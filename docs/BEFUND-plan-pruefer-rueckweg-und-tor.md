@@ -9734,3 +9734,2600 @@ gehoert trotzdem gemeldet, bevor es einmal etwas verdeckt.
 Loeschen des Feldes, nicht des Blocks — A-40 zeigt, wie es aussieht. **An Yama** geht die
 Ausschlussliste des Filters: `VERWORFEN` und `ABGELOEST` streichen oder definieren, und
 `ZURUECKGEZOGEN` einordnen.
+
+## §131 — Posten (c): F-024 durchgerechnet. Die Formel haelt, ihre Grenzfall-Klausel nennt den falschen Wert, und die Umsetzung hat kein Netz — aber zwei Waechter davor
+
+*(Messstand 7d1dfab4, 21.08. 10:53. Nummer gegen den frischen HEAD gewaehlt: 26 Abschnitte, keine
+Dublette, hoechste §130 — §131 war frei.)*
+
+**Wie ich hierher kam.** Von 41 Werkbank-Scheiben sind genau zwei in dieser Datei nie genannt: W-19
+und W-42. W-42 sagt ehrlich "keine Formel" (*ein Schreibpfad rechnet nicht*), W-19 ist zu 100 Prozent
+Vorlage — gegen `_VORLAGE/` gemessen traegt es ueber sechs Blaetter **6 eigene Zeilen**, und alle
+sechs sind Titel; die naechstniedrigste Scheibe hat **116**. Das ist kein Fund: `REGISTER.md:77`
+fuehrt W-19 als **GEGENSTANDSLOS**, `WERKBANK-ANSCHLUSS.md:81` als *"kein Modul gefunden"*, und
+[`BEFUND-FORMELSAMMLUNG-GEGEN-INSEL.md:182-186`](BEFUND-FORMELSAMMLUNG-GEGEN-INSEL.md) hat es bereits
+als **Zustaendigkeitsfrage, nicht Bau** eingeordnet. Dessen Zeiger habe ich geprueft statt
+nachgebaut: `pvBelegung.ts:6-7` traegt die zitierte Grenze woertlich (*"Ertrag/Verschattung/Strings
+bleiben der Fach-Engine (wberechnung) vorbehalten"*). Was dort haengt, ist die Formel **F-024**, und
+die habe ich gerechnet.
+
+**F-024 · Ausrichtung einer Dachflaeche** (`FORMELSAMMLUNG.md:270-279`, eine von 27 F-Formeln):
+
+| gerechnet | Ergebnis |
+|---|---|
+| `atan2(nx,ny)` fuer N/O/S/W | **0° · 90° · 180° · 270°** — die Zusage "0=Nord, 90=Ost, 180=Sued" haelt exakt |
+| `arccos(nz/\|n\|)` Flachdach · 45°-Dach · Wand | **0° · 45° · 90°** — haelt |
+| dieselbe Formel, Normale nach UNTEN `(0,0,-1)` | **180°** statt 0° — kein Schutz im Eintrag |
+| Grenzfall `atan2(0,0)` | **0°** — die Warnung des Eintrags ist berechtigt |
+| fast flach, `nx=±1e-9, ny=0` | **90° bzw. 270°** — nicht 0° |
+
+**Zwei Luecken im Eintrag, beide gerechnet, nicht vermutet.** (1) Die Neigungsformel liefert fuer
+eine nach unten zeigende Normale 180°; da F-010 festhaelt, dass *das Vorzeichen die Orientierung
+ist* (siehe §111), ist die Umlaufrichtung des Polygons genau der Weg dorthin. (2) Die
+Grenzfall-Klausel verlangt *"nicht 0° melden, sondern »keine Ausrichtung«"* — **0° entsteht aber nur
+bei exakt `nx=ny=0`.** Fuer ein real fast flaches Dach dominiert das Rauschen: bei `ny=0` und
+`nx=±1e-9` kommen **90° und 270°** heraus, und eine Aenderung von 2e-9 in der Normalen dreht die
+gemeldete Ausrichtung um 180°. Der Eintrag warnt vor dem einen Wert, den die Formel im realistischen
+Fall gerade nicht liefert, und nennt **kein ε** — der Umsetzer hat keine Schwelle.
+
+**Die Umsetzung, am echten Modul gerechnet** (esbuild-Bundle von `wallGeometry.ts`, nicht an einer
+Abschrift): `azimutDerNormalen` (`:37`) benutzt woertlich F-024s Azimut-Formel. Beide Beispiele des
+Kopfkommentars (`:34-35`) treffen — West→Ost/links = **0° Nord**, Sued→Nord/links = **270° West**;
+alle vier Laufrichtungen mal beide Seiten sind stimmig (links/rechts genau 180° auseinander). Dass
+es **nur die Wand-Variante** ist (kein `nz`, keine Neigung), steht bereits in
+`FAHRPLAN-KLASSE-A.md:98-100` — zitiert, nicht nachgebaut.
+
+**Was ich geprueft habe und was haelt:** die 360-Naht. `359` erscheint korrekt (roh −0,600 → 359),
+und `Math.round` kann nie 360 erzeugen, weil `atan2` hoechstens 180 liefert; `((grad%360)+360)%360`
+ist sauber, auch fuer −180. Kein Mangel.
+
+**Was kein Netz hat:** die entartete Wand. `start === end` gibt **0° (Nord)** fuer `links` und **180°
+(Sued)** fuer `rechts` — eine zuversichtliche Himmelsrichtung fuer eine Wand ohne Richtung, also
+genau das, was F-024 fuer seinen eigenen Grenzfall verbietet. Kein Schutz in der Funktion, und **kein
+Test**: die fuenf Zusicherungen in `wallGeometry.test.ts:19-32` benutzen alle 4000-mm-Waende.
+
+**Und warum es trotzdem kein Live-Fehler ist.** Der einzige Laufzeit-Verbraucher ist
+`raumProjektion.ts:90` (`azimut_grad` je Aussenkante). Davor liegen **zwei** Waechter in
+`roomDetection.ts`: `:89` `if (laenge === 0) continue;` ueberspringt Waende der Laenge null, und
+`:102` `if (key(pa) !== key(pb))` laesst nur Kanten mit verschiedenen Endpunkten durch. Der entartete
+Fall ist auf diesem Weg **nicht erreichbar**. Latente Luecke, kein Schaden — und sie wird zum Schaden
+in dem Moment, in dem ein zweiter Aufrufer die Funktion ohne diese Vorpruefung benutzt.
+
+**Eigener Fehlgriff dokumentiert:** meine erste 360-Naht-Probe war fehlkonstruiert — sie traf den
+Ostsektor statt die Naht und lieferte 90°. Sie hat eine Zahl erzeugt, aber nicht die zur Frage; neu
+gebaut mit `dx` gross und `dy` klein positiv. Ausserdem hatte ich zwischendurch behauptet, nur W-19s
+Formelblatt sei Vorlage — das war aus Zeilenzahlen geschlossen statt gemessen; gegen `_VORLAGE/`
+gemessen sind es alle sechs Blaetter.
+
+**Ball beim Planner** fuer die zwei Luecken in `FORMELSAMMLUNG.md:278-279`: das fehlende ε und der
+Grenzfallwert, der im realistischen Fall 90°/270° statt 0° ist. Die entartete Wand ist eine
+Bau-Entscheidung (Schutz in der Funktion oder Verlass auf die Aufrufer) und gehoert an denselben
+Tisch.
+
+## §132 — Posten (d) an den sieben DoR-Schnitten, und das Ergebnis ist eine Berichtigung an Posten (d) selbst
+
+*(Messstand e58d54da, 21.08. 10:59. Nummer gegen den frischen HEAD gewaehlt: 27 Abschnitte, keine
+Dublette, hoechste §131 — §132 war frei.)*
+
+**Die Alterung, gemessen.** Sieben Blaetter in `docs/auftraege/aktiv/` tragen ein
+`dor_schnitt_sha`; alle sieben SHAs existieren, alle Schnitte fallen auf den **16.08. zwischen 13:16
+und 17:24**. Heute sind das **6811 bis 7058 Minuten** (4,7 bis 4,9 Tage) und **944 bis 1040
+Commits**.
+
+| Blatt | Schnitt | Alter | Commits | Blatt am Schnitt → heute |
+|---|---|---|---|---|
+| A-37 | `b6af3207` 13:16 | 7058 Min | 1040 | 342 → **628 Z. (+286, +84 %)**, 10 Commits aufs Blatt |
+| A-38 | `b6af3207` 13:16 | 7058 Min | 1040 | 184 → **335 Z. (+151, +82 %)**, 8 Commits aufs Blatt |
+| A-39 · A-40 | `99add90f` 13:45 | 7030 Min | 1016 | *Blatt am Schnitt noch nicht vorhanden* |
+| A-41 | `e521bd98` 15:04 | 6951 Min | 966 | *dito* |
+| A-42 | `e802c1f8` 17:24 | 6811 Min | 944 | *dito* |
+| W-17/1 | `8faca79c` 14:40 | 6974 Min | 968 | *dito* |
+
+**Drei Verdachtsfaelle, alle drei unter der Messung aufgeloest — und keiner davon ist ein Mangel.**
+
+1. **"Fuenf Blaetter existieren an ihrem eigenen Schnitt nicht."** Mit zwei Verfahren geprueft (Pfad
+   und ganzer Baum: kein Treffer unter keinem Pfad), dann die Zeit gemessen: die fuenf entstanden
+   **5 bis 38 Minuten NACH** ihrem Schnitt (A-42 fuenf, W-17/1 elf, A-41 fuenfzehn, A-39 achtundzwanzig,
+   A-40 achtunddreissig). Der Schnitt-SHA benennt den **untersuchten Baumzustand**, nicht einen, in
+   dem das Blatt selbst schon steht. Genau richtig — und A-37/A-38 sind es auch, deren Schnitte
+   gehoeren zu einer spaeteren Runde, in der das Blatt schon existierte.
+2. **"82 Prozent Wachstum machen das Votum schal."** Widerlegt durch
+   [`ARBEITSREGELN.md:1319-1321`](ARBEITSREGELN.md): **Blattinhalte AN EINEM SHA** sind Klasse
+   **UNVERAENDERLICH**, Beleg ist *der SHA*, Haltbarkeit **"fuer immer"**. Das Blatt sagt es selbst
+   (`A-38:22-24`): *"Eine DoR-Runde prueft den Stand DIESES SHA … der naechste Schnitt-SHA eroeffnet
+   die naechste Runde."* Wachstum altert hier nichts.
+3. **"Meine Commits sind nicht als gueltig verbucht."** Der Satz steht unter jedem meiner Commits.
+   Gemessen, was er bewirkt: `scripts/rollen-tor.sh:447-461` **meldet nur** — `echo` nach stderr,
+   kein `exit`. `:440-446` begruendet das ausdruecklich (*"eine Sperre, die vor ihrem Ersatzweg
+   kommt, haelt die Kette an, statt sie zu schuetzen"*) und stellt offen, dass ein Sperren erst mit
+   einem Rueckgabewert fuer A-37-14 kaeme. Ein Hinweis, kein Urteil.
+
+**Die Berichtigung an meinem eigenen Posten (d).** Die Regel trennt zwei Klassen, und nur eine altert:
+
+| Klasse | Beleg | Haltbarkeit |
+|---|---|---|
+| UNVERAENDERLICH — Historie, Commits, **Blattinhalte an einem SHA** | der SHA | **fuer immer** |
+| FLUECHTIG — Arbeitsbaeume, installierte Module, laufende Prozesse | der Zeitstempel | **"ab dem Zeitstempel, und sie laeuft ab"** |
+
+**Posten (d) muss also erst einordnen und dann messen.** Minuten und Commits sind fuer die
+SHA-verankerte Klasse **Zusammenhang, nicht Verfall** — sie zu melden, als waere es Verfall, waere
+derselbe Fehler wie eine fluechtige Messung ohne Zeitstempel, nur spiegelverkehrt. Ab hier trage ich
+in (d) die Klasse mit.
+
+**Eine fluechtige Messung, regelkonform mit Zeitstempel** (21.08.2026 10:58:14): mein Rollenbaum hat
+**kein** `node_modules`, der Hauptbaum **300** Eintraege. Die Marke, die das Tor sucht, ist
+`node_modules/.aus-lockfile` — sie kann hier gar nicht liegen. Das ist der Grund fuer den Hinweis
+unter jedem Commit, und es ist derselbe Gegenstand wie der Anlass der Regel selbst (`:1327-1329`:
+ein Befund ueber `node_modules`, der **vierzehn Sekunden** hielt).
+
+**Kein Ball aus dieser Runde.** Was an A-38 offen bleibt, ist bereits gemeldet und wird nicht
+nachgebaut: der doppelte Schluessel `dor_beleg` (`:18` *"NICHT ERTEILT — 3. Runde"* gegen `:331`
+*"steht aus"*) und mein geliefertes Votum, das in keinem der beiden Felder steht — §108.
+
+## §133 — Posten (e): die 33 stehen unveraendert, auf meinem Feld ist gearbeitet worden — und ein Satz aus §131 haelt nicht
+
+*(Messstand 3d7d3cb3, 21.08. 11:02. Nummer gegen den frischen HEAD gewaehlt: 28 Abschnitte, keine
+Dublette, hoechste §132 — §133 war frei. Klasse nach §132: alles hier ist SHA-verankert, also
+UNVERAENDERLICH; der Stand ist benannt.)*
+
+**Die Zahl neu gemessen, nicht erinnert.** Erreichbarkeit ab `main.tsx` ueber Laufzeitkanten
+(`import type` zaehlt nicht), Grundmenge `.ts/.tsx` unter `resources/planner/hausplaner` **ohne**
+`__tests__` und `__domtests__`: **160 Module, 127 erreichbar, 33 ohne Ladeweg.** Das ist Zeichen fuer
+Zeichen der berichtigte Wert aus dem Nachtrag zu §120 — die Titelzahl dort (*38 von 165*) bleibt die
+widerlegte. Warum sie steht, habe ich gemessen statt angenommen: seit dem §120-Schnitt `d4ee1555`
+liegen **zwei** Commits auf der Insel, beide beruehren **sieben Dateien, alle nur geaendert**, keine
+angelegt, keine geloescht — der Graph konnte sich nicht bewegen.
+
+**Auf dem Feld ist gearbeitet worden, und das gehoert nicht mir.** Zitiert, nicht nachgebaut:
+`78e4cc0e` (Generator, 20.08. 13:54) traegt in **fuenf** der acht K3-Module einen Herkunftsvermerk —
+sie nennen einen Wirt, den es im Produktivbaum nicht gibt; `class RoofEngine` existiert **genau
+einmal**, in `docs/planner/pv-belegung-referenz/DachplanerProPage.tsx:369`. Drei der acht nennen ihn
+null Mal und blieben deshalb unberuehrt. `e1674e4c` (20.08. 15:34) ordnet `aufbautenStatus` als
+**Modellfrage an Yama** ein: die Lage, die es erkennt, kann nicht eintreten, weil `RoofAufbau` keine
+Flaechenbindung fuehrt. Beide Male ausdruecklich *"nur Kommentare, keine Zeile Verhalten"* — was
+meine Messung bestaetigt.
+
+**Und jetzt die Selbstberichtigung.** In §131 steht: *"Der einzige Laufzeit-Verbraucher ist
+`raumProjektion.ts:90`."* Das tragende Wort ist falsch. `projection/raumProjektion.ts` steht **selbst
+in der Liste der 33** — es hat keinen Ladeweg ab `main.tsx`. Von der anderen Seite gegengeprueft:
+der einzige Import des Moduls kommt aus `__tests__/raumProjektion.test.ts`, und **alle vier**
+Nennungen von `projiziereRaum` ausserhalb des Moduls stehen in eben dieser einen Testdatei. Es ist
+ein Verbraucher **im Quelltext**, kein Verbraucher **zur Laufzeit**.
+
+**Was das an §131 aendert und was nicht.** Die beiden Luecken bleiben unberuehrt: das fehlende ε in
+`FORMELSAMMLUNG.md:278-279` und der Grenzfallwert, der im realistischen Fall 90°/270° statt 0° ist —
+beides am Eintrag gemessen, nicht am Aufrufweg. Der entartete-Wand-Befund wird **schwaecher, nicht
+staerker**: ich hatte ihn als *latent, weil zwei Waechter davor* gemeldet; richtig ist, dass die
+Kette ueberhaupt nicht laeuft. Die zwei Waechter in `roomDetection.ts:89/:102` habe ich damit in
+einer Kette gemessen, die kein Ladeweg erreicht — `roomDetection.ts` selbst ist erreichbar
+(gegengeprueft: null Treffer in der Tot-Liste), `raumProjektion.ts` nicht. Der Befund haelt, seine
+Einordnung war eine Stufe zu scharf.
+
+**Eine Warnung an die Zahl selbst, damit sie nicht ueberlesen wird.** In den 33 steht auch
+`domain/scene.types.ts` — ein Typmodul, das ausschliesslich ueber `import type` haengt, und genau
+diese Kanten schneidet das Verfahren absichtlich weg. **"Ohne Ladeweg" heisst nicht "tot".** Die
+Zahl beantwortet die Frage *"was laedt die laufende Anwendung"* und keine andere; wer sie als
+Loeschliste liest, liest sie falsch.
+
+**Kein neuer Ball.** Die Entscheidung zu den 33 liegt weiter bei Yama (§119/§120/§122), die
+Modellfrage zu `aufbautenStatus` ist dort neu dazugekommen — vom Generator gestellt, nicht von mir.
+Die Berichtigung an §131 ist meine und steht hier.
+
+## §134 — Posten (a): zwei Kommentar-Commits haben 86 Zeiger verschoben, und einer davon widerlegt meinen eigenen §128
+
+*(Messstand 1b61ce63, 21.08. 11:07. Nummer gegen den frischen HEAD gewaehlt: 29 Abschnitte, keine
+Dublette, hoechste §133 — §134 war frei. Klasse nach §132: SHA-verankert, Stand benannt.)*
+
+**Gezielt gesucht statt gestochert.** Nach der Lehre aus §129 — Zeiger halten, solange sich die
+Zieldatei nicht bewegt — habe ich zuerst gemessen, welche Werkbank-Scheiben auf **bewegte** Dateien
+zeigen. Sechs Scheiben zeigen auf Dateien mit genau **einem** Commit seit ihrem Schnitt, und dieser
+eine Commit ist in fuenf Faellen derselbe: `78e4cc0e` (Generator, 20.08. 13:54), der Herkunftsvermerk
+aus §133 — ausdruecklich *"nur Kommentare, keine Zeile Verhalten"*.
+
+**Kommentare aendern kein Verhalten und verschieben trotzdem alles darunter.** Reine Einfuegungen,
+null Loeschungen, und alle nahe am Dateikopf:
+
+| Datei | eingefuegt | ab Zeile | Zeiger in docs | davon unterhalb |
+|---|---|---|---|---|
+| `dachAusschnitt.ts` | **+21** | 21 | 37 | **31** |
+| `holzMengen.ts` | **+17** | 18 | 30 | **23** |
+| `holzBauteile.ts` | **+17** | 17 | 12 | **12** |
+| `auswechslung.ts` | **+21** | 19 | 12 | **11** |
+| `grundriss.ts` | **+21** | 14 | 9 | **9** |
+| | | | **100** | **86** |
+
+**86 von 100 Zeigern zeigen seit dem 20.08. 13:54 auf eine andere Zeile.** Von den 44 Dokumenten, die
+sie tragen, sind **41 seither nicht angefasst** worden. Betroffen sind sieben Scheiben: W-08, W-10,
+W-20, W-21, W-25, W-26, W-29.
+
+**Vier Zeiger einzeln geoeffnet — sie zeigen auf etwas anderes, nicht ins Leere.** In
+`W-29/3-FORMELN.md:34` steht ein Block aus drei Zeigern, und er ist **auf sich selbst gerutscht**:
+
+| Zusage | vor dem Vermerk | heute an der Stelle | Zusage steht heute auf |
+|---|---|---|---|
+| `:86` Schuhband-Summe | `a += p.x*q.y - q.x*p.y;` ✓ | `function r3(n){…Math.round…}` | `:107` |
+| `:106` Kreuzprodukt | `const cross = …` ✓ | `const p = poly[i], q = …` | `:127` |
+| `:107` `cross*orient<=tol` | ✓ | **`a += p.x*q.y - q.x*p.y;`** | `:128` |
+
+Wer heute `:107` aufschlaegt, findet die Schuhband-Summe — also genau das, was derselbe Block dem
+`:86` zuschreibt. Das ist die gefaehrliche Sorte Drift: sie liest sich nicht wie ein Bruch, sondern
+wie eine Verwechslung im Dokument.
+
+**Und jetzt gegen mich selbst.** §128 sagt ueber W-10: *"alle 49 tragen Inhalt, 15 woertlich
+geprueft, nicht einer ist gewandert."* **Das haelt nicht.** W-10 traegt genau einen Zeiger in die
+verschobenen Dateien — `3-FORMELN.md:111` behauptet `geometry/grundriss.ts:111` sei
+`grundrissFlaecheM2`. Vor dem Vermerk war es das woertlich; **heute steht dort `eckenAnalyse`**, und
+`grundrissFlaecheM2` liegt auf `:132` (111+21). Der Fehler ist nicht die Zeit: §128 entstand am
+21.08. **10:31**, also **20 Stunden 37 Minuten NACH** der Verschiebung. Der Fehler ist mein Pruefsatz
+— *"traegt Inhalt"* kann einen gewanderten Zeiger nicht fangen, weil ein gewanderter Zeiger immer
+Inhalt traegt. Ich habe das Verfahren gemessen statt die Frage. Von den 49 sind es damit **48, die
+halten, und einer, der gewandert ist**; die 15 woertlich geprueften bleiben geprueft.
+
+**Der strukturelle Punkt, und er verbindet sich mit §132.** Ein Zeiger `datei.ts:86` traegt **keinen
+SHA**. Nach der Haltbarkeitsregel (`ARBEITSREGELN.md:1319-1322`) ist er damit eine Behauptung ueber
+einen Baumzustand ohne den Beleg, der ihn haltbar machen wuerde — und anders als eine fluechtige
+Messung traegt er auch keinen Zeitstempel. Deshalb kann **ein einziger Commit, der nachweislich kein
+Verhalten aendert, 86 Belege auf einmal entwerten.** Das ist kein Vorwurf an `78e4cc0e`: der Commit
+ist sauber, gemessen und begruendet. Es ist eine Eigenschaft der Zeigerform.
+
+**Ball beim Planner**, und zwar zum vorhandenen Zeigerbuendel (§77/§93/§102/§104/§106/§107/§109/
+§110/§111), nicht als neuer Strang: 86 Zeiger in 41 Dokumenten, Verschiebung exakt bekannt (+17 bis
++21 je Datei), also mechanisch nachziehbar. Die Berichtigung an §128 ist meine und steht hier.
+
+## §135 — Posten (b): acht fremde Zahlen nachgezaehlt, alle acht halten — und ein Wort trennt meinen Befund vom seinen
+
+*(Messstand 31356fe3, 21.08. 11:11. Nummer gegen den frischen HEAD gewaehlt: 30 Abschnitte, keine
+Dublette, hoechste §134 — §135 war frei. Klasse nach §132: SHA-verankert.)*
+
+**Die Wache verlangt es ausdruecklich — jede Zahl frisch messen, auch die aus fremden Berichten.**
+Der Herkunftsvermerk-Commit `78e4cc0e` nennt acht Modulzahlen: *"nur FUENF der acht nennen den Wirt
+ueberhaupt (auswechslung 3 Nennungen, dachAusschnitt 1, grundriss 1, holzBauteile 1, holzMengen 2);
+aufbautenStatus, dachOeffnung und sparrenTrennung nennen ihn null Mal."* Gemessen am Stand **vor**
+dem Vermerk (`78e4cc0e^`) — sonst zaehlt man den Vermerk mit.
+
+**Alle acht halten. Ich habe vier Anlaeufe gebraucht, um die richtige Einheit zu treffen:**
+
+| Anlauf | Muster | Ergebnis |
+|---|---|---|
+| 1 | `RoofEngine\|buildFlat\|ObstacleData` | 5 von 8 — dachAusschnitt 0 statt 1 |
+| 2 | `Engine` | 7 von 8 — auswechslung 2 statt 3 |
+| 3 | Vereinigung, **Begriffe** gezaehlt | 7 von 8 — grundriss 2 statt 1 |
+| 4 | Vereinigung, **Zeilen** gezaehlt | **8 von 8** |
+
+Die Aufloesung steckt in zwei Zeilen. `auswechslung.ts:6` nennt `ObstacleData` — ein Wirt-Begriff,
+aber kein *"Engine"*; deshalb war Anlauf 2 zu eng. Und `grundriss.ts:8` traegt *"Die Engine
+(buildFlat)"* — **zwei Begriffe in EINER Nennung**; deshalb war Anlauf 3 zu weit. **"Nennung" ist die
+Zeile, nicht das Wort.** Das steht nirgends, und es entscheidet die Zahl.
+
+**Die uebrigen Zusagen desselben Commits, ebenfalls gezaehlt:**
+
+- *"`class RoofEngine` existiert genau einmal"* — **haelt**: genau eine Definition,
+  `docs/planner/pv-belegung-referenz/DachplanerProPage.tsx:369`. Wer heute nach der Zeichenfolge
+  sucht, findet **sechs** Treffer, weil der Vermerk sie in fuenf Modulen zitiert. **Ein Vermerk, der
+  eine Zeichenfolge zaehlt und sie selbst enthaelt, erschwert seine eigene Nachpruefung** — keine
+  Unsauberkeit, aber der naechste Zaehler muss es wissen.
+- *"269-KB-Referenzdatei"* — **haelt**: 269 099 Bytes (dezimal 269 KB; binaer 263 KiB). Keine
+  Abweichung, nur zwei Einheiten.
+- *"`buildFlat`, `ObstacleData`, `RoofEngine` haben in `resources/` und `app/` null Definitionen"* —
+  **haelt**. Mein erstes Muster gab fuer `RoofEngine` fuenf Treffer; alle fuenf sind der Kommentartext
+  des Vermerks. Ein Muster, das Kommentar nicht von Code trennt, misst hier nichts.
+
+**Und ein Wort, das zwei Dinge heisst (H-9).** Der Commit begruendet, `buildFlat` sei *"nicht per se
+fremd"*, denn es stehe auch in `dachformVorlagen.ts`, *"und die ist **erreichbar und in Benutzung**"*.
+In §133 steht dieselbe Datei unter den **33 ohne Ladeweg**. Beide Saetze stimmen, und sie messen
+Verschiedenes: ausserhalb der Tests wird `dachformVorlagen.ts` **genau einmal** importiert, naemlich
+`renderers/three-d/dachMesh.ts:13` als **`import type { EngineRoofShape }`** — eine Typkante, die zur
+Laufzeit verschwindet. **Im Quellgraphen erreichbar, im Ladegraphen nicht.** Wer *"erreichbar"* als
+*"laeuft"* liest, nimmt aus dem Satz mehr mit, als gemessen wurde — und die Begruendung, `buildFlat`
+sei nicht fremd, traegt dann weiter, als sie darf.
+
+**Ball beim Planner**, klein und sprachlich: *erreichbar* braucht in diesen Blaettern denselben
+Zusatz, den ich mir in §133 selbst auferlegt habe — **Quellgraph oder Ladegraph**. Kein Mangel am
+Vermerk, dessen acht Zahlen ausnahmslos halten; ein Wort, an dem zwei richtige Messungen
+auseinanderlaufen.
+
+## §136 — Posten (c): F-012 durchgerechnet. Der Code haelt die Formel ein, aber zwei Kommentare versprechen mehr als er tut
+
+*(Messstand bee03edd, 21.08. 11:15. Nummer gegen den frischen HEAD gewaehlt: 31 Abschnitte, keine
+Dublette, hoechste §135 — §136 war frei. Klasse nach §132: SHA-verankert.)*
+
+**Wahl.** Von den **27** Formeln der Sammlung sind sechs in dieser Datei nie vorgekommen; ich nehme
+**F-012 · Punkt in Polygon (Strahlenmethode)** (`FORMELSAMMLUNG.md:198-206`), weil ihre Grenzfaelle
+sich exakt rechnen lassen.
+
+**Zwei Quellen schienen sich zu widersprechen, und taten es nicht.** `W-05-raum-beschreiben.md:296`
+sagt `F-012: "NEIN — 0 Treffer"`, `STATUS.md:3443` nennt *"F-012 in W-13s trefferSuche"*. Der
+vollstaendige Satz loest es auf: dort werden **sieben Formelzuordnungen aufgezaehlt, die GEFALLEN
+sind** — *"F-012 in W-13s trefferSuche Math. **0x**"*. Beide sagen dasselbe. Haette ich das Fragment
+zitiert, waere daraus ein erfundener Widerspruch geworden (dieselbe Klasse wie §111).
+
+**Gebaut ist sie trotzdem — gefunden ueber die Gestalt, nicht ueber den Namen.** Mein erstes
+Idiom-Muster gab **null Treffer im ganzen Repo**, also beweist seine Null nichts und ich habe sie
+nicht verwendet. `inside = !inside` gab **einen**: `punktInPolygon`, `dachAusschnitt.ts:265` —
+**privat**, kein `export`, in einem der 33 Module ohne Ladeweg (§133). Weil sie privat ist, habe ich
+sie programmatisch woertlich entnommen (10 Zeilen, Treue geprueft) statt sie abzuschreiben.
+
+**Gerechnet, Quadrat 1000x1000 mm, acht Randfaelle:**
+
+| Fall | Ergebnis | Kopfzusage `:264` |
+|---|---|---|
+| untere Kante `y=0` | **innen** | innen ✓ |
+| **obere Kante `y=1000`** | **aussen** | innen ✗ |
+| linke Kante `x=0` | **innen** | innen ✓ |
+| **rechte Kante `x=1000`** | **aussen** | innen ✗ |
+| Ecke unten links | **innen** | innen ✓ |
+| Ecke unten rechts · oben links · oben rechts | **aussen** | innen ✗ |
+
+**Drei von acht halten, fuenf nicht.** Der Rand zaehlt nur unten und links als innen.
+
+**Und das ist kein Fehler im Algorithmus.** Genau das schreibt F-012 vor: *"Regel festlegen: untere
+Kante zaehlt, obere nicht."* Die halboffene Regel ist gewollt — sie laesst benachbarte Flaechen
+lueckenlos kacheln, ohne dass ein Punkt zweimal zaehlt. **Falsch sind die beiden Kommentare, die
+etwas anderes versprechen:** `:264` *"Rand zaehlt als innen (mit kleiner Toleranz)"* und die
+Aufrufstelle `:351` *"Oeffnung muss **inkl. Rand** vollstaendig in der Flaeche liegen"*.
+
+**Die Toleranz im selben Kommentar ist wirkungslos.** `tol = 1e-6` bei einer Domaene aus ganzen
+Millimetern (`scene.types.ts:270`) sind **1e-6 mm = ein Nanometer**. Gerechnet: **11 von 11**
+ganzzahligen Faellen liefern mit `tol=1e-6` und mit `tol=0` dasselbe. Der Zusatz *"(mit kleiner
+Toleranz)"* beschreibt nichts, was in dieser Domaene geschieht.
+
+**Die Folge ist gemessen und sie ist null.** Beide Aufrufstellen (`:352`, `:399`) verknuepfen das
+Ergebnis mit `&&` an `rechteckKantenAbstandOk(..., KANTEN_RAND_M)` — und `KANTEN_RAND_M = 0.2`
+(`:101`), also **200 mm Mindestabstand zu jeder Kante**. Eine Ecke genau auf einer Kante hat Abstand
+null und faellt dort ohnehin durch, gleich ob unten oder oben. **Die Asymmetrie entscheidet nie.**
+Dazu kommt, dass das Modul keinen Ladeweg hat. Kein Schaden, an keiner Stelle.
+
+**Warum es trotzdem hier steht.** Die Funktion ist heute privat und zweimal gerufen; beide Male
+haelt eine strengere Pruefung sie ab. Wer sie exportiert oder anderswo wiederverwendet, liest zuerst
+ihren Kopf — und der sagt *"Rand zaehlt als innen"*, was fuer die Haelfte des Randes nicht stimmt.
+Das ist die Sorte Zusage, die genau dann traegt, wenn niemand mehr nachrechnet.
+
+**Ball beim Planner**, klein: zwei Kommentare an `dachAusschnitt.ts:264` und `:351` beschreiben eine
+halboffene Regel als geschlossene. Der Code bleibt, wie er ist — er erfuellt F-012.
+
+## §137 — Posten (d) an der fluechtigen Klasse: 178 Claims, ein Satz im Regelwerk, eine einzige Schliessung
+
+*(Messstand 73b6443d, 21.08. 11:21. Nummer gegen den frischen HEAD gewaehlt: 32 Abschnitte, keine
+Dublette, hoechste §136 — §137 war frei.)*
+
+**Nach §132 zuerst einordnen, dann messen.** Es altert nur die **FLUECHTIGE** Klasse. Ich nehme
+deshalb die **Claim-Felder** — sie sagen "diese Station ist jetzt besetzt", also eine Behauptung ueber
+die Gegenwart, und die Wache verlangt sie ausdruecklich (Punkt 4).
+
+*(Ein erster Versuch, fluechtige Aussagen ueber `node_modules` per Muster zu erfassen, ist
+gescheitert und liefert deshalb keine Zahl: der bekannte Fall — der Anlass der Haltbarkeitsregel
+selbst, `ARBEITSREGELN.md:1327-1329` — laeuft ueber einen Zeilenumbruch, und ein zeilenbasiertes
+Muster kann ihn nicht fassen. Die 53 Treffer sind eine Untermenge unbekannter Groesse.)*
+
+**Die Grundmenge, scharf:** **99** `claim*`-Felder in `docs/STATUS.md` in acht Namensformen
+(`claim` 12, `claim_abnahme` 71, `claim_bau` 4, `claim_dor` 2, `claim_messlauf` 1, `claim_release` 7,
+`claim_spec` 1, `claim_umschnitt` 1) und **79** in den Blaettern — zusammen **178**.
+
+**Was gut ist, und ich sage es zuerst: die Zeitstempel-Pflicht wird eingehalten.** **99 von 99**
+tragen ein Datum. *(Mein erstes Muster meldete 50 ohne Datum — es war zu eng, weil die Rolle dort
+`evaluator (Erstinstanz)` mit Klammer lautet. Korrigiert: null ohne Datum.)*
+
+**Die Alterung:**
+
+| | Datum | Alter |
+|---|---|---|
+| aeltester Claim | 05.08. | **16 Tage 11 Stunden** |
+| juengster Claim | 16.08. | **5 Tage 11 Stunden** |
+
+**Kein einziger Claim ist juenger als der 16.08.** Die dichteste Stelle ist der 12.08. mit 41.
+
+**Das Gegenstueck fehlt fast vollstaendig.** Ein Claim endet in diesem Bestand mit
+`station_geschlossen: "… — Claim eingeloest."` (`STATUS.md:3447`). Dieses Feld existiert **genau
+einmal**. Blockweise gezaehlt: **80 Bloecke tragen einen Claim, 79 davon keine Schliessung.**
+
+**Und das ist kein Regelverstoss — es gibt die Regel nicht.** In `docs/ARBEITSREGELN.md` (1925 Z.)
+kommt `claim` **genau einmal** vor (`:168`), `station_geschlossen` **null Mal**. Der eine Satz sagt:
+*"Wer eine Datei anfassen will, auf der ein Evaluator- oder Release-Claim liegt, muss das selbst
+pruefen — **§3 meldet dort frei**."* Ein abgelaufener Claim ist der Sperre also unsichtbar, und wer
+ihn pruefen soll, hat kein Merkmal, an dem er "abgelaufen" erkennen koennte. **178 Vorkommen, ein
+Satz, kein Ende.**
+
+**Das Regelwerk stellt die Diagnose selbst, drei Zeilen darueber** (`:165`): *"Eine Schranke, deren
+Messvorschrift nirgends verbindlich steht, ist so stark wie die zuletzt kopierte Fassung."*
+
+**Der Fall, an dem es konkret wird — und er betrifft meine eigene Station.** `STATUS.md:18614`
+traegt `claim_dor: "release-pruefer 15.08. AUF YAMAS AUSDRUECKLICHE ANWEISUNG … **Plan-Pruefer-Station
+besetzt**"`, sauber gearbeitet: Rollenwechsel statt Autonomie, Befangenheit offengelegt, und **vor**
+dem Claim gemessen — *"plan-pruefer seit 14.08. 10:11 ohne Commit"*. Das war richtig gemessen. Heute
+gemessen: **308 Commits mit der Rollenmarke `plan-pruefer` seit genau diesem Zeitpunkt**, der letzte
+fuenf Minuten vor dieser Messung. **Der Grund des Claims ist widerlegt, der Claim steht** — 6 Tage
+11 Stunden alt, ohne Schliessungsfeld, und ohne Regel, die eines verlangen wuerde.
+
+**Eigener Rechenfehler, dokumentiert:** ich hatte das Claim-Alter zuerst mit "388 Tage" ausgegeben —
+Sekunden durch 1440 statt Minuten. Korrekt sind **9319 Minuten = 6 Tage 11 Stunden**. Eine Zahl mit
+falscher Einheit ist keine Zahl.
+
+**Ball bei Yama**, als Regelfrage neben den bestehenden: der Claim traegt 178 Vorkommen und einen
+Satz. Entweder er bekommt ein verbindliches Ende (ein Feld, eine Frist, oder "terminaler Zustand
+schliesst automatisch"), oder er wird als das benannt, was er heute ist — eine Notiz, keine Schranke.
+Solange beides offen ist, misst die Wache (Punkt 4) ein Merkmal, das nichts sperrt.
+
+## §138 — Posten (e): §123 haelt, und das Fenster ist keine Woche alt, sondern 82 Minuten
+
+*(Messstand 34802356, 21.08. 11:25. Nummer gegen den frischen HEAD gewaehlt: 33 Abschnitte, keine
+Dublette, hoechste §137 — §138 war frei. Klasse nach §132: SHA-verankert.)*
+
+**Die Kennung stand nicht, wo ich sie suchte.** Die fuenf Welle-1-Blaetter tragen **kein**
+`auftrag:`-Feld; ihr Kopfblock fuehrt `zustand`, `basis_sha`, `herkunft`, `vorbestand`, `baut`,
+`nimmt_ab`, `fachliche_gegenprobe`, `status_steht_in` — und keine Kennung. Es sind **feldlose
+Blaetter** im Sinn von Wache Punkt 2, also gilt der Rueckfall auf die Kopfzeile, und dort steht
+`Z1-W1-1` bis `Z1-W1-5`. Mit der Dateinamensform haette ich nichts gefunden und daraus womoeglich
+"kein Datensatz" geschlossen, was zufaellig richtig, aber falsch begruendet gewesen waere.
+
+**Nachgemessen an der richtigen Kennung: 0 von 5.** Keine der fuenf Kennungen kommt in
+`docs/STATUS.md` auch nur **einmal** vor — weder Tafelzeile noch Datensatz. Jedes Blatt sagt es
+selbst: `status_steht_in: "docs/STATUS.md — Integrator-Lauf erforderlich"`.
+
+**Neu und schaerfer als bisher berichtet: das Fenster ist 82 Minuten alt.** Alle fuenf entstanden am
+**21.08. 10:00** im selben Commit `f350befc` — und der traegt die Rollenmarke **`planner`**. In diesen
+82 Minuten ist der Integrator **dreimal** gelaufen (`3555565a`, `a651e886`, `22c5ed7a`, alle 10:04),
+**alle drei reiner Rueckweg-Transport**, je eine Datei, **keiner** auf `docs/STATUS.md`. Das ist
+dieselbe Beobachtung wie in §108, hier an einem frischen Fall: die einzige Rolle mit Schreibrecht
+laeuft, und sie transportiert.
+
+**Die Kollision aus §123 haelt, beide Seiten am HEAD nachgemessen:**
+
+- `ARBEITSREGELN.md:233` — *"Wer ein Auftragsblatt schneidet, legt im SELBEN Commit Tafelzeile UND
+  Datensatz-Block in …"*
+- `scripts/rollen-tor.sh:344` — `if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]`,
+  und der Vollzug bei `:403-407` ist **`exit 1`**, nicht nur eine Meldung.
+
+Der Schneider war der Planner. Er kann `docs/STATUS.md` nicht schreiben. **Die Regel ist fuer jeden
+Schneider ausser dem Integrator nicht erfuellbar** — das ist §123, unveraendert, jetzt mit
+benanntem Schneider und benanntem Zeitfenster.
+
+**Zuendbedingung selbst gerechnet, nur lesend: die Sperre IST scharf.** `TOR_MIT = 6` von
+`TOR_ZWEIGE = 6`, also greift der `elif`-Zweig mit `exit 1`, nicht der Hinweis-Zweig.
+
+**Und dabei mein eigener Fehler, gefangen bevor er gemeldet wurde.** Mein erster Lauf gab
+*"6 von 20 — NOCH NICHT scharf"*, also das Gegenteil. Ursache: ich hatte das Zweigmuster als
+`refs/heads/auto/hausplaner*` geschrieben; das Tor prueft aber **`refs/heads/auto/hausplaner-integration`**,
+den exakten Namen. Vierzehn unbeteiligte Feature-Zweige waren in meiner Grundmenge. Gefangen hat es
+nur, dass ich die Musterzeile `:390` ungekuerzt nachgelesen habe — dieselbe Lehre wie in §111: ein
+abgeschnittenes Zitat ist kein Zitat, und hier war es ein abgeschnittenes *Muster*.
+
+**Fremder Befund, zitiert und nicht nachgebaut.** Der Tor-Kopf (`:349-371`) haelt fest, dass die
+Sperre am 16.08. **verkehrt herum** wirkte: gebunden waren nur die drei Zweige, die das Tor besassen,
+waehrend `planner` und `plan-pruefer` weiterschrieben — *"eine Barriere, die nur die Ausgestatteten
+bindet, schuetzt die Datei nicht, sie waehlt aus, wer sie schreibt."* Das ist behoben, seit das Tor
+in allen sechs Zweigen liegt. Es erklaert aber, warum die Statuswahrheit heute so aussieht, wie sie
+aussieht.
+
+**Ball unveraendert**: beim **Integrator** die fuenf Datensaetze, bei **Yama** die Regelkollision
+§123. Neu ist nur die Praezision — 82 Minuten, ein Planner-Commit, drei Transportlaeufe dazwischen.
+
+## §139 — Posten (a) an Dokument-Zeigern: eine Berichtigung ist selbst gewandert, und die Regel dagegen steht seit fünf Tagen
+
+*(Messstand 57a10eca, 21.08. 11:30. Nummer gegen den frischen HEAD gewaehlt und diesmal gegen BEIDE
+Schreibweisen geprueft — 76 Abschnitte mit und ohne Paragraphenzeichen, hoechste 138, 139 frei. Die
+gemeldete Dublette "19" sind die Uhrzeit-Ueberschriften aus §130, keine Abschnittsnummern.)*
+
+**Andere Zeigersorte als in §134.** Dort ging es um Verweise in **Code**; hier um Verweise in
+**Dokumente**, die staendig wachsen. Grundmenge: **57** Zeiger der Form `STATUS.md:<zeile>` in 19
+Dokumenten und **42** der Form `ARBEITSREGELN.md:<zeile>` in 14 Dokumenten.
+
+**Beinahe-Fehlfund, und gefangen hat ihn nur Wache-Punkt 6.** Ich hatte `A-19:92` in der Hand, das
+weiterhin `ARBEITSREGELN.md:103` nennt, wo heute Prosa steht — und war dabei, es zu melden. **Das
+habe ich schon einmal gemeldet: §84.** Und **§85 hat es als FEHLER 29 zurueckgenommen**, weil der
+Berichtigungs-Commit `165c8339` seine Reichweite selbst benennt: *"alle 26 einzeln geoeffnet — 25
+sind Belege, EINER war ein Abnahmekriterium"*. Die 25 stehen **bewusst** so da. Ein zweites Mal
+haette ich denselben widerlegten Schluss gezogen.
+
+**Neu ist etwas anderes, und es liegt eine Ebene hoeher: die BERICHTIGUNG ist gewandert.** A-19
+traegt bei `:122-124` den Vermerk *"ANKER BERICHTIGT 16.08.: hier stand `ARBEITSREGELN.md:103` — der
+Zaehlbefehl steht bei **125**, bei 103 steht Prosa."* Das ist kein Beleg, sondern eine Aussage
+darueber, wo der Befehl **heute** liegt. Gemessen:
+
+| A-19 sagt | steht heute bei | Versatz | was bei der genannten Zeile heute steht |
+|---|---|---|---|
+| Zaehlbefehl bei `:125` | **`:132`** | **+7** | `:125` ist eine **Leerzeile** |
+| `:145` erklaert `[A-Z]+-?[0-9]+` gegen `[AW]-[0-9]+` | **`:152`** | **+7** | Prosa ueber das Wachsen des Musters |
+
+**Derselbe Versatz an beiden Stellen, und der Verursacher ist benannt:** `0f554dd9` (Planner,
+20.08. 16:04, *"ARBEITSREGELN Fassung 1.7 eingearbeitet"*) fuegt oberhalb zwei Bloecke ein —
+`@@ -1,9 +1,10 @@` und `@@ -65,9 +66,15 @@`, zusammen **+7 Zeilen**. §84/§85 liegen davor und
+konnten es nicht sehen.
+
+**Ein Dokument ueber gewanderte Anker, dessen Anker-Berichtigung gewandert ist** — vier Tage nachdem
+sie geschrieben wurde, durch einen Commit, der die Regeln auf Fassung 1.7 hob.
+
+**Und die Regel dagegen gibt es laengst.** `ARBEITSREGELN.md` traegt seit `fd7f30bf` (16.08. 19:56)
+einen eigenen Abschnitt **"⚠ ZEILENVERWEISE AUF DIESE DATEI SIND UNZUVERLAESSIG"** — dort mit einem
+gemessenen Versatz von **+161** an zwei Zeigern und dem Satz *"Ein toter Zeilenverweis ist schlimmer
+als ein fehlender. Ein fehlender zwingt zum Suchen; ein toter fuehrt an eine falsche Stelle, die
+plausibel aussieht."* Verbindlich ab da: **nicht die Zeile, sondern die Ueberschrift** (*"NICHT
+`ARBEITSREGELN.md:739` — SONDERN Abschnitt 18a"*). Zitiert, nicht nachgebaut.
+
+**Gegen mich selbst gemessen.** Von den 42 Zeigern stehen **37 in Dokumenten, die nach dem 16.08.
+19:56 angefasst wurden** — und **zehn davon in meiner eigenen Befunddatei**, die meisten von heute.
+Sie treffen zur Zeit alle (einzeln nachgesehen: `:229`, `:233`, `:255`, `:834`, `:1317ff`, `:1327ff`,
+`:1817` tragen jeweils das Zitierte), aber sie haben genau die Form, die diese Datei fuer sich selbst
+untersagt — und §134 hat gezeigt, warum: ein Zeiger ohne SHA wird von jedem Einschub darueber
+entwertet. **Was ich ab hier aendere:** bei Verweisen in `ARBEITSREGELN.md` nenne ich die
+**Ueberschrift** oder den **Stand-SHA** neben der Zeile; die Zeile allein ist keine Fundstelle,
+sondern eine Momentaufnahme.
+
+**Ball beim Planner**, klein und genau: der Anker-Vermerk in
+`A-19-h9-und-die-paragraf-3-musterberichtigung.md:122-124` nennt `125`, richtig ist heute `132`; die
+zweite Angabe `:145` gehoert auf `152`. Beide um +7 durch `0f554dd9`. Das allgemeine Problem ist
+nicht neu und liegt schon in der Prozessquelle selbst.
+
+## §140 — Posten (b): der Abschnitt, der vor toten Zeilenverweisen warnt, trägt sechs davon — seine eigenen
+
+*(Messstand 6f151610, 21.08. 11:33. Nummer gegen den frischen HEAD gewaehlt, beide Schreibweisen
+geprueft: 77 Abschnitte, hoechste 139, 140 frei.)*
+
+**Gegenstand.** Der Abschnitt **"⚠ ZEILENVERWEISE AUF DIESE DATEI SIND UNZUVERLAESSIG — gemessen
+16.08. abends"** in `docs/ARBEITSREGELN.md` (ueber die Ueberschrift zu finden, nach der Praxis aus
+§139). Er nennt drei Zahlen, und die Wache verlangt, jede fremde Zahl frisch zu messen.
+
+**Am Stand von damals stimmten sie exakt.** Gemessen an `fd7f30bf` (16.08. 19:56, dem Commit, der
+den Abschnitt anlegte):
+
+| Zusage | an `fd7f30bf` | heute | Versatz |
+|---|---|---|---|
+| Abschnitt 18a steht bei **900** | `## 18a.` bei **900** ✓ | **917** | **+17** |
+| Hausregel H-8 steht bei **973** | `### H-8 ·` bei **973** ✓ | **990** | **+17** |
+| Versatz **+161** | richtig | **+178** (917−739 und 990−812) | **+17** |
+
+**Und was heute an den zugesagten Zeilen steht, ist genau das, wovor der Abschnitt warnt:**
+
+- `:900` traegt heute **`## 18. Verbotene Abkuerzungen`** — der **Nachbarabschnitt**.
+- `:973` traegt heute **`### H-6 · Ein Wort ist kein Beleg; erst die Stelle ist einer`** — die
+  **Nachbar-Hausregel**.
+
+Wer die Zahl `973` prueft, findet dort eine Hausregel. Nicht die genannte, aber eine — und genau
+darum geht es in dem Satz, den derselbe Abschnitt schreibt: *"Ein toter Zeilenverweis ist schlimmer
+als ein fehlender. Ein fehlender zwingt zum Suchen; ein toter fuehrt an eine falsche Stelle, **die
+plausibel aussieht**."*
+
+**Gezaehlt, mit dem genannten Muster:** `900` steht **zweimal** als Zusage (`:1600`, `:1640`), `973`
+**dreimal** (`:1601`, `:1630`, `:1641`), dazu der Versatz `+161` — **sechs veraltete Angaben**, alle
+um denselben Betrag.
+
+**Was NICHT veraltet ist, und das ist der Punkt.** Derselbe Abschnitt gibt zwei Zeilen weiter das
+Gegenmittel:
+
+```
+NICHT   ARBEITSREGELN.md:739
+SONDERN Abschnitt 18a  (ueber die Ueberschrift zu finden)
+        Hausregel H-8  (ueber die Kennung zu finden)
+```
+
+**Diese beiden Verweise treffen heute noch** — ich habe genau so gesucht und beide gefunden. Auf
+einer Seite stehen die Diagnose, die veraltet ist, und das Rezept, das haelt. Haette der Abschnitt
+sein eigenes Rezept auf sich selbst angewandt, waere er immun.
+
+**Kein Vorwurf, und die Einordnung gehoert dazu.** Die Ueberschrift traegt *"gemessen 16.08.
+abends"* — die Zahlen sind **datiert und waren richtig**. Nach der Haltbarkeitsregel (Abschnitt
+"Zwei Haltbarkeiten einer Messung") liegt der Fall in der Luecke zwischen den Klassen: er beschreibt
+**versionierten** Inhalt (waere mit einem SHA fuer immer haltbar), ist aber nur mit einem **Datum**
+belegt. Ein Datum macht eine fluechtige Messung haltbar; eine SHA-faehige Messung wird davon nicht
+haltbar, sondern nur ehrlich.
+
+**Eigener Fehler, dokumentiert:** ich hatte den Versatz auf **+7** vorhergesagt — abgeleitet aus
+`0f554dd9`, dem Verursacher aus §139. Gemessen sind es **+17**. Ich hatte von einem bekannten
+Einschub auf die Gesamtverschiebung geschlossen, statt an beiden Staenden nachzusehen. Eine
+Herleitung ist keine Messung, auch wenn sie von einer Messung ausgeht.
+
+**Ball beim Planner**, klein: sechs Zahlen im Warnabschnitt nachziehen (900→917, 973→990,
++161→+178) — oder, im Sinn des Abschnitts selbst, durch Ueberschrift und Kennung ersetzen und damit
+dauerhaft erledigen.
+
+### Nachtrag zu §140 — das Tor hat mich beim selben Fehler gefangen, über den §140 handelt
+
+*(Messstand 515b68c7, 21.08. 11:36.)*
+
+Der Commit zu §140 lief durch, aber nicht schweigend: **B5-WARNUNG — *"Zaehlwort in der Botschaft,
+aber keine Belegzeile (datei.ext:zeile)"***. Welche der drei Warnungen gefeuert hat, habe ich rein
+lesend bestimmt, indem ich die Botschaft gegen die Muster im Tor hielt: `B5_ZAEHLWORT` trifft,
+`B5_BELEGZEILE` trifft **nicht**; B6 und B7 feuern nicht.
+
+**Die Ursache ist meine Praxisaenderung aus §139, halb ausgefuehrt.** Dort habe ich mir vorgenommen,
+bei Verweisen die Ueberschrift oder den SHA mitzunennen. In der §140-Botschaft habe ich stattdessen
+die **Dateinamen weggelassen** und nur noch `:1600`, `:1601`, `:1630`, `:1640`, `:1641` geschrieben.
+Das Muster `commit-pruefen.sh:850` verlangt `[A-Za-z0-9_./-]+\.[A-Za-z]{1,5}:[0-9]+` — ein nackter
+Doppelpunkt-Zeiger ist keine Belegzeile. **Sechs gezaehlte Angaben ohne eine einzige nachschlagbare
+Fundstelle**, und das in einem Abschnitt ueber unbrauchbare Verweise.
+
+**Belegzeilen nachgereicht, damit die Zahl aus §140 nachschlagbar ist:**
+`docs/ARBEITSREGELN.md:1600` und `docs/ARBEITSREGELN.md:1640` tragen die `900`,
+`docs/ARBEITSREGELN.md:1601`, `docs/ARBEITSREGELN.md:1630` und `docs/ARBEITSREGELN.md:1641` die
+`973`, und `docs/ARBEITSREGELN.md:1600-1601` den Versatz `+161`.
+
+**Was ich aendere:** in Botschaften nenne ich die Fundstelle immer voll — `datei.ext:zeile`, nicht
+`:zeile`. Die Ueberschrift kommt dazu, sie ersetzt den Dateinamen nicht. Die Historie fasse ich
+dafuer nicht an (B6, keine Datei-Chirurgie); die Berichtigung steht hier.
+
+## §141 — Posten (c): F-014 rechnet in fünf von sechs Lagen exakt, und im sechsten verliert sie genau das, wofür sie gebaut ist
+
+*(Messstand be932eba, 21.08. 11:38. Nummer gegen den frischen HEAD gewaehlt: 78 Abschnitte, hoechste
+140 — 141 war frei. Klasse nach §132: SHA-verankert.)*
+
+**Wahl.** **F-014 · Innenwinkel an einer Polygonecke** (`docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md:404-420`),
+eine der sechs Formeln, die in dieser Datei nie vorkamen. Ihr Zweck steht dort woertlich:
+*"Feststellen, ob eine Ecke nach aussen oder nach innen springt. **Das ist die Erkennung, an der W-07
+bisher scheiterte.**"*
+
+**Die Umsetzung folgt der Formel Zeile fuer Zeile** — `resources/planner/hausplaner/geometry/dachTopologie.ts:133-152`:
+`|| 1` bei `:138-139`, die Klemmung auf [−1,1] bei `:145`, `acos` bei `:146`, das Kreuzprodukt bei
+`:147`, `isCCW ? cross > 0 : cross < 0` bei `:148`, `360 − β` bei `:149`, `> 180 → innen` bei `:152`.
+Gefunden ueber die Gestalt: `Math.acos` kommt in der ganzen Insel **einmal** vor.
+
+**Gerechnet am echten Modul** (esbuild-Bundle, Export `analyzeTopology`), Pruefmass ist die
+Winkelsumme `(n−2)·180`:
+
+| Lage | Winkel | Summe / Soll |
+|---|---|---|
+| Quadrat CCW | 90 · 90 · 90 · 90 | **360 / 360** ✓ |
+| Quadrat CW | 90 · 90 · 90 · 90 | **360 / 360** ✓ |
+| L-Form CCW | 90 · 90 · 90 · **270** · 90 · 90 | **720 / 720** ✓ |
+| L-Form CW | 90 · 90 · 90 · **270** · 90 · 90 | **720 / 720** ✓ |
+| Rechteck mit kollinearem Punkt | 90 · **180** · 90 · 90 · 90 | **540 / 540** ✓ |
+| **doppelter Punkt** | 90 · 90 · 90 · 90 · 90 | **450 / 540 — −90** |
+
+Die einspringende Ecke wird in **beiden** Umlaufrichtungen erkannt; genau dafuer steht `isCCW` im
+Code, und es traegt. Der kollineare Zwischenpunkt gibt sauber 180° und `aussen`.
+
+**Der sechste Fall, gemessen statt vermutet.** Ein doppelter Punkt macht einen der beiden
+normierten Vektoren zum Nullvektor; `dot` wird 0, `acos(0)` ist 90°. **Beide Nachbarecken melden
+90°, und der echte Winkel an dieser Stelle ist geloescht.** Der Verlust ist keine Konstante,
+sondern genau der zerstoerte Winkel:
+
+```
+Quadrat, Punkt doppelt          Summe 450 / 540    -90
+spitzes Dreieck, Punkt doppelt  Summe 352 / 360     -8
+L-Form, Doppelung auf der
+      einspringenden Ecke       Summe 630 / 900   -270
+Quadrat, zwei Doppelungen       Summe 540 / 720   -180
+```
+
+**Und damit faellt genau die Erkennung aus, fuer die F-014 gebaut ist:**
+
+| Lage | einspringende Ecken erkannt |
+|---|---|
+| L-Form, sauber | **1** |
+| L-Form, Punkt **auf** der einspringenden Ecke doppelt | **0** |
+| L-Form, Doppelung woanders | **1** |
+
+Der Ausfall ist **oertlich**: er trifft nur die Ecke, auf der die Doppelung liegt — und wenn das die
+einspringende ist, meldet das Werkzeug lautlos "alles aussen".
+
+**Die Formelsammlung weiss es und sagt es**, zitiert statt nachgebaut: *"Laenge 0 → im Quellcode auf
+1 gesetzt (`|| 1`) … **Sauberer waere eine Absage — eine Ecke mit Laenge 0 ist keine Ecke.**"* Neu
+ist hier nicht der Mangel, sondern sein **Preis**, in Zahlen.
+
+**Der vorhandene Test ist ehrlich und eng, kein Widerspruch.**
+`resources/planner/hausplaner/__tests__/dachTopologie.test.ts:123-130` heisst *"entartete Kante:
+zwei gleiche Punkte lassen die Rechnung nicht abstuerzen"* und sichert genau zwei Dinge zu: vier
+Ecken und **kein NaN**. Beides trifft zu. Dass die Winkel dabei falsch sind, prueft er nicht — und
+behauptet es auch nicht.
+
+**Wirkung: latent.** Alle **15** Verbraucher von `analyzeTopology` stehen in eben dieser einen
+Testdatei, kein einziger im Produktivpfad, und `geometry/dachTopologie.ts` gehoert zu den 33 Modulen
+ohne Ladeweg (§133). Kein Schaden heute.
+
+**Ball beim Planner**: F-014 empfiehlt die Absage selbst — das ist eine Bau-Entscheidung, keine
+Messfrage. Bleibt der `|| 1`-Wächter, waere die kleine Ergaenzung am Test die ehrlichere Fassung:
+die bekannten falschen Werte festschreiben, damit der Preis sichtbar bleibt statt bei der naechsten
+Wiederverwendung neu entdeckt zu werden.
+
+## §142 — Posten (d): vier Rollen sind binnen drei Minuten verstummt, die Warteschlange ist leer, und das Tor davor bin ich
+
+*(Messstand 95945409, 21.08. 11:42. Nummer gegen den frischen HEAD gewaehlt: 79 Abschnitte, hoechste
+141 — 142 war frei. Klasse nach §132: der Aktivitaets-Teil ist FLUECHTIG und traegt deshalb den
+Zeitstempel; die Regel- und Zustandsbelege sind SHA-verankert.)*
+
+**Fluechtige Messung, Zeitstempel 21.08.2026 11:40:31** — letzter EIGENER Commit je Rolle, ueber die
+Rollenmarke gesucht, nicht ueber die Zweigspitze:
+
+| Rolle | letzter eigener Commit | Alter | eigene Commits heute |
+|---|---|---|---|
+| **plan-pruefer** (ich) | 11:39 | **0 Min** | **24** |
+| integrator | 10:46 | 54 Min | — |
+| generator | 10:07 | **93 Min** | 3 |
+| release-pruefer | 10:04 | **95 Min** | 7 |
+| evaluator | 10:04 | **96 Min** | 1 |
+| planner | 10:04 | **96 Min** | 4 |
+
+**Vier Rollen haben binnen drei Minuten aufgehoert** (10:04 bis 10:07) und sich seither nicht
+geruehrt. Drei Zweige — `rolle/evaluator`, `rolle/planner`, `rolle/release-pruefer` — stehen sogar
+auf **demselben** SHA `03e9ac41`, einem Transport-Merge des Release-Pruefers.
+
+**Die Warteschlange erklaert es, und sie ist leer:** `BEREIT` **0**, `IN_ARBEIT` **0**. Es gibt
+nichts zu bauen. Nicht-terminal sind nur vier `ENTWURF`, ein `CODE_FERTIG` (Ball Evaluator) — und
+die fuenf `Z1-W1`, die in der Statuswahrheit gar nicht vorkommen (§138).
+
+**Die Kette bis zum Ursprung gemessen, und sie endet bei mir.**
+`docs/ARBEITSREGELN.md:253` sagt woertlich: *"Ein Auftrag darf nur `BEREIT` werden, wenn **der
+Plan-Pruefer** alle folgenden Punkte belegt hat."* Die fuenf Welle-1-Blaetter tragen alle
+`baut: generator` und `nimmt_ab: evaluator`. **Das Schweigen des Generators ist also kein
+Leerlauf, sondern eine leere Warteschlange — und die Weiche davor ist meine.**
+
+**Und sie ist nicht durch §123 verschlossen.** Das habe ich geprueft, statt es anzunehmen:
+
+- Die DoR-Kriterien (`docs/ARBEITSREGELN.md:255-262`) nennen Basis-SHA, Ziel, Ist-Beleg, Scope,
+  Nicht-Ziele, Konfliktpruefung, Abhaengigkeitskette, Akzeptanzfaelle — **keines** verlangt einen
+  Datensatz in `docs/STATUS.md`.
+- `docs/ARBEITSREGELN.md:247-249`: *"Tafelzeile, `zustand` und `dor_beleg` sind EIN Handgriff … die
+  Regel oben sagt nur, **wer** ihn zuerst ausfuehrt."* Sie regelt die **Reihenfolge**, nicht die
+  Moeglichkeit.
+- Und §123 selbst handelt ausweislich seiner Ueberschrift vom **Datensatz** und der Sperre — ich
+  habe dort nie behauptet, die DoR sei blockiert. Sie ist es nicht.
+
+**Was blockiert ist, ist das EINTRAGEN**, nicht das Pruefen: `dor_beleg` und `zustand: BEREIT`
+gehoeren in `docs/STATUS.md`, und dorthin schreibt nur der Integrator
+(`scripts/rollen-tor.sh:344`, Vollzug `:403-407` mit `exit 1`). Genau denselben Weg bin ich bei
+A-38/A-39/A-40/A-42 gegangen: **Votum geliefert und in dieser Datei belegt, Eintragen beim
+Integrator** (§108).
+
+**Ball bei mir, und ich benenne ihn als offene Arbeit statt als Befund:** fuenf DoR-Pruefungen fuer
+`Z1-W1-1` bis `Z1-W1-5`, jede am Basis-Stand `11f7c4c3` und mit durchgerechneten Formeln, wie §5 es
+verlangt. Das ist mehr als eine Runde; ich fange in der naechsten damit an und liefere je Blatt ein
+eigenes Votum. **Solange steht der Stillstand nicht bei den anderen vier Rollen, sondern hier.**
+
+## §143 — DoR Z1-W1-1 (DIN-Badge): NICHT ERTEILT. Der Ist-Beleg trifft zeichengenau, aber zwei der vier Abnahmekriterien sind im eigenen Scope nicht prüfbar
+
+*(Messstand d4514f52, 21.08. 11:45. Nummer gegen den frischen HEAD gewaehlt: 80 Abschnitte, hoechste
+142 — 143 war frei. Erste der fuenf DoR aus §142. Kennung aus der Kopfzeile, das Blatt hat kein
+`auftrag:`-Feld — §138.)*
+
+**Blatt:** `docs/auftraege/generator-auftrag-z1-w1-1-din-badge-ehrlich.md` (44 Z.), `zustand: ENTWURF`,
+`basis_sha: 11f7c4c3`. Alles unten ist **am Basis-Stand** gemessen, nicht am HEAD.
+
+### Was haelt — und es haelt zeichengenau
+
+| §5-Punkt | Ergebnis |
+|---|---|
+| exakter Basis-SHA | `11f7c4c3` existiert, 21.08. 09:54 (`planner: Inventur Z1 abgeschlossen`) ✓ |
+| Ist-Beleg aus aktuellem Code | **alle vier Zeiger treffen woertlich** ✓ |
+| kleinster sinnvoller Scope | eine Datei + Test; das Badge existiert nur dort ✓ |
+| ausdrueckliche Nicht-Ziele | drei, benannt ✓ |
+| Konfliktpruefung | **selbst gemessen: 0 Commits** auf `app/rahmen/EigenschaftenPanel.tsx` seit der Basis ✓ |
+| Rot-Lage vor dem Bau | **wirksam rot** ✓ — die Badge-Zeile lautet am Basis-Stand `{erg.bestanden ? 'DIN 18065 erfüllt' : 'DIN 18065 verletzt'}`, kein Lueckenhinweis |
+
+Die vier Ist-Belege einzeln geoeffnet, am Basis-Stand:
+`resources/planner/hausplaner/geometry/treppenBerechnung.ts:58` traegt
+`const DURCHGANG_MIN = 2000; // mm, DIN 18065 lichte Höhe`; `:97` traegt
+`if (e.durchgangshoehe !== undefined) {`;
+`resources/planner/hausplaner/app/rahmen/EigenschaftenPanel.tsx:494` den Aufruf und `:499` den
+Badge-Text. **Vier von vier.**
+
+### Restpunkt 1 (tragend) — Kriterium A ist im eigenen Scope nicht prüfbar
+
+Kriterium A verlangt, die neue Anzeige **„im Test am Text festgehalten"**. Der Badge-Text ist am
+Basis-Stand ein **inline-JSX-Ternaer** in einer Zeile (`app/rahmen/EigenschaftenPanel.tsx:499`) —
+es gibt keine Funktion, die ein Test aufrufen koennte. Gemessen: die Insel hat **fuenf**
+`__domtests__`-Dateien, **keine** davon fuer dieses Panel. Der Scope nennt *"Badge-Text + zugehoeriger
+Test"* und laesst damit offen, welcher der beiden einzig moeglichen Wege gilt: **neuer DOM-Test** oder
+**Textableitung in eine Funktion herausziehen**. Der zweite Weg aendert mehr als den Text — er
+gehoert in den Scope geschrieben, wenn er gemeint ist.
+
+### Restpunkt 2 (tragend) — Kriterium B ist über das geänderte Bauteil nicht erreichbar
+
+B verlangt: *"Aufruf MIT `durchgangshoehe` < 2000 → weiterhin »verletzt«"*. **Das Panel uebergibt
+dieses Feld nie.** Gegenprobe ueber den Feldnamen am Basis-Stand: `durchgangshoehe` kommt in
+`EigenschaftenPanel.tsx` **null Mal** vor. `erg.bestanden` kann die Kopfhoehen-Pruefung dort also
+gar nicht tragen. B ist nur gegen `berechneTreppe` **selbst** pruefbar — und
+`geometry/treppenBerechnung.ts` ist ausdrueckliches **Nicht-Ziel**. So wie B dasteht, prueft es ein
+Verhalten, das im Scope nicht entstehen kann.
+
+### Restpunkt 3 (klein) — der Ist-Beleg zählt zwei, gemessen sind fünf
+
+Das Blatt nennt *"reale Aufrufe ohne das Feld"* und listet zwei. Ueber den **Funktionsnamen**
+gemessen (nicht ueber Dateinamen), am Basis-Stand, ohne Tests:
+
+```
+berechneTreppe — Nicht-Test-Aufrufer                       durchgangshoehe?   Ladeweg
+  app/rahmen/EigenschaftenPanel.tsx:494                    nein               ja
+  geometry/treppe2D.ts:54                                  nein               ja
+  geometry/treppe3D.ts:44                                  nein               ja
+  geometry/treppenTypen.ts:48                              nein               NEIN (33er-Liste)
+  app/dashboard/enginePanels.ts:164 (ueber :113)           nur wenn eingegeben ja
+```
+
+**Fuenf statt zwei, vier davon erreichbar.** Dazu eine Praezisierung: das genannte
+`renderers/three-d/szene.ts:406-412` ruft nicht `berechneTreppe`, sondern `treppe3DKoerper` — es ist
+ein **mittelbarer** Aufrufer ueber `geometry/treppe3D.ts:44`. Der Punkt untertreibt die Lage, statt
+sie zu uebertreiben; er blockiert nichts, gehoert aber richtiggestellt.
+
+### Votum
+
+**NICHT ERTEILT.** Zwei tragende Restpunkte (A nicht pruefbar im Scope, B im Scope nicht erreichbar),
+ein kleiner (Ist-Beleg-Vollstaendigkeit). **Das Ziel und die Rot-Lage sind in Ordnung, der Bau ist
+sinnvoll** — was fehlt, ist die Entscheidung, WIE der Text pruefbar wird, und eine Fassung von B, die
+im Scope liegt.
+
+**Ball beim Planner** fuer die drei Punkte. **Eintragen** von `dor_beleg` und Zustand bleibt beim
+**Integrator** (`docs/STATUS.md`, alleiniger Schreiber) — und dieser Auftrag hat dort bis heute
+weder Tafelzeile noch Datensatz (§138). Naechste Runde: DoR fuer `Z1-W1-2`.
+
+## §144 — DoR Z1-W1-2 (Walm-Sperre): ERTEILT. Beide gerechneten Zahlen treffen auf die Stelle, und die Rot-Lage ist echt
+
+*(Messstand 7ab0917e, 21.08. 11:50. Nummer gegen den frischen HEAD gewaehlt: 81 Abschnitte, hoechste
+143 — 144 war frei. Zweite der fuenf DoR aus §142. Kennung aus der Kopfzeile.)*
+
+**Blatt:** `docs/auftraege/generator-auftrag-z1-w1-2-walmdach-sperre.md` (52 Z.), `zustand: ENTWURF`,
+`basis_sha: 11f7c4c3`. Alle drei beteiligten Dateien haben **0 Commits seit der Basis** — HEAD und
+Basis sind hier deckungsgleich, gemessen und nicht angenommen.
+
+### Die tragende Rechnung — durchgerechnet, nicht angesehen
+
+Am echten Modul (esbuild-Bundle von `geometry/dachGeometrie.ts`), und **zuerst am bekannten
+Bestandstest kalibriert**:
+
+| Fall | Rueckgabe | Blatt | korrekt (`L·B/cos`) | Blatt | Abweichung | Firstlaenge |
+|---|---|---|---|---|---|---|
+| Kalibrierung 8×12 m | 110,85 | *(gruen)* | 110,85 | — | **+0,0 %** | **4000 mm** ✓ |
+| A: 6×8 m, 30° | **64,66** | 64,66 ✓ | **55,43** | 55,43 ✓ | +16,7 % | **0 mm** |
+| B: 4×10 m, 30° | **80,83** | 80,83 ✓ | **46,19** | 46,19 ✓ | **+75,0 %** ✓ | **0 mm** |
+
+**Alle vier absoluten Zahlen treffen auf die zweite Stelle.** Die Ursache ist sichtbar: `firstLenM`
+wird bei `geometry/dachGeometrie.ts:136` auf 0 geklemmt, und die Firstlaenge **0 mm** in beiden
+Faellen ist der Fingerabdruck davon.
+
+**Rot-Lage A/B: echt.** Beide Faelle liefern heute stumm eine Zahl, kein Wurf — genau wie das Blatt
+sagt.
+
+### Was ich sonst nachgemessen habe
+
+- **Ist-Belege, fuenf von fuenf am Basis-Stand:** `dachGeometrie.ts:136` traegt den Klemmer;
+  `app/HausplanerApp.tsx:1024` `dachFlaechen(dach);`; `projection/dachProjektion.ts:29`
+  `for (const flaeche of dachFlaechen(roof))`; `app/rahmen/EigenschaftenPanel.tsx:249`
+  `<option value="walm">Walmdach</option>`; `geometry/dachformVorlagen.ts:414`
+  `export function walmIstKonsistent(...)`.
+- **Die Auflage traegt.** `walmIstKonsistent` ist woertlich die gebrauchte Regel
+  (`lengthM > widthM`), hat **drei** Testzusicherungen (`__tests__/dachformVorlagen.test.ts:177-179`)
+  und **einen** Produktivverbraucher (`geometry/dachformVorlagen.ts:478`). Fuer Fall A liefert sie
+  `false`, fuer den Bestandstest `true`.
+- **Kriterium D ist pruefbar und heute gruen:** genau **eine** Definition der Regel, keine zweite
+  Fassung.
+- **Der Ausnahmeweg existiert:** `DachGeometrieUngueltig` ist eine Klasse in
+  `geometry/dachGeometrie.ts:22`; das Nicht-Ziel *"die Meldung reist ueber den vorhandenen
+  Fehlerweg"* ist damit erfuellbar.
+- **Kanten gemessen:** der gutmuetige Fall (L > B) bleibt exakt — +0,0 % und Firstlaenge 4000 mm.
+- **Konfliktpruefung:** 0 Commits auf `dachGeometrie.ts`, `utils/dachWerte.ts` und
+  `dachformVorlagen.ts` seit der Basis.
+- **Kopplung bestaetigt:** Z1-W1-3 nennt in seinem Scope dieselbe Datei
+  (`geometry/dachGeometrie.ts`) — die Reihenfolge W1-2 **vor** W1-3 ist begruendet.
+
+### Zwei Anmerkungen, keine Restpunkte
+
+1. **„+16,6 %" ist abgeschnitten, nicht gerundet.** Gerechnet sind **16,666… → +16,7 %**. Die zweite
+   Prozentzahl (+75 %) ist exakt. Kein Sachfehler, aber die Zahl steht als Beleg.
+2. **Der auferlegte Import legt die erste Laufzeitkante nach `geometry/dachformVorlagen.ts`.** Dieses
+   Modul gehoert heute zu den **33 ohne Ladeweg** (§133), erreichbar nur ueber eine `import type`-Kante
+   (§135); `geometry/dachGeometrie.ts` dagegen ist erreichbar. Der Import ist richtig und die Folge
+   erwuenscht — sie gehoert nur benannt, damit die naechste Reichweitenmessung die Aenderung erklaert
+   findet statt sie zu melden.
+
+### Votum
+
+**ERTEILT.** Ziel, Ist-Beleg, Scope, Nicht-Ziele, Kanten, Rueckweg, Konfliktpruefung und
+Abhaengigkeitskette sind vollstaendig; die beiden P1-Kriterien sind **wirksam rot** und nach dem Bau
+messbar gruen; die Auflage benennt eine vorhandene, getestete Regel statt einer dritten Fassung.
+
+**Eigener Fehlgriff, dokumentiert:** meine erste Rechnung vertauschte `laengeM` und `spannM` und gab
+die Ergebnisse **umgekehrt** aus. `laengeM` ist die Ausdehnung **parallel zum First**
+(`geometry/dachGeometrie.ts:82-83`, gedrehtes Bezugssystem), nicht die x-Achse. Gefangen hat es die
+Kalibrierprobe am Bestandstest, die eine bekannte Firstlaenge von 4000 mm verlangt — **eine Rechnung
+ohne bekannten Bezugsfall ist keine Messung.**
+
+**Ball beim Generator** fuer den Bau, **Eintragen** beim **Integrator** (`docs/STATUS.md`, weder
+Tafelzeile noch Datensatz — §138). Naechste Runde: DoR fuer `Z1-W1-3`.
+
+### Nachtrag zu §144 — B7 hat gefeuert, und der Grund ist ein Wort, nicht eine fehlende Messung
+
+*(Messstand 27a3532e, 21.08. 11:52.)*
+
+Der §144-Commit lief mit **B7-WARNUNG** durch: *"Mehrere Fundorte genannt, aber keine Herkunft."*
+Rein lesend bestimmt, indem ich die Botschaft gegen die Muster im Tor hielt: `B7_MEHRFACH` trifft,
+`B7_HERKUNFT` trifft **nicht**; B5 und B6 feuern nicht.
+
+**Die Herkunft stand in der Botschaft — mit Datei und Zeile.** Ich hatte den einen produktiven
+**Aufrufer** von `walmIstKonsistent` benannt (`geometry/dachformVorlagen.ts:478`) und ihn
+*"Produktivverbraucher"* genannt. Das Muster `scripts/commit-pruefen.sh:906` kennt zehn Alternativen
+— `Herkunft`, `Quelle`, `stammt`, `unabhaengig`, `Ursprung`, `kopiert`, `Aufrufer`, `@include`,
+`@extends`, `Route` — und **`Verbraucher` ist keine davon** (nachgemessen: null Treffer in der
+Musterzeile).
+
+**Das ist keine Luecke im Tor, sondern eine zwischen zwei Vokabularen.** Meine stehende Anweisung
+sagt *"Verbraucher ueber FUNKTIONSNAMEN messen statt ueber Dateinamen"* (P7); das Tor erkennt
+denselben Sachverhalt am Wort **Aufrufer**. Dieselbe Klasse wie §135: ein Wort traegt die Bedeutung,
+und zwei richtige Sprachen laufen daran auseinander.
+
+**Was ich aendere:** in Botschaften schreibe ich **Aufrufer** (oder nenne die Herkunft ausdruecklich),
+auch wenn ich im Fliesstext beim Wort *Verbraucher* bleibe. Der Sachverhalt war belegt; belegt sein
+und erkannt werden sind zwei Dinge.
+
+**Kleiner Ball beim Planner** — nicht am Tor, das gehoert mir nicht: entweder `Verbraucher` in
+`scripts/commit-pruefen.sh:906` aufnehmen, oder die Rollen-Anweisung auf `Aufrufer` vereinheitlichen.
+Eines von beiden, sonst faellt der naechste Pruefer in dieselbe Kerbe.
+
+## §145 — DoR Z1-W1-3 (Shoelace zusammenführen): NICHT ERTEILT. Kriterium A misst in beide Richtungen falsch
+
+*(Messstand 4a642d3a, 21.08. 11:54. Nummer gegen den frischen HEAD gewaehlt: 82 Abschnitte, hoechste
+144 — 145 war frei. Dritte der fuenf DoR aus §142. Kennung aus der Kopfzeile.)*
+
+**Blatt:** `docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md` (45 Z.),
+`zustand: ENTWURF`, `basis_sha: 11f7c4c3`.
+
+### Was hält
+
+Alle Ist-Belege treffen am Basis-Stand: `geometry/dachGeometrie.ts:39-45` ist die private Kopie
+(`:44` `s += a.x * b.y - b.x * a.y;`), `geometry/polygonFlaeche.ts:11-13` verpflichtet den Eingang
+auf **Meter**, `:29` verspricht *"Niemals NaN oder Infinity."*, und `geometry/kontur.ts:21-23` traegt
+den Satz ueber *"genau einer Stelle"*. Ziel, Scope (mit ausdruecklichem Entweder-Oder beim
+Einheiten-Vertrag), Nicht-Ziele, Rueckweg und die Kopplung nach W1-2 (in §144 bestaetigt) sind in
+Ordnung. Die Einheiten-Falle ist real und deckt sich mit meinem eigenen Befund §128 — dort gemessen:
+drei Stellen im Baum nennen drei verschiedene Einheiten fuer `polygonFlaecheM2`, waehrend der Rumpf
+**keine** Umrechnung ausfuehrt.
+
+### Restpunkt 1 (tragend) — Kriterium A kann nie grün werden
+
+A verlangt: *"Formelmuster `a.x * b.y` existiert in `geometry/` nur noch in `polygonFlaeche.ts`"*,
+und der P1-Satz sagt *"heute 2 Fundstellen"*. Mit **genau diesem Muster** am Basis-Stand gezaehlt
+sind es **vier Dateien**:
+
+```
+geometry/dachGeometrie.ts:44       s += a.x * b.y - b.x * a.y;        Schuhband  (Ziel der Zusammenfuehrung)
+geometry/polygonFlaeche.ts:44      summe += a.x * b.y - b.x * a.y;    Schuhband  (das Ziel-Modul)
+geometry/aufbauOrientierung.ts:32  function cross(a: Vec3, b: Vec3)   3D-KREUZPRODUKT
+geometry/gaubeGeometrie.ts:59      function cross(a: Vec3, b: Vec3)   3D-KREUZPRODUKT
+```
+
+Die beiden `cross`-Funktionen tragen in ihrer z-Komponente `a.x * b.y - a.y * b.x` — **dieselbe
+Zeichenfolge, eine andere Rechnung**. Nach der Zusammenfuehrung blieben **drei** Treffer stehen. Das
+Kriterium ist so, wie es dasteht, **unerfuellbar**.
+
+### Restpunkt 2 (tragend) — dasselbe Muster übersieht drei echte Schuhband-Fassungen
+
+`signierteFlaeche` existiert am Basis-Stand **dreimal**, jede mit derselben Rechnung:
+
+```
+geometry/roomDetection.ts:70    export function signierteFlaeche(...)   summe += p.x * q.y - q.x * p.y;
+geometry/dachAusschnitt.ts:103  function signierteFlaeche(...)          a     += p.x * q.y - q.x * p.y;
+geometry/grundriss.ts:94        function signierteFlaeche(...)          a     += p.x * q.y - q.x * p.y;
+```
+
+Die Bezeichner heissen dort `p` und `q` — **das Muster `a.x * b.y` findet keine einzige davon.** A
+faengt also zwei Stellen, die nicht gemeint sind, und verfehlt drei, die es sind. Das deckt sich mit
+meinem §122 (*"sieben Umsetzungen"*), hier auf die vom Blatt gewaehlte Grundmenge `geometry/`
+heruntergerechnet.
+
+### Restpunkt 3 (Entscheidung nötig) — Kriterium D hat zwei Lesarten, und nur eine liegt im Scope
+
+Der Satz in `geometry/kontur.ts:21-23` handelt von **`signierteFlaeche`**, nicht von
+`polygonFlaecheM2`: *"Wiederverwendet wird dagegen `signierteFlaeche` aus `roomDetection.ts` — die
+Flaechenformel steht damit weiterhin an genau einer Stelle."* Gemessen sind es **drei** Fassungen —
+der Satz ist heute schon unwahr, und zwar aus einem Grund, den dieser Auftrag ausdruecklich **nicht**
+anfasst (Nicht-Ziel: *"die anderen Shoelace-Vorkommen sind NICHT Gegenstand"*). Der Scope bietet
+*"Satz wahr machen **oder** berichtigen"* — **wahr machen liegt ausserhalb**, berichtigen liegt
+drin. D sagt *"stimmt wieder mit dem Bestand ueberein"* und laesst beides offen; der Auftrag muss
+sich festlegen.
+
+### Anmerkung, kein Restpunkt
+
+Das Ziel-Modul `geometry/polygonFlaeche.ts` gehoert selbst zu den **33 ohne Ladeweg** (§119, heute
+erneut gemessen). Die Zusammenfuehrung macht es zum ersten Mal lebendig — erwuenscht, und dieselbe
+Lage wie bei W1-2 (§144). Gehoert benannt, damit die naechste Reichweitenmessung die Aenderung
+erklaert findet.
+
+### Votum
+
+**NICHT ERTEILT.** Zwei tragende Restpunkte (A unerfuellbar **und** falsch gemessen) und eine
+noetige Entscheidung (D). **Die Sache selbst ist richtig und ueberfaellig** — eine ungeschuetzte
+Kopie neben einer geschuetzten Fassung, dazu die Einheiten-Falle; was fehlt, ist ein Kriterium, das
+die Schuhband-Formel an ihrer **Rechnung** erkennt statt an einer Zeichenfolge, die zwei
+Kreuzprodukte mitnimmt und drei Fassungen uebersieht.
+
+**Ball beim Planner** fuer A und D. **Eintragen** beim **Integrator** (`docs/STATUS.md`: weder
+Tafelzeile noch Datensatz, §138). Naechste Runde: DoR fuer `Z1-W1-4`.
+
+## §146 — DoR Z1-W1-4 (dachWerte stilllegen): ERTEILT. Die Byte-Gleichheit ist am Blob bewiesen, nicht am diff
+
+*(Messstand 4ea7867c, 21.08. 11:57. Nummer gegen den frischen HEAD gewaehlt: 83 Abschnitte, hoechste
+145 — 146 war frei. Vierte der fuenf DoR aus §142. Kennung aus der Kopfzeile.)*
+
+**Blatt:** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` (41 Z.),
+`zustand: ENTWURF`, `basis_sha: 11f7c4c3`.
+
+### Die tragende Behauptung, staerker belegt als das Blatt sie belegt
+
+Das Blatt sagt *"`diff` beider Dateien leer"*. Ich habe es nicht diffiert, sondern die **Blob-Namen**
+verglichen — dasselbe Ergebnis, nur beweiskraeftiger, weil git denselben Inhalt zwingend gleich
+benennt:
+
+```
+resources/planner/hausplaner/geometry/dachWerte.ts    blob e5e5c93b   4188 B
+resources/planner/utils/dachWerte.ts                  blob e5e5c93b   4188 B
+```
+
+**Derselbe Blob. Byte-identisch, ohne Spielraum.** Die Byte-Zahl **4188** im Blatt ist exakt.
+
+### Was ich sonst nachgemessen habe — alles am Basis-Stand
+
+| Zusage | gemessen |
+|---|---|
+| Aufrufer 1: `dachGeometrie.ts:13` → `../../utils/dachWerte` | `import { sichererCos } from '../../utils/dachWerte';` ✓ |
+| Aufrufer 2: `dachformVorlagen.ts:34` → `./dachWerte` | `import { sichererCos, cmZuMFloor, DACH_FLOOR_CM } from './dachWerte';` ✓ |
+| Der einzige Test deckt nur die geometry-Kopie | `__tests__/dachWerte.test.ts:12` → `} from "../geometry/dachWerte";` ✓ — die utils-Kopie ist ungetestet |
+| Entstehung `00bfed2b` (18.07.) | existiert, 18.07., *"Hausplaner-Heimat nach ticket"* ✓ |
+| Entstehung `588283df` (23.07.) | existiert, 23.07., *"W-1: Dach-Werte + Verschneidung"* ✓ |
+| **P1-A wirksam rot: heute 1 produktiver Treffer** | **genau 1** — `dachGeometrie.ts:13` ✓ |
+| Konfliktpruefung | **0 Commits** auf alle drei beteiligten Dateien seit der Basis ✓ |
+
+**Kriterium A ist nach dem Bau erreichbar:** ausserhalb dieser einen Zeile referenziert **nichts** in
+`resources/` die utils-Kopie.
+
+### Drei Anmerkungen, keine Restpunkte
+
+1. **„104 Z." ist um eins zu hoch.** Zwei Verfahren geben **103** (`wc -l` und `grep -c ''`), und die
+   Datei endet mit einem Zeilenumbruch — die Zahl ist also unter jeder Zaehlweise 103. Unabhaengig
+   bestaetigt: `docs/S-1-ANSCHLUSSMESSUNG.md:620` fuehrt dieselbe Datei mit **103 Z.** (fremde
+   Messung, zitiert, nicht nachgebaut). Die Byte-Zahl daneben ist exakt — ohne Folge fuer den Bau.
+2. **Kriterium C verlangt eine md5 — die es schon gibt, besser.** Der Blob-Name `e5e5c93b` ist genau
+   der Anker, den C sucht: er steht dauerhaft in der Historie und ist das, woran git selbst
+   Gleichheit misst. Eine md5 schadet nicht; den Blob-Namen mitzuschreiben kostet nichts und ist von
+   jedem spaeter nachpruefbar.
+3. **Ein Aufrufer ausserhalb von `resources/`, und er ist richtig ausgeklammert.**
+   `docs/planner/pv-belegung-referenz/DachplanerProPage.tsx:25` importiert aus derselben Quelle — es
+   ist die 269-KB-Referenzdatei unter `docs/` (dieselbe wie in §135), nicht der Produktivbaum. Das
+   Kriterium ist bewusst auf `resources/` geschnitten und damit richtig; gehoert nur benannt, damit
+   es spaeter niemand als uebersehenen Aufrufer meldet.
+
+### Votum
+
+**ERTEILT.** Alle §5-Punkte sind vollstaendig: Basis-SHA, Ziel, Ist-Beleg (jede Einzelangabe am
+Basis-Stand geprueft), kleinster Scope, ausdrueckliche Nicht-Ziele, Konfliktpruefung selbst gemessen,
+Rot-Lage echt und mit **einer** Zahl belegt, Rueckweg trivial (**keine Loeschung**, Y-2). Die
+Entscheidung Y-2 steht im Blatt und wird eingehalten — Stilllegungsvermerk statt Loeschung ist
+genau die Rueckfall-Regel.
+
+**Ball beim Generator** fuer den Bau, **Eintragen** beim **Integrator** (`docs/STATUS.md`: weder
+Tafelzeile noch Datensatz, §138). Naechste Runde: DoR fuer `Z1-W1-5` — die letzte der fuenf.
+
+## §147 — DoR Z1-W1-5 (insulationType ehrlich ausweisen): NICHT ERTEILT. Der Auftrag schreibt eine Messung in den Code, und die Messung ist um eins daneben
+
+*(Messstand 0ae808d8, 21.08. 12:00. Nummer gegen den frischen HEAD gewaehlt: 84 Abschnitte, hoechste
+146 — 147 war frei. Fuenfte und letzte DoR aus §142. Kennung aus der Kopfzeile.)*
+
+**Blatt:** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` (40 Z.),
+`zustand: ENTWURF`, `basis_sha: 11f7c4c3`.
+
+### Die tragende Behauptung hält — und ich habe sie schärfer geprüft als das Blatt
+
+*"keine Schreibstelle im ganzen Baum"*: mit einem Muster auf **Zuweisung** gemessen
+(`insulationType` gefolgt von `:` oder `=` mit Wert) gibt es in `resources/` **null** Treffer; der
+einzige Formtreffer ist die Zod-Deklaration selbst (`domain/validation.ts:46`). **Das Feld wird
+gelesen und nirgends gesetzt.**
+
+Ebenso bestaetigt, alles am Basis-Stand:
+
+| Zusage | gemessen |
+|---|---|
+| Lesestelle `raumProjektion.ts:91` | `bauteil_typ: wandVon.get(kante.wallId)?.construction?.insulationType ? 'aussenwand_gedaemmt' : …` ✓ |
+| Muster „ehrlich null" bei `:95-96` | `decke: null, // P0: ehrlich unbestimmt — kein erfundener Aufbau (Operanden-Gate)` / `boden: null,` ✓ |
+| `EigenschaftenPanel.tsx:324` schreibt nur `materialId` | `<select value={selectedWall.construction?.materialId ?? ''} …>` ✓ |
+| P1-A wirksam rot | `:91` traegt heute nur den Ternary, keinen Hinweis ✓ |
+| Konfliktpruefung | **0 Commits** auf `projection/raumProjektion.ts` seit der Basis ✓ |
+
+Das Nicht-Ziel ist sauber geschnitten: **Y-3 bleibt bei Yama**, weil der Operand fehlt — genau die
+Regel, dass fachliche Entscheidungen nicht still automatisiert werden.
+
+### Restpunkt (tragend) — die Zahl, die in den Code geschrieben werden soll, ist falsch
+
+Der Ist-Beleg sagt *"`grep -rn insulationType` → genau 3 Treffer"* und zaehlt Typ, Zod und
+Lesestelle. Am Basis-Stand in `resources/` gemessen sind es **vier**:
+
+```
+domain/scene-document-v2.schema.json:142   "insulationType": { "type": "string" }   <- FEHLT im Blatt
+domain/scene.types.ts:109                  insulationType?: string;
+domain/validation.ts:46                    insulationType: z.string().optional(),
+projection/raumProjektion.ts:91            Lesestelle
+```
+
+**Die fehlende ist eine dritte Deklarationsstelle**, nicht eine Nebensache: das Nicht-Ziel lautet
+*"Typ und Zod-Schema bleiben"* und deckt damit zwei von drei Orten, an denen das Feld erklaert wird.
+Und der Auftrag liefert als Arbeitsergebnis **eine Messung, die in den Code geschrieben wird**
+(Kriterium A: *"benennt am Code, dass das Feld heute nirgends gesetzt wird (Messung + Y-3-Verweis)"*).
+Eine Zahl, die dauerhaft im Quelltext steht, muss stimmen — sonst wird aus einem ehrlichen Ausweis
+ein neuer unbelegter Satz, und zwar an genau der Stelle, die Ehrlichkeit herstellen soll.
+
+*(Zur Vollstaendigkeit: im ganzen Baum sind es 20 Treffer, davon 15 in `docs/` und einer im gebauten
+Buendel `public/hausplaner/hausplaner.js`. Die Grundmenge `resources/` ist die richtige fuer die
+Frage — nur ist sie im Blatt nicht benannt, und mit ihr sind es vier.)*
+
+### Zwei Anmerkungen, ausserhalb des Auftrags
+
+1. **Das Zielmodul hat keinen Ladeweg.** `projection/raumProjektion.ts` gehoert zu den 33 (§133);
+   ausserhalb der Tests importiert es niemand. Der Kommentar ist trotzdem richtig — er richtet sich
+   an den Leser, nicht an die Laufzeit. Kriterium B (*"Projektion vorher = nachher"*) ist damit eine
+   Aussage auf Testebene; das sollte im Bericht so dastehen.
+2. **Das Nachbarfeld traegt zwei Einheiten.** `insulationThickness` ist in
+   `domain/scene.types.ts` **zweimal** deklariert: `:110` mit dem Kommentar `// m` und `:238` mit
+   `// mm`. Gleicher Name, zwei Einheiten — dieselbe Klasse wie §128. **Nicht Gegenstand dieses
+   Auftrags**, hier nur festgehalten, damit es nicht verlorengeht.
+
+### Votum
+
+**NICHT ERTEILT** — ein Restpunkt, und er ist tragend, weil die Zahl das Arbeitsergebnis ist.
+Behebung ist klein: Grundmenge benennen und **vier** zaehlen (oder die dritte Deklarationsstelle
+ausdruecklich ausklammern). Alles andere an diesem Blatt haelt, einschliesslich der zentralen
+Kausalitaets-Aussage und des sauber gezogenen Y-3-Gates.
+
+**Ball beim Planner** fuer die Zahl. **Eintragen** beim **Integrator**. Damit sind alle fuenf DoR aus
+§142 geliefert: **W1-2 und W1-4 ERTEILT, W1-1, W1-3 und W1-5 NICHT ERTEILT** — zwei Auftraege sind
+baubar, drei brauchen je eine kleine Nachbesserung am Blatt.
+
+### Nachtrag zu §147 — B7 zum zweiten Mal, und meine Behebung von §144 war zu eng
+
+*(Messstand d3d05005, 21.08. 12:02.)*
+
+Der §147-Commit lief erneut mit **B7-WARNUNG** durch (rein lesend bestimmt: `B7_MEHRFACH` trifft,
+`B7_HERKUNFT` trifft nicht). **Das ist ein Rueckfall, und der Fehler liegt in meiner eigenen
+Behebung.** Im Nachtrag zu §144 hatte ich nur *ein Wort* ersetzt — `Verbraucher` → `Aufrufer` — und
+damit den Einzelfall geheilt statt der Klasse. In §147 habe ich die Fundstellen mit *"importiert"*,
+*"Lesestelle"* und *"Deklarationsstelle"* benannt: sachlich genauer als vorher, und wieder keines der
+zehn Woerter, die `scripts/commit-pruefen.sh:906` als Herkunftsbeleg annimmt.
+
+**Was daraus folgt, und diesmal als Regel statt als Wortwechsel:** wenn eine Botschaft mehrere
+Fundorte nennt, schreibe ich **einen Satz mit dem Wort `Herkunft`** dazu — nicht ein Synonym raten,
+sondern den Begriff benutzen, den das Muster fuehrt. Der erste Eintrag im Muster ist `[Hh]erkunft`;
+er trifft immer.
+
+*Die Sache selbst war in §147 belegt: die vier Fundstellen stehen dort einzeln mit Datei und Zeile,
+die fehlende vierte ist benannt. Belegt sein und erkannt werden bleiben zwei Dinge — und eine
+Behebung, die nur den beobachteten Einzelfall trifft, ist keine Behebung.*
+
+## §148 — Posten (e) am eigenen Fehlerregister: alle drei offenen Posten sind nach vier Tagen unverändert — und §130 war ein Nachbau meiner selbst
+
+*(Messstand d4241084, 21.08. 12:05. Nummer gegen den frischen HEAD gewaehlt: 85 Abschnitte, hoechste
+147 — 148 war frei.)*
+
+**Gegenstand:** `docs/BILANZ-plan-pruefer-eigene-fehler.md` (286 Z.), erhoben am 16.08. 20:42 ueber
+**157** eigene Commits: **16** eigene Fehler, **15** selbst berichtigt, **1** nach Zustellung fremd
+behoben, **3 offen**. Zuletzt angefasst 19.08. 19:30.
+
+### Die drei offenen, heute nachgemessen — keiner hat sich bewegt
+
+| Posten der Bilanz (16.08.) | heute gemessen |
+|---|---|
+| 1 · `zustand: BEFUND` in drei eigenen Bloecken (P-03, P-04 zweimal) | **3** — unveraendert (`docs/STATUS.md`) |
+| 2 · P-04 ist eine Kennungs-Dublette | unveraendert (in §130 blockweise bestaetigt) |
+| 3 · `docs/PROBE-TOR.md` liegt „in allen Zweigen" | **6 von 6** Zweigen — unveraendert |
+
+**Die Zustellung ist vier Tage und fuenfzehn Stunden alt.**
+`docs/ZUSTELLUNG-plan-pruefer-an-integrator.md` traegt `Ballbesitz: integrator` und nennt **vier**
+Bloecke; zuletzt angefasst `16c3f4db`, 16.08. 20:35 — **6689 Minuten**. Davon wurde **einer** (A-40)
+noch am selben Abend erledigt, die uebrigen **drei** nicht. Posten 3 liegt seit demselben Abend bei
+Yama, mit dem Grund, dass das Werkzeug eine reine Loeschung nicht als Beleg fuehrt (*„F-14: was
+nicht geschrieben wurde, wird auch nicht belegt"*).
+
+### Und jetzt gegen mich selbst: §130 hat zwei davon als Fund gemeldet
+
+In §130 habe ich die drei `BEFUND`-Felder und die P-04-Dublette gemessen und mit einem Ball an den
+Integrator gemeldet — **ohne zu erwaehnen, dass mein eigenes Register sie seit fuenf Tagen als
+offen fuehrt, samt Zustellung.** Die Messungen stimmen, und §130 hat echtes Neues gebracht: dass
+A-40 geheilt ist (**17 von 18** Bloecken ohne Zustandsfeld), dass `claim` in den Arbeitsregeln
+**genau einmal** vorkommt und `station_geschlossen` **null Mal**. Aber die zwei tragenden Tatsachen
+waren meine eigenen, und ich habe sie **nachgebaut statt zitiert**.
+
+**Wache Punkt 6 sagt: vor jeder eigenen Erhebung lesen, was angekommen ist, und fremde Befunde
+zitieren statt nachbauen. Fuer die eigenen gilt dasselbe** — und bei den eigenen faellt es niemandem
+auf ausser mir.
+
+### Rückfallprüfung gegen die sechzehn Klassen
+
+Einordnung, nicht Messung — ich benenne es als Urteil: von den sechzehn Klassen des 16.08. sind mir
+heute **vier** wiederbegegnet.
+
+```
+Bilanz  1  am falschen Objekt gemessen        -> §129 falsche Traegerdatei · §144 vertauschte Eingaben
+Bilanz  7  las nur eine Datei                 -> §130 Blockgrenze ueberschritten
+Bilanz 10  Messung war wertlos                -> §129 Ziffern statt Nummern · §138 zu weites Zweigmuster
+Bilanz 15  vier Proben als Erhebung           -> §131 aus Zeilenzahlen geschlossen statt gemessen
+```
+
+**Eine Klasse ist neu und steht in den sechzehn nicht:** *belegt sein und erkannt werden sind zwei
+Dinge* — B5 im Nachtrag zu §140, B7 zweimal (§144, §147). Alle drei Male stand die Sache mit Datei
+und Zeile in der Botschaft; sie wurde nur nicht in den Worten geschrieben, die das Tor als Beleg
+fuehrt.
+
+**Was ich aendere:** vor jeder Erhebung, die eine eigene Kennung oder einen eigenen Block betrifft,
+lese ich **erst** `docs/BILANZ-plan-pruefer-eigene-fehler.md`. Das kostet einen Griff und haette
+§130 zu einer Fortschreibung statt zu einem Fund gemacht.
+
+**Ball beim Integrator** — unveraendert und jetzt mit Alter: drei Felder, seit **4 Tagen 15 Stunden**
+zugestellt (`docs/STATUS.md:26543`, `:26582`, `:26667`). **Bei Yama** liegt `docs/PROBE-TOR.md`
+ebenso lange.
+
+## §149 — Posten (a) an den Registern: die Landkarte stimmt, aber sie trägt zwei gewanderte Zeiger — einer davon zweimal
+
+*(Messstand 7b985c0e, 21.08. 12:09. Nummer gegen den frischen HEAD gewaehlt: 86 Abschnitte, hoechste
+148 — 149 war frei.)*
+
+**Warum die Register.** `CLAUDE.md` nennt sie die Landkarte: *"Wer etwas sucht, greift dorthin statt
+zu raten."* Ein gewanderter Zeiger wiegt dort schwerer als in einem Bericht, weil die Karte an die
+Stelle des Ratens tritt.
+
+### Was hält — und das ist der groessere Teil
+
+**Alle 55 Links loesen auf.** Geprueft ueber sechs Register (`docs/REGISTER.md` und die fuenf
+Fach-Register), jeder Zielpfad relativ zum eigenen Verzeichnis geoeffnet: **0 tote Links**.
+
+**Das Werkbank-Register haelt sein eigenes Wort.** Es definiert `BESCHRIEBEN` als *"alle sieben
+Blaetter gefuellt"* und vergibt es **37**-mal. Gemessen:
+
+- **37 von 37** Scheiben haben genau **sieben** Eintraege.
+- **37 von 37** sind auch inhaltlich gefuellt: gegen `_VORLAGE/` gerechnet liegt die **niedrigste**
+  bei **116** eigenen Zeilen (W-04) — gegen die 6 von W-19, das folgerichtig nicht `BESCHRIEBEN`
+  heisst, sondern `GEGENSTANDSLOS`.
+
+Das Vokabular des Registers deckt sich also mit dem Bestand, an beiden Stellen nachgemessen.
+
+### Was nicht hält: 43 Code-Zeiger, und zwei zeigen auf etwas anderes
+
+**1 · `dachAusschnitt.ts:26`** (Zeile W-29). Heute steht dort `* ---`, eine nackte Trennzeile im
+Kommentar. Vor dem Herkunftsvermerk trug `:26`
+`import { polygonFlaecheM2, type Punkt2D } from './polygonFlaeche';` — genau das, was die Zeile
+belegen soll (F-011). Der Inhalt liegt heute auf **`:47`**, also **+21**. *Dieser Zeiger ist bereits
+in den 86 aus §134 enthalten* — er steht hier, weil der Traeger die Landkarte ist.
+
+**2 · `studioDaten.ts:163` — und zwar zweimal**, in den Zeilen **W-38** (`REGISTER.md:125`) und
+**W-40** (`:127`). Heute traegt `:163` einen Kommentar ueber PHP-Routen
+(`web.php:5016/5018/5020` → `objekt.blade.php:144` → `main.tsx:89` → …). Gesucht ist `SchrittStatus`,
+und der steht auf **`:173`** — exakt **+10**, und die Datei misst heute **267** Zeilen, genau wie
+§110 es gemessen hat (damals 257 → 267).
+
+**Dieser Zeiger liegt ausserhalb der Grundmenge von §134**: `studioDaten.ts` gehoert nicht zu den
+fuenf Dateien des Herkunftsvermerks, die Verschiebung hat eine andere Ursache. Er ist damit eine
+**Fortschreibung von §109 und §110**, nicht ein neuer Fund: dort in `W-36/1-ZWECK.md:62`,
+`W-36/2-FUNKTION.md:10` und in W-38 belegt — **mit den beiden Registerzeilen sind es fuenf Stellen,
+an denen dieselbe falsche Zahl steht.**
+
+### Eigener Fehler, gefangen bevor er zum Ergebnis wurde
+
+Mein erstes Zeilenmuster fuer die Registertabelle verlangte ein Sternchen vor der Kennung
+(`\*\*?W-`), die Tabelle fuehrt sie aber **ohne** (`| W-01 | …`). Es traf **nichts** — und die
+Leermeldung sah aus wie *"keine Abweichungen"*. Erst der Blick auf eine echte Tabellenzeile hat es
+gezeigt. **Ein Muster, das nichts trifft, meldet dasselbe wie ein Bestand ohne Mangel;** ich habe es
+am bekannten Treffer nachgezogen, dann stimmten Zeilenzahl (37) und Wortzaehlung (37) ueberein.
+
+**Ball beim Planner**, klein und mit den Zielen benannt: `REGISTER.md:96` soll auf
+`dachAusschnitt.ts:47` zeigen, `REGISTER.md:125` und `:127` auf `studioDaten.ts:173`. Die Landkarte
+ist die letzte Stelle, an der eine falsche Zeile stehen sollte.
+
+## §150 — Posten (b) am Messblock des Registers: sechs von acht Zahlen treffen, und die zwei anderen waren schon beim Schreiben falsch
+
+*(Messstand 927fc45f, 21.08. 12:13. Nummer gegen den frischen HEAD gewaehlt: 87 Abschnitte, hoechste
+149 — 150 war frei.)*
+
+**Gegenstand.** Der Messblock im Werkbank-Register
+(`docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md:296-312`), eingeleitet mit *"Die Messungen, je
+Formel einmal, in `resources/planner/hausplaner/`"*. Er nennt **Muster und Zahlen** — genau das, was
+Posten (b) nachzaehlt. Die Legende (`:288-293`) ist praezise: `✓` = am Code belegt, `ⓝ` = am Code
+nicht belegt.
+
+### Sechs Zahlen, exakt getroffen
+
+| Zusage | Muster | gemessen |
+|---|---|---|
+| F-001 `fangKern` **4x** | `Math.hypot\|Math.sqrt` | **4** ✓ |
+| F-001 `bemassung` **1x** | dito | **1** ✓ |
+| F-001 `masseingabe` **1x** | dito | **1** ✓ |
+| F-027 `gaubeGeometrie` **6x** | `Math.tan` | **6** ✓ |
+| F-004 `fangKern` **0x** | `schnittpunkt` | **0** ✓ |
+| F-012 `trefferSuche` **0x** | `Math.` | **0** ✓ |
+
+Auch die drei Fundorte von F-004 tragen ihren Inhalt: `geometry/schifterListe.ts:71`
+(`function schnittpunkteU(...)`), `geometry/wallGeometry.ts:62` (Gehrung/Schnittpunkt) und `:106`
+(*"Liefert die beiden Schnittpunkte der Bandkanten"*). **Die Null-Behauptungen sind die
+wertvollsten und sie halten beide** — dort bestaetigt sich ein unscharfes Muster sonst still selbst.
+
+### Zwei Zahlen treffen nicht
+
+**1 · „(14 Module insgesamt)" bei F-001.** Gemessen mit dem genannten Muster in der genannten
+Grundmenge: **36** Module (`.ts`+`.tsx` der ganzen Insel). Ohne Tests **27**, nur `geometry/` **16**.
+**Keine der drei Lesarten ergibt 14.**
+
+**2 · „NUR EIN Treffer" bei F-031.** Mit dem genannten Muster `csg|CSG` sind es **drei**:
+`geometry/dachAusschnitt.ts:10` (der zitierte Kommentar ✓) sowie
+`renderers/three-d/segmentierung.ts:2` und `:7`.
+
+### Und beide waren schon beim Schreiben falsch — das unterscheidet sie von allem heute Vorherigen
+
+Am **eigenen Stand des Registers** gemessen (`dbdd4691`, 16.08. 21:34) ergeben dieselben Muster
+**dieselben Zahlen: 36 und 3.** Es ist also **keine Drift**, wie in §134, §139, §140 und §149,
+sondern ein **Messfehler bei der Erhebung**. Der Unterschied ist wichtig fuer die Behebung: eine
+gewanderte Zahl zieht man nach, eine falsch erhobene muss man neu erheben.
+
+**Die Folgerung von F-031 ueberlebt trotzdem, und das gehoert dazu.** Alle drei Treffer sind
+**Kommentare**, keiner ist eine CSG-Operation — und die zwei zusaetzlichen sagen sogar ausdruecklich,
+dass das Modul *CSG-frei* ist. **Der Schluss des Registers ist richtig, seine Zahl ist es nicht.**
+Ein Wort, das sein eigenes Fehlen ankuendigt, wird von jeder Zaehlung mitgezaehlt.
+
+### Was ich nicht gemessen habe, und warum
+
+Der Block sagt bei `:292-293` selbst: *"ohne Zeichen UNGEPRUEFT — kein Blatt benennt das Modul, also
+ist die Zuordnung nicht messbar. Ich habe sie NICHT geraten (13 der 23 Zeilen)."* **Das ist die
+richtige Haltung** und ich habe sie nicht angetastet. Das Zahlenpaar *13 von 23* habe ich **nicht**
+nachgezaehlt, weil die Grundmenge „23 Zeilen" im Block nicht benannt ist und die Tabelle darueber
+mehr Zeilen fuehrt — eine Zahl ohne Grundmenge kann ich weder bestaetigen noch widerlegen, und
+raten waere schlechter als offenlassen.
+
+**Ball beim Planner**: zwei Zahlen im Messblock neu erheben —
+`REGISTER.md:300` („14 Module") und `:310` („NUR EIN Treffer"). Beide sind kleine Korrekturen an
+einem Block, dessen uebrige sechs Zahlen und dessen Legende sauber sind.
+
+## §151 — Posten (c): F-025 hält in allen 25 Kombinationen, und ihr einziger Beleg liegt außerhalb des Repos
+
+*(Messstand af28b5ea, 21.08. 12:16. Nummer gegen den frischen HEAD gewaehlt: 88 Abschnitte, hoechste
+150 — 151 war frei.)*
+
+**Gegenstand: F-025 · Verbindungstyp einer Ecke (Grat · Kehle · Ortgang)**
+(`docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md:423-438`), eine der noch nie gerechneten.
+Ihre Regel ist vollstaendig entscheidbar, und ihr Grenzfall verknuepft sie mit F-014: *"Eine Kehle
+entsteht **nur** an einspringenden Ecken … wenn doch eine gemeldet wird, ist F-014 falsch."*
+
+### Durchgerechnet am echten Modul — 25 von 25
+
+Umsetzung: `resources/planner/hausplaner/geometry/dachTopologie.ts:160-168`, gerechnet ueber ein
+esbuild-Bundle. `istTraufeImWeiterenSinn` (`:95-97`) fasst genau die drei Typen, die F-025
+„traufartig" nennt: `TRAUFE`, `WALM`, `TEILWALM`.
+
+Alle **25** Kantentyp-Paare an einer Aussenecke gegen die Regel gestellt — **0 Abweichungen**:
+
+```
+             TRAUFE   GIEBEL   PULT_W   WALM     TEILWALM
+TRAUFE       grat     ortgang  neutral  grat     grat
+GIEBEL       ortgang  neutral  neutral  ortgang  ortgang
+PULT_WAND    neutral  neutral  neutral  neutral  neutral
+WALM         grat     ortgang  neutral  grat     grat
+TEILWALM     grat     ortgang  neutral  grat     grat
+```
+
+Verteilung, programmatisch gezaehlt statt abgelesen: **grat 9 · ortgang 6 · neutral 10**.
+
+### Der Grenzfall hält in beide Richtungen
+
+| Lage | innenEcken | Kehlen | Grate |
+|---|---|---|---|
+| Rechteck, alle Kanten Traufe | **0** | **0** ✓ | 4 |
+| L-Form mit einer einspringenden Ecke | **1** | **1** ✓ | 5 |
+
+Sechs Ecken = 1 Kehle + 5 Grate. **Die Querprobe zwischen F-014 und F-025 traegt in beide
+Richtungen** — keine Kehle ohne einspringende Ecke, und genau eine, wo eine ist.
+
+### Der eine Punkt: die Belegstelle ist von innen nicht prüfbar
+
+F-025 nennt als **Belegstelle** `dachdecker_pro_3d.tsx:153–158`. **Diese Datei existiert im Repo
+nicht.** Sie ist **M-01** und liegt ausserhalb: `docs/UEBERNAHME-PLAYGROUND-DACH.md:81` fuehrt sie
+als `~/Desktop/…/dachdecker_pro_3d.tsx`, in `BESTAND-YAMA.md` als *"der wertvollste Fund"*
+bezeichnet. Und `docs/BEFUND-VIER-DACHWELTEN.md:90` haelt ausdruecklich fest, was hier davon gelesen
+wurde: *"Den Inhalt von `dachdecker_pro_3d.tsx` — nur den Eintrag in BESTAND-YAMA.md gelesen."*
+
+**Das ist kein toter Zeiger und kein Vorwurf** — die Formel ist offensichtlich richtig, ihre
+Umsetzung deckt sie in allen 25 Faellen, und die Herkunft ist ehrlich benannt. Es ist eine
+**Eigenschaft**: der einzige Beleg dieser Formel kann von niemandem im Repo nachgeschlagen werden,
+und der Repo-Bestand sagt selbst, dass niemand ihn gelesen hat.
+
+### Zwei Anmerkungen
+
+1. **Zehn von 25 Paaren fallen auf `neutral`** — die ganze `PULT_WAND`-Zeile und -Spalte sowie
+   `GIEBEL`/`GIEBEL`. Die Regel deckt sie mit *"sonst → neutral"* ab; **was dort handwerklich
+   entsteht, sagt sie nicht.** Das ist eine Fachfrage und gehoert an die Dachdecker-Linse, nicht an
+   mich.
+2. **Das Modul hat keinen Ladeweg.** `geometry/dachTopologie.ts` gehoert zu den 33 (§133); alle
+   Aufrufer von `analyzeTopology` stehen in einer Testdatei (§141). Die Formel ist geprueft, sie
+   laeuft nur nicht.
+
+**Kein Ball aus dieser Runde** — F-025 verlangt nichts. Die Belegstelle ist ein Hinweis fuer den
+Planner, falls M-01 je hereingeholt wird: dann waere sie zum ersten Mal pruefbar.
+
+## §152 — Posten (d) an den roten Sperren: beide über neun Tage alt, beide gesund — und mein Verdacht löste sich unter der Messung auf
+
+*(Messstand 585e47ae, 21.08. 12:20. Nummer gegen den frischen HEAD gewaehlt: 89 Abschnitte, hoechste
+151 — 152 war frei.)*
+
+**Gegenstand.** Die Sperrmarken der Formelsammlung. Von 27 Formeln tragen **sechs** eine Marke in der
+Ueberschrift: `F-026` 🟢 · **`F-028` 🔴** · `F-050` 🟡 · **`F-051` 🔴 GESPERRT** · `F-053` 🟡 ·
+`F-054` 🟡. Eine rote Marke ist eine **Zustandsaussage ueber eine offene Entscheidung** — genau der
+Gegenstand von (d).
+
+**Das Alter, am einfuehrenden Commit gemessen:**
+
+| Sperre | eingefuehrt | Alter |
+|---|---|---|
+| `F-028` Azimut-Konvention an der Systemgrenze | `1734aa3b`, 12.08. 00:10 | **9 Tage 12 Stunden** |
+| `F-051` Zeitwerte je Gewerk (GESPERRT — unbelegt) | `1e933a64`, 10.08. 19:11 | **10 Tage 17 Stunden** |
+
+### F-028 — die Sperre wird heute nicht überschritten, Ende zu Ende gemessen
+
+F-028 ist keine Rechenformel, sondern eine Barriere: zwei Azimut-Konventionen, **beide dokumentiert,
+beide richtig**, und der gefaehrliche Bereich ist `0..180` — dort sind Werte in **beiden** Systemen
+gueltig und bedeuten das **Gegenteil**. Ein Suedddach traegt im Kompass `180`; unveraendert an PVGIS
+gegeben rechnet PVGIS ein Norddach.
+
+Gemessen, ob das heute passiert:
+
+```
+app/Services/Energie/PvgisErtragService.php:41
+    "@param float $aspect  Azimut nach PVGIS-Konvention: 0 = Sued, -90 = Ost, 90 = West"
+        ^ der Zeiger der Sperre trifft woertlich
+
+genau EIN Aufrufer:  app/Http/Controllers/Energie/EnergiekonzeptController.php
+    :455   $aspect = isset($in['aspect']) ... : 0.0;      <- aus dem Formular
+    :465   ->jahresertragFuerStandort(..., $angle, $aspect)
+
+resources/views/admin/energie/energiekonzept.blade.php:393-395
+    Label:  "Ausrichtung (0=Sued, -90=Ost, 90=West)"
+    Feld:   min="-180" max="180"   Vorgabe 0
+```
+
+**Die Kette ist von der Eingabe bis zum Dienst konventionstreu.** Das Feld ist in derselben
+Konvention beschriftet, die der Dienst erwartet, und die Vorgabe `0` bedeutet in beiden — Feld wie
+Dienst — **Sued**. Keine Umrechnungsfunktion noetig, keine gefunden, keine gebraucht. **Die Barriere
+steht richtig und wird eingehalten.**
+
+### F-051 — und hier hätte ich beinahe eine Lücke gemeldet, die keine ist
+
+Erste Messung: `F-051` kommt in `docs/VORLAGE-AN-YAMA-2026-08-12.md` **null Mal** vor, `F-028`
+einmal. Daraus war der Satz *„eine zehn Tage alte Sperre steht in keiner Vorlage"* schon halb
+geschrieben. **Breiter gemessen ist er falsch:** F-051 wird in ueber fuenfzig Zeilen quer durch den
+Bestand gefuehrt — `docs/rollenkette/START-PROMPT.md:63` (*"Zurzeit rot: F-051"*),
+`05-MATERIALQUELLEN/VORGEHEN.md:122` (*"F-051 — warum rot"*) und `:177` (*"F-051 verwerfen oder an
+echten Aufmassen …"*), dazu ein eigener Auftrag `A-16`. Und
+`docs/BERICHT-M02-AUSGEWERTET.md:214` haelt fest: ***„F-051s Sperre ist BESTAETIGT, nicht
+aufgehoben — zweite Quelle derselben"***.
+
+**Die Sperre ist nicht liegengeblieben, sie ist nachgeprueft und wieder bestaetigt worden.** Ihr
+Alter ist kein Versaeumnis, sondern die Wartezeit auf echte Aufmasse — ein fehlender Operand, und
+der gehoert nach den Schutzgrenzen ausdruecklich nicht still ersetzt.
+
+### Was das für Posten (d) heißt
+
+**Ein hohes Alter macht eine rote Marke nicht schal.** Beide Sperren sind ueber neun Tage alt und
+beide sind **gesund**: die eine bewacht eine Grenze, die heute eingehalten wird, die andere ist von
+einer zweiten Quelle bestaetigt. Das ist dieselbe Lehre wie in §132, nur an Entscheidungssperren
+statt an Messungen: **erst einordnen, dann messen — und „alt" ist keine Einordnung.**
+
+**Kein Ball.** Beide Sperren verlangen nichts von mir; F-051 wartet auf Operanden, die nur Yama
+liefern kann, und F-028 wird eingehalten. Eine kleine Beobachtung bleibt: meine stehende
+Yama-Liste fuehrt **keine** der beiden — sie ist kein vollstaendiges Verzeichnis der bei Yama
+liegenden Sperren, und ich sollte sie auch nicht dafuer halten.
+
+## §153 — Posten (e) an §107: nach vier Tagen unverändert, am echten Modul nachgerechnet — und eine Präzisierung an meinem eigenen Satz
+
+*(Messstand 4013b62d, 21.08. 12:24. Nummer gegen den frischen HEAD gewaehlt: 90 Abschnitte, hoechste
+152 — 153 war frei.)*
+
+**Verfolgt:** §107 (`3a2bfd6f`, 17.08. 02:33) — F-040s Grenzfall-Spalte sagt *kaufmaennisch*, der
+Code rundet mit `Math.round`. Alter heute: **6348 Minuten = 4 Tage 9 Stunden**.
+
+**Nichts hat sich bewegt, und das ist gemessen:** seit §107 **0 Commits** auf
+`docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md`,
+`resources/planner/hausplaner/geometry/fangKern.ts` und
+`resources/planner/hausplaner/app/HausplanerApp.tsx`.
+
+**Alle drei Zeiger treffen woertlich:**
+
+```
+W-01/3-FORMELN.md:9    "| **F-040** Rasterfang | die Art `raster` | **192** | **JA** —
+                        kaufmaennisch runden, sonst ist das Raster links der Null verschoben |"
+fangKern.ts:192        "return { punkt: { x: Math.round(p.x / r) * r, y: Math.round(p.y / r) * r }, …"
+HausplanerApp.tsx:773  "let y = -((zeiger.y - stage.y()) / zoom);"
+```
+
+### Nachgerechnet am echten Modul, mit Kalibrierprobe
+
+`fange(p, kandidaten, opt)` aus dem esbuild-Bundle, ohne Kandidaten, nur Raster 100:
+
+| Eingabe | Code | kaufmaennisch | |
+|---|---|---|---|
+| x = 50 · 150 · 250 · 120 | 100 · 200 · 300 · 100 | **gleich** | Kalibrierprobe haelt |
+| **y = −50** | **0** | −100 | **Abweichung 100** |
+| **y = −150** | **−100** | −200 | **Abweichung 100** |
+| **y = −250** | **−200** | −300 | **Abweichung 100** |
+| y = −120 *(kein Gleichstand)* | −100 | −100 | gleich |
+
+**Die Zahlen aus §107 reproduzieren exakt**, vier Tage spaeter, und nur **Gleichstaende** sind
+betroffen — `−120` laeuft sauber.
+
+**Und `raster` wird tatsaechlich immer uebergeben:** genau **ein** Produktiv-Aufrufer,
+`HausplanerApp.tsx:805`, und `:810` setzt `raster: scene.settings.gridSize || 100` — mit Rueckfall.
+Der Fall ist also kein Randfall, wie §107 sagt.
+
+### Die Präzisierung — an meinem eigenen Satz
+
+§107 schreibt: *"x bricht Gleichstaende nach aussen, y nach innen."* Die **Gegenprobe auf der
+x-Achse mit negativen Werten** zeigt: `x = −50 → 0`, `−150 → −100`, `−250 → −200` — **exakt dieselbe
+Abweichung wie bei y**. Die Funktion ist **achsensymmetrisch**; sie unterscheidet nicht x von y,
+sondern **positiv von negativ**.
+
+Der Satz aus §107 bleibt in der **Wirkung** richtig — genau deshalb steht dort der Verweis auf die
+Negierung bei `HausplanerApp.tsx:773`: **y ist fuer jede Zeigerposition negativ**, x nicht. Aber als
+Aussage ueber den Code gelesen waere er falsch. **Praeziser:** *negative Gleichstaende brechen nach
+innen, und y ist immer negativ.* So steht die Ursache vor der Wirkung statt daneben.
+
+**Ball unveraendert beim Planner** (§107): Umstellung auf kaufmaennisches Runden **oder**
+Berichtigung der Grenzfall-Spalte in `W-01/3-FORMELN.md:9` — eine Fachentscheidung, keine Messfrage.
+Nach vier Tagen und neun Stunden liegt sie dort unbewegt.
+
+## §154 — Posten (a) an den aktiven Auftragsblättern: sechs gewanderte Zeiger, einer um 811 Zeilen
+
+*(Messstand 706cdb24, 21.08. 12:28. Nummer gegen den frischen HEAD gewaehlt: 91 Abschnitte, hoechste
+153 — 154 war frei.)*
+
+**Warum diese Zeigersorte.** §128/§134 massen Werkbank-Scheiben, §139/§140 die Prozessquelle, §149
+die Register. Die **aktiven Auftragsblaetter** waren nie dran — und dort fuehrt ein falscher Zeiger
+nicht einen Leser in die Irre, sondern einen **Bauenden**.
+
+**Grundmenge:** `docs/auftraege/aktiv/` mit **89** Blaettern, darin **121** Code-Zeiger der Form
+`datei.ext:zeile`, **94** verschiedene.
+
+### Erste Stufe: lösen sie auf?
+
+**90 von 94** treffen eine nichtleere Zeile, **0** eine Leerzeile. Die vier Ausnahmen sind
+aufgeklaert und **keine davon ist ein Mangel**:
+
+- **Zwei waren mein eigener Fehler.** `create_p_v_roofs_table.php:67` meldete ich als tot — ich hatte
+  `resources app scripts` abgesucht, die Datei liegt unter `database/migrations/`. Sie existiert und
+  `:67` traegt woertlich `$table->float('roof_azimuth')->nullable(); // 0=N, 90=E, 180=S, 270=W` —
+  genau die Fundstelle, die F-028 zitiert. **Grundmenge zu eng, nicht Bestand zu duenn.**
+- `datei.ts:44` ist **kein Zeiger**, sondern ein Beispiel im Fliesstext von
+  `B5N-belegzeilen-schreibweisen.md:50`.
+- `objekt.blade.php:141` ist mehrdeutig — den Namen tragen **drei** Dateien. Der Inhalt passt zu
+  `admin/hausplaner/objekt.blade.php:141`, und `W-33-start-und-projektwahl.md:90` nennt den vollen
+  Pfad. Nur die Kurzform in A-23 laesst offen, welche gemeint ist.
+
+### Zweite Stufe: „löst auf" ist der schwache Test
+
+§134 hat gezeigt, dass ein gewanderter Zeiger **immer** Inhalt traegt. Gezielt geprueft wurden
+deshalb die Zeiger in Dateien, die sich bewegt haben — **acht** Kandidaten, davon **sechs
+gewandert** und **zwei haltend**:
+
+| Zusage im Blatt | steht wirklich auf | Versatz | Blatt (Stand) |
+|---|---|---|---|
+| `dachAusschnitt.ts:72` = `istAchsenRechteck` | **:93** | +21 | A-01 (05.08.) |
+| `SzeneProjektionService.php:258` = `azimutRechteNormale` | **:271** | +13 | W-07N (12.08.) |
+| `enginePanels.ts:210` = `berechneSparren(…) as unknown` | **:227** | +17 | A-14 (12.08.) |
+| `commit-pruefen.sh:163` = der Doppelpfad `\|\| [ "$ALTER" -ge 120 ]` | **:510** | **+347** | A-08-N (08.08.) |
+| `commit-pruefen.sh:188` = `-- "$@"` | **:999** | **+811** | A-08-N (08.08.) |
+| `commit-pruefen.sh:503` = `node --check … 2>/dev/null` | **:773** | **+270** | A-08-N (08.08.) |
+| `studioDaten.ts:97` = `StudioModus` | **:97** ✓ | 0 | haelt |
+| `enginePanels.ts:176` = `keinGesamturteil: true,` | **:176** ✓ | 0 | haelt |
+
+**Drei der sechs stehen in EINEM Blatt** (`A-08-NACHTRAG-drei-nein.md`, Stand 08.08.) und zeigen
+alle in `scripts/commit-pruefen.sh` — eine Datei, die heute **1066 Zeilen** misst. In dreizehn Tagen
+ist sie so gewachsen, dass ein Zeiger um **811 Zeilen** danebenliegt. Was an `:188` steht, ist heute
+ein Kommentar; das gemeinte `-- "$@"` steht in der letzten Zehntelseite der Datei.
+
+**Und die zwei haltenden sind lehrreich.** `studioDaten.ts:97` traegt woertlich
+`export type StudioModus = 'start' | 'guided' | 'expert';` — obwohl §110 und §149 an **derselben
+Datei** einen Versatz von +10 belegt haben. Der Grund: `:97` liegt **oberhalb** der Einfuegestelle.
+**Eine Verschiebung hat eine Grenze**, und Zeiger darueber bleiben richtig. Wer eine gewanderte
+Datei sieht, darf nicht alle ihre Zeiger fuer falsch halten — genauso wenig wie fuer richtig.
+
+**Ball beim Planner**, mit benannten Zielen: `A-01`→`:93`, `W-07N`→`:271`, `A-14`→`:227`,
+`A-08-NACHTRAG` dreimal→`:510`, `:999`, `:773`. Fuenf Blaetter, sechs Zahlen. Alle sechs sind
+**aktive Auftraege**, keine Berichte.
+
+## §155 — Posten (b) an A-38: die vier Zahlen halten, und die Lage, die sie beschreiben, ist seit drei Tagen geschlossen
+
+*(Messstand 6714cd09, 21.08. 12:32. Nummer gegen den frischen HEAD gewaehlt: 92 Abschnitte, hoechste
+154 — 155 war frei.)*
+
+**Gegenstand.** `docs/auftraege/aktiv/A-38-merges-laufen-am-tor-vorbei.md`. Das Blatt traegt vier
+berichtigte Zahlen (*„59 von 497, 58 von 70 Merges ohne Marke"*) **und** einen ausfuehrbaren
+Messbefehl mit den Werten *„gemessen 16.08. abends: 472 Commits, 188 Merges, Anteil 40 Prozent"*.
+Beides nachgezaehlt.
+
+### Der Messbefehl: die Zahlen wachsen, das Verhältnis hält
+
+Der Befehl aus `:80-85`, heute gefahren:
+
+| | Blatt (16.08. abends) | heute | |
+|---|---|---|---|
+| Commits | 472 | **1073** | +127 % |
+| Merges | 188 | **437** | +132 % |
+| Anteil | 40 % | **40,7 %** | **haelt** |
+
+**Das Blatt nennt den Befehl eine „FESTE ERHEBUNG — ein benannter Tag statt eines wandernden
+Fensters".** Er fixiert aber nur den **Anfang** (`--since='2026-08-16 00:00'`); das **Ende wandert**
+mit jedem Commit. Der P6-Fund war damit halb behoben: die Zahlen altern weiter, nur langsamer
+begruendet.
+
+**Rekonstruiert, wie schnell:** ueber den Abend des 16.08. gemessen liegt 472/188 zwischen 19:00
+(414/156) und 20:00 (530/219) — stimmig mit *„abends"*. Eingetragen wurde die Zahl aber erst um
+**20:57** mit `e15d3677`, und zu dem Zeitpunkt stand der Zaehler schon bei **623/266**. *(Annahme
+benannt: rekonstruiert ueber heute erreichbare Refs; geloeschte Zweige von damals fehlen.)*
+**Eine offene `--since`-Zaehlung altert, waehrend man sie aufschreibt.** Tragfaehig ist hier allein
+das Verhaeltnis — und genau mit ihm argumentiert der Auftrag.
+
+### Die vier Titel-Zahlen: reproduzierbar, mit ihrem eigenen Fenster
+
+`:65` nennt die Grundmenge: **„Commits letzte 48 h → 497"** — ein wanderndes Fenster. Mit
+demselben Fenster fuer den 15.08. rekonstruiert: **56 von 467 Commits · 55 von 65 Merges** gegen die
+zugesagten **59 von 497 · 58 von 70**. Die Abweichung von drei bis fuenf erklaert sich aus der
+Stunde, auf die „letzte 48 h" faellt und die das Blatt nicht festhaelt — **kein Messfehler, eine
+Fensterunschaerfe.**
+
+### Und jetzt der Befund: die Lage ist geschlossen
+
+Dasselbe Fenster **heute** gefahren: **0 von 172 Commits ohne Rollenmarke · 0 von 53 Merges.**
+Tageweise nachgezaehlt, damit es kein gleitender Mittelwert ist:
+
+```
+14.08.   20 Merges   18 ohne Marke   90%
+15.08.   16           0               0%
+16.08.  358         194              54%      <- der grosse Integrationstag
+17.08.   25           6              24%
+18.08.    0           0               —
+19.08.   12           0               0%
+20.08.   18           0               0%
+21.08.   23           0               0%
+```
+
+**Seit dem 19.08. ist an jedem Tag mit Merges der Anteil null — drei Tage, 53 Merges, alle mit
+Rollenmarke.** Der Zustand, den A-38 beschreibt und gegen den es einen Hook bauen will, tritt in der
+laufenden Praxis nicht mehr auf.
+
+**Das entwertet den Auftrag nicht** — ein Hook erzwingt, und Disziplin kann nachlassen; genau dafuer
+gibt es ihn. Aber die **Rot-Lage**, mit der er begruendet ist, ist heute nicht mehr rot, und das
+gehoert vor die naechste DoR-Runde.
+
+**Ball bei mir.** A-38 steht auf `zustand: ENTWURF` mit `ballbesitz: plan-pruefer`
+(`docs/STATUS.md:18768 ff.`), `dor_beleg: "BEREIT — 2. Runde 15.08."`. Mein Votum aus §108 lautete
+ERTEILT; **dieser Befund ist neu und aendert die Beweislage der Begruendung, nicht die Baubarkeit.**
+Ich lege ihn hier ab und nenne ihn in der naechsten DoR-Runde ausdruecklich, statt still
+weiterzugehen.
+
+## §156 — DoR-Runde A-38, und eine Berichtigung an §155: das Blatt hatte den Befund schon, und die Lage kippte am selben Abend zurück
+
+*(Messstand 1349e992, 21.08. 12:36. Nummer gegen den frischen HEAD gewaehlt: 93 Abschnitte, hoechste
+155 — 156 war frei. A-38 steht auf `ENTWURF` mit `ballbesitz: plan-pruefer`, also gilt Wache Punkt 3
+vor Punkt 7.)*
+
+### Zuerst gegen mich selbst
+
+**§155 hat als Fund vorgetragen, was das Blatt bereits geloest hatte.** `A-38:195-209` traegt
+woertlich:
+
+> *"**⚠ DIE ALTE ROT-LAGE HATTE EINE UHR — behoben, bevor sie abgelaufen ist.** … Gefallen war nicht
+> nur die Quote (88 % → 83 % → 25 % → 4 %), sondern die absolute Zahl von 58 auf 5.
+> **Eine Rot-Lage, die von selbst gruen wird, ohne dass jemand etwas behoben hat, ist keine
+> Rot-Lage.** … **Abgelaufen ist der Beleg, nicht der Zweck.**"*
+
+Das ist derselbe Gedanke wie mein §155, vom Plan-Pruefer selbst gemessen (`4eac6684`) und **im Blatt
+bereits umgesetzt**: A-38-2s Rot-Lage steht heute nicht mehr auf einer Quote, sondern auf **fuenf
+festen SHAs**. Meine frischen Zahlen bleiben additiv, meine **Rahmung war falsch** — ich habe eine
+behobene Sache als offene gemeldet. Dieselbe Klasse wie §148, und diesmal gegenueber einem fremden
+Blatt statt gegenueber meinem eigenen Register.
+
+### Die fünf festen SHAs — alle geprüft, alle tragen
+
+```
+94d2b479  Merge branch 'rolle/planner' into HEAD                 keine Rollenmarke
+0f05f8bf  Merge branch 'rolle/planner' into HEAD                 keine Rollenmarke   (= basis_sha)
+c1b3a774  Merge branch 'auto/hausplaner-integration' into HEAD   keine Rollenmarke
+b1d343e6  Merge commit 'bc2125d9' into HEAD                      keine Rollenmarke
+9b42e777  Merge commit '0a297803' into HEAD                      keine Rollenmarke
+```
+
+**Fuenf von fuenf:** jeder existiert, jeder ist ein Merge, keiner traegt eine Marke. Nach §132 ist
+das die **UNVERAENDERLICHE** Klasse — dieser Beleg laeuft nicht ab, und genau das war der Zweck der
+Umstellung.
+
+### „0 von 97" war richtig, als es geschrieben wurde — und hielt keine drei Stunden
+
+Der Satz `A-38:206` (*„Seit 15.08. gibt es 97 Merges und davon 0 ohne Marke — das ist Disziplin,
+kein Mechanismus"*) wurde mit `1ca66c0d` am **16.08. um 16:19** eingetragen. Zu diesem Zeitpunkt
+gemessen: **0 von 100 ohne Marke.** *(Abweichung 3 = Rekonstruktion ueber heute erreichbare Refs.)*
+**Die Null stimmt exakt.**
+
+Und dann teilt sich derselbe Tag an genau dieser Uhrzeit:
+
+| 16.08. | Merges | ohne Marke |
+|---|---|---|
+| bis 16:19 (vor dem Satz) | 84 | **0** |
+| ab 16:19 (nach dem Satz) | **274** | **194** |
+
+**Die Disziplin hielt, bis eine Massenoperation lief.** Der Satz des Blattes — *„das ist Disziplin,
+kein Mechanismus"* — wurde **noch am selben Abend belegt**, nicht widerlegt. Das ist das staerkste
+Argument fuer den Auftrag, das ich messen kann, und es steht bisher nirgends.
+
+### Was §155 richtig gemessen hat und was daraus folgt
+
+Die Tagesreihe bleibt: 14.08. 90 % · 16.08. 54 % · 17.08. 24 % · **19.–21.08. je 0 %, zusammen 53
+Merges**. Drei ruhige Tage sind kein Mechanismus — sie sind genau der Zustand, den der 16.08. abends
+gebrochen hat.
+
+**Methodenhinweis, weil ich fast daran haengengeblieben waere:** ich wollte die 194 markenlosen
+Merges dem Verursacher zuordnen und habe den **Autorennamen** gezaehlt. Ueber **alle 473 Merges seit
+14.08. gibt es genau EINEN Autor**. Das Feld traegt keine Rolleninformation; die **Rollenmarke in der
+Botschaft ist der einzige Traeger** — und genau deshalb baut A-38 einen Hook auf die Botschaft.
+
+### Votum
+
+**Mein Votum aus §108 bleibt ERTEILT, und dieser Durchgang stuetzt es staerker als §155 es tat.**
+Rot-Lage: **fuenf feste SHAs, alle nachgeprueft**. Ist-Beleg: reproduziert. Zweck: am 16.08. abends
+belegt. Ich trage **keinen vierten Wert** in die Zustandsfelder ein — dass `dor_beleg` an drei Orten
+drei Fassungen traegt, ist §108 und liegt beim **Integrator**.
+
+**Ball:** beim **Integrator** (die drei Fassungen von `dor_beleg`, `docs/STATUS.md:18768 ff.`), beim
+**Generator** der Bau. Bei mir ist A-38 damit abgeschlossen.
+
+## §157 — A-40 nachgeprüft: alle vier Punkte stehen offen, einer wurde halb behoben, und eine meiner eigenen Zahlen reproduziert nicht
+
+*(Messstand 8aaeba51, 21.08. 12:40. Nummer gegen den frischen HEAD gewaehlt: 94 Abschnitte, hoechste
+156 — 157 war frei. A-40 steht auf `ENTWURF` mit `ballbesitz: "plan-pruefer (DoR)"`, also Wache
+Punkt 3 vor Punkt 7.)*
+
+**Vorweg eine Berichtigung an meiner eigenen Merkung:** ich fuehrte A-40 als *„NICHT ERTEILT, zwei
+Restpunkte"*. Das Votum in dieser Datei sagt **vier Punkte**, gemessen 16.08. gegen `eb023990`. Die
+Akte gilt, nicht die Erinnerung.
+
+### Die vier Punkte, heute einzeln nachgemessen
+
+| Punkt | Stand |
+|---|---|
+| **1** · A-40-2 vergibt die Nummer „siebte", die A-39 belegt | **offen** |
+| **2** · Der Messweg misst nicht, was die Auflagen verlangen | **offen, aber halb behoben** |
+| **3** · Keine Stufenmarkierung | **offen** |
+| **4** · Kein benannter Erstnutzer | **offen** |
+
+**1 · unveraendert.** `A-40:172` traegt weiterhin *„**Die siebte Innenpruefung** laeuft und findet
+einen echten Fall"*, und A-39 fuehrt heute **P1 bis P8** — acht. A-40s Pruefung waere die neunte.
+
+**2 · halb behoben, und das ist der interessante Teil.** Das Blatt traegt bei `:207` einen eigenen
+Vermerk: *„⚠ BERICHTIGT 18:2x durch Selbstpruefung gegen P8 — das Kriterium mass die HAELFTE."*
+Vorher lief der Befehl nur ueber `FORMELSAMMLUNG.md`, heute ueber
+`docs/rollenkette/werkbank/01-MATHEMATIK/*.md`, also **beide** Sammlungen. **Die Reichweite ist
+behoben, die Einheit nicht:** den Befehl gefahren gibt **87 Zeilen** bei **54 verschiedenen
+Kennungen** — **33 Doppelzaehlungen**. Genau die Beanstandung *„zaehlt Zeilen statt Kennungen"*
+steht also weiter.
+
+**3 · unveraendert — und hier faellt eine eigene Zahl.** A-40 traegt **null** Stufenmarkierungen der
+Form `(P1)`; sein einziger `P[123]`-Treffer ist `prioritaet: P2`, ein **Prioritaetsfeld**, keine
+Stufe. Die Sache haelt also. **Meine Vergleichszahl haelt nicht:** das Votum sagt *„70 der 89
+aktiven Blaetter fuehren sie"*. Drei Muster, je am Votumsstand **und** heute gemessen:
+
+```
+(P1)|(P2)|(P3)                          51 von 89      (beide Staende gleich)
++ **P1** + P1-Kriterium                 52 von 89      (beide Staende gleich)
+P[123] ohne Klammern  (faengt auch
+   'prioritaet: P2', also untauglich)   84 von 89      (beide Staende gleich)
+```
+
+**Keines ergibt 70**, und alle drei sind zwischen dem Votumsstand und heute **identisch** — es ist
+also kein Drift, sondern eine Zahl, die ich nicht reproduzieren kann. Sie ist eine **Vergleichszahl,
+kein tragender Beleg**: der Punkt lautet „A-40 hat keine", und das gilt unter jedem Muster.
+
+**4 · unveraendert.** `erstnutzer` **0**, „ab wann" **0**, „wer benutzt" **0** Treffer im Blatt.
+
+### Eigener Messfehler, gefangen bevor er zum Ergebnis wurde
+
+Mein erster Anlauf zu Punkt 3 nahm das Muster `\bP[123]\b` und meldete *„84 von 89 heute gegen 70
+damals"* — also Bewegung. **Am Votumsstand gibt dasselbe Muster 0 von 89.** Es misst offensichtlich
+etwas anderes als das, was 2026-08-16 gemessen wurde, und ein Muster, das am alten Stand null trifft
+und am neuen 84, meldet keine Veraenderung, sondern seine eigene Untauglichkeit. Erst die Probe
+*„wie sieht eine Stufenmarkierung wirklich aus"* — Antwort: `(P1)`, 145 Vorkommen — hat es gezeigt.
+
+### Votum
+
+**NICHT ERTEILT, unveraendert.** Vier Punkte, vier offen; einer davon in der Reichweite behoben und
+in der Einheit nicht. Dazu der Kettenpunkt aus dem Blatt selbst (`staut_hinter: A-37, dann A-39`) —
+selbst eine erteilte DoR wuerde A-40 heute nicht loesen.
+
+**Ball bei mir bleibt A-40 nicht:** die vier Punkte liegen beim **Planner**, das Feld `dor_beleg`
+(`"steht aus — plan-pruefer."`) beim **Integrator** — es steht dort seit §108 falsch, denn geliefert
+ist es. Naechste Runde: dieselbe Nachpruefung fuer **A-42**.
+
+### Nachtrag zu §157 — B5 und B7 zugleich, und für beide hatte ich eine eigene Regel
+
+*(Messstand 5139e6d4, 21.08. 12:42.)*
+
+Der §157-Commit lief mit **zwei** Warnungen durch. Rein lesend bestimmt: `B5_ZAEHLWORT` trifft,
+`B5_BELEGZEILE` **nicht**; `B7_MEHRFACH` trifft, `B7_HERKUNFT` **nicht**. B6 feuert nicht.
+
+**Beide Male gegen eine Regel, die ich mir selbst gegeben habe.** Der Nachtrag zu §140 sagt: *„in
+Botschaften nenne ich die Fundstelle immer voll — `datei.ext:zeile`, nicht `:zeile`."* Der Nachtrag
+zu §147 sagt: *„nennt eine Botschaft mehrere Fundorte, schreibe ich einen Satz mit dem Wort
+Herkunft."* In §157 habe ich **Kennungsformen** geschrieben (`A-40:172`, `:207`) — die sehen aus wie
+Fundstellen, sind aber keine, weil `A-40` kein Dateiname ist — und das Wort Herkunft kam nicht vor.
+
+**Belegzeilen nachgereicht, damit §157 nachschlagbar ist:**
+`docs/auftraege/aktiv/A-40-der-zustand-am-facheintrag.md:172` traegt *„Die siebte Innenpruefung"*,
+`docs/auftraege/aktiv/A-40-der-zustand-am-facheintrag.md:207` den Berichtigungsvermerk, und
+`docs/auftraege/aktiv/A-40-der-zustand-am-facheintrag.md:204-205` den Zaehlbefehl.
+**Herkunft der Zahlen 51/52/84:** eigene Messung ueber `docs/auftraege/aktiv/*.md`, je am Stand
+`eb023990` und am HEAD, mit drei benannten Mustern.
+
+**Was ich aendere — und diesmal an der Ursache statt am Einzelfall:** die zwei Regeln sind
+**Prueffragen vor dem Absenden**, nicht Vorsaetze. Vor jedem Commit stelle ich sie mir als Paar:
+*(1) steht mindestens eine volle `datei.ext:zeile` drin? (2) kommt das Wort Herkunft vor?* Zwei
+Blicke, und beide Warnungen sind strukturell unmoeglich. Dass ich sie dreimal einzeln „behoben" habe
+(§140, §144, §147) und sie beim vierten Mal doppelt auftraten, ist der Beleg, dass eine Absicht
+keine Pruefung ersetzt.
+
+## §158 — A-42 nachgeprüft: mein Restpunkt ist sauber behoben, und dabei fällt ein Punkt auf, den ich damals übersehen habe
+
+*(Messstand 8a0020c7, 21.08. 12:44. Nummer gegen den frischen HEAD gewaehlt: 95 Abschnitte, hoechste
+157 — 158 war frei. A-42 steht auf `ENTWURF` mit `ballbesitz: "plan-pruefer (DoR)"`.)*
+
+**Herkunft aller Zahlen unten:** eigene Messung, blockweise an den ```yaml-Zaeunen von
+`docs/STATUS.md`, gegen mein Votum in dieser Datei (`docs/BEFUND-plan-pruefer-rueckweg-und-tor.md:1958 ff.`,
+gemessen 16.08. gegen `88f7bc2b`) und gegen `docs/auftraege/aktiv/A-42-befundnotizen-ziehen-um.md`.
+
+### Die tragende Zahl reproduziert exakt
+
+Mein Fund lautete: *„der Umzug nimmt 120 von 137 Baellen mit."* Definition scharf — Bloecke **mit**
+`auftrag:` und **ohne** `zustand:` ziehen um. Heute nachgemessen:
+
+| Rolle | heute (bleibt/um/gesamt) | Votum 16.08. |
+|---|---|---|
+| planner | 3 / 78 / 81 | **identisch** |
+| plan-pruefer | 8 / 31 / 39 | **identisch** |
+| generator | 4 / 6 / 10 | **identisch** |
+| release-pruefer | 0 / 5 / 5 | **identisch** |
+| integrator | 1 / 0 / 1 | 2 / 0 / 2 |
+| evaluator | 1 / 0 / 1 | 0 / 0 / 0 |
+| **Summe** | **17 / 120 / 137** | **17 / 120 / 137** |
+
+**Vier von sechs Zeilen identisch, und die Summen exakt** — integrator und evaluator haben je um
+eins in Gegenrichtung getauscht, netto null. Nach fuenf Tagen und **208 Commits** auf
+`docs/STATUS.md`.
+
+**Eine Praezisierung an meiner eigenen Tabelle:** sie kennt nur die sechs Rollen. Heute traegt
+`docs/STATUS.md` ausserdem **`yama` mit 8/4/12** und **`offen` mit 1/0/1**. Ueber **alle**
+Ballwerte gerechnet sind es **124 von 150**, nicht 120 von 137. Der Satz stimmt fuer seine
+Grundmenge; die Grundmenge stand nicht dabei.
+
+### Der Restpunkt ist behoben, und zwar gut
+
+Meine Beanstandung war: *„kein Kriterium erwaehnt das."* Heute traegt das Blatt bei
+`docs/auftraege/aktiv/A-42-befundnotizen-ziehen-um.md:113` einen eigenen Abschnitt
+(*„DER UMZUG NIMMT 120 VON 137 BAELLEN MIT — Befund des Plan-Pruefers, zutreffend"*), bei `:126` die
+Tabelle und bei `:142-154` **zwei** Kriterien:
+
+- **A-42-11** — Ballbesitz je Rolle **vor** dem Lauf in `docs/STATUS.md`, **nach** dem Lauf ueber
+  **beide** Dateien; Summen muessen uebereinstimmen, sonst ist der Lauf nicht abgeschlossen.
+- **A-42-12** — jede Rolle bekommt ihren neuen Ortungsbefehl namentlich in den Bericht, und der
+  Kommentar bei `:151-153` schreibt die **Ankerpflicht** ausdruecklich hin: *„ohne sie zaehlt der
+  Befehl jede Zeile mit, in der die Zeichenfolge irgendwo vorkommt, auch in Prosa."*
+
+Das ist genau die Falle, in die ich in §130 (End-Anker) und §157 (untaugliches Muster) gelaufen bin.
+**Der Punkt ist geschlossen.**
+
+### Und der Punkt, den ich übersehen habe
+
+`docs/auftraege/aktiv/A-42-befundnotizen-ziehen-um.md` traegt **null** Stufenmarkierungen der Form
+`(P1)` — **und trug schon am Votumsstand `88f7bc2b` null.** Mein A-42-Votum erwaehnt sie mit
+**null Treffern**. **In derselben Sitzung habe ich genau diesen Mangel bei A-40 als Punkt 3 geruegt.**
+Gleicher Mangel, gleiche Sitzung, einmal gesehen und einmal nicht. Damit ist §5s Satz *„jedes
+P1-Kriterium ist vor dem Bau wirksam rot"* auch hier nicht pruefbar.
+
+### Votum
+
+**NICHT ERTEILT — aber aus einem anderen Grund als beim letzten Mal.** Der alte Restpunkt ist
+behoben; offen ist die fehlende Stufenmarkierung, die ich haette nennen muessen. Dazu zwei Angaben
+fuer die Akte, keine Beanstandungen: die Konfliktpruefung ergibt **208 Commits** auf den
+Scope-Gegenstand seit der Basis (`e802c1f8`, 16.08. 17:24) — die tragende Struktur ist trotzdem
+stabil, denn die Balltabelle reproduziert exakt; und `docs/BEFUNDNOTIZEN.md` existiert noch nicht,
+was fuer ein Umzugsziel richtig ist.
+
+**Ball beim Planner** fuer die Stufenmarkierung — derselbe Punkt wie A-40 Punkt 3, jetzt an zwei
+Blaettern. Das Feld `dor_beleg` bleibt beim **Integrator**.
+
+## §159 — A-39 nachgeprüft, und dabei fällt mein eigener Punkt 3: die fehlende Stufenmarkierung ist kein DoR-Hindernis, sondern A-39s Liefergegenstand
+
+*(Messstand 05d5a444, 21.08. 12:49. Nummer gegen den frischen HEAD gewaehlt: 96 Abschnitte, hoechste
+158 — 159 war frei. A-39 ist das letzte der vier ENTWURF-Blaetter mit meinem Ball.)*
+
+**Herkunft:** eigene Messung gegen `docs/auftraege/aktiv/A-39-die-fuenf-innenpruefungen-des-blattes.md`,
+mein Votum in `docs/BEFUND-plan-pruefer-rueckweg-und-tor.md:1573` (Runde 1) und `:6169` (Runde 2),
+sowie `docs/STATUS.md:22096` und `:25411`.
+
+### A-39s erteilte DoR trägt — nachgemessen, nicht angenommen
+
+Runde 1 war **NICHT ERTEILT** (ein Punkt: A-39-3 nannte keinen Stand), Runde 2 **ERTEILT**. Der
+Restpunkt ist heute erfuellt und seine Belege reproduzieren:
+
+- `docs/auftraege/aktiv/A-39-die-fuenf-innenpruefungen-des-blattes.md:168-169` nennt beide Staende
+  `8559b555` und `7ef8f046`; beide existieren, `7ef8f046` mit dem angegebenen Zeitpunkt 14.08. 22:35.
+- Die tragende Zusage *„dieselbe Datei, zwei Staende, zwei Antworten"* nachgerechnet: in
+  `docs/auftraege/aktiv/A-33-elf-tafelzeilen-tragen-eine-alte-kennung.md` findet das Muster
+  `genau EINS` am Stand `8559b555` **1 Treffer**, heute **0**. **Haelt.**
+- Konfliktpruefung: 11 Commits auf das Blatt seit `basis_sha 99add90f`.
+
+### Und jetzt gegen mich selbst — Punkt 3 aus meinem A-40-Votum
+
+Ich hatte gemessen: **alle vier Blaetter tragen null Stufenmarkierungen** der Form `(P1)` — A-38,
+A-39, A-40, A-42, jedes null. Daraus wurde bei A-40 ein Restpunkt (Punkt 3) und in §158 einer bei
+A-42. **Beide waren zu streng, und zwar aus zwei Gruenden:**
+
+**1 · Die Rot-Lage steht in allen vier — nur in Prosa.** Gemessen ueber die vier Blaetter: das Wort
+`Rot` kommt 7 · 4 · 4 · 2 Mal vor, die Form *„Rot am …"* je mindestens einmal. Bei A-38 habe ich in
+§156 sogar **fuenf feste SHAs** als Rot-Lage einzeln nachgeprueft. **Ich kann es also pruefen — ich
+habe es heute viermal getan.**
+
+**2 · Der Satz, mit dem ich es begruendet habe, benennt A-39s eigenen Liefergegenstand.** Mein
+Punkt 3 lautet: *„nicht pruefbar, weder von mir noch von `blatt-pruefen.sh`."* Gemessen:
+`scripts/blatt-pruefen.sh` **existiert nirgends im Baum** — und das ist **kein Mangel, sondern
+A-39-1s Rot-Lage**, vierfach festgehalten:
+`docs/auftraege/aktiv/A-39-die-fuenf-innenpruefungen-des-blattes.md:161` als Kriterium,
+`docs/STATUS.md:22099` (*„Die Rot-Lage A-39-1 ist nachgemessen: scripts/blatt-pruefen.sh existiert
+NICHT. Rot."*), `docs/STATUS.md:25411` (*„in keinem der geprueften Zweige — 0 Treffer"*) und
+`docs/ZUSTELLUNG-plan-pruefer-an-planner.md:443` (*„A-39s Liefergegenstand … nicht im Bestand"*).
+
+**Damit ordnet sich der ganze Strang neu und widerspruchsfrei:** A-39 **baut** den Pruefer, A-40
+und A-42 fehlen die Etiketten, die dieser Pruefer lesen wird. Das ist eine **Reihenfolge**, keine
+Beanstandung — und A-40 schreibt sie selbst hin (`staut_hinter: A-37, dann A-39`).
+
+### Was ich berichtige
+
+**Punkt 3 meines A-40-Votums und der Restpunkt aus §158 werden herabgestuft:** von *„DoR-Hindernis"*
+auf **Hinweis**. Die fehlende `(P1)`-Auszeichnung macht die Rot-Lage nicht unpruefbar — sie macht sie
+nur **maschinell** unpruefbar, und die Maschine ist A-39s Ergebnis. **Fuer A-42 heisst das: mein
+Votum aus §158 kippt auf ERTEILT**, weil der alte Restpunkt behoben ist und der neue kein Hindernis
+war. **Fuer A-40 bleibt NICHT ERTEILT** — die Punkte 1, 2 und 4 stehen unabhaengig davon.
+
+### Stand der vier
+
+| Blatt | Votum | Grund |
+|---|---|---|
+| A-38 | **ERTEILT** | §156, fuenf SHAs geprueft |
+| A-39 | **ERTEILT** | Runde 2, Belege heute reproduziert |
+| A-40 | **NICHT ERTEILT** | Punkte 1, 2, 4 — Punkt 3 herabgestuft |
+| A-42 | **ERTEILT** | alter Restpunkt behoben, neuer herabgestuft |
+
+**Ball beim Integrator** fuer die Felder, beim **Generator** fuer den Bau von A-38, A-39 und A-42;
+beim **Planner** die drei verbliebenen A-40-Punkte. Bei mir ist die Reihe der vier abgeschlossen.
+
+## §160 — Posten (c): F-021 verlangt bei 90° eine Absage; der Code liefert 163 Billiarden Meter
+
+*(Messstand 59aa5171, 21.08. 12:52. Nummer gegen den frischen HEAD gewaehlt: 97 Abschnitte, hoechste
+159 — 160 war frei.)*
+
+**Herkunft:** `docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md:243-251` (F-021 · Dach aus
+Skelett anheben), eine der drei nie gerechneten Formeln. Ihre Regel ist `z(Knoten) = t · tan(α)`,
+ihr Grenzfall lautet woertlich: *„α = 90° → `tan` laeuft gegen unendlich, **Absage**."*
+
+### Das Skelett gibt es nicht — die Formel schon
+
+Ueber die Gestalt gesucht: `skelett`, `skeleton`, `Skelett`, `straightSkeleton` geben in
+`resources/planner/hausplaner/` **je null Treffer**. F-020 und F-021 sind als Skelett **nicht
+gebaut** — was zu F-026 passt, das die Sammlung als *„Alternative zu F-020"* fuehrt.
+
+Die **Formel** steht trotzdem im Baum, zweimal:
+`resources/planner/hausplaner/geometry/dachformVorlagen.ts:268-271` als
+`tanGrad(grad) { return endlich(Math.tan(gradToRad(grad))); }` und
+`resources/planner/hausplaner/renderers/three-d/dachMesh.ts:229` als
+`const tan = Math.tan(...)`.
+
+### Gerechnet am echten Modul
+
+esbuild-Bundle von `resources/planner/hausplaner/geometry/dachformVorlagen.ts`, Export `pultRiseM`
+(`:317`), Breite 10 m:
+
+| Neigung | Code | erwartet `10·tan α` | |
+|---|---|---|---|
+| 0 · 15 · 30 · 45 · 60° | 0 · 2,6795 · 5,7735 · 10 · 17,3205 | identisch | **haelt auf 1e-9** |
+| **90°** | **163 312 393 531 953 700** | *Absage* | **kein Wurf, eine Zahl** |
+| 90,0000001° | **−5 729 578 275** | — | **Vorzeichen kippt** |
+| 91° | **−572,9** | — | Dach nach unten |
+
+### Warum der Wächter nicht greift, und das ist der Kern
+
+`endlich(n)` (`resources/planner/hausplaner/geometry/dachformVorlagen.ts:254-256`) lautet
+`Number.isFinite(n) ? n : 0`. Der Kommentar darueber sagt *„tan(alpha) sicher in Bogenmass
+(NaN/Infinity → 0)"*. Gemessen:
+
+```
+Math.tan(90 Grad)              = 16331239353195370      <- ENDLICH
+Number.isFinite(...)           = true                   <- der Waechter laesst es durch
+pultRiseM(10, 90)              = 163312393531953700
+```
+
+**In Gleitkomma wird `tan(90°)` nie unendlich** — π/2 ist nicht exakt darstellbar. Der Waechter
+schuetzt also gegen einen Fall, den die Domaene gar nicht erzeugen kann; gefangen hat er in meiner
+Probe nur `NaN`, `Infinity` und `−Infinity` als **Eingabe**, nicht als Ergebnis.
+
+**F-021 verlangt eine Absage, der Code liefert eine Zahl.** Dieselbe Klasse wie §136 (entartete Wand
+meldet eine zuversichtliche Himmelsrichtung) und §141 (`|| 1` liefert glatte 90°): **ein Schutz, der
+statt zu verweigern etwas Plausibles zurueckgibt** — hier sogar etwas offensichtlich Unsinniges, das
+aber keinen Fehler ausloest.
+
+### Reichweite: latent, nicht scharf
+
+- `clampPitchGrad` (`…/dachformVorlagen.ts:402-406`) klemmt auf **min 1, max 85** — 90° kaeme dort
+  nie durch. Aber der Klemmer wird **einmal** gerufen, bei `…/dachformVorlagen.ts:497`, und **nicht**
+  innerhalb von `tanGrad`.
+- `pultRiseM` und `walmFirstRiseM` haben **keinen einzigen Nicht-Test-Aufrufer**.
+- `geometry/dachformVorlagen.ts` gehoert zu den **33 Modulen ohne Ladeweg** (§133, heute erneut
+  gemessen).
+
+**Kein Schaden heute.** Er entsteht, sobald jemand `pultRiseM` verdrahtet, ohne vorher zu klemmen —
+und der Kommentar ueber `tanGrad` sagt ihm, es sei „sicher".
+
+### Was ich NICHT gemessen habe
+
+F-021 traegt eine **physikalische Probe**: *„Wasser muss von jedem Punkt der Dachflaeche immer zur
+Traufe fliessen."* Sie setzt das Dreiecksnetz aus dem Skelett voraus, und das gibt es nicht. Ich habe
+sie **nicht** geprueft und stelle das ausdruecklich fest, statt sie unter „haelt" zu verbuchen.
+
+**Ball beim Planner:** entweder `tanGrad` sagt bei α ≥ 90° ab (dann stimmt F-021), oder der
+Kommentar bei `…/dachformVorlagen.ts:268` hoert auf, „sicher" zu versprechen. Eine Fachentscheidung,
+keine Messfrage.
+
+## §161 — Posten (d) über alle 41 Scheiben: nicht das Alter sagt es voraus, sondern die Bewegung — und es trifft genau einen Zeiger
+
+*(Messstand f3e4da44, 21.08. 12:56. Nummer gegen den frischen HEAD gewaehlt: 98 Abschnitte, hoechste
+160 — 161 war frei.)*
+
+**Herkunft der Fragestellung:** §129 hat gezeigt, dass eine Scheibe nicht haelt, weil sie sorgfaeltig
+ist, sondern weil ihre Zieldatei stillsteht. Diese Runde prueft das ueber den **ganzen** Bestand
+statt an einem Beispiel.
+
+### Die Erhebung
+
+Von **41** Werkbank-Scheiben haben **23** eine Code-Zieldatei (`.ts`/`.tsx`, Testdateien
+ausgenommen). Fuer jede: Schnitt-Commit der Scheibe, Alter in Minuten, Commits auf die Zieldatei
+seither. **Sechs** haben ein bewegtes Ziel — jede um genau **einen** Commit:
+
+```
+W-14     9461 Min   toolRegistry.ts      1     <- neu in meinem Bestand
+W-20    12967 Min   holzMengen.ts        1     \
+W-21     6762 Min   auswechslung.ts      1      |  Herkunftsvermerk 78e4cc0e,
+W-25     7133 Min   holzBauteile.ts      1      |  bereits in §134 erfasst
+W-43     1374 Min   holzBauteile.ts      1     /
+W-31    10912 Min   enginePanels.ts      1     <- neu in meinem Bestand
+```
+
+**Das Alter sagt nichts voraus.** Die **aeltesten** Scheiben — W-01 (15 320 Min) und W-02
+(15 306 Min) — haben **null** Bewegung; die eine, bei der ein Zeiger faellt, ist juenger als beide.
+§129s Unterscheidung haelt ueber die ganze Grundmenge.
+
+### W-14 ist unberührt — und zeigt, warum die Grenze zählt
+
+`resources/planner/hausplaner/app/tools/toolRegistry.ts` wuchs mit `ec12e9b3` (15.08. 11:05) um
+**+27 Zeilen ab `:291`**. W-14s beide Zeiger lauten `toolRegistry.ts:249` und `:273` — **beide
+oberhalb der Einfuegestelle**, also beide unveraendert richtig. Dieselbe Lehre wie in §154 bei
+`studioDaten.ts:97`: **eine bewegte Datei macht nicht alle ihre Zeiger falsch.**
+
+### W-31 trifft es — an einer Stelle, dreimal zitiert
+
+`resources/planner/hausplaner/app/dashboard/enginePanels.ts` wuchs mit `62736115` (20.08. 13:12,
+*„STOPP-REGEL — die Schneelastzone kam nie in der Formel an"*) um netto **+20** Zeilen; die Hunks
+liegen bei `:189` (laengenneutral), `:411` (+14) und `:424`→`:438` (+6).
+
+W-31s vier Zeiger: `:32`, `:380`, `:403` liegen **oberhalb** von `:411` und halten. **`:509` nicht:**
+
+| | |
+|---|---|
+| W-31 behauptet | `enginePanels.ts:509` = `alsPvEingabe(...)`, *„der Adapter (W-37)"* |
+| vor `62736115` | `export function alsPvEingabe(werte: Record<string, string>): PvEingabe {` ✓ |
+| **heute an `:509`** | `...(feldZahl(werte, 'psiRandverbund') !== undefined ? { … }` |
+| **steht wirklich auf** | **`:529`** — genau +20 |
+
+**Und der Zeiger steht dreimal:**
+`docs/rollenkette/werkbank/02-WERKZEUGE/W-31-pv-schnellbelegung/4-BEDIENUNG.md:13`,
+`…/4-BEDIENUNG.md:35` und `…/2-FUNKTION.md:87`.
+
+### Was diese Runde beiträgt
+
+**Ein Ertrag von einem Zeiger aus 41 Scheiben ist ein gutes Ergebnis, kein duennes.** Die Erhebung
+sagt vor allem, wo **nicht** zu suchen ist: 17 Scheiben ohne Code-Ziel, 17 mit unbewegtem Ziel, vier
+bereits in §134 erfasst. Uebrig bleiben zwei ungeprueste Faelle, davon einer unberuehrt und einer
+mit genau einer falschen Zahl. **Das ist die Ausbeute, die eine gezielte Suche haben soll.**
+
+**Ball beim Planner**, klein und benannt: drei Zitate derselben Zahl auf `:529` nachziehen.
+
+## §162 — Posten (e) an §128: der Einheiten-Befund hält, und ein eigener Zeiger trägt den falschen Inhalt
+
+*(Messstand ea08339a, 21.08. 12:59. Nummer gegen den frischen HEAD gewaehlt: 99 Abschnitte, hoechste
+161 — 162 war frei.)*
+
+**Herkunft:** mein eigener §128 (`docs/BEFUND-plan-pruefer-rueckweg-und-tor.md:9577-9605`), der
+Einheiten-Teil — *„drei Aussagen ueber dieselbe Einheit"*. Nachgemessen am HEAD.
+
+### Drei von vier Zusagen treffen wörtlich
+
+| Zusage aus §128 | heute gemessen |
+|---|---|
+| `polygonFlaeche.ts:12` sagt *„in Metern … Ergebnis in m²"* | ✓ woertlich |
+| `deckenMesh.ts:14` sagt *„rechnet KEINE Einheit um (Input in mm ⇒ Ergebnis mm²)"* | ✓ woertlich |
+| `MM2_PRO_M2 = 1_000_000` | ✓ bei `renderers/three-d/deckenMesh.ts:15`, benutzt bei `:24` |
+| Rumpf `polygonFlaecheM2`: **0** Divisionen durch 1000 / 1e6 | ✓ **0** |
+
+**Der tragende Satz haelt also:** der Rumpf rechnet nichts um, der Meter-Vertrag steht nur im Kopf.
+
+### Der vierte: richtiger Zeiger, falscher Inhalt daneben
+
+§128 schreibt: *„Zusammen mit `dachGeometrie.ts:44` aus §122 (`/1_000_000`, also ebenfalls mm)"*.
+Gemessen:
+
+```
+geometry/dachGeometrie.ts:44   s += a.x * b.y - b.x * a.y;        <- die Schuhband-Summe
+geometry/dachGeometrie.ts:46   return Math.abs(s) / 2 / 1_000_000; <- die Division
+```
+
+**Und es ist kein Drift:** am Stand von §128 (`b5af089e`) stand dort schon dasselbe, und die Datei
+hat seither **0 Commits**. §122 (`…:9147`) und §145 (`…:10678`) zitieren `:44` **richtig** — als Ort
+der Formel. **Nur §128 hat die Division an diesen Zeiger gehaengt**, und die steht zwei Zeilen
+tiefer.
+
+**Die Folgerung ueberlebt unveraendert:** `dachGeometrie.ts` teilt tatsaechlich durch `1_000_000`,
+rechnet also in mm — nur eben bei `:46`. Beide gemessenen Verbraucher rechnen mm, der Meter-Vertrag
+steht allein im Kopf einer Datei ohne Ladeweg (`geometry/polygonFlaeche.ts`, heute erneut in der
+Tot-Liste).
+
+### Nichts hat sich bewegt
+
+```
+geometry/polygonFlaeche.ts          0 Commits seit b5af089e
+renderers/three-d/deckenMesh.ts     0
+geometry/dachGeometrie.ts           0
+Z1-W1-3 (zustaendiger Auftrag)      0   ·  zustand: ENTWURF
+```
+
+Der Auftrag, der die Falle aufloesen soll, steht unveraendert auf `ENTWURF` mit meinem NICHT ERTEILT
+aus §145 — dessen zwei tragende Restpunkte (Kriterium A unerfuellbar, Kriterium D zweideutig) liegen
+beim Planner.
+
+### Was ich an mir ändere
+
+**Das ist die zweite Stelle, an der ein Abschnitt von mir einen richtigen Zeiger mit dem falschen
+Inhalt verbindet** — hier `:44` mit der Division, in §153 die Achsen-Formulierung neben einer
+richtigen Rechnung. **Ich habe den Zeiger geprueft und den Satz daneben nicht.** Kuenftig gilt fuer
+mich: wenn ich einen Zeiger uebernehme, uebernehme ich **auch dessen Inhalt aus der Quelle**, statt
+ihm meinen eigenen Satz mitzugeben.
+
+**Kein neuer Ball.** Die Einheiten-Sache liegt bei Z1-W1-3 und damit beim Planner; die Berichtigung
+an §128 steht hier.
+
+## §163 — Posten (a) an der Statuswahrheit: sie beschreibt einen Mangel, den es nicht mehr gibt, an einer Zeile, die etwas anderes trägt
+
+*(Messstand 6597d801, 21.08. 13:03. Nummer gegen den frischen HEAD gewaehlt: 100 Abschnitte, hoechste
+162 — 163 war frei.)*
+
+**Neue Richtung.** §139 mass Zeiger **in** `docs/STATUS.md` hinein. Diese Runde misst die Zeiger, die
+**aus** ihr in den Code fuehren — die Statuswahrheit ist der meistgelesene Traeger im Bestand.
+
+**Grundmenge:** **773** Code-Zeiger der Form `datei.ext:zeile`, **468** verschieden. Zielgerichtet
+nach §154 auf die bewegteste Datei: `scripts/commit-pruefen.sh`, heute **1066 Zeilen**, aus der
+Statuswahrheit **17-mal verschieden** und **27-mal** insgesamt zitiert.
+
+*(Musterprobe zuerst fehlgeschlagen und korrigiert: ich pruefte an `rollen-tor.sh` und bekam null —
+die Datei wird in `docs/STATUS.md` durchweg **ohne** Zeilennummer genannt. Schlechter Probefall, nicht
+schlechtes Muster; an echten Treffern verifiziert.)*
+
+### Fünf Zeiger mit konkreter Zusage, einzeln geöffnet
+
+| Zeiger | was die Statuswahrheit sagt | heute |
+|---|---|---|
+| `commit-pruefen.sh:73` / `:78` | *„liest den Praefix `zustand` als Rollenmarke"*, *„`:78` exit 2"* | `:73` ist `fi`; `exit 2` steht auf **`:72`**, die Rollen-Auswertung auf **`:83`** |
+| `commit-pruefen.sh:163` | *„Doppelpfad"* | gehoert auf **`:510`** (in §154 gemessen) |
+| `commit-pruefen.sh:501` | *„die Regex … ist ohne g-Flag"*, meldet nur den **ersten** yaml-Block | `:501` ist `fi`; die Regex steht auf **`:713`** — **mit `/g`** |
+| `commit-pruefen.sh:642` | *„der Hook steht NACH allen 12 exit-Punkten, mit `\|\| true`"* | `:642` ist `#`; die `\|\| true`-Hooks stehen auf **`:925`, `:934`, `:949`** |
+| `commit-pruefen.sh:699-730` | *„die Barriere ist gebaut"* | **haelt** — `catch (e)` bei `:706`, `:717`, `:725` |
+
+**Vier gewandert, eine haelt.**
+
+### Der Fall :501 ist von anderer Art — und der wichtigste
+
+Die Statuswahrheit sagt bei `docs/STATUS.md:16719`: *„die Regex in `scripts/commit-pruefen.sh:501`
+ist ohne g-Flag, und die Meldung [nennt nur den] ERSTEN yaml-Block"*. Gemessen:
+
+```
+scripts/commit-pruefen.sh:713   const bloecke = [...t.matchAll(/```yaml\n([\s\S]*?)```/g)];
+                                                                                      ^ g-Flag
+scripts/commit-pruefen.sh:694   Kommentar: "Der Pruefer liest ```yaml-BLOECKE, nicht Front Matter"
+```
+
+**Der beschriebene Mangel existiert nicht mehr** — das `g` ist da, `matchAll` mit Spread liest
+**alle** Bloecke. Es ist also nicht nur die Zeile gewandert, sondern der **Sachverhalt behoben**,
+waehrend seine Beschreibung stehen blieb.
+
+**Das ist die unangenehmste Sorte:** ein toter Zeiger fuehrt an eine falsche Stelle (§140), aber
+dieser hier fuehrt an eine falsche Stelle **und** beschreibt einen Zustand, den es nicht mehr gibt.
+Wer ihn liest, sucht einen Fehler, findet die Zeile nicht, und wenn er die richtige Zeile faende,
+faende er den Fehler auch nicht.
+
+### Was das über die Grundmenge sagt
+
+Ich habe **5 von 468** geprueft, gezielt an der bewegtesten Datei. **Das ist eine Stichprobe und
+keine Erhebung** — ich sage es ausdruecklich, statt aus vier Treffern auf 468 hochzurechnen. Was sie
+zeigt, ist die **Trefferdichte an bewegten Zielen**, und die ist hoch.
+
+**Ball beim Integrator** — er ist der einzige Schreiber von `docs/STATUS.md`
+(`scripts/rollen-tor.sh:344`). Benannte Ziele: `:73`→`:72`/`:83`, `:163`→`:510`, `:642`→`:925`,
+und bei `:501` **nicht nachziehen, sondern streichen** — der Mangel ist behoben.
+
+## §164 — Posten (b) an den fünf roten Karten: zwei nachgezählt, beide halten — und der Fehler von Karte 3 ist derselbe, den ich in §157 gemacht habe
+
+*(Messstand 57d7b0b5, 21.08. 13:06. Nummer gegen den frischen HEAD gewaehlt: 101 Abschnitte,
+hoechste 163 — 164 war frei.)*
+
+**Herkunft:** die Selbstanzeige des Planners in `docs/ARBEITSREGELN.md:1813-1819`
+(*„Fuenf rote Karten an einem Tag"*), eingetragen mit `2478f23f` am 16.08. 20:22. Die Wache verlangt,
+fremde Zahlen frisch zu messen — auch die aus einer fremden Fehlerliste.
+
+### Karte 2 hält, auf eine Datei genau
+
+Die Karte zitiert *„`ls-files 0` ueber einen Baum mit **7460** Dateien"*. Gemessen ueber den 16.08.:
+
+```
+bis 08:00   7459 Dateien       bis 18:00   7523
+bis 12:00   7459               bis 20:22   7532
+bis 16:00   7459               heute       7622
+```
+
+**Bis in den Nachmittag hinein waren es 7459** — die Karte sagt 7460. **Abweichung: eine Datei**,
+und das bei zwei verschiedenen Zaehlverfahren (`ls-tree -r` gegen `ls-files`). Das ist ein Treffer,
+kein Fehlschlag.
+
+### Karte 3: der Mechanismus reproduziert exakt, die Basis wandert
+
+Die Karte sagt *„**281** statt **284** Rollenmarken — Schreibweise gezaehlt"*. Die Grundmenge steht
+nicht in der Karte, sondern in `docs/auftraege/aktiv/A-38-merges-laufen-am-tor-vorbei.md:239-243`:
+*„Commits am 16.08. gesamt 472 · davon MERGES 188 · Nicht-Merges 284 · davon mit Rollenmarke 284."*
+
+**Die drei „Ausreisser" tragen woertlich, was das Blatt sagt:**
+
+```
+c425638d   release-pruefer (in Yamas Namen): …
+a4694b21   release-pruefer (in Yamas Namen): …
+4ed51b8f   plan-pruefer (release-pruefer in Rollenwechsel): …
+```
+
+**Und der Zaehlunterschied ist an jedem Messpunkt exakt drei:**
+
+| Fenster | Nicht-Merges | enges Muster | mit Klammerzusatz | Delta |
+|---|---|---|---|---|
+| bis 16.08. 19:20 | 272 | 269 | 272 | **3** |
+| bis 16.08. 19:29 | 278 | 275 | 278 | **3** |
+| ganzer 16.08. | 455 | 452 | 455 | **3** |
+| *Blatt (19:2x)* | *284* | *281* | *284* | *3* |
+
+**Der Mechanismus haelt vollstaendig.** Die absolute Basis wandert — 284 wird kurz nach 19:29
+erreicht, ueber den ganzen Tag sind es 455. **Dieselbe Ursache wie in §155 an demselben Blatt:** das
+Fenster ist nach vorn offen.
+
+### Der Fehler von Karte 3 ist meiner aus §157
+
+*„Schreibweise gezaehlt"* heisst hier: ein Muster, das den **Klammerzusatz** nicht zulaesst, findet
+drei Marken nicht, die da sind. **Das ist Zeichen fuer Zeichen der Fehler, den ich in §157 gemacht
+habe** — dort suchte ich Stufenmarkierungen mit `P[123]` statt `(P1)` und bekam null am alten Stand
+und 84 am neuen. Der Planner hat ihn am 16.08. an sich selbst gefunden und aufgeschrieben; ich bin
+fuenf Tage spaeter in dieselbe Kerbe gelaufen, **obwohl die Karte in der Prozessquelle steht, die ich
+jede Runde lese.**
+
+### Eigene Fehlmessung, dokumentiert
+
+Mein erster Anlauf zaehlte Rollenmarken **ueber die ganze Historie** und gab **2201** bzw. **2056** —
+gegen eine Zahl von 284. Drei Groessenordnungen daneben, weil ich die Grundmenge nicht kannte: die
+Karte ist eine **Einzeilen-Zusammenfassung**, ihr Umfang steht in A-38. **Ich habe gezaehlt, bevor
+ich gelesen habe.**
+
+**Karten 1, 4 und 5 habe ich in dieser Runde NICHT gemessen** — ich sage es, statt „die Karten
+halten" zu schreiben.
+
+**Kein Ball.** Die zwei geprueften Karten halten; die Selbstanzeige des Planners ist in der Sache
+richtig und in Karte 3 sogar praeziser, als ihre Kurzform vermuten laesst.
+
+## §165 — Posten (c): F-027s Breiten-Absage ist nicht gebaut, und diesmal liegt der Fall auf einem lebenden Pfad
+
+*(Messstand be33db5d, 21.08. 13:12. Nummer gegen den frischen HEAD gewaehlt: 102 Abschnitte,
+hoechste 164 — 165 war frei.)*
+
+**Herkunft:** `docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md:869-881` (F-027 ·
+Gaubenaufbau), eine der letzten zwei nie gerechneten Formeln. Umsetzung gemessen an
+`resources/planner/hausplaner/geometry/gaubeGeometrie.ts` (498 Z.), gerechnet ueber ein
+esbuild-Bundle.
+
+### Drei Abweichungen zwischen Formel und Code
+
+**1 · `rise = d · tan(φ)` ist nicht der Rueckgabewert, sondern eine Obergrenze.** Bei 45° und
+d = 1,5 gibt `d·tan φ` **1,5000**; zurueck kommt `h = 1,2000`, also die **gewuenschte** Hoehe. Der
+Code rechnet bei `…/gaubeGeometrie.ts:144` `hMax = d · (tanA − tanMin)` — mit einem
+**Mindestwinkel-Term**, den F-027 nicht nennt.
+
+**2 · Der Vorgabewert 15° existiert nicht.** F-027 sagt *„Eigenneigung ohne Vorgabe → 15° (Wert aus
+dem Quellcode)"*. Gemessen: die Neigung wird **abgeleitet** —
+`…/gaubeGeometrie.ts:92-95` `neigungAusFrame(f) = asin(vDown.y)` —, und das Feld `pitch?` ist bei
+`:49` ausdruecklich als *„advisorisch (Gaubenneigung wird i.d.R. abgeleitet)"* markiert. **Kein 15°
+im Modul.**
+
+**3 · Die Breiten-Absage ist nicht umgesetzt.** F-027: *„Gaube breiter als die Dachflaeche →
+Absage."* Gerechnet:
+
+```
+width =   5 m   feasible=true   angepasst=false   hinweis=undefined
+width =  50 m   feasible=true   angepasst=false   hinweis=undefined
+width = 500 m   feasible=true   angepasst=false   hinweis=undefined   4 Dreiecke
+```
+
+Und in `pruefeAufbau` (`…/gaubeGeometrie.ts:409`) stehen fuenf Kriterien — `AK1 kein Vertex ueber
+First`, `AK2 Anschlusskante auf Hauptdach`, `AK3 keine Rueckwand ueber Dach`, `AK4 Front lotrecht`,
+`AK5 Kaminsockel spaltfrei`. **Keines nennt die Breite.** Ueber `w = 2 · 12 · 50 · 500` sind die vier
+bewerteten Kriterien **zeichengleich** — die Breite geht in keines ein.
+
+### Was der Code besser macht als die Formel
+
+Er hat eine **Absage, die F-027 nicht kennt**: bei zu flachem Hauptdach liefert er `feasible=false`
+mit *„Hauptdach zu flach fuer einbindende Pultgaube — pruefpflichtig (schematisch)."* Und bei 10–30°
+kuerzt er die Fronthoehe **und sagt es**: *„Fronthoehe an Hauptdachneigung/Tiefe gekoppelt
+(gekuerzt), damit der Rueckanschluss exakt aufgeht."*
+
+### Und diesmal ist es kein latenter Fall
+
+§136, §141 und §160 endeten alle mit *„nicht erreichbar"*. **Hier nicht:**
+
+```
+geometry/gaubeGeometrie.ts              NICHT in der 33er-Liste
+renderers/three-d/dachAufbautenMesh.ts  NICHT in der 33er-Liste  — ruft :143 pultGaubeGeometrie,
+                                        :136/:141/:146 pruefeAufbau(...).ampel, schneidet ueber
+                                        fussabdruckUV ein Loch in die Dachflaeche
+commands/applyCommand.ts:332            ADD_ROOF_AUFBAU prueft ueber pruefeAufbauGanzzahlig (:88-90)
+                                        NUR Ganzzahligkeit — keine Obergrenze
+```
+
+**Auf dem ganzen Weg von der Eingabe bis zum Loch im Dach begrenzt nichts die Breite gegen die
+Flaeche.**
+
+### Zwei eigene Fehler, beide gefangen
+
+1. **Ich las das falsche Feld.** `hinweise` (Plural) ist leer und ungenutzt; die Meldung steht in
+   `hinweis` (Singular). Mein erster Satz *„schrumpft stillschweigend"* war damit **falsch** — die
+   Anpassung wird angesagt. **Ein Buchstabe Unterschied im Feldnamen machte aus einer ehrlichen
+   Meldung eine stille.**
+2. **Meine Pruefflaeche ist nicht kalibriert.** Erst benutzte ich falsche Feldnamen (`uRight`/`W`/`H`
+   statt `vRight`/`width`/`height`) — Wurf, kein Ergebnis. Danach lief sie, liefert aber schon bei
+   einer normalen 2-m-Gaube `ampel=rot` (AK3 faellt). **Ueber den absoluten Ampelwert sage ich
+   deshalb nichts** — nur, dass er ueber alle vier Breiten **identisch** ist, und das genuegt fuer
+   die Aussage.
+
+**Ball beim Planner:** F-027s Breiten-Absage fehlt auf einem erreichbaren Pfad — entweder sie wird
+gebaut, oder die Formel streicht sie. Dazu die zwei kleineren Abweichungen: `rise = d·tan φ` ist im
+Code eine Obergrenze mit Mindestwinkel-Term, und der 15°-Vorgabewert existiert nicht.
+
+## §166 — Posten (d): A-38s „FESTE ERHEBUNG" ist an einem Ende offen, und das Zumachen hilft nicht
+
+**Messstand** `bf4d67fc` · Baum sauber (0 Einträge) · 0 neue Commits seit §165 · Zweigprobe live:
+`origin/rolle/plan-pruefer b43d26a7`, `origin/auto/hausplaner-integration 85be41e4`, `origin/main 4ed11218`.
+Erhebung im Integrations-Checkout `/Users/yamanuri/Documents/ticket` (Zweig `auto/hausplaner-integration`,
+HEAD `85be41e4`), wie das Blatt es ausdrücklich vorschreibt.
+
+### Die Alterung der neun Aufträge in meiner Bahn
+
+| Auftrag | Basis | Schnitt | Commits seit Schnitt | Alter |
+|---|---|---|---|---|
+| A-38 | `0f05f8bf` | 14.08. 22:51 | **1156** | 6 T 14 h 26 min |
+| A-39 | `99add90f` | 16.08. 13:45 | 1054 | 4 T 23 h 32 min |
+| A-40 | `99add90f` | 16.08. 13:45 | 1054 | 4 T 23 h 32 min |
+| A-42 | `e802c1f8` | 16.08. 17:24 | 982 | 4 T 19 h 53 min |
+| Z1-W1-1…5 | `11f7c4c3` | 21.08. 09:54 | 63 | 0 T 3 h 23 min |
+
+Alter allein ist kein Befund — §129 hat den Unterschied festgelegt: es zählt nicht, wie alt ein Satz
+ist, sondern **ob sein Gegenstand sich bewegt hat**. Also gemessen, welche der genannten Pfade sich
+zwischen Basis und HEAD bewegt haben:
+
+- **A-38**: 5 Pfade genannt, 4 am Basis vorhanden, **2 bewegt** — `docs/STATUS.md` 17857 → 27619 Z.
+  (313 Commits), `scripts/commit-pruefen.sh` 743 → 1066 Z. (12 Commits, **+43 %**).
+- **A-39**: 3 genannt, 2 vorhanden, 2 bewegt (dieselben zwei Dateien).
+- **A-40**: 1 genannt, 1 bewegt (`docs/STATUS.md` 21353 → 27619).
+- **A-42**: 6 genannt, 3 vorhanden, 1 bewegt (`docs/STATUS.md` 21764 → 27619).
+
+A-38 ist damit der scharfe Fall: **der Auftrag handelt vom Tor, und das Tor ist seit dem Schnitt um
+323 Zeilen gewachsen.**
+
+### Die eigentliche Messung: was die „feste Erhebung" heute liefert
+
+`A-38-merges-laufen-am-tor-vorbei.md:80-87` ersetzt einen wandernden Messbefehl durch eine, so das
+Blatt wörtlich, **„FESTE ERHEBUNG — ein benannter Tag statt eines wandernden Fensters"**, und
+notiert das Ergebnis: *„gemessen 16.08. abends: 472 Commits, 188 Merges, Anteil 40 Prozent."*
+Der Befehl unverändert nachgefahren:
+
+```
+FESTE ERHEBUNG heute (--since='2026-08-16 00:00', --all):
+   Commits 1085 · Merges 437 · Anteil 40 Prozent
+Blattzahl 16.08. abends:
+   Commits  472 · Merges 188 · Anteil 40 Prozent
+```
+
+**Faktor 2,3 in fünf Tagen.** Der Grund steht in der Fassung des Befehls: der Anfang ist benannt,
+das **Ende ist offen**. Ein Fenster mit festem Anfang und offenem Ende ist kein festes Fenster,
+es ist ein *wachsendes*. Das Blatt hat den wandernden Rand durch einen wachsenden ersetzt und
+den neuen Zustand „fest" genannt.
+
+### Und jetzt das Unangenehme: das Ende zumachen genügt nicht
+
+Naheliegender Vorschlag wäre `--until='2026-08-17 00:00'`. Gemessen:
+
+```
+Fenster MIT Ende (16.08. 00:00 bis 17.08. 00:00, --all):
+   Commits 815 · Merges 359
+```
+
+Auch das trifft die 472/188 nicht — **+73 % bei den Commits, +91 % bei den Merges**, obwohl das
+Fenster nun an beiden Enden benannt ist und in der Vergangenheit liegt. Gegenprobe, ob der Filter
+schuld ist: `--since/--until` filtert das **Commit-Datum**, und die unabhängige Auszählung über
+`%cd` ergibt für den 2026-08-16 ebenfalls **815** — die beiden Verfahren stimmen überein, der Filter
+arbeitet richtig. Die Ursache ist eine andere und steht im Blatt selbst
+(`A-38-merges-laufen-am-tor-vorbei.md:105-107`): *„die Zahl wächst rückwirkend, sobald Zweige
+zusammengeführt werden."* `--all` ist keine feste Menge, sondern die **heutige** Menge der Refs.
+Ein vergangenes Datumsfenster über eine wachsende Refmenge friert nichts ein.
+
+**Folge, und das ist der Posten:** Die im Blatt angebotene Abhilfe — *benannter Tag statt wanderndes
+Fenster* — erreicht ihr Ziel nicht, auch nicht in der verbesserten Fassung mit Ende. Der einzige
+Anker, der in diesem Baum wirklich festhält, ist der, den `docs/ARBEITSREGELN.md` unter
+**„Zwei Haltbarkeiten"** ohnehin benennt: **der SHA**. Ein Datum ist kein SHA. Wer die Zahl
+reproduzierbar haben will, muss `--all` durch einen benannten Stand ersetzen.
+
+### Was NICHT gealtert ist — und darauf ruht der Auftrag
+
+Der Kern von A-38 hat sich in 1156 Commits **nicht um ein Zeichen bewegt**:
+
+| Blattaussage (Stand 14.08.) | heute gemessen |
+|---|---|
+| `'merge' in scripts/commit-pruefen.sh (-i)` — 4 Treffer, keine Prüfung | **4 Treffer**, wortgleich |
+| `.githooks` nicht vorhanden | **NEIN** — nicht vorhanden |
+| `core.hooksPath` nicht gesetzt | **leer** — nicht gesetzt |
+| — | `commit-msg`-Hook: nicht vorhanden |
+
+Die vier Treffer sind am Basis `0f05f8bf` die Zeilen 696, 702, 703, 705 und heute die Zeilen
+`scripts/commit-pruefen.sh:1019`, `:1025`, `:1026`, `:1028` — **derselbe Wortlaut, um genau 323
+Zeilen verschoben**, also exakt um den Zuwachs der Datei. Alle vier handeln von *unaufgelösten
+Merge-Einträgen im Index*, keiner von der **Botschaft** eines Merge-Commits. Zusätzlich gemessen:
+`MERGE_HEAD` 0 Treffer, `HEAD^2` 0 Treffer, `no-ff` 0 Treffer, `git merge` 0 Treffer — bei
+7 Treffern für `TICKET_ROLLE`. **Das Tor prüft die Rollenmarke und sieht Merges nicht.**
+
+Das Blatt hat sich gegen genau diese Prüfung selbst gewappnet
+(`A-38-merges-laufen-am-tor-vorbei.md:107-109`): *„Der Bau prüft die Aussage, nicht die Zahl."*
+Diese Vorsorge trägt. Und die Verhältniszahl, auf die es sich stützt, ist ebenfalls stabil:
+188/472 = 39,8 %, heute 437/1085 = 40,3 %. **Der Auftrag ist gealtert, ohne zu verfallen** —
+zwölf Commits sind in seinen Gegenstand geflossen, und keiner davon in die Lücke, die er beschreibt.
+
+Das ist die umgekehrte Richtung zu §110: dort machte **ein** Bau fünf Zahlen eines Blattes ungültig.
+Hier haben 1156 Commits die Zahlen verdoppelt und die Aussage unberührt gelassen. Der Unterschied
+liegt nicht am Alter, sondern daran, woran ein Satz hängt: an einer Auszählung des Baums oder an
+einer Eigenschaft einer Datei.
+
+### Eigener Fehler — zweimal dieselbe Falle in einer Runde
+
+Zwei Messungen dieser Runde sind **ausgefallen und wurden nicht gemeldet**:
+
+1. `for e in "A-38 0f05f8bf" …; do set -- $e; …` — Ergebnis: **alle fünf Basis-SHAs „UNBEKANNT IN
+   DIESEM BAUM"**. Fangprobe an einem bekannten Treffer: `git cat-file -t 11f7c4c3` → `commit`.
+   Alle vier existieren.
+2. `paths=$(grep …); for p in $paths` — Ergebnis: **jedes Blatt „1 Pfad genannt"**. Nach der
+   Korrektur: 5, 3, 1, 6.
+
+Ursache beide Male dieselbe: **zsh teilt eine unquotierte Variable nicht an Whitespace auf.** Das
+steht als meine eigene Lehre in `docs/STATUS.md` im Block `P-08` (Z.27311, *„Suchräume nie über
+eine Variable in eine Schleife geben"*) — und ich habe sie **eine halbe Stunde nach dem Lesen
+zweimal gebrochen**. Beide Male sah der Ausfall aus wie ein Ergebnis: einmal ein einheitliches
+„unbekannt", einmal eine einheitliche 1. Genau die Form, die die Wache mit *„eine ausgefallene
+Messung ist KEIN Ergebnis"* meint. Ersetzt durch `while IFS= read -r` aus einer Datei; eine
+Lehre in einem Block ist keine Gewohnheit.
+
+**Ball beim Planner:** `A-38-merges-laufen-am-tor-vorbei.md:80-87` trägt die Überschrift „FESTE
+ERHEBUNG" über einem Fenster mit offenem Ende; die Zahl darunter ist heute 1085/437 statt 472/188,
+und ein `--until` bringt sie nur auf 815/359. Entweder die Erhebung wird an einen SHA gebunden oder
+die Überschrift sagt, dass die Zahl wächst. **Der Auftrag selbst bleibt unberührt** — sein Befund
+ist an vier Stellen unverändert belegt, und die DoR-Erteilung aus §156 wird davon nicht angetastet.
+
+## §167 — Posten (e): meine eigenen Zeiger, und warum „zehn von elf halten" nichts beweist
+
+**Messstand** `5dbc246b` · Baum sauber (0 Einträge) · 0 neue Commits seit §166 · Zweigprobe live:
+`origin/rolle/plan-pruefer b43d26a7`, `origin/auto/hausplaner-integration 85be41e4`, `origin/main 4ed11218`.
+`docs/STATUS.md` unverändert bei 27619 Zeilen, letzter Commit `8232b63a` **20.08. 15:34**.
+
+Seit §109 messe ich fremde Zeiger. Diese Runde habe ich dieselbe Klinge an meine eigenen gelegt:
+**alle Zeiger der Form `STATUS.md:NNNN` in dieser Befunddatei** — 13 Nennungen, 12 verschiedene.
+
+### Erst der Fehlfund in eigener Sache
+
+Einer der zwölf ist gar kein Zeiger. `STATUS.md:8` steht in §-Text als **Ausgabe von `grep -c`**
+über zwei Dateien:
+
+```
+docs/BEFUNDNOTIZEN.md:31
+docs/STATUS.md:8
+```
+
+Das ist eine **Trefferzahl**, keine Zeilennummer — und mein Suchmuster `datei.ext:NNN` kann die
+beiden nicht unterscheiden. Hätte ich nicht geöffnet, hätte ich einen toten Zeiger gemeldet, wo
+eine richtige Zahl steht. *Grundmenge gegen die Frage prüfen, nicht gegen das Verfahren.*
+Bleiben **elf echte Zeiger**.
+
+### Das Ergebnis, und dann das, was es wert ist
+
+| Zeiger | geschrieben | trifft heute |
+|---|---|---|
+| `:3443` | 21.08. 11:16 | ja — *„F-012 in W-13s trefferSuche"* |
+| `:3447` | 21.08. 11:22 | ja — `station_geschlossen:` |
+| `:16719` | 21.08. 13:04 | ja — *„die Regex in `scripts/commit-pruefen.sh:501` ist ohne g-Flag"* |
+| `:18614` | 21.08. 11:22 | ja — `claim_dor: "release-pruefer 15.08. …"` |
+| `:18768 ff.` | 21.08. 12:33 | ja — `auftrag: "A-38"`, `dor_beleg` bei `:18785` im „ff." |
+| `:22096` | 21.08. 12:50 | ja — Rot-Lage A-39-1 |
+| `:22099` | 21.08. 12:50 | ja — wörtlich |
+| `:25411` | 21.08. 12:50 | ja — wörtlich |
+| `:26537` | 21.08. 10:45 | ja — Blockanfang P-03 |
+| `:26543` | 21.08. 12:05 | ja — `zustand: BEFUND` |
+| **`:26054`** | **17.08. 01:31** | **NEIN** |
+
+Zehn von elf. **Und genau daraus darf ich nichts folgern.** Zehn dieser elf Zeiger sind **heute**
+geschrieben, zwischen 10:45 und 13:04 — und `docs/STATUS.md` ist seit **20.08. 15:34** unberührt.
+Sie halten, weil sich nichts bewegt hat, nicht weil ich sorgfältig war. **Ein Zeiger, der nie einer
+Bewegung ausgesetzt war, ist nicht geprüft, sondern ungetestet.**
+
+Die ehrliche Fassung des Ergebnisses lautet deshalb: **Von meinen elf Zeigern in die
+Statuswahrheit war genau EINER älter als die letzte Änderung der Datei. Dieser eine trifft nicht.**
+Die übrigen zehn sind kein Gegenbeweis, sie sind kein Beweis.
+
+### Der eine, gemessen
+
+`docs/BEFUND-plan-pruefer-rueckweg-und-tor.md` trägt im **Nachtrag zu §89** die Zeile
+`docs/STATUS.md:26054  stand_der_A_42_dor:`. Geschrieben am **17.08. 01:31** in `ee5ac878`.
+
+- **Heute steht auf `:26054`:** `K1: "Ein Block traegt zustand: in Kleinschreibung oder als Prosa
+  — NICHT umziehen, …"` — ein anderes Thema, aus einem anderen Block.
+- **`stand_der_A_42_dor:` steht heute auf `:26130`** — 76 Zeilen tiefer.
+
+Der Zeiger **zeigt also auf etwas anderes**, nicht ins Leere — genau die Klasse, die die Wache mit
+Posten (a) meint, und dieselbe, die ich in §109, §110 und §154 gegen fremde Blätter gemeldet habe.
+
+### Kein Schnitt, eine Treppe
+
+§109 war ein Commit nach 45 Minuten, §110 einer nach 9 Stunden. Hier ist es **kein einzelner
+Verschieber, sondern vier**:
+
+```
+17.08. 01:31  ee5ac878  Zeiger geschrieben               26054
+19.08. 19:53  87a987e1  integrator: A-37 Ball-Drift      26054 -> 26070   (+16)
+19.08. 20:12  ea4cecd0  integrator: A-37 Bau-SHAs        26070 -> 26083   (+13)
+20.08. 12:37  82c7af6d  generator: S-1/7 Rundlauf        26083 -> 26106   (+23)
+20.08. 15:34  8232b63a  integrator: A-37 Ball an Eval.   26106 -> 26130   (+24)
+```
+
+**Standzeit bis zur ersten Bewegung: 3981 Minuten** = 2 T 18 h 21 min. Keiner der vier Schritte
+ist groß; zusammen sind es +76, und die Treppe hat **drei Autoren** (Integrator dreimal, Generator
+einmal). Ein Zeiger stirbt hier nicht an einem Ereignis, sondern an Verkehr.
+
+### Die Zahl, die zählt — Nachtrag zu §166
+
+Zwischen dem Schreiben und der ersten Bewegung liegen **71 Commits** — aber nur **zwei davon haben
+`docs/STATUS.md` angefasst**, und schon der erste hat den Zeiger verschoben. Das schärft die
+Messgröße aus §166: *„Commits seit Schnitt"* überzeichnet die Aussetzung um mehr als das
+Dreißigfache. **Die aussagekräftige Zahl ist nicht, wie viele Commits seit dem Schnitt liefen,
+sondern wie viele die Trägerdatei berührt haben.** Für A-38 waren das 12 von 1156, hier 2 von 71 —
+und in beiden Fällen entscheidet die kleine Zahl.
+
+Randbefund zur Grenze aus §154: `:25411` hält, `:26054` nicht, obwohl `:25411` **tiefer im Text**
+liegen dürfte als die Einfügestellen. Das ist kein Widerspruch zur Grenzregel, sondern ihre
+Bedingung: `:25411` wurde **nach** allen vier Bewegungen geschrieben. Eine Grenze trennt nur
+Zeiger, die **denselben** Schreibzeitpunkt haben. Wer Zeiger unterschiedlichen Alters in eine
+Grenzbetrachtung wirft, misst nichts.
+
+### Was ich nicht tue
+
+Ich ziehe `:26054` **nicht** nach. Die Befunddatei ist zitiert, das Nachbessern einer zitierten
+Zeile ist Datei-Chirurgie (B6), und in §163 habe ich dem Integrator für denselben Fall
+*„streichen, nicht nachziehen"* geschrieben. Was für ihn gilt, gilt hier: **die Berichtigung steht
+in diesem Abschnitt, nicht in der alten Zeile.** Wer den §89-Nachtrag liest, findet den Feldnamen
+`stand_der_A_42_dor` — und der ist eindeutig, mit oder ohne Zeilennummer. Das ist genau das, was
+`docs/ARBEITSREGELN.md` unter der Warnung *„Zeilenverweise auf diese Datei sind unzuverlässig"*
+verlangt: **nicht die Zeile, sondern die Überschrift.** Ich habe die Regel bisher zitiert und mich
+selbst nicht daran gehalten.
+
+**Ball bei mir.** Ab hier trägt jeder Zeiger in eine bewegte Datei den **Feldnamen oder die
+Überschrift** neben der Zeilennummer, damit er beim Wandern lesbar bleibt. Kein Ball beim Planner,
+kein Ball beim Integrator — dieser Befund geht gegen mich.
