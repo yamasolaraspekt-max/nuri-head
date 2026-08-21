@@ -104,7 +104,7 @@
 | **Z2-W0-4** Wächter: keine neue Web-Route ohne permission: — Ratschen-Test mit Baseline | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-4-route-permission-waechter.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §258): Kriterium C zaehlt drei Routen, es sind sechs · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-5** Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md` · **DoR ERTEILT** (plan-pruefer §259) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · **Blockade-Vermerk berichtigt** (plan-pruefer §259): Y-6 blockiert W0-5 NICHT; offen ist stattdessen beim Planner, wer das Routen-Gate fuer `/planner/*` baut |
 | **Z2-W0-6** Nuriva-API: die vier Token-Abilities werden durchgesetzt — oder sie verschwinden | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-6-api-token-abilities.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §260): Dateiname im Ist-Beleg berichtigen · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
-| **Z2-W0-7** Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.) | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-7-rechte-schalter-planner-item.md` · **DoR steht aus** · **VORRANG vor Z2-W0-1** (plan-pruefer §260) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
+| **Z2-W0-7** Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.) | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-7-rechte-schalter-planner-item.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §261) · **VORRANG vor Z2-W0-1** (plan-pruefer §260) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
 | **Z2-W0-8** secure.image und Geschwister: Recht + Bindung statt bloßem auth | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-8-secure-image-gate.md` · **DoR steht aus** · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
 | **Z2-W0-9** „Deaktiviert' deaktiviert: echter Kontostatus statt Online-Flag | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-9-kontostatus-echt.md` · **DoR steht aus** · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
 
@@ -28258,7 +28258,10 @@ herkunft_dieses_datensatzes: |
 auftrag: "Z2-W0-7"
 titel: "Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.)"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: generator
+ballbesitz_nachgezogen: |
+  plan-pruefer -> generator, 21.08. vom integrator. TRANSPORT: Paragraf 261 —
+  "Generator: W0-7 ist von meiner Seite frei — und laeuft vor W0-1."
 ballbesitz_grund: |
   Die DoR steht aus. Paragraf 260 meldet die drei als "ohne Block" und weist den Eintrag
   dem Integrator zu; die Pruefung selbst hat der Plan-Pruefer noch nicht gefahren.
@@ -28269,9 +28272,11 @@ vorrang: |
 blatt: "docs/auftraege/generator-auftrag-z2-w0-7-rechte-schalter-planner-item.md"
 basis_sha: 114b98f6
 dor_beleg: |
-  steht aus — der Plan-Pruefer hat W0-1 bis W0-6 gefahren, diese drei noch nicht. Woertlich
-  gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
-  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+  ERTEILT — plan-pruefer, Paragraf 261 (21.08.), woertlich "Restpunkte: keine".
+  Der Abschnitt beantwortet zugleich eine offene Messfrage des Blattes: es gibt
+  keinen Rechte-Cache.
+  VORHERIGE FASSUNG, ausdruecklich erhalten: steht aus (angelegt 21.08. auf §260).
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
 herkunft_dieses_datensatzes: |
   Zustellung: plan-pruefer Paragraf 260, "Integrator: W0-7/8/9 ohne Block". Zustand und
   basis_sha AUS DEM BLATTKOPF, Titel aus der Blattueberschrift. Ich setze keinen Zustand
