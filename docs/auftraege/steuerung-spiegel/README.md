@@ -17,6 +17,12 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
    `sitzungen/<rolle>.yaml` mit `sitzungs_id`, `pid`, `rolle`, `worktree`, `branch`, `zeit`.
    **`pid` = PID des Sitzungsprozesses** (`claude`, über die ppid-Kette von `$$` aufwärts: Shell → claude → VS Code),
    **nicht** die flüchtige Shell-PID einer Werkzeugrunde (Befund 79285cf2: drei von vier Einträgen trugen eine tote Zahl).
+   **Headless-Betrieb (Yama 22.08.):** bei `claude -p --resume` ist jeder Lauf ein neuer Prozess — eine PID ist dort
+   **kein dauerhafter Lebensnachweis**. Stabile Identität = **Sitzungs-ID**; je Lauf `pid` + `prozess_start` (gilt nur für
+   diesen Lauf); dazu aktuelle `generation` + `digest`; **atomarer Heartbeat** (`heartbeat_bis` in `active/lease.yaml`,
+   tmp+mv) während Schreibarbeit; Schreibrecht **ausschließlich unter gültiger Lease**. Transkript-mtime = nur Aktivitätshinweis.
+   **Der Pull-Betrieb ist bis zur Umsetzung und negativen Abnahme von A-37 `SOFT-AKTIV — organisatorisch wirksam,
+   technisch noch umgehbar`.** Berichte nennen ACKs nie als Summe, nur je Rolle mit Generation.
 3. **ACK** — die einzige gültige Bestätigung, **kein Git-Commit**: Datei
    `ereignisse/<auftrag_id>/<rolle>-ack.yaml` atomar anlegen mit
    `auftrag_id, generation, digest (aus rollen/<rolle>.yaml.sha256), rolle, sitzungs_id, pid, worktree, branch, head_sha, zeit, antwort: GELESEN`.

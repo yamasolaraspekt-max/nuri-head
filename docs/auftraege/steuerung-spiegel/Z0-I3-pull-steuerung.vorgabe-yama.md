@@ -32,6 +32,12 @@ voraussetzungen, erlaubte_pfade, verboten, status`.
 7. Eine schlafende Sitzung gilt nicht als informiert — bis ein Orchestrator existiert, stößt Yama sie einmal manuell an.
 8. Fortschritt nur durch Belege: `ZUGETEILT → GELESEN → GECLAIMT → IN_ARBEIT → CODE_FERTIG → ABGENOMMEN`, jeder Übergang mit SHA, Zeit, Rolle, Beleg.
 
+## Ergänzung Yama 22.08. — Identität bei headless Sitzungen
+Für headless Sitzungen darf eine alte PID nicht als Lebensnachweis gelten. Sitzungs-ID = stabile Identität;
+je Lauf Prozess-ID + Startkennung; dazu aktuelle Generation + Digest; atomarer Heartbeat; Schreibrecht
+ausschließlich unter gültiger Lease. Transkript-mtime ist nur Aktivitätshinweis. Bis A-37 umgesetzt und negativ
+abgenommen ist, gilt der Pull-Betrieb als `SOFT-AKTIV — organisatorisch wirksam, technisch noch umgehbar`.
+
 ## Einordnung (Dirigent)
 Heute als **Sofortlösung von Hand** betrieben (Dateien in `rollen/`, README). Die technische Durchsetzung (Hook, Lease-Werkzeug, ACK-Prüfung) ist
 Bauauftrag in der Folge A-37-Erweiterung → Z0-I2 → Z0-I3, Kriterien durch den Planner, DoR durch den Plan-Prüfer, Bau durch den Generator
