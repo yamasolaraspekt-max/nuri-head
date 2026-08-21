@@ -16,6 +16,14 @@ Stil, Routen) gehört anderen Findern — melde es nicht, es wäre Rauschen.
 
 **Pflicht vor dem Melden:** `docs/backlog/` auf Vorbestand prüfen — ein bekannter Befund ist kein Fund.
 
+**Lehre aus dem Lauf vom 20.08. (Meta-Befund, dokumentiert in `docs/fortschritt/inventur-2026-08-20.md`):**
+„Formel korrekt" und „Eingabe der Formel korrekt" sind **zwei Prüfungen**. Die Fehler-Linse hatte
+die Walm-Flächenformel als nachgerechnet-korrekt gemeldet — die Plausibilitäts-Linse bewies in
+derselben Datei einen +75 %-Defekt, weil eine stille Klemmung **vor** der Formel die Eingabe
+verfälschte. Wenn du eine Formel nachrechnest, rechne **mindestens einen Grenzfall der Eingabe**
+mit (0, Gleichstand, Vorzeichenwechsel, Vertauschung von Länge/Breite) — und melde, welche
+Eingaben du geprüft hast, damit ein Negativ-Ergebnis sagt, *wogegen* es negativ ist.
+
 **Je Befund genau diese Felder:**
 `beleg:` Befehl + `datei:zeile` + Trefferzeilen (nicht die ganze Datei) · `beschreibung:` ·
 `erklaerung:` warum falsch, wenn möglich mit nachgerechnetem Wert · `erledigt_wenn:` prüfbar ·
