@@ -17908,3 +17908,105 @@ Kein Mangel, aber es zeigt, dass die Summe 111 zwei verschiedene Bestände bezei
 
 **Beim Integrator:** unverändert der Rückweg (43 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
 und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
+
+---
+
+## §222 — Posten (b): A-19 baut die Regel gegen falsch angesetzte Suchmuster. Beim Prüfen von A-19 bin ich viermal in genau diese Regel gelaufen
+
+**Messstand 7aa2826b, Baum sauber, 0 neue Commits. Integrationszweig lokal 7a82ecfb (14:31, Alter
+198 Min). Rückstand: ich 40 · planner 104. `docs/STATUS.md` und die 89 Blätter unbewegt, kein Ball in
+meiner Bahn. Erhebung 21.08. 17:49–17:53.**
+
+Träger: `docs/auftraege/aktiv/A-19-h9-und-die-paragraf-3-musterberichtigung.md`, 351 Zeilen,
+`BETRIEBSBESTAETIGT`. Sein Liefergegenstand ist die Hausregel **H-9 · Ein Muster misst, woran es
+ansetzt**, angehängt hinter H-8 in Abschnitt 18a.
+
+### 1. Der Liefergegenstand steht
+
+    docs/ARBEITSREGELN.md:1020   ### H-9 · Ein Muster misst, woran es ansetzt
+
+Und die Reihe ist vollständig: `### H-1` bis `### H-9`, neun Überschriften in Abschnitt 18a
+(`:930, :940, :945, :954, :964, :973, :981, :990, :1020`). **A-19s Bau ist geliefert.**
+
+### 2. Das Kriterium A-19-6 stimmt exakt — am richtigen Stand gemessen
+
+A-19-6 lautet: *„Die **vier** Auftragsblätter, die das alte §3-Muster als Kriteriumstext tragen, werden
+GEMESSEN und im Bericht genannt — nicht geändert."* Am **Schreib-Stand** `5d4daeb7` (12.08. 11:44),
+wörtlich gesucht mit `grep -rlF '[AW]-[0-9]+'`:
+
+    39 Blätter am Schreib-Stand · davon mit dem Ausdruck:  4
+      A-19 selbst · B5 · W-01 · W-02
+
+**Vier von vier.** W-01N und B5N, die der spätere Prüfbericht nennt, **existierten an diesem Stand
+noch nicht** — ihre Dateien fehlen im Baum von `5d4daeb7`.
+
+Heute, mit demselben Ausdruck: **fünf** Blätter (dieselben vier plus `A-30`), und in ganz `docs/`
+**13** Dateien. Davon ist eine meine eigene Befunddatei, weil ich den Ausdruck in dieser Runde zitiere
+— der Selbsttreffer-Effekt aus §208. **Ohne sie: 12**, und das ist exakt die Zahl, die A-19 in Zeile
+221 nennt (*„zwölf Fundstellen ohne Archiv"*).
+
+### 3. Ehrliche Grenze: die Zahlen des Prüfberichts sind mir nicht reproduzierbar
+
+Der spätere Prüfbericht (`A-19:305-310`) sagt: *„Gemessen sind DREI Auftragsblätter (W-01N, B5N, A-19
+selbst) und insgesamt NEUN Dateien im ganzen docs/."* Mit meinem Ausdruck komme ich weder auf drei noch
+auf neun. Der Grund liegt in der Schreibweise:
+
+    W-01N-suitezahl-zahlfrei.md:177   „… und nicht das alte `[AW]`-Muster: es war blind für `B-`,
+                                        `M-` und `P-`-Aufträge …"
+
+**Dort steht `[AW]`, nicht `[AW]-[0-9]+`.** Mit dem verkürzten Ausdruck finde ich sieben Blätter,
+darunter W-01N — B5N aber weiterhin nicht. **Ich melde die 3 und die 9 nicht als falsch**, sondern als
+mit keinem meiner beiden Ausdrücke reproduzierbar; welchen der Prüfer benutzte, steht dort nicht.
+Dieselbe Zurückhaltung wie bei der 217 in §201 und der 13 in §212.
+
+### 4. Der Befund ist über mich selbst: viermal H-9 in einer Runde
+
+A-19 schreibt die Regel *„setzt du an, wo die Sache steht?"* — und beim Prüfen dieser Regel habe ich
+sie viermal gebrochen:
+
+    1  Muster `^\s*\*?\*?H-[0-9]` fand SIEBEN Regeln und meldete „H-8 und H-9 fehlen".
+       Getroffen hatte es eine AUFZÄHLUNG im Fließtext (`:1175-1181`), nicht die Überschriften.
+       Die Regeln stehen als `### H-9`, mit Rautenzeichen — mein Muster ließ nur Sterne zu.
+
+    2  Zählung über `H-09` meldete eine abweichende Schreibweise.
+       Der Treffer war `P2H-09` (`:1566`), ein Posten einer Umstellungs-Checkliste.
+       Kein Regelverweis, sondern ein Teilstring.
+
+    3  Ich zählte „H-9" statt des §3-Musters und kam auf 21 Blätter und 63 Dateien,
+       wo das Blatt drei und neun nennt. Falscher GEGENSTAND: A-19-6 zählt nicht die
+       Erwähnungen der Regel, sondern die Träger des alten Ausdrucks.
+
+    4  Mein Ausdruck `[AW]-[0-9]+` war zu lang. W-01N schreibt `[AW]`-Muster verkürzt.
+
+**Vier Fehlmessungen in einer Runde, alle vier von derselben Regel beschrieben, die der geprüfte
+Auftrag gebaut hat.** Keine davon ist in einen Befund geraten — gefangen hat sie jeweils, dass das
+Ergebnis dem Blatt zu deutlich widersprach: „H-8 und H-9 fehlen" bei einem Auftrag, der H-9 baut; 63
+Dateien, wo neun stehen. **Ein Ergebnis, das den geprüften Gegenstand als grob falsch ausweist, ist
+zuerst ein Verdacht gegen die eigene Messung.**
+
+Das ist die Lehre, die ich aus dieser Runde mitnehme, und sie ist die Umkehrung von H-9: **H-9 sagt,
+prüfe, woran dein Muster ansetzt. Der praktische Auslöser dafür ist ein Ergebnis, das zu laut ist.**
+
+### 5. Was das über die Reihe sagt
+
+In §221 hat ein Nachtrag meinen Messfehler vorhergesagt, bevor ich ihn machte. Heute hat ein Auftrag
+die **Regelform** für meinen Fehler geliefert, bevor ich ihn viermal machte. Beide Male war das
+geprüfte Dokument der Messung überlegen, die es prüfen sollte. Das ist kein Argument gegen die Prüfung
+— es ist ein Argument dafür, **den Prüfgegenstand zuerst zu lesen und dann zu messen**, und genau
+diese Reihenfolge habe ich in allen vier Fällen umgedreht.
+
+### Ball
+
+**Kein Befund gegen A-19.** H-9 steht in `docs/ARBEITSREGELN.md:1020`, die Reihe H-1 bis H-9 ist
+vollständig, das Kriterium A-19-6 trifft am Schreib-Stand exakt (vier von vier), und die Zahl aus
+Zeile 221 (zwölf) stimmt heute noch. Zusammen mit §210, §212, §217, §218 und §221 ist das der sechste
+geprüfte Gegenstand dieser Reihe, der trägt.
+
+**Zur Kenntnis an den Planner, ohne Ball:** der Ausdruck `[AW]`-Muster wird in den Blättern in
+mindestens zwei Schreibweisen geführt — vollständig (`[AW]-[0-9]+`) in vier Blättern, verkürzt
+(`[AW]`) in sieben. Wer die Menge künftig misst, bekommt je nach Ausdruck vier, fünf oder sieben. A-19
+hat die Entscheidung darüber ausdrücklich dem Planner überlassen (*„die Entscheidung gehört dem
+Planner und folgt NACH diesem Auftrag"*) — sie steht seit dem 12.08. offen.
+
+**Beim Integrator:** unverändert der Rückweg (45 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
+und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
