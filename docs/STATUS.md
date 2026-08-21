@@ -108,7 +108,7 @@
 | **Z2-W0-8** secure.image und Geschwister: Recht + Bindung statt bloßem auth | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-8-secure-image-gate.md` · **DoR ERTEILT** (plan-pruefer §262) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
 | **Z2-W0-9** „Deaktiviert' deaktiviert: echter Kontostatus statt Online-Flag | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-9-kontostatus-echt.md` · **DoR ERTEILT** (plan-pruefer §263) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
 | **Z2-W0-10** api/secure/master-sets*: reversible Stilllegung per Schalter (Y-11 entschieden) | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `14dc15f3` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-10-master-set-api-haertung.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §264) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §262/§263 |
-| **Z2-W0-11** POST ids/callback: CSRF-Ausnahme mit Auto-Produktanlage schließen, tote Ausnahmen aufräumen | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `ae7cee9d` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-11-ids-callback-csrf.md` · **DoR steht aus** · Datensatz vom Integrator angelegt 21.08. auf Zustellung §262/§263 |
+| **Z2-W0-11** POST ids/callback: CSRF-Ausnahme mit Auto-Produktanlage schließen, tote Ausnahmen aufräumen | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `ae7cee9d` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-11-ids-callback-csrf.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §265): der Auftrag mischt operandenabhaengig und -unabhaengig · Datensatz vom Integrator angelegt 21.08. auf Zustellung §262/§263 |
 | **Z2-W0-12** Nuriva-Token: Laufzeit 8 h (konfigurierbar), Widerruf, Bereinigung (Y-10 entschieden) | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `14dc15f3` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-12-token-laufzeit-widerruf.md` · **DoR steht aus** · Datensatz vom Integrator angelegt 21.08. auf Zustellung §264 |
 
 ### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
@@ -28374,15 +28374,25 @@ herkunft_dieses_datensatzes: |
 auftrag: "Z2-W0-11"
 titel: "POST ids/callback: CSRF-Ausnahme mit Auto-Produktanlage schließen, tote Ausnahmen aufräumen"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: planner
+ballbesitz_nachgezogen: |
+  plan-pruefer -> planner, 21.08. vom integrator. TRANSPORT: Paragraf 265 —
+  "Planner/Dirigent: Restpunkt 1 (Trennung)."
 ballbesitz_grund: |
   Die DoR steht aus. Paragraf 262 und 263 melden beide "W0-10 und W0-11 ohne Block" und
   weisen den Eintrag dem Integrator zu; gefahren hat der Plan-Pruefer sie noch nicht.
 blatt: "docs/auftraege/generator-auftrag-z2-w0-11-ids-callback-csrf.md"
 basis_sha: ae7cee9d
 dor_beleg: |
-  steht aus — woertlich gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
-  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+  ERTEILT MIT EINEM RESTPUNKT — plan-pruefer, Paragraf 265 (21.08.).
+  Restpunkt 1: den operandenabhaengigen Teil (CSRF-Weg fuer ids/callback) von den
+  beiden unabhaengigen TRENNEN. Der Auftrag mischt beides.
+  DER OPERAND IST NICHT IM HAUS MESSBAR, und das ist der Unterschied zu allen
+  bisherigen dieser Welle: "Wie liefert der IDS-Shop zurueck?" ist eine Frage an
+  einen EXTERNEN Partner. Sie liegt bei Yama und kann hier nicht beantwortet
+  werden — ein Operand, den keine Messung im Bestand schliesst.
+  VORHERIGE FASSUNG, ausdruecklich erhalten: steht aus.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
 herkunft_dieses_datensatzes: |
   Zustellung: plan-pruefer Paragraf 262 und 263. Zustand und basis_sha AUS DEM BLATTKOPF,
   Titel aus der Blattueberschrift. Ich setze keinen Zustand und bilde kein Votum.
