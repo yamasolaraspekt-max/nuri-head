@@ -20843,3 +20843,82 @@ messe sie nach; die Freigabe zur Behebung ist nicht meine.
 **Nicht gemessen:** S-2 bis S-5. Diese Runde hat einen Posten, und S-1 trug vier prüfbare Angaben —
 das war er. Die übrigen vier Befunde stehen für die nächsten Runden an, und ich sage es hier,
 damit „geprüft" nicht mit „S-1 geprüft" verwechselt wird.
+
+## §252 · S-2 nachgemessen: hält vollständig — und `index()` ist schärfer als der Befund sagt
+
+**Messstand.** Mein HEAD `de742a2c`, Baum sauber. Integrationszweig `63c3c615` (21.08. 19:52),
+ein neuer Commit seit meiner letzten Messung: *„Inventur Z1 zweite Stufe (Konsistenz) abgelegt —
+K-5/K-6"*. Ballortung nachgemessen: `ballbesitz: plan-pruefer` **40, unverändert**. Gemessen
+21.08. 19:56–20:00.
+
+**Kein Vorratsposten diese Runde.** Punkt 7 gilt nur, wenn nichts offen ist — S-2 bis S-5 habe ich
+in §251 selbst als ungeprüft benannt, also sind sie offen. S-2 ist eine der drei LIVE-Rechtelücken.
+
+### 1 · Die vier Belege von S-2, einzeln geprüft
+
+Der Befund gehört dem Planner/Dirigenten; ich prüfe die Messgrundlage, baue nichts nach (P-02).
+
+| Beleg in S-2 | frisch gemessen | |
+|---|---|---|
+| `editor()` bei `:106-114`, `HeizlastProjekt::…->find($projekt)` ohne Scope | `editor()` bei **:106**, `find($projekt)` bei **:114** | **trifft** |
+| `speichern()` bei `:244-264` ohne Check | `speichern()` bei **:244**, im Bereich 244-300 **0** Prüfungen | **trifft** |
+| `PlanUploadController::store:79` verlangt `hasPermission('Hausplaner','update')` | `:79` trägt genau das, `:80` das `abort(403)` | **trifft** |
+| `index()` ohne Ownership | siehe Abschnitt 3 — **schärfer als beschrieben** | **trifft** |
+
+### 2 · Zwei eigene Messfehler, beide unterwegs gefangen
+
+**Erstens der Pfad.** Ich habe `app/Http/Controllers/GrundrissController.php` gesucht — die Datei
+liegt unter `Energie/`. Der Befund nennt nur den Klassennamen, ich habe den Ordner geraten. **Genau
+der Fehler aus §247** (dort `Admin/` statt `Product/`), zwei Runden später wiederholt.
+
+**Zweitens das Muster.** Meine Suche nach `authorize|Gate::|Policy|->can(|hasPermission` ergab
+**2 Treffer** im Controller — was S-2 zu widersprechen schien. Die Treffer angesehen:
+
+    :103   * ist über auth()->id() streng gescoped (keine PlanUpload-Policy, A-3d). Ohne ?upload
+    :171   ->where('user_id', auth()->id()) // Besitzer-Scope (keine Policy, A-3d)
+
+**Beide enthalten „Policy" als Verneinung.** Mein Muster hat die Aussage getroffen, dass **keine**
+Policy existiert — H-6 in Reinform (*„Ein Wort ist kein Beleg; erst die Stelle ist einer"*), und
+zugleich die zweite Hälfte von H-9: das Muster setzte an, wo die Sache gerade **nicht** ist.
+
+Dazu ein dritter, feinerer: Meine `awk`-Zuordnung ordnete den Doc-Kommentar `:98-105` der
+**vorhergehenden** Funktion zu. Er gehört zur **folgenden** — er beginnt mit
+*„GET energie.grundriss.editor →"*. Ein Doc-Kommentar steht vor dem, was er beschreibt.
+
+### 3 · Was ich beitragen kann: `index()` ist schärfer als der Befund sagt
+
+S-2 schreibt: *„jeder Nutzer kann **per URL** fremde Gebäudegeometrie sehen"*. Gemessen ist es
+schlimmer — `index()` (`:85-96`):
+
+    $projekte = HeizlastProjekt::query()
+        ->whereHas('raeume.geometrie')
+        ->with(['raeume' => fn ($q) => $q->with('geometrie')])
+        ->orderByDesc('id')
+        ->get();
+
+**Kein `where('user_id', …)`, kein Gate, keine Einschränkung.** Die Übersicht listet **alle**
+Heizlast-Projekte mit Geometrie und lädt die Geometrie gleich mit (`with(['raeume' => …
+'geometrie'])`).
+
+**Man muss also keine URL raten.** Die Liste zeigt fremde Objekte samt Geometrie von selbst; der
+in S-2 beschriebene Weg über den Route-Parameter ist der *zweite*, nicht der erste.
+
+Und der einzige echte Besitzer-Scope im Controller (`:171`,
+`->where('user_id', auth()->id())`) sitzt in `importUnterlage()` — einer **privaten Hilfsfunktion**
+für den optionalen `?upload`-Parameter. Er schützt den PlanUpload, **nicht das Projekt**. Der
+Kommentar `:103` sagt genau das und wird leicht als Projektschutz gelesen: *„Der **PlanUpload** ist
+über `auth()->id()` streng gescoped."*
+
+### 4 · Ball
+
+**Planner/Dirigent** — S-2s `erledigt_wenn` (*„`editor()/index()/speichern()` prüfen dieselbe
+Berechtigung"*) ist richtig und vollständig; ich schlage **eine Ergänzung der Begründung** vor, weil
+sie die Dringlichkeit ändert: Für `index()` genügt kein Ownership-Check am Einzelobjekt, es braucht
+einen **Listen-Scope** — sonst bleibt die Übersicht die bequemere Lücke.
+
+**Yama** — unverändert aus §251: LIVE, Rechte, Datenschutz, nach `CLAUDE.md` keine stille
+Automatisierung. **S-1 und S-2 sind jetzt beide nachgemessen und beide bestätigt**; S-1 zusätzlich
+um drei Controller erweitert (§251).
+
+**Offen und ausdrücklich nicht geprüft:** S-3, S-4, S-5 sowie die neu angekommenen K-5/K-6 aus
+`inventur-2026-08-21-z1-konsistenz.md` (56 Zeilen, `63c3c615`). Ein Posten je Runde.
