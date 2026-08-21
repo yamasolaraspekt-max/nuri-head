@@ -18597,3 +18597,121 @@ sind — das ist entschieden —, sondern warum sie nur an einer Stelle stehen.*
 
 **Beim Integrator:** unverändert der Rückweg (51 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
 und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
+
+## §229 · Fünf gebaute Aufträge auf ENTWURF — und der Widerspruch, den der Block selbst benennt
+
+**Messstand.** HEAD `f820862b` (21.08. 18:18:14), Baum sauber, 0 neue Commits seit Rundenbeginn.
+Gültiger Stand `7a82ecfb` (234 Min alt). Gemessen 21.08. 18:25. Vorratsprüfung Posten **(d)**,
+dazu der Ball aus Punkt 3 der Wache — beides betrifft denselben Auftrag, deshalb eine Runde.
+
+### 1 · Posten (d): fünf gebaute Aufträge stehen im ersten Zustand der Kette
+
+Am gültigen Stand tragen alle fünf Z1-W1-Aufträge `zustand: ENTWURF`:
+
+| Kennung | zustand | ballbesitz | Bau-Commit | gebaut | Alter |
+|---|---|---|---|---|---|
+| Z1-W1-1 | ENTWURF | planner | `2bc0d2f2` | 13:56 | 269 Min |
+| Z1-W1-2 | ENTWURF | evaluator | `60c04eef` | 13:33 | 292 Min |
+| Z1-W1-3 | ENTWURF | planner | `d7651d9c` | 13:40 | 285 Min |
+| Z1-W1-4 | ENTWURF | evaluator | `b2371d7e` | 13:42 | 283 Min |
+| Z1-W1-5 | ENTWURF | planner | `9dde4d15` | 14:15 | 250 Min |
+
+Der Block-Commit ist `6ece5379`, 13:56, 269 Min alt. **Drei der fünf Bauten waren fertig, bevor
+der Block sie auf ENTWURF setzte** (13:33, 13:40, 13:42); Z1-W1-1 fällt in dieselbe Minute wie der
+Block, Z1-W1-5 kam 19 Minuten danach.
+
+Nach `docs/ARBEITSREGELN.md:59-71` läuft die Kette `ENTWURF → BEREIT → IN_ARBEIT → CODE_FERTIG → …`.
+Fünf gebaute Aufträge stehen also drei Stufen unter ihrem tatsächlichen Zustand. Wer die
+Statuswahrheit liest, sieht fünf Entwürfe und nicht fünf fertige Bauten.
+
+### 2 · Der Befund liegt NICHT beim Integrator — er hat transportiert, nicht entschieden
+
+Das ist der Punkt, an dem ich meine eigene erste Lesart korrigiert habe. `6ece5379` schreibt:
+
+> ICH HABE MIR NICHTS AUSGEDACHT. Jeder Wert hat eine Quelle, und die Quelle steht im Feld:
+> zustand und basis_sha AUS DEM BLATTKOPF (alle fuenf: ENTWURF, 11f7c4c3)
+
+Der Zustand `ENTWURF` ist aus dem Blattkopf **übernommen**, nicht gesetzt. Der Integrator durfte ihn
+nicht heben — Eintragen ist seine Rolle, Entscheiden nicht. Die Aufgabe, die er erledigt hat, war
+meine Forderung aus §169 („Datensatz und Bau-SHA in ein FELD, für alle fünf Z1-W1-Kennungen"), und
+er hat sie vollständig erledigt: vor dem Schreiben kam `Z1-W1` in `docs/STATUS.md` **0 mal** vor.
+
+**Der Halter des Zustands-Befunds ist damit der Planner**, dem die Blattköpfe gehören — nicht der
+Integrator. Das korrigiert nichts an seiner Arbeit; es benennt, wo der nächste Griff sitzt.
+
+### 3 · Der Ball, den der Block mir ausdrücklich übergibt
+
+Der Block Z1-W1-2 trägt drei Bälle in einem Feld und legt die beiden übrigen offen in den Text:
+
+> beim PLANNER liegt der Widerspruch dachformVorlagen.ts:478 gegen dachGeometrie.ts:150
+> — dieselbe Eingabe L = B, dieselbe Regelfunktion walmIstKonsistent, zwei Urteile;
+> […] Wenn der Plan-Pruefer einen anderen Halter meint, berichtigt er ihn — ich habe
+> transportiert, nicht entschieden.
+
+**Durchgerechnet am gültigen Stand, nicht nachgelesen.** `walmIstKonsistent` steht in
+`dachformVorlagen.ts:414-415` und lautet `lengthM > widthM`. Drei Eingaben durch beide Stellen:
+
+| L × B | `dachformVorlagen.ts:478` | `dachGeometrie.ts:150` |
+|---|---|---|
+| 10 × 10 | **NICHT konsistent → Fehler** | **rechnet** (First 0) |
+| 10 × 8 | konsistent | rechnet |
+| 8 × 10 | NICHT konsistent → Fehler | wirft |
+
+Der Widerspruch ist bestätigt und er trifft **genau einen** Fall: den quadratischen Grundriss.
+`dachGeometrie.ts:150` hängt an die Regelfunktion die Ausnahme `&& laengeM !== spannM`, die die
+Funktion selbst nicht kennt und ihr zweiter Aufrufer nicht macht.
+
+**Und die Warnung wirkt** (P7: Ort ≠ Wirkung, deshalb über den Feldnamen gemessen):
+`dachformVorlagen.ts:506` lautet `return { ok: !warnungen.some((w) => w.schwere === 'fehler'), warnungen }`
+— `WALM_INKONSISTENT` trägt `schwere: 'fehler'` und setzt damit `ok: false`. Keine Anzeige, eine Sperre.
+
+### 4 · Beide Seiten haben recht — und deshalb ist es keine Schlamperei
+
+`dachGeometrie` ist nicht nachlässig, sondern **beauftragt**: `__tests__/dachGeometrie.test.ts:150`
+heißt wörtlich `Z1-W1-2 C: Zeltdach 8×8 m wird NICHT abgewiesen` und prüft vier Flächen mit
+`first_laenge_mm === 0`. L = B ergibt ein Zeltdach, und das ist ein reales Dach.
+
+`dachformVorlagen` ist ebenfalls nicht nachlässig, sondern **in sich konsequent**: `:88` sagt
+„Walm: L>W Pflicht (sonst Firstlänge<=0)", der Warnungstext sagt dasselbe, das Flag heißt so, die
+Vorlage `:1898` schreibt es in ihre Kurzbeschreibung. Der mehrdeutige Feldname
+`benoetigtLaengerGleichBreite` meint nach `:88` **größer**, nicht größer-gleich.
+
+Die beiden Seiten wurden gegen verschiedene Aufträge gebaut, und Z1-W1-2 hat den Kern geöffnet,
+ohne den Vorlagenweg mitzunehmen. Das ist **Drift-Klasse 4** in neuer Ausprägung: nicht Doku gegen
+Code, sondern Code gegen Code über eine gemeinsame Regelfunktion.
+
+### 5 · Die Lücke, die dabei sichtbar wird
+
+Die eigene Zeltdach-Vorlage `:2087` ist eine `geplanteVorlage` — kein `engineShape`, kein Flag, und
+ihr Grund sagt selbst: **„Kein Build-Pfad in updateBuilding."** Die Sperre `:477` greift bei ihr
+also nicht, aber sie hilft auch niemandem:
+
+- Der **Kern** kann das Zeltdach und ein Test verlangt es.
+- Der **Walm-Vorlagenweg** sperrt L = B als Fehler.
+- Die **Zeltdach-Vorlage** ist nicht gebaut.
+
+Ein quadratischer Grundriss hat damit über den Vorlagenweg **keinen** Zugang zu einem Dach, das der
+Geometriekern korrekt rechnet. Das ist kein Widerspruch mehr, sondern eine Lücke zwischen zwei
+richtigen Hälften.
+
+### 6 · Was ich in eigener Sache korrigiere
+
+Mein §225 hat zu `Math.max(0, laengeM - spannM)` festgehalten, die Klemmung bleibe für `L === B`
+richtig. Das stimmt weiter — bei L = B ist `max(0, 0) = 0`, es wird nichts geklemmt. **Aber es war
+die halbe Messung:** ich habe den Kern geprüft und den zweiten Aufrufer derselben Regelfunktion
+nicht aufgesucht. Der Block hat mir die Stelle gezeigt, die ich hätte finden müssen.
+
+Dazu ein Werkzeugfehler dieser Runde, gefangen vor der Meldung: `set -- $e` splittet in **zsh**
+nicht in Wörter, `$2` blieb leer, und sechs auflösbare SHAs meldeten sich als „NICHT AUFLOESBAR".
+Mit `while read -r name sha` gegengeprüft — alle sechs existieren. Eine ausgefallene Messung sieht
+einer Messung zum Verwechseln ähnlich, wenn ihr Ergebnis plausibel klingt.
+
+### 7 · Ball
+
+**Planner**, zweimal, und der Halter ist damit bestätigt statt berichtigt:
+
+1. Die fünf Blattköpfe tragen `ENTWURF` für gebaute Arbeit — seit 250 bis 292 Minuten.
+2. L = B: Ist der quadratische Walm ein Fehler (Vorlage) oder ein Zeltdach (Kern)? Das ist eine
+   Fachentscheidung über ein Dach und wird nach `CLAUDE.md` nicht still automatisiert. Die Antwort
+   entscheidet, ob `dachGeometrie.ts:150` seine Ausnahme verliert oder `dachformVorlagen.ts:478`
+   sie bekommt — **eine der beiden Zeilen muss sich bewegen, nicht beide.**
