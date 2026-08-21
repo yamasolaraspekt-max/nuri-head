@@ -931,3 +931,59 @@ Befunde ausgewiesen hatten.
 eines `zustand`-Feldes gezählt — meine erste, verworfene Fassung —, wäre die Zahl von 90 auf 87
 gefallen und ich hätte drei Vorgänge verloren, ohne es zu merken. *Eine Regel, deren Rot-Probe nie
 eintritt, ist von einer wirkungslosen nicht zu unterscheiden. Diese hier ist jetzt unterscheidbar.*
+
+---
+
+# §6 IST EINGETRETEN — die schlafende Falle ist aufgewacht, unter meinem eigenen Prüfstand
+
+Heute Nachmittag habe ich meinen Posten 1 selbst entschärft: *„kein Hindernis, sondern eine
+schlafende Falle: Er schlägt in dem Moment zu, in dem zwei Rollen zufällig gleichzeitig PHP-Tests
+fahren, und das Fehlerbild wäre dann ein sprunghaft fehlschlagender Test ohne erkennbare Ursache."*
+
+**Genau das ist heute Abend passiert, während der Z1-W1-Abnahme.**
+
+## Der Ablauf, gemessen
+
+| Zeit | Ereignis |
+|---|---|
+| ~20:2x | Testbenutzer für die Browserabnahme angelegt: `id=70`, `users: 1`, DB im selben Skript als `ticket_testing` bestätigt |
+| dazwischen | *(nichts von mir — die Bühne lief, ich baute das Prüfskript)* |
+| 20:44 | Login schlägt fehl, Seite bleibt auf `/login`; Insel lädt nicht: `hp: 0`, `canvas: 0` |
+| 20:44 | Ursache gemessen: **`users: 0` — mein Benutzer ist WEG** |
+| 20:45 | neu angelegt → **`id=1`**, nicht 71 |
+
+**Die `id=1` ist der härtere Beleg:** Ein `DELETE` hätte den Zähler stehen lassen und `id=71`
+ergeben. `AUTO_INCREMENT` wird nur beim **Neuaufbau der Tabelle** zurückgesetzt — `migrate:fresh`
+oder `RefreshDatabase`. Es war kein Aufräumen, sondern ein Neubau der Datenbank unter einem
+laufenden fremden Prüfstand.
+
+## Warum das genau der Regelfall ist
+
+`ARBEITSREGELN.md:302` (der in E16 berichtigte Zeiger): *„Insbesondere dürfen Generator und
+Evaluator nicht gleichzeitig dieselbe `ticket_testing`-Datenbank verwenden."* Alle sechs Bäume, je
+aus ihrer eigenen `phpunit.xml` gelesen, tragen `DB_DATABASE = ticket_testing` mit `force="true"`.
+
+`:304` benennt die Folge, die ich hier ziehe: *„Ein durch Locks, **konkurrierende Datenbankläufe**,
+fehlende Browsersteuerung oder defekte Testinfrastruktur verursachter Lauf ist `ENV_BLOCKED` und
+kein Produktfehler."*
+
+## Was ich daraus NICHT mache
+
+**Keinen Befund gegen eine andere Rolle.** Wer den Lauf gefahren hat, benutzte seine eigene
+`phpunit.xml`, die ihm dieselbe Datenbank vorschreibt — er konnte es nicht anders tun. *Der Mangel
+liegt in der fehlenden Trennung, nicht bei dem, der hineingelaufen ist.* Ich habe nicht gemessen,
+wer es war, und werde es nicht.
+
+**Noch kein `ENV_BLOCKED` für die laufende Abnahme.** Der Vorfall hat mich einen Anlauf gekostet,
+nicht die Messbarkeit: Benutzer neu angelegt, Insel lud wieder (`hp: 80 → 96`, `canvas: 2`). **Erst
+wenn es sich während der Messung wiederholt**, ist das Ergebnis nicht mehr belastbar.
+
+## Was sich am Posten ändert
+
+Er steigt von **abgeleitet** auf **belegt**. Bisher stand er auf zwei Beinen — Regeltext und der
+Messung, dass sechs Bäume dieselbe Datenbank erzwingen. Jetzt hat er ein drittes: **einen Vorfall
+mit Uhrzeit, Fehlerbild und Ursachenbeleg.** Und das Fehlerbild war exakt das vorhergesagte: Der
+Login brach ab, die Insel blieb leer, und nichts davon zeigte auf die Datenbank — ich brauchte drei
+Diagnoseläufe, um von „Insel lädt nicht" auf „Tabelle ist neu" zu kommen.
+
+**Ball unverändert beim Planner.** Neu ist nur, dass er nicht mehr auf Vorrat entscheidet.
