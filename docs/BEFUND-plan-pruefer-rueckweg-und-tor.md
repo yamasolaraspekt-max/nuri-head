@@ -23853,3 +23853,113 @@ Fach-Linse (Zimmerer/Statiker) und nicht meine. Ich habe die **Erreichbarkeit** 
 **Unverändert offen beim Planner:** Schreibschutz der Zieldatei (§278),
 `…w0-11-ids-callback-csrf.md:22` (§276), die Rundungsfrage (§277), der zweite Pfad in der
 Wache-Anweisung (§279).
+
+## §284 · Yamas Posten 4 (W-21L): die Blockadebedingung ist seit 13528 Minuten erfüllt, und der Auftrag steht weiter auf DECISION_BLOCKED
+
+**Messstand.** Runde begonnen an `909af6cb` / Zweig `82dc8d47`. **Vor dem Schreiben neu gemessen
+22:12: Zweig `a5b77ecc`, Rückstand 3** — zurückgekommen ist mein eigenes §283. **Alle Gegenstände
+dieses Abschnitts sind zwischen beiden Ständen unberührt** (`docs/STATUS.md`, W-23s Werkzeugordner,
+W-21Ls Blatt, die Hausplaner-Insel — numstat leer), und die Gegenprobe am neuen Stand liefert für
+W-21L unverändert `DECISION_BLOCKED`. Baum sauber. Ballortung beidseitig **1** (P-02, VORLAGE) und
+**35** — nichts in meiner Bahn. Gemessen 21.08. 22:08–22:14.
+
+§282 hat Posten 4 als „in dieser Runde nicht neu gemessen" markiert. Hier ist er.
+
+### 1 · Der Zustand
+
+`docs/STATUS.md:4401-4437`, Datensatz `W-21L`:
+
+    zustand: DECISION_BLOCKED
+    fortsetzung_zustand: ENTWURF          # der Zustand vor der Blockade, fuer die Rueckkehr
+    ballbesitz: —   # bis Yama die Fachdaten liefert oder W-23 sie erzeugt
+
+Tafelzeile `:86` sagt dasselbe: `DECISION_BLOCKED`, Ball `–`. **Tafel und Datensatz stimmen überein.**
+
+### 2 · Die Bedingung ist erfüllt — und zwar seit über neun Tagen
+
+Die Blockade endet nach dem Feld selbst, wenn *„Yama die Fachdaten liefert **oder W-23 sie
+erzeugt**"*. Frisch gemessen:
+
+    W-23  zustand: BETRIEBSBESTAETIGT   (docs/STATUS.md:8408, ballbesitz — Kette vollstaendig)
+          betriebsbestaetigt seit d5d830d2, 12.08. 12:43
+          ->  13528 Minuten · 2133 Commits
+
+Der Release-Prüfer hat das am 12.08. gemeldet und den Zustand ausdrücklich **nicht** angefasst —
+richtig, denn ob eine Beschreibung einen Operanden liefert, ist Fachentscheidung. Sein Vermerk steht
+im Block: *„Ein DECISION_BLOCKED, dessen Bedingung sich erfuellt hat, bleibt sonst stehen, bis
+jemand zufaellig hinsieht."* **Seither hat 2133 Commits lang niemand hingesehen.**
+
+### 3 · Was der Operand wirklich ist — jede Zahl frisch gemessen
+
+Der Block zitiert *„eine Modelltabelle mit **10** Zeilen"*. Nachgezählt in
+`…/W-23-deckung-und-material/5-CODE/LIESMICH.md`, Kopf bei `:37`, Datenzeilen bis `Z.47`:
+
+    Datenzeilen: 9        (nicht 10)
+    Spaltenkopf: Zeile | Hersteller | Modell | Variante | Lattmass | Spiel | Probe |
+                 Regelneigung | Datenstatus | Quelle
+
+**Die zehnte Zeile gehört einer anderen Tabelle** — `| 47 | Eindeckmass_Text | Klartextregel |` bei
+`Z.31`, unter dem Kopf `| Nr | Feld | Rolle |` bei `:23`. Ein Zähler ohne Tabellengrenze nimmt sie
+mit. *Ich bin in dieselbe Falle gelaufen, bevor ich sie gefunden habe* — s. Abschnitt 5.
+
+**Die Datenlage der neun Zeilen:**
+
+    verifiziert            7        Probe "fehlt"          1  (Harzer Pfanne 7 Big)
+    teilweise verifiziert  2        Regelneigung fehlt     2  (Rubin 13V HA und OG)
+    Quelle benannt         9        (braas_dachziegel_datenbank_v14.xlsx)
+
+**W-21L nennt seine eigene Schwelle** (`W-21L-lattung-der-fehlende-schritt.md:122-123`):
+
+    DREI Deckungsarten mit belegter Quelle genuegen fuer den ersten Schritt —
+    aber die Ampel bleibt dann 🟡 "nur die drei benannten"
+
+**Neun mit belegter Quelle gegen drei geforderte.** Die Schwelle ist dreifach überschritten; nach
+der eigenen Regel des Blattes bliebe die Ampel gelb, aber der erste Schritt wäre frei.
+
+### 4 · Der Einwand, den ich nicht wegmessen kann
+
+Die Daten stehen im **Vertrag**, nicht im Code. Das ist genau der Vorbehalt, den der Block selbst
+festhält: *„die Daten stehen im VERTRAG, nicht im Code, und ob eine Beschreibung einen Operanden
+liefert oder erst eine Implementierung, ist eine Fachentscheidung."* Gemessen:
+
+    Hausplaner-Dateien mit lattweite/lattabstand/lattung:  3
+      enginePanels.ts:204      'Dachdeckung, Lattung und Sparren-Eigengewicht'  -> LASTANNAHME
+      sparrenBerechnung.ts:63  'staendige Last (Dachdeckung + Lattung + …)'     -> LASTANNAHME
+      dachformVorlagen.ts:122  konterlattungMm: [number, number]                -> KONTERLATTUNG
+                        :1384  konterlattungMm: [24, 48]
+                        :118   lattmassAbhaengigVonProdukt: boolean  // Deckmass/Lattung ist
+                                                                     // produktabhaengig
+
+**Kein Code leitet ein Lattmaß aus einer Deckungsart ab.** Und `:118` ist die schärfste Zeile des
+ganzen Postens: **der Code führt ein Feld, das die Abhängigkeit benennt, und hat die Daten nicht.**
+Er weiß, dass es produktabhängig ist, und kann es nicht auflösen.
+
+### 5 · Drei eigene Messfehler, alle vor der Meldung gefangen
+
+1. Ich suchte **„Lattweite"** und bekam **0** — die Spalte heißt **`Lattmaß`**. Hätte ich die Null
+   gemeldet, stünde da „der Vertrag trägt die Daten nicht", und das Gegenteil ist wahr.
+2. Mein Spannen-Muster verlangte einen **Bindestrich**; die Tabelle benutzt einen
+   **Halbgeviertstrich** (`330–360`). Zweite Null aus demselben Grund.
+3. Mein Zeilenzähler lief **ohne Tabellengrenze** und meldete 10 statt 9. Erst mit Kopf- und
+   Endgrenze wurde daraus die richtige Zahl — und zugleich die Erklärung für die fremde 10.
+
+**Alle drei sind dieselbe Klasse:** das Muster passte zum Verfahren und nicht zum Gegenstand. Und
+Punkt 3 ist der lehrreichste, weil er *zuerst* meinen eigenen Fehler und *dann* den fremden erklärt.
+
+### 6 · Ball
+
+**Yama** — Posten 4 ist entscheidungsreif, und die Lage ist:
+
+    Blockadebedingung   erfuellt seit 13528 Minuten (W-23 betriebsbestaetigt 12.08. 12:43)
+    Operand vorhanden   9 Modellzeilen mit Lattmass-Spanne und benannter Quelle
+                        7 verifiziert · 2 teilweise · 1 ohne Probe · 2 ohne Regelneigung
+    eigene Schwelle     DREI genuegen fuer den ersten Schritt  ->  dreifach uebertroffen
+    offener Punkt       die Daten stehen im VERTRAG, nicht im Code — ob das als Operand
+                        genuegt, ist die Fachentscheidung, die niemand ausser Ihnen faellt
+
+Ich fasse den Zustand nicht an und schlage keinen Weg vor. **Was ich melde, ist der Stillstand:**
+Ein Auftrag steht auf DECISION_BLOCKED, weil eine Bedingung fehlte, die seit über neun Tagen erfüllt
+ist.
+
+**Nicht geprüft:** Posten 8 (Regelkollision) — der letzte der neun, den ich in dieser Sitzung noch
+nicht neu gemessen habe. Nächste Runde.
