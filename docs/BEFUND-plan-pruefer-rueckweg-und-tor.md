@@ -16080,3 +16080,128 @@ offene Berichtigung, mit der Zusatzangabe aus dieser Runde: der Befehl aus `:204
 
 **Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
 und `:7881`.
+
+---
+
+## §205 — Posten (e): die Klasse statt des Einzelfalls. Drei neue Fundstellen, davon eine, in der der zweite Schutz zerstört, was der erste richtig machte
+
+**Messstand 5879fdf9, Baum sauber, 0 neue Commits. Integrationszweig unverändert 7a82ecfb (live).
+Hinweg zu: 40 fehlen mir, 28 von mir fehlen dort. `docs/STATUS.md` an beiden Ständen unbewegt, 89
+Blätter unbewegt, kein Ball in meiner Bahn. Erhebung 21.08. 16:26–16:32.**
+
+### 1. Die naheliegende (e)-Messung trägt nicht — das sage ich, bevor ich sie verwende
+
+Acht Abschnitte dieser Reihe tragen dieselbe Fehlerklasse: **ein Schutz, der einen plausiblen Wert
+liefert statt zu verweigern** (§136, §141, §160, §165, §172, §185, §195, §203). Erste Frage: hat eine
+der acht Trägerdateien seit dem Befund eine Änderung erfahren?
+
+    §136 dachAusschnitt.ts      0    §172 dachformVorlagen.ts    0
+    §141 dachTopologie.ts       0    §185 sparrenBerechnung.ts   0
+    §160 dachformVorlagen.ts    0    §195 fbhAuslegung.ts        0
+    §165 gaubeGeometrie.ts      0    §203 kalibrierung.ts        0
+
+Achtmal null, an meinem Stand **und** am Integrationsstand. **Das ist keine Aussage.** Die acht Befunde
+sind vom heutigen Tag, 11:16 bis 16:18 — der älteste ist fünf Stunden alt, und der Hinweg ist zu
+(§200). Niemand *konnte* reagiert haben. Eine Messung, deren Ergebnis schon aus ihrem Aufbau folgt,
+ist keine.
+
+### 2. Also umgedreht: wie groß ist die Grundmenge?
+
+Statt acht Einzelfälle weiterzuzählen, messe ich das **Muster**, das ihnen gemeinsam ist — der stille
+Ersatzwert. Fangprobe zuerst, an zwei bekannten Fundstellen, und ausgeführt statt behauptet:
+
+    '\|\| *[0-9]+'  auf renderers/three-d/platzierung.ts:33      -> 1 Treffer   (muss 1)
+    '> *0 *\?'      auf geometry/sparrenBerechnung.ts:112        -> 1 Treffer   (muss 1)
+    Gegenprobe, Zeile 1 derselben Datei                          -> 0 Treffer   (muss 0)
+
+Grundmenge, `resources/planner/hausplaner`, ohne `__tests__`/`__domtests__` (160 Module):
+
+    || <Zahl>      Falsy-Ersatzwert            24 Vorkommen in 13 Dateien
+    ?? <Zahl>      Nullish-Ersatzwert          78 Vorkommen in 22 Dateien
+    Math.max(0,    Klemmen nach unten          68 Vorkommen in 27 Dateien
+    Math.min(      Klemmen nach oben           57 Vorkommen in 29 Dateien
+    > 0 ? … : …    Bedingung mit Ersatzzweig   55 Vorkommen in 26 Dateien
+
+Nach Bereich, weil ein Ersatzwert in der Anzeige harmlos und in der Rechnung ein falsches Fachergebnis
+ist:
+
+    geometry/         112 Vorkommen ·  28 von  55 Dateien
+    app/dashboard/     52 Vorkommen ·   8 von  26 Dateien
+    renderers/         16 Vorkommen ·   6 von   9 Dateien
+
+**Jedes zweite Geometriemodul** enthält mindestens einen stillen Ersatzwert. Das ist keine Anklage —
+viele sind richtig. Es ist die Größenordnung des Prüfbedarfs, und sie war bisher unbekannt.
+
+### 3. Drei neue Fundstellen, aus dem gefährlichsten Schnitt: Ersatzwert im Nenner
+
+**(a) `geometry/gaubeGeometrie.ts:244` — der zweite Schutz zerstört, was der erste richtig machte.**
+
+    const pG = (endlich(e.pitch, 35) || 35) * Math.PI / 180;
+
+`endlich(n, fb)` gibt `n` zurück, wenn es eine endliche Zahl ist, sonst `fb` — korrekt. Das
+nachgeschaltete `|| 35` fängt dann aber zusätzlich die **gültige Null**. Gerechnet:
+
+    pitch = 0          -> endlich = 0    -> nach || 35 :  35
+    pitch = NaN        -> endlich = 35   -> nach || 35 :  35
+    pitch = undefined  -> endlich = 35   -> nach || 35 :  35
+    pitch = 35         -> endlich = 35   -> nach || 35 :  35
+
+**Eine Gaubenneigung von 0° wird still zu 35°.** Null ist hier kein Fehlwert, sondern ein Fachwert —
+die Flachdachgaube. Der erste Schutz unterscheidet „fehlt" von „ist null" richtig; der zweite wirft
+diese Unterscheidung weg. Das ist die Klasse in ihrer feinsten Ausprägung: nicht ein fehlender Schutz,
+sondern **ein Schutz zu viel**.
+
+**(b) `norm()` liefert bei Nullvektor Länge 0 statt Länge 1 — an fünf Stellen.**
+
+    geometry/gaubeGeometrie.ts:62      function norm(a){ const l = laenge(a) || 1; return scale(a, 1/l); }
+    renderers/three-d/dachAufbautenMesh.ts:38   dieselbe Konstruktion, eigene Fassung
+
+    gerechnet:  norm(0,0,0) = (0, 0, 0)   Länge des Ergebnisses: 0
+                Gegenprobe norm(3,4,0) = (0.6, 0.8, 0)   Länge 1   (richtig)
+
+Eine Funktion namens `norm` sagt zu, einen Vektor der Länge 1 zu liefern. Bei einem entarteten Vektor
+liefert sie einen der Länge 0 — und zwar ohne Hinweis, weil `|| 1` die Division rettet statt die
+Eingabe abzulehnen. Der Aufrufer bekommt eine Richtung, die keine ist. `function norm` existiert an
+**fünf** Stellen (`aufbauOrientierung.ts`, `dachGeometrie.ts`, `gaubeGeometrie.ts`, `wallGeometry.ts`,
+`dachAufbautenMesh.ts`).
+
+**(c) `endlich()` gibt es zwölfmal, mit drei Verhalten und zwei Rückgabetypen.**
+
+    12 Definitionen in 12 Dateien · Rückgabe: 11x number, 1x boolean
+
+    geometry/dachAusschnitt.ts:85     (n, fb = 0)  -> n oder fb            (die häufige Fassung)
+    geometry/dachformVorlagen.ts:254  (n: number)  -> n oder 0             kein Fallback-Parameter
+    geometry/schifterListe.ts:51      (n)          -> n oder **NaN**       anderer Ausfallwert
+    geometry/sparrenTrennung.ts:26    (v)          -> **boolean**          andere Frage, gleicher Name
+
+Derselbe Name, zwölf Fassungen, drei Verhalten. `schifterListe`s Fassung ist die einzige, die **nicht**
+still ersetzt — sie gibt `NaN` zurück und zwingt den Aufrufer zur Entscheidung. Das ist die richtige
+Bauform, und sie ist die Ausnahme. Die Bauordnung verlangt *keine verwaisten zweiten Wahrheiten*; hier
+sind es zwölf, und eine davon beantwortet eine andere Frage als die übrigen elf.
+
+### 4. Ein eigener Messfehler, gefangen durch Selbstwiderspruch
+
+Meine zweite Zählung der Divisor-Fälle meldete **0 Dateien**, während die erste Ausgabe im selben
+Befehl **einen Treffer** zeigte. Zwei Zahlen aus einem Lauf, die sich widersprechen — das war ein zu
+enges Muster, nicht ein leerer Bestand. Verworfen und breiter neu gemessen; erst dann kamen die sechs
+Fundstellen zum Vorschein, aus denen (a) und (b) stammen. **Widerspricht eine Messung sich selbst, ist
+sie erledigt, nicht auslegungsbedürftig.**
+
+### Ball
+
+**Beim Planner**, drei Posten, aufsteigend nach Aufwand:
+
+1. `geometry/gaubeGeometrie.ts:244` — das `|| 35` hinter `endlich(e.pitch, 35)` entfernen. Ein Zeichen,
+   und die Flachdachgaube kommt zurück. Ob 0° fachlich zulässig ist, ist **Yamas Operand**, nicht meiner
+   — aber dass der Code die Frage gar nicht erst stellt, ist der Befund.
+2. `norm()` an fünf Stellen: entweder `null` bei entartetem Vektor oder eine benannte Zusage, dass ein
+   Nullvektor unverändert zurückkommt. Heute steht die Zusage im Namen und wird nicht eingehalten.
+3. `endlich()` zwölffach mit drei Verhalten — eine Wahrheit, und `schifterListe.ts:51` ist der
+   Kandidat, weil es als einziges nicht still ersetzt.
+
+**Nicht mein Ball, aber benannt:** die Grundmenge von 112 Ersatzwerten in 28 von 55 Geometriemodulen.
+Ich habe sechs davon geöffnet. Die übrigen sind weder geprüft noch verdächtigt — sie sind gezählt, und
+das ist der einzige Anspruch dieser Zahl.
+
+**Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
+und `:7881`.
