@@ -22580,3 +22580,100 @@ Statuswahrheit — Berichtigungen und Verlaufseinträge *sollen* keinen Zustand 
 entstünden Kennungs-Dubletten (die Warnung des Integrators aus §269: *„wer bei unlesbarem Block ein
 Zustandsfeld ERGÄNZT, baut die Kennungs-Dublette"*). **Der Fehler lag in meiner Auswertung, nicht in
 ihrer Ablage.**
+
+## §272 · Dieselbe Sache, dieselbe Datei, drei verschiedene Antworten — die getrennte Ballortung legt es in ihrer ersten Runde frei
+
+**Messstand.** Mein HEAD `62862889`, Baum sauber (vor dem Anfügen dieses Abschnitts).
+Integrationszweig bei Rundenbeginn 21:01 `976f7d6b`, **Rückstand 1**; beim Nachmessen unmittelbar
+vor dem Schreiben 21:05 `81b6b7f5`, **Rückstand 11**. Der Zweig ist während des Schreibens um zehn
+Commits gewandert — deshalb ist dies die zweite Fassung des Abschnitts; die erste war eine halbe
+Stunde nach ihrer Messung schon überholt. Alle Zahlen unten stehen am Stand `81b6b7f5`
+(28427 Z. in docs/STATUS.md).
+
+**Angekommen, ungeprüft:** `9d76f698` (21:01) *„GESAMTAUFTRAG v2 … vier Plan-Pruefer-Restpunkte
+erledigt"* — meine vier Restpunkte aus §256/§258/§260/§265. Und `d40adbf5` (21:04): der Evaluator
+stellt Z1-W1-1 Kriterium C auf **ENV_BLOCKED**, weil die Prüfbühne zweimal in 18 Minuten unter
+seiner laufenden Messung neu aufgesetzt wurde. Beides zitiert, nicht nachgebaut (P-02 Punkt 4).
+
+### 1 · Die neue Zählweise nach §271, erste Anwendung
+
+    filterbar (Block MIT zustand-Feld):   5     davon ENTWURF 4 · VORLAGE 1
+    ohne zustand-Feld:                   35
+    Feldzähler gesamt (Kontrolle):       40
+
+Aus der stabilen Zahl „40" werden fünf benennbare Vorgänge: **A-38, A-39, A-40, A-42** — und P-02,
+eine Prozessvorlage ohne Blatt. Das sind exakt die vier aus §108.
+
+### 2 · Der Befund: drei Antworten auf dieselbe Frage, alle in docs/STATUS.md
+
+Die Frage lautet „ist die DoR erteilt?". Die Datei antwortet dreimal verschieden:
+
+| Quelle | A-38 | A-39 | A-40 | A-42 |
+|---|---|---|---|---|
+| **Datensatz, Feld `dor_beleg`** | ERTEILT | ERTEILT | NICHT ERTEILT | ERTEILT |
+| **Datensatz, `zustand` + `ballbesitz`** | ENTWURF / plan-pruefer | ENTWURF / plan-pruefer | ENTWURF / plan-pruefer | ENTWURF / plan-pruefer |
+| **Tafelzeile** | „DoR steht aus." | „DoR steht aus." | „DoR steht aus." | „DoR steht aus." |
+
+Erhoben je Block über das Feld `auftrag:`, nicht über die Tafel; Belegstelle für die erste Spalte
+`docs/STATUS.md:18787` (A-38).
+
+**Zeile 1 ist neu und richtig.** §108 meldete am Vormittag, meine vier Voten stünden *in keinem
+Feld*. Heute tragen alle vier ein `dor_beleg` mit meinem Wortlaut, und zwar mit Fortschreibung über
+drei Runden — A-38 *„Runde 2, bestaetigt und verstaerkt in Paragraf 156"*, A-39 *„in Paragraf 159
+nachgeprueft statt angenommen"*, A-40 *„Paragraf 157 … in Paragraf 159 praezisiert auf die Punkte 1,
+2 und 4"*, A-42 *„Paragraf 158 … alter Restpunkt behoben"*. **Der Kern von §108 ist erledigt.**
+
+**Zeile 2 und 3 sind stehen geblieben.** Der Ball liegt bei mir, als wäre kein Votum gefallen —
+obwohl bei dreien die DoR **erteilt** ist und der vierte inhaltlich beim Planner liegt. Und die
+Tafelzeile sagt vier Mal *„DoR steht aus."*, während der Datensatz zwei Zentimeter tiefer das
+Gegenteil belegt.
+
+### 3 · Warum das keine Formsache ist
+
+Ein Leser, der die Tafel liest — und die Tafel ist das, was man liest —, sieht vier Aufträge, die
+auf mich warten. **Alle vier warten nicht auf mich.** Drei sind frei und könnten gebaut werden;
+einer wartet auf den Planner. Die Tafel meldet damit vier Blockaden, die es nicht gibt, und
+verschweigt einen Auftrag, der bauen könnte.
+
+**Alterung:** Die Tafelzeile von A-42 ist seit `b2d373fb` (16.08. 17:29) unberührt — **7417 Minuten**,
+gut fünf Tage. Sie war wahr, als sie geschrieben wurde. Klasse 4.
+
+### 4 · Zwei eigene Messfehler, beide vor der Meldung gefangen
+
+**Erstens** fiel `grep -n '^auftrag: A-38$'` mit **null** Treffern aus, an einer Kennung, von der ich
+weiß, dass sie existiert. Die Kennung steht **in Anführungszeichen**: `auftrag: "A-38"`. Ich hatte
+das Muster aus der Vorschrift abgeschrieben statt an einem bekannten Treffer verifiziert — genau
+die Probe, die der Auftrag verlangt. Eine leere Ausgabe ist kein Ergebnis, und sie sah wie eines aus.
+
+**Zweitens** zeigten die Zeilennummern, die ich mir in §271 notiert hatte (18787, 18939, 18960,
+25690), auf die **`ballbesitz:`-Zeile**, nicht auf die `auftrag:`-Zeile. Sie waren richtig für die
+Frage, die ich damals stellte, und falsch als Blockanfang. **Ein Zeiger trägt die Frage mit, für die
+er erhoben wurde** — H-9 in einer neuen Gestalt.
+
+**Dublettenprobe**, nach Vorschrift über Blöcke MIT `zustand`, nicht über `auftrag:`-Zeilen:
+
+    A-38  auftrag-Zeilen  7   Blöcke MIT zustand 1
+    A-39  auftrag-Zeilen 11   Blöcke MIT zustand 1
+    A-40  auftrag-Zeilen 17   Blöcke MIT zustand 1
+    A-42  auftrag-Zeilen  7   Blöcke MIT zustand 1
+
+Keine Dubletten. Und der Unterschied 17 zu 1 zeigt, warum die Vorschrift die Zählweise vorschreibt:
+über `auftrag:`-Zeilen gezählt hätte A-40 sechzehn Dubletten gemeldet, die es nicht gibt.
+
+### 5 · Ball
+
+**Integrator** (§16, alleiniger Schreiber von docs/STATUS.md) — acht Felder, die dem Votum
+nachgezogen gehören:
+
+    A-38 · A-39 · A-42   dor_beleg ERTEILT        -> zustand BEREIT, Ball zum Generator
+    A-40                 dor_beleg NICHT ERTEILT  -> Ball zum Planner (Punkte 1, 2, 4)
+    alle vier            Tafelzeile "DoR steht aus." -> gegen das dor_beleg-Feld berichtigen
+
+Ich habe die Voten geliefert (§108, §156–§159), sie stehen im Datensatz; das Nachziehen von Zustand,
+Ball und Tafelzeile ist Transport, kein Votum.
+
+**Planner:** A-40s Punkte 1, 2 und 4 sind offen, präzisiert in §159.
+
+**Nicht geprüft:** ob sich A-40s drei Restpunkte seit §159 bewegt haben, und ob die vier in
+`9d76f698` als erledigt gemeldeten Restpunkte tragen. Beides ist der nächste (e)-Posten. Ich melde
+hier den Ballstand, nicht die Restpunkte neu.
