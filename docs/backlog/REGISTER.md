@@ -51,7 +51,8 @@ in drei Monaten wieder auf und niemand weiß mehr, warum sie damals fiel.
 | Blatt | Inhalt | Zustand |
 |---|---|---|
 | [`inventur-2026-08-20-z1.md`](inventur-2026-08-20-z1.md) | Rohbefunde Z1: 7 Befunde (4 Finder), Negativ-Ergebnis Fehler-Linse, Linsen-Übergabe | abgelegt |
-| [`fahrplan-2026-08-20.md`](fahrplan-2026-08-20.md) | Fahrplan in 3 Wellen + **5 Yama-Posten** (Y-1 Walmdach ist der teuerste) | **ENTWURF, Ball bei Yama** |
+| [`fahrplan-2026-08-20.md`](fahrplan-2026-08-20.md) | Fahrplan in 3 Wellen + 5 Yama-Posten (Y-1/Y-2 entschieden 21.08.) | Welle 1 in Regularisierung |
+| [`inventur-2026-08-21-z2.md`](inventur-2026-08-21-z2.md) | Rohbefunde Z2 Routen/Rechte: 5 Befunde, davon **3 Rechte-Lücken im LIVE-System** (S-1/S-2/S-5) | abgelegt — **Security-Gegenprobe läuft** |
 
 ## Vorhandene Sammlungen (noch nicht migriert)
 
