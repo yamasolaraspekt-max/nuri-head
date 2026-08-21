@@ -11002,3 +11002,65 @@ am bekannten Treffer nachgezogen, dann stimmten Zeilenzahl (37) und Wortzaehlung
 **Ball beim Planner**, klein und mit den Zielen benannt: `REGISTER.md:96` soll auf
 `dachAusschnitt.ts:47` zeigen, `REGISTER.md:125` und `:127` auf `studioDaten.ts:173`. Die Landkarte
 ist die letzte Stelle, an der eine falsche Zeile stehen sollte.
+
+## §150 — Posten (b) am Messblock des Registers: sechs von acht Zahlen treffen, und die zwei anderen waren schon beim Schreiben falsch
+
+*(Messstand 927fc45f, 21.08. 12:13. Nummer gegen den frischen HEAD gewaehlt: 87 Abschnitte, hoechste
+149 — 150 war frei.)*
+
+**Gegenstand.** Der Messblock im Werkbank-Register
+(`docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md:296-312`), eingeleitet mit *"Die Messungen, je
+Formel einmal, in `resources/planner/hausplaner/`"*. Er nennt **Muster und Zahlen** — genau das, was
+Posten (b) nachzaehlt. Die Legende (`:288-293`) ist praezise: `✓` = am Code belegt, `ⓝ` = am Code
+nicht belegt.
+
+### Sechs Zahlen, exakt getroffen
+
+| Zusage | Muster | gemessen |
+|---|---|---|
+| F-001 `fangKern` **4x** | `Math.hypot\|Math.sqrt` | **4** ✓ |
+| F-001 `bemassung` **1x** | dito | **1** ✓ |
+| F-001 `masseingabe` **1x** | dito | **1** ✓ |
+| F-027 `gaubeGeometrie` **6x** | `Math.tan` | **6** ✓ |
+| F-004 `fangKern` **0x** | `schnittpunkt` | **0** ✓ |
+| F-012 `trefferSuche` **0x** | `Math.` | **0** ✓ |
+
+Auch die drei Fundorte von F-004 tragen ihren Inhalt: `geometry/schifterListe.ts:71`
+(`function schnittpunkteU(...)`), `geometry/wallGeometry.ts:62` (Gehrung/Schnittpunkt) und `:106`
+(*"Liefert die beiden Schnittpunkte der Bandkanten"*). **Die Null-Behauptungen sind die
+wertvollsten und sie halten beide** — dort bestaetigt sich ein unscharfes Muster sonst still selbst.
+
+### Zwei Zahlen treffen nicht
+
+**1 · „(14 Module insgesamt)" bei F-001.** Gemessen mit dem genannten Muster in der genannten
+Grundmenge: **36** Module (`.ts`+`.tsx` der ganzen Insel). Ohne Tests **27**, nur `geometry/` **16**.
+**Keine der drei Lesarten ergibt 14.**
+
+**2 · „NUR EIN Treffer" bei F-031.** Mit dem genannten Muster `csg|CSG` sind es **drei**:
+`geometry/dachAusschnitt.ts:10` (der zitierte Kommentar ✓) sowie
+`renderers/three-d/segmentierung.ts:2` und `:7`.
+
+### Und beide waren schon beim Schreiben falsch — das unterscheidet sie von allem heute Vorherigen
+
+Am **eigenen Stand des Registers** gemessen (`dbdd4691`, 16.08. 21:34) ergeben dieselben Muster
+**dieselben Zahlen: 36 und 3.** Es ist also **keine Drift**, wie in §134, §139, §140 und §149,
+sondern ein **Messfehler bei der Erhebung**. Der Unterschied ist wichtig fuer die Behebung: eine
+gewanderte Zahl zieht man nach, eine falsch erhobene muss man neu erheben.
+
+**Die Folgerung von F-031 ueberlebt trotzdem, und das gehoert dazu.** Alle drei Treffer sind
+**Kommentare**, keiner ist eine CSG-Operation — und die zwei zusaetzlichen sagen sogar ausdruecklich,
+dass das Modul *CSG-frei* ist. **Der Schluss des Registers ist richtig, seine Zahl ist es nicht.**
+Ein Wort, das sein eigenes Fehlen ankuendigt, wird von jeder Zaehlung mitgezaehlt.
+
+### Was ich nicht gemessen habe, und warum
+
+Der Block sagt bei `:292-293` selbst: *"ohne Zeichen UNGEPRUEFT — kein Blatt benennt das Modul, also
+ist die Zuordnung nicht messbar. Ich habe sie NICHT geraten (13 der 23 Zeilen)."* **Das ist die
+richtige Haltung** und ich habe sie nicht angetastet. Das Zahlenpaar *13 von 23* habe ich **nicht**
+nachgezaehlt, weil die Grundmenge „23 Zeilen" im Block nicht benannt ist und die Tabelle darueber
+mehr Zeilen fuehrt — eine Zahl ohne Grundmenge kann ich weder bestaetigen noch widerlegen, und
+raten waere schlechter als offenlassen.
+
+**Ball beim Planner**: zwei Zahlen im Messblock neu erheben —
+`REGISTER.md:300` („14 Module") und `:310` („NUR EIN Treffer"). Beide sind kleine Korrekturen an
+einem Block, dessen uebrige sechs Zahlen und dessen Legende sauber sind.
