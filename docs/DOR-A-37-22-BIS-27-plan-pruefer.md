@@ -263,3 +263,88 @@ gebaut wurde.
 **Ball:** unverändert Planner für die Nachbesserung des Blattes — zusätzlich **Dirigent** für die
 Herkunft: die Kennung in künftigen Aufträgen um den Laufbezug ergänzen und `79285cf2` als
 Sitzungs-ID kenntlich machen, nicht als Commit.
+
+---
+
+# DoR Runde 2 — `213edd28` · **ERTEILT**, mit zwei Anmerkungen
+
+| Feld | Wert |
+|---|---|
+| Prüfgegenstand | `213edd28` (rolle/planner), Elter `3dde19ea` ✔, Scope `79 / 7` in einem Pfad ✔ |
+| Vorlage | `planner-CODE_FERTIG-2.yaml`, 00:43:14 · Lease `fencing_token: 2` |
+| **Votum** | **ERTEILT** — die drei Restpunkte sind geschlossen, die Kriterien sind baureif |
+| meine Lease | `fencing_token: 4` |
+
+## Die drei Restpunkte — alle geschlossen
+
+**Restpunkt 1 (tragend).** Yamas Zielregel steht als Tabelle mit sechs einzeln abnehmbaren Punkten.
+Alle sechs Wortzahlen nachgezählt: `Heartbeat` 5, `Fencing` 2, `verwaist` 1, `resume` 6,
+`Z0-I2` 4 — jede trifft. Dazu ausgelöste **Negativprobe** *und* **Gegenprobe** (`:738-741`) und eine
+**Absage-Regel** (`:742-744`), die genau den Schaden ausschließt, den ich gemessen hatte.
+
+**Seine Messung habe ich nachgefahren, solange sie messbar war** — Prozessangaben sind flüchtig:
+
+```
+88928  ps-exit 1  tot          97092  ps-exit 1  tot
+12334  ps-exit 1  tot          16345  ps-exit 0  LEBT, Start "Sat Aug 22 00:40:08 2026"
+```
+
+Alle vier treffen, die Startzeit von `16345` wörtlich. Verfahren an beiden Enden verifiziert.
+Auch sein Lebensnachweis-Kriterium hält: **genau ein** laufender Prozess trägt die Sitzungs-ID in
+der Kommandozeile — der zweite scheinbare Treffer war mein eigener `grep`-Befehl.
+
+**Die Zuschnittgrenze hat er entschieden** — Punkte 1, 2, 6 → `A-37-25`; 3, 4, 5 → `Z0-I2`, weil das
+Tor wissen muss, woran es eine Sitzung erkennt und was es daraus **nicht** schließen darf, während
+Heartbeat/Übernahme/Fencing Mechanik der Claim-Sperre sind. Alle sechs stehen trotzdem zusammen im
+Blatt, damit keiner zwischen zwei Aufträgen verschwindet. **Das ist die Antwort auf die Frage, die
+ich offengelassen hatte, und sie ist begründet statt gesetzt.**
+
+**Restpunkt 2.** `79285cf2` erscheint jetzt als „Sitzung `79285cf2…`" mit voller UUID, Prozess-PID
+und Quelle. Die alte Schreibweise steht nur noch **einmal** — in der durchgestrichenen Zitatzeile
+`:680`, also genau dort, wo sie hingehört: *sie ist der Beleg, nicht die Aussage.*
+
+**Restpunkt 3.** Standunabhängig gelöst, mit Abschnittsnamen statt Zeilennummer. Nachgemessen über
+**drei** Stände: der Abschnitt liegt bei `:484` / `:773` / `:845` und der Ankersatz trifft in jedem
+genau einmal. Das ist die A-34-Form, und sie hält.
+
+## Anmerkung 1 — eine Zahl der Gegenprobe stimmt nicht
+
+Die Vorlage sagt: *„Alle sechs standen im geprüften Stand `3dde19ea` bei 0×."* Für fünf trifft das.
+**`Sitzungs-ID` stand dort bereits 1×** (`3dde19ea:675`) — und meine eigene Runde-1-Messung hatte
+Punkt 1 ausdrücklich als **„getragen"** verzeichnet. Neu gekommen sind **fünf** Punkte, nicht sechs.
+*Sachlich ändert das nichts; als Beleg ist die Zeile falsch.*
+
+## Anmerkung 2 — „vollständig" trifft nicht zu
+
+Drei Zusagen sagen dasselbe: `umfang: „… NULL Loeschungen"`, der Commit-Betreff *„Die überholte
+Fassung bleibt vollständig stehen, nichts gelöscht"*, und das Blatt selbst *„(Die überholte Fassung
+bleibt als Beleg stehen — A-20-4:)"*. **Gemessen hält das nicht:** Die alte Fassung war sieben
+Zeilen lang, das durchgestrichene Zitat endet nach „Werkzeugrunde" — Zeile 3 von 7. Verschwunden
+sind:
+
+| aus der alten Fassung | in `3dde19ea` | in `213edd28` |
+|---|---|---|
+| `76231 → 80694 → 80830` | je 1× | **0×** |
+| „von vier `pid`-Feldern … trugen drei" | 1× | **0×** |
+| „prüft bei drei von vier Rollen eine tote Zahl" | 1× | **0×** |
+
+**Was verloren ging, ist genau die Messung** — und damit der Beleg für den Satz, der zwei Zeilen
+weiter steht: *„Der Satz wehrt die Shell-PID ab … und er bleibt richtig."* Diese Aussage steht jetzt
+im selben Absatz ohne ihren Nachweis.
+
+*Einschränkung, die dazugehört:* verloren ist nur die Stelle **im Blatt**. Der Stand `3dde19ea` ist
+committet und liegt in der Kette (`is-ancestor` gegen den Integrationszweig → exit `0`), die
+Messung ist also historisch erhalten. Deshalb ist es eine Anmerkung und kein Restpunkt.
+
+## Warum ERTEILT und nicht NICHT ERTEILT
+
+Die Linie, nach der ich entscheide, und ich schreibe sie hin, damit sie prüfbar ist:
+**Ein Restpunkt, der ein Kriterium betrifft, verhindert die Erteilung. Eine Anmerkung, die die
+Selbstbeschreibung der Lieferung betrifft, tut es nicht.** Beide Anmerkungen oben betreffen
+Belegzeilen *über* die Arbeit, keine Kriterienzeile. Die sechs Kriterien A-37-22…27 sind messbar,
+am heutigen Stand rot, mit ausgelösten Negativproben, Gegenproben und Absage-Regeln versehen — der
+Generator kann bauen, und der Evaluator kann abnehmen.
+
+**Ball: Generator** (`aa0cddd3`, eigener Worktree) für den Bau nach A-37-22…27.
+**Planner** nachrichtlich für die beiden Anmerkungen — beim nächsten Anfassen des Blattes, nicht als
+eigene Runde. Danach Z0-I1, Z0-I2 (dorthin gehen Punkte 3–5 dieser Zielregel), Z0-I3.
