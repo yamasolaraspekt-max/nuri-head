@@ -18492,3 +18492,108 @@ nichts; eine heißt `toolCatalogStillgelegt.ts` und sagt ihren Zustand im Namen.
 
 **Beim Integrator:** unverändert der Rückweg (49 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
 und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
+
+---
+
+## §228 — Posten (c): F-020 ist nicht gebaut, und ihr Grenzfall ist trotzdem eingehalten — durch Verweigerung. Und die Ankerform, die ich fünfmal empfohlen habe, steht seit A-34 im Code
+
+**Messstand 9225da29, Baum sauber, 0 neue Commits. Integrationszweig lokal 7a82ecfb (14:31, Alter
+224 Min). Rückstand: ich 40 · planner 104. `docs/STATUS.md` und die 89 Blätter unbewegt, kein Ball in
+meiner Bahn. Erhebung 21.08. 18:15–18:17. §226-Regel vorab: `dachGeometrie.ts` unterscheidet sich um
+drei Commits, deshalb dort am gültigen Stand gemessen.**
+
+Gegenstand: **F-020 · Straight Skeleton (Grundgleichung)**, `FORMELSAMMLUNG.md:220-241`. Das Blatt nennt
+sie *„den Kern der Dachkonstruktion"*.
+
+### 1. Sie ist nicht gebaut
+
+Über Bezeichner am gültigen Stand gesucht:
+
+    skelett · Skelett · straightSkeleton · spaltEreignis · kantenEreignis     je 0 Dateien
+    skeleton/Skeleton                                                            1 Datei
+    winkelhalbierende                                                            2 Dateien
+    Fangprobe 'berechneSparren'                                                  3 Dateien   (Verfahren greift)
+
+Die drei Fundstellen sind **kein Skelett**:
+
+    geometry/dachVerschneidung.ts:8    Kommentar: Kehle/Grat = 45°-Winkelhalbierende bei 90°-Ecke
+    geometry/wallGeometry.ts:120       Gehrungsnaht an Wandecken — Wand, nicht Dach
+    geometry/geradenGeometrie.ts:185   ein VERWEIS auf F-020, kein Aufruf
+
+Der Code löst die Dachkonstruktion über eine **Fallunterscheidung nach Dachform**
+(`dachGeometrie.ts`: `case 'flach'`, `'pult'`, `'sattel'`, `'walm'`) mit geschlossenen Formeln je
+Form. Kein wandernder Kantenversatz, keine Ereignisse.
+
+### 2. Der Grenzfall ist trotzdem eingehalten — durch Verweigerung
+
+F-020s Grenzfall lautet: *„Wer nur Kanten-Ereignisse behandelt, bekommt bei einem rechteckigen
+Grundriss ein korrektes Dach und bei einem L-Grundriss **gar keins**."* Am gültigen Stand:
+
+    dachGeometrie.ts, default:
+      // W-3b: rect/l/t/u-shape — zusammengesetzte/rechteckige Neuformen. Flächenprojektion (inkl.
+      // Verschneidungsflächen) folgt in Stufe 2; hier bewusst keine Fläche statt eines Rateswerts.
+      return [];
+
+**„Bewusst keine Fläche statt eines Rateswerts"** — der L-Grundriss bekommt kein Dach, und das steht
+so im Code. Der Grenzfall ist nicht durch ein Skelett gelöst, sondern durch eine ausdrückliche Absage.
+
+Das ist die **exakte Gegenform zu meiner Fehlerklasse** aus §136 bis §207. Zehnmal habe ich „ein
+Schutz, der einen plausiblen Wert liefert statt zu verweigern" gemeldet; hier steht der Fall, der
+verweigert — und er nennt den Grund im selben Satz. Zusammen mit der P-1-Behebung (§225: Klemmung
+eingerahmt statt entfernt) ist das die zweite gebaute Gegenform, die ich in dieser Reihe finde.
+
+### 3. Der eigentliche Fund: meine Empfehlung ist längst Entscheidung
+
+In §206, §208, §211, §216 und §220 habe ich fünfmal „zur Erwägung" geschrieben, man möge statt
+Zeilennummern **Bezeichner** oder **Anker** verwenden. `geometry/geradenGeometrie.ts:181-192` trägt
+genau das, und zwar ausformuliert:
+
+    /**
+     * **Parallelversatz einer Achse — F-020s Normalform.**
+     *
+     * *Fundstelle als **Anker**, nicht als Zeilennummer:* `FORMELSAMMLUNG.md`, Abschnitt
+     * **`### F-020 · Straight Skeleton (Grundgleichung)`**, Unterpunkt
+     * **`Formel (Kantenversatz zur Zeit t)`**. **Beide Texte kommen dort genau einmal vor** — eine
+     * Suche findet die Stelle, eine Zahl nicht.
+     *
+     * > **Warum hier keine Zeilennummer steht (A-34).** *Diese Zeile zeigte auf die Zeilen 141 bis 143
+     * > jener Datei. Die Berichtigung von F-004 hat rund 35 Zeilen davor eingefügt — seitdem steht
+     * > dort die **Ausgabe von F-011 (Polygonfläche)**. **Der Verweis war lautlos falsch:** er sah
+     * > aus wie vorher und führte zu einer anderen Formel.*
+
+Der Auftrag dazu ist **A-34**, `BETRIEBSBESTAETIGT`, Ball `—`, Kopfzeile: *„Meine F-004-Berichtigung
+hat 52 Verweise verschoben. Einer steht im Produktivcode und zeigt auf die falsche Formel."* Seine
+Kriterien A-34-1 bis A-34-3 sind alle als `ERFUELLT` verzeichnet, darunter A-34-2: *„Der Anker ist
+AUFFINDBAR, nicht nur schön: er nennt die F-Nummer."*
+
+**Meine fünfmalige Empfehlung ist kein Vorschlag, sondern der Hinweis auf eine bereits getroffene und
+abgenommene Entscheidung.** Ich hätte sie beim ersten Mal als solche benennen können — der Anker steht
+seit A-34 im Code, in einer Datei, die ich in §219 selbst als Verdachtsträger gelistet habe
+(`geradenGeometrie.ts`, 11 Fälle).
+
+Was daraus für die offenen Zeiger folgt, ändert sich dadurch: es ist keine Erwägung mehr, sondern die
+Frage, **warum die entschiedene Form nur an einer Stelle angewandt wurde.** „Anker" kommt in 12
+Insel-Dateien vor; die ausformulierte Begründung genau einmal.
+
+### 4. Kein eigener Messfehler in dieser Runde
+
+Zum ersten Mal seit §220 ist mir keiner unterlaufen. Der Grund ist benennbar und nicht Verdienst: ich
+habe die §226-Regel **vor** der Messung angewandt (Trägerprüfung: `dachGeometrie.ts` 3 Commits,
+`FORMELSAMMLUNG.md` 0, `dachformVorlagen.ts` 0) und die Suche mit einer Fangprobe geeicht, bevor ich
+aus null Treffern etwas schloss.
+
+### Ball
+
+**Kein Befund gegen F-020.** Sie ist nicht gebaut, ihr Grenzfall ist durch eine ausdrückliche Absage
+eingehalten, und der einzige Verweis auf sie im Code ist ein vorbildlicher Anker. Das ist der achte
+geprüfte Gegenstand dieser Reihe, der trägt.
+
+**Beim Planner, und diesmal nicht als Erwägung:** A-34 hat die Ankerform entschieden und abgenommen.
+Die 24 gebrochenen Zeiger aus §216, die 13 aus §220, die vier aus §206 und der eine aus §221 stehen
+alle in Blättern, für die dieselbe Form verfügbar wäre. **Die Frage ist nicht mehr, ob Anker besser
+sind — das ist entschieden —, sondern warum sie nur an einer Stelle stehen.**
+
+**Bei Yama:** unverändert die neun Posten, die Zahl zu §119/§120 seit §227 frisch bei 27 von 160.
+
+**Beim Integrator:** unverändert der Rückweg (51 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
+und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
