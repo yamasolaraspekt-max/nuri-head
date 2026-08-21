@@ -29,7 +29,8 @@ müssen aber als solche gekennzeichnet sein.
 
 | Blatt | Thema | Zustand |
 |---|---|---|
-| [`arbeitsregeln-1-5-orchestra-nachtrag.md`](arbeitsregeln-1-5-orchestra-nachtrag.md) | Nachtrag ARBEITSREGELN 1.5: Integrations-Abnahme, Release-Hook, Nachvollzugs-Matrix, Dirigent | ENTWURF, Ball bei Yama |
+| [`dachschichten-modell-zielkonzept.md`](dachschichten-modell-zielkonzept.md) | Dachschichten-Modell: Ticket bleibt Basis, Playground-Schichtengeneratoren herauslösen, Ansicht ≠ Konstruktion, drei Modi; erster vertikaler Schnitt | KONZEPT — Bau nach TESTBEREIT (Welle 2 Produkt); Reuse-Matrix in Arbeit |
+| [`arbeitsregeln-1-5-orchestra-nachtrag.md`](arbeitsregeln-1-5-orchestra-nachtrag.md) | Nachtrag ARBEITSREGELN 1.7 (eingearbeitet `0f554dd9`): Integrations-Abnahme, Release-Hook, Nachvollzugs-Matrix, Dirigent | eingearbeitet, K2/K3 offen |
 | [`3d-wandecken-gehrung.md`](3d-wandecken-gehrung.md) | Wandecken/Gehrung im 3D-Hausplaner | — |
 
 ## Konzeptbestand außerhalb dieses Fachs (noch nicht migriert)
