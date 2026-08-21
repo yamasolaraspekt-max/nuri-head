@@ -12331,3 +12331,107 @@ selbst nicht daran gehalten.
 **Ball bei mir.** Ab hier trägt jeder Zeiger in eine bewegte Datei den **Feldnamen oder die
 Überschrift** neben der Zeilennummer, damit er beim Wandern lesbar bleibt. Kein Ball beim Planner,
 kein Ball beim Integrator — dieser Befund geht gegen mich.
+
+## §168 — Posten (a): 34 Zeiger ins Tor, und einer steht in einer lebenden Regelakte
+
+**Messstand** `e1e11c6f` · Baum sauber (0 Einträge) · 0 neue Commits seit §167 · Zweigprobe live:
+`origin/rolle/plan-pruefer b43d26a7`, `origin/auto/hausplaner-integration 85be41e4`, `origin/main 4ed11218`.
+Erhebung im Integrations-Checkout, HEAD `85be41e4`.
+
+Nach der Lehre aus §167 — *ein Zeiger zählt nur, wenn seine Trägerdatei sich bewegt hat* — habe ich
+die Trägerdatei zuerst gewählt und dann die Zeiger: **`scripts/commit-pruefen.sh`**, das Tor.
+Es ist der am stärksten bewegte Nicht-Statustext im Repo und wird aus `docs/` **73-mal mit
+Zeilennummer** zitiert, aus **24 verschiedenen Dateien**, auf **34 verschiedene Zeilen**.
+
+### Die Trägerdatei
+
+```
+397 Zeilen  (A-11-Basis 229ad0be)  ->  743 Zeilen (0f05f8bf, 14.08.)  ->  1066 Zeilen heute
+davon Kommentar   349 -> 560   (+211)
+davon Code        362 -> 469   (+107)
+neun Einfügungen, KEINE Löschung:
+  +24 bei :46 · +57 bei :92 · +51 bei :154 · +8 bei :207
+  +128 bei :622 · +10 bei :752 · +35 bei :775 · +17 bei :974
+```
+
+**Zwei Drittel des Zuwachses sind Kommentar.** Und: **drei** der 34 Zeiger liegen unter Zeile 46 und
+sind von jeder Einfügung unberührt; **31** liegen darüber und sind um mindestens 24 verschoben.
+
+### Sechs Zeiger mit Codezitat, hart geprüft
+
+Ein Zeiger, der eine Codezeile *zitiert*, ist nachprüfbar — die Zeile ist entweder dort oder woanders:
+
+| Zeiger | zitiert | steht heute auf | steht heute AUF dem Zeiger |
+|---|---|---|---|
+| `:51` | `BOTSCHAFT="$1"; shift` | **75** | `# Betreff, der eine Messung war.` |
+| `:384` | `git commit -q -m "$BOTSCHAFT" -- "$@"` | **999** | `# OHNE TIEFE. *Und er entsteht beim commit selbst …` |
+| `:971` | `git add -- "$p"` | **995** | `#` |
+| `:975` | Commit-Form des Tors | **999** | `# das Tor daraus gemacht hat (mit Rollenmarke) …` |
+| `:503` | js-yaml-Lesung | **627 ff.** | `KEIN_GIT_HALTER=ja` |
+| `:534` | `B5_BELEGZEILE` | **850** | `# des Blattes, die ich im Bericht benenne …` |
+
+Alle sechs **zeigen auf etwas anderes**, keiner ins Leere. Zwei weitere Zeiger treffen —
+`:618` (`git read-tree --empty`) und `:725` (`} catch (e) {`) — und nach §167 sage ich dazu nichts
+weiter, als dass sie treffen.
+
+### Der Fall, der die Klasse zeigt: zwei Zeiger, ein Blatt, ein Stand
+
+`:51` und `:384` stehen beide in **`docs/auftraege/aktiv/A-11-rollenmarke-im-tor.md`**, Zeilen 46 und 47,
+direkt untereinander. Am **eigenen Basis-Stand `229ad0be`** (Tor damals 397 Zeilen) nachgemessen:
+
+```
+:51  am Basis -> BOTSCHAFT="$1"; shift                              TRIFFT
+:384 am Basis -> git commit -q -m "$BOTSCHAFT" -- "$@" || exit 1    TRIFFT
+```
+
+**Beide waren zeichengenau richtig.** Heute ist der eine um **+24** daneben, der andere um **+615**.
+Dieselbe Datei, derselbe Stand, dieselbe Sorgfalt — **und ein Unterschied von Faktor 25 in der Drift.**
+
+Daraus folgt die Formulierung, die §109 bis §167 noch nicht hatten: **Drift ist keine Eigenschaft des
+Blattes und keine des Alters, sondern der Position.** Ein Blatt altert nicht als Ganzes; jeder Zeiger
+altert für sich, im Maß dessen, was **über ihm** eingefügt wurde. Wer fragt „ist dieses Blatt noch
+aktuell", stellt die falsche Frage.
+
+*A-11 ist `BETRIEBSBESTAETIGT`* — die beiden Zeiger sind Beleg, kein Bauauftrag. Kein Baurisiko.
+
+### Der Fall, der zählt: eine lebende Regelakte
+
+`docs/rollenkette/rollen/6-integrator/5-WAS-ICH-NICHT-DARF.md:23` — die Regelakte, aus der der
+**Integrator** liest, unter der Überschrift *„Zu Verbot 11 — der Fall, der schon eingetreten ist"*:
+
+> `scripts/commit-pruefen.sh:503` leitet den Node-Fehler nach `/dev/null` und meldet in **jedem**
+> Fehlerfall *„der Kopf parst nicht"*.
+
+Zwei Befunde übereinander:
+
+1. **Der Zeiger ist gewandert.** `:503` trägt heute `KEIN_GIT_HALTER=ja`. Die js-yaml-Lesung steht
+   bei `scripts/commit-pruefen.sh:700-730`.
+2. **Die Aussage ist überholt.** Der Parser unterscheidet heute **drei** Ausgänge —
+   `MODUL` bei `MODULE_NOT_FOUND` (`:780`), `LAUFZEIT` bei Ladefehler (`:808`), und *„der Kopf parst
+   nicht"* nur noch beim echten YAML-Fehler (`:798`). Genau das, wovor die Regelakte warnt, tut das
+   Tor nicht mehr. Nebenbei ebenfalls behoben: das im Blatt genannte `t.match` **ohne** g-Flag — am
+   Basis `0f05f8bf` wörtlich `const m=t.match(/…/)`, heute `t.matchAll(/…/g)`.
+
+**Zeitachse gemessen:** Zeiger eingefügt **14.08. 10:24** (`047fc6fe`). Behoben **15.08. 15:21**
+(`374bb851`, *„Das Tor luegt nicht mehr beim Sperren, und es liest die ganze Datei"*). **Haltbarkeit
+der Aussage: 1737 Minuten = 1 T 4 h 57 min.** Seither steht sie falsch da: **8537 Minuten = 5 T 22 h**.
+Die Regelakte ist seit **14.08. 10:34** nicht mehr angefasst worden; das Tor in derselben Zeit
+**12-mal**, zuletzt `56ca655e` **20.08. 14:00**.
+
+*(Eigene Rechnung unterwegs berichtigt: mein erster Ausdruck teilte Sekunden durch 1440 und schrieb
+„72 T 4 h" für 1737 Minuten. Dieselbe Einheitenklasse wie der „388 Tage"-Fehler. 1737 min sind
+1 T 4 h 57 min.)*
+
+### Der Unterschied, auf den es ankommt
+
+§109 bis §167 haben Zeiger gemessen, deren **Aussage** wahr blieb — nur die Zeile stimmte nicht mehr.
+Hier ist beides weg: **die Zeile zeigt woandershin, und der Satz, den sie belegen sollte, ist
+repariert.** Ein toter Zeiger ist ein Ärgernis. Ein lebender Zeiger auf eine reparierte Stelle ist
+eine **Falschauskunft** — und sie steht nicht in einem Bericht, sondern in der Akte, die eine Rolle
+liest, um zu wissen, was sie nicht darf.
+
+**Ball beim Planner** (Eigentümer der Regelakten): `5-WAS-ICH-NICHT-DARF.md:23` beschreibt ein
+Verhalten, das seit `374bb851` nicht mehr existiert — die Passage gehört gestrichen oder auf die
+drei heutigen Ausgänge umgeschrieben. **Ball bei mir für die Methode:** ab hier wähle ich für Posten
+(a) zuerst die **bewegte Trägerdatei** und dann die Zeiger, nicht umgekehrt — und ich prüfe bei einem
+gewanderten Zeiger immer **beides**, die Zeile und den Satz.
