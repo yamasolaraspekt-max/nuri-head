@@ -23,14 +23,12 @@ use Tests\TestCase;
  *
  * Läuft ausschließlich gegen `ticket_testing` (`phpunit.xml` erzwingt `DB_DATABASE`).
  *
- * **OFFENE HÄLFTE, benannt statt verschwiegen:** Yamas Entscheidung vom 21.08.
- * (`docs/regelwerk/ENTSCHEIDUNG-RECHTE-ALLE-FUER-ALLE.md`) verlangt, dass die Welle-0-Tore
- * **in BEIDEN Schalterstellungen** geprüft werden — mit und ohne `rechte.alle_fuer_alle`.
- * Dieser Test deckt heute nur die Stellung **aus** (das Tor wirkt), weil der Schalter selbst
- * noch nicht existiert; er wird als Z2-W0-7 gebaut. Sobald er steht, gehört hier ein zweiter
- * Satz dazu: mit `alle_fuer_alle=true` muss `GET /objekte` für denselben rechtelosen Nutzer
- * **200** liefern, ohne dass die Route-Middleware entfernt wurde. Fehlt dieser Satz, sieht die
- * Datei vollständig aus und prüft die halbe Zusage.
+ * **BEIDE SCHALTERSTELLUNGEN, seit Z2-W0-7 geschlossen:** Yamas Entscheidung vom 21.08.
+ * (`docs/regelwerk/ENTSCHEIDUNG-RECHTE-ALLE-FUER-ALLE.md`) verlangt, dass die Welle-0-Tore mit
+ * **und** ohne `rechte.alle_fuer_alle` geprüft werden. Diese Datei trug den Vermerk, dass ihr die
+ * zweite Hälfte fehlt, solange der Schalter nicht existiert. Er existiert seit Z2-W0-7; die
+ * Hälfte steht jetzt unten. **Der Vorgabewert in der Testumgebung ist `false`** — sonst würde der
+ * Schalter jede Tor-Zusage grün färben, und keine wüsste mehr, ob ihr Tor schließt.
  */
 class ObjektakteGateTest extends TestCase
 {
@@ -80,5 +78,24 @@ class ObjektakteGateTest extends TestCase
     {
         $admin = $this->user(true);
         $this->assertNotSame(403, $this->actingAs($admin)->get('/objekte')->getStatusCode());
+    }
+
+    /**
+     * Die andere Schalterstellung: mit `alle_fuer_alle=true` kommt derselbe rechtelose Nutzer
+     * durch — **ohne dass die Route-Middleware entfernt wurde.** Genau das ist die Zusage des
+     * Entscheidungsblatts: „die Gates werden weiter gebaut und in beiden Schalterstellungen
+     * getestet, damit der Tag, an dem Yama differenzieren will, kein Neubau ist."
+     */
+    public function test_mit_schalter_alle_fuer_alle_kein_verbot(): void
+    {
+        config(['rechte.alle_fuer_alle' => true]);
+        $this->assertNotSame(403, $this->actingAs($this->user())->get('/objekte')->getStatusCode());
+    }
+
+    /** Und die Gegenprobe in derselben Datei: mit Schalter AUS sperrt dasselbe Tor wieder. */
+    public function test_mit_schalter_aus_wieder_verboten(): void
+    {
+        config(['rechte.alle_fuer_alle' => false]);
+        $this->actingAs($this->user())->get('/objekte')->assertForbidden();
     }
 }

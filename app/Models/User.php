@@ -55,6 +55,16 @@ class User extends Authenticatable
 
     public function hasPermission(string $item, string $action = 'read'): bool
     {
+        // Z2-W0-7 — Yamas Entscheidung vom 21.08.2026, dokumentiert in
+        // `docs/regelwerk/ENTSCHEIDUNG-RECHTE-ALLE-FUER-ALLE.md`: steht der Schalter auf `true`,
+        // gilt jede Rechteprüfung als bestanden. Er sitzt hier und nur hier, weil von hier aus
+        // ALLE Aufrufer erreicht werden — `permission:`-Middleware, Blade-Sichtbarkeit, Controller.
+        // Rückweg: `RECHTE_ALLE_FUER_ALLE=false`, dann wirken die vorhandenen Tore sofort wieder.
+        // Er macht NIEMANDEN zum Admin — `isSuperAdmin()` bleibt unberührt.
+        if (config('rechte.alle_fuer_alle')) {
+            return true;
+        }
+
         if ($this->isSuperAdmin()) {
             return true;
         }
