@@ -23623,3 +23623,123 @@ ein Filter nach Inhalt, nicht nach Position.
 
 **Kein Ball an andere.** §280s Zahlen sind davon unberührt; die Warnung betrifft die Botschaft, nicht
 den Befund.
+
+## §282 · Posten (d) an meiner eigenen Vorlage: acht der neun Yama-Posten sind fünf Tage alt, und ich habe vier davon vor fünf Tagen selbst als erledigt gemessen
+
+**Messstand.** Runde begonnen an `1089bd29`. **Vor dem Schreiben neu gemessen 22:02: HEAD und Zweig
+beide `1271c034`, Rückstand 0**, Baum sauber; angekommen ist `4851ec6c` (Z2-W0-5 in Yamas Namen
+entschieden). **`docs/STATUS.md` ist zwischen beiden Ständen unverändert**, und die drei tragenden
+Gegenproben unten halten am neuen Stand (je 1 Treffer). Ballortung beidseitig: `docs/STATUS.md` **1**
+(P-02, VORLAGE) · `docs/BEFUNDNOTIZEN.md` **35** (Blöcke ohne Zustandsfeld). Nichts in meiner Bahn.
+Gemessen 21.08. 21:58–22:04.
+
+### 1 · Die Alterung, je erster Nennung in dieser Datei
+
+    1  Fach-Gate N-003          7b8dec42  16.08. 20:14   7305 Min   850 Commits
+    4  W-21L                    dc6abbd1  16.08. 21:08   7250 Min   717 Commits
+    7  Zeiger raumAuswahl.ts    94c98ad0  16.08. 21:46   7212 Min   652 Commits
+    8  Regelkollision E1        eb713631  16.08. 22:54   7144 Min   595 Commits
+    2  A-13-Veroeffentlichung   82c3e33b  16.08. 23:10   7128 Min   571 Commits
+    3  Tragwerk an die Flaeche  82c3e33b  16.08. 23:10   7128 Min   571 Commits
+    5  versatz-Quittung         82c3e33b  16.08. 23:10   7128 Min   571 Commits
+    6  Seed-Weg der Pruefbuehne 82c3e33b  16.08. 23:10   7128 Min   571 Commits
+    9  §119/§120, 33 Module     73b6443d  21.08. 11:16    642 Min   298 Commits
+
+**Acht der neun sind fünf Tage alt.** Beide Suchmuster, die ein gebräuchliches Wort tragen
+(`Beifang`, `A-13`), habe ich am eingefügten Text nachgeprüft — beide treffen ihren Posten und nicht
+eine fremde Verwendung.
+
+### 2 · Der Fund liegt bei mir
+
+`82c3e33b` ist **mein eigener Commit** und heißt: *„meine eigene Wache-Liste gemessen — von acht
+Yama-Posten liegen mindestens VIER nicht mehr bei Yama."* Die Tabelle darin sagt:
+
+    1 Fach-Gate N-003        entschieden — Yama 12.08., DAUERGELB
+    2 A-13-Veroeffentlichung entschieden — Bedingung gemessen, war LEER (p_v_roofs 0 Zeilen)
+    6 Seed-Weg               entschieden — Yama hat WEG C entschieden, 13.08., drei Auflagen
+    4 W-21L                  verkleinert — erster Schritt beim Planner
+    5 versatz-Quittung       OFFEN
+    7 Zeiger raumAuswahl.ts  offen, stabil
+    8 Regelkollision         praktisch geschlossen, formal offen
+    3 Tragwerk               nicht gemessen
+
+**Seit dieser Messung sind 7128 Minuten und 571 Commits vergangen, und ich habe die Liste in jeder
+Runde unverändert vorgetragen** — einschließlich der drei, die ich selbst als entschieden gemessen
+hatte. Das ist genau der Vorgang, den ich in §272 an fremder Stelle gemeldet habe: eine Tafel, die
+Blockaden meldet, die es nicht gibt. Hier ist die Tafel meine eigene Vorlage.
+
+### 3 · Alle Belege von damals hängen an Zeilennummern — und alle vier sind gewandert
+
+Die Tabelle belegt mit `STATUS Z.3037`, `Z.3042`, `Z.7038-7047`, `Z.16843`, erhoben am Stand
+`8781795b` (16.08. 23:05, 27543 Zeilen). Heute hat die Datei 19376 Zeilen:
+
+    Z.3037   ZEIGT AUF ANDERES      Z.7038   ZEIGT AUF ANDERES
+    Z.3042   ZEIGT AUF ANDERES      Z.16843  ZEIGT AUF ANDERES
+
+**Vier von vier.** §280 hat den Massenfall gemessen; hier trifft er meine eigene Beweisführung für
+die Vorlage an Yama.
+
+**Und die Gegenprobe entlastet vollständig:** Über die **Ankerform** gesucht — Text statt
+Zeilennummer — steht jeder Beleg unverändert in `docs/STATUS.md`:
+
+    "fail closed, nur ticket_testing"    1 Treffer     "VERTRETUNGSENTSCHEID"   6 Treffer
+    "p_v_roofs"                         19 Treffer     "DAUERGELB"             12 Treffer
+    "Eine Quittung liegt nicht vor"      1 Treffer
+
+**Nichts ist verloren, nur die Zeigerform war die falsche.** Das ist der Beleg für §280s Empfehlung,
+an einem Fall, der mich selbst kostet.
+
+### 4 · Heute frisch gemessen, je Posten
+
+| # | Posten | heute gemessen | |
+|---|---|---|---|
+| 5 | **versatz-Quittung** | *„Eine Quittung liegt nicht vor"* steht unverändert; 10 Nennungen von *Quittung*, **keine** meldet eine vorliegende | **OFFEN** |
+| 6 | **Seed-Weg** | Das **Feld** `ballbesitz: —  # ERLEDIGT 13.08.: Yama hat WEG C entschieden, mit drei Auflagen (fail closed, nur ticket_testing, idempotent)` | **entschieden** |
+| 7 | **Zeiger raumAuswahl.ts** | `raumAuswahl.ts:7-8` nennt `Buehne.tsx:147`; dort steht heute `{massElemente}`, das gesuchte `key={\`raum${i}\`}` steht bei **:162** | **offen, unverändert seit 16.08.** |
+| 2 | A-13 | `p_v_roofs` 19× auffindbar, Bedingung wie 16.08. | entschieden (16.08.) |
+| 1 | N-003 | `DAUERGELB` 12× auffindbar | entschieden (16.08.) |
+
+**Nicht neu gemessen** in dieser Runde: 3 (Tragwerk), 4 (W-21L), 8 (Regelkollision), 9 (§119/§120).
+
+### 5 · Zwei meiner eigenen Abschnitte widersprechen sich, und der jüngere hat recht
+
+Ein Block in `docs/STATUS.md` (heute Z.16761-16769) führt die Yama-Posten und sagt zu Seed-Weg:
+*„OFFEN — 'ICH ENTSCHEIDE DAS NICHT … ballbesitz: yama'."* Er stammt aus **`45172ea7`, 14.08. 06:07**
+— ebenfalls von mir.
+
+**Der Widerspruch löst sich am Feld.** Der Seed-Weg-Block trägt beides: oben die Prosa *„ICH
+ENTSCHEIDE DAS NICHT"* (Z.3049-3052) und darunter das Feld *„ERLEDIGT 13.08."* (Z.3053). Mein
+14.08.-Abschnitt zitiert die **Prosa**, mein 16.08.-Abschnitt liest das **Feld**. Das Feld gilt.
+
+Dieselbe Klasse, die ich in §275 dem Integrator und in §272 der Tafel gemeldet habe — hier an mir
+selbst und zweimal in derselben Datei: **wer die Begründung liest statt des Feldes, liest den
+Zustand von vorgestern.**
+
+### 6 · Ein eigener Fehlgriff, gefangen
+
+Ich habe zuerst `raumAuswahl.ts:147` und `:162` gemessen — beide leer, denn die Datei hat **100
+Zeilen**. Der Zeiger steht *in* `raumAuswahl.ts:7-8` und nennt **`Buehne.tsx:147`**. Richtige
+Messung, falsche Eingabe; dieselbe Klasse wie §110, wo ich `GuidedView`-Zeilen gegen `studioDaten`
+maß. **Bei einem Zeiger in einem Kommentar muss die Zieldatei aus dem Zitat kommen, nicht aus der
+Datei, in der er steht.**
+
+### 7 · Ball
+
+**Yama** — die Liste kann kürzer werden. Heute gemessen und belegbar:
+
+    bleiben offen :  5 versatz-Quittung          (keine Quittung im ganzen Bestand)
+                     7 Zeiger raumAuswahl.ts     (147 statt 162, seit 7212 Minuten)
+                     3 Tragwerk an die Zeichenflaeche  (nie gemessen)
+    entschieden   :  1 Fach-Gate N-003           (Yama 12.08., DAUERGELB)
+                     2 A-13-Veroeffentlichung    (Bedingung leer)
+                     6 Seed-Weg der Pruefbuehne  (Yama 13.08., WEG C, drei Auflagen)
+    verkleinert   :  4 W-21L                     (erster Schritt beim Planner)
+    formal offen  :  8 Regelkollision            (beide Regeln stehen, das Tor erzwingt eine)
+    frisch        :  9 §119/§120, 33 Module      (642 Minuten)
+
+Ich streiche nichts selbst — die Liste steht in **Ihrer** Anweisung, und sie zu kürzen ist Ihre
+Entscheidung, nicht meine. Ich lege die Messung vor.
+
+**In eigener Sache:** Ab hier prüfe ich die Vorlage an Yama nicht nur auf frische Zahlen, sondern
+auch darauf, **ob der Posten noch existiert**. Eine Zahl frisch zu messen und den Posten nicht,
+war die Lücke.
