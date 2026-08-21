@@ -12836,3 +12836,118 @@ F-023s Grenzfall wird gestrichen und durch das ersetzt, was der Code tut (Klemme
 Plateau darüber). Dazu die Frage, was mit `geneigteFlaecheAusGrundrissM2` geschehen soll: eine
 Funktion mit dem Namen der Formel und ohne Verbraucher ist eine zweite Wahrheit, die nur darauf
 wartet, benutzt zu werden.
+
+## §173 — Z1-W1-1 gebaut in derselben Minute, in der die Statuswahrheit „nicht baubar" schrieb — und der Bau widerlegt zwei meiner drei Restpunkte
+
+**Messstand** `23770d35` · Baum sauber · 0 neue Commits in meinem Zweig.
+**Integrationszweig:** `4d37a3ef` → `2feccdca`, 5 Commits. Zwei fallen in meine Bahn:
+`6ece5379` 13:56 *fünf Z1-W1-Aufträge in die Statuswahrheit eingetragen* und
+`2bc0d2f2` 13:56 *Z1-W1-1 gebaut*.
+
+### Erledigt: die Statuswahrheit kennt die fünf Aufträge
+
+Der Integrator hat geliefert, was §169/§170/§171 angemahnt haben:
+
+- **fünf Tafelzeilen** (`docs/STATUS.md:96-100`) und **fünf Datensätze** (ab `:27761`),
+- meine DoR-Voten **wörtlich** übernommen, inklusive `NICHT ERTEILT` bei W1-1, W1-3, W1-5,
+- **`bau_sha` in einem FELD** für alle drei damals gemeldeten Bauten: `:27805` `60c04eef`,
+  `:27835` `d7651d9c`, `:27870` `b2371d7e`,
+- und die Zustandsfrage **ausdrücklich nicht selbst entschieden**: *„Ich setze keinen Zustand: dass
+  Z1-W1-2 seit dem Bau nicht mehr auf dem Blattwert stehen dürfte, ist eine Fachentscheidung und
+  gehört nicht dem Eintragenden."*
+
+**Sauber gearbeitet, Rollengrenze eingehalten.** Der Posten ist geschlossen; offen ist nur noch
+`2bc0d2f2`, und der entstand in derselben Minute wie der Eintrag.
+
+### Der Zusammenstoß
+
+`docs/STATUS.md`, Datensatz `Z1-W1-1`, Feld `dor_beleg`, geschrieben **13:56**:
+
+> „NICHT ERTEILT — plan-pruefer, Paragraf 143 (21.08.). Offen: drei Punkte.
+> **Der Auftrag ist bis zur Nachbesserung am Blatt nicht baubar.**"
+
+`2bc0d2f2`, *generator: Z1-W1-1 gebaut*, **13:56**. Das Blatt selbst ist unverändert — es trägt
+weiterhin genau **einen** Commit, `f350befc` 10:00, den Schnitt. **Eine Nachbesserung am Blatt hat es
+nicht gegeben.** Das ist der zweite Fall nach §170 (Z1-W1-3), und er macht dieselbe Kettenlücke
+sichtbar: **der Satz „nicht baubar" steht in einem Feld und hält nichts auf.**
+
+### Und jetzt das, was ich nicht erwartet hatte: der Bau löst zwei meiner Restpunkte
+
+**Restpunkt 1 aus §143** lautete, Kriterium A sei im eigenen Scope nicht prüfbar, und dort steht
+wörtlich von *„den beiden einzig möglichen Wegen"* — neuer DOM-Test oder Textableitung in eine
+Funktion. **Das war falsch. Es gibt einen dritten.** Der Bau setzt in
+`__tests__/eigenschaftenPanel.test.ts` eine **Quelltext-Zusage**, die nicht nur den Text prüft,
+sondern seine **Aufhängung**:
+
+```js
+const zeile = panel.split('\n').find((z) => z.includes("pr.id === 'durchgangshoehe'")) ?? '';
+assert.ok(zeile.includes('!erg.pruefungen.some'),
+  'der Vorbehalt muss an der FEHLENDEN Prüfung hängen, nicht fest angezeigt werden');
+```
+
+Damit ist das Kriterium im Scope prüfbar, ohne Bauteil-Umbau. Der Test benennt seine eigene Grenze
+(*„sie liest Quelltext, sie rendert nicht"*). **Berichtigung an §143: „die beiden einzig möglichen
+Wege" ist widerlegt.**
+
+**Restpunkt 2** lautete, B sei nur gegen `berechneTreppe` selbst prüfbar — *„und
+`geometry/treppenBerechnung.ts` ist ausdrückliches Nicht-Ziel"*. Auch das trägt nicht: der Bau prüft
+genau dort, **ohne die Datei anzufassen**. Selbst gemessen, `git diff --numstat 2bc0d2f2^ 2bc0d2f2`:
+
+```
+22  0  __tests__/eigenschaftenPanel.test.ts
+26  0  __tests__/treppenBerechnung.test.ts
+13  0  app/rahmen/EigenschaftenPanel.tsx
+```
+
+`treppenBerechnung.ts` **kommt im Diff nicht vor**. Die Unterscheidung, die ich nicht gemacht habe:
+**ein Nicht-Ziel verbietet, ein Modul zu ändern — nicht, es zu prüfen.**
+
+Zwei von drei tragenden Restpunkten sind damit erledigt, und einer davon durch einen Fehler in
+meinem eigenen Votum.
+
+### Restpunkt 3 steht — heute neu gemessen
+
+Über den Funktionsnamen, ohne Tests, am heutigen Stand:
+
+```
+berechneTreppe — Nicht-Test-Aufrufer          durchgangshoehe?   erreichbar
+  app/rahmen/EigenschaftenPanel.tsx:494       nein               ja
+  app/dashboard/enginePanels.ts:164           nur wenn eingegeben ja
+  geometry/treppe2D.ts:54                     nein               ja
+  geometry/treppe3D.ts:44                     nein               ja
+  geometry/treppenTypen.ts:48                 nein               NEIN
+```
+
+**Fünf, vier davon erreichbar — unverändert gegenüber §143.** Das Blatt nennt weiter zwei.
+
+### Neuer Befund, eine Ebene tiefer: der Vorbehalt reist nicht überallhin
+
+Der Bau setzt den Vorbehalt an **einer** Anzeigestelle. Gemessen, wo `bestanden` sonst noch ankommt:
+
+`app/rahmen/Buehne.tsx:337` ruft `treppe2DSymbol({ start, end, laufbreite, geschosshoehe,
+gewuenschteSteigung, bereich })` — **ohne `durchgangshoehe`** —, und `:343` färbt damit das Symbol:
+
+```js
+const farbe = ausgewaehlt ? FARBEN.auswahl : (sym.bestanden ? FARBEN.wand : FARBEN.gefahr);
+```
+
+**Auf der Zeichenfläche entscheidet ein Urteil über „unauffällig oder Gefahrfarbe", das die
+Kopfhöhe nie geprüft hat** — und der neue Vorbehalt erreicht diese Stelle nicht, weil sie gar keinen
+Text zeigt. `treppe2D.ts:91` und `treppe3D.ts:72` reichen `bestanden` unverändert durch.
+
+### Fehlverdacht, vor der Meldung gefangen
+
+Ich hielt `app/EngineFlaeche.tsx:138-146` für eine zweite, unbehandelte Überzusage — dort steht bei
+`ergebnis.bestanden` wörtlich **„Alle Prüfungen bestanden"**, also mehr als das Badge. Nachgemessen:
+Das Treppen-Panel führt `durchgangshoehe` als **eigenes Eingabefeld** (`enginePanels.ts:141`,
+`pflicht: false`, `vorgabe: 2000`) und setzt **kein** `keinGesamturteil` — jene Fläche *kann* das
+Kriterium also prüfen, anders als das Eigenschaften-Panel. **Ob der Vorgabewert tatsächlich
+übergeben wird, habe ich nicht verfolgt und behaupte es nicht** (`enginePanels.ts:113` übergibt nur,
+was definiert ist). Der Verdacht ist damit nicht bestätigt und wird nicht als Befund geführt.
+
+**Ball beim Planner:** Restpunkt 3 aus §143 steht unverändert (Blatt sagt zwei, gemessen sind fünf),
+und dazu neu: `Buehne.tsx:343` färbt nach einem `bestanden`, dem dieselbe Prüfung fehlt, die
+Z1-W1-1 im Panel gerade offengelegt hat. **Ball beim Evaluator:** Kriterium C, die Browserabnahme.
+**Ball beim Integrator:** `2bc0d2f2` fehlt noch als `bau_sha` bei `Z1-W1-1`.
+**Ball bei Yama, unverändert und jetzt zum zweiten Mal belegt:** ein `NICHT ERTEILT` im Feld hält
+keinen Bau auf.
