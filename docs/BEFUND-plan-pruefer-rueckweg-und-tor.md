@@ -21451,3 +21451,99 @@ also in einem Zug entscheidbar.
 **Yama**: Y-6 blockiert weiterhin W0-5.
 
 **Nicht geprüft:** W0-5, W0-6.
+
+## §259 · DoR Z2-W0-5 — ERTEILT. Und ich muss meinen eigenen §257 berichtigen: Y-6 blockiert ihn nicht
+
+**Messstand.** Mein HEAD `e52b42bb`, Baum sauber. Integrationszweig `314ea991` (21.08. 20:17),
+3 neue Commits. Ballortung **44 → 43**. Basis-Stand der Prüfung: **`cb500067`**, wie im Blatt
+genannt — abweichend von den übrigen fünf Aufträgen. Gemessen 21.08. 20:19–20:24.
+
+### 1 · §257 hat gewirkt — und dabei einen Fehler von mir mittransportiert
+
+`314ea991`: *„Z2-W0-3 nachgezogen und **Y-6 als Blockade an Z2-W0-5 vermerkt**"*. W0-3 trägt jetzt
+`ballbesitz: generator`. Der W0-5-Block trägt seither ein Feld `blockiert_durch:`, das **meinen §257
+wörtlich zitiert**:
+
+> *„Y-6, bei Yama. Paragraf 257 wörtlich: ‚Y-6 blockiert W0-5 ausdrücklich — **das Blatt sagt es
+> selbst.** Solange kein Permission-Item Planner entschieden ist, kann das Routen-Gate für 61 Routen
+> nicht gebaut werden.'"*
+
+Handwerklich ist der Eintrag vorbildlich: Er trennt Blockade von Ballwechsel (*„die Blockade ist ein
+eigener Umstand und KEIN Ballwechsel — sie würde sonst die ausstehende Prüfung verdecken"*) und
+kennzeichnet sich als *„TRANSPORT, keine Bewertung"*.
+
+**Der Inhalt stammt von mir, und er ist falsch.**
+
+### 2 · Die Berichtigung, gemessen
+
+Ich habe in §257 geschrieben *„das Blatt sagt es selbst"* — gemeint war **W0-3s** Abgrenzungsfeld:
+
+    W0-3, Kopf:  abgrenzung: das Routen-Permission-Gate für /planner/* (61 Routen)
+                 ist Z2-W0-5 und wartet auf Y-6 (Permission-Item)
+
+**W0-5 sagt das Gegenteil**, in seinen Nicht-Zielen:
+
+    W0-5, Z.40:  Nicht-Ziele: … keine Web-Routen (`/planner/*` = Z2-W0-3/Y-6); keine Migration.
+
+**Zwei Blätter derselben Welle schieben einander denselben Gegenstand zu.** W0-3 sagt „das Routen-Gate
+ist W0-5", W0-5 sagt „die Web-Routen sind W0-3/Y-6". Ich habe die eine Seite gelesen, „das Blatt sagt
+es selbst" geschrieben und die andere nicht aufgeschlagen — **derselbe Fehler wie §252 (Pfad
+geraten) und §256 (Rumpf statt Aufrufweg): ich habe eine Aussage übernommen statt sie zu prüfen.**
+
+**Und sachlich braucht W0-5 kein Permission-Item:** Es baut `darfMitarbeiterSehen(employeeId)` und
+`istZustaendigFuerItem/Plan/Kunde()` auf `planner_item_employees` und der Vorgesetztenkette
+(`resolveReviewer`) — beides existiert im Code. Ein `permission:`-Item kommt darin nicht vor.
+
+**Folge: Das Feld `blockiert_durch:` am W0-5-Block beruht auf meiner ungenauen Meldung und gehört
+berichtigt.** Ich melde das, weil ein falsches Blockadefeld einen Auftrag stillegt, den niemand
+stillegen wollte.
+
+### 3 · DoR Z2-W0-5 — die Belege
+
+| Beleg | frisch gemessen am Stand `cb500067` | |
+|---|---|---|
+| Basis-Stand `cb500067` | existiert: generator, 21.08. 19:53, *„S-1/11"* | **trifft** |
+| A-1 `routes/api.php:281` | `Route::get('/employees/{employee}/work', [PlannerEmployeeApiController::class, …])` | **trifft** |
+| A-2 `routes/api.php:318` | `Route::post('/customer-images/upload', [PlannerMobileCustomerImageController::class, …])` | **trifft** |
+| A-3 `routes/api.php:340` | `Route::post('/items/{item}/master-sets/{masterSet}', [PlannerMasterSetController::class, …])` | **trifft** |
+| A-4 `routes/api.php:356` | `Route::get('/items/{item}/materials', [PlannerItemMaterialController::class, …])` | **trifft** |
+| Vorbildlicher Baustein `PlannerEmployeeApiController.php:1726` | `->whereExists(… from('planner_item_employees as pie') … where('pie.employee_id', $employeeId))` | **trifft** |
+
+**Sechs von sechs.** Besonders der letzte zählt: Das Blatt baut nicht auf der grünen Wiese, sondern
+zeigt ein **im selben Controller vorhandenes, korrektes Muster** und verlangt, es an vier Stellen
+anzuschließen — mit Kriterium E (*„Genau EIN Baustein, vier Aufrufer (grep) — keine vier Kopien"*),
+das die Wiederverwendung prüfbar macht.
+
+### 4 · Der Operand ist benannt und sauber behandelt
+
+`Z.42-46` nennt ihn ausdrücklich: *„**Wer darf fremde Mitarbeiter sehen?**"* — und löst ihn nicht
+still, sondern als **gekennzeichnete Arbeitsannahme**: die im Code bereits angelegte Regel (self /
+Vorgesetztenkette / Admin), *„ausdrücklich als Annahme gekennzeichnet, im Baubericht wiederholt;
+will Yama eine andere Regel, ist das Y-Posten und ändert nur den Baustein."*
+
+**Das ist genau die Form, die `CLAUDE.md` für fehlende Operanden verlangt** — kein stiller
+Automatismus, sondern ein benannter, begrenzter und widerrufbarer Vorgriff.
+
+### 5 · Votum
+
+**DoR Z2-W0-5 — ERTEILT. Restpunkte: keine.**
+
+Ziel, Basis-SHA, Ist-Beleg mit sechs geprüften Fundstellen, Scope mit Nicht-Zielen, Kanten mit
+benanntem Operanden, **sechs** Kriterien A–F, vier rote P1-Kriterien und ein Rückweg mit benannter
+Entdeckung liegen vor.
+
+**Ein Hinweis zur Reihenfolge**, kein Restpunkt: Das Blatt verlangt selbst
+*„fachliche_gegenprobe: security-reviewer — **VOR dem Bau**: Gegenprobe A-1..A-4 wie bei S-1/2/5"*.
+`114b98f6` meldet diese Gegenprobe inzwischen als gefahren und bestätigt; ich habe **sie nicht
+geprüft**, nur ihre Existenz gesehen.
+
+### 6 · Ball
+
+**Integrator**: Das Feld `blockiert_durch:` am W0-5-Block berichtigen — es stammt aus meiner
+ungenauen Formulierung in §257, nicht aus W0-5.
+**Planner/Dirigent**: Der Widerspruch zwischen W0-3s `abgrenzung:` und W0-5s Nicht-Zielen gehört
+aufgelöst — **wer baut das Routen-Gate für `/planner/*`?** Beide Blätter zeigen auf das jeweils
+andere. Das ist der eigentliche Ort, an dem Y-6 wirkt.
+**Generator**: W0-5 ist von meiner Seite frei.
+
+**Nicht geprüft:** W0-6.
