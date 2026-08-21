@@ -14058,3 +14058,101 @@ A-08-Tafelzeile, deren Zustand ich dort gegen fünf zustandsfreie Blöcke gestel
 
 *(Der Befund aus §184 bleibt unberührt: B5 prüft die Form der Botschaft, nicht die Messung. Die 89
 Blätter, ihr Alter, die neun offenen und die A-08-Lage sind gezählt und stehen.)*
+
+## §185 — Posten (e): §172s offene Frage beantwortet — und ein 120°-Dach besteht die Sparrenbemessung
+
+**Messstand** `927a3105` · Baum sauber · 0 neue Commits; der Integrationszweig steht die dritte Runde
+unverändert auf `7a82ecfb`, mit denselben drei ungesicherten Einträgen.
+
+In §172 habe ich eine Frage ausdrücklich **offen gelassen** und nicht behauptet: *„ob die
+Schemagrenze `[0, 89]` auf dem Live-Weg greift, habe ich nicht verfolgt."* Das hole ich hier nach.
+
+### Die Antwort: die Grenze greift — aber nur auf einem von zwei Wegen
+
+```
+SZENENWEG                                                        gedeckelt bei 89
+  app/rahmen/EigenschaftenPanel.tsx:258   <input type="number" min={0} max={89} …>
+  domain/validation.ts:197 / :248         z.number().min(0).max(89)
+  main.tsx:62                             sceneDocumentSchema.safeParse(migriereSzene(roh))
+
+DASHBOARD-WEG                                                    UNGEDECKELT
+  app/dashboard/enginePanels.ts:182  { schluessel: 'neigungGrad', … pflicht: true, vorgabe: 38 }   <- kein min, kein max
+  app/EngineFlaeche.tsx:85           type="number" inputMode="numeric"                            <- kein min, kein max
+  app/dashboard/enginePanels.ts:437  neigungGrad: zahl('neigungGrad') ?? 0                        <- jede endliche Zahl
+```
+
+Alle drei Module sind **erreichbar** (27er-Liste neu gefahren), und die Engine ist verdrahtet:
+`enginePanels.ts:227` ruft `berechneSparren(alsSparrenEingabe(werte))`, registriert als
+`engine-sparren` (`app/tools/faehigkeiten.ts:83`).
+
+### Durchgerechnet — und der Ausgang bei 120° ist der Befund
+
+Eingabe: Breite 10 m, Sparrenabstand 0,8 m, Querschnitt 60 × 200 mm, C24, Schneelast 0,65:
+
+```
+ Grad     cos      Sparrenlänge mm    AusnBiegung     AusnDurchbg.   bestanden
+    0   1.0000               5000         0.7504          1.2607     nein
+   38   0.7880               6345         0.7951          1.7163     nein
+   60   0.5000              10000         0.9141          3.1960     nein
+   85   0.0872              57369         5.2438        105.1860     nein
+   89   0.0175             286493        26.1873       2623.2473     nein
+   90   6.1e-17     8.2 · 10^19 mm    7.5 · 10^15     2.1 · 10^32    nein
+  120  -0.5000               5000        -0.2285         -0.3995     **JA**
+```
+
+**Ein „Dach" mit 120° Neigung besteht die Bemessung — mit besseren Werten als ein reales 38°-Dach,
+das durchfällt.**
+
+### Warum
+
+`sparrenBerechnung.ts:112` fängt die Division sauber ab:
+
+```ts
+const lsMm = cosA > 0 ? lhMm / cosA : lhMm;   // Sparrenlänge (geneigt)
+```
+
+Bei 120° ist `cosA = −0,5`, der Schutz greift, und die Sparrenlänge fällt auf die **Horizontalspanne**
+zurück. Neun Zeilen später aber:
+
+```ts
+:121  const wPerp = wDesign * cosA;   // kN/m = N/mm
+```
+
+Dort wird **weiter mit dem negativen Kosinus multipliziert**. `M`, `sigma`, `delta` werden negativ —
+und das Urteil lautet
+
+```ts
+:148  bestanden: ausnBiegung <= 1 && ausnDurch <= 1,
+```
+
+**Eine negative Ausnutzung ist kleiner als eins.** Der Schutz an `:112` verhindert den Überlauf und
+lässt das Vorzeichen durch; die Abnahme an `:148` fragt nach einer Obergrenze und nicht nach einem
+Bereich.
+
+Bei **90°** greift der Schutz übrigens **nicht**: `Math.cos(π/2)` ist in Gleitkomma `6,1·10⁻¹⁷`,
+also `> 0`. Das Ergebnis ist absurd (8,2·10¹⁹ mm Sparren), aber **sichtbar** — es fällt durch. Der
+gefährliche Fall ist nicht der absurde, sondern der **stille**.
+
+### Die Klasse, und was §172 damit verbindet
+
+Dieselbe Klasse wie §136 (entartete Wand → sichere Himmelsrichtung), §141 (`|| 1` → 90°), §160
+(F-021 → 1,63·10¹⁷ m), §165 (500-m-Gaube besteht), §172 (F-023 ohne Absage): **ein Schutz, der einen
+plausiblen Wert liefert statt zu verweigern.** Neu ist die Richtung — hier wird der Wert nicht nur
+plausibel, sondern **besser als der richtige**.
+
+Und beide Lücken hängen am selben Fehlen: **es gibt keine Bereichsprüfung für die Dachneigung.**
+§172s Band 85–89° trifft die **Fläche** (Faktor bis 57,3), die Lücke über 90° trifft die
+**Bemessung**. Die Schemagrenze `[0, 89]` deckt den einen Weg und nicht den anderen.
+
+### Was ich NICHT tue
+
+Ich schlage keine Zahl vor. Eine Bereichsgrenze für die Dachneigung ist eine **Tragwerks- und
+Fachentscheidung**; `CLAUDE.md` verbietet ausdrücklich, so etwas still zu automatisieren, und die
+Sparren-Vorbemessung ist genau der Ort, an dem eine erfundene Grenze schlimmer wäre als keine. Ich
+melde die Messung.
+
+**Ball beim Planner:** eine Bereichsprüfung für `neigungGrad` auf dem Dashboard-Weg — und die
+Entscheidung, ob `bestanden` an `sparrenBerechnung.ts:148` einen **Bereich** statt einer Obergrenze
+prüfen soll. **Ball bei Yama** als Fach-Gate: die Grenze selbst (0…85? 0…89? Absage darüber?) ist
+eine Fachfestlegung, kein Programmierdetail — sie gehört neben `N-003` und `W-21L` auf die Liste.
+**Damit ist §172s offene Frage geschlossen.**
