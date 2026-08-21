@@ -28,9 +28,35 @@ export const T = {
   // (`.18`, `.30`, der weisse). Ihre Angleichung waere eine **sichtbare** Farbaenderung und bleibt
   // Yamas Entscheidung. Ein Token fuer einen einzigen Aufruf ist ausserdem keine Rolle, sondern eine
   // Umbenennung.
-  /** Ruhende Flaeche: Karte, Plakette, Panel. 10 Fundstellen am 26.07. */
+  /**
+   * Ruhende Flaeche: Karte, Plakette, Panel.
+   *
+   * **Hier stand "10 Fundstellen am 26.07." — die Zahl ist abgelaufen, und ihr Bruch ist
+   * dokumentiert:** AUF-38 Scheibe 2 hat einen Teil der Verwendungen in die Stilschicht
+   * verschoben (`var(--hp-schatten-flach)`). Dieselbe Verschiebung hat schon die ZUSAGE in
+   * `__tests__/elevationTokens.test.ts` rot gemacht; sie wurde daraufhin von der ANZAHL auf die
+   * EIGENSCHAFT umgestellt ("die Rolle wird benutzt, der Rohwert nirgends") — dieser Kommentar
+   * wurde dabei uebersehen und trug die alte Zahl weiter.
+   *
+   * **Deshalb steht hier die Eigenschaft und der Messbefehl, nicht mehr die nackte Zahl.**
+   * Eine Anzahl bricht bei jeder Verschiebung; die Eigenschaft haelt:
+   *
+   *     Rolle in TS/TSX:  T.schattenFlach   (ohne Kommentare, ohne diese Datei)
+   *     Rolle in der CSS: var(--hp-schatten-flach)
+   *     Rohwert rgba(...) darf an KEINER der beiden Stellen stehen — das ist die Zusage.
+   *
+   * Gemessen 21.08.2026 mit der Methode des Waechters: **5** in TS/TSX, **7** in der CSS.
+   * Die Zahlen sind eine Momentaufnahme und kein Versprechen; verbindlich ist die Zusage.
+   */
   schattenFlach: '0 1px 2px rgba(28,40,48,.05)',
-  /** Angehobene Flaeche: Karte unter dem Zeiger. 3 Fundstellen am 26.07. */
+  /**
+   * Angehobene Flaeche: Karte unter dem Zeiger.
+   *
+   * Hier stand "3 Fundstellen am 26.07."; nachgemessen 21.08.2026 sind es **weiterhin 3** in
+   * TS/TSX und **0** in der CSS. Die Zahl stimmt also noch — sie wird trotzdem ersetzt, denn
+   * dass sie zufaellig gehalten hat, macht sie nicht haltbarer als ihre Nachbarin darueber.
+   * Es gilt dieselbe Zusage: Rolle benutzt, Rohwert nirgends.
+   */
   schattenGehoben: '0 10px 34px rgba(28,50,55,.10)',
 } as const;
 
