@@ -12951,3 +12951,110 @@ Z1-W1-1 im Panel gerade offengelegt hat. **Ball beim Evaluator:** Kriterium C, d
 **Ball beim Integrator:** `2bc0d2f2` fehlt noch als `bau_sha` bei `Z1-W1-1`.
 **Ball bei Yama, unverändert und jetzt zum zweiten Mal belegt:** ein `NICHT ERTEILT` im Feld hält
 keinen Bau auf.
+
+## §174 — Posten (d): drei Blätter, drei tote Zeiger — und jedes hat sich selbst umgebracht
+
+**Messstand** `b3c6ac29` · Baum sauber · 0 neue Commits · Zweigprobe live: `auto/hausplaner-integration`
+unverändert `2feccdca`. Nichts Neues **committet**, also Vorratsprüfung, Posten **(d)**.
+
+Gegenstand: die fünf `Z1-W1`-Blätter, alle mit `basis_sha: 11f7c4c3`.
+
+```
+Basis 11f7c4c3   21.08. 09:54
+Alter             248 Minuten (4 h 8 min)
+Commits gesamt     96
+```
+
+Nach der Regel aus §167 ist die Gesamtzahl die falsche Zahl. Gemessen, was die **Trägerdateien**
+berührt hat:
+
+```
+geometry/dachGeometrie.ts        3 Commits   153 -> 175 Z.   <- Träger von W1-2, W1-3 UND W1-4
+geometry/kontur.ts               1 Commit    175 -> 190 Z.
+app/rahmen/EigenschaftenPanel.tsx 1 Commit    563 -> 576 Z.
+geometry/treppenBerechnung.ts    0
+renderers/three-d/szene.ts       0
+geometry/dachWerte.ts            0
+```
+
+**Drei von 96 Commits** treffen den gemeinsamen Träger. Sie genügen.
+
+### Die drei Zeiger — gegen den HEAD-Blob geprüft, nicht gegen den Arbeitsbaum
+
+Alle drei Blätter tragen **genau einen** Commit (`f350befc` 10:00, den Schnitt), alle drei Zeiger
+waren am eigenen Basis-Stand **zeichengenau richtig**:
+
+| Blatt | Zeiger | am Basis | heute an derselben Zeile |
+|---|---|---|---|
+| Z1-W1-2 | `dachGeometrie.ts:134-146` | `case 'walm': {` | `}` |
+| Z1-W1-3 | `dachGeometrie.ts:39-45` | `function polygonM2(poly: readonly P[])` | `function normAz(grad: number)` |
+| Z1-W1-4 | `dachGeometrie.ts:13` | `import { sichererCos } from '../../utils/dachWerte';` | der Z1-W1-4-Kommentar |
+
+**Alle drei zeigen auf etwas anderes.** 248 Minuten Haltbarkeit.
+
+### Die neue Klasse: die Drift ist selbst verschuldet
+
+In §109, §110, §166, §167 und §168 haben **fremde** Commits die Zeiger verschoben. Hier nicht:
+`geometry/dachGeometrie.ts` wurde in diesen drei Commits von **genau den drei Bauten** verändert,
+die diese drei Blätter beauftragt haben. **Der Auftrag hat seinen eigenen Zeiger erschlagen, indem
+er ausgeführt wurde.**
+
+Am schärfsten bei **Z1-W1-3**: der Auftrag verlangte, die private `polygonM2`-Kopie zu entfernen.
+Der Bau hat sie entfernt — und damit zeigt `:39-45` nicht ins Leere, sondern auf `normAz`, eine
+völlig andere Funktion, die nachgerückt ist. Wer das Blatt heute liest, um den Bau zu prüfen, liest
+eine Ortsangabe, die auf einen Fremden zeigt.
+
+Das ist keine Nachlässigkeit von irgendjemandem, sondern eine **Bauart**: ein Blatt, das eine
+Zeilennummer als Ist-Beleg führt, wird durch seine eigene Erfüllung ungültig. Die Abhilfe steht
+längst in `docs/ARBEITSREGELN.md` — **nicht die Zeile, sondern die Überschrift** —, und ich habe sie
+mir in §167 selbst auferlegt.
+
+### Zwei eigene Fehler, beide vor der Meldung gefangen
+
+**1. Meine Pfaderkennung hat ein Blatt für leer erklärt, das nicht leer ist.** Mein Muster verlangte
+ein führendes Verzeichnis aus einer festen Liste (`app|geometry|renderers|domain|store|utils`).
+Ergebnis: *„Z1-W1-5 — 0 Modulpfade genannt."* Fangprobe: das Blatt nennt **vier** —
+`projection/raumProjektion.ts:91`, `domain/scene.types.ts:109`, `domain/validation.ts:46`,
+`app/rahmen/EigenschaftenPanel.tsx:324`. `projection/` fehlte in meiner Liste, und zwei Nennungen
+stehen ohne Verzeichnis da. **Grundmenge gegen die Frage prüfen, nicht gegen das Verfahren.**
+
+**2. Ich habe „heute" aus dem Arbeitsbaum gelesen statt aus dem HEAD-Blob.** Damit meldete meine
+erste Erhebung `raumProjektion.ts:91` als **GEWANDERT**. Aufgefallen ist es an einem Widerspruch, der
+nicht sein kann: **0 Commits auf die Datei, aber anderer Inhalt.** Aufgelöst:
+
+```
+BASIS 11f7c4c3 : bauteil_typ: wandVon.get(kante.wallId)?.construction?.insulationType ?
+HEAD  2feccdca : bauteil_typ: wandVon.get(kante.wallId)?.construction?.insulationType ?   <- identisch
+Arbeitsbaum    : // **Z1-W1-1..5 / K-1 · ehrlicher Ausweis 21.08.:** dieser Ternary lie…
+```
+
+Blob am Basis und am HEAD sind **derselbe** (`f0660fb8…`). **Der Zeiger trifft.** Der Unterschied kam
+aus ungesicherter Arbeit. Von den vier Zeigern in Z1-W1-5 treffen damit **alle vier**.
+
+### Flüchtiger Befund — Beleg ist der Zeitstempel, er läuft ab
+
+Beim Auflösen des Widerspruchs gemessen: der **gemeinsame Integrations-Checkout**
+(`/Users/yamanuri/Documents/ticket`, HEAD `2feccdca`) hat **keinen sauberen Arbeitsbaum**:
+
+```
+24  0  docs/STATUS.md
+30  0  resources/planner/hausplaner/__tests__/raumProjektion.test.ts
+11  0  resources/planner/hausplaner/projection/raumProjektion.ts
+```
+
+Zwei Rollen zugleich, unversichert. Der `docs/STATUS.md`-Teil ist der **Integrator**, und er trägt
+genau meinen §170-Befund nach — wörtlich: *„DER BAU LIEGT GEGEN EIN VERWEIGERTES VOTUM … Ich trage
+den SHA ein, WEIL DER BAU EINE TATSACHE IST."* Die beiden anderen sind der **Generator** an
+`Z1-W1-5`; der Kommentar im Arbeitsbaum nennt sich selbst *„Z1-W1-1..5 / K-1 · ehrlicher Ausweis
+21.08."*.
+
+**Damit ist Z1-W1-5 der dritte Auftrag, an dem gegen ein `NICHT ERTEILT` gebaut wird** (§147),
+nach Z1-W1-3 (§170) und Z1-W1-1 (§173). Vier von fünf Aufträgen dieser Welle sind gebaut oder im
+Bau; drei davon tragen mein verweigertes Votum. Ich melde die Lage, **nicht** den Inhalt der
+ungesicherten Arbeit — die ist nicht committet und damit nach der Regel der zwei Haltbarkeiten
+kein Beleg, sondern eine Momentaufnahme.
+
+**Ball beim Planner:** drei Blätter führen Ortsangaben, die ihre eigenen Bauten ungültig gemacht
+haben — Feldname oder Überschrift statt Zeilennummer, sonst wiederholt sich das bei jeder Welle.
+**Ball bei Yama, jetzt dreifach belegt:** ein `NICHT ERTEILT` hält keinen Bau auf.
+**Kein Ball beim Integrator** — er arbeitet gerade an genau dem, was ich gemeldet habe.
