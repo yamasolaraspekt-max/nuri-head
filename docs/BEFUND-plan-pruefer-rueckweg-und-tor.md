@@ -24291,3 +24291,107 @@ nachfahren will, findet den Schnitt bei **16.08. 19:35**, nicht bei 19:2x.
 **Unverändert offen beim Planner:** A-39s vier widerlegte Proben (§287), Schreibschutz der Zieldatei
 (§278), `…w0-11-ids-callback-csrf.md:22` (§276), die Rundungsfrage (§277), der zweite Pfad in der
 Wache-Anweisung (§279).
+
+## §289 · Ein fremder Befund schärft meine Meldung an Yama — und ein Zeilenzeiger, der seit 33 Tagen trifft, korrigiert meine eigene Regel aus §285
+
+**Messstand.** HEAD und Zweig beide `a2501764`, Rückstand 0, Baum sauber. Ballortung beidseitig
+**1** (P-02, VORLAGE) und **35** — nichts in meiner Bahn. Gemessen 21.08. 22:26–22:31.
+
+### 1 · Der fremde Befund, zitiert statt nachgebaut
+
+`ada3b645` (generator, `docs/S-1-ANSCHLUSSMESSUNG.md`): *„von 281 verdaechtigen Exporten sind SIEBEN
+wirklich tot."* Seine Dreiteilung, sein Verdienst:
+
+    281 Exporte ohne Verbraucher ausserhalb ihrer Datei
+    240  davon nur von Tests benutzt          -> "Ordnung, kein Mangel"
+     41  von niemandem, auch keinem Test
+     34    davon in der EIGENEN Datei benutzt  -> nur zu weit exportiert
+      7    auch dort ungenutzt                 -> WIRKLICH TOT
+
+Und sein Satz dazu: *„Wer die 281 meldet, meldet Rauschen; wer die 7 meldet, meldet etwas."*
+
+### 2 · Seine Linse an meine Meldung gelegt — und sie schärft sie
+
+§283 hat Yama gemeldet: *„sieben exportierte Tragwerks-Funktionen mit null Produktivverbrauchern."*
+Das war richtig und zu grob. Nach seiner Dreiteilung gemessen:
+
+    schifterAusFlaeche · schifterMengen · schifterMengenAusListe
+    sparrenTeilstuecke · istSicherTrennbar
+    sparrenPositionenU · analysiereAuswechslung
+      -> alle SIEBEN: 0 Produktivverbraucher, aber je 1-2 Testverbraucher   = Klasse "nur Tests"
+
+**Kein einziger meiner sieben ist tot.** Alle sind geprüft und nur nicht verdrahtet — nach seiner
+eigenen Einordnung *„Ordnung, kein Mangel"*. **Für Yamas Posten 3 ist das keine Kleinigkeit:** Die
+Frage *„gehört Tragwerk an die Zeichenfläche?"* steht damit nicht vor verwaistem Code, sondern vor
+**testgedecktem, unverdrahtetem** Code — eine deutlich bessere Ausgangslage als meine §283-Fassung
+nahelegte.
+
+### 3 · Die eine wirklich tote hatte ich im Blick und nicht markiert
+
+`effektiverSparrenabstandM` (`resources/planner/hausplaner/geometry/dachformVorlagen.ts:394`) steht
+in §283s Export-Aufstellung — und **nicht** in meiner Sieben-Liste. Der Generator führt sie unter
+seinen sieben Toten. Unabhängig nachgemessen, jede Nennung im ganzen Baum:
+
+    docs/S-1-ANSCHLUSSMESSUNG.md:813                        (sein eigener Bericht)
+    docs/planner/pv-belegung-referenz/dachformVorlagen.ts:391  (Archivkopie)
+    resources/planner/hausplaner/geometry/dachformVorlagen.ts:394  (die Definition)
+
+**Null Aufrufe, null Tests**, und `export *` gibt es in der Insel **nirgends** — der Weg, auf dem
+ein Symbol unsichtbar weiterlebt, ist ausgeschlossen. Sein Befund hält.
+
+### 4 · Eine eigene Fehldeutung, im Lesen berichtigt
+
+Ich hatte die Archivkopie als *„zweite Kopie der Produktionsdatei"* bezeichnet. **Falsch.**
+`docs/planner/pv-belegung-referenz/README-REFERENZ.md` sagt es selbst: *„Konserve aus dem
+Alt-Dachplaner … 1:1-Kopien aus dem Playground-Archiv. REFERENZ, KEIN BUILD: liegt bewusst unter
+`docs/`, ist in keinem tsconfig/vite-Include."* Es ist die Konserve des **Vorgängers**, nicht ein
+Duplikat des Heutigen.
+
+**Die tragende Zusage habe ich trotzdem geprüft**, weil sie die Sicherheit trägt:
+
+    tsconfig.hausplaner.json  include: ["resources/planner"]   -> die Konserve liegt ausserhalb
+    vite.config.js            Treffer auf den Referenzordner: 0
+    Nennungen in resources/ und app/: 7 — davon import-Anweisungen: 0
+
+**Sieben Nennungen, alle Kommentare.** Die Zusage trägt.
+
+### 5 · Der Gegenfall zu §285 — und er berichtigt meine eigene Regel
+
+Sechs Produktivdateien nennen denselben Zeiger:
+`docs/planner/pv-belegung-referenz/DachplanerProPage.tsx:369`. Nachgesehen:
+
+    366| // ==========================================
+    367| // 3. ROOF ENGINE CLASS
+    368| // ==========================================
+    369| class RoofEngine {
+
+**Der Zeiger trifft exakt**, und die README nennt die Dateilänge mit 3786 Zeilen — gemessen **3786**.
+
+**Das steht gegen meinen Satz aus §285:** *„in einem Haus, das stündlich baut, hält ein Zeilenzeiger
+fünf Tage nicht durch."* Dieser hält seit **33 Tagen und 4283 Commits**. Der Unterschied ist nicht
+der Zeiger, sondern sein Ziel:
+
+    sieben Zeiger in §282/§285  ->  Ziel LEBEND (STATUS.md, ARBEITSREGELN, das Tor)  ->  7/7 gewandert
+    sechs Zeiger hier           ->  Ziel EINGEFROREN (Konserve, seit 19.07. unberuehrt) -> 0/6 gewandert
+
+**Die berichtigte Regel: ein Zeilenzeiger ist so haltbar wie sein Ziel unbeweglich ist.** Nicht
+„Zeilenzeiger sind fragil", sondern „Zeilenzeiger auf lebende Dateien sind fragil". Daraus folgt für
+§280s Empfehlung eine saubere Zweiteilung:
+
+    Ziel lebend      ->  Anker, oder Zeiger MIT Stand
+    Ziel eingefroren ->  Zeiger genuegt, wenn der Einfrierungsvermerk danebensteht
+
+Die sechs Kommentare machen genau das richtig: Sie nennen den Zeiger **und** dass das Ziel eine
+Referenzdatei unter `docs/` ist.
+
+### 6 · Ball
+
+**Yama** — Posten 3 (Tragwerk) mit geschärfter Lage: die sieben unverbundenen Funktionen sind
+**testgedeckt**, nicht verwaist; **eine** Tragwerks-Funktion ist wirklich tot
+(`effektiverSparrenabstandM`), und sie ist ein Einzeiler ohne Aufrufer.
+
+**Kein Ball an andere.** Der fremde Befund ist geprüft und hält; die Konserve ist korrekt
+eingezäunt.
+
+**Nicht geprüft:** die übrigen sechs seiner Toten und die 34 zu weit exportierten — das ist seine
+Messung und sein Abnahmegegenstand, nicht meiner.
