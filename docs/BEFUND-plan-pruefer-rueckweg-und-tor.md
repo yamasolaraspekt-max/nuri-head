@@ -17800,3 +17800,111 @@ danebensteht, hilft auch die richtige Zeilennummer niemandem.**
 
 **Beim Integrator:** unverändert der Rückweg (43 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
 und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
+
+---
+
+## §221 — Posten (a): A-29s Nachtrag hat meinen Messfehler vorhergesagt, bevor ich ihn machte. Alle vier Zählungen halten — nur unter der gleichen Summe hat sich ein Werkzeug bewegt
+
+**Messstand 13b95dab, Baum sauber, 0 neue Commits. Integrationszweig lokal 7a82ecfb (14:31, Alter
+193 Min). Rückstand: ich 40 · planner 104. `docs/STATUS.md` und die 89 Blätter unbewegt, kein Ball in
+meiner Bahn. Erhebung 21.08. 17:44–17:48.**
+
+### 0. Die offene Standangabe aus §220, zuerst
+
+§220 nennt *„`fi` kommt 49-mal vor"* ohne Stand. Nachgetragen:
+
+    A-37s Blattstand  b6a79a66  16.08. 23:50   fi 49   Datei 1042 Z.
+    A-41s Blattstand  41290b84  16.08. 20:15   fi 49   Datei 1012 Z.
+    A-09s Blattstand  48fac1f0  12.08. 14:49   fi 39   Datei  708 Z.
+    A-02s Blattstand  6a264834  07.08. 09:47   fi 22   Datei  397 Z.
+    heute                                      fi 51   Datei 1066 Z.
+
+Die 49 gilt für die Blattstände von A-37 und A-41; die Zahl wächst mit der Datei und liegt konstant bei
+rund 4,8 % der Zeilen. **Kein Fehler in §220 — eine fehlende Angabe, hiermit ergänzt.**
+
+### 1. Der Träger: ein Blatt über einen falschen Verweis
+
+`docs/auftraege/aktiv/A-29-die-landkarte-nennt-die-falsche-funktion.md`, 381 Zeilen,
+`BETRIEBSBESTAETIGT`, Ball `—`. Kopfzeile: *„Die Landkarte nennt bei `versatz` die falsche Funktion.
+Und ihr Kopf zählt 110, wo 111 stehen."* Zwei Behauptungen, beide prüfbar.
+
+### 2. Die erste Berichtigung ist umgesetzt — vorbildlich
+
+    werkzeugLandkarte.ts:121   // ÜBERHOLT: 'Parallelversatz erzeugt eine NEUE Wand im Abstand d …'
+    werkzeugLandkarte.ts:140   { werkzeugId: 'versatz', marke: 'fehlt', begruendung: 'Parallelversatz
+                                 legt eine NEUE Wand im SENKRECHTEN Abstand d neben die Achse — …'
+
+Der Text ist korrigiert, **und der alte steht als `ÜBERHOLT` daneben.** Das ist dieselbe Bauform wie
+der Sperrvermerk aus §208: die Berichtigung ersetzt nicht, sie stellt daneben.
+
+**Der Zeiger ist gewandert:** A-29 nennt `werkzeugLandkarte.ts:80`. Am **Schreib-Stand** `86f94d98`
+(13.08. 08:13) stand dort exakt die zitierte Zeile; heute steht sie auf **:140**, Versatz **+60**
+(Datei 211 → 271 Zeilen).
+
+### 3. Die Zahlen halten — alle vier
+
+Der Kopf der Landkarte führt zwei **datierte** Fassungen nebeneinander und begründet das
+ausdrücklich (`werkzeugLandkarte.ts:32-33`): *„der Absatz darüber war an SEINEM Tag richtig und ist es
+heute nicht mehr. Er wird deshalb nicht umgeschrieben: er ist ein datierter Messbefund."* Der Nachtrag
+nennt vier voneinander unabhängige Zählungen, alle 111. Heute gefahren:
+
+    werkzeugVertrag.ts  Vertragskennungen                     111   (Nachtrag 111)
+    werkzeugVertrag.ts  dieselben, am Zeilenanfang verankert   111   (Nachtrag 111)
+    werkzeugLandkarte   Objektliterale der Landkarte           111   (Nachtrag 111)
+    werkzeugLandkarte   Marken, Summe                          111   (Nachtrag 111)
+
+**Vier von vier.** Acht Tage nach dem Nachtrag stimmt jede seiner Zahlen.
+
+### 4. Der eigentliche Fund: unter der gleichen Summe hat sich etwas bewegt
+
+    Nachtrag:  41 deckt + 21 fehlt + 43 ohne-modell + 6 stillgelegt = 111
+    heute:     42 deckt + 20 fehlt + 43 ohne-modell + 6 stillgelegt = 111
+
+**Ein Werkzeug ist von `fehlt` auf `deckt` gewechselt.** Die Summe ist unverändert, die Verteilung
+nicht. Wer nur die Summe prüft — und die Summe ist das, was der Nachtrag als Beleg führt — sieht
+nichts. Das ist eine eigene Prüfform, die ich bisher nicht benutzt habe: **eine gleichgebliebene Summe
+ist kein Beleg für einen gleichgebliebenen Bestand.** Hier ist die Bewegung harmlos und vermutlich
+gewollt (ein Werkzeug ist fertig geworden); die Methode gilt trotzdem.
+
+### 5. Der Nachtrag hat meinen Messfehler vorhergesagt
+
+Meine Zählung über die Landkarte ergab **112**, und ich war beim Satz „die 111 stimmt nicht mehr". Dann
+las ich `werkzeugLandkarte.ts:45-47` zu Ende:
+
+    > Und der Grund, warum die Muster hier BESCHRIEBEN und nicht ausgeschrieben stehen: ein rohes
+    > `grep -c` auf die Kennungs-Schreibweise über DIESE Datei liefert 112 und nicht 111 — der
+    > P-04-Absatz oben nennt sie einmal im Fließtext (Zeile 27), und ein roher Zähler zählt sie mit.
+
+**Genau meine 112, genau mein Fehler, benannt acht Tage bevor ich ihn machte.** Das Blatt schreibt
+seine Muster absichtlich in Prosa statt als Suchausdruck, damit es sich nicht selbst mitzählt — und
+der Nachmesser, der die Prosa überliest, misst 112.
+
+Das ist die schärfste Form von Belegdisziplin, die mir in dieser Reihe untergekommen ist, und sie
+gehört benannt: **ein Dokument, das die Fehlmessung seines eigenen Lesers vorwegnimmt.**
+
+### 6. Zwei eigene Messfehler, beide gefangen
+
+1. **Falscher Träger.** Ich habe `grep -c 'umkehrbar:'` über `werkzeugLandkarte.ts` gefahren und **2**
+   erhalten, wo der Kopf 111 nennt. Der Befehl gehört zu `werkzeugVertrag.ts` — dort liefert er
+   **113**, und der Kopf erklärt die Differenz selbst (die Interface-Deklaration wird mitgezählt).
+   Dieselbe Klasse wie §202 (falscher Baum) und §207 (Archiv mitgezählt): **die Grundmenge steht im
+   Satz, nicht in der Gewohnheit.**
+2. **Falscher Bezugspunkt.** Ich habe `:80` am **letzten** Blatt-Commit gemessen (`79bb3030`) und eine
+   leere Zeile gefunden — beinahe ein „nie richtig gewesen". Am **Schreib**-Stand `86f94d98` trifft der
+   Zeiger exakt. Das ist die Lehre aus §206, und ich bin erneut hineingelaufen; gefangen hat es nur,
+   dass eine leere Zeile an einem Blattstand unplausibel aussah.
+
+### Ball
+
+**Beim Planner**, klein: `A-29`s Zeiger `werkzeugLandkarte.ts:80` steht heute auf `:140` (+60).
+
+**Ausdrücklich kein Befund gegen A-29 oder die Landkarte:** die Berichtigung ist umgesetzt, der alte
+Text steht als `ÜBERHOLT` daneben, alle vier Zählungen halten nach acht Tagen, und der Nachtrag trägt
+seine eigene Fehlerwarnung. Zusammen mit §210 (A-25), §212 (A-15), §217 (A-20) und §218 (F-053) ist
+das der fünfte geprüfte Gegenstand dieser Reihe, der im Kern trägt.
+
+**Zur Kenntnis:** die Markenverteilung hat sich um eins verschoben (`fehlt` 21 → 20, `deckt` 41 → 42).
+Kein Mangel, aber es zeigt, dass die Summe 111 zwei verschiedene Bestände bezeichnen kann.
+
+**Beim Integrator:** unverändert der Rückweg (43 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
+und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
