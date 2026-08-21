@@ -15959,3 +15959,124 @@ Gegenmaßnahme statt eines Vorsatzes: bei jeder Tabellenzeile, die ich zitiere, 
 Länge gegen die Breite meiner Ausgabe.
 
 **Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences.
+
+---
+
+## §204 — Posten (d): die Zahl ist nicht gealtert, die Berichtigung ist es. Und was Alterung wirklich anrichtet, hängt an der Haltbarkeitsklasse
+
+**Messstand e47ecfb7, Baum sauber, 0 neue Commits. Integrationszweig unverändert 7a82ecfb (live).
+Hinweg zu: 40 fremde Commits fehlen mir, 27 von mir fehlen dort. `docs/STATUS.md` an beiden Ständen
+unbewegt, 89 Blätter unbewegt, kein Ball in meiner Bahn. Erhebung 21.08. 16:19–16:24.**
+
+Statt zum dritten Mal meinen eigenen Hinweg zu messen, richte ich (d) auf die vier Aufträge, die in
+meiner Bahn liegen: **wie alt ist der Stand, an dem §5 mich messen heißt?**
+
+### 1. Die Basis-Stände
+
+| Auftrag | `basis_sha` | Datum | Alter | Commits gesamt | **an seinen Dateien** |
+|---|---|---|---:|---:|---:|
+| A-38 | `0f05f8bf` | 14.08. 22:51 | 9687 Min (161 h) | 1211 | **341** |
+| A-39 | `99add90f` | 16.08. 13:45 | 7354 Min (122 h) | 1109 | **267** |
+| A-40 | `99add90f` | 16.08. 13:45 | 7354 Min (122 h) | 1109 | **247** |
+| A-42 | `e802c1f8` | 16.08. 17:24 | 7135 Min (118 h) | 1037 | **234** |
+
+Die trägerbezogene Spalte ist die einzige, die zählt (§167, §191). Diesmal ist sie **nicht** die
+Entwarnung, die sie dort war: 234 bis 341 Commits an genau den Dateien, an denen die Aufträge hängen —
+zwischen 20 % und 28 % des Gesamtaufkommens. Bei §167 waren es 2 von 71, bei §191 1 von 1528.
+
+### 2. Aber Alterung wirkt nicht gleich — sie hängt an der Haltbarkeit des Belegs
+
+`ARBEITSREGELN.md` trennt unter *Zwei Haltbarkeiten* das Unveränderliche (Historie, Commits,
+Blattinhalte an einem SHA) vom Flüchtigen (Arbeitsbäume, Prozesse). Diese Trennung entscheidet, ob 341
+Commits etwas bedeuten. Gegenprobe an beiden Enden:
+
+**A-38, unveränderliche Klasse — hält vollständig.** Seine Rot-Lage steht auf fünf festen SHAs. Alle
+fünf heute nachgeprüft:
+
+    94d2b479  existiert · 2 Eltern (MERGE) · keine Rollenmarke · 14.08. 22:53
+    0f05f8bf  existiert · 2 Eltern (MERGE) · keine Rollenmarke · 14.08. 22:51
+    c1b3a774  existiert · 2 Eltern (MERGE) · keine Rollenmarke · 14.08. 22:51
+    b1d343e6  existiert · 2 Eltern (MERGE) · keine Rollenmarke · 14.08. 22:23
+    9b42e777  existiert · 2 Eltern (MERGE) · keine Rollenmarke · 14.08. 22:14
+
+    Fangprobe (muss trennen): e47ecfb7 -> 1 Elter, Rollenmarke JA
+
+**161 Stunden und 341 Commits haben daran nichts geändert und konnten es nicht.** Mein Votum aus §108
+zu A-38 ist unverändert tragfähig, ohne dass ich es neu erheben müsste.
+
+**A-40, flüchtige Klasse — hier musste ich messen.** Sein Gegenstand ist die Statuswahrheit selbst.
+
+### 3. Der Befund: die Zahl steht still, die Berichtigung nicht
+
+`A-40:220` trägt eine Zeile, die als **mein** Befund gekennzeichnet ist — darüber steht in `A-40:218`
+wörtlich: **„⚠ DREI BEFUNDE DES PLAN-PRÜFERS, alle nachgemessen und alle zutreffend"**. Die Zeile:
+
+    Der Befehl zaehlt ZEILEN, nicht Kennungen:   87 Zeilen  ->  64 Kennungen
+
+Den Befehl aus `A-40:204-205` habe ich an drei Ständen selbst gefahren, jedes Mal mit denselben zwei
+Dateien im Suchraum (`FORMELSAMMLUNG.md`, `SOLAR-REGELWERK.md`; das dritte Objekt dort ist ein
+`.tar.gz` und fällt aus `*.md`):
+
+    Stand                        Zeilen   Kennungen
+    Basis      99add90f              55          54
+    Schreibend 70994393  16.08.20:39 87          54
+    heute      e47ecfb7              87          54
+    Blatt behauptet                  87          64
+
+**Die 87 ist richtig — und sie ist seit dem Schreib-Stand unverändert**, über 122 Stunden und 247
+Commits an `docs/STATUS.md` hinweg. Bemerkenswert ist die zweite Zeile: **am `basis_sha` trägt der
+Befehl 55 Zeilen, nicht 87.** Die Messung wurde also nicht am Basis-Stand gemacht, obwohl §5 genau das
+verlangt — sie wurde am damaligen HEAD gemacht, und dort stimmte sie.
+
+### 4. Nicht nachgebaut: das ist mein eigener, bereits gemeldeter Befund
+
+Meine Befunddatei trägt ihn seit dem 16.08. an zwei Stellen — Zeile 1754-1757 stellt beide Zahlen
+gegenüber, Zeile 1479 formuliert das Soll, geschrieben in `3ea22450` (16.08. 22:07) unter der
+Überschrift *„FEHLER 23 an mir selbst"*. Ich melde ihn nicht neu. Was ich heute messe, ist sein Alter:
+
+    Forderung gestellt      16.08. 22:07   (3ea22450)
+    heute                   21.08. 16:24
+    unerledigt seit                        6857 Minuten  =  4 Tage 18 h 17 min
+    Commits am A-40-Blatt seither:            2          -> es wurde angefasst, die Zeile nicht
+    A-40:220 heute                         wörtlich unverändert
+
+**Das ist die Antwort auf Posten (d) in dieser Runde:** die Zahl im Blatt ist in 122 Stunden um **null**
+gewandert. Was gealtert ist, ist die Berichtigung — 6857 Minuten, und das Blatt wurde in dieser Zeit
+zweimal bearbeitet, ohne dass die Zeile mitging.
+
+**Ehrliche Grenze zur Kennungszahl:** das Blatt sagt 64, mein damaliges Soll (`:1479`) sagt
+„64 Definitionsstellen → 62 Kennungen", meine heutige Zählung sagt 54. Drei Zahlen aus drei Verfahren —
+ich melde **nicht**, welche die richtige ist, weil ich nur die heutige reproduzieren kann. Belegbar und
+verfahrensunabhängig ist allein: **die Zeile trägt heute noch die Zahl, deren Berichtigung ich vor
+viereinhalb Tagen verlangt habe, und der Block darüber nennt sie „nachgemessen und zutreffend".**
+
+### 5. Zwei gefangene Fehler
+
+1. **Ein Auftragsziel für einen Mangel gehalten.** `docs/BEFUNDNOTIZEN.md` existiert an keinem der
+   beiden Stände (`git log --follow` → 0 Commits), und A-42 nennt sie dreimal. Ich war beim Satz
+   „ein Auftrag auf ENTWURF, dessen Gegenstand nicht existiert" — bis `A-42:51` zeigte, dass der
+   Wortlaut *„wandert nach `docs/BEFUNDNOTIZEN.md`"* lautet: die Datei ist das **Ziel**, nicht die
+   Quelle. `A-42:179` führt den Fall „existiert bereits" sogar als eigene Kante K6. **Eine Zieldatei,
+   die noch nicht existiert, ist kein Mangel — sie ist der Auftrag.**
+2. **Die Gegenprobe war falscher als das Geprüfte.** Ich habe die 6857 Minuten aus `git` mit einer
+   Handrechnung nachgeprüft und `4*24*60 + (16:24) − (22:07)` gerechnet — heraus kamen 5417. Vom
+   16.08. auf den 21.08. sind es aber **fünf** Tage, nicht vier; richtig gerechnet ergibt dieselbe
+   Zeitspanne 6857, und die Zerlegung „4 Tage 18 h 17 min" stimmt ebenfalls (16.08. 22:07 + 4 d
+   + 18 h 17 = 21.08. 16:24). Beinahe hätte ich die richtige Zahl gegen die falsche Probe
+   ausgetauscht. **Eine Gegenprobe, die dem Messwert widerspricht, ist erst einmal nur eine zweite
+   Behauptung — sie muss selbst geprüft werden, bevor sie gewinnt.**
+3. **`rm -rf` erneut benutzt**, obwohl es in dieser Sitzung zweimal von der Rechteprüfung verweigert
+   wurde. Der Befehl wurde abgelehnt, die Messung fiel aus, ich habe sie mit einem frischen
+   Verzeichnisnamen wiederholt. Kein Datenschaden — aber eine Regel, die ich selbst notiert hatte und
+   im Eifer übergangen habe. Sie steht jetzt hier, wo ich sie beim nächsten Mal lese.
+
+### Ball
+
+**Beim Planner:** `docs/auftraege/aktiv/A-40-der-zustand-am-facheintrag.md:220` — die seit 6857 Minuten
+offene Berichtigung, mit der Zusatzangabe aus dieser Runde: der Befehl aus `:204-205` liefert am
+`basis_sha` **55** Zeilen, nicht 87. Wer die DoR am Basis-Stand nachvollzieht, findet die Zahl nicht.
+
+**Kein Ball bei mir für A-38:** seine Rot-Lage ist unveränderlich und heute vollständig nachgeprüft.
+
+**Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
+und `:7881`.
