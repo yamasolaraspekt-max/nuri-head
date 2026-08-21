@@ -11129,3 +11129,75 @@ und der Repo-Bestand sagt selbst, dass niemand ihn gelesen hat.
 
 **Kein Ball aus dieser Runde** — F-025 verlangt nichts. Die Belegstelle ist ein Hinweis fuer den
 Planner, falls M-01 je hereingeholt wird: dann waere sie zum ersten Mal pruefbar.
+
+## §152 — Posten (d) an den roten Sperren: beide über neun Tage alt, beide gesund — und mein Verdacht löste sich unter der Messung auf
+
+*(Messstand 585e47ae, 21.08. 12:20. Nummer gegen den frischen HEAD gewaehlt: 89 Abschnitte, hoechste
+151 — 152 war frei.)*
+
+**Gegenstand.** Die Sperrmarken der Formelsammlung. Von 27 Formeln tragen **sechs** eine Marke in der
+Ueberschrift: `F-026` 🟢 · **`F-028` 🔴** · `F-050` 🟡 · **`F-051` 🔴 GESPERRT** · `F-053` 🟡 ·
+`F-054` 🟡. Eine rote Marke ist eine **Zustandsaussage ueber eine offene Entscheidung** — genau der
+Gegenstand von (d).
+
+**Das Alter, am einfuehrenden Commit gemessen:**
+
+| Sperre | eingefuehrt | Alter |
+|---|---|---|
+| `F-028` Azimut-Konvention an der Systemgrenze | `1734aa3b`, 12.08. 00:10 | **9 Tage 12 Stunden** |
+| `F-051` Zeitwerte je Gewerk (GESPERRT — unbelegt) | `1e933a64`, 10.08. 19:11 | **10 Tage 17 Stunden** |
+
+### F-028 — die Sperre wird heute nicht überschritten, Ende zu Ende gemessen
+
+F-028 ist keine Rechenformel, sondern eine Barriere: zwei Azimut-Konventionen, **beide dokumentiert,
+beide richtig**, und der gefaehrliche Bereich ist `0..180` — dort sind Werte in **beiden** Systemen
+gueltig und bedeuten das **Gegenteil**. Ein Suedddach traegt im Kompass `180`; unveraendert an PVGIS
+gegeben rechnet PVGIS ein Norddach.
+
+Gemessen, ob das heute passiert:
+
+```
+app/Services/Energie/PvgisErtragService.php:41
+    "@param float $aspect  Azimut nach PVGIS-Konvention: 0 = Sued, -90 = Ost, 90 = West"
+        ^ der Zeiger der Sperre trifft woertlich
+
+genau EIN Aufrufer:  app/Http/Controllers/Energie/EnergiekonzeptController.php
+    :455   $aspect = isset($in['aspect']) ... : 0.0;      <- aus dem Formular
+    :465   ->jahresertragFuerStandort(..., $angle, $aspect)
+
+resources/views/admin/energie/energiekonzept.blade.php:393-395
+    Label:  "Ausrichtung (0=Sued, -90=Ost, 90=West)"
+    Feld:   min="-180" max="180"   Vorgabe 0
+```
+
+**Die Kette ist von der Eingabe bis zum Dienst konventionstreu.** Das Feld ist in derselben
+Konvention beschriftet, die der Dienst erwartet, und die Vorgabe `0` bedeutet in beiden — Feld wie
+Dienst — **Sued**. Keine Umrechnungsfunktion noetig, keine gefunden, keine gebraucht. **Die Barriere
+steht richtig und wird eingehalten.**
+
+### F-051 — und hier hätte ich beinahe eine Lücke gemeldet, die keine ist
+
+Erste Messung: `F-051` kommt in `docs/VORLAGE-AN-YAMA-2026-08-12.md` **null Mal** vor, `F-028`
+einmal. Daraus war der Satz *„eine zehn Tage alte Sperre steht in keiner Vorlage"* schon halb
+geschrieben. **Breiter gemessen ist er falsch:** F-051 wird in ueber fuenfzig Zeilen quer durch den
+Bestand gefuehrt — `docs/rollenkette/START-PROMPT.md:63` (*"Zurzeit rot: F-051"*),
+`05-MATERIALQUELLEN/VORGEHEN.md:122` (*"F-051 — warum rot"*) und `:177` (*"F-051 verwerfen oder an
+echten Aufmassen …"*), dazu ein eigener Auftrag `A-16`. Und
+`docs/BERICHT-M02-AUSGEWERTET.md:214` haelt fest: ***„F-051s Sperre ist BESTAETIGT, nicht
+aufgehoben — zweite Quelle derselben"***.
+
+**Die Sperre ist nicht liegengeblieben, sie ist nachgeprueft und wieder bestaetigt worden.** Ihr
+Alter ist kein Versaeumnis, sondern die Wartezeit auf echte Aufmasse — ein fehlender Operand, und
+der gehoert nach den Schutzgrenzen ausdruecklich nicht still ersetzt.
+
+### Was das für Posten (d) heißt
+
+**Ein hohes Alter macht eine rote Marke nicht schal.** Beide Sperren sind ueber neun Tage alt und
+beide sind **gesund**: die eine bewacht eine Grenze, die heute eingehalten wird, die andere ist von
+einer zweiten Quelle bestaetigt. Das ist dieselbe Lehre wie in §132, nur an Entscheidungssperren
+statt an Messungen: **erst einordnen, dann messen — und „alt" ist keine Einordnung.**
+
+**Kein Ball.** Beide Sperren verlangen nichts von mir; F-051 wartet auf Operanden, die nur Yama
+liefern kann, und F-028 wird eingehalten. Eine kleine Beobachtung bleibt: meine stehende
+Yama-Liste fuehrt **keine** der beiden — sie ist kein vollstaendiges Verzeichnis der bei Yama
+liegenden Sperren, und ich sollte sie auch nicht dafuer halten.
