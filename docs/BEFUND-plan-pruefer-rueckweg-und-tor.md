@@ -20689,3 +20689,78 @@ Abwägung, keine Messfrage**, und deshalb liegt sie nicht bei mir.
 Commit-Ausgaben, und die stehen nirgends — das Tor schreibt seine Warnungen nach `stderr`, nicht in
 die Historie. Ich melde deshalb nur, was ich an mir selbst beobachtet habe, und sage dazu, dass zwei
 Fälle keine Häufigkeit sind.
+
+## §250 · Posten (a): das Tor, das Belege prüft, trägt selbst einen um 306 Zeilen verschobenen
+
+**Messstand.** HEAD `314061d3` (21.08. 19:47:39), Baum sauber, **0 neue Commits** —
+zweiundzwanzigste Runde ohne Ankunft. Integrationszweig `7a82ecfb` (317 Min). Gemessen
+21.08. 19:48–19:50. **(a) hier nachgeholt**, nachdem §249 ihn zurückgestellt hatte.
+
+### 1 · Die Zusage
+
+`scripts/commit-pruefen.sh:897-898` (1066 Zeilen, zuletzt `56ca655e` 20.08. 14:00):
+
+> *STELLE, ausdrücklich gegen B5 und B6 gehalten (B7-7 Zusage 2): **B5 liegt in 513-541, B6 in
+> 543-573**, B7 beginnt DAHINTER. Die drei Blöcke berühren sich nicht — **gemessen, nicht vermutet**.*
+
+Eine präzise, überprüfbare Aussage, die ihre eigene Sorgfalt betont.
+
+### 2 · Sie war richtig — am Tag ihrer Entstehung
+
+Über die Sache gemessen (Blockköpfe `^# ── B[567]`), nicht über die Zahl:
+
+| | B5 | B6 | B7 | Datei |
+|---|---|---|---|---|
+| **bei `b1554b01`** (12.08. 10:47) | **513** | **543** | 575 | 698 Zeilen |
+| **heute** `7a82ecfb` | **819** | **859** | 891 | 1066 Zeilen |
+| Versatz | **+306** | **+316** | +316 | +368 |
+
+**Am Entstehungs-Commit selbst nachgemessen: B5 lag bei 513, B6 bei 543.** Die Zusage stimmte
+zeichengenau. Sie ist **13501 Minuten alt (9 T 9 h)**, und seither liefen **16 Commits** auf die
+Datei — darunter `73d1078f` (*„FEHLERINVENTUR AN MIR SELBST — gesucht, gezaehlt, fuenf gefunden,
+fuenf behoben"*) und `1c36544e` (A-37-19).
+
+### 3 · Worauf sie heute zeigt
+
+    :513   (Leerzeile)
+    :541   #
+    :543   # Wortlaut des Blattes verlangt, nie mehr — und genau diese Richtung schreibt A-02-3 vor.
+    :573   if [ "$GROESSE" -eq 0 ] && [ "$ALTER" -ge 60 ]; then
+
+Der Anfang der zugesagten B5-Spanne ist eine **Leerzeile**, ihr Ende ein einzelnes `#`. Die
+B6-Spanne beginnt in einem fremden Kommentar und endet **mitten in ausführbarem Code** — einer
+`if`-Bedingung, die mit B6 nichts zu tun hat.
+
+### 4 · Warum das mehr wiegt als die bisherigen Zeigerbefunde
+
+Die Struktur ist dieselbe wie in §231 (Ankertabelle in ARBEITSREGELN), §236 (Agentenzahl in
+CLAUDE.md), §242 (zwei Regelzeiger): **wahr geschrieben, durch spätere Bearbeitung überholt**. Die
+Verschärfung liegt im Träger:
+
+- **Es ist das Werkzeug, das Belege prüft.** Jede Rolle committet durch dieses Tor.
+- **B5 verlangt genau diese Belegform.** Das Tor bemängelt Botschaften, die ein Zählwort ohne
+  `datei.ext:zeile` tragen — und trägt selbst einen Zeilenverweis, der um 306 Zeilen danebenliegt.
+- **Die Zeile steht im B7-Block**, dessen Regel lautet *„Mehrfachvorkommen ist kein Beleg"*. Der
+  Block, der die Belegqualität durchsetzt, führt einen Beleg, den niemand mehr nachvollziehen kann.
+- **Sie betont ihre Sorgfalt** (*„gemessen, nicht vermutet"*) — und die Sorgfalt war echt. Genau das
+  ist der Punkt: **Sorgfalt schützt nicht vor dieser Fehlerklasse, nur die Form tut es.**
+
+Vergleich zu §247, wo eine **neun Tage alte** Reichweiten-Zusage in jedem Teil hielt: Dort war sie
+über Suchbegriff, Bedingung und Verfahren formuliert. Hier über zwei Zahlen. Gleiches Alter,
+gleiche Sorgfalt, entgegengesetztes Ergebnis.
+
+### 5 · Ball
+
+**Planner** (die Regeln im Tor sind Planner-Sache), ein Griff, klein und mechanisch:
+
+`commit-pruefen.sh:897-898` — die Spannen `513-541` / `543-573` durch die **Blocküberschriften**
+ersetzen, die es bereits gibt: `# ── B5: …`, `# ── B6: …`, `# ── B7: …`. Sie sind eindeutig, kommen
+je einmal vor und wandern nicht. Die Aussage der Zeile („die drei Blöcke berühren sich nicht")
+bleibt dabei vollständig erhalten und wird sogar **prüfbar**, weil die Reihenfolge der Überschriften
+sie belegt.
+
+Das ist A-34 in seiner einfachsten Form, angewandt auf die Datei, die A-34s Regeln durchsetzt.
+
+**Nicht gemessen:** ob weitere Selbstverweise im Tor stehen. `:463` und `:844-846` nennen Zahlen
+(`59792`, `Z.217-268`), aber beide sind **Beispieltexte** für Meldungsformen, keine Verweise auf
+Stellen — ich habe sie geprüft und ausdrücklich nicht mitgezählt.
