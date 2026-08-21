@@ -23584,3 +23584,42 @@ trägt.
 
 **Unverändert offen:** Schreibschutz der Zieldatei (§278), `…w0-11-ids-callback-csrf.md:22` (§276),
 die Rundungsfrage (§277), der zweite Pfad in der Wache-Anweisung (§279).
+
+## §281 · Nachtrag zu §280: das Tor hat gewarnt, und ich hatte seine Ausgabe abgeschnitten
+
+**Messstand.** HEAD `e1298913` (der Commit aus §280), Baum sauber, Zweig `8511ca05`.
+Gemessen 21.08. 21:58.
+
+Der Commit zu §280 lief mit `2>&1 | tail -3` — und in den abgeschnittenen Zeilen stand eine
+**Warnung des Rollen-Tors**. Ich habe sie nur gesehen, weil der Rest der Zeile *„Warnung, kein
+Abbruch — der Commit laeuft weiter"* durchkam.
+
+**Welche Prüfung es war, habe ich gemessen statt geschlossen** — die drei Musterpaare wörtlich aus
+`scripts/commit-pruefen.sh:845-915` geholt und gegen meine Botschaft gefahren:
+
+    B5  Ausloeser 1 · Gegenbeleg 1  ->  still     (docs/STATUS.md:18787 ist die Belegzeile)
+    B6  Ausloeser 0 · Gegenbeleg 1  ->  still
+    B7  Ausloeser 1 · Gegenbeleg 0  ->  HAT GEWARNT      Ausloeser: "23 Stellen"
+
+**B7 ist berechtigt.** Die Regel lautet (`:910-913`): *„Wie oft etwas vorkommt, sagt nichts darueber,
+WOHER es kommt: dieselbe Zahl an vier Stellen ist ein Beleg dreimal kopiert — oder keiner."* Meine
+Botschaft nennt „23 Stellen" und kein Herkunftswort.
+
+**In der Sache ist die Herkunft belegt, nur nicht in der Botschaft:** §280 führt die 23 je Datei auf
+(69 / 5 / 5 / 5 / 2 / 1 Zeiger, sechs benannte Träger, davon 17 Schäden in einer Datei). Die
+Botschaft trägt die Aufstellung nicht — sie hätte „Herkunft: sechs benannte Träger" sagen müssen,
+wie ich es in §272, §273 und §276 getan habe. **Form verletzt, Substanz vorhanden.**
+
+**Der eigentliche Fehler ist ein anderer und er ist meiner:** Ich habe die Ausgabe meines eigenen
+Prüfwerkzeugs auf drei Zeilen gekürzt. Genau dagegen richtet sich die stehende Anweisung
+*„Exit-Code nie hinter einer Pipe lesen"* — hier war es kein Exit-Code, sondern eine Warnung, und
+das Muster ist dasselbe: **ein Werkzeug meldet, und ich lese die Zusammenfassung statt der Meldung.**
+Es ist dieselbe Klasse, die ich in §275 an einer feldlesenden Probe und in §278 an einer
+blockzählenden gemessen habe, diesmal an mir und an der Leseseite.
+
+**Abhilfe, ab sofort:** Der Commit-Aufruf läuft ohne `tail`. Wenn die Ausgabe lang wird, filtere ich
+auf die Tormeldungen (`grep -E 'WARNUNG|FEHLER|ROLLEN-TOR|B[567]'`) statt auf die letzten Zeilen —
+ein Filter nach Inhalt, nicht nach Position.
+
+**Kein Ball an andere.** §280s Zahlen sind davon unberührt; die Warnung betrifft die Botschaft, nicht
+den Befund.
