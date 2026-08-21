@@ -98,18 +98,18 @@
 | **Z1-W1-3** Eine Formel, eine Stelle: polygonM2-Kopie zusammenfuehren | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md` · **DoR NICHT ERTEILT** (plan-pruefer §145), offen: Kriterien A und D · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §179, 21.08.), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
 | **Z1-W1-4** dachWerte: eine Quelle, Stilllegung statt Loeschung | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` · **DoR ERTEILT** (plan-pruefer §146) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §146), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Generator** |
 | **Z1-W1-5** insulationType: der tote Zweig sagt, dass er tot ist | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §147), offen: die Zahl · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §180), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
-| **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
+| **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | `BEREIT` | **Generator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
-| **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
+| **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | `BEREIT` | **Generator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-4** Wächter: keine neue Web-Route ohne permission: — Ratschen-Test mit Baseline | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-4-route-permission-waechter.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §258): Kriterium C zaehlt drei Routen, es sind sechs · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
-| **Z2-W0-5** Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md` · **DoR ERTEILT** (plan-pruefer §259) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · **Blockade-Vermerk berichtigt** (plan-pruefer §259): Y-6 blockiert W0-5 NICHT; offen ist stattdessen beim Planner, wer das Routen-Gate fuer `/planner/*` baut |
+| **Z2-W0-5** Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein | `BEREIT` | **Generator** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md` · **DoR ERTEILT** (plan-pruefer §259) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · **Blockade-Vermerk berichtigt** (plan-pruefer §259): Y-6 blockiert W0-5 NICHT; offen ist stattdessen beim Planner, wer das Routen-Gate fuer `/planner/*` baut · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-6** Nuriva-API: die vier Token-Abilities werden durchgesetzt — oder sie verschwinden | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-6-api-token-abilities.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §260): Dateiname im Ist-Beleg berichtigen · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
-| **Z2-W0-7** Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.) | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-7-rechte-schalter-planner-item.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §261) · **VORRANG vor Z2-W0-1** (plan-pruefer §260) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
-| **Z2-W0-8** secure.image und Geschwister: Recht + Bindung statt bloßem auth | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-8-secure-image-gate.md` · **DoR ERTEILT** (plan-pruefer §262) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
-| **Z2-W0-9** „Deaktiviert' deaktiviert: echter Kontostatus statt Online-Flag | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-9-kontostatus-echt.md` · **DoR ERTEILT** (plan-pruefer §263) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
-| **Z2-W0-10** api/secure/master-sets*: reversible Stilllegung per Schalter (Y-11 entschieden) | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `14dc15f3` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-10-master-set-api-haertung.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §264) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §262/§263 |
+| **Z2-W0-7** Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.) | `BEREIT` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-7-rechte-schalter-planner-item.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §261) · **VORRANG vor Z2-W0-1** (plan-pruefer §260) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
+| **Z2-W0-8** secure.image und Geschwister: Recht + Bindung statt bloßem auth | `BEREIT` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-8-secure-image-gate.md` · **DoR ERTEILT** (plan-pruefer §262) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
+| **Z2-W0-9** „Deaktiviert' deaktiviert: echter Kontostatus statt Online-Flag | `BEREIT` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-9-kontostatus-echt.md` · **DoR ERTEILT** (plan-pruefer §263) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
+| **Z2-W0-10** api/secure/master-sets*: reversible Stilllegung per Schalter (Y-11 entschieden) | `BEREIT` | **Generator** | Schnitt 21.08. · Basis `14dc15f3` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-10-master-set-api-haertung.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §264) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §262/§263 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-11** POST ids/callback: CSRF-Ausnahme mit Auto-Produktanlage schließen, tote Ausnahmen aufräumen | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `ae7cee9d` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-11-ids-callback-csrf.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §265): der Auftrag mischt operandenabhaengig und -unabhaengig · Datensatz vom Integrator angelegt 21.08. auf Zustellung §262/§263 |
-| **Z2-W0-12** Nuriva-Token: Laufzeit 8 h (konfigurierbar), Widerruf, Bereinigung (Y-10 entschieden) | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `14dc15f3` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-12-token-laufzeit-widerruf.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §266) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §264 |
+| **Z2-W0-12** Nuriva-Token: Laufzeit 8 h (konfigurierbar), Widerruf, Bereinigung (Y-10 entschieden) | `BEREIT` | **Generator** | Schnitt 21.08. · Basis `14dc15f3` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-12-token-laufzeit-widerruf.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §266) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §264 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 
 ### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
 
@@ -28100,7 +28100,19 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z2-W0-1"
 titel: "Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht"
-zustand: ENTWURF
+zustand: BEREIT
+zustand_beleg_272: |
+  Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
+  Das Votum steht im Feld dor_beleg (Paragraf 255, ERTEILT, kein Restpunkt),
+  und der Plan-Pruefer hat den Ball selbst auf den Generator gesetzt — er haelt den
+  Auftrag also fuer baubar. ARBEITSREGELN.md:253 bindet diesen Schritt an genau
+  diesen Beleg.
+  GRUNDSATZ AUS PARAGRAF 272, dort fuer A-38/A-39/A-42 ausgesprochen: "Ich habe die
+  Voten geliefert, sie stehen im Datensatz; das Nachziehen von Zustand, Ball und
+  Tafelzeile ist Transport, kein Votum." Derselbe Fall, dieselbe Handlung.
+  NICHT NACHGEZOGEN wurden die vier mit Restpunkt (W0-2, W0-4, W0-6, W0-11): dort
+  liegt der Ball beim Planner, der Punkt ist offen, und ein Zustandswechsel wuerde
+  eine Bereitschaft behaupten, die der Pruefer eingeschraenkt hat.
 ballbesitz: generator
 ballbesitz_grund: |
   Aus Paragraf 255: "Generator: Z2-W0-1 ist von meiner Seite frei. Spur A, LIVE,
@@ -28157,7 +28169,19 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z2-W0-3"
 titel: "Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request"
-zustand: ENTWURF
+zustand: BEREIT
+zustand_beleg_272: |
+  Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
+  Das Votum steht im Feld dor_beleg (Paragraf 257, ERTEILT, kein Restpunkt),
+  und der Plan-Pruefer hat den Ball selbst auf den Generator gesetzt — er haelt den
+  Auftrag also fuer baubar. ARBEITSREGELN.md:253 bindet diesen Schritt an genau
+  diesen Beleg.
+  GRUNDSATZ AUS PARAGRAF 272, dort fuer A-38/A-39/A-42 ausgesprochen: "Ich habe die
+  Voten geliefert, sie stehen im Datensatz; das Nachziehen von Zustand, Ball und
+  Tafelzeile ist Transport, kein Votum." Derselbe Fall, dieselbe Handlung.
+  NICHT NACHGEZOGEN wurden die vier mit Restpunkt (W0-2, W0-4, W0-6, W0-11): dort
+  liegt der Ball beim Planner, der Punkt ist offen, und ein Zustandswechsel wuerde
+  eine Bereitschaft behaupten, die der Pruefer eingeschraenkt hat.
 ballbesitz: generator
 ballbesitz_nachgezogen: |
   plan-pruefer -> generator, 21.08. vom integrator. TRANSPORT: die DoR ist gefahren,
@@ -28220,7 +28244,19 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z2-W0-5"
 titel: "Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein"
-zustand: ENTWURF
+zustand: BEREIT
+zustand_beleg_272: |
+  Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
+  Das Votum steht im Feld dor_beleg (Paragraf 259, ERTEILT, kein Restpunkt),
+  und der Plan-Pruefer hat den Ball selbst auf den Generator gesetzt — er haelt den
+  Auftrag also fuer baubar. ARBEITSREGELN.md:253 bindet diesen Schritt an genau
+  diesen Beleg.
+  GRUNDSATZ AUS PARAGRAF 272, dort fuer A-38/A-39/A-42 ausgesprochen: "Ich habe die
+  Voten geliefert, sie stehen im Datensatz; das Nachziehen von Zustand, Ball und
+  Tafelzeile ist Transport, kein Votum." Derselbe Fall, dieselbe Handlung.
+  NICHT NACHGEZOGEN wurden die vier mit Restpunkt (W0-2, W0-4, W0-6, W0-11): dort
+  liegt der Ball beim Planner, der Punkt ist offen, und ein Zustandswechsel wuerde
+  eine Bereitschaft behaupten, die der Pruefer eingeschraenkt hat.
 ballbesitz: generator
 ballbesitz_nachgezogen: |
   plan-pruefer -> generator, 21.08. vom integrator. TRANSPORT: die DoR ist gefahren.
@@ -28294,7 +28330,19 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z2-W0-7"
 titel: "Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.)"
-zustand: ENTWURF
+zustand: BEREIT
+zustand_beleg_272: |
+  Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
+  Das Votum steht im Feld dor_beleg (Paragraf 261, ERTEILT, kein Restpunkt),
+  und der Plan-Pruefer hat den Ball selbst auf den Generator gesetzt — er haelt den
+  Auftrag also fuer baubar. ARBEITSREGELN.md:253 bindet diesen Schritt an genau
+  diesen Beleg.
+  GRUNDSATZ AUS PARAGRAF 272, dort fuer A-38/A-39/A-42 ausgesprochen: "Ich habe die
+  Voten geliefert, sie stehen im Datensatz; das Nachziehen von Zustand, Ball und
+  Tafelzeile ist Transport, kein Votum." Derselbe Fall, dieselbe Handlung.
+  NICHT NACHGEZOGEN wurden die vier mit Restpunkt (W0-2, W0-4, W0-6, W0-11): dort
+  liegt der Ball beim Planner, der Punkt ist offen, und ein Zustandswechsel wuerde
+  eine Bereitschaft behaupten, die der Pruefer eingeschraenkt hat.
 ballbesitz: generator
 ballbesitz_nachgezogen: |
   plan-pruefer -> generator, 21.08. vom integrator. TRANSPORT: Paragraf 261 —
@@ -28324,7 +28372,19 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z2-W0-8"
 titel: "secure.image und Geschwister: Recht + Bindung statt bloßem auth"
-zustand: ENTWURF
+zustand: BEREIT
+zustand_beleg_272: |
+  Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
+  Das Votum steht im Feld dor_beleg (Paragraf 262, ERTEILT, kein Restpunkt),
+  und der Plan-Pruefer hat den Ball selbst auf den Generator gesetzt — er haelt den
+  Auftrag also fuer baubar. ARBEITSREGELN.md:253 bindet diesen Schritt an genau
+  diesen Beleg.
+  GRUNDSATZ AUS PARAGRAF 272, dort fuer A-38/A-39/A-42 ausgesprochen: "Ich habe die
+  Voten geliefert, sie stehen im Datensatz; das Nachziehen von Zustand, Ball und
+  Tafelzeile ist Transport, kein Votum." Derselbe Fall, dieselbe Handlung.
+  NICHT NACHGEZOGEN wurden die vier mit Restpunkt (W0-2, W0-4, W0-6, W0-11): dort
+  liegt der Ball beim Planner, der Punkt ist offen, und ein Zustandswechsel wuerde
+  eine Bereitschaft behaupten, die der Pruefer eingeschraenkt hat.
 ballbesitz: generator
 ballbesitz_nachgezogen: |
   plan-pruefer -> generator, 21.08. vom integrator. TRANSPORT: Paragraf 262 —
@@ -28350,7 +28410,19 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z2-W0-9"
 titel: "„Deaktiviert' deaktiviert: echter Kontostatus statt Online-Flag"
-zustand: ENTWURF
+zustand: BEREIT
+zustand_beleg_272: |
+  Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
+  Das Votum steht im Feld dor_beleg (Paragraf 263, ERTEILT, kein Restpunkt),
+  und der Plan-Pruefer hat den Ball selbst auf den Generator gesetzt — er haelt den
+  Auftrag also fuer baubar. ARBEITSREGELN.md:253 bindet diesen Schritt an genau
+  diesen Beleg.
+  GRUNDSATZ AUS PARAGRAF 272, dort fuer A-38/A-39/A-42 ausgesprochen: "Ich habe die
+  Voten geliefert, sie stehen im Datensatz; das Nachziehen von Zustand, Ball und
+  Tafelzeile ist Transport, kein Votum." Derselbe Fall, dieselbe Handlung.
+  NICHT NACHGEZOGEN wurden die vier mit Restpunkt (W0-2, W0-4, W0-6, W0-11): dort
+  liegt der Ball beim Planner, der Punkt ist offen, und ein Zustandswechsel wuerde
+  eine Bereitschaft behaupten, die der Pruefer eingeschraenkt hat.
 ballbesitz: generator
 ballbesitz_nachgezogen: |
   plan-pruefer -> generator, 21.08. vom integrator. TRANSPORT: Paragraf 263 —
@@ -28378,7 +28450,19 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z2-W0-10"
 titel: "api/secure/master-sets*: reversible Stilllegung per Schalter (Y-11 entschieden)"
-zustand: ENTWURF
+zustand: BEREIT
+zustand_beleg_272: |
+  Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
+  Das Votum steht im Feld dor_beleg (Paragraf 264, ERTEILT, kein Restpunkt),
+  und der Plan-Pruefer hat den Ball selbst auf den Generator gesetzt — er haelt den
+  Auftrag also fuer baubar. ARBEITSREGELN.md:253 bindet diesen Schritt an genau
+  diesen Beleg.
+  GRUNDSATZ AUS PARAGRAF 272, dort fuer A-38/A-39/A-42 ausgesprochen: "Ich habe die
+  Voten geliefert, sie stehen im Datensatz; das Nachziehen von Zustand, Ball und
+  Tafelzeile ist Transport, kein Votum." Derselbe Fall, dieselbe Handlung.
+  NICHT NACHGEZOGEN wurden die vier mit Restpunkt (W0-2, W0-4, W0-6, W0-11): dort
+  liegt der Ball beim Planner, der Punkt ist offen, und ein Zustandswechsel wuerde
+  eine Bereitschaft behaupten, die der Pruefer eingeschraenkt hat.
 ballbesitz: generator
 ballbesitz_nachgezogen: |
   plan-pruefer -> generator, 21.08. vom integrator. TRANSPORT: Paragraf 264 —
@@ -28438,7 +28522,19 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z2-W0-12"
 titel: "Nuriva-Token: Laufzeit 8 h (konfigurierbar), Widerruf, Bereinigung (Y-10 entschieden)"
-zustand: ENTWURF
+zustand: BEREIT
+zustand_beleg_272: |
+  Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
+  Das Votum steht im Feld dor_beleg (Paragraf 266, ERTEILT, kein Restpunkt),
+  und der Plan-Pruefer hat den Ball selbst auf den Generator gesetzt — er haelt den
+  Auftrag also fuer baubar. ARBEITSREGELN.md:253 bindet diesen Schritt an genau
+  diesen Beleg.
+  GRUNDSATZ AUS PARAGRAF 272, dort fuer A-38/A-39/A-42 ausgesprochen: "Ich habe die
+  Voten geliefert, sie stehen im Datensatz; das Nachziehen von Zustand, Ball und
+  Tafelzeile ist Transport, kein Votum." Derselbe Fall, dieselbe Handlung.
+  NICHT NACHGEZOGEN wurden die vier mit Restpunkt (W0-2, W0-4, W0-6, W0-11): dort
+  liegt der Ball beim Planner, der Punkt ist offen, und ein Zustandswechsel wuerde
+  eine Bereitschaft behaupten, die der Pruefer eingeschraenkt hat.
 ballbesitz: generator
 ballbesitz_nachgezogen: |
   plan-pruefer -> generator, 21.08. vom integrator. TRANSPORT: Paragraf 266 —
