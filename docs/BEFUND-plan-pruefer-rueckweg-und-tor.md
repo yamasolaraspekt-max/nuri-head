@@ -12435,3 +12435,103 @@ Verhalten, das seit `374bb851` nicht mehr existiert — die Passage gehört gest
 drei heutigen Ausgänge umgeschrieben. **Ball bei mir für die Methode:** ab hier wähle ich für Posten
 (a) zuerst die **bewegte Trägerdatei** und dann die Zeiger, nicht umgekehrt — und ich prüfe bei einem
 gewanderten Zeiger immer **beides**, die Zeile und den Satz.
+
+## §169 — Z1-W1-2 ist gebaut: die Zahlen halten alle, die Meldung fehlt, und die Regel hat jetzt zwei Fassungen
+
+**Messstand** `5d646e94` · Baum sauber (0 Einträge) · 0 neue Commits in meinem Zweig.
+**Neu auf dem Integrationszweig:** `85be41e4` → **`7e28d051`**, 46 Commits — 41 davon mein eigener
+Rückweg, **fünf fremde**. Der eine, der in meine Bahn fällt: **`60c04eef` 21.08. 13:33,
+`generator: Z1-W1-2 gebaut`**. Das ist der Auftrag, für den ich in §144 die DoR **erteilt** habe.
+Damit ist die Vorratsprüfung diese Runde ausgesetzt — es ist etwas offen.
+
+### 1. Meldepflichten — hier fehlt etwas
+
+| Pflicht | gemessen |
+|---|---|
+| Bau-SHA existiert | **ja** — `60c04eef`, 2 Dateien |
+| SHA steht in einem **Feld** der Statuswahrheit | **NEIN** — `grep -c '60c04eef'` in `docs/STATUS.md` @ `7e28d051` = **0** |
+| Auftrag hat überhaupt einen Datensatz | **NEIN** — `grep -c 'Z1-W1'` = **0** |
+
+Und das ist keine Frage der Reihenfolge: der Integrator hat `docs/STATUS.md` **nach** dem Bau noch
+**zweimal** geschrieben — `86398891` (13:34, +33/−3) und `7e28d051` (13:40, +72/−0) — und in beiden
+Zustellungen kommt weder die Kennung noch der SHA vor. **Ein gebauter Auftrag, den die Statuswahrheit
+nicht kennt.** Das ist derselbe offene Posten wie in §108, nur jetzt mit Code dahinter: die fünf
+`Z1-W1`-Datensätze fehlen weiterhin.
+
+### 2. Scope-Diff, selbst gemessen
+
+```
+39  0  resources/planner/hausplaner/__tests__/dachGeometrie.test.ts
+21  0  resources/planner/hausplaner/geometry/dachGeometrie.ts
+Löschungen gesamt: 0
+```
+
+Deckt sich mit seiner Angabe („39 Anfügungen und NULL Löschungen", Kriterium C). **Kein Beifang**,
+kein Hausplaner-Fremdes, keine Migration.
+
+### 3. Seine drei Zahlen — nachgerechnet, nicht geglaubt
+
+Die Formel **wörtlich aus `dachGeometrie.ts:158-160`** genommen
+(`first = max(0, L−B)`, `trapez = ((L+first)/2)·((B/2)/cos)`, `walm = B²/(4·cos)`) und gegen den
+Erhaltungssatz `Σ = (L·B)/cos` gestellt:
+
+```
+6×8  @ 30°  Summe  64.66   Soll  55.43   +16.7 %      er sagt 64,66 / 55,43 / +16,7 %
+4×10 @ 30°  Summe  80.83   Soll  46.19   +75.0 %      er sagt 80,83 / 46,19 / +75,0 %
+3×12 @ 35°  Summe 109.87   Soll  43.95  +150.0 %      er sagt 109,87 / 43,95 / +150 %
+```
+
+**Alle drei auf die Stelle.** Auch die Aussage, auf die er seine Abweichung stützt, hält:
+
+```
+8×8  @ 30°/35°/45°   ±0.0 %      (die Ausnahme L = B)
+12×8 @ 30° · 12×3 @ 35°   ±0.0 %  (Gegenrichtung L > B)
+```
+
+Der Fehler tritt **ausschließlich** bei `L < B` auf, und genau dort — und nur dort — wirft der neue
+Code. **Die Abweichung von der Auflage ist rechnerisch berechtigt**, und er hat sie offengelegt statt
+sie zu verschweigen. Auch der eigene Fehler, den er meldet (erste drei Proben mit `L > B`, wo die
+Klemmung gar nicht greift), ist genau die Klasse, die ich mir selbst in §144 als Kalibrierfehler
+notiert habe.
+
+### 4. Was er NICHT gemeldet hat: die Regel hat jetzt zwei Fassungen
+
+Die Auflage lautete *„`walmIstKonsistent` benutzen, keine dritte Fassung"*. Er benutzt sie — und
+seine Verschärfung `&& laengeM !== spannM` ist mathematisch richtig. **Aber der zweite Aufrufer ist
+nicht mitgezogen worden.** Über den Funktionsnamen gemessen, nicht über Dateinamen:
+
+```
+Definition   dachformVorlagen.ts:414-416   lengthM > widthM          (eine Fassung, unverändert)
+Aufrufer 1   dachGeometrie.ts:150          !konsistent && L !== B    -> L = B ERLAUBT   (neu)
+Aufrufer 2   dachformVorlagen.ts:478       !konsistent               -> L = B FEHLER    (unverändert)
+```
+
+`dachformVorlagen.ts:478` liegt in `validateVorlage` und meldet bei `L = B`
+`code: 'WALM_INKONSISTENT', schwere: 'fehler'` mit dem Text *„Länge (8 m) muss größer als Breite
+(8 m) sein"*. **Dieselbe Eingabe, dieselbe Regelfunktion, zwei Urteile — ein Modul auseinander.**
+
+Und die Gattung des Widerspruchs steht im Namen des Schalters, der `:478` überhaupt scharf macht:
+**`benoetigtLaengerGleichBreite`** (`dachformVorlagen.ts:88`, gesetzt bei `:1563` und `:1906`).
+*„länger gleich breite"* liest sich als **≥**; `walmIstKonsistent` prüft **>**. Der Generator hat
+genau diese Lücke gefunden — und auf **einer** Seite geschlossen.
+
+**Grenze meiner Messung, ausdrücklich:** Die Vorlage `zeltdach` (`dachformVorlagen.ts:2087`) ist eine
+`geplanteVorlage` mit dem Grund *„Kein Build-Pfad in `updateBuilding`"*, und `applyVorlage`
+(`:1263`) steigt bei geplanten Vorlagen **vor** `validateVorlage` mit `ok: false` aus. Erreichbar ist
+der Zwiespalt daher über die **Walm**-Vorlage mit auf Gleichstand gesetzten Maßen (Vorgabe 12×8,
+beide editierbar). **Ob die Oberfläche das zulässt, habe ich nicht gemessen** — ich melde den
+Zwiespalt im Code, nicht eine Bedienfolge.
+
+### 5. Was ich NICHT tue
+
+Ich nehme nicht ab. `tsc exit 0`, `1768 grün`, die Rot-Probe und die Browserabnahme (Kriterium E)
+sind **Sache des Evaluators**; der Generator sagt das selbst und hat recht damit. Ich habe die
+Meldepflichten geprüft, den Umfang selbst gemessen und die tragenden Zahlen nachgerechnet — mehr
+gehört mir hier nicht.
+
+**Ball beim Integrator:** `Z1-W1-2` ist gebaut und die Statuswahrheit weiß nichts davon — Datensatz
+und Bau-SHA in ein **Feld**, für alle fünf `Z1-W1`-Kennungen.
+**Ball beim Planner:** `dachformVorlagen.ts:478` beurteilt `L = B` weiterhin als `fehler`, während
+`dachGeometrie.ts:150` es seit `60c04eef` erlaubt — entweder zieht `:478` nach, oder die Ausnahme
+fällt; der Schalter heißt `benoetigtLaengerGleichBreite` und meint offenbar `≥`.
+**Ball beim Evaluator:** Kriterium E, die Browserabnahme.
