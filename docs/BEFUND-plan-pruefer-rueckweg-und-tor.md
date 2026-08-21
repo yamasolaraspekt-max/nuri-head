@@ -8917,3 +8917,125 @@ darüber hinaus.
 angeschlossen, stillgelegt oder so belassen wird, ist eine Fachentscheidung mit Rechenwirkung.
 **Ball beim Planner**, mit ausdrücklichem Hinweis an **Yama**: hier liegen vier Module und 51
 Exporte, die niemand aufruft — das ist eine Größenordnung, die eine Entscheidung verdient.
+
+## §120 — Erreichbarkeit des ganzen Planers gemessen: 38 von 165 Modulen laufen nicht, und fünf davon sind kein Fund
+
+*(Nummer §120 gegen HEAD `d4ee1555` gewählt und hier benannt.)*
+
+§119 hat eine Kette gemessen. Diese Runde misst den **ganzen Baum**: den Importgraphen von
+`main.tsx` aus durchlaufen, Laufzeitkanten von Typkanten getrennt.
+
+```
+  MIT Typ-Importen              erreichbar 135 von 165     nicht erreichbar 30
+  OHNE Typ-Importe (Laufzeit)   erreichbar 127 von 165     nicht erreichbar 38
+      davon in geometry/                                   23 von 55
+```
+
+### Das Verfahren, bevor die Zahl gilt
+
+Drei Prüfungen, weil eine Reichweitenmessung leicht zu viel meldet:
+
+```
+  Positivkontrolle   fangKern · HausplanerApp · wallGeometry   erreichbar: JA
+  Projekt-Aliase     19 nicht-relative Ziele, ALLE npm-Pakete (react, konva, node:*)
+  dynamische Importe im Produktivcode: 0
+```
+
+Der letzte Punkt ist der wichtigste, und der Code beantwortet ihn selbst. `enginePanels.ts:1-10`:
+
+> *„**Warum eine Zuordnung und kein dynamischer Import:** `faehigkeiten.ts` führt je Engine
+> `engineModul: 'geometry/treppenBerechnung'`. Das ist eine **Deklaration, kein Ladepfad** —
+> `import(variable)` überlebt das Vite-Bundling nicht zuverlässig. Deshalb steht hier eine
+> **explizite Zuordnung mit statischem Import**."*
+
+Die acht `import(`-Treffer im Baum sind sämtlich Kommentare oder Tests. Damit ist der statische
+Graph der vollständige Ladeweg, und die 38 sind belastbar.
+
+### Fünf der 38 sind erklärt — und zwar sauber
+
+`faehigkeiten.ts` deklariert **13** Engine-Module, `enginePanels.ts` verdrahtet **8**. Fünf fehlen:
+`heizkreisVerteiler` · `holzBauteile` · `holzMengen` · `schifterListe` · `wandaufbau`.
+
+Das sah nach einem toten Versprechen aus — eine angebotene Fähigkeit, die nichts lädt. Gemessen:
+
+```
+  die fuenf unverdrahteten     zustand: 'in_entwicklung'   (alle fuenf)
+  zwei verdrahtete zur Probe   zustand: 'verfuegbar'
+```
+
+**Exakte Entsprechung: 8 verfügbar und verdrahtet, 5 in Entwicklung und nicht verdrahtet.** Die
+Deklaration sagt die Wahrheit, die Oberfläche verspricht nichts, was nicht lädt. **Kein Fund** — und
+das gehört genauso berichtet wie ein Fund.
+
+### Was unerklärt bleibt
+
+**Keines der §119-Module ist als Engine deklariert.** Die Kette `polygonFlaeche` ← `deckenMesh` ·
+`dachAusschnitt` · `dachformVorlagen` · `grundriss` fällt nicht unter „in Entwicklung"; sie ist
+gebaut, geprüft und ohne Ladeweg. §119 steht unverändert.
+
+Dazu die schärfere Teilmenge, die erst dieser Durchlauf zeigt:
+
+| Modul | Laufzeit-Exporte | hängt nur an |
+|---|---|---|
+| `dachformVorlagen.ts` | **51** | `import type` |
+| `aufbauPlatzierung.ts` | 8 | `import type` |
+| `dachWerte.ts` | 8 | `import type` |
+| `linienBauteile.ts` | 5 | `import type` |
+| `polygonFlaeche.ts` | 1 | `import type` |
+
+**73 Laufzeit-Exporte in fünf Modulen, die über eine Kante angeschlossen sind, die beim Übersetzen
+verschwindet.** Sie sehen im Editor verbunden aus, in der Anwendung sind sie es nicht. Zwei weitere
+Typ-only-Module (`toolTypes.ts`, `werkzeugArten.ts`) tragen null Laufzeitcode — dort ist die Typkante
+richtig, und sie sind ausdrücklich **kein** Teil des Befunds.
+
+### Einordnung
+
+Die Differenz 135 zu 127 ist die eigentliche Lehre: **acht Module ändern ihren Status, je nachdem ob
+man Typkanten mitzählt.** Wer Erreichbarkeit ohne diese Trennung misst, meldet fünf laufzeitrelevante
+Module als angeschlossen, die es nicht sind. Das ist P7 auf Graphebene — die Kante existiert im
+Quelltext und nicht im Programm.
+
+**Grenze:** gemessen sind statische Importe, Typkanten getrennt, dynamische Importe und Registrierung
+geprüft. Ein Bündlerpfad außerhalb dieser Formen wäre nicht sichtbar; Hinweise darauf gibt es keine.
+
+**Kein Bau, kein Zustandsfeld.** **Ball beim Planner** für die 33 unerklärten; die fünf
+`in_entwicklung`-Engines brauchen nichts. **Hinweis an Yama:** 23 von 55 Geometrie-Modulen laufen
+nicht, davon fünf mit 73 Exporten hinter einer Typkante — ob angeschlossen, stillgelegt oder bewusst
+belassen wird, ist eine Fachentscheidung mit Rechenwirkung.
+
+### Nachtrag zu §120 — der Generator war achtzehn Stunden vor mir, und meine Zahl war falsch
+
+*(Ohne eigene Nummer, weil es eine Berichtigung ist und kein neuer Befund.)*
+
+**Erstmessung gehört ihm.** `cfd5959e` „S-1/8", **20.08. 16:10** — mein §120 ist vom **21.08. 09:57**.
+Sein Befund ist meiner, Punkt für Punkt: `import type` fälschlich als Kante gezählt, korrigiert auf
+Wertkanten, drei reine Typdateien ausdrücklich **kein** Befund, `dachformVorlagen` mit 51
+Laufzeit-Exporten als der schwerste Fall. Sein Satz dazu, den ich nicht besser sagen kann: *„Gefunden
+nicht durch Nachdenken über die Methode, sondern beim Verfolgen einer einzelnen Kette."* Und `6506c713`
+„S-1/9" vom **21.08. 09:52** — fünf Minuten vor meinem Commit — hat die 33 bereits klassifiziert und
+die `in_entwicklung`-Fälle herausgerechnet.
+
+**Damit habe ich einen fremden Befund nachgebaut statt ihn zu zitieren.** Das ist Punkt 4 aus P-02
+(*„VERLINKEN STATT NACHBAUEN"*) — genau der Punkt, den ich in §116 selbst geprüft und für tragfähig
+erklärt habe. Vier Tage später breche ich ihn. Die Ursache ist dieselbe wie bei der
+Nummernkollision: ich habe den Stand zu Beginn gemessen und nicht mehr, bevor ich schrieb.
+
+**Und meine Zahl war falsch.** §120 nennt 165 Module und 38 unerreichbare; richtig sind **160 und 33**.
+
+```
+  Grundmenge MIT  Testdateien   165   erreichbar 127   nicht 38   <- meine Fassung, falsch
+  Grundmenge OHNE Testdateien   160   erreichbar 127   nicht 33   <- richtig, deckt sich mit S-1/8
+```
+
+Ursache: fünf DOM-Tests liegen in `__domtests__/`, nicht in `__tests__/` — mein Filter kannte nur den
+zweiten Ordnernamen. Fünf Testdateien sind natürlich unerreichbar, und sie haben meine Fundzahl um
+genau fünf aufgebläht. **Das Messverfahren hat die Grundmenge bestimmt statt der Frage** — dieselbe
+Klasse, die der Release-Prüfer bei sich „4 von 74" genannt hat.
+
+**Was von §120 bleibt, ist eine Gegenprobe und nicht mehr:** eine unabhängige Umsetzung, anderer
+Autor, anderes Programm, kommt bei angeglichener Grundmenge auf **exakt dieselben 127 erreichbaren
+und 33 unerreichbaren Module**. Das ist etwas wert — aber es ist Bestätigung, nicht Entdeckung, und
+§120 liest sich an mehreren Stellen wie Entdeckung. Es gilt der Nachtrag.
+
+**§119 bleibt davon unberührt**: die `polygonFlaeche`-Kette habe ich am 20.08. gemessen, bevor S-1/8
+transportiert war, und sie ist in seiner Aufstellung als eigener Fall geführt.
