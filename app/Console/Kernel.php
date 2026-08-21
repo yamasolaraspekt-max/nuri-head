@@ -21,6 +21,13 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         // $schedule->command('leaves:update-status')->hourly();
         // $schedule->command('job_representatives:update-status')->hourly(); 
+        // Z2-W0-12: abgelaufene Token werden taeglich entfernt. Ohne Bereinigung waechst
+        // `personal_access_tokens` unbegrenzt mit Saetzen, die nichts mehr oeffnen.
+        // `--hours=24` heisst: geloescht wird, was seit 24 Stunden abgelaufen ist — ein
+        // Nachlauf, damit ein gerade abgelaufener Token noch als 'abgelaufen' erkennbar ist
+        // und nicht als 'nie existiert'.
+        $schedule->command('sanctum:prune-expired --hours=24')->daily();
+
         $schedule->command('chat:sync-solar-news')->everyFifteenMinutes();
         $schedule->command('breaking-news:deactivate-expired')->everyMinute();
         $schedule->command('lead-emails:sync')->everyMinute()->withoutOverlapping();

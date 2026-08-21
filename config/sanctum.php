@@ -46,7 +46,18 @@ return [
     |
     */
 
-    'expiration' => null,
+    // Z2-W0-12 · Y-10 (Yama, 21.08.): Nuriva-Token laufen nach 8 Stunden ab, konfigurierbar.
+    //
+    // Der Wert steht in STUNDEN in der Umgebung und wird hier in Minuten umgerechnet — Sanctum
+    // erwartet Minuten, und eine Stundenangabe ist die Groesse, ueber die entschieden wurde.
+    //
+    // **Rueckweg, ausdruecklich:** `NURIVA_TOKEN_LAUFZEIT_STUNDEN=0` (oder leer) bedeutet
+    // UNBEGRENZT — dann steht hier wieder `null`, der Zustand von vor diesem Auftrag. Die
+    // Null-Behandlung ist kein Beiwerk: `0 * 60` waere `0` Minuten, und Sanctum liesse jeden
+    // Token sofort ablaufen. Der Rueckweg wuerde damit zur Totalsperre.
+    'expiration' => ((int) env('NURIVA_TOKEN_LAUFZEIT_STUNDEN', 8)) > 0
+        ? ((int) env('NURIVA_TOKEN_LAUFZEIT_STUNDEN', 8)) * 60
+        : null,
 
     /*
     |--------------------------------------------------------------------------
