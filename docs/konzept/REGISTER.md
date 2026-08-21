@@ -29,6 +29,7 @@ müssen aber als solche gekennzeichnet sein.
 
 | Blatt | Thema | Zustand |
 |---|---|---|
+| [`governance-automatisierung-zielbild.md`](governance-automatisierung-zielbild.md) | Yamas zwölf Hebel „Kontrollen als Maschine": Auftragsdatei als SSOT (G-1), Rollen-Workspace + Ressourcen-Vermieter (G-2, Z0-I1 = Scheibe 1), WIP-Limit im Tor (G-3), Abnahmepaket, Bundle-Drift, Browser-Reproduzierbarkeit, drei Spuren, Aktivierungsmatrix, Alterung, Schalterregister, DB-Guard | KONZEPT — eigene Spur Governance/Infrastruktur; Bau nach Z0-I1/A-37 (WIP-Regel) |
 | [`dachschichten-modell-zielkonzept.md`](dachschichten-modell-zielkonzept.md) | Dachschichten-Modell: Ticket bleibt Basis, Playground-Schichtengeneratoren herauslösen, Ansicht ≠ Konstruktion, drei Modi; erster vertikaler Schnitt | KONZEPT — Bau nach TESTBEREIT (Welle 2 Produkt) |
 | [`dachschichten-reuse-matrix.md`](dachschichten-reuse-matrix.md) | Reuse-/Extraktions-Matrix des ersten Schnitts: R1 `schichten`-Muster (Wand/Decke), R2 Zod/Commands nach `aufbauten`-Muster, R3 Playground-Ideen (Layer-Gruppen, Explosion) ohne Code, R5 Ebenenpanel + Schichten-Renderer; Nicht-Ziele (deckungsneutral, holzBauteile) | KONZEPT — schnittreif nach TESTBEREIT; Dirigent-Entscheide Ansichtsprofil/2D-Scope im Kopf |
 | [`arbeitsregeln-1-5-orchestra-nachtrag.md`](arbeitsregeln-1-5-orchestra-nachtrag.md) | Nachtrag ARBEITSREGELN 1.7 (eingearbeitet `0f554dd9`): Integrations-Abnahme, Release-Hook, Nachvollzugs-Matrix, Dirigent | eingearbeitet, K2/K3 offen |

@@ -289,7 +289,11 @@ dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K
 - **A-37-3** · **Negativfall Baum:** `TICKET_ROLLE=generator` im **Planner**-Worktree → exit **1**,
   Meldung nennt **erwarteten und gefundenen** Baum.
 - **A-37-4** · **Negativfall Branch:** richtiger Baum, aber falscher Branch ausgecheckt → exit **1**.
-- **A-37-5** · **Negativfall fehlende Kennung:** `TICKET_ROLLE` leer → **exit 3**.
+- **A-37-5** · **Negativfall fehlende Kennung:** `TICKET_ROLLE` leer → **exit 5**.
+  *(Berichtigt 21.08., Planner nach VOTUM A-37 / Gesamtauftrag v2 Phase 1: hier stand „exit 3" und
+  widersprach damit der Tabelle unten — Code 3 ist dort die fehlende Modulauflösung — und dem
+  Rückweg-Absatz, der **5** nennt. **Gemessen 21.08.:** `TICKET_ROLLE= bash scripts/rollen-tor.sh` →
+  `exit=5`. Überschrift, Tabelle und Rückweg nennen jetzt denselben Wert.)*
   **Entschieden am 15.08. nach DoR-Restpunkt 3, benannt statt geraten:** `rollen-tor.sh` prüft
   **eigenständig**, denn bei direktem Aufruf ist keine andere Prüfung davor. **Drei
   unterscheidbare Codes**, damit die Quelle am Code ablesbar ist:
@@ -358,6 +362,12 @@ dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K
   erfüllt — auch wenn die Codetabelle im Blatt steht.*
   **Verlangt:** je Ursache ein eigener, im Bau **wirklich erreichbarer** Rückgabewert, belegt
   durch **je einen Lauf mit Rohausgabe und `echo $?`** — nicht durch die Tabelle.
+  **Klarstellung 21.08. (Planner, Gesamtauftrag v2 Phase 1):** Die Unterscheidung 2/3/4 gilt für die
+  **inneren** Prüfer (YAML-Syntax / Modulauflösung / Laufzeit — die Meldungsklassen `YAML-KOPF`,
+  `MODUL`, `LAUFZEIT`); **nach außen** endet `commit-pruefen.sh` im Abweisungsfall mit **1**
+  („KEIN COMMIT"), und `rollen-tor.sh` mit **1** (Baum/Branch) bzw. **5** (fehlende Kennung).
+  Beides zusammen ist **kein** Widerspruch, sondern zwei Ebenen — das Blatt benennt sie ab jetzt
+  getrennt, damit der Evaluator weiß, **welchen** Rückgabewert er wo misst.
   **Zählen der `raus()`-Aufrufe genügt nicht, wenn kein Pfad sie erreicht.**
 - **A-37-19** · **DIE MARKENERKENNUNG MUSS ROLLENMARKEN MIT ZUSATZ ERKENNEN.**
   **Gemessen 19:4x:** die Erkennung sucht `^[a-z][a-z-]*(-[0-9]+)?: ` *(heute Zeile **150**,
@@ -394,6 +404,16 @@ dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K
   **Verlangt: `js-yaml` wird als direkte `dependency` deklariert.** *Eine Barriere, die an einer
   transitiven Abhängigkeit hängt, fällt aus, sobald jemand ein unbeteiligtes Paket entfernt —
   und sperrt dann die gesamte Kette, ohne dass die Ursache am Fehlerbild ablesbar wäre.*
+  **ENTSCHIEDEN 21.08. (Planner, nach VOTUM A-37 = NACHBESSERN 20/21, offen nur dieses Kriterium;
+  Gesamtauftrag v2 Phase 1):** `js-yaml` wird als **direkte, versionierte `dependency`** in
+  `package.json` aufgenommen (gleiche Hauptversion wie die heute transitiv geladene, damit kein
+  Verhaltenswechsel), `package-lock.json` aktualisiert. **Nachbesserung = genau dieser Schritt,
+  nichts sonst** (§12.2: Umfang ist der Befund). Kette: Plan-Prüfer bestätigt die Revision →
+  Generator **im eigenen Worktree** → Evaluator prüft danach **alle** A-37-Kriterien erneut, nicht
+  nur A-37-21 (Yama). Abnahmebeleg: `grep -n '"js-yaml"' package.json` → Treffer in `dependencies`;
+  `npm ls js-yaml` zeigt den direkten Eintrag; Trockenlauf `commit-pruefen.sh --trocken` mit
+  `NODE_PATH` auf ein leeres Verzeichnis zeigt weiterhin `MODUL` (Meldung bleibt, Abhängigkeit
+  ist nur nicht mehr transitiv).
   **Das Tor selbst ist an dieser Stelle vorbildlich:** es trennt vier Lagen — heil, YAML-Syntax,
   Modulauflösung, Laufzeit — und meldet den Modulfehler **als solchen** statt als Kopf-Fehler.
   *Der Mangel liegt nicht im Tor, sondern in der Deklaration, an der es hängt.*
