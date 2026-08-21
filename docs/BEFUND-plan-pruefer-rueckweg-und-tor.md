@@ -13482,3 +13482,88 @@ hat die ältere verdrängt, statt neben ihr zu stehen.*
 **0**, obwohl das Wort dasteht — ohne Zeilenende zählt `grep -c` die Zeile nicht. Mit
 `printf '%s\n'` kommt **1** heraus. Die Fangprobe war ein Wort, von dem ich wusste, dass es
 vorkommt.)*
+
+## §179 — DoR Z1-W1-3, Fassung 2: **ERTEILT**. Kriterium A ist heute messbar grün — und mein §145 ist damit erledigt
+
+**Messstand** `cc94c2ba` · Baum sauber · 0 neue Commits in meinem Zweig.
+**Angekommen:** `47ca397f` (21.08. 14:21) *„planner/dirigent: Welle-1-Blätter Fassung 2 — drei
+DoR-Verweigerungen eingearbeitet, Bauten regularisiert, eine Nachbesserung angeordnet, ein
+Widerspruch entschieden"*. Vier Blätter geändert, **131 Anfügungen / 65 Löschungen**.
+Damit liegt etwas in meiner Bahn: drei revidierte Blätter im Zustand `ENTWURF` verlangen eine
+**neue DoR-Runde**. Ich mache **eine** vollständig statt drei oberflächlich; W1-1 und W1-5 folgen.
+
+Gewählt: **Z1-W1-3**, weil dort mein tragender Restpunkt lautete, Kriterium A könne **nie** grün
+werden. Das ist die Behauptung, die sich entscheiden lässt.
+
+### Jede Behauptung selbst gemessen — am Basis-Stand UND am heutigen Code
+
+| Behauptung des Blattes | meine Messung |
+|---|---|
+| A heute: `grep -c polygonM2 dachGeometrie.ts` → **0** und `grep -c "from './polygonFlaeche'"` → **1** | **0 / 1** ✓ |
+| „P1-Kriterium A war vor dem Bau wirksam rot" | am Basis `11f7c4c3`: **2 / 0** ✓ — A ist am Basis rot und heute grün |
+| Basis `dachGeometrie.ts:39-48` = private `polygonM2`, mm-Eingang, `/1_000_000`, kein `isFinite` | wörtlich getroffen ✓ |
+| „**fünf** Schuhband-Fassungen in `geometry/`" | **5** ✓ (siehe Fehlverdacht unten) |
+| C: Umrechnung erkennbar am Aufrufort `:89` | `dachGeometrie.ts:89` trägt `polygonFlaecheM2(poly.map((p) => ({ x: p.x / 1000, …})))` ✓ |
+| C: `polygonFlaeche.ts` unverändert | `git diff --numstat d7651d9c^ d7651d9c -- …/polygonFlaeche.ts` = **0 Zeilen** ✓ |
+| „eine **achte** Fassung" im Kommentar | stimmig: sechs gelistet, die siebte (`polygonM2`) im Folgesatz benannt ✓ |
+| D: „`kontur.ts:22-23` nennt die tatsächliche Lage" | **daneben** — siehe Restpunkt |
+
+### Eigener Fehlverdacht, vor der Meldung gefangen
+
+Meine erste Zählung ergab **sechs** Schuhband-Dateien in `geometry/` gegen die **fünf** des Blattes,
+und ich war nahe daran, das als Zahlfehler zu melden. Die sechste ist `kontur.ts` — und sie trägt
+**0 Codezeilen** mit dem Muster:
+
+```
+dachAusschnitt.ts 1 · dachTopologie.ts 1 · grundriss.ts 1 · polygonFlaeche.ts 1 · roomDetection.ts 1
+kontur.ts 0   <- nur die Kommentarzeile :27, die das Muster ZITIERT
+```
+
+**Grundmenge „Dateien mit Mustertreffer" ist nicht dieselbe wie „Dateien mit Rechencode".** Die
+Fünf des Blattes hält; meine Sechs war die falsche Frage. *(Dieselbe Trennung habe ich in §170
+selbst gezogen und hier zunächst vergessen.)*
+
+### Restpunkt (klein, nicht tragend) — Kriterium D zeigt zwei Zeilen daneben
+
+D verlangt, `kontur.ts:22-23` nenne die tatsächliche Lage und behaupte keine „genau eine Stelle"
+mehr. Gemessen:
+
+```
+kontur.ts:22-23   „Wiederverwendet wird dagegen `signierteFlaeche` … statt eine achte Fassung …"
+kontur.ts:25      „**BERICHTIGT 21.08. (Z1-W1-3, Kriterium D):** hier stand …"
+kontur.ts:26      „… weiterhin an genau einer Stelle". **Das trifft nicht zu und traf nie zu.**"
+```
+
+Die Zusage steht auf **:25-26**, nicht auf :22-23. Und sie ist **nicht gewandert**: die Datei ist an
+`87dbbe77` — dem Stand, an dem der Planner gemessen hat — und heute **blob-identisch**
+(`a8980021…`). Der Zeiger war beim Schreiben daneben.
+
+**Warum das nicht blockiert:** die geforderte Aussage existiert, ist eindeutig auffindbar und steht
+drei Zeilen tiefer; :22-23 trägt sogar bereits „eine achte Fassung", also die Mehrzahl. Ein
+Evaluator wird nicht in die Irre geführt, nur kurz aufgehalten.
+
+### Votum
+
+**DoR ERTEILT** für `Z1-W1-3`, Fassung 2. Ein kleiner Restpunkt (Fundstelle in Kriterium D), kein
+tragender.
+
+**Und damit ist mein §145 erledigt, in allen drei Punkten:**
+
+- **Restpunkt 1** („A kann nie grün werden") — **aufgelöst**, und zwar sauber: A misst jetzt den
+  **Bezeichner** statt des Formelmusters. Am Basis rot (2/0), heute grün (0/1). Das ist genau der
+  Weg, den mein Einwand offenließ, und er ist messbar.
+- **Restpunkt 2** (das Muster übersieht echte Fassungen) — **erledigt** durch die berichtigte
+  Zählung; ich habe sie nachgezählt und sie stimmt.
+- **Restpunkt 3** (Kriterium D hatte zwei Lesarten) — **entschieden**: berichtigen statt wahr
+  machen. Die Entscheidung liegt beim Planner und ist getroffen.
+
+*Zur Kenntnis, ohne eigene Messung in dieser Runde:* der Dirigent hat den Widerspruch aus §169
+(`dachformVorlagen.ts:478` gegen `dachGeometrie.ts:150`) **entschieden** — kein Defekt, weil die
+beiden Stellen verschiedene Fragen stellen („ist das eine Walm-**Vorlage**" gegen „ist die Fläche
+rechenbar"); der Warntext an `:478` soll in Welle 2 „Zeltdach" sagen. Das ist eine Fachentscheidung
+und gehört ihm; ich nehme sie an und führe §169 damit nicht weiter.
+
+**Ball beim Integrator:** `Z1-W1-3` kann auf `BEREIT`, das Votum steht hier.
+**Ball beim Planner:** die Fundstelle in Kriterium D (`:22-23` → `:25-26`).
+**Bei mir offen:** die beiden anderen DoR-Runden, **W1-1** und **W1-5** (dort ist zusätzlich eine
+Nachbesserung Klasse CODE angeordnet, die genau meinen §177-Befund aufnimmt).
