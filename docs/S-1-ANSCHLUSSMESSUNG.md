@@ -646,3 +646,65 @@ hängt — und genau dann ist er am teuersten. Der Zählbefehl steht oben; er un
 **Und die Grenze bleibt, die der Architektur-Bericht benannt hat:** dieses Maß misst **Dateien**.
 Eine tote Funktion in einer lebenden Datei findet es nicht. **Die 33 sind weiterhin eine
 Untergrenze.**
+
+---
+
+# S-1/9 — die 33, neu gezählt und klassifiziert
+
+*20.08. gegen `cfd5959e`. Nach dem Methodenfehler aus S-1/8 stehen die Klassen des
+Architektur-Berichts auf einer anderen Grundlage. Hier die Zuordnung, neu gemessen.*
+
+## Erst der Zahlenabgleich, damit keine Zahl unerklärt bleibt
+
+```
+33 Module unerreichbar (Wert-Kanten)                    6.709 Zeilen  gemessen
+  – 3 reine Typdateien (kein Laufzeitcode)                –543
+  – meine eigenen Vermerke von heute (6 Dateien)          –122
+                                                        -------
+  toter Laufzeitcode                                     6.044 Zeilen
+```
+
+**Das deckt sich auf die Zeile mit der Hochrechnung aus S-1/8** (3.105 + 2.939). Die Differenz zur
+Rohzahl waren genau die Typdateien und meine eigenen Kommentarzeilen — beides gehört
+herausgerechnet, sonst wächst der Befund durch das Berichten über ihn.
+
+**6.044 von 29.361 Zeilen Produktivcode = 20,6 %.**
+
+## Die Klassen
+
+| Klasse | Module | Z. | Urteil |
+|---|---|---|---|
+| **Reine Typdateien** — Typ-Kante ist die richtige | `scene.types.ts` · `toolTypes.ts` · `werkzeugArten.ts` | 543 | **kein Befund** |
+| **Ausdrücklich stillgelegt / reine Daten** | `toolCatalogStillgelegt` (75) · `werkzeugLandkarte` (271) | 346 | **kein Befund**, im Kopf begründet |
+| **Als `in_entwicklung` markiert** | `heizkreisVerteiler` (58) · `wandaufbau` (96) · `holzMengen` (81) · `holzBauteile` (99) · `schifterListe` (152) | 486 | **kein Befund** — ehrlich ausgewiesen, Operand fehlt am `RoofNode` |
+| **NEU: tot an einer Typ-Kante** | **`dachformVorlagen` (2.402)** · `aufbauPlatzierung` (219) · `linienBauteile` (167) · `polygonFlaeche` (48) · `dachWerte` (103) | **2.939** | **schwerster Posten**, s. S-1/8 |
+| **K3 fremder Wirt** | `auswechslung` · `dachAusschnitt` · `dachOeffnung` · `grundriss` · `sparrenTrennung` · `aufbautenStatus` | 1.058 | Vermerk gesetzt; Anschluss braucht Modellfelder |
+| **K1 Modul und Umgehung im selben Griff** | `deckenMesh` (35) · `auswahlDarstellung` (71) · `trefferSuche` (75) | 181 | **anschließen** — die Inline-Lösung kann weniger |
+| **K4 PHP-Zwilling** | `raumProjektion` (98) · `dachProjektion` (43) | 141 | Träger-Entscheidung bei Yama |
+| **K2 ohne Anschlussauftrag** | `wandFlaeche` (238) · `dachTopologie` (183) · `treppenTypen` (153) · `treppeSvg` (142) · `integrationAbgleich` (135) · `werkzeugRegistry` (68) · `dachVorlage` (34) | 953 | je Fall verschieden |
+
+*(`holzMengen`, `holzBauteile` und `schifterListe` gehören zu zwei Klassen — `in_entwicklung`
+**und** fremder Wirt. Sie stehen oben nur einmal, bei der Klasse, die ihre Lage erklärt.)*
+
+## Was daraus für den Bauvorrat folgt
+
+**Von 6.044 toten Zeilen sind 1.375 ausdrücklich begründet** (Typdateien ausgenommen: stillgelegt,
+reine Daten, `in_entwicklung`). **Kein Befund, und das ist ein gutes Viertel.**
+
+**Der Rest zerfällt in drei ungleiche Teile:**
+
+1. **2.939 Zeilen hängen an einer einzigen Typ-Kante** — eine Zeile Entscheidung, kein Bauvorrat.
+   Das ist der größte Posten und der billigste Griff im ganzen Bestand.
+2. **1.058 Zeilen sind gegen ein anderes Haus gebaut** (K3) — Anschluss heißt hier Umrechnung
+   Meter→mm plus fehlende Modellfelder. **Kein Handgriff.**
+3. **181 Zeilen sind der echte Anschlussvorrat** (K1) — dort kann die lebende Lösung weniger als das
+   Modul, und der Anschluss ist eine Verdrahtung ohne Fachfrage.
+
+**Die Bauliste, dreimal verkleinert:** S-1/4 nannte fünf Anschlüsse mit 1.628 Zeilen. Die
+Vertragsprüfung ließ einen übrig. Die Modellprüfung nahm `aufbautenStatus` heraus. Was messbar
+bleibt, ohne Yama-Entscheidung anschließbar zu sein, sind **drei Module mit 181 Zeilen** — und der
+`dachfenster`-Anschluss, sobald die Einheitenfrage entschieden ist.
+
+**Das ist ein unbequemes Ergebnis und es ist das gemessene.** Der Bestand ist nicht voller
+anschlussbereiter Rechnungen; er ist voller Rechnungen, die eine Entscheidung brauchen, die über
+einem Anschluss liegt.
