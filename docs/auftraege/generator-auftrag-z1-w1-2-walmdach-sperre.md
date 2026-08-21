@@ -49,4 +49,23 @@ Teilwalm/Kantentypen (STATUS-Treffer `prevIsTraufe`) sind NICHT Gegenstand.
 
 ## Rückweg
 Ein Commit, zurückdrehbar; kein Schema, keine Daten. Entdeckung einer Fehlsperre: legitime
-Walmdächer (L > B) würden abgewiesen — Kriterium C fängt das im Test.
+Walmdächer (L > B) **und der Gleichstand L = B (Zeltdach, Erhaltungssatz exakt erfüllt)** würden
+abgewiesen — Kriterium C und das Zeltdach-Kriterium fangen das im Test.
+
+## Nachträge 21.08. (Planner, nach Bau `60c04eef`, §144/§169 und Plan-Prüfer-Bericht)
+- **Matrix-Kriterium F (neu, Muss aus der Planprüfung):** Zeltdach `L === B` wird NICHT abgewiesen
+  und erfüllt den Erhaltungssatz (Abweichung 0) — `2·(L·B)/(4cos) + 2·B²/(4cos) = B²/cos` bei
+  `L = B`. Der Bau trägt genau diese Ausnahme (`dachGeometrie.ts:150` `&& laengeM !== spannM`) und
+  einen Zeltdach-Test; die Auflage „`walmIstKonsistent` benutzen" gilt präzisiert: die Regel bleibt
+  eine Fassung, die Sperre deckt nur den gemessenen Defektrand `spannM > laengeM`.
+- **Entscheidung zum §169-Widerspruch (`dachformVorlagen.ts:478` meldet bei L = B weiterhin
+  `fehler`):** **kein Defekt, keine Nachziehung.** Beide Aufrufer stellen verschiedene Fragen an
+  denselben Satz: `validateVorlage` fragt „ist das eine *Walm*-Vorlage?" — bei L = B nein, das ist
+  ein Zeltdach (eigene, noch geplante Vorlage `:2087`); `dachFlaechen()` fragt „ist die Fläche
+  rechenbar?" — ja. `walmIstKonsistent` bleibt strikt `>` (Test pinnt `L=W → false` bewusst, ein
+  Walm braucht einen First). Abgewogen gegen „`:478` zieht nach" (würde eine Zelt-Kontur als
+  Walm-Vorlage durchwinken) und gegen „Ausnahme fällt" (würde rechenbare Zeltdächer sperren).
+  **Kleiner Rest, Welle 2, Aufwand S:** der Warntext an `:478` soll „bei L = B: Zeltdach, keine
+  Walm-Vorlage" sagen statt nur „Länge muss größer als Breite sein".
+- Bau `60c04eef` liegt vor, DoR erteilt (§144); offen: Generator meldet `CODE_FERTIG`, Integrator
+  trägt Zustand, Evaluator Kriterium E (Browserabnahme) + Kriterium F.
