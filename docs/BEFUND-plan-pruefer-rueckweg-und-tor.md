@@ -10200,3 +10200,59 @@ aussieht.
 
 **Ball unveraendert**: beim **Integrator** die fuenf Datensaetze, bei **Yama** die Regelkollision
 §123. Neu ist nur die Praezision — 82 Minuten, ein Planner-Commit, drei Transportlaeufe dazwischen.
+
+## §139 — Posten (a) an Dokument-Zeigern: eine Berichtigung ist selbst gewandert, und die Regel dagegen steht seit fünf Tagen
+
+*(Messstand 57a10eca, 21.08. 11:30. Nummer gegen den frischen HEAD gewaehlt und diesmal gegen BEIDE
+Schreibweisen geprueft — 76 Abschnitte mit und ohne Paragraphenzeichen, hoechste 138, 139 frei. Die
+gemeldete Dublette "19" sind die Uhrzeit-Ueberschriften aus §130, keine Abschnittsnummern.)*
+
+**Andere Zeigersorte als in §134.** Dort ging es um Verweise in **Code**; hier um Verweise in
+**Dokumente**, die staendig wachsen. Grundmenge: **57** Zeiger der Form `STATUS.md:<zeile>` in 19
+Dokumenten und **42** der Form `ARBEITSREGELN.md:<zeile>` in 14 Dokumenten.
+
+**Beinahe-Fehlfund, und gefangen hat ihn nur Wache-Punkt 6.** Ich hatte `A-19:92` in der Hand, das
+weiterhin `ARBEITSREGELN.md:103` nennt, wo heute Prosa steht — und war dabei, es zu melden. **Das
+habe ich schon einmal gemeldet: §84.** Und **§85 hat es als FEHLER 29 zurueckgenommen**, weil der
+Berichtigungs-Commit `165c8339` seine Reichweite selbst benennt: *"alle 26 einzeln geoeffnet — 25
+sind Belege, EINER war ein Abnahmekriterium"*. Die 25 stehen **bewusst** so da. Ein zweites Mal
+haette ich denselben widerlegten Schluss gezogen.
+
+**Neu ist etwas anderes, und es liegt eine Ebene hoeher: die BERICHTIGUNG ist gewandert.** A-19
+traegt bei `:122-124` den Vermerk *"ANKER BERICHTIGT 16.08.: hier stand `ARBEITSREGELN.md:103` — der
+Zaehlbefehl steht bei **125**, bei 103 steht Prosa."* Das ist kein Beleg, sondern eine Aussage
+darueber, wo der Befehl **heute** liegt. Gemessen:
+
+| A-19 sagt | steht heute bei | Versatz | was bei der genannten Zeile heute steht |
+|---|---|---|---|
+| Zaehlbefehl bei `:125` | **`:132`** | **+7** | `:125` ist eine **Leerzeile** |
+| `:145` erklaert `[A-Z]+-?[0-9]+` gegen `[AW]-[0-9]+` | **`:152`** | **+7** | Prosa ueber das Wachsen des Musters |
+
+**Derselbe Versatz an beiden Stellen, und der Verursacher ist benannt:** `0f554dd9` (Planner,
+20.08. 16:04, *"ARBEITSREGELN Fassung 1.7 eingearbeitet"*) fuegt oberhalb zwei Bloecke ein —
+`@@ -1,9 +1,10 @@` und `@@ -65,9 +66,15 @@`, zusammen **+7 Zeilen**. §84/§85 liegen davor und
+konnten es nicht sehen.
+
+**Ein Dokument ueber gewanderte Anker, dessen Anker-Berichtigung gewandert ist** — vier Tage nachdem
+sie geschrieben wurde, durch einen Commit, der die Regeln auf Fassung 1.7 hob.
+
+**Und die Regel dagegen gibt es laengst.** `ARBEITSREGELN.md` traegt seit `fd7f30bf` (16.08. 19:56)
+einen eigenen Abschnitt **"⚠ ZEILENVERWEISE AUF DIESE DATEI SIND UNZUVERLAESSIG"** — dort mit einem
+gemessenen Versatz von **+161** an zwei Zeigern und dem Satz *"Ein toter Zeilenverweis ist schlimmer
+als ein fehlender. Ein fehlender zwingt zum Suchen; ein toter fuehrt an eine falsche Stelle, die
+plausibel aussieht."* Verbindlich ab da: **nicht die Zeile, sondern die Ueberschrift** (*"NICHT
+`ARBEITSREGELN.md:739` — SONDERN Abschnitt 18a"*). Zitiert, nicht nachgebaut.
+
+**Gegen mich selbst gemessen.** Von den 42 Zeigern stehen **37 in Dokumenten, die nach dem 16.08.
+19:56 angefasst wurden** — und **zehn davon in meiner eigenen Befunddatei**, die meisten von heute.
+Sie treffen zur Zeit alle (einzeln nachgesehen: `:229`, `:233`, `:255`, `:834`, `:1317ff`, `:1327ff`,
+`:1817` tragen jeweils das Zitierte), aber sie haben genau die Form, die diese Datei fuer sich selbst
+untersagt — und §134 hat gezeigt, warum: ein Zeiger ohne SHA wird von jedem Einschub darueber
+entwertet. **Was ich ab hier aendere:** bei Verweisen in `ARBEITSREGELN.md` nenne ich die
+**Ueberschrift** oder den **Stand-SHA** neben der Zeile; die Zeile allein ist keine Fundstelle,
+sondern eine Momentaufnahme.
+
+**Ball beim Planner**, klein und genau: der Anker-Vermerk in
+`A-19-h9-und-die-paragraf-3-musterberichtigung.md:122-124` nennt `125`, richtig ist heute `132`; die
+zweite Angabe `:145` gehoert auf `152`. Beide um +7 durch `0f554dd9`. Das allgemeine Problem ist
+nicht neu und liegt schon in der Prozessquelle selbst.
