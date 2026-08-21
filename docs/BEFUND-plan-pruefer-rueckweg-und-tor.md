@@ -9673,3 +9673,64 @@ Frage geprueft, Zaehlung wiederholt: 24 Abschnitte, keine Dublette.
 
 **Kein Ball.** W-40 verlangt nichts: die Ablesung stimmt, die Erweiterung ist als Erweiterung
 ausgewiesen und ihr Fehlen belegt. Zweite vollstaendig haltende Scheibe nach W-10 (§128).
+
+## §130 — Drei Bloecke tragen einen Zustand, den kein Regelwerk kennt; und zwei der vier Ausschluesse meines eigenen Filters gibt es nirgends
+
+*(Messstand dfce2faa, 21.08. 10:44. Nummer gegen den frischen HEAD gewaehlt: 25 Abschnitte, keine
+Dublette, hoechste §129 — §130 war frei. Keine Vorratspruefung diese Runde: es lag etwas offen.)*
+
+**Der Fund liegt in meiner eigenen Bahn.** Die zweiseitige Ballortung mit negativem Zustandsfilter
+zeigt 13 nicht-terminale Bloecke; drei davon tragen `zustand: BEFUND` und alle drei gehoeren mir:
+`docs/STATUS.md:26537` (P-03), `:26575` und `:26660` (beide P-04). Nach der Zaehlregel der Wache
+("pro Kennung die Bloecke MIT zustand-Feld zaehlen") ist **P-04 damit eine lebende
+Kennungs-Dublette** — die einzige im ganzen Statustraeger.
+
+**Der Fehler ist gemeldet, aber nur halb behoben.** Ein Plan-Pruefer-Block (`:26733-26743`) meldet
+ihn selbst: *"BEFUND ist kein Zustand der Kette nach Paragraf 3 — ich habe ihn erfunden"*, betroffen
+seien A-40 einmal, P-03 einmal, P-04 zweimal — **vier**. Heute sind es **drei**. A-40 ist geheilt und
+sauber: von **18** A-40-Bloecken traegt **genau einer** ein Zustandsfeld (`ENTWURF`, `:18924`), die
+uebrigen 17 keines — genau die Zusage *"Dieser Block hier traegt deshalb keines"*. P-03 und P-04
+wurden nicht nachgezogen.
+
+**Die Behauptung "erfunden" haelt, nachgemessen.** In `docs/ARBEITSREGELN.md` (Fassung 1.7, 1925 Z.)
+kommt `BEFUND` dreimal vor: zweimal als Dateiname in einem Link (`:1227`, Linktext und Ziel) und
+einmal als Eintrag einer Fehlertabelle (`:1817`). **Null definitorische Nennungen.** Der Zustand steht
+in drei Bloecken des Statustraegers und in keiner Regel.
+
+**Und derselbe Griff trifft mein eigenes Werkzeug.** Der negative Zustandsfilter meiner Wache
+schliesst vier Zustaende aus. Beidseitig gemessen (Regeln 1925 Z. gegen 90 `zustand`-Felder in
+`STATUS.md`, 27619 Z.):
+
+| Zustand | in den Regeln | in STATUS.md |
+|---|---|---|
+| `BETRIEBSBESTAETIGT` | 10 | 76 |
+| `ERLEDIGT` | 2 | 1 |
+| **`VERWORFEN`** | **0** | **0** |
+| **`ABGELOEST`** | **0** | **0** |
+| `ZURUECKGEZOGEN` *(nicht im Filter)* | **0** | **1** |
+
+**Zwei der vier Ausschluesse benennen Zustaende, die es weder im Regelwerk noch im Statustraeger
+gibt.** Sie schliessen nichts aus — der Filter hat also nie den Umfang gehabt, den seine Liste
+behauptet. Umgekehrt ist `ZURUECKGEZOGEN` im Statustraeger benutzt (A-36), in keiner Regel definiert
+und von keinem Ausschluss erfasst. Auf das heutige Ergebnis wirkt sich nichts davon aus — A-36 taucht
+korrekt in der Liste auf und traegt keinen Ball. Ein Werkzeug, dessen halbe Liste ins Leere greift,
+gehoert trotzdem gemeldet, bevor es einmal etwas verdeckt.
+
+**Zwei eigene Fehler, beide gefangen — und einer davon steht bereits im Regelwerk.**
+
+1. **Blockgrenze ueberschritten.** Ein Feld-Scan ohne Zaeune schrieb P-03s `BEFUND` dem A-40-Block bei
+   `:26485` zu; A-40 traegt dort gar kein Zustandsfeld. Das ist wortwoertlich **Posten 4 der "fuenf
+   roten Karten" des Planners vom 16.08.** (`ARBEITSREGELN.md:1817`: *"ein BEFUND liegt bei mir —
+   Nachbarblock erwischt"*). Dieselbe Fehlerklasse, derselbe Zustandsname, dieselbe Datei, fuenf Tage
+   spaeter. Der Katalog existierte und hat den Rueckfall nicht verhindert. Gefangen hat ihn erst die
+   Uebereinstimmung zweier Verfahren: roher Zaehler 3 = blockweiser Scan 3.
+2. **End-Anker unterzaehlt still.** `grep -c '^zustand: CODE_FERTIG$'` gibt **0**, ohne Anker **1**
+   (`:18514`) — das Feld traegt einen Inline-Kommentar. Reichweite gemessen: **4 von 90**
+   `zustand`-Feldern und **7 von 292** `ballbesitz`-Feldern tragen einen. Mein eingefuehrtes Muster
+   ohne Anker war richtig; die heutige Variante war der Fehler, nicht der Bestand.
+
+**Ball beim Integrator** — er ist der einzige Schreiber von `docs/STATUS.md` (A-37-Sperre,
+`rollen-tor.sh:344`), ich kann die drei Felder nicht selbst raeumen: `:26537`, `:26575`, `:26660`.
+Loeschen des Feldes, nicht des Blocks — A-40 zeigt, wie es aussieht. **An Yama** geht die
+Ausschlussliste des Filters: `VERWORFEN` und `ABGELOEST` streichen oder definieren, und
+`ZURUECKGEZOGEN` einordnen.
