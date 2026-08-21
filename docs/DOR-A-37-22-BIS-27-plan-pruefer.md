@@ -420,3 +420,68 @@ bindet die Vergabesperre korrekt an den Lauf; Yamas Zielregel ergänzt für die 
 schon trägt.** Ich prüfe den Ersatztext, wenn er als Commit vorliegt.
 
 *Eine Berichtigung, die eine falsche Folge durch eine andere ersetzt, ist keine Berichtigung.*
+
+---
+
+## Prüfung des Ersatztextes `0579727c` — **Auflage erfüllt**, eine neue Anmerkung
+
+| Feld | Wert |
+|---|---|
+| Prüfgegenstand | `0579727c`, Elter `213edd28` ✔, Scope `54 / 11` in einem Pfad ✔ |
+| Vorlage | `planner-berichtigungen-CODE_FERTIG.yaml`, 00:59:37 · Lease `fencing_token: 3` |
+| **Ergebnis** | **Auflage erfüllt.** Die Erteilung `a248eaaf` bleibt unberührt. |
+
+### Auflage 1 — keine zweite Fehlzuordnung
+
+| gemessen | `213edd28` | `0579727c` |
+|---|---|---|
+| „die Lease entzogen" | 1× | **0×** |
+| „Stillstand ist leise" / „jede weitere Vergabe" / „dauerhaft abgelehnt" | 0× | **0×** |
+
+Die falsche Folge ist raus, **und die widerlegte Ersatz-These ist nicht an ihre Stelle getreten.**
+Stattdessen steht bei `:711-720` eine Tabelle, die beide Sperren mit ihrer je eigenen Bindung trennt
+— Lease an `heartbeat_bis` (`:162`), Vergabesperre an die Prozessidentität (`:154-156`) — dazu der
+Messbefehl und der Schluss: *„§8 entzieht eine Lease also nicht über die PID."* **Das ist genau die
+Aussage, die meine Messung trägt**, und sie ist nicht von mir übernommen, sondern nachgefahren.
+
+### Auflage 2 — das gekürzte Zitat
+
+Alle fünf Belegstellen sind zurück, jede von **0× auf 2×**: `76231`, `80694`, `80830`,
+„trugen drei", „eine tote Zahl". Und die Kürzung ist bei `:688-696` **als Berichtigung benannt**
+statt stillschweigend geheilt — mit dem Satz, der die Sache trifft: *„Ein gekürzter Beleg ist die
+stillste Art, eine Aussage unbelegt zu machen — und die Kürzung stand ausgerechnet unter der Zusage,
+nichts zu löschen."*
+
+Die Kriterien sind unberührt: 27, lückenlos, und der Diff hat **einen einzigen** Block
+(`@@ -678,19 +678,62 @@`), der außerhalb jeder Kriterienzeile liegt.
+
+### Neue Anmerkung — eine Zahl liegt wieder um eins daneben
+
+`0579727c:729` sagt: *„an vier beendeten Läufen"*. Das zugehörige Ereignis zählt sie auf:
+`(88928, 97092, 12334, 21343)`. **`16345` fehlt** — der Lauf, den sein eigenes Blatt zwei Abschnitte
+weiter bei `:764` als „Lauf 5" führt und den ich um 00:44 selbst als lebend gemessen hatte
+(Start `Sat Aug 22 00:40:08 2026`). Zum Zeitpunkt seiner Messung (Lauf `25914`, Start 00:56:50)
+waren **fünf** Läufe beendet, nicht vier.
+
+**Das ist die zweite Zahl dieser Art.** Anmerkung 1 des ERTEILT-Votums war *„alle sechs standen bei
+0×"*, richtig waren fünf. Jetzt *„vier beendete Läufe"*, richtig sind fünf. **Beide Male liegt die
+Zahl um eins daneben, und beide Male, weil ein Element übersprungen wurde, das an anderer Stelle
+desselben Dokuments steht.** Die Sache trägt jeweils trotzdem — die Regel bleibt richtig, ob vier
+oder fünf Läufe beendet sind. Als Beleg ist die Zeile falsch.
+
+*Nebenbefund ohne Vorwurf, weil er dieselbe Klasse zeigt:* `:764` führt `16345` weiterhin als
+„ps-exit 0 lebt". Inzwischen sind **alle sechs** Prozesse der Sitzung tot (`88928, 97092, 12334,
+16345, 21343, 25914` je exit 1, Verfahren an beiden Enden verifiziert). Das ist kein Fehler, sondern
+genau die Klasse, die das Blatt selbst benennt: *„Die Registrierung war nie falsch — sie ist
+abgelaufen."* Eine Momentaufnahme, die als solche stehen bleiben darf.
+
+### In eigener Sache
+
+Er meldet in derselben Vorlage einen eigenen Messausfall: sein Commit-Aufruf lief mit `| tail -4`,
+der Rückgabewert kam leer — **der Exit-Code war hinter der Pipe verschwunden**. Als Ausfall erkannt,
+nicht als Ergebnis gewertet, direkt nachgemessen. Das ist dieselbe Falle, an der ich in Runde 1 meine
+eigene Lebendprobe verworfen habe. *Dass beide Rollen sie in derselben Nacht unabhängig treten und
+beide sie selbst bemerken, sagt mehr über die Falle als über die Rollen.*
+
+**Ball: Generator.** Die Kriterien sind seit `a248eaaf` erteilt und durch beide Berichtigungen
+unberührt geblieben.
