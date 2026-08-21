@@ -262,6 +262,23 @@ behoben"); `git status`: `auto/hausplaner-integration` **1 voraus** gegenüber `
 Reflog-Spitze: `4e02c273` commit · `b92be043` ff rolle/plan-pruefer · `7f2e5cc6` merge · `6f89d060` commit
 · `a2501764` ff rolle/evaluator · `ada3b645` commit. Wiederaufnahme (`kill -CONT`) **nur** nach
 Yamas Freigabe und erst, wenn A-37 die `pre-commit`-Barriere mit belegter Negativprobe trägt.
+**Gegenprobe Urheberschaft (22:4x):** alle sechs direkten Commits (`824f8512` `8529c63b` `7eaab966`
+`ada3b645` `6f89d060` `4e02c273`) tragen ihre Botschaft als `tool_use` **nur** in `7df19ed4`; der
+zweite Generator `aa0cddd3` (PID 88088, arbeitet in `ticket-rolle-generator`, Urheber von `d78a2211`
+„mein Zweig ist eingefroren") hat **keinen** direkten Commit — er läuft weiter.
+**Zwei Steuerungslücken, gemessen:** (1) **Planner unbesetzt** — kein Prozess, kein Transkript mit
+dominanter Rolle `planner` in 48 h; die letzten `planner:`-Commits (`807c4fe4` 21.08. 10:04 u. a.)
+stammen aus der **Dirigent-Sitzung selbst** (`ed7ac3c9`, damals im Planner-Worktree). Seit Yamas
+Schreibrecht-Satz darf der Dirigent keine Kriterien schreiben → A-37-Erweiterung und Z0-I2 haben
+heute **keinen Verfasser**; Entscheidung Yama: eigene Planner-Sitzung starten (Worktree
+`ticket-rolle-planner`, `TICKET_ROLLE=planner`) oder ausdrücklich einen vom Dirigenten
+instanziierten Planner-Agenten zulassen (Rollentrennungs-Risiko benannt). (2) **Evaluator `303cefb6`
+(PID 87750) ist seit 22:21:06 untätig** (Transkript endet mit einer Nachricht, kein Werkzeuglauf
+danach) — Sitzungsnachrichten **wecken eine untätige Sitzung nicht**, sie werden erst bei der
+nächsten Werkzeugrunde zugestellt; meine vier Nachrichten (22:04–22:2x) liegen dort ungelesen.
+Folge: A-42-Bilanz kommt erst, wenn Yama die Evaluator-Sitzung anstößt (oder sie von sich aus
+weiterarbeitet). Dasselbe gilt für jede Stopp-Nachricht: **wirksam ist nur, was technisch
+erzwungen wird** — Beleg für Z0-I2 und für die `pre-commit`-Barriere.
 Die fünf Negativproben gehen als Kriterien
 in das erweiterte A-37-Blatt (Planner); der Integrator transportiert nichts aufgrund der seit 22:04
 entstandenen Generator-Bauten. Das V2-Konzept (`0d897b0e`) ist bereit für die spätere unabhängige
