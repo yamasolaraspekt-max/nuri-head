@@ -194,3 +194,72 @@ messbar geschehen. Wie die Grenze zwischen A-37 und Z0-I2/Z0-I3 gezogen wird, en
 Planner, nicht ich.
 
 **Das Votum bleibt NICHT ERTEILT**, Restpunkt 1 jetzt in sechs prüfbaren Zeilen statt einer Prosa.
+
+---
+
+## Zweiter Nachtrag 00:42 — wo die beanstandeten Stellen entstanden sind
+
+Ich habe den **Auftrag** gemessen, gegen den der Planner gearbeitet hat
+(`.ticket-steuerung/rollen/planner.yaml`, generation 6, geschrieben 00:10:04). Das Ergebnis
+berichtigt die Zuschreibung zweier Restpunkte und eine Aussage von mir selbst.
+
+### Restpunkt 1 stammt wörtlich aus dem Auftrag
+
+| Quelle | Wortlaut |
+|---|---|
+| Auftrag `:20` | „Sitzungsidentitaet = Sitzungs-ID + PID des Sitzungsprozesses + Prozess-Startkennung (nicht Shell-PID, Befund 79285cf2)" |
+| Blatt `:675-676` | „die Kennung aus **Sitzungs-ID + PID des Sitzungsprozesses + Prozess-Startkennung**, **nie** aus der Shell-PID einer Werkzeugrunde" |
+
+**Der Planner hat seinen Auftrag wortgetreu umgesetzt.** Die Regel, die ich als unvollständig
+beanstande, ist nicht seine Formulierung — er hat sie übernommen, wie sie zugestellt wurde.
+
+**Die Zeitachse zeigt dasselbe:**
+
+| Zeit | Ereignis |
+|---|---|
+| 00:10:04 | Auftrag gen 6 mit der unvollständigen Kennung |
+| 00:21:54 | Z0-I3-Vorgabe erhält Yamas Ergänzung „Identität bei headless Sitzungen" |
+| **00:23:15** | **Planner-Commit `3dde19ea`** |
+| 00:25:55 | mein Hinweis mit der Messung |
+| 00:29:08 | Yamas Zielregel in sechs Punkten |
+| 00:34:24 | mein Votum |
+
+Die Präzisierung ist **sechs Minuten nach** der Lieferung entstanden. Das Votum bleibt **NICHT
+ERTEILT** — Yama verlangt die Beanstandung ausdrücklich, und das Blatt trägt die vollständige Regel
+nicht. Aber es ist **kein Ausführungsmangel, sondern ein nachgereichter Maßstab.**
+
+*Bemerkenswert ist, dass der Auftrag den Mechanismus, der die Regel bricht, selbst benennt:* `:5`
+sagt „Der Dirigent stoesst die Sitzung alle 4 Minuten headless an (`claude -p --resume`)". Die
+Ursache stand im selben Dokument wie die Regel, die sie aushebelt — fünfzehn Zeilen darüber.
+
+### Restpunkt 2 ebenfalls
+
+`79285cf2` steht wörtlich im Auftrag `:20` als „Befund 79285cf2". Der Planner hat den Belegzeiger
+übernommen, wie er zugestellt wurde. Dass es eine **Sitzungs-ID** und kein Commit ist, ist damit ein
+Fehler der Zustellung, nicht der Verarbeitung. *(Der Restpunkt bleibt — ein Blatt sollte einen
+Zeiger prüfen, bevor es ihn erbt. Aber die Quelle ist benannt.)*
+
+### Berichtigung einer eigenen Aussage
+
+Abschnitt 7 dieses Blattes sagt: *„Er hat den schärfsten Punkt — `ticket-release-pruefung` bestimmt
+bei `:118` das Ziel und steht nicht in der Liste — selbst gefunden."* **Das ist falsch, und ich
+nehme es zurück.** Der Auftrag `:17` gibt wörtlich vor: „ALLE Rollenbaeume … **inkl.
+ticket-release-pruefung (heute Sonderfall :118)** und ticket-rolle-dirigent". Der Punkt *und* die
+Zeilennummer standen in der Vorgabe.
+
+**Was der Planner tatsächlich selbst geleistet hat** — und das bleibt bestehen: die Ist-Lage dazu
+gemessen (`grep -n 'release'` → genau ein Treffer bei `:118`) und die Folge ausformuliert, dass der
+Baum, der das Ziel bestimmt, selbst nie nachgezogen wird. Messen und Folgern ist seine Arbeit;
+Finden war es nicht.
+
+### Das Muster dahinter
+
+**Ein Auftrag, der eine unvollständige Regel wörtlich vorgibt, erzeugt ein Blatt mit derselben
+Lücke — und die DoR beanstandet dann den Ausführenden statt die Quelle.** Ohne diese Messung hätte
+mein Votum drei Mängel dem Planner zugeschrieben, von denen zwei bei der Auftragserteilung
+entstanden sind. Deshalb gehört zur DoR nicht nur das Blatt, sondern auch der Auftrag, gegen den es
+gebaut wurde.
+
+**Ball:** unverändert Planner für die Nachbesserung des Blattes — zusätzlich **Dirigent** für die
+Herkunft: die Kennung in künftigen Aufträgen um den Laufbezug ergänzen und `79285cf2` als
+Sitzungs-ID kenntlich machen, nicht als Commit.
