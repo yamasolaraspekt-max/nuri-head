@@ -93,6 +93,11 @@
 | **A-42** Befundnotizen ziehen um | `ENTWURF` | **plan-pruefer** | Schnitt 16.08. · Basis `e802c1f8` | **Blatt** `docs/auftraege/aktiv/A-42-befundnotizen-ziehen-um.md` · Auflage 2 der Integrationslauf-Freigabe bekommt einen Träger. Blöcke mit `auftrag:` aber ohne `zustand:` wandern nach `docs/BEFUNDNOTIZEN.md` — **unverändert, mit Herkunft, KEIN Löschen**. **Muss vor dem ersten schreibenden `--tafel`-Lauf fertig sein:** die Erzeugung schreibt je Kennung eine Zeile aus dem Commit-Log, diese Blöcke kämen darin nicht vor und verschwänden lautlos. **Keine feste Zahl in einem Kriterium** — A-42-1 nennt den Zählbefehl, weil die Menge wächst. Tragende Prüfung ist **A-42-2, die Summengleichung**: sie ist die einzige, die einen stillen Verlust findet. **DoR steht aus.** |
 | **W-17/1** Export und Speichern ablesen | **`BETRIEBSBESTAETIGT`** | — | Schnitt 16.08. · Basis `8faca79c` | **Blatt** `docs/auftraege/aktiv/W-17-1-export-und-speichern-ablesen.md` · **Stufe B, Ziel `BESCHRIEBEN`.** Einordnung **gemessen**: Reifegrad `LEER`, die sieben Werkbank-Blätter sind reine Vorlagen (**249 Z.**), Produktivcode reichlich. **Der Code liegt an ZWEI Orten** — Insel (`arbeitsbereichSpeicher.ts`, `paketSpeichern.ts`, 37 Dateien) **und Server** (`SpeichereHausplanerDokument.php`, `StelleSnapshotWieder.php`). **Die Insel speichert nicht selbst.** `W-17-1-4` zieht die **Registerzeile** nach — das Kriterium existiert wegen der W-37-Lücke. `W-17-1-5` schließt Produktivcode aus. **DoR steht aus.** |
 | **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | **`BETRIEBSBESTAETIGT`** | — | Bau `ec12e9b3` · Schnitt `1df82ee1` | **GEBAUT 15.08.: das erste Werkzeug nach A7, das wirklich etwas tut.** `geradenGeometrie` hatte **null** Produktivimporte, jetzt einen. **`u` gab es vorher nicht** — `geradenSchnittParameter` ist eine **zweite Sicht auf dieselbe Rechnung**, `geradenSchnitt` ruft sie und bleibt in seiner Signatur. **Der lehrreichste Fehler kam von meiner eigenen Zusage:** die erste Fassung verglich `min(t, 1−t)` — in Gleitkomma ist `1−0.8` **nicht** `0.2`, der Gleichstand zweier symmetrischer Schnittkanten wäre **nie** erkannt worden. *Genau das Raten, das K6 verbietet, nur unsichtbar.* Behoben über den **quadrierten Abstand zum gerundeten** Schnittpunkt — ganze Millimeter, exakt vergleichbar. **Drei Entscheidungen benannt statt still getroffen** (K6 ohne Klickpunkt → *kleinste Kürzung*; Gleichstand bei `t = 0,5` → `end`; gesperrte Wand als Schnittkante erlaubt). **UMFANG GRÖSSER ALS DER SCHNITT, gemeldet:** ein Registry-Eintrag ist im Haus **nicht additiv** — **zwölf** bestehende Zusagen wurden rot, alle einzeln nachgemessen; **eine** Zusage habe ich **erweitert** (`art === 'werkzeug'` → auch `'aktion'`), **sechs Zähl-Anker** mit Gegenprobe nachgezogen. **OFFEN und nicht behauptet: die Browserabnahme** — die Bühne `ticket_testing` ist leer (0 Benutzer, 0 Objekte). Suite **1763/1763** (1750 + genau 13 neue), tsc **0**, Bündel frisch. **— SCHNITT:** Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` · **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
+| **Z1-W1-1** Das DIN-18065-Badge sagt, was es nicht geprueft hat | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-1-din-badge-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §143), offen: drei Punkte · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich |
+| **Z1-W1-2** Walmdach: ungueltige Kontur wird abgelehnt statt still falsch gerechnet | `ENTWURF` | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-2-walmdach-sperre.md` · **DoR ERTEILT** (plan-pruefer §144) · **Bau** `60c04eef` (21.08. 13:33) · offen: Kriterium E Browserabnahme, dazu ein Widerspruch an `dachformVorlagen.ts:478` beim Planner (§169) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich |
+| **Z1-W1-3** Eine Formel, eine Stelle: polygonM2-Kopie zusammenfuehren | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md` · **DoR NICHT ERTEILT** (plan-pruefer §145), offen: Kriterien A und D · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich |
+| **Z1-W1-4** dachWerte: eine Quelle, Stilllegung statt Loeschung | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` · **DoR ERTEILT** (plan-pruefer §146) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich |
+| **Z1-W1-5** insulationType: der tote Zweig sagt, dass er tot ist | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §147), offen: die Zahl · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich |
 
 ### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
 
@@ -27750,4 +27755,133 @@ ballbesitz_grund: |
   Ersetzen im Originalsatz ausdruecklich verlangt, ist seine Entscheidung und nicht meine.
   Verlangt er es, braucht es Yamas Wort — es waere eine Aenderung an datierten Messungen
   fremder Rollen.
+```
+
+
+## Z1-W1 — die fuenf Auftraege der Inventur Z1, Datensaetze vom Integrator angelegt 21.08.2026
+
+```yaml
+auftrag: "Z1-W1-1"
+titel: "Das DIN-18065-Badge sagt, was es nicht geprueft hat"
+zustand: ENTWURF
+ballbesitz: planner
+ballbesitz_grund: |
+  Aus Paragraf 143: "Ball beim Planner" fuer drei Punkte.
+  Eintragen war ausdruecklich beim Integrator und ist mit diesem Commit erledigt.
+blatt: "docs/auftraege/generator-auftrag-z1-w1-1-din-badge-ehrlich.md"
+basis_sha: 11f7c4c3
+dor_beleg: |
+  NICHT ERTEILT — plan-pruefer, Paragraf 143 (21.08.). Offen: drei Punkte. Der Auftrag ist
+  bis zur Nachbesserung am Blatt nicht baubar.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
+herkunft_dieses_datensatzes: |
+  Das Auftragsblatt verlangt ihn woertlich: "status_steht_in: docs/STATUS.md —
+  Tafelzeile+Datensatz braucht den Integrator-Lauf (alleiniger Schreiber)". Zustand und
+  basis_sha sind AUS DEM BLATTKOPF uebernommen, nicht von mir gewaehlt; das DoR-Ergebnis
+  aus dem genannten Abschnitt; der Titel aus der Blattueberschrift. Ich setze keinen
+  Zustand: dass Z1-W1-2 seit dem Bau nicht mehr auf dem Blattwert stehen duerfte, ist
+  eine Fachentscheidung und gehoert nicht dem Eintragenden.
+```
+
+```yaml
+auftrag: "Z1-W1-2"
+titel: "Walmdach: ungueltige Kontur wird abgelehnt statt still falsch gerechnet"
+zustand: ENTWURF
+ballbesitz: evaluator
+ballbesitz_grund: |
+  Paragraf 169 nennt DREI Baelle zu diesem Auftrag, und ein Feld traegt nur einen.
+  Gesetzt ist der, den die Kette nach dem Bau ruft: der Evaluator, Kriterium E, die
+  Browserabnahme. DIE ANDEREN BEIDEN STEHEN HIER, damit sie nicht verschwinden:
+  beim PLANNER liegt der Widerspruch dachformVorlagen.ts:478 gegen dachGeometrie.ts:150
+  — dieselbe Eingabe L = B, dieselbe Regelfunktion walmIstKonsistent, zwei Urteile;
+  beim INTEGRATOR lag dieser Eintrag hier, erledigt mit diesem Commit.
+  Wenn der Plan-Pruefer einen anderen Halter meint, berichtigt er ihn — ich habe
+  transportiert, nicht entschieden.
+blatt: "docs/auftraege/generator-auftrag-z1-w1-2-walmdach-sperre.md"
+basis_sha: 11f7c4c3
+dor_beleg: |
+  ERTEILT — plan-pruefer, Paragraf 144 (21.08.).
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
+bau_sha: 60c04eef
+bau_beleg: |
+  Gemeldet in Paragraf 169: "60c04eef 21.08. 13:33, generator: Z1-W1-2 gebaut", 2 Dateien,
+  39 Anfuegungen und null Loeschungen, kein Beifang. Der Plan-Pruefer hat die drei
+  Zahlen des Bauenden nachgerechnet statt geglaubt und alle drei treffen auf die Stelle.
+  Sein Befund war, dass dieser SHA in KEINEM Feld der Statuswahrheit stand — grep -c
+  ergab null. Damit steht er.
+herkunft_dieses_datensatzes: |
+  Das Auftragsblatt verlangt ihn woertlich: "status_steht_in: docs/STATUS.md —
+  Tafelzeile+Datensatz braucht den Integrator-Lauf (alleiniger Schreiber)". Zustand und
+  basis_sha sind AUS DEM BLATTKOPF uebernommen, nicht von mir gewaehlt; das DoR-Ergebnis
+  aus dem genannten Abschnitt; der Titel aus der Blattueberschrift. Ich setze keinen
+  Zustand: dass Z1-W1-2 seit dem Bau nicht mehr auf dem Blattwert stehen duerfte, ist
+  eine Fachentscheidung und gehoert nicht dem Eintragenden.
+```
+
+```yaml
+auftrag: "Z1-W1-3"
+titel: "Eine Formel, eine Stelle: polygonM2-Kopie zusammenfuehren"
+zustand: ENTWURF
+ballbesitz: planner
+ballbesitz_grund: |
+  Aus Paragraf 145: "Ball beim Planner" fuer Kriterien A und D.
+  Eintragen war ausdruecklich beim Integrator und ist mit diesem Commit erledigt.
+blatt: "docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md"
+basis_sha: 11f7c4c3
+dor_beleg: |
+  NICHT ERTEILT — plan-pruefer, Paragraf 145 (21.08.). Offen: Kriterien A und D. Der Auftrag ist
+  bis zur Nachbesserung am Blatt nicht baubar.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
+herkunft_dieses_datensatzes: |
+  Das Auftragsblatt verlangt ihn woertlich: "status_steht_in: docs/STATUS.md —
+  Tafelzeile+Datensatz braucht den Integrator-Lauf (alleiniger Schreiber)". Zustand und
+  basis_sha sind AUS DEM BLATTKOPF uebernommen, nicht von mir gewaehlt; das DoR-Ergebnis
+  aus dem genannten Abschnitt; der Titel aus der Blattueberschrift. Ich setze keinen
+  Zustand: dass Z1-W1-2 seit dem Bau nicht mehr auf dem Blattwert stehen duerfte, ist
+  eine Fachentscheidung und gehoert nicht dem Eintragenden.
+```
+
+```yaml
+auftrag: "Z1-W1-4"
+titel: "dachWerte: eine Quelle, Stilllegung statt Loeschung"
+zustand: ENTWURF
+ballbesitz: generator
+ballbesitz_grund: |
+  Aus Paragraf 146: "Ball beim Generator" fuer den Bau.
+  Eintragen war ausdruecklich beim Integrator und ist mit diesem Commit erledigt.
+blatt: "docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md"
+basis_sha: 11f7c4c3
+dor_beleg: |
+  ERTEILT — plan-pruefer, Paragraf 146 (21.08.).
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
+herkunft_dieses_datensatzes: |
+  Das Auftragsblatt verlangt ihn woertlich: "status_steht_in: docs/STATUS.md —
+  Tafelzeile+Datensatz braucht den Integrator-Lauf (alleiniger Schreiber)". Zustand und
+  basis_sha sind AUS DEM BLATTKOPF uebernommen, nicht von mir gewaehlt; das DoR-Ergebnis
+  aus dem genannten Abschnitt; der Titel aus der Blattueberschrift. Ich setze keinen
+  Zustand: dass Z1-W1-2 seit dem Bau nicht mehr auf dem Blattwert stehen duerfte, ist
+  eine Fachentscheidung und gehoert nicht dem Eintragenden.
+```
+
+```yaml
+auftrag: "Z1-W1-5"
+titel: "insulationType: der tote Zweig sagt, dass er tot ist"
+zustand: ENTWURF
+ballbesitz: planner
+ballbesitz_grund: |
+  Aus Paragraf 147: "Ball beim Planner" fuer die Zahl.
+  Eintragen war ausdruecklich beim Integrator und ist mit diesem Commit erledigt.
+blatt: "docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md"
+basis_sha: 11f7c4c3
+dor_beleg: |
+  NICHT ERTEILT — plan-pruefer, Paragraf 147 (21.08.). Offen: die Zahl. Der Auftrag ist
+  bis zur Nachbesserung am Blatt nicht baubar.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
+herkunft_dieses_datensatzes: |
+  Das Auftragsblatt verlangt ihn woertlich: "status_steht_in: docs/STATUS.md —
+  Tafelzeile+Datensatz braucht den Integrator-Lauf (alleiniger Schreiber)". Zustand und
+  basis_sha sind AUS DEM BLATTKOPF uebernommen, nicht von mir gewaehlt; das DoR-Ergebnis
+  aus dem genannten Abschnitt; der Titel aus der Blattueberschrift. Ich setze keinen
+  Zustand: dass Z1-W1-2 seit dem Bau nicht mehr auf dem Blattwert stehen duerfte, ist
+  eine Fachentscheidung und gehoert nicht dem Eintragenden.
 ```
