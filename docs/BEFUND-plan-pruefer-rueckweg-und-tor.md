@@ -14983,3 +14983,87 @@ ihre Grundmenge im Kurztext nennt. Genau das habe ich in §184 an der „33er-Li
 waren"**. Eine Zahl ohne ihre Menge ist keine Zahl.
 **Ball bei Yama, unverändert und jetzt datiert:** sieben Posten warten seit **4 T 16 h bis 4 T 19 h**,
 zwei weitere seit 31 und 93 Minuten.
+
+## §195 — Posten (e): §185 war kein Einzelfall — 92 Eingabefelder, null Bereichsgrenzen, und eine Rohrlänge von −166,7 m besteht die Fehlerprüfung
+
+**Messstand** `efbe849c` · Baum sauber · 0 neue Commits; Integrationszweig unverändert, letzter
+Commit vor **55 Minuten**.
+
+§185 fand eine Form: **eine einseitige Obergrenze, die ein negativer Wert erfüllt.** Eine Form
+verlangt die Nachbarschaftsprobe — sonst bleibt sie eine Anekdote. Ich habe alle **zwölf** Module
+mit einem `bestanden`-Urteil durchgesehen.
+
+### Zwei Engines machen es richtig, und das Haus kennt damit das Muster
+
+```
+kuecheArbeitsdreieck.ts:41   bestanden: wert  >= BEIN_MIN  && wert  <= BEIN_MAX      <- Bereich
+kuecheArbeitsdreieck.ts:46   bestanden: summe >= SUMME_MIN && summe <= SUMME_MAX     <- Bereich
+abwassergefaelle.ts:63       { 'min-gefaelle', schwere: 'fehler',  bestanden: gef >= min - 1e-9 }
+abwassergefaelle.ts:65       { 'max-gefaelle', schwere: 'warnung', bestanden: gef <= MAX + 1e-9 }
+```
+
+Bei `abwassergefaelle` ist die Untergrenze die **Fehler**-Prüfung und die Obergrenze nur Warnung —
+ein negatives Gefälle fällt durch. **Beides sind saubere Bereiche.**
+
+### Vier Stellen tragen die §185-Form
+
+```
+sparrenBerechnung.ts:148   bestanden: ausnBiegung <= 1 && ausnDurch <= 1        (§185, nachgewiesen)
+wandaufbau.ts:83           { 'ziel-u',        schwere: 'warnung', uWert <= ziel + 1e-9 }
+fbhAuslegung.ts:81         { 'spez-leistung', schwere: 'warnung', spez  <= 100 }
+fbhAuslegung.ts:83         { 'kreislaenge',   schwere: 'fehler',  rohrProKreis <= maxKreis + 0.5 }
+```
+
+### Der zweite erreichbare Fall — und er trägt `schwere: 'fehler'`
+
+`fbhAuslegung` mit dem Modul nachgerechnet:
+
+```
+Normalfall      Fläche 100 m², Heizlast 5000 W          spez  50,0   rohrProKreis  88,3 m   bestanden JA
+Heizlast −5000                                          spez −50,0   Komfort-Warnung besteht
+anbindungProKreis −500                                  spez  50,0   rohrProKreis −166,7 m  bestanden JA
+```
+
+**Eine Rohrlänge von −166,7 Metern besteht die Prüfung „Längster Kreis ≤ max" — und die ist auf
+`schwere: 'fehler'` gesetzt, also die Stufe, die das Gesamturteil kippen soll.** Sie kippt es nicht,
+weil `−166,7 ≤ 100,5` wahr ist.
+
+### Die gemeinsame Ursache, und sie ist größer als §185
+
+```
+enginePanels.ts   Feldzeilen mit schluessel:      92
+                  davon mit min: oder max:         0
+EngineFlaeche.tsx:85   <input type="number" inputMode="numeric" …>   ohne min, ohne max
+```
+
+**Kein einziges Eingabefeld irgendeiner Engine trägt eine Bereichsgrenze — 0 von 92.** §185 hat das
+für `neigungGrad` gefunden; gemessen gilt es für **alle**. Die Engines fangen entartete Eingaben
+also **jede für sich** ab oder gar nicht — und genau darin unterscheiden sie sich.
+
+### Was ausdrücklich für `fbhAuslegung` spricht
+
+Das Modul ist **sonst gut gesichert**, und das gehört genannt:
+
+```
+:63  va = verlegeabstand > 0 ? … : 150          :68  nutzflaeche = Math.max(0, flaeche − sperr)
+:65  maxKreis = maxKreisLaenge > 0 ? … : 100    :74  nutzbarProKreis = Math.max(1, …)
+:75  anzahlHeizkreise = Math.max(1, …)          :85  { 'nutzflaeche', 'fehler', nutzflaeche > 0 }
+```
+
+**Sechs Klemmen, eine davon eine echte Untergrenzen-Prüfung.** Der Autor hat an entartete Eingaben
+gedacht. Durchgerutscht sind **zwei Felder**: `heizlast` (speist nur eine Warnung) und
+`anbindungProKreis` (speist die **Fehler**-Prüfung). Das ist kein Muster von Nachlässigkeit, sondern
+die Lücke, die entsteht, wenn jede Engine ihre Grenzen selbst mitbringen muss.
+
+### Was ich nicht tue
+
+Ich nenne keine Bereiche. Ob eine Anbindungsleitung ≥ 0 sein muss, ob eine Heizlast negativ sein
+darf (Kühlfall?), ob ein U-Wert eine Untergrenze hat — das sind **Fachfragen**, und `CLAUDE.md`
+verbietet, sie still zu automatisieren. Ich melde die Messung.
+
+**Ball beim Planner:** die Grenzen gehören **an die Felder** (`enginePanels.ts`, 92 Zeilen, heute
+null Grenzen) und nicht in jede Engine einzeln — sonst wiederholt sich der Fall bei jeder neuen
+Engine. Zusätzlich: `fbhAuslegung.ts:83` und `sparrenBerechnung.ts:148` prüfen eine **Obergrenze**,
+wo ein **Bereich** gemeint ist; `kuecheArbeitsdreieck.ts:41` zeigt im selben Haus, wie es aussieht.
+**Ball bei Yama, zusammen mit §185:** die Bereiche selbst sind Fachfestlegungen.
+**Kein Ball beim Generator.**
