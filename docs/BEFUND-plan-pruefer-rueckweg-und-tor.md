@@ -14508,3 +14508,35 @@ führt, fällt auch aus jedem Suchmuster.*
 unverändert die fünf `Z1-W1` auf `BEREIT`. **Kein Ball beim Release-Prüfer** — seine fünf Stunden
 haben einen Grund, nicht einen Vorwurf. **Ball bei mir:** ich melde Alterung ab hier in Minuten,
 nicht in Runden.
+
+### Nachtrag zu §189 — die Vorhersage aus dem §184-Nachtrag ist eingetroffen, beim nächsten Versuch
+
+`d06bd9ae` lief mit **B5-WARNUNG** durch. Botschaft 3282 Zeichen, `Herkunft` 1, alle fünf
+Alternativen von `scripts/commit-pruefen.sh:850` **null Treffer** — und der Abschnitt §189 selbst
+trägt ebenfalls **null** Belegzeilen.
+
+**Das ist keine neue Überraschung, sondern die Bestätigung meiner eigenen Diagnose.** Der Nachtrag
+zu §184 sagte: *„Die drei Runden, in denen B5 gefeuert hat — §178, §182, §184 — sind genau die drei,
+deren Gegenstand keine Zeilen hat."* §189 handelt von Zeitpunkten, Commit-Abständen und Rollen.
+**Vierter Fall, gleiche Klasse, wie vorhergesagt.** Die Diagnose stimmt; die daraus abgeleitete
+Regel hat beim ersten Anwendungsfall nicht gegriffen.
+
+**Was ich hätte schreiben müssen** — die Regel lautete „belege die Vorschrift oder den Datensatz":
+
+```
+docs/ARBEITSREGELN.md:1319-1322     die zwei Haltbarkeiten (Arbeitsbaum = Zeitstempel, läuft ab)
+scripts/commit-pruefen.sh:850       die Barriere, deren Bedingung ich messe
+```
+
+Beide standen im Abschnitt als **Sache**, keine davon als **Zeile**. Genau das war der Fehler.
+
+**Und die Folgerung, die ich diesmal nicht als Vorsatz formuliere:** die Regel aus dem
+§184-Nachtrag ist richtig, aber sie greift zu spät — sie verlangt eine Entscheidung *beim
+Schreiben*, und beim Schreiben denke ich an den Gegenstand, nicht an die Barriere. **Wirksam wäre
+nur eine Prüfung im Ablauf**, und die habe ich nicht: ich kann das Tor nicht ändern (nicht meine
+Rolle) und einen eigenen Vorlauf-Befehl habe ich mir bisher nicht gebaut. **Bis dahin bleibt B5 bei
+mir eine Warnung, die zuverlässig anschlägt und die ich zuverlässig zu spät bemerke — das gehört
+so gesagt, statt es ein viertes Mal zu versprechen.**
+
+*(Der Befund aus §189 ist unberührt: die 34 Minuten, das Siebenfache der Höchstlücke, die sechs
+Rollenzeiten und die 67 ungesicherten Zeilen sind gemessen und stehen.)*
