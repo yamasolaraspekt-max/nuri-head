@@ -20414,3 +20414,95 @@ Mindestwert greift. Genau diese Unterscheidung fehlt an den zehn Fundstellen mei
 treffen, beide Ampeln sind verdient. Nach §233 (drei Schwellen für eine Frage) und §238 (F-031 nicht
 wie beschrieben gebaut) ist das die erste Formelprüfung dieser Sitzung **ohne einen einzigen
 Rechenfehler im Gegenstand**.
+
+## §247 · Posten (d): eine neun Tage alte Reichweiten-Zusage hält in jedem Teil — und beinahe hätte ich das Gegenteil gemeldet
+
+**Messstand.** HEAD `b83d4fe8` (21.08. 19:35:46), Baum sauber, **0 neue Commits** — neunzehnte Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (305 Min), STATUS-Blob `810f37d9e560`. Gemessen
+21.08. 19:37–19:39.
+
+### 1 · Die Alterung der beiden roten Ampeln, frisch
+
+| Sperre | seit | Alter |
+|---|---|---|
+| **F-051** Zeitwerte je Gewerk · 🔴 GESPERRT — unbelegt | `1e933a64` 10.08. 19:11 | **15865 Min = 11 T 0 h** |
+| **F-028** Azimut-Konvention an der Systemgrenze · 🔴 | `1734aa3b` 12.08. 00:10 | **14126 Min = 9 T 19 h** |
+
+**Diesen Posten habe ich schon einmal gemacht** und komme zum selben Schluss wie damals: *„Ein hohes
+Alter macht eine rote Marke nicht schal … beide sind gesund … Kein Ball."* Ich baue ihn nicht nach
+(P-02). **Die Frage, die er offen ließ, ist eine andere:** Die Sperre ist dokumentiert — wird sie
+auch **eingehalten**?
+
+### 2 · Beinahe ein schwerer Fehlbefund
+
+Gefunden, in derselben Datei:
+
+    roof.blade.php:74    🔴 F-051 GESPERRT — DIESE ELF ZEITWERTE HABEN KEINE HERKUNFT. NICHT VERWENDEN.
+    roof.blade.php:102   const TIME_VARS = {
+    roof.blade.php:1685  const scaffoldTime = Math.ceil(facadeAreaApprox * TIME_VARS.SCAFFOLD_M2);
+    roof.blade.php:1692  TIME_VARS.MEASURE + (totalRailMeters * TIME_VARS.RAIL_M) + …
+    roof.blade.php:2383  <b>Montagezeit (Schätzung):</b> ${formatHours(bom.time.installMinutes)}
+
+Ein Sperrvermerk „NICHT VERWENDEN", 1600 Zeilen später eine Summe aus genau diesen Werten, und am
+Ende eine Anzeige für den Nutzer. **Der Satz „eine gesperrte Geld-Formel wird trotzdem gerechnet und
+angezeigt" war halb geschrieben.** Er wäre falsch gewesen.
+
+Der Vermerk beantwortet es selbst, 17 Zeilen weiter unten:
+
+> `:90` *ZUR REICHWEITE DIESER DATEI, gemessen am 12.08. (A-16-1), damit sie niemand überschätzt:*
+> `:91` *statisch — KEIN Aufrufer, `'admin.layouts.roof'` 0 Treffer in app/, routes/, resources/views/*
+> `:92` *dynamisch — EINE Stelle ruft `view()` mit einer Variablen auf, `ProductController.php:443`*
+> `:93` *Ihr `$view` wird zwei Zeilen davor auf GENAU ZWEI feste Namen gesetzt … keiner davon dieser*
+> `:95` *Ergebnis — kein Aufrufer, statisch UND dynamisch geprüft.*
+> `:96` *Die Datei liegt im Produktivbaum und wird trotzdem nicht ausgeliefert: der ORT ist kein
+> Beleg für die Wirkung (H-8b).*
+
+### 3 · Und genau deshalb ist die Zusage der eigentliche Prüfgegenstand
+
+Sie ist **vom 12.08.**, also **neun Tage alt** — und sie trägt die ganze Last: Ohne sie wäre die
+Verwendung gesperrter Geld-Werte ein Befund. Alle drei Teile am heutigen Stand nachgemessen:
+
+| Zusage vom 12.08. | heute gemessen | |
+|---|---|---|
+| `'admin.layouts.roof'` — 0 Treffer in app/, routes/, resources/views/ | **1 Treffer, und das ist der Kommentar selbst** → 0 Aufrufer | **hält** |
+| dynamisch: eine Stelle, `ProductController.php:443` | `:443` trägt `'html' => view($view, compact(` | **hält** |
+| `$view` zwei Zeilen davor auf **genau zwei** feste Namen | `:438-440` — `…product_cards` / `…product_list` | **hält** |
+
+Muster vorher verifiziert: `admin.layouts` allgemein liefert **391** Treffer, die Suche greift also.
+Und der Zeiger ist **nicht** mehrdeutig, obwohl er nur den Dateinamen nennt: es gibt im ganzen Baum
+**genau eine** `ProductController.php`. (Mein erster Griff ging ins Leere, weil ich den Ordner
+`Admin/` geraten habe statt `Product/` — mein Fehler, nicht seiner.)
+
+### 4 · Warum diese Zusage hält, wo neun andere gewandert sind
+
+Das ist der Ertrag der Runde. In dieser Sitzung habe ich gemessen: §231 — 9 von 11 Ankern falsch
+nach fünf Tagen. §232 — 9 von 9 in der Statuswahrheit. §236 — drei Quellen, drei Zahlen. §242 —
+zwei Regelzeiger um 14 und 15 Zeilen gewandert. **Hier hält eine neun Tage alte Aussage in jedem
+Teil.**
+
+Der Unterschied liegt in ihrer **Form**. Sie behauptet keine Zeile, sondern:
+
+- einen **Suchbegriff mit Trefferzahl** (`'admin.layouts.roof'` → 0),
+- eine **Bedingung** (`$view` wird auf zwei feste Namen gesetzt),
+- ein **Verfahren** (statisch *und* dynamisch),
+- und sie nennt ihr eigenes **Messdatum**.
+
+Jedes dieser vier Stücke ist heute nachprüfbar, ohne dass eine Zeilennummer stimmen muss. Der
+einzige Zeilenzeiger darin (`:443`) trifft ebenfalls — aber er trägt die Aussage nicht allein.
+
+**Das ist A-34s Ankerform, angewandt auf eine Reichweiten-Aussage statt auf einen Textverweis** — und
+der bisher stärkste Beleg dafür, dass die Form und nicht die Sorgfalt über die Haltbarkeit
+entscheidet. Die neun gewanderten Zeiger waren beim Schreiben ebenso sorgfältig gemessen.
+
+### 5 · Ball
+
+**Kein Ball.** Beide Sperren sind gesund, die Reichweiten-Zusage hält, die gesperrten Werte werden
+nicht ausgeliefert. F-051 wartet weiter auf Operanden, die nach `CLAUDE.md` nur Yama nennen kann —
+`roof.blade.php:87` hält Yamas Auflage dazu wörtlich fest: *„NICHT ÄNDERN, bevor Yama die
+Firmenwerte genannt hat. Eine falsche Zahl durch eine andere falsche zu ersetzen ist keine
+Korrektur."*
+
+Ein Hinweis ohne Auftrag für den **Planner**: Diese Zusage ist die einzige mir bekannte Stelle im
+Bestand, an der eine Reichweiten-Messung **mit Datum, Verfahren und Suchbegriff** dokumentiert ist.
+Wenn irgendein Muster es verdient, kopiert zu werden, dann dieses — und zwar dorthin, wo heute
+Zeilennummern die Last tragen.
