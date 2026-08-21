@@ -13727,3 +13727,77 @@ nicht in diesen Auftrag.
 **Ball beim Planner:** der Listenname (drei Blätter) und die Bühnen-Färbung für Welle 2.
 **Kein Ball mehr bei mir** — meine Neu-DoR-Runde ist abgeschlossen; ab der nächsten Runde wieder
 Vorratsprüfung, Posten (b).
+
+## §182 — Posten (b): die falsche Zahl im Quelltext stammt aus der Inventur, und ein einziges übersehenes Objekt erzeugt sie zweimal
+
+**Messstand** `adf4f2a6` · Baum sauber · 0 neue Commits, weder bei mir noch auf dem
+Integrationszweig (`7a82ecfb` unverändert). Dessen Arbeitsbaum trägt **eine** ungesicherte Datei,
+`docs/STATUS.md` — flüchtig, nur gemeldet.
+
+Gegenstand: **`docs/backlog/inventur-2026-08-20-z1.md`** (124 Z., ein einziger Commit `f374c73a`
+20.08. 16:35). Das ist die **Quelle** der ganzen Welle — alle fünf `Z1-W1`-Blätter tragen
+`herkunft: Befund K-1 … K-4` auf dieses Dokument. Geprüft habe ich bisher die Blätter; nie die
+Quelle.
+
+### Fünf Zahlen mit genanntem Muster, nachgezählt
+
+| Aussage | Blatt | gemessen |
+|---|---|---|
+| „`geometry/` (**56 Dateien**)" | 56 | **55** — an beiden genannten Ständen (`d6d74dbc`, `0f554dd9`) **und** heute; alle 55 sind `.ts`, es liegt keine andere Datei darin |
+| „`domain/` (**4**)" | 4 | **5** |
+| K-1: „`grep -rn insulationType` → **genau 3 Treffer** (Typ, Schema, Lesestelle)" | 3 | **4 Dateien**, an beiden Inventur-Ständen |
+| „`dachformVorlagen.ts` (**>1500 Z.**)" | >1500 | **2402** ✓ |
+| P-1: „**+16,6 %**" | 16,6 | **16,667 %** → kaufmännisch **16,7** |
+
+### Beide Fehler haben dieselbe Ursache — ein einziges Objekt
+
+Die fünfte Datei in `domain/` ist **`scene-document-v2.schema.json`**:
+
+```
+commands.types.ts · roofShape.ts · scene-document-v2.schema.json · scene.types.ts · validation.ts
+```
+
+**Und genau sie ist auch die vierte Fundstelle in K-1.** Die Inventur zählt in K-1 auf: *„Typ,
+**Schema**, Lesestelle"* — sie hielt `domain/validation.ts` (das **Zod**-Schema) für „das Schema".
+Das echte JSON-Schema lag daneben, im selben Ordner, und ist beide Male herausgefallen: **einmal aus
+der Dateizahl, einmal aus der Trefferzahl.** Ein übersehenes Objekt, zwei falsche Zahlen.
+
+### Die Wanderung der Zahl — drei Stationen, kein einziges Nachmessen
+
+```
+20.08. 16:35  Inventur  f374c73a   „genau 3 Treffer"          <- Ursprung
+21.08. 10:00  Blatt F.1 f350befc   „grep -rn insulationType → genau 3 Treffer"
+21.08. 14:15  QUELLTEXT 9dde4d15   „insulationType hat **genau drei** Fundstellen"
+```
+
+Dieselbe Zahl, dreimal weitergereicht, **kein einziges Mal nachgemessen**. Gefangen habe ich sie an
+Station 2 (§147, DoR verweigert) und an Station 3 (§177, im Code). **Station 1 ist die Quelle** —
+und dort steht sie bis heute. Fassung 2 des Blattes hat sie auf **vier** berichtigt (§180), die
+Inventur **nicht**; sie trägt genau einen Commit und ist seit dem 20.08. unberührt.
+
+Das ist die schärfere Fassung meines §177-Satzes: nicht der Bau hat die Zahl erfunden, er hat sie
+**geerbt**. Wer nur den Bau berichtigt, lässt die Quelle stehen, aus der die nächste Welle wieder
+abschreibt.
+
+### Eine Zahl, die ich NICHT als falsch melde
+
+„Falscher Alarm selbst entkräftet (**48 SVG-Icons** liegen in Unterordnern)". Gemessen: unter der
+Zone der Inventur (`resources/planner/hausplaner/`) liegen **0** SVG-Dateien; repo-weit sind es 996,
+und **kein einziger Ordner** enthält 48 (`public/hausplaner/icons/`: 111 · 25 · 25 · 20 · 5).
+
+**Das Blatt nennt für diese Zahl keine Grundmenge** — anders als bei den vier anderen. Damit ist sie
+nicht widerlegt, sondern **nicht prüfbar**. Ich führe sie ausdrücklich nicht als Fehler, sondern als
+das, was B6 meint: eine Summe ohne Erhebung. *Der Unterschied zwischen „falsch" und „nicht
+nachzählbar" ist genau der, den ich von anderen verlange.*
+
+### Die kleinste der fünf
+
+„+16,6 %" gegen gerechnete **16,667 %**. Das ist **abgeschnitten statt gerundet** — dieselbe Klasse
+wie F-040 in §107, nur in die andere Richtung und ohne Folgen. Der Generator hat in seinem Bau
+**+16,7 %** geschrieben (§169) und damit richtig gerundet; die Quelle war es, die abschnitt.
+
+**Ball beim Planner** (die Inventur ist sein Dokument, `f374c73a`): drei Zahlen berichtigen —
+`geometry/` **55** statt 56, `domain/` **5** statt 4, K-1 **vier** Fundstellen statt drei — und für
+die 48 die Grundmenge nachtragen oder die Zahl streichen. **Kein Ball beim Generator:** er hat
+geerbt, nicht erfunden, und die Nachbesserung an `9dde4d15` ist bereits angeordnet.
+**Kein Ball beim Integrator.**
