@@ -9912,3 +9912,64 @@ Loeschliste liest, liest sie falsch.
 **Kein neuer Ball.** Die Entscheidung zu den 33 liegt weiter bei Yama (§119/§120/§122), die
 Modellfrage zu `aufbautenStatus` ist dort neu dazugekommen — vom Generator gestellt, nicht von mir.
 Die Berichtigung an §131 ist meine und steht hier.
+
+## §134 — Posten (a): zwei Kommentar-Commits haben 86 Zeiger verschoben, und einer davon widerlegt meinen eigenen §128
+
+*(Messstand 1b61ce63, 21.08. 11:07. Nummer gegen den frischen HEAD gewaehlt: 29 Abschnitte, keine
+Dublette, hoechste §133 — §134 war frei. Klasse nach §132: SHA-verankert, Stand benannt.)*
+
+**Gezielt gesucht statt gestochert.** Nach der Lehre aus §129 — Zeiger halten, solange sich die
+Zieldatei nicht bewegt — habe ich zuerst gemessen, welche Werkbank-Scheiben auf **bewegte** Dateien
+zeigen. Sechs Scheiben zeigen auf Dateien mit genau **einem** Commit seit ihrem Schnitt, und dieser
+eine Commit ist in fuenf Faellen derselbe: `78e4cc0e` (Generator, 20.08. 13:54), der Herkunftsvermerk
+aus §133 — ausdruecklich *"nur Kommentare, keine Zeile Verhalten"*.
+
+**Kommentare aendern kein Verhalten und verschieben trotzdem alles darunter.** Reine Einfuegungen,
+null Loeschungen, und alle nahe am Dateikopf:
+
+| Datei | eingefuegt | ab Zeile | Zeiger in docs | davon unterhalb |
+|---|---|---|---|---|
+| `dachAusschnitt.ts` | **+21** | 21 | 37 | **31** |
+| `holzMengen.ts` | **+17** | 18 | 30 | **23** |
+| `holzBauteile.ts` | **+17** | 17 | 12 | **12** |
+| `auswechslung.ts` | **+21** | 19 | 12 | **11** |
+| `grundriss.ts` | **+21** | 14 | 9 | **9** |
+| | | | **100** | **86** |
+
+**86 von 100 Zeigern zeigen seit dem 20.08. 13:54 auf eine andere Zeile.** Von den 44 Dokumenten, die
+sie tragen, sind **41 seither nicht angefasst** worden. Betroffen sind sieben Scheiben: W-08, W-10,
+W-20, W-21, W-25, W-26, W-29.
+
+**Vier Zeiger einzeln geoeffnet — sie zeigen auf etwas anderes, nicht ins Leere.** In
+`W-29/3-FORMELN.md:34` steht ein Block aus drei Zeigern, und er ist **auf sich selbst gerutscht**:
+
+| Zusage | vor dem Vermerk | heute an der Stelle | Zusage steht heute auf |
+|---|---|---|---|
+| `:86` Schuhband-Summe | `a += p.x*q.y - q.x*p.y;` ✓ | `function r3(n){…Math.round…}` | `:107` |
+| `:106` Kreuzprodukt | `const cross = …` ✓ | `const p = poly[i], q = …` | `:127` |
+| `:107` `cross*orient<=tol` | ✓ | **`a += p.x*q.y - q.x*p.y;`** | `:128` |
+
+Wer heute `:107` aufschlaegt, findet die Schuhband-Summe — also genau das, was derselbe Block dem
+`:86` zuschreibt. Das ist die gefaehrliche Sorte Drift: sie liest sich nicht wie ein Bruch, sondern
+wie eine Verwechslung im Dokument.
+
+**Und jetzt gegen mich selbst.** §128 sagt ueber W-10: *"alle 49 tragen Inhalt, 15 woertlich
+geprueft, nicht einer ist gewandert."* **Das haelt nicht.** W-10 traegt genau einen Zeiger in die
+verschobenen Dateien — `3-FORMELN.md:111` behauptet `geometry/grundriss.ts:111` sei
+`grundrissFlaecheM2`. Vor dem Vermerk war es das woertlich; **heute steht dort `eckenAnalyse`**, und
+`grundrissFlaecheM2` liegt auf `:132` (111+21). Der Fehler ist nicht die Zeit: §128 entstand am
+21.08. **10:31**, also **20 Stunden 37 Minuten NACH** der Verschiebung. Der Fehler ist mein Pruefsatz
+— *"traegt Inhalt"* kann einen gewanderten Zeiger nicht fangen, weil ein gewanderter Zeiger immer
+Inhalt traegt. Ich habe das Verfahren gemessen statt die Frage. Von den 49 sind es damit **48, die
+halten, und einer, der gewandert ist**; die 15 woertlich geprueften bleiben geprueft.
+
+**Der strukturelle Punkt, und er verbindet sich mit §132.** Ein Zeiger `datei.ts:86` traegt **keinen
+SHA**. Nach der Haltbarkeitsregel (`ARBEITSREGELN.md:1319-1322`) ist er damit eine Behauptung ueber
+einen Baumzustand ohne den Beleg, der ihn haltbar machen wuerde — und anders als eine fluechtige
+Messung traegt er auch keinen Zeitstempel. Deshalb kann **ein einziger Commit, der nachweislich kein
+Verhalten aendert, 86 Belege auf einmal entwerten.** Das ist kein Vorwurf an `78e4cc0e`: der Commit
+ist sauber, gemessen und begruendet. Es ist eine Eigenschaft der Zeigerform.
+
+**Ball beim Planner**, und zwar zum vorhandenen Zeigerbuendel (§77/§93/§102/§104/§106/§107/§109/
+§110/§111), nicht als neuer Strang: 86 Zeiger in 41 Dokumenten, Verschiebung exakt bekannt (+17 bis
++21 je Datei), also mechanisch nachziehbar. Die Berichtigung an §128 ist meine und steht hier.
