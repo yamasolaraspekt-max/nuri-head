@@ -29,7 +29,10 @@ export function deckenNettoFlaecheM2(ceiling: CeilingNode): number {
  * Fehlt die Decke, wird `level.floorThickness` als Deckendicke angesetzt (dokumentierter Rückfall, kein
  * Rateswert der Höhe selbst). Ganzzahlig (mm-Invariante).
  */
-export function naechsteEtageElevationMm(level: Level, decke: CeilingNode | undefined): number {
+export function naechsteEtageElevationMm(
+  level: Pick<Level, 'elevation' | 'defaultWallHeight' | 'floorThickness'>,
+  decke: CeilingNode | undefined,
+): number {
   const deckeDickeMm = decke ? decke.dickeMm : level.floorThickness;
   return Math.round(level.elevation + level.defaultWallHeight + deckeDickeMm);
 }

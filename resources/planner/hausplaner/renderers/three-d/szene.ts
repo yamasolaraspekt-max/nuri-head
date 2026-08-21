@@ -35,6 +35,7 @@ import { erkenneRaeume } from '../../geometry/roomDetection';
 import { dachMeshWelt, dachflaechen, type DachFlaeche } from './dachMesh';
 import { nichtDarstellbareDaecher, type NichtDarstellbar } from './nichtDarstellbar';
 import { flaecheZuFrame, aufbauKoerper, type AufbauFrame } from './dachAufbautenMesh';
+import { deckenOberkanteMm } from './deckenMesh';
 import { DachGeometrieUngueltig } from '../../geometry/dachGeometrie';
 
 /**
@@ -452,7 +453,7 @@ export class HausplanerDreiDSzene implements RendererAdapter {
     // (level.elevation + defaultWallHeight). RÜCKSEITEN-CULLING (side: BackSide) ⇒ nur von UNTEN/
     // innen sichtbar; von oben durchsichtig, damit die Draufsicht nicht verdeckt wird. Kein
     // userData.nodeId (dekorativ, nicht selektierbar — der Boden trägt die Raum-Selektion).
-    const deckenHoehe = level.elevation + level.defaultWallHeight;
+    const deckenHoehe = deckenOberkanteMm(level);
     // Feature A: existiert eine MODELLIERTE Geschossdecke für dieses Level, ersetzt sie die dekorative
     // Raum-Decke (eine Wahrheit je Level) — sonst bleibt der dekorative Raumabschluss.
     const hatModellDecke = (dokument.ceilings ?? []).some((c) => c.levelId === level.id && c.visible !== false);
@@ -479,7 +480,7 @@ export class HausplanerDreiDSzene implements RendererAdapter {
       if (decke.polygon.length < 3) {
         continue;
       }
-      const oberkante = level.elevation + level.defaultWallHeight;
+      const oberkante = deckenOberkanteMm(level);
       const aussen = bodenPunkteThree(decke.polygon, oberkante);
       const form = new THREE.Shape();
       aussen.punkte.forEach((p, i) => (i === 0 ? form.moveTo(p.x, -p.z) : form.lineTo(p.x, -p.z)));

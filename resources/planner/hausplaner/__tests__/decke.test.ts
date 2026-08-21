@@ -6,7 +6,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { applyCommand } from '../commands/applyCommand';
 import { sceneDocumentSchema } from '../domain/validation';
-import { deckenNettoFlaecheM2, naechsteEtageElevationMm } from '../renderers/three-d/deckenMesh';
+import { readFileSync } from 'node:fs';
+import { deckenNettoFlaecheM2, naechsteEtageElevationMm, deckenOberkanteMm } from '../renderers/three-d/deckenMesh';
 import { treppeZuParametern } from '../geometry/treppeObjekt';
 import { polygonFlaecheM2 } from '../geometry/polygonFlaeche';
 import { teil, ohneKommentare } from './_zerlegteApp';
@@ -239,4 +240,30 @@ test('Z-07/K-04: die L-Form bekommt ein L-DACH — 68 m², nicht die 80 der Boun
   assert.equal(Math.round(rechteck), 80, `Rechteck-Kontrolle ${rechteck.toFixed(1)} m² statt 80`);
   assert.notEqual(Math.round(rechteck), Math.round(flaeche),
     'L-Form und Rechteck liefern dieselbe Flaeche — dann misst die Zusage nicht die Kontur');
+});
+
+// ---- K1-Anschluss: `deckenOberkanteMm` ist wieder die eine Stelle ----------------------------
+//
+// Der Wert „Decken-Unterkante = Wand-Oberkante" stand an DREI Produktivstellen inline
+// (`szene.ts:455`, `szene.ts:482`, `HausplanerApp.tsx:1007`), während die benannte Funktion
+// daneben lag und von niemandem gerufen wurde — sie war der Grund, warum `deckenMesh.ts` in der
+// Erreichbarkeitsmessung als tot geführt wurde.
+//
+// **Der Anschluss ist verhaltensgleich**, der Ausdruck ist identisch. Was gewonnen ist: es gibt
+// wieder eine Stelle, an der sich diese Ableitung ändern lässt.
+test('K1: deckenOberkanteMm rechnet, was die drei Inline-Stellen gerechnet haben', () => {
+  assert.equal(deckenOberkanteMm({ elevation: 0, defaultWallHeight: 2500 }), 2500);
+  assert.equal(deckenOberkanteMm({ elevation: 2700, defaultWallHeight: 2500 }), 5200);
+  assert.equal(deckenOberkanteMm({ elevation: -3000, defaultWallHeight: 2250 }), -750, 'auch unter Null');
+});
+
+test('K1: keine Produktivdatei rechnet die Decken-Oberkante mehr selbst', () => {
+  const muster = /elevation \+ [A-Za-z.]*defaultWallHeight/;
+  for (const pfad of ['../renderers/three-d/szene.ts', '../app/HausplanerApp.tsx']) {
+    const quelle = ohneKommentare(readFileSync(new URL(pfad, import.meta.url), 'utf8'));
+    assert.equal(
+      muster.test(quelle), false,
+      `${pfad} rechnet die Oberkante wieder selbst — die Funktion ist damit erneut umgangen`,
+    );
+  }
 });
