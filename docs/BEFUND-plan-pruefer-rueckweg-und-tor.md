@@ -24395,3 +24395,102 @@ eingezäunt.
 
 **Nicht geprüft:** die übrigen sechs seiner Toten und die 34 zu weit exportierten — das ist seine
 Messung und sein Abnahmegegenstand, nicht meiner.
+
+## §290 · Posten (c): `clampPitchGrad` rechnet in jedem Grenzfall richtig — und die Warnung, die sie verspricht, kann niemanden erreichen
+
+**Messstand.** Runde begonnen an `a815d92d` / Zweig `a2501764`. **Vor dem Schreiben neu gemessen
+22:33: HEAD und Zweig beide `7f2e5cc6`, Rückstand 0** — angekommen sind mein eigenes §289 und
+`6f89d060` (47 Zählaussagen in Kommentaren durchgemessen, eine abgelaufen). **`dachformVorlagen.ts`
+und `dachGeometrie.ts` sind zwischen beiden Ständen unverändert** (numstat leer), und die
+Gegenprobe am neuen Stand liefert unverändert **eine** Laufzeitkante in die Datei hinein. Baum
+sauber. Ballortung beidseitig **1** (P-02, VORLAGE) und **35** — nichts in meiner Bahn.
+Gemessen 21.08. 22:31–22:35.
+
+### 1 · Die Zusage
+
+`resources/planner/hausplaner/geometry/dachformVorlagen.ts:399-400`:
+
+    Schutz gegen cos→0 / tan→∞ und NaN/Infinity. geklemmt=true loest eine sichtbare
+    PITCH_GEKLEMMT-Warnung aus (kein stilles Abschneiden). Flachdach: min=1.5, max=8.
+
+Das ist die ausdrückliche **Gegenform** zu der Fehlerklasse, die ich in dieser Datei zehnmal
+gefunden habe (*Schutz liefert plausiblen Wert statt zu verweigern*). Deshalb geprüft.
+
+### 2 · Die Formel hält — sechzehn Grenzfälle gerechnet
+
+Formel wörtlich aus `:402-411` entnommen und gefahren:
+
+    Flachdach (1.5 / 8)                     Steildach (1 / 85)
+      NaN       -> 1.5  geklemmt              NaN      -> 1     geklemmt
+      +Infinity -> 1.5  geklemmt              0.9999   -> 1     geklemmt
+      -Infinity -> 1.5  geklemmt              1        -> 1     OFFEN
+      -0 / 0    -> 1.5  geklemmt              85       -> 85    OFFEN
+      1.4999    -> 1.5  geklemmt              85.0001  -> 85    geklemmt
+      1.5       -> 1.5  OFFEN                 1e308    -> 85    geklemmt
+      8         -> 8    OFFEN
+      8.0001    -> 8    geklemmt
+      90        -> 8    geklemmt
+
+**Kein Fall wird still abgeschnitten.** Die Ränder sind einschließend (1.5 und 8 gelten als gültig),
+NaN und beide Unendlichkeiten sind gefangen, und der Rückgabetyp `{ wert, geklemmt }` **trägt die
+Klemmung mit** — genau die Form, die ich in §238 als richtig gemessen habe.
+
+**Eine Beobachtung, kein Mangel:** `+Infinity` landet auf **min**, nicht auf max, weil
+`!Number.isFinite` vor den Bereichsprüfungen greift. Die Richtung ist willkürlich, aber sie ist
+gemeldet (`geklemmt: true`), und der Kopf nennt Infinity ausdrücklich als Schutzfall. Wer aus dem
+Wert allein weiterrechnet, bekommt bei Unendlich das flachste statt des steilsten Dach — er darf es
+aber nicht, weil das Flag danebensteht.
+
+### 3 · Der Fund: die Kette endet vor der Oberfläche
+
+Die Zusage sagt *„löst eine **sichtbare** PITCH_GEKLEMMT-Warnung aus"*. Über die Funktionsnamen
+gemessen, nicht über Dateien:
+
+    clampPitchGrad   :402   <- gerufen von genau einer Stelle:
+    validateVorlage  :463   erzeugt die Warnung bei :499-503
+                            <- gerufen von :1272, in
+    applyVorlage    :1263   <- Verbraucher ausserhalb der eigenen Datei: NUR TESTS
+                               (30+ Nennungen, alle in __tests__/dachformVorlagen.test.ts)
+
+Und die Gegenprobe an der Dateigrenze:
+
+    Laufzeitkanten IN dachformVorlagen.ts hinein:
+      dachGeometrie.ts:17   import { walmIstKonsistent }        <- die einzige
+      dachMesh.ts:13        import type { EngineRoofShape }     <- keine Laufzeitkante
+
+**`validateVorlage` und `applyVorlage` haben keinen Produktivverbraucher.** Die Warnung wird
+erzeugt und von niemandem gelesen. **Am Code ist die Zusage richtig; am Betrieb ist sie
+unerfüllbar.**
+
+### 4 · Einordnung — eine neue Gestalt meiner alten Klasse
+
+Nach der Linse aus §289 fällt das in die Klasse **„nur Tests"**, und der Generator hat dafür recht:
+*„Ordnung, kein Mangel."* Der Code ist geprüft und noch nicht verdrahtet. **Der Mangel liegt nicht
+im Code, sondern im Satz darüber.**
+
+Und es ist eine Gestalt, die ich bisher nicht hatte:
+
+    bisher (10 Faelle)   Schutz liefert einen plausiblen Wert und SCHWEIGT
+    Gegenform (4 Faelle) Schutz meldet — Rueckgabetyp traegt die Klemmung   (§225 §228 §230 §238)
+    hier (neu)           Schutz MELDET RICHTIG, und niemand hoert zu
+
+Die dritte ist die harmloseste — heute. Sie wird zur ersten, sobald jemand `applyVorlage`
+verdrahtet und die Warnung nicht mitverdrahtet: Dann klemmt der Schutz korrekt, meldet korrekt, und
+die Meldung verschwindet trotzdem. **Genau dieser Übergang ist der Moment, an dem die Zusage
+gebraucht wird — und heute steht sie als erfüllt da, obwohl sie ungeprüft ist.**
+
+### 5 · Ball
+
+**Planner** — ein Halbsatz in `dachformVorlagen.ts:399-400`:
+
+    ist:  geklemmt=true loest eine sichtbare PITCH_GEKLEMMT-Warnung aus
+    soll: geklemmt=true wird von validateVorlage in eine PITCH_GEKLEMMT-Warnung
+          umgesetzt; sichtbar wird sie erst, wenn applyVorlage einen Produktiv-
+          verbraucher hat — heute hat es nur Tests.
+
+Das ist keine Wortklauberei: Wer das Modul verdrahtet, liest diesen Kopf und hält die Sichtbarkeit
+für erledigt.
+
+**Nicht geprüft:** ob `validateVorlage`s übrige Warncodes (`EINDECKUNG_KATEGORIE`, `PULT_GEFAELLE`,
+`NEIGUNG_UNTER_RDN`, `NEIGUNG_UNTER_MINDEST`) dieselbe Lage haben — sie hängen an derselben
+Funktion, also vermutlich ja; gemessen habe ich es nicht und melde es deshalb nicht.
