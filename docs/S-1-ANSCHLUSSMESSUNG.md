@@ -825,3 +825,81 @@ Gezählt sind **Import-Nennungen**. Ein Symbol, das über `import * as X` oder e
 gezogen wird, zähle ich nicht — solche Fälle würden hier fälschlich als unbenutzt erscheinen. Und
 Klasse B sagt nichts über Absicht: ein Modul darf geprüft sein, bevor es einen Verbraucher hat. **Was
 B misst, ist der Abstand zwischen „geprüft" und „benutzt", nicht ein Fehler.**
+
+---
+
+## Symbolebene: die 33 Module waren eine Untergrenze — und die schärfere Zahl ist 7
+
+**Gemessen 21.08.2026** am Stand `7eaab966`. Die bisherigen Abschnitte messen **Module** — eine
+Datei ist erreichbar oder nicht. Dieser Abschnitt geht eine Ebene tiefer und misst **Symbole**:
+welche exportierte Funktion, Konstante oder Klasse hat keinen Verbraucher?
+
+**Der Messbefehl steht dabei, nicht nur sein Ergebnis** — eine Zahl ohne ihren Befehl läuft ab,
+ohne dass der Schreibende es erfährt (A-39/P2):
+
+```python
+# Über resources/planner/hausplaner/**/*.{ts,tsx} ohne __tests__:
+#   sym = ^export\s+(?:async\s+)?(?:function|const|class)\s+(NAME)
+# Für jedes NAME: Nennungen in ALLEN ANDEREN Produktivdateien; dann in allen Testdateien;
+# dann in der EIGENEN Datei (abzüglich der Definition selbst).
+```
+
+**Gemessen wird über den SYMBOLNAMEN, nicht über den Dateikopf** — P7 aus dem Regelwerk: der Ort
+ist nicht die Wirkung. Ein Modul kann importiert und trotzdem ungenutzt sein, und eine Funktion
+kann leben, während ihre Datei nirgends im Importgraphen auftaucht.
+
+### Das Ergebnis, in drei Klassen getrennt
+
+```
+Produktivdateien                                                165
+Testdateien                                                     173
+
+exportierte Funktionen/Konstanten ohne Verbraucher AUSSERHALB ihrer Datei   281
+  davon nur von Tests benutzt                                              240
+  davon von niemandem benutzt, auch nicht von einem Test                    41
+       davon in der EIGENEN Datei benutzt (nur unnötig exportiert)           34
+       davon auch dort ungenutzt — WIRKLICH TOT                              7
+```
+
+> **Die 281 sind kein Befund, die 7 sind einer.** Die drei Klassen zu trennen ist der ganze Punkt:
+> „ohne Verbraucher außerhalb der Datei" klingt nach 281 toten Symbolen und ist bei 240 davon nur
+> die Aussage, dass ein Modul geprüft ist, bevor es verdrahtet wurde. Bei 34 weiteren ist es ein
+> zu weites `export` und kein toter Code. **Wer die 281 meldet, meldet Rauschen; wer die 7 meldet,
+> meldet etwas.**
+
+### Die sieben
+
+| Ort | Symbol |
+|---|---|
+| `app/tools/paketAdapter.ts:163` | `paketWerkzeug` |
+| `app/tools/paketAdapter.ts:202` | `schemaSchutzwert` |
+| `domain/roofShape.ts:31` | `RECHTECK_FORMEN` |
+| `geometry/dachformVorlagen.ts:394` | `effektiverSparrenabstandM` |
+| `geometry/dachformVorlagen.ts:1074` | `GAUBE_SCHEMATISCH_HINWEIS` |
+| `geometry/dachformVorlagen.ts:1085` | `GAUBE_VORSCHAU_HINWEIS` |
+| `geometry/heizkoerperTypen.ts:23` | `heizkoerperTypNach` |
+
+**Gegen den GANZEN Baum geprüft, nicht nur gegen die Insel** (P8 — die Sache, nicht der Ort):
+jedes der sieben kommt außerhalb seiner eigenen Datei nur noch in Dokumentation vor. Eine
+Re-Ausfuhr über `export *` gibt es in der Insel **nirgends** (null Treffer), der übliche Weg, auf
+dem ein Symbol unsichtbar weiterlebt, ist damit ausgeschlossen.
+
+### Eine Messung, die ich VERWORFEN habe — und der Grund gehört dazu
+
+Ich wollte den Befund über das gebaute Bundle härten: „steht 0 Mal in `hausplaner.js`, also
+ausgeliefert unerreichbar." Alle sieben ergaben 0. **Die Gegenprobe hat den Schluss widerlegt:**
+`deckenOberkanteMm` und `sichererCos` ergeben ebenfalls 0 — beide laufen nachweislich, ersteres an
+drei Produktivstellen. Das Bundle ist minifiziert, die Namen sind ersetzt; **der Zähler findet
+dort gar keinen Namen.** Ein Zähler, der überall nichts findet, belegt keine Abwesenheit.
+
+> **Ohne die Gegenprobe stünde hier ein Beleg, der nichts belegt** — und er hätte überzeugender
+> ausgesehen als die Quellmessung, die tatsächlich trägt. Die Bundle-Zeile ist gestrichen; die
+> Aussage steht allein auf der Quellmessung, und die genügt.
+
+### Was daraus NICHT folgt
+
+**Nichts wird hier entfernt.** Ein totes Symbol ist ein Befund, kein Auftrag: die Rückfall-Regel
+verlangt für jedes Löschen eine Freigabe, und mehrere der sieben sind erkennbar Vorarbeit
+(`GAUBE_*_HINWEIS` gehört zu Gaubenarbeit, die nicht gebaut ist). **Ob sie verschwinden, angeschlossen
+oder als Vorarbeit stehen bleiben, entscheidet der Planner** — dieser Abschnitt liefert ihm die
+Grundlage und keine Handlung.
