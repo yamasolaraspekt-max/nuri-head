@@ -24575,3 +24575,77 @@ ins Leere.**
 
 **Nicht geprüft:** ob `ConfiguratorWarning` je gefüllt werden *soll* — das steht in W-35
 (Konfigurator-Dialog) und ist Auftragsfrage, nicht Messfrage.
+
+## §292 · Posten (a) am Fahrplan: vier von sechs Zeigern halten, zwei sind gewandert — und beide waren richtig, als sie geschrieben wurden
+
+**Messstand.** HEAD `f49a4d68`, Baum sauber, Zweig `bb7eb19c`, Rückstand 2 (mein eigenes §291 und
+ein Transport). **`docs/backlog/fahrplan-2026-08-20.md` und `docs/STATUS.md` sind zwischen
+Rundenbeginn und jetzt unverändert** (numstat leer). Ballortung beidseitig **1** (P-02, VORLAGE)
+und **35** — nichts in meiner Bahn. Gemessen 21.08. 22:38–22:44.
+
+**Angekommen, zitiert statt nachgebaut:** `4e02c273` (generator) berichtigt die Zusage von
+`wandMengen` und beruft sich dabei ausdrücklich auf §287: *„Ein Schluss aus drei richtigen Zeigern
+ist noch keine Messung — das ist die Lehre aus 287."* Er hat den Aufruf gefahren statt aus den
+Zeilennummern zu schließen und dabei gefunden, dass der vom Kommentar erlaubte Aufruf **nie eine
+Zahl liefert**. Seine Messung, seine Behebung; ich melde sie nicht als meine.
+
+### 1 · Die sechs Zeiger des Fahrplans, einzeln gemessen
+
+§280 hatte den Fahrplan mit *„5 Zeiger, 2 anders"* gezählt. Aufgelöst (`:534` nennt eine Spanne,
+also sechs Zeilen):
+
+    docs/STATUS.md:9      HAELT      A-01, Auftragstafel
+    docs/STATUS.md:23     HAELT      W-05/1
+    docs/STATUS.md:28     HAELT      W-08/1
+    docs/STATUS.md:95     HAELT      A-35
+    docs/STATUS.md:8650   GEWANDERT
+    docs/STATUS.md:14920  GEWANDERT
+
+**Die vier, die halten, liegen alle in der Auftragstafel (Z.9–95)** — also **vor** den Blöcken, die
+A-42 ausgezogen hat. Das ist §280s Beobachtung an einem zweiten Träger bestätigt: *der Schaden folgt
+nicht der Zitierhäufigkeit, sondern der Lage im Dokument.*
+
+### 2 · Beide gewanderten waren richtig — nachgemessen an ihrem Schreibstand
+
+Der Fahrplan wurde zuletzt **20:36** angefasst; die zwei Zeilen stammen aber aus `11f7c4c3`,
+**21.08. 09:54**. An **diesem** Stand (STATUS.md 27619 Zeilen):
+
+    Z.8650   "zwei_praezisierungen_aus_der_quelle: (1) prevIsTraufe ist wahr fuer TRAUFE, WALM …"
+             -> der Fahrplan sagt "der Treffer STATUS.md:8650 ist prevIsTraufe"   TRIFFT
+    Z.14920  "DAS SCHWERSTE IST :134: 'DIN 18065 Schrittmass' steht als Haken da, ohne dass …"
+             -> der Fahrplan zitiert den Vorbestand zu ConfigWizard.tsx:134       TRIFFT
+
+**Beide Zusagen waren wahr.** Klasse 4, sauber: **766 Minuten und 361 Commits** alt, und in dieser
+Zeit ist `docs/STATUS.md` erst gewachsen (27619 → 28377) und dann durch A-42 geschrumpft
+(28377 → 19376). **Zwei Bewegungen in Gegenrichtungen, dieselbe Datei, derselbe Tag.**
+
+**Und beide sind über die Ankerform in einem Zug wiederzufinden** — je genau **1 Treffer** im
+heutigen `docs/STATUS.md`. Nichts ist verloren.
+
+### 3 · Ein Fehlbefund, den ich fast geschrieben hätte
+
+Mein erster Durchgang maß `:8650` am **Commit des Fahrplans** (20:36) und fand dort einen Satz über
+W-23-8 — nicht `prevIsTraufe`. Daraus wäre die Meldung geworden: *„der Zeiger hat nie gehalten"*,
+und das ist die schwerere Anschuldigung, weil sie dem Schreiber Nachlässigkeit unterstellt statt dem
+Haus Bewegung.
+
+**Der Fehler liegt in der Gleichsetzung von Dateidatum und Zeilendatum.** Ein Dokument, das um 20:36
+zuletzt berührt wurde, enthält Zeilen von 09:54. Der richtige Stand für einen Zeiger ist der, an dem
+**die Zeile** geschrieben wurde — `git blame --porcelain` auf die Zeile, nicht `git log` auf die
+Datei. Das ist dieselbe Trennung, die ich in §280 für meine eigenen Zeiger gebraucht habe und hier
+zuerst vergessen hatte.
+
+**Dazu eine ausgefallene Messung:** Mein `awk` mit `strftime` brach ab (*„calling undefined
+function"*) — die BSD-Variante kennt es nicht. Die Antwort kam aus dem zweiten Befehl; die erste
+Ausgabe war kein Ergebnis und wird auch nicht als eines geführt.
+
+### 4 · Ball
+
+**Kein Ball.** Zwei Zeiger in einem ENTWURF-Fahrplan sind gewandert, beide Aussagen sind unversehrt
+und in Sekunden wiederauffindbar. Ich beantrage keine Berichtigung — was sich lohnt, ist dieselbe
+Form wie in §280/§289 empfohlen: **Zeiger MIT Stand.** Hier wäre es
+`docs/STATUS.md:8650 am Stand 11f7c4c3` gewesen, und die Frage hätte sich nie gestellt.
+
+**Unverändert offen beim Planner:** A-39s vier widerlegte Proben (§287), Schreibschutz der Zieldatei
+(§278), `…w0-11-ids-callback-csrf.md:22` (§276), die Rundungsfrage (§277), der zweite Pfad in der
+Wache-Anweisung (§279).
