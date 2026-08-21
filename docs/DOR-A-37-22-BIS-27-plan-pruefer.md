@@ -348,3 +348,75 @@ Generator kann bauen, und der Evaluator kann abnehmen.
 **Ball: Generator** (`aa0cddd3`, eigener Worktree) für den Bau nach A-37-22…27.
 **Planner** nachrichtlich für die beiden Anmerkungen — beim nächsten Anfassen des Blattes, nicht als
 eigene Runde. Danach Z0-I1, Z0-I2 (dorthin gehen Punkte 3–5 dieser Zielregel), Z0-I3.
+
+---
+
+## Berichtigung 00:55 — mein eigener Fehler in Restpunkt 1, und was daran *nicht* stimmt
+
+Der Planner hat um 00:50:53 gemeldet
+(`ereignisse/SPEZ-planner-A-37/planner-befund-paragraph8-fehlzuordnung.yaml`), dass mein Satz zu §8
+die Folge der falschen Sperre zuordnet. **Ich habe die Quelle selbst geöffnet, statt seinen Befund zu
+übernehmen — und er hat recht.**
+
+### Mein Fehler
+
+Ich schrieb im Votum und im Ereignis: *„§8 (`0d897b0e:154-158`) entfernt eine Sperre automatisch,
+wenn PID + Startkennung nicht mehr übereinstimmen — wörtlich umgesetzt hätte das Tor der arbeitenden
+Planner-Sitzung **die Lease** entzogen."*
+
+**Gemessen:** `PID` kommt in §8 **genau zweimal** vor, `:154` und `:156` — beide unter der
+Absatzüberschrift **„Recovery der Sperre selbst"**, also `counter.lock/owner.yaml`, der kurzlebigen
+**Vergabesperre**. Die Lease-Übernahme bei `:162` nennt **keine PID**: *„`active/` darf nur entfernt
+werden, wenn `heartbeat_bis` verstrichen ist."* *(Muster tauglich: `Fencing` trifft 4× im selben
+Abschnitt.)*
+
+**§8 entzieht die Lease nicht über die PID.** Für die Lease trägt der Paragraph Yamas Punkt 4 bereits
+richtig. Die zitierten Zeilen waren korrekt benannt; falsch war die Folge, die ich daran hängte.
+
+### Was an seiner Ersatz-Folgerung *nicht* stimmt
+
+Er setzt an die Stelle meines Fehlers eine schärfere These: bei `--resume` sei die Lebendigkeit über
+die eingetragene PID *„strukturell nicht messbar"*, deshalb greife `fail closed` (`:157-159`) und
+**jede weitere Vergabe** werde dauerhaft abgelehnt — *„Entzug ist laut, Stillstand ist leise."*
+
+**Durchgespielt trifft das nicht.** `fail closed` greift laut Wortlaut nur, *„ist die Lebendigkeit
+**nicht eindeutig messbar** (fremder Host, fehlende Startkennung)"*. Bei einer zurückgebliebenen
+`counter.lock` eines beendeten Laufs ist beides gegeben — lokaler Host, eingetragene Startkennung —
+und `ps` antwortet eindeutig:
+
+```
+ps -p 88928 -> exit 1     ps -p 97092 -> exit 1     ps -p 12334 -> exit 1
+Verfahren verifiziert: eigene PID -> exit 0 · erfundene -> exit 1
+```
+
+Exit `1` heißt **nachweislich nicht mehr existent** — genau die Bedingung aus `:155-156`, unter der
+die Sperre entfernt werden **darf**. Die Vergabe läuft weiter; es entsteht kein Stillstand.
+
+**Der Grund dahinter ist der, den er selbst nennt und dann übergeht:** *„die Sperre soll ohnehin nur
+innerhalb eines Laufs leben."* `counter.lock` gehört dem **Lauf**, nicht der **Sitzung** — und für
+den Lauf ist die Prozessidentität die richtige Kennung. **Was für die Lease falsch ist, ist für die
+Vergabesperre richtig.** §8 ist an dieser Stelle intakt: weder mein „Lease-Entzug" noch sein
+„Stillstand" tritt ein.
+
+### Was davon unberührt bleibt
+
+**Restpunkt 1 bleibt zu Recht erhoben** — aber aus dem Grund, den der Planner selbst richtig
+benennt: *Yamas Zielregel ist eine **Vorgabe**, keine Beschreibung von §8.* Das Blatt trug sie nur
+halb; das ist unabhängig von der Fehlzuordnung. Ebenso unberührt: die Vier-Prozess-Messung, der
+Realfall 00:17:18 und die Absage-Regel. **Mein ursprünglicher Befund — die Kennung ist bei
+fortgesetzten Sitzungen nicht stabil — beruht auf der Prozessmessung, nicht auf §8, und steht.**
+
+### Zum erteilten Votum
+
+Sein Befund datiert 00:50:53, mein Votum `a248eaaf` auf 00:48:58 — **zwei Minuten früher.** Die
+Erteilung erging ohne Kenntnis, nicht gegen sie. **Das ERTEILT bleibt:** der falsche Satz steht in
+der *Begründung* von A-37-25, nicht in einem Kriterium; der Generator baut nach den sechs Punkten,
+der Negativprobe und der Absage-Regel, die alle unberührt sind.
+
+**Auflage, und sie ist ernst gemeint:** Der Ersatztext, den er im Scratchpad vorbereitet hat, darf
+die Fehlzuordnung nicht durch eine zweite ersetzen. Nach meiner Messung ist die richtige Aussage
+weder „§8 entzieht die Lease über die PID" noch „§8 führt zum Vergabe-Stillstand", sondern: **§8
+bindet die Vergabesperre korrekt an den Lauf; Yamas Zielregel ergänzt für die Lease das, was §8 dort
+schon trägt.** Ich prüfe den Ersatztext, wenn er als Commit vorliegt.
+
+*Eine Berichtigung, die eine falsche Folge durch eine andere ersetzt, ist keine Berichtigung.*
