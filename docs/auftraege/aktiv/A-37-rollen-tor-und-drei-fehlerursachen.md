@@ -226,8 +226,27 @@ beantworten die Frage, die **nach** dem ersten Widerspruch kommt.
   > hätte ich mir sonst nachträglich zurechtgelegt."*
 
 - **Keine Abschwächung** der vorhandenen Barrieren A-25/A-26/A-27/A-30 und der YAML-Prüfung.
-- **Kein Hook.** Der versionierte `pre-commit`-Hook ist ein eigener Auftrag — dieses Tor läuft
-  weiter über den ausdrücklichen Aufruf.
+- **⚠ ÜBERHOLT am 21.08.2026 durch Yamas Entscheidung (Weg a) — das Nicht-Ziel bleibt als Beleg
+  stehen und gilt nicht mehr.** Der neue Stand ist **`A-37-25`**: der versionierte `pre-commit`-Hook
+  gehört in **diesen** Auftrag.
+
+  **Yamas Wortlaut**, weitergereicht vom Dirigenten *(`ereignisse/SPEZ-planner-A-37/dirigent-antwort-nichtziel-kein-hook.yaml`, 00:15)*:
+
+  > **„Wiederaufnahme des Generators erst, wenn A-37 eine wirksame `pre-commit`-Barriere enthält und
+  > deren Negativprobe belegt"** — und **„A-37 einschließlich wirksamem `pre-commit`-Hook"**.
+
+  **Der Anlass, gemessen und nicht behauptet:** sechs Generator-Commits entstanden direkt im
+  gemeinsamen Checkout. **Das Tor wirkt heute ausschließlich in `commit-pruefen.sh`** — also nur,
+  wenn jemand es *aufruft*. **Ein nacktes `git commit` erreicht es nie.** Belege siehe `A-37-25`.
+  Quellen des Wortlauts: `docs/auftraege/ABSCHLUSSMODUS-2026-08-21.md` @ `rolle/dirigent`, Abschnitt
+  *„Yama-Entscheidung … Weg (a)"*, und `/Users/yamanuri/.ticket-steuerung/README.md`.
+
+  *(Der bisherige Wortlaut bleibt als Beleg stehen — A-20-4:)*
+
+  > ~~- **Kein Hook.** Der versionierte `pre-commit`-Hook ist ein eigener Auftrag — dieses Tor läuft
+  > weiter über den ausdrücklichen Aufruf.~~ **Der Satz war richtig, solange niemand am Tor vorbei
+  > committete.** Er ist nicht falsch geschrieben, sondern **abgelaufen** — dieselbe Klasse wie die
+  > feste Suite-Zahl in `A-37-11` und die Zeilennummer in `A-37-19`.
 
 ## Kanten
 
@@ -397,8 +416,18 @@ dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K
   **Das Tor selbst ist an dieser Stelle vorbildlich:** es trennt vier Lagen — heil, YAML-Syntax,
   Modulauflösung, Laufzeit — und meldet den Modulfehler **als solchen** statt als Kopf-Fehler.
   *Der Mangel liegt nicht im Tor, sondern in der Deklaration, an der es hängt.*
-- **A-37-18** · **DAS TOR MUSS IN ALLEN SECHS BÄUMEN VORHANDEN SEIN.**
-  `git ls-files scripts/rollen-tor.sh` ergibt in **jedem** der sechs Arbeitsbäume **1**.
+- **A-37-18** · **DAS TOR MUSS IN JEDEM ROLLENBAUM DER LISTE VORHANDEN SEIN.**
+  `git ls-files scripts/rollen-tor.sh` ergibt in **jedem** Baum der Liste aus **`A-37-22`** genau **1**.
+
+  **⚠ BERICHTIGT am 22.08.2026 — die Zahl „sechs" ist abgelaufen, und zwar genau so, wie dieses
+  Blatt es an zwei anderen Stellen selbst verbietet.** Hier stand *„IN ALLEN SECHS BÄUMEN"* und
+  *„jedem der sechs Arbeitsbäume"*. **Gemessen am 22.08. sind es sieben** — `ticket-rolle-dirigent`
+  ist nach dem Schnitt dazugekommen. **Ein Kriterium, das eine Zahl nennt, misst ab dem nächsten
+  Rollenzugang die Zeit statt den Bau** — wörtlich der Befund, mit dem `A-37-11` schon einmal von
+  *„1750"* auf *„gegen den Bau-Stand"* umgestellt wurde, und die Mahnung aus `A-37-19`
+  (*„diese Nummer gehört mitgemessen, nicht zitiert"*). **Deshalb trägt das Kriterium jetzt keine
+  Zahl mehr, sondern verweist auf die eine Liste, die auch `rueckweg.py` und das Tor binden.**
+  *Wächst die Liste, wächst dieses Kriterium mit — ohne dass jemand es anfassen muss.*
   **Rot, gemeldet vom Integrator (`83296554`, 16:17):** *„die Barriere ist hier nicht
   vorhanden — `rollen-tor.sh` liegt bei mir 0 Mal im Index."*
   **Das ist nicht dasselbe wie K5.** K5 fragt, ob das Tor die Rolle `integrator` **kennt** —
@@ -466,6 +495,266 @@ dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K
   seit A-35 sind es 1763, weil dieser Bau dreizehn Zusagen gebracht hat. **Wer die feste Zahl
   wörtlich misst, meldet eine Abweichung, die keine ist** — und in vier Wochen erst recht.
   Eine Zahl, die an einem alten Stand klebt, misst die Zeit, nicht den Bau.)*
+
+---
+
+## ERWEITERUNG 22.08.2026 — A-37-22 bis A-37-27
+
+**Herkunft:** Yamas Vorgaben, zugestellt über `rollen/planner.yaml` gen 6
+(`SPEZ-planner-A-37`, Digest `a438e052…`). **Jeder „Rot"-Beleg unten ist am 22.08. im Worktree
+`ticket-rolle-planner` auf `1cd33614` einmal gefahren worden** — kein Wert stammt aus einer Notiz.
+*(Regel „Zustand messen vor Vorlage": eine Zahl ohne Erhebungsbefehl ist keine Zahl.)*
+
+**Warum die Rot-Belege dreierlei Art sind und getrennt bleiben müssen:**
+
+| Art | was der Beleg zeigt | Beispiel hier |
+|---|---|---|
+| **Produkt** | die gebaute Sache fehlt | `A-37-25`: `.githooks/pre-commit` existiert nicht |
+| **Vergleich** | zwei Quellen sagen Verschiedenes | `A-37-27`: `package.json` nennt `js-yaml`, das Lockfile nicht |
+| **Schutz** | die Barriere greift an dieser Stelle nicht | `A-37-24`: `BEFUNDNOTIZEN.md` kommt in beiden Toren 0× vor |
+
+*Ein Produkt-Rot verschwindet, sobald jemand eine Datei anlegt. Ein Schutz-Rot verschwindet erst,
+wenn die Barriere den Fall auch wirklich abweist — deshalb verlangen die Schutz-Kriterien unten
+ausnahmslos eine **ausgelöste** Negativprobe mit Rohausgabe und `echo $?`, nicht einen Grep-Treffer.*
+
+- **A-37-22** · **`scripts/rueckweg.py` KENNT DIE ROLLENBÄUME ÜBER `(Pfad, Zweig)`-PAARE, NICHT ÜBER NAMEN.**
+
+  **Verlangt:** eine feste Liste von Paaren aus **Pfad** und **erwartetem Zweig**. Vor jedem Merge
+  wird der tatsächlich ausgecheckte Zweig gegen den erwarteten geprüft; **weicht er ab, wird der Baum
+  übersprungen und gemeldet, nie gemergt.** Namensgleiche außerhalb der Liste werden **gemeldet und
+  ausgeschlossen**. `ticket-release-pruefung` steht als **vollwertiger Eintrag** in der Liste,
+  `ticket-rolle-dirigent` kommt dazu.
+
+  **Messbefehle und ihr heutiges (rotes) Ergebnis:**
+  ```
+  sed -n '75,81p' scripts/rueckweg.py                       -> BAEUME = 5  (ticket, planner,
+                                                               plan-pruefer, generator, evaluator)
+  grep -cE 'branch|symbolic-ref|abbrev-ref' scripts/rueckweg.py  -> 0
+  grep -n 'release' scripts/rueckweg.py                     -> genau 1 Treffer, Zeile 118
+  ```
+  **Drei getrennte Mängel, jeder für sich ausreichend:**
+  1. **Auswahl über den Namen** — `:128 pfad = f'{WURZEL}/{name}'`. Es gibt keine Pfad-Zweig-Bindung.
+  2. **Der Zweig wird nirgends geprüft.** `lage()` (`:91-113`) liest `HEAD`, `status --porcelain`
+     und `rev-list --count` — **nie**, auf welchem Zweig der Baum steht. *Ein Baum auf fremdem Zweig
+     wird `--ff-only` nachgezogen, solange der Merge technisch durchgeht.*
+  3. **`ticket-release-pruefung` kommt genau einmal vor: bei `:118` als Quelle des ZIEL-SHA**
+     (`rev-parse fork/auto/hausplaner-integration`) — und steht **nicht** in `BAEUME`.
+     **Das ist schärfer als „Sonderfall": der Baum, der das Ziel definiert, wird selbst nie
+     nachgezogen.** Fällt er aus, ist das Ziel unlesbar und `main()` gibt `2` zurück — die ganze
+     Kette hängt an einem Baum, den die eigene Liste nicht führt.
+
+  **Warum eine längere Liste NICHT genügt** *(Befund der Vorgängersitzung `20c9c319`, 23:32,
+  am 22.08. nachgemessen)*: unter `~/Documents` tragen **15** Bäume ein `ticket`-Präfix, aber nur
+  **7** sind Rollenbäume. Die Regel `ticket-rolle-*` liefert **6** — davon ist einer
+  (`ticket-rolle-release`, detached `4630d658`) der tote Rest aus `P2H-09`, während der lebende
+  `ticket-release-pruefung` fehlt. **Ein weiterer Gleichnamiger liegt im Scratchpad einer fremden
+  Sitzung** (`…/303cefb6-…/scratchpad/ticket-rolle-generator`, detached `f374c73a`) und steht in
+  `git worktree list` des gemeinsamen Repos. *Wer über den Namen sucht, kann ihn erwischen und misst
+  dann an `f374c73a` statt an `abd1719c`.*
+  **Erhebungsbefehl:** `git worktree list --porcelain` im Integrations-Checkout, ausgewertet nach
+  `worktree`/`branch`/`detached`.
+
+  **Absage-Regel:** Findet der Bauende einen Baum der Liste **nicht** vor, wird er **gemeldet und
+  übersprungen** — der Lauf endet mit dem Code für *nicht messbar* (`2`), **nie** mit `0`.
+  Das ist die Zusage, die im Kopf der Datei bereits steht (*„eine ausgefallene Messung ist KEIN
+  Ergebnis"*); das Kriterium dehnt sie von den drei Vorbedingungen auf die **Baumauswahl** aus.
+
+- **A-37-23** · **DAS ROLLEN-TOR KENNT DEN `dirigent` — MIT TECHNISCH BEGRENZTEM SCHREIBBEREICH.**
+
+  **Verlangt:** siebter Eintrag `dirigent` → Verzeichnis `ticket-rolle-dirigent`, Zweig
+  `rolle/dirigent`, in **derselben** Zuordnungsform wie die sechs davor (`:205-210`). **Dazu eine
+  Pfadgrenze, die das Tor durchsetzt und nicht nur beschreibt:** erlaubt sind `docs/konzept/`,
+  `docs/regelwerk/` und Steuerungsblätter unter `docs/auftraege/`; **abgewiesen** werden Produktcode
+  (`app/`, `resources/`), `docs/STATUS.md` und `docs/BEFUNDNOTIZEN.md`.
+
+  **Messbefehle und ihr heutiges (rotes) Ergebnis:**
+  ```
+  grep -c 'dirigent' scripts/rollen-tor.sh          -> 0     (auf rolle/planner UND in der Integration)
+  grep -c 'rolle/dirigent' scripts/rollen-tor.sh    -> 0
+  ```
+  **Rot ist hier ein Schutz-Rot:** das Tor kennt die Rolle nicht, weist sie also mit *„unbekannte
+  Rollenkennung"* ab — **der Dirigent kann in seinem eigenen Baum nicht committen**, und zugleich
+  gibt es **keine** Grenze, die ihn von `docs/STATUS.md` fernhält, sobald er bekannt ist.
+  *Beide Hälften gehören in ein Kriterium: eine Rolle bekannt machen, ohne ihren Bereich zu
+  begrenzen, tauscht eine Sperre gegen ein Loch.*
+
+  **⚠ ZUM VORGRIFF `5c9afbc7` — ENTSCHIEDEN: ÜBERNEHMEN, NICHT ERSETZEN.** *(Yamas Vorgabe stellte
+  beides frei; die Entscheidung ist begründet, nicht gewählt.)*
+  **Gemessen, und das ist der Grund:**
+  ```
+  git merge-base --is-ancestor 5c9afbc7 HEAD                          -> NEIN
+  git merge-base --is-ancestor 5c9afbc7 auto/hausplaner-integration   -> NEIN
+  git branch -a --contains 5c9afbc7                                   -> nur rolle/dirigent
+  ```
+  **Der Vorgriff existiert ausschließlich auf `rolle/dirigent` und ist in keinem Baum sichtbar, in
+  dem gebaut wird.** Sein Inhalt ist inhaltlich richtig und additiv — er setzt
+  `dirigent) SOLL_VERZ="ticket-rolle-dirigent"; SOLL_ZWEIG="rolle/dirigent" ;;` in K2-Form und
+  ergänzt die `Bekannt:`-Zeile um `dirigent`.
+  **Die Gefahr ist nicht der Inhalt, sondern die Doppelung:** baut der Generator denselben Eintrag
+  in seinem Baum neu, entstehen **zwei Fassungen derselben `case`-Zeile und derselben
+  `Bekannt:`-Zeile**, die beim Integrieren kollidieren.
+  **Verlangt deshalb ausdrücklich:** der Bauende prüft **vor** dem Schreiben mit
+  `git merge-base --is-ancestor 5c9afbc7 HEAD`, ob der Vorgriff bereits in seinem Stand liegt.
+  **Liegt er:** übernehmen, nicht neu schreiben. **Liegt er nicht:** den Eintrag **wortgleich zu
+  `5c9afbc7`** setzen, damit der spätere Zusammenlauf keinen Konflikt erzeugt.
+  **Belegt durch:** `git show 5c9afbc7 -- scripts/rollen-tor.sh` im Bau-Bericht, und nach dem Bau
+  `grep -c 'dirigent)' scripts/rollen-tor.sh` → **genau 1**, nicht 2.
+
+  **Nebenbefund, gefunden beim Messen dieses Kriteriums und hier benannt statt still behoben:**
+  die Tabelle im Tor führt bei `:210` weiterhin `release-pruefer → ticket-rolle-release`, während
+  der lebende Baum `ticket-release-pruefung` heißt. Heute fängt die **K2**-Kante das über den Zweig
+  ab (Evaluator-Schritt I: exit `0` mit eigener Meldung). *Es ist dieselbe Namensfalle wie in
+  `A-37-22` — sie gehört in dieselbe Liste, sobald `A-37-22` gebaut ist, und ausdrücklich **nicht**
+  in eine stille Textänderung hier.*
+
+- **A-37-24** · **`docs/BEFUNDNOTIZEN.md` STEHT UNTER DERSELBEN SCHREIBBARRIERE WIE `docs/STATUS.md`.**
+
+  **Verlangt:** Beide Tore behandeln `docs/BEFUNDNOTIZEN.md` **gleich** wie `docs/STATUS.md` —
+  Schreiben nur durch den **Integrator** im Integrations-Checkout; jede andere Rolle wird abgewiesen.
+
+  **Messbefehle und ihr heutiges (rotes) Ergebnis** *(Messbeleg des Evaluators `3f7f61d6`, am 22.08.
+  nachgefahren — beide Zahlen bestätigt)*:
+  ```
+  grep -c 'BEFUNDNOTIZEN' scripts/rollen-tor.sh      -> 0        gegen  'STATUS.md' -> 8
+  grep -c 'BEFUNDNOTIZEN' scripts/commit-pruefen.sh  -> 0        gegen  'STATUS.md' -> 9
+  ```
+  **Das ist ein Vergleichs-Rot und es wiegt schwerer als eine fehlende Zeile:** seit `A-42`
+  (Bau `26c46f31`) liegen **172 Befundblöcke** in `docs/BEFUNDNOTIZEN.md`, die vorher in
+  `docs/STATUS.md` standen und **dort geschützt waren**. *Der Umzug hat den Inhalt bewegt und den
+  Schutz zurückgelassen* — **jede Rolle kann die Datei heute aus jedem Baum schreiben.**
+
+  **Negativ- und Positivprobe, beide ausgelöst:** `docs/BEFUNDNOTIZEN.md` in der Pfadliste aus
+  `ticket-rolle-planner` → `KEIN COMMIT`, Rückgabe ≠ 0, Rohausgabe im Bericht; dieselbe Datei als
+  `integrator` im Integrations-Checkout → exit `0`.
+  **Absage-Regel:** Greift die Sperre auch nur für **eine** der Rollen nicht, ist das Kriterium
+  **nicht** erfüllt — ein Schutz, der fünf von sechs Fällen trifft, ist im sechsten wirkungslos.
+
+  **Vorratsposten, ausdrücklich NICHT Teil dieses Kriteriums** *(Evaluator, ohne Wertung)*:
+  `a26-ball-drift`, `a30-datensatz-paar`, `a33-kennungen-nachziehen` und `status-erzeugen` kennen
+  `BEFUNDNOTIZEN` **0×**. **Heute wirkungslos, gemessen:** alle vier arbeiten auf
+  Auftragsdatensätzen, und die sind vollständig in `docs/STATUS.md` geblieben (**104 = 104** vor wie
+  nach dem Umzug). *Die Lücke wirkt erst, wenn dort ein Feld mit `zustand` oder `ballbesitz` landet.*
+  **Als Vorrat notiert, damit der nächste Umzug ihn nicht neu findet — kein Bauauftrag.**
+
+- **A-37-25** · **EIN WIRKSAMES `pre-commit`-TOR — DER NACKTE `git commit` MUSS SCHEITERN.**
+
+  **Dieses Kriterium hebt das Nicht-Ziel „Kein Hook" auf** (siehe dort: als ÜBERHOLT gekennzeichnet,
+  Yamas Entscheidung Weg a vom 21.08.). *Ohne diese Kennzeichnung widerspräche das Blatt sich selbst
+  — genau der Fehler, den es unter „Rückweg und Entdeckung" für `exit 1`/`exit 5` schon einmal
+  behoben hat.*
+
+  **Messbefehle und ihr heutiges (rotes) Ergebnis:**
+  ```
+  ls .githooks/                      -> commit-msg  post-commit        (kein pre-commit)
+  test -x .githooks/pre-commit; echo $?   -> 1
+  git config core.hooksPath          -> .githooks                      (der Pfad ist gesetzt!)
+  sed -n '84p' .githooks/commit-msg  -> [ "$ist_merge" = "1" ] || exit 0
+  ```
+  **Die vierte Zeile ist der eigentliche Befund und sie ist ein Schutz-Rot:** `core.hooksPath` ist
+  **gesetzt**, es gibt also einen wirksamen Hook-Pfad — **aber `commit-msg` steigt bei allem, was
+  kein Merge ist, sofort mit `exit 0` aus.** *Der Hook läuft, und er lässt jeden normalen Commit
+  durch.* **Die gesamte Rollenbindung hängt heute daran, dass jemand `commit-pruefen.sh` freiwillig
+  aufruft.** Genau daran ist sie nachweislich gescheitert: sechs Generator-Commits im gemeinsamen
+  Checkout, und der Stopp per `SIGSTOP` war die einzige verbliebene Abhilfe.
+
+  **Verlangte Negativproben — jede tatsächlich ausgelöst, mit Rohausgabe und `echo $?`:**
+
+  | # | Lage | verlangt |
+  |---|---|---|
+  | a | nackter `git commit` im **falschen** Worktree | **abgewiesen**, Meldung nennt erwarteten und gefundenen Baum |
+  | b | `TICKET_ROLLE` **nicht gesetzt** | **abgewiesen**, **exit 5** *(der für diesen Fall festgelegte Code, `A-37-5`)* |
+  | c | richtiger Baum, **falscher Zweig** ausgecheckt | **abgewiesen** |
+  | d | `integrator` im Integrations-Checkout, begrenzter Integrationscommit | **durchgelassen**, exit `0` |
+  | e | Merge-Commit | der vorhandene `commit-msg`-Hook bleibt **unverändert wirksam** |
+
+  **Positivprobe nicht vergessen:** die richtige Rolle im richtigen Baum committet normal weiter.
+  *Ein Tor, das nur sperrt, ist von einem kaputten nicht zu unterscheiden — dieselbe Begründung wie
+  bei `A-37-2`.*
+
+  **Sitzungsidentität — Befund `79285cf2`, in ein Kriterium überführt:** wo der Hook eine Sitzung
+  identifiziert, besteht die Kennung aus **Sitzungs-ID + PID des Sitzungsprozesses + Prozess-
+  Startkennung**, **nie** aus der Shell-PID einer Werkzeugrunde. **Gemessen:** von vier `pid`-Feldern
+  im Steuerungssystem trugen **drei** eine Zahl, zu der kein Prozess mehr existierte; die Shell-PID
+  einer einzigen Sitzung wechselte in vier aufeinanderfolgenden Aufrufen `76231 → 80694 → 80830`,
+  während der Sitzungsprozess konstant blieb. *Ein Tor, das Lebendigkeit über die Shell-PID prüft,
+  prüft bei drei von vier Rollen eine tote Zahl.*
+
+  **⚠ `--no-verify` IST DIE GRENZE UND WIRD ALS SOLCHE DOKUMENTIERT, NICHT ÜBERSPIELT.**
+  Ein Git-Hook ist mit `git commit --no-verify` umgehbar; **das ist technisch nicht verhinderbar.**
+  **Verlangt ist deshalb ein ausdrücklicher Absatz im Bau-Bericht und im Skriptkopf**, der sagt:
+  *diese Barriere ist gegen Gewohnheit und Versehen wirksam, nicht gegen Absicht.*
+  **Absage-Regel:** Wer `--no-verify` als „gelöst" meldet, hat das Kriterium **nicht** erfüllt —
+  eine benannte Grenze ist der Liefergegenstand, eine behauptete Dichtheit ein Mangel.
+
+- **A-37-26** · **EIN ZUSTANDSCOMMIT, DEN DIE ERZEUGUNG NICHT ERKENNT, DARF NICHT DURCHGEHEN.**
+
+  **Verlangt:** Trägt ein Commit-Betreff `zustand:`, so wird er gegen das Muster aus
+  `scripts/status-erzeugen.sh` geprüft. **Passt er nicht — insbesondere bei mehr als einer Kennung
+  oder mehr als einem Bau-SHA —, wird der Commit abgewiesen**, mit Nennung des erwarteten Wortlauts.
+
+  **Messbefehl und heutiges (rotes) Ergebnis** — der Fall ist real und liegt im Bestand:
+  ```
+  git log -1 --format=%s e9e6ee5b
+    -> generator: zustand: A-38 · A-42 · CODE_FERTIG · evaluator · bau 0f731c22 26c46f31 — …
+  ```
+  **Gemessen gegen `WORTLAUT` aus `scripts/status-erzeugen.sh:195`** (das Muster erlaubt bei `:190`
+  **genau eine** `kennung`-Gruppe): **NICHT ERKANNT.** Gegenprobe mit einer künstlichen Ein-Kennungs-
+  Fassung: **ERKANNT**. *Das Muster arbeitet korrekt — der Betreff passt nicht.*
+
+  **Warum dieser Fall der gefährlichste der drei ist** *(Befund der Vorgängersitzung, 23:22)*:
+  `e9e6ee5b` trug **drei** unabhängige Mängel — der Commit war **leer**, der Betreff nannte **zwei
+  Kennungen**, und er nannte **zwei Bau-SHAs**. **Ein leerer Commit fällt auf.** **Ein Betreff, den
+  das Muster nicht erkennt, fällt nicht auf: er sieht richtig aus und wird still übergangen.**
+  Folge im Bestand: **weder `A-38` noch `A-42` bekamen aus diesem Commit einen Zustandswechsel**,
+  und `docs/STATUS.md` führte `A-42` weiter auf `BEREIT/generator`, obwohl der Bau seit Stunden lag.
+
+  **Negativprobe (ausgelöst):** Betreff mit zwei Kennungen → **abgewiesen**.
+  **Positivprobe:** Betreff mit einer Kennung und einem Bau-SHA → **durchgelassen**.
+  **Absage-Regel:** Das Kriterium ist **nicht** über einen Grep auf das Wort `zustand:` erfüllbar —
+  verlangt ist die Prüfung gegen **dasselbe** Muster, das `status-erzeugen.sh` benutzt. *Zwei
+  Muster für dieselbe Frage sind eine zweite Wahrheit und driften auseinander.*
+
+- **A-37-27** · **`js-yaml` MUSS AUCH IM LOCKFILE ALS WURZEL-ABHÄNGIGKEIT STEHEN.**
+
+  **Dies ist der Rest von `A-37-21`, und er ist heute halb erfüllt** — deshalb ein eigenes Kriterium
+  statt einer stillen Erweiterung des alten. *(`A-37-21` verlangt wörtlich „als direkte
+  `dependency` deklariert"; das ist teilweise geschehen, und die Lücke sitzt an einer anderen Stelle
+  als beim Schreiben von `A-37-21` vermutet.)*
+
+  **Messbefehle und ihr heutiges Ergebnis — ein Vergleichs-Rot:**
+  ```
+  package.json      dependencies['js-yaml']      -> FEHLT
+  package.json      devDependencies['js-yaml']   -> ^4.1.0        (gesetzt in e5aa5af7)
+  package-lock.json packages[""].dependencies    -> js-yaml FEHLT
+  package-lock.json packages[""].devDependencies -> js-yaml FEHLT
+  package-lock.json packages["node_modules/js-yaml"].version -> 4.1.1, ohne dev-Markierung
+  ```
+  **Die Deklaration ist in `package.json` angekommen und im Lockfile nicht.** Das Paket liegt dort
+  weiterhin **nur als transitive Auflösung** über `puppeteer → cosmiconfig → js-yaml`. **Damit ist
+  die Lücke, gegen die `A-37-21` geschrieben wurde, sachlich noch offen:** wer `puppeteer` entfernt
+  oder `cosmiconfig` seine Abhängigkeit ändert, nimmt `js-yaml` mit — **und das Tor scheitert
+  geschlossen und weist JEDEN `.md`-Commit ab, für jede Rolle.**
+
+  **Der bauende Generator hat das selbst offengelegt** (`e5aa5af7`, wörtlich): *„ein späteres
+  `npm install` wird den Lockfile umschreiben, um `js-yaml` als Wurzel-Abhängigkeit zu führen; das
+  habe ich NICHT ausgelöst, weil der Lockfile geteilt ist und ein Lauf unbeteiligte Pakete mitzieht."*
+  **Das ist die richtige Vorsicht und genau der Grund, warum es ein eigenes Kriterium braucht** —
+  der Schritt ist bekannt, riskant und deshalb liegengeblieben. *Ein bekannter, benannter Restpunkt
+  ohne Kriterium wird nicht behoben, sondern zitiert.*
+
+  **Verlangt:** `js-yaml` steht in `package.json` **und** als Wurzel-Eintrag im Lockfile,
+  **ohne dass unbeteiligte Pakete ihre Fassung ändern.**
+  **Messbar, und die zweite Hälfte ist die eigentliche Zusage:**
+  ```
+  npm ci --dry-run                                        -> exit 0
+  git diff --numstat package-lock.json                    -> nur js-yaml-bezogene Zeilen
+  git diff package-lock.json | grep -c '"version"'        -> keine fremde Paketfassung geändert
+  ```
+  **Absage-Regel:** Zieht der Lauf **andere** Pakete mit, wird **abgesagt und gemeldet**, nicht
+  committet. *Ein grüner Lauf, der nebenbei sechs Fassungen bewegt, ist die zweite Wahrheit aus dem
+  `node_modules`-Nicht-Ziel — eine Ebene tiefer.* **Ob `dependencies` oder `devDependencies` der
+  richtige Block ist, entscheidet der Bauende messend, nicht schätzend:** maßgeblich ist, ob das Tor
+  nach `npm ci --omit=dev` noch läuft. **Läuft es nicht, gehört `js-yaml` nach `dependencies`.**
 
 ## ⚠ Teil 5 fügt eine VIERTE Fehlerursache hinzu, die keinen eigenen Code bekommt
 
