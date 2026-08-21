@@ -151,3 +151,47 @@ keine Produktionsdaten verändern · keine fremden uncommittierten Änderungen �
 nach main · kein Push, Release oder Deployment ohne gesonderte Freigabe von Yama · Generator nimmt
 eigenen Bau niemals ab · offene Browserprüfung niemals als bestanden melden · historische Befunde
 nicht löschen, sondern als überholt kennzeichnen.
+
+---
+
+## NACHTRAG 2 (Yama 21.08. spät) — korrigierte Reihenfolge nach realen Gegenbeweisen
+**Gemessen am Integrationsstand `8511ca05` (Dirigent, 21.08.):** `e9e6ee5b` ist ein **leerer
+Commit** (kein Pfad im `--stat`) → A-42 steht maschinenlesbar weiter auf `BEREIT`/Generator ·
+`scripts/rueckweg.py` `BAEUME` führt **fünf** Bäume (ohne `ticket-rolle-release`, ohne
+`ticket-rolle-dirigent`) · das Rollen-Tor des Integrationsstands kennt keine Rolle `dirigent` ·
+`docs/BEFUNDNOTIZEN.md` trägt **keine** Schreibbarriere · **W0-5 wurde zweimal gebaut** (`28ca0834` im
+gemeinsamen Checkout, `ef7a8c89` in `rolle/generator`) · A-38 (`0f731c22`) wurde vor der vollen
+A-37-Aktivierung gebaut. Urteil Yama: gute Einzel- und Prüfarbeit, **keine sehr gute
+Gesamtsteuerung** — Selbstkorrektur funktioniert, technische Koordination verhindert bekannte Fehler
+noch nicht.
+
+**Reihenfolge ab sofort (ersetzt Nachtrag 1 in der Abfolge, nicht in den Kriterien):**
+1. **WIP-Stopp** — keine neuen Bauten; A-38 bleibt, wird bis nach A-37 weder abgenommen noch
+   weiterbearbeitet; keine parallelen DB-Läufe.
+2. **A-42 wirklich abschließen** — Evaluator (frische Instanz): vollständige 10-Punkte-Bilanz,
+   idempotenter Zweitlauf, Zieldateischutz (`BEFUNDNOTIZEN.md`); erst nach positivem Votum zieht der
+   Integrator Datensatz und Tafel in **einem echten, nicht leeren** Zustandscommit nach; Gegenprobe:
+   `git show --stat` enthält `docs/STATUS.md`.
+3. **Steuerungsrolle vollständig registrieren** — Entscheid Dirigent (gedeckt durch Yamas Satz vom
+   21.08.: *„Dirigent darf Steuerungs- und Konzeptdokumente vorbereiten, aber keinen Produktcode,
+   keine Kriterien, keine Voten und keinen fachlichen Status schreiben"*): `dirigent` wird **echte
+   Rolle** (Worktree `ticket-rolle-dirigent`, Zweig `rolle/dirigent`, Tor + Rückweg) mit **technisch
+   begrenztem Schreibbereich** (`docs/konzept/`, `docs/regelwerk/`, Steuerungsblätter in
+   `docs/auftraege/` ohne Kriterien); **Auftragsblätter mit Kriterien schreibt ab jetzt der Planner**;
+   `release-pruefer` ebenfalls in den Rückweg. Bis zur Registrierung: kein Rückweg von `rolle/dirigent`.
+4. **A-37 auf 21/21** — `js-yaml` direkt + Lockfile, Tor auf alle Rollen/Bäume, `rueckweg.py` kennt
+   alle Bäume, `BEFUNDNOTIZEN.md` unter dieselbe Barriere, positive **und** negative Mutationsproben
+   (fremder Baum, falscher Zweig, unregistrierte Rolle scheitern technisch — je ausgelöst).
+5. **Claim-Sperre ergänzen (Z0-I2, ENTWURF → Planner)** — genau eine aktive Bau-Claim je Auftrag,
+   atomar vor dem ersten schreibenden Commit, zweite Sitzung stoppt technisch (Lease-Autorität:
+   `docs/konzept/agentenarchitektur-v2.md` §8); **W0-5-Doppelbau fachlich vergleichen, keinen Stand
+   blind überschreiben** (Evaluator vergleicht, Entscheidung danach).
+6. **Z0-I1 bauen und unabhängig abnehmen** — vier DBs, Guard, gleichzeitiger Negativtest; erst danach
+   parallele datenbankverändernde Abnahmen.
+7. **Erst dann Abschlussbetrieb** — W1-/W0-Abnahmen an echten Bau-SHAs, Browser auf isolierter DB,
+   Statusänderungen nur mit Votum + Bau-SHA + Testbeleg, dann TESTBEREIT/NICHT TESTBEREIT mit Test-SHA.
+
+**Berichtsform ab jetzt (jede Meldung, jede Rolle):** Ausgangs-SHA · Ergebnis-SHA · geänderte Pfade ·
+unabhängiges Votum · Browserstatus · offene Abweichung · nächster Ball. **Ein Commit ohne Diff ist
+kein Zustandsfortschritt.** Belege dauerhaft als `Commit-SHA + Dateipfad + stabiler Anker`, kein
+nackter Zeilenzeiger (Beleg `e1298913`: 23 von 124 STATUS-Zeigern nach A-42 ungültig).
