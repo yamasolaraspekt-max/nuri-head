@@ -19708,3 +19708,110 @@ Was davon unabhängig bei Yama bleibt: Solange der Betrieb steht (§234, seit 14
 auch eine gute Vorlage nicht — die Datei ist bis §179 angekommen, und diese Posten stehen in
 Abschnitten davor, also **angekommen und trotzdem unentschieden**. Beides zugleich wahr, und
 deshalb nenne ich beides.
+
+## §240 · Die Yama-Vorlage, Teil 1 von 3 — drei Posten entscheidbar aufbereitet
+
+**Messstand.** HEAD `c3a52743` (21.08. 19:12:19), Baum sauber, **0 neue Commits** — zwölfte Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (281 Min), STATUS-Blob `810f37d9e560`. Gemessen
+21.08. 19:12–19:14.
+
+§239 hat festgestellt: Zwei vergleichbare Fachposten wurden in **sechs Minuten** entschieden, weil
+sie entscheidbar vorgelegt waren; meine neun stehen seit **4 T 19 h**, weil sie nur gemeldet sind.
+Der Ball lag damit bei mir. Hier ist Teil 1 — **drei von neun**, jede Angabe am gültigen Stand
+frisch gemessen, keine aus einer Notiz übernommen.
+
+---
+
+### Posten 1 · Fach-Gate N-003 (Sparren-Vorbemessung)
+
+**Stand, gemessen.** Anders als die Kurzform „Fach-Gate N-003" nahelegt, ist der **Geltungsbereich
+längst entschieden**: `FORMELSAMMLUNG.md:784` — *„N-003 · Geltungsbereich — von Yama festgelegt
+12.08., DAUERGELB"*, mit ERLAUBT-Liste (`:790`) und NICHT-ERLAUBT-Liste (`:796`).
+
+Auch Yamas **Auflage** (`:816`) ist gebaut, und zwar in der stärksten Form:
+
+    sparrenBerechnung.ts:82   N-003-Vorbehalt — **Pflichtfeld, kein Kommentar.**
+    sparrenBerechnung.ts:89   vorbehalt: string;          <- im Rückgabetyp
+    sparrenBerechnung.ts:149  vorbehalt: N003_VORBEHALT,
+
+Und er **erreicht die Oberfläche** — über den Feldnamen gemessen, nicht über Dateinamen:
+`enginePanels.ts:225`, `:264`, `:354` führen ihn je als `{ schluessel: 'vorbehalt', label: 'Vorbehalt' }`.
+
+**Die eine offene Frage.** Yamas Auflage nennt **vier** Orte: *„in der Oberfläche, im Export, in der
+Stückliste, im PDF … nicht als Fußnote, sondern am Wert."* Gemessen erfüllt ist **einer**.
+
+> **Gilt die Auflage für Export, Stückliste und PDF als noch offen — oder entfallen diese drei,
+> solange es die Wege nicht gibt?**
+
+| Antwort | Folge |
+|---|---|
+| **offen** | Auftrag an den Planner: Vorbehalt an Export/Stückliste/PDF koppeln, sobald der jeweilige Weg gebaut wird |
+| **entfallen** | Posten schließt; die Auflage wird auf „Oberfläche" eingegrenzt und der Satz in `:816` entsprechend vermerkt |
+
+**Wirkung hoch** (es ist ein Haftungsvorbehalt an einer Bemessungszahl), **Aufwand gering** — es ist
+eine Festlegung, kein Bau. Drei weitere Träger führen dasselbe Feld (`abwassergefaelle.ts:44`,
+`fbhAuslegung.ts:49`, `wandaufbau.ts:49`), die Antwort gilt also für vier Vorbehalte zugleich.
+
+---
+
+### Posten 2 · W-21L (Lattung, fehlender Schritt)
+
+**Stand, gemessen.** `docs/STATUS.md:86` führt W-21L als `DECISION_BLOCKED`, Schnitt `717eb11c`.
+Der Datensatz benennt die Lage selbst und korrigiert dabei eine frühere eigene Aussage:
+
+> *„W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt`
+> als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL."*
+
+Zeiger verifiziert, bevor ich ihn übernehme: `:118` trägt
+`lattmassAbhaengigVonProdukt: boolean; // Deckmaß/Lattung ist produktabhängig` — **trifft**.
+
+**Die offenen Fragen sind zwei, und sie stehen wörtlich im Datensatz:** *„offen bleiben die zwei
+Fachfragen bei Yama: **Restausgleich** und die **Wahl des `n`**."*
+
+| Antwort | Folge |
+|---|---|
+| beide beantwortet | `docs/STATUS.md:130` sagt es selbst: *„Deckungsart-/Lattweiten-Tabelle → entsperrt W-21L **und** W-23"* — zwei Vorgänge auf einmal |
+| offen | W-21L bleibt `DECISION_BLOCKED`; W-23 bleibt mit ihm blockiert |
+
+**Wirkung hoch** (zwei Vorgänge hängen daran), **Aufwand: reine Entscheidung**, kein Bau. Dies ist
+der älteste der neun (7081 Min = 4 T 22 h) und der einzige mit einem formalen Blockzustand.
+
+---
+
+### Posten 3 · „driftender Zeiger `raumAuswahl.ts`" — gehört nicht auf diese Liste
+
+**Stand, gemessen.** `raumAuswahl.ts:7-8` schreibt, die Identität eines Raums sei der Listenindex,
+und belegt das mit `Buehne.tsx:147, key={`raum${i}`}`. Heute:
+
+    Buehne.tsx  (439 Zeilen)
+    :147   {massElemente}                                      <- etwas anderes
+    :162   <Group key={`raum${i}`} listening={…}>               <- das gemeinte Ziel, +15
+
+Der Zeiger ist gewandert — dieselbe Klasse wie §231, §232, §236.
+
+**Und daraus folgt: Das ist keine Fachfrage.** Ein gewanderter Zeiger verlangt eine Berichtigung,
+keine Entscheidung. Die Entscheidung dazu ist außerdem **bereits gefallen**: A-34 („Ankerform statt
+Zeilennummer") ist entschieden, abgenommen und gebaut (§228, `geradenGeometrie.ts:181-192`).
+
+> **Empfehlung: Posten von der Yama-Liste auf die Planner-Liste umhängen.** Er braucht keine
+> Antwort von Yama, sondern die Anwendung einer Regel, die Yama längst hat beschließen lassen.
+
+**Wirkung mittel** (eine falsche Belegstelle in einer Datei, die ihre eigene Auflage begründet),
+**Aufwand minimal**. Ich sage das als Empfehlung, nicht als Entscheidung — die Liste ist Yamas.
+
+---
+
+### Was diese Runde nicht leistet
+
+**Sechs Posten fehlen**: A-13-Veröffentlichungsbedingung, Tragwerk an die Zeichenfläche,
+versatz-Quittung, Seed-Weg der Prüfbühne, Regelkollision §3/E1/Beifang, §119/§120. Jeder braucht
+dieselbe Behandlung — Stand messen, Frage isolieren, Folgen benennen, gewichten —, und drei sind
+das, was in eine Runde passt, ohne dass die Messung leidet. **Teil 2 und Teil 3 folgen in den
+nächsten beiden Runden.** Ich nenne die Zahl, damit „Teil 1" nicht zur offenen Ankündigung wird.
+
+### Ball
+
+**Yama** für Posten 1 und 2 — beide sind jetzt in einem Satz beantwortbar, und beide kosten
+Yama nur die Antwort, keinen Bau.
+
+**Planner** für Posten 3, sofern Yama der Umhängung nicht widerspricht.
