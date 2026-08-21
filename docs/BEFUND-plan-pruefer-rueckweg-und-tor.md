@@ -22061,3 +22061,94 @@ Partner — sie kann im Haus nicht gemessen werden. Das ist der Unterschied zu a
 Operanden dieser Welle.
 
 **Nicht geprüft:** W0-12, Gesamtauftrag Teststand, Konzept Dachschichten-Modell (`53cf8b75`).
+
+## §266 · DoR Z2-W0-12 — ERTEILT. Damit sind alle zwölf Aufträge der Welle 0 begutachtet
+
+**Messstand.** Mein HEAD `70d2984b`, Baum sauber. Integrationszweig `84371fef` (21.08. 20:38),
+1 neuer Commit. Ballortung **42, unverändert**. **Blätter 12, Blöcke 12** — vollständig. Basis-Stand
+der Prüfung: **`14dc15f3`**. Gemessen 21.08. 20:39–20:44.
+
+### 1 · Eine Empfehlung aus meinem Bericht ist ins Feld gewandert
+
+`84371fef`: *„Z2-W0-10 nachgezogen und W0-12 angelegt — **und eine Empfehlung, die sonst nur im
+Bericht stünde**"*, und im Rumpf: *„UND EINE EMPFEHLUNG INS FELD GENOMMEN, die ich sonst hier hätte
+liegen lassen: Paragraf 264 rät dem Planner, eine Berichtigung zu TRENNEN — `fix-ledger.md:122` ist
+wörtlich [richtig]…"*
+
+Das ist eine Wirkung anderer Art als bisher: Nicht ein Befund wurde behoben, sondern eine
+**Empfehlung** aus dem Bericht in die Statuswahrheit übernommen — dorthin, wo sie die nächste Rolle
+findet, ohne meinen Bericht zu lesen. **Der Rückstand aus §215 (Empfänger lesen 58 von 153
+Abschnitten) verliert damit an Gewicht**, weil das Wesentliche nicht mehr nur im Bericht steht.
+
+Und die Lage aus §255/§260/§262/§264 ist geschlossen: **zwölf Blätter, zwölf Blöcke.**
+
+### 2 · DoR Z2-W0-12 — die Belege
+
+| Beleg | frisch gemessen am Stand `14dc15f3` | |
+|---|---|---|
+| `config/sanctum.php:49` `'expiration' => null` | exakt so | **trifft** |
+| `prune-expired` → 0 Treffer in `app/`, `routes/` | **0**; Musterprobe: `sanctum` liefert **8** Treffer in `app/` | **trifft** |
+| `Kernel.php:19-35` — **fünf** Kommandos, keines für Sanctum | fünf **aktive**; `:21-23` sind auskommentiert | **trifft** |
+| `logout-all` (`PlannerApiAuthController:137-149`) ist Selbstbedienung | `:139` `$user = $request->user();` · `:142` `$user->tokens()->delete();` | **trifft** |
+
+### 3 · Die Zahl „fünf" — mein Muster war zu breit, nicht das Blatt
+
+Meine erste Zählung ergab **sieben** `command(`-Aufrufe. Angesehen:
+
+    :21  // $schedule->command('inspire')->hourly();
+    :22  // $schedule->command('leaves:update-status')->hourly();
+    :23  // $schedule->command('job_representatives:update-status')->hourly();
+    :24  $schedule->command('chat:sync-solar-news')…          <- aktiv
+    :25  $schedule->command('breaking-news:deactivate-expired')…
+    :26  $schedule->command('lead-emails:sync')…
+    :27  $schedule->command('appointments:dispatch-reminders')…
+    :28  $schedule->command('personal-tasks:process-scheduler')…
+
+**Drei sind auskommentiert.** Das Blatt zählt die **wirksamen** — richtig, denn ein auskommentiertes
+Kommando läuft nicht. **Achter Fall falscher Grundmenge in dieser Sitzung** (§232, §233, §235, §236,
+§244, §245, §257, jetzt), und wieder gefangen, weil die Abweichung gegen eine fremde Zahl zuerst
+gegen das eigene Verfahren spricht.
+
+### 4 · Votum
+
+**DoR Z2-W0-12 — ERTEILT. Restpunkte: keine.**
+
+Vier nummerierte Ziele, Basis-SHA, Y-10 als entschiedene Grundlage, vier geprüfte Belege. Drei Dinge
+zeichnen das Blatt aus:
+
+**Erstens die Reihenfolge im Kopf:** `laeuft: NACH W0-9 (Kontostatus) — W0-9 löscht Tokens beim
+Deaktivieren; dieser Auftrag ergänzt Ablauf + Bereinigung + Admin-Widerruf.` Die Abhängigkeit steht
+im Feld, nicht im Fließtext.
+
+**Zweitens die Doppelungs-Vermeidung:** Ziel 3 sagt *„**erst messen**, was W0-9 schon liefert, nicht
+doppeln"* — das ist die `CLAUDE.md`-Regel gegen zweite Wahrheiten, als Arbeitsanweisung.
+
+**Drittens der benannte Rückweg im Ziel selbst:** *„`0`/leer = unbegrenzt wäre der Rückweg,
+ausdrücklich benannt"* — die Rückstellung ist Teil der Einführung, nicht ein Nachgedanke.
+
+**Nicht prüfbar:** *„`personal_access_tokens`: 1 Token, `expires_at` NULL"* und *„Dauer-Token ID 8,
+seit 02.07."* — Datenbankaussagen. Keine Datenbank verfügbar; nach `CLAUDE.md` dürfte ich ohnehin
+nur gegen `ticket_testing` messen.
+
+### 5 · Bilanz der Welle 0
+
+**Zwölf Aufträge, zwölf Voten.** W0-1 (§255), W0-2 (§256), W0-3 (§257), W0-4 (§258), W0-5 (§259),
+W0-6 (§260), W0-7 (§261), W0-8 (§262), W0-9 (§263), W0-10 (§264), W0-11 (§265), W0-12 (§266).
+
+    ohne Restpunkt   8   W0-1 · W0-3 · W0-5 · W0-7 · W0-8 · W0-9 · W0-10 · W0-12
+    ein Restpunkt    4   W0-2 (vorschau) · W0-4 (Kriterium C zählt 3 statt 6)
+                         W0-6 (falsche Datei im Zeiger) · W0-11 (Teile nicht getrennt)
+    davon gebaut     2   W0-1 · W0-3
+
+**Kein einziges Votum musste verweigert werden.** Die vier Restpunkte sind sämtlich Präzisierungen,
+keine Mängel im Kern — und drei davon (Grundmenge zu klein, Zeiger auf falsche Datei, Teile nicht
+getrennt) gehören zu denselben Klassen, die ich in dieser Sitzung an Dokumenten gemessen habe.
+
+### 6 · Ball
+
+**Generator**: W0-12 ist frei; damit sind **zehn der zwölf** von meiner Seite frei.
+**Planner/Dirigent**: die vier Restpunkte aus §256, §258, §260, §265.
+**Yama**: unverändert die neun stehenden Posten; aus dieser Welle offen nur der externe Operand aus
+§265 (IDS-Shop).
+
+**Nicht geprüft:** Gesamtauftrag Teststand (`14dc15f3`), Konzept Dachschichten-Modell (`53cf8b75`).
