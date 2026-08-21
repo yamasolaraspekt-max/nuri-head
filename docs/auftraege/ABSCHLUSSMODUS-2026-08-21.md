@@ -228,3 +228,25 @@ abweisen — **und zwar auch bei nacktem `git commit`**, nicht nur über `commit
 `TICKET_ROLLE` — das Tor wirkt heute ausschließlich innerhalb von `scripts/commit-pruefen.sh`; ein
 direktes `git commit` umgeht es vollständig. Das ist die Lücke, die A-37 (Tor im `pre-commit`-Hook)
 und die Claim-Sperre Z0-I2 schließen müssen.
+
+### Yama-Entscheidung 21.08. (nach 22:24) — Weg (a): Generator-Sitzung manuell anhalten
+Nachgemessen (Dirigent): **`ada3b645`** 22:24:43, Generator, **direkt auf `auto/hausplaner-integration`**
+(vierter direkter Generator-Commit nach dem WIP-Stopp; zum Messzeitpunkt bereits auf `fork`, HEAD der
+Integration, Arbeitsbaum sauber). Wortlaut Yama, verbindlich:
+
+> Yama-Entscheidung: Weg (a). Die Generator-Sitzung, die im gemeinsamen Checkout
+> `auto/hausplaner-integration` arbeitet, ist sofort manuell anzuhalten. Keine weitere Nachricht als
+> Ersatz für den Stopp. Der aktuelle Integrationsstand wird nach dem tatsächlichen Anhalten frisch
+> gemessen und als Stopp-SHA protokolliert. Keine der seit dem WIP-Stopp entstandenen Arbeiten wird
+> gelöscht, zurückgesetzt, abgenommen oder als Fortschritt der kritischen Kette gewertet.
+> Wiederaufnahme des Generators erst, wenn A-37 eine wirksame `pre-commit`-Barriere enthält und deren
+> Negativprobe belegt: fehlende Rollenkennung scheitert · Generator im Integrationscheckout scheitert ·
+> falscher Worktree/Zweig scheitert · Integrator im Integrationscheckout darf den eng begrenzten
+> Integrationscommit ausführen · nacktes `git commit` kann die Prüfung nicht umgehen.
+> Danach gilt weiterhin ausschließlich: A-42 → A-37 → Z0-I1.
+
+**Stopp-SHA:** *offen — wird erst nach Yamas bestätigtem Anhalten frisch gemessen und hier
+eingetragen; bis dahin gilt kein Stand als Stopp-Stand.* Die fünf Negativproben gehen als Kriterien
+in das erweiterte A-37-Blatt (Planner); der Integrator transportiert nichts aufgrund der seit 22:04
+entstandenen Generator-Bauten. Das V2-Konzept (`0d897b0e`) ist bereit für die spätere unabhängige
+Prüfung; **die technische Schreibsperre hat Vorrang vor jeder weiteren Konzept- oder Produktarbeit.**
