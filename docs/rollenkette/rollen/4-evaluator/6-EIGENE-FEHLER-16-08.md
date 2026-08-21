@@ -905,3 +905,29 @@ Einordnung wie bei `js-yaml` (A-37-21).
 Zwei von drei Posten sind durch die Gegenprobe kleiner geworden, keiner größer. Das ist das
 Ergebnis, und es ist ein besseres als drei bestätigte Posten: **Ich habe vier Tage lang drei
 Punkte beim Planner geführt, von denen einer nicht trug.**
+
+---
+
+# E4 am Betrieb bestätigt — der Härtefall ist eingetreten, und die Regel hält
+
+E4 hatte nie eine echte Probe. Die Regel lautet: **ein Block ist ein BEFUND, wenn er `rolle` UND
+`zeit` trägt** — nicht, weil er ein `zustand`-Feld hat oder nicht hat. Der Härtefall dazu ist ein
+Befundblock, der **trotzdem** ein `zustand`-Feld trägt. Genau der lag heute vor.
+
+`86398891` (21.08. 13:34, integrator) räumte **drei erfundene `zustand: BEFUND`-Felder**. Die
+Blöcke, an denen sie hingen:
+
+```
+auftrag: "P-03"   rolle: plan-pruefer   zeit: "16.08. 18:27"   -zustand: BEFUND
+auftrag: "P-04"   rolle: plan-pruefer   zeit: "16.08. 18:31"   -zustand: BEFUND
+auftrag: "P-04"   rolle: plan-pruefer   zeit: "16.08. 18:37"   -zustand: BEFUND
+```
+
+**Mein Zähler, an beiden Ständen gefahren: 87 vorher, 87 nachher.** Drei `zustand`-Felder sind
+verschwunden, ohne dass meine Datensatzzahl sich bewegt hat — weil `rolle`+`zeit` sie längst als
+Befunde ausgewiesen hatten.
+
+**Das ist der Beleg, den ich sonst von anderen verlange.** Hätte ich Blöcke über das Vorhandensein
+eines `zustand`-Feldes gezählt — meine erste, verworfene Fassung —, wäre die Zahl von 90 auf 87
+gefallen und ich hätte drei Vorgänge verloren, ohne es zu merken. *Eine Regel, deren Rot-Probe nie
+eintritt, ist von einer wirkungslosen nicht zu unterscheiden. Diese hier ist jetzt unterscheidbar.*
