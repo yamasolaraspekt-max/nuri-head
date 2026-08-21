@@ -148,10 +148,17 @@ Hooks lehnen A ab, B kann nicht umbenennen: ein gültig aussehendes, sofort vera
 8. **erst danach** `counter.lock/` lösen;
 9. Abbruchreste (`active.tmp.*` ohne erfolgreiches Rename) **ausschließlich unter dieser Sperre**
    bereinigen; `active/` bleibt die einzige Wahrheit.
-Damit können zwei Bewerber weder den Gewinner veralten lassen noch gleichzeitig übernehmen; ein
-unter der Sperre abgestürzter Bewerber hinterlässt `counter.lock/` — sie gilt nach fester, kurzer
-Frist (Sekunden, nicht Minuten) als verwaist und darf vom nächsten Bewerber entfernt werden, weil
-unter ihr nie ein Lease entsteht, das nicht in `active/` sichtbar wäre.
+Damit können zwei Bewerber weder den Gewinner veralten lassen noch gleichzeitig übernehmen.
+**Recovery der Sperre selbst (Yama 21.08., fünfte Runde — ersetzt die frühere „Sekundenfrist"; die
+wäre falsch, weil ein lebender Prozess durch Scheduler, I/O oder `fsync` länger pausieren kann und
+ein zweiter ihm dann die noch gültige Sperre entzöge):** `counter.lock/owner.yaml` trägt Host, PID,
+Prozess-Startkennung und Übernahmezeit · eine Sperre wird **nur** automatisch entfernt, wenn diese
+konkrete Prozessidentität nachweislich nicht mehr existiert (PID + Startkennung stimmen nicht mehr
+überein) · **Alter allein ist nur ein Warnsignal**, nie ein Löschgrund · ist die Lebendigkeit nicht
+eindeutig messbar (fremder Host, fehlende Startkennung) → **fail closed**: Vergabe ablehnen, Mensch
+informieren · Alternative für Z0-I2: betriebssystemverwalteter Dateilock (`flock`), der beim
+Prozessende automatisch freigegeben wird — dann entfällt die Identitätsprüfung, der Crash gibt die
+Sperre von selbst frei. Das ist eine **Implementierungsanforderung für Z0-I2**, kein Konzeptvorbehalt.
 Übernahme nach Ablauf: `active/` darf nur entfernt werden, wenn `heartbeat_bis` verstrichen ist; der
 neue Bewerber erhält aus dem **dauerhaften** `counter` zwingend einen höheren Token — ein Token kann
 nach Löschung von `active/` nie wiederverwendet werden. **Ablehnung veralteter Token durch drei Hooks**: (1) `scripts/commit-pruefen.sh` vor jedem Commit (Lease
