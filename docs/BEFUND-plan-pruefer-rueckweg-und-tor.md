@@ -9187,3 +9187,86 @@ oder ob die Zahl sieben neu ist, kann ich nicht messen — das ist seine Auskunf
 
 **An Yama:** der Fall ändert die Lage aus §119/§120. Dort ging es um Code, der nicht läuft. Hier läuft
 er — nur die ungeschützte Fassung.
+
+## §123 — Fünf Aufträge stehen in keiner Statuswahrheit, und die Regel dafür widerspricht der Sperre
+
+*(Nummer §123 gegen HEAD `5cbe0b24` gewählt und hier benannt.)*
+
+### Vorweg: A-37-21 — der Generator war 51 Sekunden vor mir, unabhängig
+
+```
+  1407b9dd  generator   21.08. 10:07:25   "A-37-21 ist geschlossen, seit heute 09:54"
+  c72b2acf  ich (§121)  21.08. 10:08:16
+  war mein §121 in seinem Baum?  NEIN
+```
+
+Zwei Rollen, dieselbe Messung, dieselbe Zeitachse (Prüfstand zeitlich jünger, inhaltlich älter),
+binnen 51 Sekunden und ohne einander zu sehen. **Er war zuerst.** Mein Ball an den Evaluator aus §121
+ist damit gegenstandslos — er hat den Ball bereits an den Planner gegeben und dort als erledigt
+gemeldet. Ich ziehe ihn zurück; die Sache steht, die Zuständigkeit nicht bei mir.
+
+*(Das ist keine Doppelarbeit im Sinn von P-02 Punkt 4 — sein Commit war nicht in meinem Baum, als ich
+schrieb. Es ist eine unabhängige Bestätigung, und die ist etwas wert.)*
+
+### Die fünf Welle-1-Aufträge: kein Ball bei mir
+
+`f350befc` schneidet fünf Aufträge (`Z1-W1-1` bis `-5`), alle `zustand: ENTWURF`, alle mit
+`basis_sha: 11f7c4c3`. Gemessen:
+
+```
+  baut:      generator (Agent frontend-entwickler)     alle fuenf
+  nimmt_ab:  evaluator — nie der Bauende               alle fuenf
+  ballbesitz-Feld:                                     KEINES
+  "dor" im Blatt:                                      0 von 5
+```
+
+Keiner trägt einen Ball für mich. Das ist die Antwort auf Wache-Punkt 3, und sie ist negativ.
+
+### Der Fund: das Fenster, das §5 ausdrücklich verhindern soll, ist fünffach offen
+
+```
+  Z1-W1-1 … Z1-W1-5      Datensatz in STATUS.md: 0     Tafelzeile: 0
+  Schnitt-Commit f350befc fasst docs/STATUS.md an:     0 mal
+```
+
+`ARBEITSREGELN.md:229ff` (§5, A-20 vom 12.08.) sagt wörtlich:
+
+> *„**Wer ein Auftragsblatt schneidet, legt im SELBEN Commit Tafelzeile UND Datensatz-Block in
+> `docs/STATUS.md` an** — Zustand `ENTWURF`, `dor_beleg: steht aus`."*
+
+Und begründet es mit genau dem heutigen Bild:
+
+> *„…gäbe es ein Fenster zwischen Schnitt und Prüfung, in dem der Auftrag in der Statuswahrheit
+> **nicht existiert**. Genau das ist am 12.08. bei W-38 eingetreten — **Blatt committet, null Blöcke,
+> null Tafelzeilen**."*
+
+**Heute steht es fünfmal so da.** Die Statuswahrheit sagt über diese fünf Aufträge nicht das Falsche —
+sie sagt gar nichts.
+
+### Aber es ist keine Nachlässigkeit, sondern eine Kollision
+
+Die andere Seite, bevor ich jemandem etwas vorwerfe:
+
+```
+  rollen-tor.sh:344   if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]
+                      -> nur der Integrator darf docs/STATUS.md schreiben
+```
+
+Und die Blätter benennen das **selbst**:
+
+> `status_steht_in: docs/STATUS.md — Tafelzeile+Datensatz braucht den Integrator-Lauf (alleiniger
+> Schreiber)`
+
+**§5 verlangt vom Schneidenden einen Handgriff, den die A-37-Sperre ihm verbietet.** Der Planner hat
+die Kollision erkannt, dokumentiert und den einzigen ihm möglichen Weg genommen. Die Regel ist
+unerfüllbar für jeden außer dem Integrator — und der schneidet keine Aufträge.
+
+Das ist dieselbe Bauform wie die Regelkollision §3/E1/Beifang, die bei Yama liegt: **zwei Regeln, jede
+für sich richtig, zusammen unerfüllbar.** Neu ist, dass diese hier den Dreiklang aus §5 selbst trifft
+(*„Tafelzeile, `zustand` und `dor_beleg` sind EIN Handgriff"*) — der Handgriff ist auf zwei Rollen
+verteilt, und §5 kennt nur eine.
+
+**Ball bei Yama**, weil es eine Regelfrage ist und keine Messfrage. Zwei Wege, beide nicht meine
+Entscheidung: §5 auf „der Schneidende veranlasst den Eintrag" ändern, oder der Sperre eine Ausnahme
+für neu geschnittene Blöcke geben. **Bis dahin bleibt das Fenster offen**, und jede Ballortung über
+die Statuswahrheit sieht diese fünf Aufträge nicht — meine eingeschlossen.
