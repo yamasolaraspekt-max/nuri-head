@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#
+# A-38, NEBENWIRKUNG ABGEFANGEN — dieser Haken ist NICHT Teil des Auftragsziels, sondern die
+# Bedingung dafuer, dass das Ziel nichts kaputt macht.
+#
+# `core.hooksPath` ERSETZT `.git/hooks` vollstaendig; git schaut danach nur noch hier. Im Hauptbaum
+# liegt aber seit dem 26.07. ein aktiver Haken:
+#     .git/hooks/post-commit -> ../../scripts/hooks/post-commit     (AUF-75, Waechter-Ausloeser)
+# Ohne diese Datei haette A-38 ihn STILL abgeschaltet — der Waechter waere nach jedem Commit
+# einfach nicht mehr gelaufen, ohne Fehlermeldung und ohne dass es jemand bemerkt. Genau die Sorte
+# Nebenwirkung, die kein Abnahmekriterium des Blattes gemessen haette.
+#
+# Der alte Symlink in .git/hooks bleibt liegen (nicht loeschen, danebenstellen) — er ist wirkungslos,
+# solange core.hooksPath gesetzt ist, und wirkt sofort wieder, wenn der Rueckweg gefahren wird.
+#
+WURZEL="$(git --no-optional-locks rev-parse --show-toplevel 2>/dev/null)" || exit 0
+[ -x "$WURZEL/scripts/hooks/post-commit" ] || exit 0
+exec "$WURZEL/scripts/hooks/post-commit" "$@"

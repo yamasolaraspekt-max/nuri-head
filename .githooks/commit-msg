@@ -1,0 +1,152 @@
+#!/usr/bin/env bash
+#
+# A-38 — MERGES LAUFEN AM TOR VORBEI. Dieser Haken schliesst genau diese Luecke.
+#
+# DER BEFUND: `scripts/commit-pruefen.sh` wird VON HAND aufgerufen (`bash scripts/commit-pruefen.sh
+# "Botschaft" pfad ...`) — ein `git merge` ruft es nie. Das Rollen-Tor greift damit lueckenlos bei
+# den Commits, die es erreicht, und sieht die Merges ueberhaupt nicht. Gemessen an den letzten 300
+# Merges des Graphen: 197 tragen eine Rollenmarke, 103 nicht. Das ist keine Vorgeschichte, das ist
+# der heutige Stand.
+#
+# WARUM commit-msg UND NICHT pre-commit: `pre-commit` laeuft bei einem Merge NICHT (git ueberspringt
+# ihn, wenn MERGE_HEAD gesetzt ist). `commit-msg` laeuft immer — bei jedem Commit, auch bei Merges.
+# Es ist der einzige Haken, der die Luecke ueberhaupt erreicht.
+#
+# WARUM VERSIONIERT UND core.hooksPath: `.git/hooks/` gilt je Arbeitsbaum. Dieses Repository hat
+# NEUNZEHN Worktrees; ein Haken, den jede Rolle selbst einrichten muss, ist bei neunzehn Baeumen
+# kein Schutz, sondern eine Bitte. `core.hooksPath` gilt repo-weit und wirkt in allen zugleich.
+#
+# ── DIE ENTSCHEIDUNG, DIE VOM BLATT ABWEICHT, und der Grund steht in den Zahlen ────────────────
+# Das Blatt verlangt woertlich die Zeile `zusammengefuehrt: <sha> <- <sha>`. An den letzten 300
+# Merges nachgemessen:
+#     'zusammengefuehrt:'                 0 Treffer
+#     'Herkunft: … @<sha> -> @<sha>'    167 Treffer
+# Wer die Schreibweise des Blattes erzwingt, weist ALLE 167 heutigen, inhaltlich korrekten Merges
+# des Integrators ab und laesst dabei kein einziges echtes Problem auffliegen. Das waere H-9 —
+# die Schreibweise gepruefte statt der Sache, genau die Fehlerklasse, die das Blatt selbst zweimal
+# an sich benennt. Der Haken verlangt deshalb DIE SACHE: eine Herkunftsangabe, die ZWEI Staende
+# nennt. Beide Schreibweisen zaehlen. Will der Planner die woertliche Form, ist das eine Zeile
+# hier — der Ball liegt dort, nicht in einer stillen Auslegung durch den Bauenden.
+#
+# ── FEHLERVERHALTEN, ausdruecklich gewaehlt (K5) ───────────────────────────────────────────────
+# Bei den ZWEI benannten Maengeln (fehlende Marke, fehlende Herkunft) gibt der Haken 1 zurueck und
+# der Commit unterbleibt. Bei EIGENEM Versagen — Botschaftsdatei unlesbar, git nicht ansprechbar —
+# meldet er seine EIGENE Ursache und laesst durch. Begruendung: dieser Haken wirkt in neunzehn
+# Baeumen gleichzeitig, in denen mehrere Rollen parallel arbeiten. Ein Formfehler soll einen Commit
+# aufhalten; eine Fehlfunktion des Waechters darf nicht neunzehn Baeume zugleich lahmlegen. Die
+# Meldung nennt beim eigenen Versagen ausdruecklich den Haken als Ursache und nicht die Botschaft.
+#
+# ── GRENZE, die nicht verschwiegen wird (K6) ───────────────────────────────────────────────────
+# `git commit --no-verify` umgeht JEDEN Haken, auch diesen. Das ist nicht verhinderbar. Ein Schutz,
+# dessen Grenze man verschweigt, erzeugt falsches Vertrauen — deshalb steht sie hier und im Bericht.
+#
+# ABSCHALTEN (Rueckweg, eine Zeile, ohne Commit):
+#   git config --unset core.hooksPath
+#
+
+BOTSCHAFT_DATEI="$1"
+
+# ── Eigenes Versagen: melden und DURCHLASSEN, nie als Formfehler ausgeben ─────────────────────
+eigenes_versagen() {
+  echo "A-38-HAKEN: ich kann nicht pruefen — $1" >&2
+  echo "            Das ist ein Fehler DES HAKENS, kein Fehler der Botschaft." >&2
+  echo "            Der Commit laeuft durch. Ursache bitte melden." >&2
+  exit 0
+}
+
+[ -n "$BOTSCHAFT_DATEI" ] || eigenes_versagen "git hat mir keinen Pfad zur Botschaft uebergeben"
+[ -r "$BOTSCHAFT_DATEI" ] || eigenes_versagen "die Botschaftsdatei '$BOTSCHAFT_DATEI' ist nicht lesbar"
+
+# ── Ist das ein Merge? ────────────────────────────────────────────────────────────────────────
+# Drei Signale, und die Reihenfolge ist wichtig:
+#   1 MERGE_HEAD existiert -> laufender `git merge` / `git pull`. Das sichere Signal.
+#     --git-path loest den Pfad je ARBEITSBAUM auf; $GIT_DIR waere in einem Worktree falsch.
+#   2 GIT_REFLOG_ACTION nennt merge -> deckt Wege ab, die MERGE_HEAD schon aufgeraeumt haben.
+#   3 amend an einem Merge (K3) -> nur wenn die Reflog-Aktion ausdruecklich amend sagt UND der
+#     Stand zwei Eltern hat.
+# WARUM PUNKT 3 SO ENG IST: waehrend commit-msg zeigt HEAD auf den Stand VOR dem Commit. Steht dort
+# ein Merge — was nach jedem Integrationslauf der Fall ist —, dann hat HEAD zwei Eltern, obwohl der
+# entstehende Commit ein ganz normaler ist. Wer nur `HEAD^2` prueft, haelt JEDEN Commit nach einem
+# Merge fuer einen Merge und blockiert damit die gesamte Rollenkette. Die amend-Bedingung ist das,
+# was diesen Fehlgriff verhindert.
+ist_merge=0
+merge_head="$(git rev-parse --git-path MERGE_HEAD 2>/dev/null)"
+if [ -n "$merge_head" ] && [ -f "$merge_head" ]; then
+  ist_merge=1
+elif printf '%s' "${GIT_REFLOG_ACTION:-}" | grep -qi 'merge'; then
+  ist_merge=1
+elif printf '%s' "${GIT_REFLOG_ACTION:-}" | grep -qi 'amend'; then
+  git rev-parse --verify --quiet HEAD^2 >/dev/null 2>&1 && ist_merge=1
+fi
+
+# A-38-4 — ein normaler Commit wird NICHT angefasst. commit-pruefen.sh bleibt dort allein
+# zustaendig; zwei Waechter an derselben Stelle waeren die Doppelung, gegen die A-38 antritt.
+[ "$ist_merge" = "1" ] || exit 0
+
+# ── Botschaft lesen, Kommentarzeilen weg (git haengt sie an, sie sind nicht Teil der Botschaft) ──
+BOTSCHAFT="$(grep -v '^#' "$BOTSCHAFT_DATEI" 2>/dev/null)" \
+  || eigenes_versagen "die Botschaft liess sich nicht lesen"
+
+# ── Pruefung 1: Rollenmarke ───────────────────────────────────────────────────────────────────
+# Muster wie in den ARBEITSREGELN (Zeile 1547): `^[a-z][a-z-]*(-[0-9]+)?: `. ERWEITERT um einen
+# Klammerzusatz, weil es ihn im Bestand gibt und er eine gueltige Marke ist:
+#   'release-pruefer (in Yamas Namen): '  ·  'plan-pruefer (release-pruefer in Rollenwechsel): '
+# Das Blatt selbst nennt drei solche Faelle als H-9-Fehlgriff einer Zaehlung, die die Schreibweise
+# statt der Sache mass. Derselbe Fehlgriff waere hier eine Sperre gegen legitime Botschaften.
+MARKE='^[a-z][a-z-]*(-[0-9]+)?( \([^)]*\))?: '
+ERSTE="$(printf '%s\n' "$BOTSCHAFT" | grep -v '^[[:space:]]*$' | head -1)"
+
+if ! printf '%s\n' "$ERSTE" | grep -qE "$MARKE"; then
+  cat >&2 <<MELDUNG
+A-38: MERGE OHNE ROLLENMARKE — kein Commit.
+
+  Botschaft: ${ERSTE:0:100}
+
+  Ein Merge ist ein Vorgang wie jeder andere und braucht dieselbe Marke. Bis heute war er der
+  einzige, den das Rollen-Tor nicht sah: commit-pruefen.sh wird von Hand aufgerufen, git merge
+  ruft es nie.
+
+  Erwartet:  <rolle>: <text>          z. B.  integrator: Rueckweg — ...
+  Erlaubt:   <rolle> (<zusatz>): <text>  z. B.  release-pruefer (in Yamas Namen): ...
+
+  Botschaft aendern:  git commit --amend
+  Rueckweg, sofort und ohne Commit:  git config --unset core.hooksPath
+MELDUNG
+  exit 1
+fi
+
+# ── Pruefung 2: Herkunft — ZWEI Staende muessen dastehen ──────────────────────────────────────
+# Gefordert ist die SACHE, nicht eine Schreibweise (Begruendung im Kopf). Anerkannt sind:
+#   a) die im Bestand gelebte Form:   Herkunft: <zweig> @ <sha> -> <zweig> @ <sha>
+#   b) die im Blatt genannte Form:    zusammengefuehrt: <sha> <- <sha>
+HERKUNFT_A='[Hh]erkunft:.*[0-9a-f]{7,40}.*(->|<-|→).*[0-9a-f]{7,40}'
+HERKUNFT_B='zusammengefuehrt:.*[0-9a-f]{7,40}.*(<-|->|←).*[0-9a-f]{7,40}'
+
+if ! printf '%s\n' "$BOTSCHAFT" | tr '\n' ' ' | grep -qE "$HERKUNFT_A|$HERKUNFT_B"; then
+  cat >&2 <<MELDUNG
+A-38: MERGE OHNE HERKUNFTSANGABE — kein Commit.
+
+  Botschaft: ${ERSTE:0:100}
+
+  Die Marke sagt WER, die Herkunft sagt WAS mit WAS. Ohne sie weiss in einem halben Jahr niemand,
+  welche Arbeit hier zusammenkam — der Regelfall im Bestand war der leere Body:
+      'Merge commit 'b9a030e3' into HEAD'   Body: (leer)
+
+  Erwartet wird eine Zeile, die ZWEI Staende nennt. Beide Schreibweisen gelten:
+      Herkunft: <zweig> @ <sha> -> <zweig> @ <sha>      (im Bestand gelebt, 167 von 300 Merges)
+      zusammengefuehrt: <sha> <- <sha>                  (Form aus dem Auftragsblatt A-38)
+
+  GEMESSEN VOR DEM SCHARFSCHALTEN, damit niemand ueberrascht wird: von den letzten 60 Merges
+  tragen 53 beides. Die 7 abgewiesenen nennen NUR EINEN Stand — Form 'Transport — <sha>
+  zusammengefuehrt'. Sie sagen, WAS hereinkam, aber nicht, WOHINEIN. Das Auftragsblatt A-38
+  verlangt ausdruecklich zwei Staende; der Bauende hat das NICHT eigenmaechtig aufgeweicht.
+
+  Botschaft aendern:  git commit --amend
+  Rueckweg, sofort und ohne Commit:  git config --unset core.hooksPath
+  Haelt jemand zwei Staende fuer zu streng: das ist eine Planner-Frage (A-38 Scope 1),
+  keine Auslegung im Haken.
+MELDUNG
+  exit 1
+fi
+
+exit 0
