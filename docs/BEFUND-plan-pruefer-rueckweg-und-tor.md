@@ -14633,3 +14633,86 @@ raumAuswahl.ts"*, sondern **„falscher Zeiger `raumAuswahl.ts:7` → `Buehne.ts
 `:162`, seit 8 T 14 h, nie richtig gewesen"**. **Ball beim Planner** für die eine Zahl — sie steht
 in einem Kommentarkopf, der seine eigene Identitätsregel erklärt, und dort ist eine falsche
 Fundstelle mehr wert als anderswo.
+
+## §191 — Posten (a): §190s neue Klasse auf drei Fälle angewandt — sie findet keinen weiteren, und das ist das Ergebnis
+
+**Messstand** `2f597da4` · Baum sauber · 0 neue Commits; Integrationszweig unverändert, letzter
+Commit vor **41 Minuten**.
+
+§190 hat eine vierte Klasse eingeführt: **„nie richtig gewesen"** — ein Zeiger, der schon im
+Schreib-Commit daneben lag. Eine neue Klasse verlangt sofort die Gegenprobe, sonst wird sie zur
+Lieblingserklärung. Ich habe sie deshalb auf die **drei benannten Fehlzeiger aus §186** angewandt
+und für jeden den **Schreib-Commit aufgesucht**.
+
+### Das Ergebnis: zwei waren zeichengenau richtig, einer war um zwei Zeilen unscharf
+
+```
+1-AUFTRAG.md:376 -> a26-ball-drift.sh:56      geschrieben 13.08. 08:34 (f80e7285)
+   DAMALS  [ -z "$START" ] && continue          <- das Zitat sagt „überspringt … still (continue)"
+   HEUTE   (Leerzeile)                          <- der Inhalt steht auf :97
+
+5-WAS-ICH-NICHT-DARF.md:23 -> commit-pruefen.sh:503   geschrieben 14.08. 10:24 (047fc6fe)
+   DAMALS  ' "$p" 2>/dev/null || { echo "YAML-KOPF  $p  — der Kopf …
+   HEUTE   KEIN_GIT_HALTER=ja                   <- der Inhalt steht auf :798
+```
+
+**Beide Zitate treffen ihren Schreib-Stand wörtlich.** Das sind echte Wanderungen, keine Fehler beim
+Schreiben.
+
+Der dritte ist ein Zwischenfall:
+
+```
+SKILL-formel-pruefen.md:39 -> dachGeometrie.ts:87     geschrieben 10.08. 19:11 (1e933a64)
+   Zitat:  „geometry/dachGeometrie.ts:87 wirft DachGeometrieUngueltig"
+   DAMALS  :87  const konturM2 = polygonM2(poly);
+           :88  if (bboxM2 <= 0 || Math.abs(konturM2 - bboxM2) / bboxM2 > 0.01) {
+           :89  throw new DachGeometrieUngueltig(          <- der Wurf, zwei Zeilen tiefer
+```
+
+**Zwei Zeilen unscharf, aber im selben Block:** `:87` rechnet den Vergleichswert, auf dem der Wurf
+beruht; wer dort aufschlägt, steht mitten in der Prüfung. Das ist ein **Blockzeiger**, nicht der
+Fall aus §190 (dort fünfzehn Zeilen und eine völlig andere Stelle). **Die Unschärfe ist erst durch
+die Bewegung zum Fehler geworden** — heute trägt `:87` einen Kommentar über die Homogenität der
+Shoelace-Formel, und der Wurf steht auf `:91`.
+
+### Die Kalibrierung — und sie gehört ausdrücklich hierher
+
+**§190s neue Klasse findet in drei Fällen keinen weiteren Treffer.** „Nie richtig gewesen" ist damit
+die **Ausnahme**, nicht die Regel, und ich wende sie **nicht rückwirkend** auf meine Drift-Befunde
+an. Was bleibt: **der Schreib-Commit gehört ab jetzt zur Prüfung**, denn ohne ihn lassen sich die
+vier Klassen nicht trennen — und genau das habe ich in §190 fünf Tage lang versäumt.
+
+### §167 erneut bestätigt, und diesmal am Extremfall
+
+Die entscheidende Zahl ist nie die Gesamtzahl der Commits, sondern die auf die **Trägerdatei**:
+
+```
+dachGeometrie.ts     3 Commits auf die Datei  (von 2511 gesamt)   153 -> 175 Z.
+a26-ball-drift.sh    1 Commit  auf die Datei  (von 1528 gesamt)   102 -> 158 Z.
+commit-pruefen.sh   12 Commits auf die Datei  (von 1272 gesamt)   743 -> 1066 Z.
+```
+
+**Ein einziger Commit hat gereicht.** `a26-ball-drift.sh` wuchs in **einem** Schritt von 102 auf 158
+Zeilen, und der Zeiger `:56` liegt heute bei `:97`. Wer nach „vielen Commits" als Warnzeichen sucht,
+findet den Fall nicht: 1 von 1528.
+
+### Ein fünfter Erschwernisgrund, neu gesehen
+
+Beide gewanderten Ziele sind heute **nicht mehr eindeutig**:
+
+```
+'YAML-KOPF'                     heute auf :671 (Kommentar) UND :798 (Code)
+'throw new DachGeometrieUngueltig'  heute auf :91 UND :151
+```
+
+Der zweite Wurf in `dachGeometrie.ts` ist die **Walm-Sperre aus Z1-W1-2** (`60c04eef`, §169) — also
+eine Stelle, die es beim Schreiben des Zeigers noch gar nicht gab. **Ein nachgezogener Zeiger hätte
+heute zwei mögliche Ziele**, und die Wahl zwischen ihnen ist keine Formsache, sondern eine
+Sachfrage. Das ist der Grund, warum „einfach nachziehen" auch dann nicht genügt, wenn man den
+richtigen Stand kennt.
+
+**Ball beim Planner:** `SKILL-formel-pruefen.md:39` — dort steht die Prüfvorschrift, aus der eine
+Rolle ihr Verfahren nimmt, und der Zeiger nennt heute einen Shoelace-Kommentar statt eines Wurfs;
+`1-AUFTRAG.md:376` zeigt auf eine Leerzeile. **Ball beim Integrator, unverändert seit §168:**
+`5-WAS-ICH-NICHT-DARF.md:23` — dort ist zusätzlich die Aussage repariert.
+**Kein Ball bei mir** — die Gegenprobe zu §190 ist gefahren und hat die neue Klasse begrenzt.
