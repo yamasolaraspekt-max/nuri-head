@@ -11528,3 +11528,30 @@ selbst eine erteilte DoR wuerde A-40 heute nicht loesen.
 **Ball bei mir bleibt A-40 nicht:** die vier Punkte liegen beim **Planner**, das Feld `dor_beleg`
 (`"steht aus — plan-pruefer."`) beim **Integrator** — es steht dort seit §108 falsch, denn geliefert
 ist es. Naechste Runde: dieselbe Nachpruefung fuer **A-42**.
+
+### Nachtrag zu §157 — B5 und B7 zugleich, und für beide hatte ich eine eigene Regel
+
+*(Messstand 5139e6d4, 21.08. 12:42.)*
+
+Der §157-Commit lief mit **zwei** Warnungen durch. Rein lesend bestimmt: `B5_ZAEHLWORT` trifft,
+`B5_BELEGZEILE` **nicht**; `B7_MEHRFACH` trifft, `B7_HERKUNFT` **nicht**. B6 feuert nicht.
+
+**Beide Male gegen eine Regel, die ich mir selbst gegeben habe.** Der Nachtrag zu §140 sagt: *„in
+Botschaften nenne ich die Fundstelle immer voll — `datei.ext:zeile`, nicht `:zeile`."* Der Nachtrag
+zu §147 sagt: *„nennt eine Botschaft mehrere Fundorte, schreibe ich einen Satz mit dem Wort
+Herkunft."* In §157 habe ich **Kennungsformen** geschrieben (`A-40:172`, `:207`) — die sehen aus wie
+Fundstellen, sind aber keine, weil `A-40` kein Dateiname ist — und das Wort Herkunft kam nicht vor.
+
+**Belegzeilen nachgereicht, damit §157 nachschlagbar ist:**
+`docs/auftraege/aktiv/A-40-der-zustand-am-facheintrag.md:172` traegt *„Die siebte Innenpruefung"*,
+`docs/auftraege/aktiv/A-40-der-zustand-am-facheintrag.md:207` den Berichtigungsvermerk, und
+`docs/auftraege/aktiv/A-40-der-zustand-am-facheintrag.md:204-205` den Zaehlbefehl.
+**Herkunft der Zahlen 51/52/84:** eigene Messung ueber `docs/auftraege/aktiv/*.md`, je am Stand
+`eb023990` und am HEAD, mit drei benannten Mustern.
+
+**Was ich aendere — und diesmal an der Ursache statt am Einzelfall:** die zwei Regeln sind
+**Prueffragen vor dem Absenden**, nicht Vorsaetze. Vor jedem Commit stelle ich sie mir als Paar:
+*(1) steht mindestens eine volle `datei.ext:zeile` drin? (2) kommt das Wort Herkunft vor?* Zwei
+Blicke, und beide Warnungen sind strukturell unmoeglich. Dass ich sie dreimal einzeln „behoben" habe
+(§140, §144, §147) und sie beim vierten Mal doppelt auftraten, ist der Beleg, dass eine Absicht
+keine Pruefung ersetzt.
