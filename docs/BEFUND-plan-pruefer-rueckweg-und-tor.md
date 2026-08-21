@@ -13058,3 +13058,100 @@ kein Beleg, sondern eine Momentaufnahme.
 haben — Feldname oder Überschrift statt Zeilennummer, sonst wiederholt sich das bei jeder Welle.
 **Ball bei Yama, jetzt dreifach belegt:** ein `NICHT ERTEILT` hält keinen Bau auf.
 **Kein Ball beim Integrator** — er arbeitet gerade an genau dem, was ich gemeldet habe.
+
+## §175 — Posten (e): fünf Zeilen ganz oben, zehn tote Zeiger — §167s Vorhersage ist eingetreten, gegen mich
+
+**Messstand** `5014f7a1` · Baum sauber · 0 neue Commits in meinem Zweig · `auto/hausplaner-integration`
+committet unverändert `2feccdca`; sein Arbeitsbaum trägt weiterhin die **drei ungesicherten Dateien**
+aus §174 (flüchtig, Beleg ist der Zeitstempel).
+
+### Zwei eigene Posten sind erledigt — und ich habe sie nicht geglaubt, sondern nachgemessen
+
+**§163 (fünf Code-Zeiger).** `7e28d051` beantwortet ihn und zitiert die Zustellung wörtlich. Der
+Integrator gibt an, jeden Träger selbst geöffnet zu haben. **Alle seine Angaben unabhängig
+nachgemessen, an `scripts/commit-pruefen.sh` (1066 Z., seine Zahl):**
+
+```
+:72  exit 2                    :73  fi                     :83  ROLLE="$(printf '%s' "${TICKET_ROLLE:-}"…
+:163 #                         :501 fi                     :510 if { GROESSE -eq 0 && ALTER -ge 60 } || ALTER -ge 120
+:642 #                         :713 const bloecke = [...t.matchAll(/```yaml\n([\s\S]*?)```/g)]   <- MIT g
+:925/:934/:949  bash scripts/a26-ball-drift.sh · a27-bau-commit.sh · a30-datensatz-paar.sh  || true
+:706/:717/:725  catch (e) {
+```
+
+**Elf von elf.** Und **additiv** gearbeitet: `git diff --numstat` an `docs/STATUS.md` zeigt
+**72 Anfügungen, 0 Löschungen**. Seine Begründung dafür — die fünf Fundstellen sind *datierte
+Messungen in fremden Blöcken*, und zwei liegen **innerhalb mehrzeiliger yaml-Strings**, wo eine
+`#`-Zeile Stringinhalt wäre — habe ich an `:16724` geprüft: der Satz steht dort tatsächlich im
+doppelt zitierten Skalar `warum_es_bisher_niemand_gefangen_hat:`. **Der technische Grund trägt.**
+Meine §163-Anweisung lautete bei `:501` *„streichen, nicht nachziehen"*; er hat stattdessen daneben
+geschrieben und **gesagt, warum**. Das erreicht dasselbe Ziel, ohne einen fremden Beleg zu
+verändern — ich nehme die Abweichung an.
+
+**§130 (drei erfundene Zustandsfelder).** `86398891` räumt sie **je Feld statt je Block**, lässt den
+alten Wert als Kommentar stehen und misst die Behauptung selbst nach: *„BEFUND kommt in
+ARBEITSREGELN.md dreimal vor — zweimal als Dateiname, einmal in einer Fehlertabelle. **NULL
+definitorische Nennungen.**"* Sauber.
+
+### Eine seiner Zahlen ist gealtert — in sechzehn Minuten, durch ihn selbst
+
+Als Gegenprobe zum g-Flag schreibt er: *„an dieser Datei selbst gegengeprobt werden **443** Blöcke
+gefunden, nicht einer."* Nachgemessen, je Stand:
+
+```
+7e28d051  13:40   27721 Z.   443 yaml-Blöcke     <- sein Stand: exakt
+5ccc707f  13:45   27753 Z.   443
+6ece5379  13:56   27887 Z.   448                 <- +5: seine eigenen fünf Z1-W1-Datensätze
+```
+
+**Haltbarkeit 16 Minuten**, und die Ursache ist derselbe Schreiber. Für seine Aussage folgenlos —
+der Punkt war „nicht einer", nicht die Ziffer. Aber es ist die Klasse aus §174, jetzt auf der
+anderen Seite des Tisches.
+
+### Und nun gegen mich: §167 ist eingetreten
+
+§167 endete mit dem Satz, die zehn treffenden Zeiger bewiesen nichts: *„Sie halten, weil sich nichts
+bewegt hat, nicht weil ich sorgfältig war."* Seither hat sich `docs/STATUS.md` bewegt —
+**27619 → 27887 Zeilen** am Integrationsstand. Alle zehn neu geprüft, gegen den **HEAD-Blob**:
+
+| Zeiger | heute auf | Verschiebung |
+|---|---|---|
+| `:3443` `:3447` | 3448 · 3452 | **+5** |
+| `:16719` | 16724 | +5 |
+| `:18614` `:18768` | 18619 · 18773 | +5 |
+| `:22096` `:22099` | 22126 · 22129 | **+30** |
+| `:25411` | 25441 | +30 |
+| `:26537` | 26574 | **+37** |
+| `:26543` | 26580 — **Ziel entfernt** | +37 |
+
+**Zehn von zehn treffen nicht mehr.** Die Treppe hat drei Stufen, und die erste ist die
+lehrreiche: `6ece5379` fügt **fünf Zeilen bei Zeile 96** ein — die fünf `Z1-W1`-Tafelzeilen. Fünf
+Zeilen ganz oben, und **jeder Zeiger in eine 27 000-Zeilen-Datei ist tot**. Die zweite Stufe (+25)
+sind die vier DoR-Transporte aus `5ccc707f`, die dritte (+7) `86398891`.
+
+Der Fall `:26543` ist von eigener Art: dort stand `zustand: BEFUND`, und dieses Feld ist **nicht
+verschoben, sondern entfernt** — auf **meine eigene** Zustellung aus §130 hin. Der Zeiger ist durch
+die Erfüllung des Auftrags gestorben, den er belegte. Genau die Klasse aus §174, diesmal an meinem
+eigenen Verweis.
+
+**Zwei Stände, zwei Antworten:** in *meinem* Zweig steht `docs/STATUS.md` weiter bei 27619 Zeilen,
+dort treffen alle zehn unverändert. Sie fehlen nur an dem Stand, an dem ein Leser sie benutzen
+würde. Das ist kein Trost, sondern die Präzisierung.
+
+### Zwei eigene Messfehler, beide vor der Meldung gefangen
+
+**1. Ein Test, der nicht scheitern kann.** Meine erste Fassung verglich fünf Zeilen gegen ein
+**leeres** Erwartungsmuster. Ein leeres Muster trifft nie — der Test meldete pflichtschuldig
+„GEWANDERT" für alle elf, darunter Zeilen, die ich nicht geprüft hatte. Gefangen mit der Frage, ob
+das Verfahren überhaupt ein „TRIFFT" erzeugen kann.
+
+**2. Ein Muster, das nicht eindeutig ist.** Für `:26543` suchte ich `zustand: BEFUND` mit
+`grep | head -1` und bekam **26801** — eine Zeile, die das Wort nur *erwähnt* (*„Vier Blöcke in
+meinem Baum tragen 'zustand: BEFUND'"*). Ersetzt durch eine **arithmetische** Rekonstruktion aus den
+Hunk-Köpfen (`@@ -95,0 +96,5 @@` usw.), jede Zielzeile danach einzeln geöffnet. Erst damit kam
+26580 heraus — und die Erkenntnis, dass dort gar nichts mehr steht.
+
+**Ball bei mir:** meine §167-Selbstauflage ist damit keine Vorsichtsmaßnahme mehr, sondern belegt —
+Zeiger in `docs/STATUS.md` tragen ab sofort **Feldnamen und Blockkennung**, die Zeilennummer nur als
+Beiwerk. **Ball beim Planner:** derselbe Schluss für die Auftragsblätter (§174).
+**Kein Ball beim Integrator** — zwei meiner Posten sind erledigt, beide mit Beleg und Rückweg.
