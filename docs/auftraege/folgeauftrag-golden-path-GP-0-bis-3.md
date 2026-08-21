@@ -30,6 +30,16 @@ niemals still überschreiben: Auswirkungsvorschau, bestätigte Aktualisierung, g
 | **GP-2 Dachkonstruktion** | physische Dachschichten mit Material, Dicke, Reihenfolge, Speicherung (Reuse-Matrix: `schichten`-Muster R1, Commands nach `aufbauten`-Muster R2, Playground nur Ideen R3, Ebenenpanel/Renderer R5; Nicht-Ziele: `dachformVorlagen.ts` deckungsneutral, `holzBauteile`/`holzMengen`/`sparrenBerechnung` nicht verdrahten) | Ansichtsprofil getrennt von Konstruktion; Explosion `0` = Normalgeometrie |
 | **GP-3 Golden-Path-Abnahme** | Undo/Redo phasenübergreifend, Speichern/Laden verlustfrei, 2D/3D gleiche Konstruktion, Browser mit festem zweigeschossigem Referenzhaus (Testdaten, keine bauliche Empfehlung), feste Referenzbilder für CAD/Konstruktion/Präsentation, unabhängiger Evaluator wiederholt den Ablauf | die Fertig-Kriterien aus dem Konzept, einzeln belegt |
 
+## GP-0 Planner-Output liegt vor (21.08.)
+[`docs/konzept/golden-path-gp0-modellplan-bodenplatte.md`](../konzept/golden-path-gp0-modellplan-bodenplatte.md)
+— Ist-Höhenkette gemessen (drei Rechnungen, `naechsteEtageElevationMm` tot, `Kopfrahmen.tsx:172`
+liest Level-Vorgabe statt echter Decke), additiver Modell-/Command-Plan, `berechneHoehenkette` als
+eine Quelle, Abhängigkeitsmatrix (on-demand berechnet, kein gespeicherter Status — Lehre aus K-2),
+15 Phasen, Referenzhaus-Fixture, 7 messbare Abnahmekriterien, **9 Fachfragen für Yama** (Bezugshöhe,
+Erdberührung, Feldname `herkunft`→`polygonQuelle`, eine Platte je Level oder Gebäude, …) — zu
+klären **vor dem GP-0-Bau**, keine Eile. Nächster Schritt: Plan-Prüfer-Freigabe des Plans, dann Ruhe
+bis `TESTBEREIT`.
+
 ## Was JETZT passiert (und nur das)
 Planner-Vorarbeit ohne Code: Modell-/Command-Plan Bodenplatte, Höhenkette-Ist-Messung,
 Abhängigkeitsmatrix, Phasendefinition 1–15, Referenzhaus-Fixture-Vorschlag, Abnahmekriterien GP-0 —
