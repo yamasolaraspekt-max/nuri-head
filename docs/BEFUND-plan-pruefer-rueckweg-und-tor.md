@@ -16205,3 +16205,107 @@ das ist der einzige Anspruch dieser Zahl.
 
 **Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
 und `:7881`.
+
+---
+
+## §206 — Posten (a): die Datei, die vor ihren eigenen Zeilennummern warnt, verweist 35-mal zeilengenau auf fremden Code. Vier dieser Zeiger sind heute falsch
+
+**Messstand ee8c3716, Baum sauber, 0 neue Commits. Integrationszweig unverändert 7a82ecfb (live).
+Hinweg zu: 40 fehlen mir, 29 von mir fehlen dort. `docs/STATUS.md` und die 89 Blätter an beiden
+Ständen unbewegt, kein Ball in meiner Bahn. Erhebung 21.08. 16:33–16:38.**
+
+### 1. Die eigene Drift-Tabelle der FORMELSAMMLUNG hält vollständig
+
+`FORMELSAMMLUNG.md:1153-1186` trägt einen selbst gemessenen Abschnitt *„⚠ ZEILENVERWEISE AUF DIESE
+DATEI SIND UNZUVERLÄSSIG — gemessen 16.08. abends"* mit fünf geprüften Ankern. Nachgemessen:
+
+    Commits an der Datei seit der Messung (15c49f96): 0 · Zeilen damals 1187, heute 1187
+
+    Z.220   F-020 Straight Skeleton         -> ### F-020 · Straight Skeleton (Grundgleichung)   TRIFFT
+    Z.211   Zitat "Jedes Kantenpaar …"      -> - **Formel:** Jedes Kantenpaar, das nicht …      TRIFFT
+    Z.754   N-003 Sparren-Vorbemessung      -> ### N-003 · Sparren-Vorbemessung … 🟡 FACH-GATE   TRIFFT
+    Z.757   Belegstelle sparrenBerechnung   -> - **Belegstelle:** `geometry/sparrenBerechnung…`  TRIFFT
+    Z.1082  F-054 Maßstab                   -> ### F-054 · Maßstab aus einer Referenzstrecke    TRIFFT
+
+Fünf von fünf. Der Planner hat 16.08. abends richtig gemessen, und es hat sich seither nichts bewegt.
+**Kein Befund — das gehört gesagt, bevor der eigentliche kommt.**
+
+### 2. Der Befund: die Warnung deckt die eigenen Ausgangszeiger nicht ab
+
+Dieselbe Datei schreibt in `:1185-1186`: *„Es gibt hier keinen einzigen Grund, je eine Zeile zu
+zitieren — die Kennung ist in jeder Hinsicht besser."* Der Satz gilt für Verweise **auf** sie. Für
+Verweise **von** ihr hinaus gilt er nicht, und dort steht:
+
+    33 verschiedene Code-Zeiger der Form datei.ts:zeile · 35 Vorkommen
+
+Für diese Zeiger gibt es keine Kennung als Ausweichweg — Code trägt keine F-Nummern. Die Datei hat das
+Problem also nicht gelöst, sondern nur an der Stelle beschrieben, an der es sie selbst trifft.
+
+### 3. Vier gewanderte Zeiger, jeder mit Ziel
+
+| Zeiger | zitiert als | steht heute | Versatz |
+|---|---|---|---:|
+| `SzeneProjektionService.php:257` | „Nord = +y = 0°, Ost = 90°" | `continue;` → Ziel Z.**270** | +13 |
+| `SzeneProjektionService.php:258` | `azimutRechteNormale($von,$bis)` | `}` → Ziel Z.**271** | +13 |
+| `app/dashboard/enginePanels.ts:210` | „die EINZIGE Aufrufstelle" | `],` → Ziel Z.**227** | +17 |
+| `geometry/sparrenBerechnung.ts:86` *(2×)* | `berechneSparren(e)` | `*` → Ziel Z.**105** | +19 |
+
+Verschoben haben zwei Generator-Commits: `90b89ae2` (*„SzeneProjektionService — der Dateikopf
+behauptete seit der Verdrahtung das Gegenteil"*) und `62736115` (*„STOPP-REGEL — die Schneelastzone
+kam nie in der Formel an"*). Beide sind Reparaturen; die Zeiger sind ihr Beifang.
+
+Der vierte ist der schwerste, weil er **zweimal** steht (`:757` und `:824`) und weil er die
+tragende Stelle von **N-003** bezeichnet — der Formel mit dem 🟡 FACH-GATE. Wer heute
+`sparrenBerechnung.ts:86` öffnet, findet eine leere Kommentarzeile (`*`) und keinen Hinweis, dass die
+Funktion neunzehn Zeilen tiefer beginnt.
+
+### 4. Was hält — und warum das genauso wichtig ist
+
+    app/EngineFlaeche.tsx:56-58   Zitat "Die Rechengrundlage steht sichtbar …"   steht wörtlich dort
+    renderers/three-d/szene.ts:60 "Kompass-Azimut der Sonne: 180° = Süd"          steht wörtlich dort
+    Zusage "die EINZIGE Aufrufstelle ausserhalb der Tests" für berechneSparren:
+        über den FUNKTIONSNAMEN gemessen -> genau ein Aufruf (enginePanels.ts:227).
+        Import (:24), Kommentar (:412), Definition (sparrenBerechnung.ts:105) und die
+        Fähigkeitszeile (faehigkeiten.ts:83) sind keine Aufrufe. Die Zusage hält.
+
+`szene.ts:60` ist der lehrreiche Fall: die Zieldatei **hat** sich seit dem Zeiger bewegt (1 Commit),
+und der Zeiger trifft trotzdem. **Bewegung ist ein Verdacht, kein Urteil** — das war die Lehre aus
+§167, und sie bestätigt sich hier an einem Einzelfall, den die Bewegungsmessung fälschlich angezeigt
+hätte.
+
+### 5. Ein Methodenfehler an mir selbst, aufgedeckt vom eigenen Ergebnis
+
+Ich hatte die Bewegung aller 33 Zeiger gegen `15c49f96` gemessen — den letzten Commit an der
+**FORMELSAMMLUNG** — und daraus „27 unbewegt, 3 bewegt" abgeleitet. Das ist der falsche Bezugspunkt.
+Aufgefallen ist es an `sparrenBerechnung.ts:86`: nach jener Messung „0 Commits, kann nicht gedriftet
+sein", tatsächlich um 19 Zeilen daneben. Der Grund:
+
+    Zeiger geschrieben       12.08. 00:30  (717eb11c)   — dort stand auf Z.86 wirklich
+                                                          `export function berechneSparren(…)`
+    FORMELSAMMLUNG zuletzt   16.08. 20:01  (15c49f96)   — vier Tage SPÄTER
+    Bewegung dazwischen                                   von meiner Messung nicht erfasst
+
+**Der Bezugspunkt einer Driftmessung ist der Commit, der den ZEIGER schrieb — nicht der letzte Commit
+an seiner Trägerdatei.** Eine überarbeitete Datei enthält alte Zeiger; die Überarbeitung setzt ihre Uhr
+nicht zurück. Mit dem richtigen Bezugspunkt neu gemessen (acht tragende Zeiger einzeln): sieben
+Zieldateien unbewegt, eine bewegt (`szene.ts`) — und die trifft, siehe oben.
+
+**Ehrliche Grenze:** ich habe **13** der 33 Zeiger angefasst — sechs im Inhalt geöffnet, acht mit
+richtigem Bezugspunkt auf Bewegung gemessen (`szene.ts:60` in beiden). Die übrigen **20** sind **nicht** geprüft, und ich rechne die Quote nicht hoch (B6). Sechs davon
+zeigen ohnehin auf `dachdecker_pro_3d.tsx`, das `FORMELSAMMLUNG.md:398` ausdrücklich als externe
+Quelle ausweist (`~/Desktop/Gemini-Code-Ideen-2026-05-25/…`) — außerhalb jedes Repos, von hier weder
+prüfbar noch widerlegbar, und schon dreimal in dieser Datei erwähnt. Kein neuer Befund.
+
+### Ball
+
+**Beim Planner:** vier Zeiger in `docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md` —
+`:623`, `:672`, `:825` und die doppelte Belegstelle in `:757` und `:824`. Ziele sind gemessen und oben
+genannt; die Berichtigung ist eine Zahlenänderung, keine Untersuchung.
+
+**Zur Erwägung, nicht als Forderung:** die Datei hat für Verweise auf sich selbst die Kennung als
+Ausweg gefunden. Für ihre Verweise nach außen gibt es das Gegenstück — den **Funktionsnamen**. Drei
+der vier gewanderten Zeiger nennen ihn bereits daneben (`azimutRechteNormale`, `berechneSparren`); er
+hätte in allen drei Fällen getragen, wo die Zeilennummer versagte.
+
+**Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
+und `:7881`.
