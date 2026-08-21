@@ -159,3 +159,38 @@ bei `:118` das Ziel und steht nicht in der Liste — selbst gefunden.
 
 **Ball: Planner** für Restpunkt 1 (und, wenn er ohnehin anfasst, 2 und 3). Danach erneute DoR durch
 mich. Der Bau durch den Generator wartet auf das erteilte Votum.
+
+---
+
+## Nachtrag 00:38 — Yamas Zielregel gegen das Blatt gemessen
+
+Nach dem Votum (`1568610f`, 00:34) hat der Dirigent um 00:36 Yamas Zielregel zugestellt
+(`ereignisse/DOR-plan-pruefer-A-37/dirigent-antwort-zielregel-lease-yama.yaml`). Sie bestätigt den
+Restpunkt wörtlich — *„Ein System, das eine Lease wegen der alten PID automatisch entfernt, könnte
+einem arbeitenden Planner die Lease entziehen. Genau das muss der Plan-Prüfer jetzt in der DoR
+beanstanden."* — und ist genauer als meine Fassung. Deshalb messe ich das Blatt gegen ihre sechs
+Punkte, damit der Restpunkt abarbeitbar wird statt bloß benannt:
+
+| # | Yamas Zielregel | in `3dde19ea` |
+|---|---|---|
+| 1 | stabile Identität = Sitzungs-ID | **getragen** (`:675`) |
+| 2 | pro Lauf: aktuelle PID + Startkennung | **fehlt** — genannt ohne Laufbezug |
+| 3 | während Schreibarbeit erneuerter Heartbeat | **fehlt** (`Heartbeat` 0×) |
+| 4 | Übernahme nur bei abgelaufenem Heartbeat **und** fehlendem Lauf | **fehlt** (`verwaist` 0×) |
+| 5 | Fencing-Token bleibt maßgeblich | **fehlt** (`Fencing` 0×) |
+| 6 | eine alte PID allein erklärt nie „verwaist" | **fehlt** |
+
+**Messfehler auf dem Weg dorthin, korrigiert:** ein erstes `grep -ciE 'lease'` meldete **27**
+Treffer — sämtlich `Release-Prüfer` und `ticket-rolle-release`. Mit Wortgrenze gemessen kommt
+**`Lease` im Blatt null Mal vor**, ebenso `Fencing`, `Heartbeat`, `verwaist`, `Z0-I2`, `Z0-I3`.
+
+**Was das für den Zuschnitt heißt** — und hier höre ich auf, weil es Planner-Arbeit ist: Die Punkte
+3 bis 5 beschreiben die Lease-Verwaltung und haben ihren Ort sichtbar in Z0-I2/Z0-I3
+(`agentenarchitektur-v2.md` §8; `.ticket-steuerung/README.md:66` weist die Barriere ausdrücklich
+A-37-Erweiterung **und** Z0-I2/Z0-I3 zu). **Die Punkte 2 und 6 dagegen gehören unausweichlich in
+A-37-25 selbst**, denn dieses Kriterium sagt dem Tor, woran es eine Sitzung erkennt: Ein Tor, das
+eine *gespeicherte* PID als Lebensnachweis nimmt, sperrt einen arbeitenden Lauf aus — heute Nacht
+messbar geschehen. Wie die Grenze zwischen A-37 und Z0-I2/Z0-I3 gezogen wird, entscheidet der
+Planner, nicht ich.
+
+**Das Votum bleibt NICHT ERTEILT**, Restpunkt 1 jetzt in sechs prüfbaren Zeilen statt einer Prosa.
