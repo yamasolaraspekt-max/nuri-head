@@ -13567,3 +13567,83 @@ und gehört ihm; ich nehme sie an und führe §169 damit nicht weiter.
 **Ball beim Planner:** die Fundstelle in Kriterium D (`:22-23` → `:25-26`).
 **Bei mir offen:** die beiden anderen DoR-Runden, **W1-1** und **W1-5** (dort ist zusätzlich eine
 Nachbesserung Klasse CODE angeordnet, die genau meinen §177-Befund aufnimmt).
+
+## §180 — DoR Z1-W1-5, Fassung 2: **ERTEILT**. Und ein Zeiger in die Statuswahrheit, der trifft
+
+**Messstand** `c4452644` · Baum sauber · 0 neue Commits in meinem Zweig. Auf dem Integrationszweig
+seit `47ca397f` drei Commits, **alle drei mein eigener Rückweg** — von fremder Seite nichts. Damit
+steht meine offene Aufgabe aus §179: die zweite der beiden Neu-DoR-Runden.
+
+Gegenstand: **`Z1-W1-5`, Fassung 2** (55 Z.), revidiert nach meiner Verweigerung in §147 und mit
+einer **angeordneten Nachbesserung Klasse CODE**, die genau meinen §177-Befund aufnimmt.
+
+### Jede Behauptung selbst gemessen
+
+| Behauptung des Blattes | meine Messung |
+|---|---|
+| A2-Befehl `grep -rln insulationType resources/ \| grep -v __tests__ \| wc -l` | **4** ✓ — und die vier Dateien sind genau die genannten |
+| `domain/scene.types.ts:109` (Typ) | `insulationType?: string;` ✓ |
+| `domain/validation.ts:46` (Zod) | `insulationType: z.string().optional(),` ✓ |
+| `domain/scene-document-v2.schema.json:142` (JSON-Schema) | `"insulationType": {` ✓ |
+| `projection/raumProjektion.ts:102` (Lesestelle, „nach dem Kommentar-Einschub verschoben") | trifft ✓ |
+| „Schreibstellen: **null**" | Muster erst an `materialId` verifiziert; auf `insulationType` bleibt **nur** die Zod-Deklaration ✓ |
+| „**A2 ist heute rot** (Code sagt drei, gemessen vier)" | `raumProjektion.ts:93-96` sagt wörtlich „**genau drei** Fundstellen" — und die Zeilenangabe `:93-96` trifft auf die Zeile genau ✓ |
+| „P1-Kriterium A war vor dem Bau wirksam rot" | am Basis `11f7c4c3`: Ternary auf `:91`, **0** Treffer für einen Ausweis ✓ |
+| B: „2 Zusagen" | `git diff 9dde4d15^ 9dde4d15` an der Testdatei: genau **zwei** neue `test(`-Aufrufe (A und Gegenprobe B) ✓ |
+| C: kein neues Feld, nur Kommentar | in §177 gemessen: Nicht-Kommentar-Anfügungen **null** ✓ |
+
+### Ein Zeiger in die Statuswahrheit, der trifft — und warum
+
+`status_steht_in: docs/STATUS.md (Zeile 100)`. Nach §176 wäre die Erwartung: **daneben**, denn von
+18 Selbstverweisen in jener Datei trafen nur drei. Gemessen:
+
+```
+docs/STATUS.md:100  | **Z1-W1-5** insulationType: der tote Zweig sagt, dass er tot ist | `ENTWURF` | **Planner** | …
+```
+
+**Er trifft.** Und er trifft aus demselben Grund, aus dem die drei anderen trafen: er zeigt in die
+**Auftragstafel im Kopf der Datei**, oberhalb aller Einfügungen. Das ist §176 zum ersten Mal in
+positiver Richtung — die Regel sagt nicht nur, welche Zeiger sterben, sondern auch, welche man
+gefahrlos setzen darf.
+
+### Restpunkt (klein, nicht tragend) — „33er-Liste" heißt heute 27er-Liste
+
+Das Blatt schreibt in Zeile 26: *„`raumProjektion.ts` hat keinen Ladeweg (**33er-Liste**)"*.
+
+**Die Aussage hält** — heute neu gefahren steht `projection/raumProjektion.ts` weiterhin auf der
+Liste. **Der Name hält nicht:**
+
+```
+§119/§120   33 Module ohne Ladeweg
+§170        28   (fünf gingen durch den Z1-W1-2-Bau, alle über EINEN Wert-Import)
+heute       27   (renderers/three-d/deckenMesh.ts ist durch de55bc79 dazugekommen — Grundmenge unverändert 160)
+```
+
+Dreimal überholt an **einem Tag**. Und der Name steht nicht nur hier: **drei aktive Blätter** führen
+die „33er-Liste". Ausgerechnet in dem Blatt, das mit **A2** die Regel einführt, *eine Zahl im Text
+müsse stimmen* — dieselbe Klasse, eine Ebene höher: **ein Listenname mit Zahl altert wie eine
+Messung.** Vorschlag, nicht meine Entscheidung: „Modulliste ohne Ladeweg" ohne Ziffer, die Zahl
+bleibt der Messung vorbehalten.
+
+### Votum
+
+**DoR ERTEILT** für `Z1-W1-5`, Fassung 2. Ein kleiner Restpunkt (der Listenname), kein tragender.
+
+**Ausdrücklich zu A2:** dass A2 **heute rot** ist, ist **kein** Mangel, sondern die Bedingung. P1
+verlangt eine vor dem Bau wirksam rote Lage, und das Blatt sagt sie selbst an. Die angeordnete
+Nachbesserung — Kommentar auf **vier** berichtigen und die Messvorschrift mit hinschreiben — ist
+genau der Umfang meines §177-Befundes und nichts darüber hinaus.
+
+**Damit sind beide offenen Neu-DoR aus §179 zur Hälfte erledigt.** Offen bleibt **W1-1**.
+
+**Stand meiner fünf Voten nach der Revision:**
+`W1-2` ERTEILT (§144) · `W1-3` **ERTEILT** (§179) · `W1-4` ERTEILT (§146) · `W1-5` **ERTEILT** (§180)
+· `W1-1` — Neu-DoR steht aus.
+
+**Ball beim Integrator:** `Z1-W1-3` und `Z1-W1-5` können auf `BEREIT`; beide Voten stehen hier.
+**Ball beim Generator:** die Nachbesserung an `9dde4d15` (Zahl auf vier, Messvorschrift dazu).
+**Ball beim Planner:** der Listenname in drei Blättern.
+**Bei mir:** die Neu-DoR zu `W1-1`, nächste Runde.
+
+**Für Yamas Postenliste, frisch gemessen:** die Zahl aus §119/§120 lautet heute **27** Module ohne
+Ladeweg bei Grundmenge 160 — plus die eine stillgelegte Datei **außerhalb** der Insel (§171).
