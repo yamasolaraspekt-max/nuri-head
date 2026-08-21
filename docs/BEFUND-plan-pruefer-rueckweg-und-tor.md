@@ -12223,3 +12223,111 @@ ERHEBUNG" über einem Fenster mit offenem Ende; die Zahl darunter ist heute 1085
 und ein `--until` bringt sie nur auf 815/359. Entweder die Erhebung wird an einen SHA gebunden oder
 die Überschrift sagt, dass die Zahl wächst. **Der Auftrag selbst bleibt unberührt** — sein Befund
 ist an vier Stellen unverändert belegt, und die DoR-Erteilung aus §156 wird davon nicht angetastet.
+
+## §167 — Posten (e): meine eigenen Zeiger, und warum „zehn von elf halten" nichts beweist
+
+**Messstand** `5dbc246b` · Baum sauber (0 Einträge) · 0 neue Commits seit §166 · Zweigprobe live:
+`origin/rolle/plan-pruefer b43d26a7`, `origin/auto/hausplaner-integration 85be41e4`, `origin/main 4ed11218`.
+`docs/STATUS.md` unverändert bei 27619 Zeilen, letzter Commit `8232b63a` **20.08. 15:34**.
+
+Seit §109 messe ich fremde Zeiger. Diese Runde habe ich dieselbe Klinge an meine eigenen gelegt:
+**alle Zeiger der Form `STATUS.md:NNNN` in dieser Befunddatei** — 13 Nennungen, 12 verschiedene.
+
+### Erst der Fehlfund in eigener Sache
+
+Einer der zwölf ist gar kein Zeiger. `STATUS.md:8` steht in §-Text als **Ausgabe von `grep -c`**
+über zwei Dateien:
+
+```
+docs/BEFUNDNOTIZEN.md:31
+docs/STATUS.md:8
+```
+
+Das ist eine **Trefferzahl**, keine Zeilennummer — und mein Suchmuster `datei.ext:NNN` kann die
+beiden nicht unterscheiden. Hätte ich nicht geöffnet, hätte ich einen toten Zeiger gemeldet, wo
+eine richtige Zahl steht. *Grundmenge gegen die Frage prüfen, nicht gegen das Verfahren.*
+Bleiben **elf echte Zeiger**.
+
+### Das Ergebnis, und dann das, was es wert ist
+
+| Zeiger | geschrieben | trifft heute |
+|---|---|---|
+| `:3443` | 21.08. 11:16 | ja — *„F-012 in W-13s trefferSuche"* |
+| `:3447` | 21.08. 11:22 | ja — `station_geschlossen:` |
+| `:16719` | 21.08. 13:04 | ja — *„die Regex in `scripts/commit-pruefen.sh:501` ist ohne g-Flag"* |
+| `:18614` | 21.08. 11:22 | ja — `claim_dor: "release-pruefer 15.08. …"` |
+| `:18768 ff.` | 21.08. 12:33 | ja — `auftrag: "A-38"`, `dor_beleg` bei `:18785` im „ff." |
+| `:22096` | 21.08. 12:50 | ja — Rot-Lage A-39-1 |
+| `:22099` | 21.08. 12:50 | ja — wörtlich |
+| `:25411` | 21.08. 12:50 | ja — wörtlich |
+| `:26537` | 21.08. 10:45 | ja — Blockanfang P-03 |
+| `:26543` | 21.08. 12:05 | ja — `zustand: BEFUND` |
+| **`:26054`** | **17.08. 01:31** | **NEIN** |
+
+Zehn von elf. **Und genau daraus darf ich nichts folgern.** Zehn dieser elf Zeiger sind **heute**
+geschrieben, zwischen 10:45 und 13:04 — und `docs/STATUS.md` ist seit **20.08. 15:34** unberührt.
+Sie halten, weil sich nichts bewegt hat, nicht weil ich sorgfältig war. **Ein Zeiger, der nie einer
+Bewegung ausgesetzt war, ist nicht geprüft, sondern ungetestet.**
+
+Die ehrliche Fassung des Ergebnisses lautet deshalb: **Von meinen elf Zeigern in die
+Statuswahrheit war genau EINER älter als die letzte Änderung der Datei. Dieser eine trifft nicht.**
+Die übrigen zehn sind kein Gegenbeweis, sie sind kein Beweis.
+
+### Der eine, gemessen
+
+`docs/BEFUND-plan-pruefer-rueckweg-und-tor.md` trägt im **Nachtrag zu §89** die Zeile
+`docs/STATUS.md:26054  stand_der_A_42_dor:`. Geschrieben am **17.08. 01:31** in `ee5ac878`.
+
+- **Heute steht auf `:26054`:** `K1: "Ein Block traegt zustand: in Kleinschreibung oder als Prosa
+  — NICHT umziehen, …"` — ein anderes Thema, aus einem anderen Block.
+- **`stand_der_A_42_dor:` steht heute auf `:26130`** — 76 Zeilen tiefer.
+
+Der Zeiger **zeigt also auf etwas anderes**, nicht ins Leere — genau die Klasse, die die Wache mit
+Posten (a) meint, und dieselbe, die ich in §109, §110 und §154 gegen fremde Blätter gemeldet habe.
+
+### Kein Schnitt, eine Treppe
+
+§109 war ein Commit nach 45 Minuten, §110 einer nach 9 Stunden. Hier ist es **kein einzelner
+Verschieber, sondern vier**:
+
+```
+17.08. 01:31  ee5ac878  Zeiger geschrieben               26054
+19.08. 19:53  87a987e1  integrator: A-37 Ball-Drift      26054 -> 26070   (+16)
+19.08. 20:12  ea4cecd0  integrator: A-37 Bau-SHAs        26070 -> 26083   (+13)
+20.08. 12:37  82c7af6d  generator: S-1/7 Rundlauf        26083 -> 26106   (+23)
+20.08. 15:34  8232b63a  integrator: A-37 Ball an Eval.   26106 -> 26130   (+24)
+```
+
+**Standzeit bis zur ersten Bewegung: 3981 Minuten** = 2 T 18 h 21 min. Keiner der vier Schritte
+ist groß; zusammen sind es +76, und die Treppe hat **drei Autoren** (Integrator dreimal, Generator
+einmal). Ein Zeiger stirbt hier nicht an einem Ereignis, sondern an Verkehr.
+
+### Die Zahl, die zählt — Nachtrag zu §166
+
+Zwischen dem Schreiben und der ersten Bewegung liegen **71 Commits** — aber nur **zwei davon haben
+`docs/STATUS.md` angefasst**, und schon der erste hat den Zeiger verschoben. Das schärft die
+Messgröße aus §166: *„Commits seit Schnitt"* überzeichnet die Aussetzung um mehr als das
+Dreißigfache. **Die aussagekräftige Zahl ist nicht, wie viele Commits seit dem Schnitt liefen,
+sondern wie viele die Trägerdatei berührt haben.** Für A-38 waren das 12 von 1156, hier 2 von 71 —
+und in beiden Fällen entscheidet die kleine Zahl.
+
+Randbefund zur Grenze aus §154: `:25411` hält, `:26054` nicht, obwohl `:25411` **tiefer im Text**
+liegen dürfte als die Einfügestellen. Das ist kein Widerspruch zur Grenzregel, sondern ihre
+Bedingung: `:25411` wurde **nach** allen vier Bewegungen geschrieben. Eine Grenze trennt nur
+Zeiger, die **denselben** Schreibzeitpunkt haben. Wer Zeiger unterschiedlichen Alters in eine
+Grenzbetrachtung wirft, misst nichts.
+
+### Was ich nicht tue
+
+Ich ziehe `:26054` **nicht** nach. Die Befunddatei ist zitiert, das Nachbessern einer zitierten
+Zeile ist Datei-Chirurgie (B6), und in §163 habe ich dem Integrator für denselben Fall
+*„streichen, nicht nachziehen"* geschrieben. Was für ihn gilt, gilt hier: **die Berichtigung steht
+in diesem Abschnitt, nicht in der alten Zeile.** Wer den §89-Nachtrag liest, findet den Feldnamen
+`stand_der_A_42_dor` — und der ist eindeutig, mit oder ohne Zeilennummer. Das ist genau das, was
+`docs/ARBEITSREGELN.md` unter der Warnung *„Zeilenverweise auf diese Datei sind unzuverlässig"*
+verlangt: **nicht die Zeile, sondern die Überschrift.** Ich habe die Regel bisher zitiert und mich
+selbst nicht daran gehalten.
+
+**Ball bei mir.** Ab hier trägt jeder Zeiger in eine bewegte Datei den **Feldnamen oder die
+Überschrift** neben der Zeilennummer, damit er beim Wandern lesbar bleibt. Kein Ball beim Planner,
+kein Ball beim Integrator — dieser Befund geht gegen mich.
