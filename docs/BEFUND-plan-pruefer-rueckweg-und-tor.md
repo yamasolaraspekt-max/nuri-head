@@ -21990,3 +21990,74 @@ ist wörtlich richtig und braucht nur den Zusatz „Auth im Controller"; falsch 
 korrekten Eintrag als falsch markieren.
 
 **Nicht geprüft:** W0-11, W0-12, Gesamtauftrag Teststand.
+
+## §265 · DoR Z2-W0-11 — ERTEILT mit einem Restpunkt: der Auftrag mischt operandenabhängig und unabhängig
+
+**Messstand.** Mein HEAD `e69d038a`, Baum sauber. Integrationszweig `9c36dab5` (21.08. 20:37),
+5 neue Commits. Ballortung **42, unverändert**. Blätter **12**, Blöcke **11** — nur `Z2-W0-12` fehlt
+noch. Basis-Stand der Prüfung: **`ae7cee9d`**. Gemessen 21.08. 20:37–20:41.
+
+### 1 · §257 ist gebaut
+
+`69c85d01`: *„Z2-W0-3 gebaut — die Mitarbeiter-Kennung kommt aus der Sitzung, nicht aus dem
+Request."* Damit sind aus meinen Voten **zwei Bauten** geworden (W0-1 nach §255, W0-3 nach §257).
+Und `c89b8375` hat die letzten zwei Voten der Welle eingetragen — Blöcke **9 → 11**.
+
+### 2 · Sechs Belege, alle geprüft, alle treffen
+
+| Beleg | frisch gemessen am Stand `ae7cee9d` | |
+|---|---|---|
+| `VerifyCsrfToken.php:14-29` Ausnahmenliste | `:14` `protected $except = [` … `:29` `];`, elf Einträge | **trifft** |
+| Dublette `/ids/callback` gegen `ids/callback` | `:21` `'/ids/callback', ` (mit Leerzeichen) · `:22` `'ids/callback',` | **trifft** |
+| fünf tote Ausnahmen | Routen-Gegenprobe: `ids/search/callback` **0**, `ids/receive` **0**; `api/`-Varianten tot, weil die realen Routen kein Präfix tragen | **trifft** |
+| `routes/web.php:4727-4728` reale Routen ohne `api/` | `:4727` `Route::get('/due-personal-notes', …)` · `:4728` `Route::post('/reminder/{id}/status', …)` | **trifft** |
+| `IdsController@callback` — `uid` aus Query bei `:56` | `:55` `// user + auto flag from query` · `:56` `$userId = $request->query('uid');` · `:58` `$auto = $request->query('auto') == '1';` | **trifft** |
+| `autoPromoteItem()` ab `:89` | `:89` `protected function autoPromoteItem(ImportedIdsI…` | **trifft** |
+
+**Sechs von sechs.** Die Analyse der toten Ausnahmen ist dabei besonders sauber: Sie sagt nicht nur
+*dass* sie tot sind, sondern **warum** — die Ausnahme lautet `api/due-personal-notes`, die Route
+heißt `/due-personal-notes`. Ein Präfix, das nie existierte.
+
+### 3 · Der Restpunkt: zwei Aufträge in einem
+
+Das Ziel enthält **drei** Teile, die verschieden abhängig sind:
+
+| Teil | hängt am Operanden? |
+|---|---|
+| CSRF-Schutz für `ids/callback` (State-Token **oder** Ausnahme fällt) | **ja** — *„Operand: wie liefert der IDS-Shop zurück?"* |
+| `uid` nicht mehr frei aus der Query | **nein** |
+| **fünf tote Ausnahmen entfernen** | **nein** |
+
+Das Blatt benennt den Operanden vorbildlich (*„Form-POST ohne Session? Dann ist (a) der Weg"*) und
+rät nicht — das ist die Form aus `CLAUDE.md`. **Aber es trennt die Teile nicht.** Solange die Frage
+an den IDS-Shop offen ist, kann der Generator den ersten Teil nicht bauen; die beiden anderen
+könnte er sofort.
+
+**Genau diese Trennung hat W0-3 vorgemacht** und in seinem Kopf als Feld geführt:
+`abgrenzung: das Routen-Permission-Gate … ist Z2-W0-5 und wartet auf Y-6`. §257 hat das
+ausdrücklich als stärksten Teil jenes Blattes bezeichnet.
+
+**Restpunkt 1:** Den operandenabhängigen Teil (CSRF-Weg für `ids/callback`) von den beiden
+unabhängigen (`uid`-Bindung, fünf tote Ausnahmen) trennen — entweder als Abgrenzungsfeld im Kopf
+oder als eigener Auftrag. Sonst blockiert eine offene Frage an einen **externen Shop** das Aufräumen
+von fünf Einträgen, die nachweislich niemanden schützen.
+
+### 4 · Votum
+
+**DoR Z2-W0-11 — ERTEILT, mit einem Restpunkt.**
+
+Ziel, Basis-SHA, sechs geprüfte Belege, benannter Operand, Spur A mit Begründung
+(*„Stopp-Regel-Kandidat (Integrität Produktstamm)"*). Der Ernst des Falls ist belegt: `:56` nimmt
+`uid` aus der Query, `:58` das `auto`-Flag, und `autoPromoteItem()` legt daraufhin über
+`Distributor::firstOrCreate` und den `ProductIdentityService` **Produktstammdaten** an — an einem
+Endpunkt, der von CSRF ausgenommen ist.
+
+### 5 · Ball
+
+**Planner/Dirigent**: Restpunkt 1 (Trennung).
+**Integrator**: `Z2-W0-12` ohne Block.
+**Yama**: Der Operand *„wie liefert der IDS-Shop zurück?"* ist eine Frage an einen **externen**
+Partner — sie kann im Haus nicht gemessen werden. Das ist der Unterschied zu allen bisherigen
+Operanden dieser Welle.
+
+**Nicht geprüft:** W0-12, Gesamtauftrag Teststand, Konzept Dachschichten-Modell (`53cf8b75`).
