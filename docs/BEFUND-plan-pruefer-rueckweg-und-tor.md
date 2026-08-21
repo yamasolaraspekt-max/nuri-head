@@ -10343,3 +10343,76 @@ Fundstelle**, und das in einem Abschnitt ueber unbrauchbare Verweise.
 **Was ich aendere:** in Botschaften nenne ich die Fundstelle immer voll — `datei.ext:zeile`, nicht
 `:zeile`. Die Ueberschrift kommt dazu, sie ersetzt den Dateinamen nicht. Die Historie fasse ich
 dafuer nicht an (B6, keine Datei-Chirurgie); die Berichtigung steht hier.
+
+## §141 — Posten (c): F-014 rechnet in fünf von sechs Lagen exakt, und im sechsten verliert sie genau das, wofür sie gebaut ist
+
+*(Messstand be932eba, 21.08. 11:38. Nummer gegen den frischen HEAD gewaehlt: 78 Abschnitte, hoechste
+140 — 141 war frei. Klasse nach §132: SHA-verankert.)*
+
+**Wahl.** **F-014 · Innenwinkel an einer Polygonecke** (`docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md:404-420`),
+eine der sechs Formeln, die in dieser Datei nie vorkamen. Ihr Zweck steht dort woertlich:
+*"Feststellen, ob eine Ecke nach aussen oder nach innen springt. **Das ist die Erkennung, an der W-07
+bisher scheiterte.**"*
+
+**Die Umsetzung folgt der Formel Zeile fuer Zeile** — `resources/planner/hausplaner/geometry/dachTopologie.ts:133-152`:
+`|| 1` bei `:138-139`, die Klemmung auf [−1,1] bei `:145`, `acos` bei `:146`, das Kreuzprodukt bei
+`:147`, `isCCW ? cross > 0 : cross < 0` bei `:148`, `360 − β` bei `:149`, `> 180 → innen` bei `:152`.
+Gefunden ueber die Gestalt: `Math.acos` kommt in der ganzen Insel **einmal** vor.
+
+**Gerechnet am echten Modul** (esbuild-Bundle, Export `analyzeTopology`), Pruefmass ist die
+Winkelsumme `(n−2)·180`:
+
+| Lage | Winkel | Summe / Soll |
+|---|---|---|
+| Quadrat CCW | 90 · 90 · 90 · 90 | **360 / 360** ✓ |
+| Quadrat CW | 90 · 90 · 90 · 90 | **360 / 360** ✓ |
+| L-Form CCW | 90 · 90 · 90 · **270** · 90 · 90 | **720 / 720** ✓ |
+| L-Form CW | 90 · 90 · 90 · **270** · 90 · 90 | **720 / 720** ✓ |
+| Rechteck mit kollinearem Punkt | 90 · **180** · 90 · 90 · 90 | **540 / 540** ✓ |
+| **doppelter Punkt** | 90 · 90 · 90 · 90 · 90 | **450 / 540 — −90** |
+
+Die einspringende Ecke wird in **beiden** Umlaufrichtungen erkannt; genau dafuer steht `isCCW` im
+Code, und es traegt. Der kollineare Zwischenpunkt gibt sauber 180° und `aussen`.
+
+**Der sechste Fall, gemessen statt vermutet.** Ein doppelter Punkt macht einen der beiden
+normierten Vektoren zum Nullvektor; `dot` wird 0, `acos(0)` ist 90°. **Beide Nachbarecken melden
+90°, und der echte Winkel an dieser Stelle ist geloescht.** Der Verlust ist keine Konstante,
+sondern genau der zerstoerte Winkel:
+
+```
+Quadrat, Punkt doppelt          Summe 450 / 540    -90
+spitzes Dreieck, Punkt doppelt  Summe 352 / 360     -8
+L-Form, Doppelung auf der
+      einspringenden Ecke       Summe 630 / 900   -270
+Quadrat, zwei Doppelungen       Summe 540 / 720   -180
+```
+
+**Und damit faellt genau die Erkennung aus, fuer die F-014 gebaut ist:**
+
+| Lage | einspringende Ecken erkannt |
+|---|---|
+| L-Form, sauber | **1** |
+| L-Form, Punkt **auf** der einspringenden Ecke doppelt | **0** |
+| L-Form, Doppelung woanders | **1** |
+
+Der Ausfall ist **oertlich**: er trifft nur die Ecke, auf der die Doppelung liegt — und wenn das die
+einspringende ist, meldet das Werkzeug lautlos "alles aussen".
+
+**Die Formelsammlung weiss es und sagt es**, zitiert statt nachgebaut: *"Laenge 0 → im Quellcode auf
+1 gesetzt (`|| 1`) … **Sauberer waere eine Absage — eine Ecke mit Laenge 0 ist keine Ecke.**"* Neu
+ist hier nicht der Mangel, sondern sein **Preis**, in Zahlen.
+
+**Der vorhandene Test ist ehrlich und eng, kein Widerspruch.**
+`resources/planner/hausplaner/__tests__/dachTopologie.test.ts:123-130` heisst *"entartete Kante:
+zwei gleiche Punkte lassen die Rechnung nicht abstuerzen"* und sichert genau zwei Dinge zu: vier
+Ecken und **kein NaN**. Beides trifft zu. Dass die Winkel dabei falsch sind, prueft er nicht — und
+behauptet es auch nicht.
+
+**Wirkung: latent.** Alle **15** Verbraucher von `analyzeTopology` stehen in eben dieser einen
+Testdatei, kein einziger im Produktivpfad, und `geometry/dachTopologie.ts` gehoert zu den 33 Modulen
+ohne Ladeweg (§133). Kein Schaden heute.
+
+**Ball beim Planner**: F-014 empfiehlt die Absage selbst — das ist eine Bau-Entscheidung, keine
+Messfrage. Bleibt der `|| 1`-Wächter, waere die kleine Ergaenzung am Test die ehrlichere Fassung:
+die bekannten falschen Werte festschreiben, damit der Preis sichtbar bleibt statt bei der naechsten
+Wiederverwendung neu entdeckt zu werden.
