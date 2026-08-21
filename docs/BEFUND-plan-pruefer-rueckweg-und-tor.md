@@ -21649,3 +21649,92 @@ stehenden Posten bleiben unberührt.
 Damit sind **alle sechs DoR der Welle 0 gefahren**: W0-1 (§255, ohne Restpunkt), W0-2 (§256, ein
 Restpunkt), W0-3 (§257, ohne), W0-4 (§258, ein Restpunkt), W0-5 (§259, ohne), W0-6 (§260, ein
 Restpunkt).
+
+## §261 · DoR Z2-W0-7 — ERTEILT, und eine offene Messfrage des Blattes beantwortet: es gibt keinen Rechte-Cache
+
+**Messstand.** Mein HEAD `bc149f5e`, Baum sauber. Integrationszweig `70e52a8f` (21.08. 20:25),
+5 neue Commits. Ballortung **42 → 41**. Basis-Stand der Prüfung: **`114b98f6`**. Gemessen
+21.08. 20:25–20:30.
+
+### 1 · §259 hat gewirkt — die Berichtigung ist angekommen
+
+`d272a3a0`: *„Z2-W0-5 nachgezogen und **mein Blockade-Vermerk berichtigt — ich hatte eine falsche
+Aussage**."* Der Integrator hat die Selbstkorrektur aus §259 übernommen; W0-5 trägt jetzt
+`ballbesitz: generator` statt einer Y-6-Blockade, die es nie gab.
+
+Stand der Welle: W0-1/3/5 → generator, W0-2/4 → planner (Restpunkte), W0-6 → plan-pruefer (§260
+unterwegs).
+
+### 2 · Die Lage aus §260 besteht: neun Blätter, sechs Blöcke
+
+    Blätter im Ordner        9
+    Blöcke mit zustand-Feld  6
+    W0-7 · W0-8 · W0-9       je 0 Nennungen in docs/STATUS.md
+
+Keine Kennungs-Dubletten (je genau ein Block je Kennung, über das `zustand`-Feld gezählt). **W0-7 hat
+laut `ae7cee9d` Vorrang vor W0-1** und ist in der Statuswahrheit nicht vorhanden — deshalb prüfe ich
+ihn zuerst, ohne auf den Eintrag zu warten.
+
+### 3 · DoR Z2-W0-7 — die Belege
+
+| Beleg | frisch gemessen am Stand `114b98f6` | |
+|---|---|---|
+| Basis-Stand `114b98f6` | existiert: dirigent, 21.08. 20:07 | **trifft** |
+| `isSuperAdmin()` bei `app/Models/User.php:51-54` | `:51-54` exakt, `return (bool) $this->is_admin;` | **trifft** |
+| `hasPermission()` bei `:56-74` | `:56` Signatur, `:70-73` die Abfrage | **trifft** |
+| `CheckUserPermission` Middleware | `app/Http/Middleware/CheckUserPermission.php` existiert | **trifft** |
+| acht Items im Bestand, **kein `Planner`** | Customer · Employee · Finance · Hausplaner · Inquiry · Problem · Product · Users = **8**; dazu `hausplaner` klein (bekannter Nebenbefund, W0-4); **`Planner` kommt nicht vor** | **trifft** |
+
+**Fünf von fünf.** Die Item-Liste ist dabei präzise formuliert: neun verschiedene Zeichenketten,
+**acht** Items — die Differenz ist genau der Kleinschreib-Fall, den das Blatt selbst als Nebenbefund
+benennt und an W0-4 abgibt.
+
+### 4 · Mein Beitrag: die Kante „Cache?" ist beantwortet
+
+Das Blatt lässt eine Frage ausdrücklich offen:
+
+> *„Cache: gibt es einen Rechte-Cache (Session/Redis)? **Messen**; wenn ja, invalidieren beim
+> Schalterwechsel."*
+
+Gemessen:
+
+    User.php                  Cache::|cache(   0 Treffer
+    CheckUserPermission.php   Cache::|cache(   0 Treffer
+    Musterprobe: 'Cache::' im ganzen app/     53 Treffer   -> das Muster greift
+
+Und `hasPermission()` selbst zeigt es unmittelbar (`:70-73`):
+
+    return $this->user_rolls()->where('item_id', $item)->where($column, true)->exists();
+
+**Eine direkte Datenbankabfrage bei jedem Aufruf, ohne Zwischenspeicher.** Damit ist die Kante
+beantwortet: **Es gibt keinen Rechte-Cache; der Schalter wirkt sofort, eine Invalidierung entfällt.**
+Das ist keine Beanstandung — das Blatt hat die Frage richtig gestellt und offen gelassen statt sie
+zu raten. Ich liefere die Messung dazu.
+
+*Nebenbei sichtbar:* `->where('item_id', $item)` vergleicht den Item-Namen als Zeichenkette — genau
+der Punkt, an dem W0-4s Collation-Nebenbefund (`hausplaner` gegen `Hausplaner`) wirkt. Die
+Zuordnung des Blattes an W0-4 ist damit sachlich richtig.
+
+### 5 · Votum
+
+**DoR Z2-W0-7 — ERTEILT. Restpunkte: keine.**
+
+Ziel in zwei nummerierten Teilen, Basis-SHA, Ist-Beleg, Scope mit Dateiliste, **Nicht-Ziele, die die
+Integritätsaufträge ausdrücklich ausnehmen** (*„keine Änderung an Ownership-/Integritätsprüfungen
+(W0-2 Schreibpfad, W0-5 A-4 bleiben)"*), drei Kanten, fünf Kriterien A–E, rotes P1-Kriterium und ein
+Rückweg, der aus **einer Zeile** besteht: `RECHTE_ALLE_FUER_ALLE=false` → Tore wirken sofort.
+
+Zwei Dinge hebe ich hervor. **Erstens die Testkante**: *„Die Tore aus W0-1/2/5 müssen in beiden
+Schalterstellungen getestet werden — sonst prüft kein Test mehr, ob ein Tor überhaupt schließt."*
+Das ist der Satz, der verhindert, dass Yamas Entscheidung die Prüfbarkeit mit abschaltet.
+**Zweitens der Default**: `false` im Code, `true` nur in Yamas lokaler `.env` — die riskante
+Einstellung ist die ausdrückliche, nicht die stillschweigende.
+
+### 6 · Ball
+
+**Generator**: W0-7 ist von meiner Seite frei — und läuft vor W0-1.
+**Integrator**: W0-7/8/9 ohne Block; W0-7 hat Vorrang und ist in der Statuswahrheit unsichtbar.
+**Planner/Dirigent**: unverändert die Restpunkte aus §256, §258, §260 und der Zuständigkeits-
+widerspruch aus §259.
+
+**Nicht geprüft:** W0-8, W0-9.
