@@ -21020,3 +21020,83 @@ vor. Dreimal ist keine Panne mehr.
 **Yama** unverändert: S-1 und S-2 sind nachgemessen und bestätigt (§251, §252); die Stufenfrage aus
 §170 steht weiter dort. **Offen und nicht geprüft:** S-3, S-4, S-5, K-5/K-6 und der neue Bericht
 `cb500067` mit seinen Klassen A/B/C — ein Posten je Runde.
+
+## §254 · S-5 nachgemessen: hält vollständig — und die Akte trägt Kundennamen, nicht nur Objektdaten
+
+**Messstand.** Mein HEAD `a0a26326`, Baum sauber. Integrationszweig `fb504d83` (21.08. 20:01),
+**5 neue Commits** seit `171f135a`, darunter Rückwege für `rolle/plan-pruefer` und `rolle/evaluator`
+sowie `1e9773bc` (*„A-08s Zustand war nicht abwesend, sondern unlesbar"*). Ballortung:
+**40, unverändert** — nichts in meiner Bahn. Gemessen 21.08. 20:03–20:04.
+
+S-5 ist die dritte der drei LIVE-Rechtelücken und die letzte, die ich in §251 als ungeprüft benannt
+hatte. Der Befund gehört dem Planner/Dirigenten; ich prüfe die Messgrundlage (P-02).
+
+### 1 · Vier Belege, alle geprüft, alle treffen
+
+| Beleg in S-5 | frisch gemessen | |
+|---|---|---|
+| `ObjektakteController.php` — *„kein Treffer in der ganzen Datei"* | **0** Treffer für `authorize\|Gate::\|hasPermission\|abort(403\|middleware` | **trifft** |
+| `routes/web.php:817-819` | `:817` `GET /objekte`, `:818` `GET /objekte/{alternative}`, `:819` `POST /objekte/{alternative}/auslegung` | **trifft** |
+| angelegt **2026-07-16**, nach der Sicherheitsrunde (10.07.) | `96904b5e`, **16.07.2026 10:13** — *„Welle A4: Gebaeudeakte V1 lesend live"* | **trifft** |
+| Datei ist 200 Zeilen, `permission`-frei | 200 Zeilen | **trifft** |
+
+Muster vorher verifiziert: dieselbe Suche liefert im ganzen `app/` **31** `hasPermission`-Treffer —
+sie greift. **Die Null ist eine gemessene Null, keine ausgefallene.**
+
+### 2 · Ein eigener Verdacht, geprüft und verworfen
+
+Mir fiel auf, dass `:819` eine **POST**-Route ist, während der Anlege-Commit *„lesend live"* heißt.
+Der Verdacht: Schreibzugriff ohne Gate. **Er ist falsch, und ich habe ihn gemessen statt gemeldet.**
+
+`auslegung()` (`:86-111`) validiert Eingaben (`phi_hl_kw`, `wp_typ`, `heizsystem`, `q_ww_kwh`,
+`q_heiz_kwh`, `vorlauf_c`), ruft dann `:103-105` einen Adapter und `rankeKandidaten($eingabe)` und
+gibt `:107` eine View zurück. **Kein `save()`, kein `update()`.** Über die ganze Datei gemessen:
+
+    ->save( | ->update( | ::create( | updateOrCreate | ->fill( | DB::     0 Treffer
+    Gegenprobe: '->save(' im ganzen app/                                623 Treffer
+
+S-5s Einordnung als **lesende** Lücke ist richtig. Der POST ist ein Rechenaufruf, kein Schreibweg.
+
+**Werkzeugfehler dabei, benannt statt verschwiegen:** Mein erster Lauf war
+`git grep -nE '->save\(…'` — `git` las das führende `->` als Schalter und brach mit *„unknown
+switch"* ab. Kein Ergebnis, also kein Ergebnis; mit `-e` vor dem Muster wiederholt.
+
+### 3 · Was ich beitragen kann: die Akte trägt Personendaten
+
+S-5s `erklaerung` nennt als gefährdete Inhalte *„Adresse, Baujahr, Heizsystem, Verbräuchen,
+Strompreis, Einspeisevergütung"* — durchweg **Objekt**daten. Gemessen lädt `akteDaten()` bei `:116`:
+
+    LeadAlternativeAdd::query()->with('lead:id,firma,name,lastname,customer_no')->findOrFail($alternativeId)
+
+**`firma`, `name`, `lastname`, `customer_no`** — Firmenname, Vorname, Nachname, Kundennummer. Das
+sind **unmittelbar personenbezogene Daten**, nicht Gebäudemerkmale, und sie stehen in S-5s
+Aufzählung nicht.
+
+Der Unterschied ist kein Wortspiel: Eine offene Route mit Baujahr und Heizsystem ist ein
+Datenschutzproblem, sobald sie einer benannten Person zugeordnet ist — und genau diese Zuordnung
+lädt die Akte mit, für **jedes** durchzählbare Objekt. Nach `CLAUDE.md` fällt das unter
+Datenschutz und wird nicht still automatisiert.
+
+### 4 · Eine Angabe, die ich nicht bestätigen kann
+
+S-5 nennt den umgebenden Block *„`['web','auth']` ab `:793`"*. Meine Messung findet die letzte
+`Route::middleware(['web','auth'])`-Gruppe vor `:817` bei **`:597`**. Das ist **kein Widerspruch**:
+`:793` kann eine innere, anders geschriebene Gruppe sein (`Route::group([...])`, `->middleware(...)`
+an einer Kette), und mein Muster hat nur die eine Schreibweise gesucht. **Ich melde das als
+ungeklärt, nicht als Fehler** — die tragende Aussage („nur `auth`, keine Berechtigung") ist durch
+die 0 Treffer im Controller unabhängig belegt.
+
+### 5 · Ball
+
+**Planner/Dirigent** — S-5s `erledigt_wenn` (*„Route-Gruppe oder Konstruktor erzwingt
+`permission:Customer,read`"*) ist richtig und ausreichend. Ich schlage **eine Ergänzung der
+`erklaerung`** vor: die geladenen Personenfelder `firma/name/lastname/customer_no` benennen, weil
+sie die Einstufung als Datenschutzvorfall tragen und in der heutigen Fassung fehlen.
+
+**Yama** — damit sind **alle drei LIVE-Rechtelücken** (S-1, S-2, S-5) nachgemessen und **alle drei
+bestätigt**: S-1 zusätzlich um drei Controller erweitert (§251), S-2 um den fehlenden Listen-Scope
+verschärft (§252), S-5 um die Personenfelder. Kein einziger der drei Befunde war zu weit gegriffen;
+zwei waren zu eng.
+
+**Offen und nicht geprüft:** S-3 (Routing-Dublette), S-4 (Sidebar), K-5/K-6 und die Klassen A/B/C
+aus `cb500067`.
