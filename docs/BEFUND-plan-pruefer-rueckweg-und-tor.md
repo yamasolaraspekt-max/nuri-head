@@ -11949,3 +11949,75 @@ zeigt, ist die **Trefferdichte an bewegten Zielen**, und die ist hoch.
 **Ball beim Integrator** — er ist der einzige Schreiber von `docs/STATUS.md`
 (`scripts/rollen-tor.sh:344`). Benannte Ziele: `:73`→`:72`/`:83`, `:163`→`:510`, `:642`→`:925`,
 und bei `:501` **nicht nachziehen, sondern streichen** — der Mangel ist behoben.
+
+## §164 — Posten (b) an den fünf roten Karten: zwei nachgezählt, beide halten — und der Fehler von Karte 3 ist derselbe, den ich in §157 gemacht habe
+
+*(Messstand 57d7b0b5, 21.08. 13:06. Nummer gegen den frischen HEAD gewaehlt: 101 Abschnitte,
+hoechste 163 — 164 war frei.)*
+
+**Herkunft:** die Selbstanzeige des Planners in `docs/ARBEITSREGELN.md:1813-1819`
+(*„Fuenf rote Karten an einem Tag"*), eingetragen mit `2478f23f` am 16.08. 20:22. Die Wache verlangt,
+fremde Zahlen frisch zu messen — auch die aus einer fremden Fehlerliste.
+
+### Karte 2 hält, auf eine Datei genau
+
+Die Karte zitiert *„`ls-files 0` ueber einen Baum mit **7460** Dateien"*. Gemessen ueber den 16.08.:
+
+```
+bis 08:00   7459 Dateien       bis 18:00   7523
+bis 12:00   7459               bis 20:22   7532
+bis 16:00   7459               heute       7622
+```
+
+**Bis in den Nachmittag hinein waren es 7459** — die Karte sagt 7460. **Abweichung: eine Datei**,
+und das bei zwei verschiedenen Zaehlverfahren (`ls-tree -r` gegen `ls-files`). Das ist ein Treffer,
+kein Fehlschlag.
+
+### Karte 3: der Mechanismus reproduziert exakt, die Basis wandert
+
+Die Karte sagt *„**281** statt **284** Rollenmarken — Schreibweise gezaehlt"*. Die Grundmenge steht
+nicht in der Karte, sondern in `docs/auftraege/aktiv/A-38-merges-laufen-am-tor-vorbei.md:239-243`:
+*„Commits am 16.08. gesamt 472 · davon MERGES 188 · Nicht-Merges 284 · davon mit Rollenmarke 284."*
+
+**Die drei „Ausreisser" tragen woertlich, was das Blatt sagt:**
+
+```
+c425638d   release-pruefer (in Yamas Namen): …
+a4694b21   release-pruefer (in Yamas Namen): …
+4ed51b8f   plan-pruefer (release-pruefer in Rollenwechsel): …
+```
+
+**Und der Zaehlunterschied ist an jedem Messpunkt exakt drei:**
+
+| Fenster | Nicht-Merges | enges Muster | mit Klammerzusatz | Delta |
+|---|---|---|---|---|
+| bis 16.08. 19:20 | 272 | 269 | 272 | **3** |
+| bis 16.08. 19:29 | 278 | 275 | 278 | **3** |
+| ganzer 16.08. | 455 | 452 | 455 | **3** |
+| *Blatt (19:2x)* | *284* | *281* | *284* | *3* |
+
+**Der Mechanismus haelt vollstaendig.** Die absolute Basis wandert — 284 wird kurz nach 19:29
+erreicht, ueber den ganzen Tag sind es 455. **Dieselbe Ursache wie in §155 an demselben Blatt:** das
+Fenster ist nach vorn offen.
+
+### Der Fehler von Karte 3 ist meiner aus §157
+
+*„Schreibweise gezaehlt"* heisst hier: ein Muster, das den **Klammerzusatz** nicht zulaesst, findet
+drei Marken nicht, die da sind. **Das ist Zeichen fuer Zeichen der Fehler, den ich in §157 gemacht
+habe** — dort suchte ich Stufenmarkierungen mit `P[123]` statt `(P1)` und bekam null am alten Stand
+und 84 am neuen. Der Planner hat ihn am 16.08. an sich selbst gefunden und aufgeschrieben; ich bin
+fuenf Tage spaeter in dieselbe Kerbe gelaufen, **obwohl die Karte in der Prozessquelle steht, die ich
+jede Runde lese.**
+
+### Eigene Fehlmessung, dokumentiert
+
+Mein erster Anlauf zaehlte Rollenmarken **ueber die ganze Historie** und gab **2201** bzw. **2056** —
+gegen eine Zahl von 284. Drei Groessenordnungen daneben, weil ich die Grundmenge nicht kannte: die
+Karte ist eine **Einzeilen-Zusammenfassung**, ihr Umfang steht in A-38. **Ich habe gezaehlt, bevor
+ich gelesen habe.**
+
+**Karten 1, 4 und 5 habe ich in dieser Runde NICHT gemessen** — ich sage es, statt „die Karten
+halten" zu schreiben.
+
+**Kein Ball.** Die zwei geprueften Karten halten; die Selbstanzeige des Planners ist in der Sache
+richtig und in Karte 3 sogar praeziser, als ihre Kurzform vermuten laesst.
