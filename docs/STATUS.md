@@ -86,11 +86,11 @@
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 | **A-36** Wer schreibt · §14 auf Hunk-Ebene | `ZURUECKGEZOGEN` | – | Schnitt 14.08. · Basis `80ab2d8d` | **ZURUECKGEZOGEN von Yama am 14.08. (Entscheidung V-02).** Begruendung woertlich: A-36 erklaert die Worktree-Trennung zum Nicht-Ziel und widerspricht damit der spaeteren, verbindlichen Entscheidung; **ein nur meldender Hunk-Waechter verhindert Richtung B nicht.** Verwertbare Teile — Hunk-Erkennung, §14-Verschaerfung, die drei historischen Positivproben, die Unterscheidung Dateiliste/`--numstat`/tatsaechlicher Diff-Inhalt — laufen unter **P2D** weiter. Kein History-Rewrite: der bisherige Eintrag bleibt als Beleg im Datensatz. **YAMA HAT §14 SELBST ENTSCHIEDEN** (14.08.): *„Das ist eine Regelaenderung, sie liegt bei mir, und ich entscheide sie hiermit: ja. Formuliert sie als Auftrag, ich brauche sie nicht vorgelegt."* Und den Waechter freigegeben: *„klein genug, um neben ihnen zu laufen; alles andere wartet."* **DER GRUND IST GEMESSEN:** `docs/STATUS.md` traegt 15.687 Zeilen und 97 Auftragsdatensaetze, **58 % aller Commits des 13.08. fassen sie an**, und **37 von 40 fassen NUR sie an** — die Kollision entsteht INNERHALB der Datei, nicht zwischen Dateien. Ueber 500 Commits schreiben **fuenf Rollen praktisch gleichauf** (141/84/84/84/76). **Damit ist `--name-only` eine Frage, deren Antwort immer dieselbe ist.** Der Waechter ordnet Hunks der naechststehenden Abschnittsueberschrift zu und meldet `beruehrt: A-33 (11 Z.), W-12/1 (38 Z.)` statt `modified`. **K5 ist die tragende Kante: er MELDET, er sperrt nicht** — A-30 hat an zwoelf Fehlalarmen gemessen, was eine zu scharfe Barriere kostet. **A-36-3 ist die Positivprobe an drei echten Faellen** dieser Nacht (`ef273926`, `93960252`, `5ac659bf`), denn ein Waechter, den man nie sprechen gesehen hat, ist von einem kaputten nicht zu unterscheiden. **NICHT im Scope:** die Aufteilung auf 97 Dateien (Yama entscheidet sie NACH zwei Tagen Waechterlauf), Claim-in-den-Commit, jede Aenderung an `docs/STATUS.md` selbst. |
 | **A-37** Rollen-Tor: Baum, STATUS-Sperre, drei Fehlerursachen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 14.08. 22:35 · Basis `bc2125d9` · Bau `374bb851` + `139872cb` | **Blatt** `docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md` · Rot-Belege am Basis-SHA gemessen: `rollen-tor.sh` existiert nicht, `worktree` hat **0 Treffer** in 743 Zeilen `commit-pruefen.sh`, keine `STATUS.md`-Sperre, `:503` meldet alle drei Fehlerarten gleich. **Elf Kriterien**, A-37-2 und A-37-7 sind die **Positivfaelle**. Gebaut wird im Generator-Worktree. **DoR steht aus.** |
-| **A-38** Merges laufen am Tor vorbei | `ENTWURF` | **Plan-Prüfer** | Schnitt 14.08. 23:00 · Basis `0f05f8bf` | **Blatt** `docs/auftraege/aktiv/A-38-merges-laufen-am-tor-vorbei.md` · Gemessen: **41 von 309** Commits in 48 h ohne Rollenmarke, **ausnahmslos Merges**; von 32 Merges tragen **4** eine Marke. Versionierter `commit-msg`-Hook plus `core.hooksPath`. **Neun Kriterien**, A-38-6 (greift im ZWEITEN Worktree) ist das tragende. **Kein Eingriff in `commit-pruefen.sh`** — dort arbeitet A-37. **DoR steht aus.** |
-| **A-39** Fünf Innenprüfungen des Blattes | `ENTWURF` | **plan-pruefer** | Schnitt 16.08. · Basis `99add90f` | **Blatt** `docs/auftraege/aktiv/A-39-die-fuenf-innenpruefungen-des-blattes.md` · Fünf Prüfungen, **je ein Belegfall von heute**: Kante ohne Kriterium (K6) · feste Zahl ohne Standbezug (A-33-1, Suite 1750) · geforderte Datei ohne Erzeuger (A-37-12) · Kriterium gegen den eigenen Blattkopf (A-33-7) · Rückgabewert doppelt (`exit 3`). **Alle fünf waren VOR dem ersten Zeichen Code vorhanden und maschinell erkennbar; jeder kostete eine Runde.** Läuft im **DoR-Schritt**, nicht im Tor — sie misst ein Blatt, keinen Commit. `A-39-2..6` sind **historische Positivproben** an Ständen, an denen der Fehler nachweislich vorlag. **DoR steht aus.** |
-| **A-40** Der Zustand am Facheintrag | `ENTWURF` | **plan-pruefer** | Schnitt 16.08. · Basis `99add90f` | **Blatt** `docs/auftraege/aktiv/A-40-der-zustand-am-facheintrag.md` · Drei Zustände (`ABGESCHRIEBEN` · `NACHGERECHNET` · `GEGENGEPRUEFT`), zwei Pflichtfelder, die **den Fall tragen statt der Behauptung**, die sechste Innenprüfung und der **Drei-Fragen-Test** (Normbezug · Dritter · Bemessung) aus Yamas §1-Entscheidung vom 16.08. **KEINE Zahl in einem Kriterium** — A-40-5 nennt den Zählbefehl, weil dieselbe Formelsammlung drei Zählungen und drei Ergebnisse ergab. **DoR steht aus.** |
+| **A-38** Merges laufen am Tor vorbei | `BEREIT` | **Generator** | Schnitt 14.08. 23:00 · Basis `0f05f8bf` | **Blatt** `docs/auftraege/aktiv/A-38-merges-laufen-am-tor-vorbei.md` · Gemessen: **41 von 309** Commits in 48 h ohne Rollenmarke, **ausnahmslos Merges**; von 32 Merges tragen **4** eine Marke. Versionierter `commit-msg`-Hook plus `core.hooksPath`. **Neun Kriterien**, A-38-6 (greift im ZWEITEN Worktree) ist das tragende. **Kein Eingriff in `commit-pruefen.sh`** — dort arbeitet A-37. ****DoR ERTEILT** (plan-pruefer §156), Zustand und Ball vom Integrator nachgezogen 21.08. auf §272 ** |
+| **A-39** Fünf Innenprüfungen des Blattes | `BEREIT` | **Generator** | Schnitt 16.08. · Basis `99add90f` | **Blatt** `docs/auftraege/aktiv/A-39-die-fuenf-innenpruefungen-des-blattes.md` · Fünf Prüfungen, **je ein Belegfall von heute**: Kante ohne Kriterium (K6) · feste Zahl ohne Standbezug (A-33-1, Suite 1750) · geforderte Datei ohne Erzeuger (A-37-12) · Kriterium gegen den eigenen Blattkopf (A-33-7) · Rückgabewert doppelt (`exit 3`). **Alle fünf waren VOR dem ersten Zeichen Code vorhanden und maschinell erkennbar; jeder kostete eine Runde.** Läuft im **DoR-Schritt**, nicht im Tor — sie misst ein Blatt, keinen Commit. `A-39-2..6` sind **historische Positivproben** an Ständen, an denen der Fehler nachweislich vorlag. ****DoR ERTEILT** (plan-pruefer §159), Zustand und Ball vom Integrator nachgezogen 21.08. auf §272 ** |
+| **A-40** Der Zustand am Facheintrag | `ENTWURF` | **Planner** | Schnitt 16.08. · Basis `99add90f` | **Blatt** `docs/auftraege/aktiv/A-40-der-zustand-am-facheintrag.md` · Drei Zustände (`ABGESCHRIEBEN` · `NACHGERECHNET` · `GEGENGEPRUEFT`), zwei Pflichtfelder, die **den Fall tragen statt der Behauptung**, die sechste Innenprüfung und der **Drei-Fragen-Test** (Normbezug · Dritter · Bemessung) aus Yamas §1-Entscheidung vom 16.08. **KEINE Zahl in einem Kriterium** — A-40-5 nennt den Zählbefehl, weil dieselbe Formelsammlung drei Zählungen und drei Ergebnisse ergab. ****DoR NICHT ERTEILT** (plan-pruefer §157/§159, Punkte 1, 2, 4), Ball vom Integrator nachgezogen 21.08. auf §272 ** |
 | **A-41** Die Statuswahrheit wird erzeugt | **`BETRIEBSBESTAETIGT`** | — | Schnitt 16.08. · Basis `e521bd98` | **Blatt** `docs/auftraege/aktiv/A-41-die-statuswahrheit-wird-erzeugt.md` · Yamas §1-Entscheidung vom 16.08.: **der Zustandswechsel IST der Commit**, `docs/STATUS.md` wird **erzeugt statt geschrieben** — damit fällt die Frage „wer darf schreiben“ weg, statt beantwortet zu werden. **P0, staut hinter nichts, geht vor A-39/A-40.** Vier Bestandteile: Wortlaut · `status-erzeugen.sh` · **Erstbefüllung** · sofortiger Übergang. **Kennung über ALLE SECHS ZWEIGE geprüft**, nicht gegen `HEAD` — `HEAD` ist der zweitälteste der sechs Stände (86 Commits hinter `rolle/release-pruefer`). **Zwei Funde am parallelen Bau `1e342d53` liegen im Blatt.** **DoR steht aus.** |
-| **A-42** Befundnotizen ziehen um | `ENTWURF` | **plan-pruefer** | Schnitt 16.08. · Basis `e802c1f8` | **Blatt** `docs/auftraege/aktiv/A-42-befundnotizen-ziehen-um.md` · Auflage 2 der Integrationslauf-Freigabe bekommt einen Träger. Blöcke mit `auftrag:` aber ohne `zustand:` wandern nach `docs/BEFUNDNOTIZEN.md` — **unverändert, mit Herkunft, KEIN Löschen**. **Muss vor dem ersten schreibenden `--tafel`-Lauf fertig sein:** die Erzeugung schreibt je Kennung eine Zeile aus dem Commit-Log, diese Blöcke kämen darin nicht vor und verschwänden lautlos. **Keine feste Zahl in einem Kriterium** — A-42-1 nennt den Zählbefehl, weil die Menge wächst. Tragende Prüfung ist **A-42-2, die Summengleichung**: sie ist die einzige, die einen stillen Verlust findet. **DoR steht aus.** |
+| **A-42** Befundnotizen ziehen um | `BEREIT` | **Generator** | Schnitt 16.08. · Basis `e802c1f8` | **Blatt** `docs/auftraege/aktiv/A-42-befundnotizen-ziehen-um.md` · Auflage 2 der Integrationslauf-Freigabe bekommt einen Träger. Blöcke mit `auftrag:` aber ohne `zustand:` wandern nach `docs/BEFUNDNOTIZEN.md` — **unverändert, mit Herkunft, KEIN Löschen**. **Muss vor dem ersten schreibenden `--tafel`-Lauf fertig sein:** die Erzeugung schreibt je Kennung eine Zeile aus dem Commit-Log, diese Blöcke kämen darin nicht vor und verschwänden lautlos. **Keine feste Zahl in einem Kriterium** — A-42-1 nennt den Zählbefehl, weil die Menge wächst. Tragende Prüfung ist **A-42-2, die Summengleichung**: sie ist die einzige, die einen stillen Verlust findet. ****DoR ERTEILT** (plan-pruefer §158), Zustand und Ball vom Integrator nachgezogen 21.08. auf §272 ** |
 | **W-17/1** Export und Speichern ablesen | **`BETRIEBSBESTAETIGT`** | — | Schnitt 16.08. · Basis `8faca79c` | **Blatt** `docs/auftraege/aktiv/W-17-1-export-und-speichern-ablesen.md` · **Stufe B, Ziel `BESCHRIEBEN`.** Einordnung **gemessen**: Reifegrad `LEER`, die sieben Werkbank-Blätter sind reine Vorlagen (**249 Z.**), Produktivcode reichlich. **Der Code liegt an ZWEI Orten** — Insel (`arbeitsbereichSpeicher.ts`, `paketSpeichern.ts`, 37 Dateien) **und Server** (`SpeichereHausplanerDokument.php`, `StelleSnapshotWieder.php`). **Die Insel speichert nicht selbst.** `W-17-1-4` zieht die **Registerzeile** nach — das Kriterium existiert wegen der W-37-Lücke. `W-17-1-5` schließt Produktivcode aus. **DoR steht aus.** |
 | **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | **`BETRIEBSBESTAETIGT`** | — | Bau `ec12e9b3` · Schnitt `1df82ee1` | **GEBAUT 15.08.: das erste Werkzeug nach A7, das wirklich etwas tut.** `geradenGeometrie` hatte **null** Produktivimporte, jetzt einen. **`u` gab es vorher nicht** — `geradenSchnittParameter` ist eine **zweite Sicht auf dieselbe Rechnung**, `geradenSchnitt` ruft sie und bleibt in seiner Signatur. **Der lehrreichste Fehler kam von meiner eigenen Zusage:** die erste Fassung verglich `min(t, 1−t)` — in Gleitkomma ist `1−0.8` **nicht** `0.2`, der Gleichstand zweier symmetrischer Schnittkanten wäre **nie** erkannt worden. *Genau das Raten, das K6 verbietet, nur unsichtbar.* Behoben über den **quadrierten Abstand zum gerundeten** Schnittpunkt — ganze Millimeter, exakt vergleichbar. **Drei Entscheidungen benannt statt still getroffen** (K6 ohne Klickpunkt → *kleinste Kürzung*; Gleichstand bei `t = 0,5` → `end`; gesperrte Wand als Schnittkante erlaubt). **UMFANG GRÖSSER ALS DER SCHNITT, gemeldet:** ein Registry-Eintrag ist im Haus **nicht additiv** — **zwölf** bestehende Zusagen wurden rot, alle einzeln nachgemessen; **eine** Zusage habe ich **erweitert** (`art === 'werkzeug'` → auch `'aktion'`), **sechs Zähl-Anker** mit Gegenprobe nachgezogen. **OFFEN und nicht behauptet: die Browserabnahme** — die Bühne `ticket_testing` ist leer (0 Benutzer, 0 Objekte). Suite **1763/1763** (1750 + genau 13 neue), tsc **0**, Bündel frisch. **— SCHNITT:** Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` · **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
 | **Z1-W1-1** Das DIN-18065-Badge sagt, was es nicht geprueft hat | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-1-din-badge-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §143), offen: drei Punkte · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §181), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
@@ -18785,8 +18785,17 @@ nachgetragen: |
 
 ```yaml
 auftrag: "A-38"
-zustand: ENTWURF
-ballbesitz: plan-pruefer  # 16.08. vom Planner zurueckgegeben: die Restpunkte der 1. DoR-Runde sind behoben (8f2aed6f, d2ca3611, 3719937f, 236f9efe). VORHER: ballbesitz: planner
+zustand: BEREIT
+zustand_beleg_272: |
+  Nachgezogen 21.08. vom integrator auf Zustellung Paragraf 272. TRANSPORT.
+  ARBEITSREGELN.md:253 bindet diesen Schritt an den Beleg des Plan-Pruefers; er
+  steht seit 5ccc707f im Feld dor_beleg (Paragraf 156, erteilt). Paragraf 272
+  woertlich: "Ich habe die Voten geliefert, sie stehen im Datensatz; das Nachziehen
+  von Zustand, Ball und Tafelzeile ist Transport, kein Votum."
+ballbesitz: generator
+ballbesitz_nachgezogen_272: |
+  plan-pruefer -> generator, 21.08. vom integrator auf Paragraf 272. TRANSPORT: die DoR
+  ist gefahren, damit endet der Grund des Pruefers.
 blatt: "docs/auftraege/aktiv/A-38-merges-laufen-am-tor-vorbei.md"
 basis_sha: 0f05f8bf
 art: "BAU — versionierter commit-msg-Hook plus core.hooksPath."
@@ -18937,8 +18946,17 @@ nachgetragen: "wie A-37, siehe dort."
 
 ```yaml
 auftrag: "A-39"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+zustand_beleg_272: |
+  Nachgezogen 21.08. vom integrator auf Zustellung Paragraf 272. TRANSPORT.
+  ARBEITSREGELN.md:253 bindet diesen Schritt an den Beleg des Plan-Pruefers; er
+  steht seit 5ccc707f im Feld dor_beleg (Paragraf 159, erteilt). Paragraf 272
+  woertlich: "Ich habe die Voten geliefert, sie stehen im Datensatz; das Nachziehen
+  von Zustand, Ball und Tafelzeile ist Transport, kein Votum."
+ballbesitz: generator
+ballbesitz_nachgezogen_272: |
+  plan-pruefer -> generator, 21.08. vom integrator auf Paragraf 272. TRANSPORT: die DoR
+  ist gefahren, damit endet der Grund des Pruefers.
 blatt: "docs/auftraege/aktiv/A-39-die-fuenf-innenpruefungen-des-blattes.md"
 basis_sha: 99add90f
 dor_schnitt_sha: "99add90f"
@@ -18959,7 +18977,12 @@ staut_hinter: "A-37 — das Tor schuetzt A-39, nicht umgekehrt."
 ```yaml
 auftrag: "A-40"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: planner
+ballbesitz_nachgezogen_272: |
+  plan-pruefer -> planner, 21.08. vom integrator auf Paragraf 272. TRANSPORT: die DoR
+  ist gefahren, damit endet der Grund des Pruefers.
+  NICHT ERTEILT ist ein ERGEBNIS, kein Ausstand: die Punkte 1, 2 und 4 liegen beim
+  Planner, praezisiert in Paragraf 159. Punkt 3 ist dort herabgestuft.
 blatt: "docs/auftraege/aktiv/A-40-der-zustand-am-facheintrag.md"
 basis_sha: 99add90f
 dor_schnitt_sha: "99add90f"
@@ -25688,8 +25711,17 @@ ballbesitz: plan-pruefer
 
 ```yaml
 auftrag: "A-42"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+zustand_beleg_272: |
+  Nachgezogen 21.08. vom integrator auf Zustellung Paragraf 272. TRANSPORT.
+  ARBEITSREGELN.md:253 bindet diesen Schritt an den Beleg des Plan-Pruefers; er
+  steht seit 5ccc707f im Feld dor_beleg (Paragraf 158, erteilt). Paragraf 272
+  woertlich: "Ich habe die Voten geliefert, sie stehen im Datensatz; das Nachziehen
+  von Zustand, Ball und Tafelzeile ist Transport, kein Votum."
+ballbesitz: generator
+ballbesitz_nachgezogen_272: |
+  plan-pruefer -> generator, 21.08. vom integrator auf Paragraf 272. TRANSPORT: die DoR
+  ist gefahren, damit endet der Grund des Pruefers.
 blatt: "docs/auftraege/aktiv/A-42-befundnotizen-ziehen-um.md"
 basis_sha: e802c1f8
 dor_schnitt_sha: "e802c1f8"
