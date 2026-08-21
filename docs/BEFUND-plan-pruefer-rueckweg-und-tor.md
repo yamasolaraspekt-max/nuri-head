@@ -17271,3 +17271,128 @@ wurde — 61 Abschnitte für den Planner, 35 für den Integrator, 8 für den Gen
 
 **Kein Ball bei Yama aus dieser Runde:** seine neun Posten sind zugestellt (§209), und daran hat sich
 nichts geändert.
+
+---
+
+## §216 — Posten (a): ein Commit hat 24 von 34 Zeigern auf dieselbe Datei gebrochen. Und der Versatz ist nicht eine Zahl, sondern eine Treppe
+
+**Messstand 28b98cc0, Baum sauber, 0 neue Commits. Integrationszweig lokal 7a82ecfb (14:31, Alter
+170 Min). Rückstand: ich 40 · evaluator 100 · planner 104. `docs/STATUS.md` und die 89 Blätter
+unbewegt, kein Ball in meiner Bahn. Erhebung 21.08. 17:22–17:26.**
+
+Träger: `docs/auftraege/aktiv/W-10-1-decke-und-boden-ablesen.md` (468 Zeilen, 53 Zeiger) — das
+zweitdichteste Blatt nach dem in §211 geprüften. Auch dieses trägt eine Zeigergeschichte: `1fac7335`
+(14.08. 04:48) heißt *„W-10/1 berichtigt — DREI falsche Zeiger, und der dritte war meiner"*.
+
+### 1. Erst Bewegung: 19 von 23 Zieldateien unbewegt
+
+Mit dem frühesten Blatt-Commit als Bezugspunkt (`39693251`, 13.08. 08:44):
+
+    bewegt:   HausplanerApp.tsx (2) · werkzeugLandkarte.ts (3) · toolRegistry.ts (1)
+    unbewegt: 19 weitere
+
+Die geprüften unbewegten treffen **wörtlich**:
+
+    toolRegistry.ts:132   id: 'decke',                                       wie zitiert
+    toolRegistry.ts:133   label: 'Decke',                                    wie zitiert
+    toolRegistry.ts:141   helpText: '… (Treppen werden ausgespart)'          wie zitiert
+    applyCommand.ts:119   function treppenDurchbrueche(draft, levelId)       wie zitiert
+    scene.types.ts:348    export interface CeilingNode extends BaseNode      wie zitiert
+    werkzeugLandkarte.ts:170/:173   Landkarteneinträge mit werkzeugId        plausibel
+
+### 2. Zwei gewandert — und wieder ist einer der berichtigte
+
+    W-10/1:52   AUFRUF app/HausplanerApp.tsx:1027  type: 'ADD_CEILING'
+                <- BERICHTIGT 14.08. (war :1042, dort steht heute eine schliessende Klammer)
+
+    am Blattstand 123d07cd (14.08. 23:57):  Z.1027 = type: 'ADD_CEILING',      -> traf exakt
+    heute:                                  Z.1027 = ein Kommentar
+                                            ADD_CEILING steht auf Z.1062        Versatz +35
+
+    W-10/1:381  die 110 ist eine hartgeschriebene Konstante (toolRegistry.ts:316)
+
+    am Blattstand:  Z.316 = export const PAKET_WERKZEUGE = 110;               -> traf exakt
+    heute:          Z.316 = meaning: 'Überstehende Linien … abschneiden.'
+                    PAKET_WERKZEUGE steht auf Z.343                           Versatz +27
+
+**Beide trafen am Blattstand exakt. Beide sind heute daneben. Und einer der beiden trug seinen eigenen
+Berichtigungsvermerk** — genau wie `HausplanerApp.tsx:1261` in §211.
+
+### 3. Ein Commit, zwei Blätter, zwei Berichtigungen zunichte
+
+Verschoben hat beide Dateien **derselbe** Commit:
+
+    ec12e9b3   15.08. 11:05   generator
+    "A-35 gebaut: trimmen ist das erste Werkzeug nach A7, das wirklich etwas tut"
+    HausplanerApp.tsx +35 Zeilen · toolRegistry.ts +27 Zeilen
+
+Er ist auch der Verschieber aus §211. **Zwei unabhängig geprüfte Blätter, zwei berichtigte Zeiger,
+ein Commit.** Das war kein Zufall zweier Einzelfälle, sondern zweimal dieselbe Ursache.
+
+### 4. Der Versatz ist eine Treppe, keine Zahl
+
+Aus den fünf Hunks von `ec12e9b3` an `HausplanerApp.tsx`, mit dem Versatz **nach** jedem Hunk:
+
+    ab alter Zeile  118   ->  +1
+    ab alter Zeile  342   ->  +4
+    ab alter Zeile  462   ->  +6
+    ab alter Zeile  633   ->  +34
+    ab alter Zeile  675   ->  +35
+
+Gegenprobe an drei unabhängig gemessenen Fällen — alle drei landen in der richtigen Stufe:
+
+    :349   liegt in [342,462)  -> +4     gemessen in §211: +4
+    :1027  liegt ab 675        -> +35    gemessen: heute 1062
+    :1261  liegt ab 675        -> +35    gemessen: heute 1296
+
+Das erklärt §211s Beobachtung *„kein einheitlicher Versatz, +4 und +35"*: **beide Zahlen sind richtig,
+sie gehören zu verschiedenen Stufen derselben Treppe.** Eine pauschale Verschiebung wäre falsch, eine
+stufenweise ist rechnerisch möglich.
+
+### 5. Die Grundmenge: 24 von 34 Zeigern sind heute daneben
+
+Elf Blätter tragen Zeiger auf `HausplanerApp.tsx`. Zehn wurden zuletzt **vor** `ec12e9b3` geändert
+(das elfte ist A-35 selbst — der Auftrag, der den Bau ausgelöst hat, und seine Zeiger sind jünger als
+die Verschiebung). Diese zehn tragen **34 Zeiger**:
+
+    Versatz  +0 : 10 Zeiger   (Zeile < 118 — treffen heute noch)
+    Versatz  +4 :  1
+    Versatz  +6 :  3
+    Versatz +34 :  1
+    Versatz +35 : 19
+    -----------------------
+    heute daneben: 24 von 34
+
+**Ein Commit vom 15.08. hat 24 Zeiger in zehn Auftragsblättern ungültig gemacht.** Zwei davon habe ich
+in §211 und heute einzeln geöffnet und bestätigt; die übrigen 22 sind über die Treppe berechnet, nicht
+einzeln geprüft — das ist eine Ableitung, keine Erhebung, und ich sage es dazu.
+
+### 6. Mein eigener Fehler: die erste Treppe war falsch, die Fangprobe hat sie gekippt
+
+Meine erste Ableitung las aus den Hunk-Köpfen den Versatz **am Hunk-Anfang** statt **danach** und war
+zusätzlich auf sechs Zeilen abgeschnitten. Sie ergab für `:349` den Wert **+1**. Die Fangprobe gegen
+die in §211 gemessenen **+4** hat den Widerspruch sofort gezeigt.
+
+    falsch: Versatz = neuStart − altStart
+    richtig: Versatz = (neuStart + neuLänge) − (altStart + altLänge)
+
+Zwei Fehler in einem Schritt — eine falsche Formel und eine abgeschnittene Ausgabe (dieselbe Falle wie
+§203 und §208). **Gefangen hat sie nur, dass ich eine Zahl aus einer früheren Runde hatte, gegen die
+ich prüfen konnte.** Ohne §211 hätte die falsche Treppe plausibel ausgesehen — sie war monoton, sie
+hatte fünf Stufen, und sie war falsch.
+
+### Ball
+
+**Beim Planner:** 24 Zeiger in zehn Blättern, verursacht von `ec12e9b3`. Die Treppe oben ist das
+Werkzeug dazu — für jeden Zeiger auf `HausplanerApp.tsx` in einem Blatt, das älter als 15.08. 11:05
+ist, gilt der Versatz seiner Stufe. Namentlich geprüft und belegt sind
+`W-10-1-decke-und-boden-ablesen.md:52` (`:1027` → `:1062`) und `:381`
+(`toolRegistry.ts:316` → `:343`), dazu die fünf Fundstellen aus §211.
+
+**Zur Erwägung, zum vierten Mal und diesmal mit einer Zahl:** `ADD_CEILING` und `PAKET_WERKZEUGE` sind
+Bezeichner. Beide hätten die Verschiebung überlebt; beide stehen im Blatt bereits neben der
+Zeilennummer. Von den 24 gebrochenen Zeigern trägt die Mehrheit einen solchen Namen daneben.
+
+**Beim Integrator:** unverändert der Rückweg (36 Abschnitte, §215), die zwei Zäune in
+`docs/STATUS.md:3220` und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block
+ab `:2397` (§210).
