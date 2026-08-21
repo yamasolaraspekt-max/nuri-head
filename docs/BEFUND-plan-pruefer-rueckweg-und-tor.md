@@ -11891,3 +11891,61 @@ ihm meinen eigenen Satz mitzugeben.
 
 **Kein neuer Ball.** Die Einheiten-Sache liegt bei Z1-W1-3 und damit beim Planner; die Berichtigung
 an §128 steht hier.
+
+## §163 — Posten (a) an der Statuswahrheit: sie beschreibt einen Mangel, den es nicht mehr gibt, an einer Zeile, die etwas anderes trägt
+
+*(Messstand 6597d801, 21.08. 13:03. Nummer gegen den frischen HEAD gewaehlt: 100 Abschnitte, hoechste
+162 — 163 war frei.)*
+
+**Neue Richtung.** §139 mass Zeiger **in** `docs/STATUS.md` hinein. Diese Runde misst die Zeiger, die
+**aus** ihr in den Code fuehren — die Statuswahrheit ist der meistgelesene Traeger im Bestand.
+
+**Grundmenge:** **773** Code-Zeiger der Form `datei.ext:zeile`, **468** verschieden. Zielgerichtet
+nach §154 auf die bewegteste Datei: `scripts/commit-pruefen.sh`, heute **1066 Zeilen**, aus der
+Statuswahrheit **17-mal verschieden** und **27-mal** insgesamt zitiert.
+
+*(Musterprobe zuerst fehlgeschlagen und korrigiert: ich pruefte an `rollen-tor.sh` und bekam null —
+die Datei wird in `docs/STATUS.md` durchweg **ohne** Zeilennummer genannt. Schlechter Probefall, nicht
+schlechtes Muster; an echten Treffern verifiziert.)*
+
+### Fünf Zeiger mit konkreter Zusage, einzeln geöffnet
+
+| Zeiger | was die Statuswahrheit sagt | heute |
+|---|---|---|
+| `commit-pruefen.sh:73` / `:78` | *„liest den Praefix `zustand` als Rollenmarke"*, *„`:78` exit 2"* | `:73` ist `fi`; `exit 2` steht auf **`:72`**, die Rollen-Auswertung auf **`:83`** |
+| `commit-pruefen.sh:163` | *„Doppelpfad"* | gehoert auf **`:510`** (in §154 gemessen) |
+| `commit-pruefen.sh:501` | *„die Regex … ist ohne g-Flag"*, meldet nur den **ersten** yaml-Block | `:501` ist `fi`; die Regex steht auf **`:713`** — **mit `/g`** |
+| `commit-pruefen.sh:642` | *„der Hook steht NACH allen 12 exit-Punkten, mit `\|\| true`"* | `:642` ist `#`; die `\|\| true`-Hooks stehen auf **`:925`, `:934`, `:949`** |
+| `commit-pruefen.sh:699-730` | *„die Barriere ist gebaut"* | **haelt** — `catch (e)` bei `:706`, `:717`, `:725` |
+
+**Vier gewandert, eine haelt.**
+
+### Der Fall :501 ist von anderer Art — und der wichtigste
+
+Die Statuswahrheit sagt bei `docs/STATUS.md:16719`: *„die Regex in `scripts/commit-pruefen.sh:501`
+ist ohne g-Flag, und die Meldung [nennt nur den] ERSTEN yaml-Block"*. Gemessen:
+
+```
+scripts/commit-pruefen.sh:713   const bloecke = [...t.matchAll(/```yaml\n([\s\S]*?)```/g)];
+                                                                                      ^ g-Flag
+scripts/commit-pruefen.sh:694   Kommentar: "Der Pruefer liest ```yaml-BLOECKE, nicht Front Matter"
+```
+
+**Der beschriebene Mangel existiert nicht mehr** — das `g` ist da, `matchAll` mit Spread liest
+**alle** Bloecke. Es ist also nicht nur die Zeile gewandert, sondern der **Sachverhalt behoben**,
+waehrend seine Beschreibung stehen blieb.
+
+**Das ist die unangenehmste Sorte:** ein toter Zeiger fuehrt an eine falsche Stelle (§140), aber
+dieser hier fuehrt an eine falsche Stelle **und** beschreibt einen Zustand, den es nicht mehr gibt.
+Wer ihn liest, sucht einen Fehler, findet die Zeile nicht, und wenn er die richtige Zeile faende,
+faende er den Fehler auch nicht.
+
+### Was das über die Grundmenge sagt
+
+Ich habe **5 von 468** geprueft, gezielt an der bewegtesten Datei. **Das ist eine Stichprobe und
+keine Erhebung** — ich sage es ausdruecklich, statt aus vier Treffern auf 468 hochzurechnen. Was sie
+zeigt, ist die **Trefferdichte an bewegten Zielen**, und die ist hoch.
+
+**Ball beim Integrator** — er ist der einzige Schreiber von `docs/STATUS.md`
+(`scripts/rollen-tor.sh:344`). Benannte Ziele: `:73`→`:72`/`:83`, `:163`→`:510`, `:642`→`:925`,
+und bei `:501` **nicht nachziehen, sondern streichen** — der Mangel ist behoben.
