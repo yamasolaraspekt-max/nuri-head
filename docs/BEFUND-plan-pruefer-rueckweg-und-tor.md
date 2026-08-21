@@ -16675,3 +16675,102 @@ die zwei offenen Fences in `docs/STATUS.md:3220` und `:7881`.
 
 **Beim Planner, klein aber folgenreich:** ein einheitliches Feld für Posten, die bei Yama liegen. Heute
 sind es 45 Namen für 48 Vorkommen; `basis_sha` zeigt mit 90:1, dass das Haus es kann.
+
+---
+
+## §210 — Posten (e): zwei P1-Kriterien eines abgenommenen Auftrags geprüft. Beide halten — und mein Musterfehler hätte den Faktor 13 gemeldet
+
+**Messstand d352e43a, Baum sauber, 0 neue Commits. Integrationszweig unverändert 7a82ecfb (live).
+Hinweg zu: 40 fehlen mir, 33 von mir fehlen dort. `docs/STATUS.md` und die 89 Blätter an beiden
+Ständen unbewegt, kein Ball in meiner Bahn. Erhebung 21.08. 16:57–17:05.**
+
+§209 hat beiläufig einen Restpunkt an einem abgenommenen Kriterium gefunden (A-22-1). Diese Runde macht
+daraus die systematische Frage — und beginnt bei **A-25**, weil dessen Gegenstand genau mein §200-Fund
+ist: *„Zwei verschmolzene yaml-Bereiche in `docs/STATUS.md` — jeder Datensatz bekommt seinen eigenen
+Zaun"*. A-25 steht auf `BETRIEBSBESTAETIGT`, Ball `—`.
+
+### 1. A-25-1 (P1, TRAGEND) — hält vollständig
+
+Das Kriterium schreibt sein Prüfverfahren selbst vor, und zwar richtig:
+
+    Nachweis mit einem Muster, das CommonMark folgt: ein Zaun schliesst nur OHNE Info-String,
+    ```yaml ist ein OEFFNER und niemals ein Schliesser.
+
+Es warnt sogar vor der Falle, die es selbst erwischt hat — *„ein Muster, das jeden ```-Zaun als Toggle
+zählt, meldete bei mir EINEN Bereich statt zwei"*. Mit CommonMark-treuem Verfahren gemessen:
+
+    Bloecke gesamt: 448 · davon mit mehr als einem Datensatz: 0
+    Fangprobe an einem konstruierten Doppelblock: greift (meldet 2 Datensaetze)
+
+**Null Verletzungen.** Das Kriterium hält, und es hält an einem Verfahren, das der Auftrag selbst
+vorgeschrieben hat.
+
+**Wichtig für meinen eigenen §200-Fund:** die zwei unverschlossenen ```yaml-Fences, die ich dort
+gemeldet habe (`docs/STATUS.md:3220` und `:7881`), verletzen A-25-1 **nicht** — kein Block trägt
+dadurch zwei Datensätze. Es ist eine dritte Form: ein Block, der eine *Überschrift* verschluckt, ohne
+einen zweiten Datensatz aufzunehmen. Mein Befund bleibt gültig, aber er gehört **nicht** zu A-25. Das
+gehört gesagt, damit niemand ihn als Kriteriumsbruch liest.
+
+### 2. A-25-1b (P1) — hält bis auf einen Block von 448
+
+Das Kriterium verlangt: *„jeder yaml-Block, der ZUSTANDSFELDER trägt (`zustand:` oder `ballbesitz:`),
+nennt auch seinen `auftrag:` — **oder er nennt ausdrücklich, zu welchem Vorgang er gehört**."* Der
+zweite Zweig ist entscheidend, und der Auftrag präzisiert ihn: *„NICHT VERLANGT: eine Auftragsnummer zu
+erfinden … Es genügt ein Feld, das den Vorgang benennt."*
+
+    Bloecke mit ballbesitz: ohne auftrag:      36
+      davon mit Vorgangsfeld (vorgang/befund/anlass/…)   23
+      davon mit einer Kennung im Fliesstext               12
+      OHNE JEDE ZUORDNUNG                                  1     <- Z.2397
+
+Der eine Fall trägt als erstes Feld `yamas_wort:` und handelt von der Worktree-Aufräumung
+(`ticket-release-pruefung`, `rolle/release-pruefer`). **Inhaltlich ist er zuordenbar, maschinell
+nicht** — im ganzen Block steht keine einzige Kennung. Das ist genau die Lage, die A-25-1b beschreibt:
+*„jeder Zähler, der Bälle über Auftragskennungen sucht, findet ihn nicht."* Ein Block von 448, und der
+Auftrag hat die Klasse getroffen.
+
+### 3. Der eigentliche Ertrag: mein Musterfehler, Faktor 13
+
+Meine erste Zählung meldete **13** Blöcke ohne Zuordnung. Die Fangprobe an einem bekannten Treffer
+brachte es an den Tag — Block Z.2148 enthält im Klartext *„Der Generator hat A-37 Teil 2 geliefert"*,
+und mein Kennungsmuster fand ihn nicht:
+
+    Text:  "Der Generator hat A-37 Teil 2 geliefert"
+    mit  \b[AWFNPS]-[0-9]{2,3}\b            -> KEIN TREFFER
+    ohne \b, mit Zeichenklassen-Grenzen     -> TREFFER "A-37"
+
+**`\b` ist eine GNU-Erweiterung und in BSD-`awk` wirkungslos.** Dieselbe Familie wie §171 (`\s` in
+`git grep -E`) und §184 (`\?` in BSD-`sed`) — das dritte Mal, dass eine GNU-Regex-Erweiterung auf
+diesem System still nichts tut. Still ist das Entscheidende: kein Fehler, keine Warnung, nur eine zu
+kleine Trefferzahl.
+
+Mit tauglichem Muster: **12 der 13 nennen ihre Kennung im Fließtext.** Ich hätte einen Restpunkt um den
+**Faktor 13** überzeichnet — an einem Auftrag, der auf BETRIEBSBESTAETIGT steht und dessen Bau
+sorgfältig war.
+
+**Die Regel, die ich daraus mitnehme, ist enger als „Muster verifizieren":** ein Muster, das eine
+*Abwesenheit* zählt, muss an einem bekannten **Anwesenheits**fall geeicht werden. Ein Muster, das zu
+wenig findet, meldet zu viele Verletzungen — und sieht dabei gründlich aus.
+
+### 4. Was die Runde über die Methode sagt
+
+§209 fand A-22-1 verletzt. §210 findet A-25-1 und A-25-1b erfüllt. Dieselbe Prüfform, zwei
+verschiedene Ergebnisse — das ist der Beleg, dass sie misst und nicht zerlegt. Bilanz der drei bisher
+so geprüften P1-Kriterien:
+
+    A-22-1  0 doppelte Schluessel mit abweichendem Wert   VERLETZT (1 Fall, schon am Abnahmetag)
+    A-25-1  kein Block mit mehr als einem Datensatz       ERFUELLT (0 von 448)
+    A-25-1b jedes Zustandsfeld ist zuordenbar             ERFUELLT bis auf 1 von 448
+
+### Ball
+
+**Beim Integrator** (alleiniger Schreiber der Statuswahrheit), klein und mit Beleg:
+`docs/STATUS.md`, Block ab Z.2397 — ein Feld, das den Vorgang benennt, würde A-25-1b vollständig
+schließen. Der Restpunkt an A-22-1 aus §209 bleibt daneben stehen.
+
+**Kein Ball beim Planner aus dieser Runde:** A-25 hat seine Sache getroffen, sein Kriterium hat sein
+eigenes Prüfverfahren mitgeliefert, und dieses Verfahren trägt heute noch. Das ist die sauberste
+Auftragsform, die mir in dieser Reihe untergekommen ist, und sie gehört benannt, nicht nur die Mängel.
+
+**Beim Integrator unverändert:** der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
+und `:7881` — die, wie oben gemessen, **kein** A-25-Kriterium verletzen und trotzdem stehen.
