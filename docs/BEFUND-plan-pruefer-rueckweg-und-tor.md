@@ -15572,3 +15572,141 @@ Verschärfung des §184-Postens, weil die Wache ihre Grundmenge dort zieht.
 
 **Bei mir:** ab hier messe ich Zustände an **beiden** Ständen und nenne beide. Der Arbeitsbaum ist
 kein Statusträger mehr, solange er nichts aufnimmt.
+
+---
+
+## §201 — Posten (a): vier Zeiger einer abgenommenen Erhebung, alle vier daneben — und die zweiseitige Ballortung mit ihrem eigenen Ergebnis
+
+**Messstand 8f0d1810, Baum sauber, 0 neue Commits. Integrationszweig unverändert 7a82ecfb (live per
+`ls-remote`). Erhebung 21.08. 15:57–16:05.**
+
+Der Hinweg aus §200 ist unverändert zu: mir fehlen weiterhin **40** fremde Commits, dort fehlen **24**
+von mir, und der letzte fremde Commit in meinem Zweig ist immer noch `03e9ac41` vom 21.08. 10:04 —
+inzwischen **6 Stunden 1 Minute**. Alle Zustandsangaben unten sind deshalb am gültigen Stand `7a82ecfb`
+gemessen, nicht an meinem Arbeitsbaum (Konsequenz aus §200).
+
+### 1. Das Werkzeug aus §200 trägt
+
+Der in §200 diagnostizierte Fehler — Blockende nur am Fence gesucht, während ein Block an einem Strich
+endet — ist im Leseverfahren behoben. Gegenprobe an beiden Ständen:
+
+    Bloecke mit zustand   90   gegen   rohe Zeilen "^zustand:"   90     (mein Stand)
+    Bloecke mit zustand   92   gegen   rohe Zeilen "^zustand:"   92     (gueltiger Stand)
+    A-08 wird jetzt gefunden:  A-08  BETRIEBSBESTAETIGT  Z.3220
+
+Kennungs-Dubletten im gültigen Stand: **keine**. In meinem veralteten Stand steht P-04 noch doppelt —
+auch das eine Folge des geschlossenen Hinwegs, keine Eigenschaft des Bestands.
+
+### 2. Ballortung zweiseitig (P-03): 73 gegen 5
+
+    Seite 1 — STATUS.md, gueltiger Stand, mein Ball, negativer Zustandsfilter:
+        A-38 ENTWURF · A-39 ENTWURF · A-40 ENTWURF · A-42 ENTWURF · P-02 VORLAGE     = 5
+
+    Seite 2 — Ballfelder der 89 Blaetter in docs/auftraege/aktiv/ (erste Zeile je Blatt):
+        45x "plan-pruefer (DoR)" · 27x "plan-pruefer (DoR), danach generator"
+         1x "plan-pruefer (Zusammenfuehrung + BEREIT)"                               = 73
+        11 Blaetter ohne Ballfeld · 5 mit fremdem Ball
+
+Die 73 gegen den Zustand ihres Auftrags gehalten:
+
+    66  BETRIEBSBESTAETIGT      1  ZURUECKGEZOGEN      4  ENTWURF
+     1  CODE_FERTIG             1  ABGENOMMEN
+
+**66 der 73 Ballfelder sind tot** — sie stehen auf Blättern, deren Auftrag längst betriebsbestätigt
+ist. Das Feld wird beim Zustandswechsel nicht mitgezogen.
+
+**Zwei Widersprüche bei OFFENEN Aufträgen**, und das sind die einzigen, die zählen:
+
+| Auftrag | Blatt sagt | Block sagt (7a82ecfb) |
+|---|---|---|
+| A-37 | `ballbesitz: "plan-pruefer (DoR)"` | `zustand: CODE_FERTIG`, `ballbesitz: evaluator` — *„WEITERGEGEBEN 20.08. 15:1x vom integrator an den evaluator"* |
+| A-12 | `ballbesitz: "plan-pruefer (DoR), danach generator"` | `zustand: ABGENOMMEN`, `ballbesitz: "— (geschlossen 12.08. vom Planner)"` |
+
+**Kein Ball in meiner Bahn** — beide Vorgänge sind weitergegeben bzw. geschlossen, der Block führt.
+Aber wer das Blatt liest, und das Blatt ist das Arbeitsmaterial, schickt beide an mich zurück. Bei
+A-37 ist das Blattfeld seit dem 20.08. falsch, bei A-12 seit dem 12.08.
+
+**Nicht nachgebaut (P-02 Punkt 4):** genau diese Fehlerklasse trägt bereits
+`docs/auftraege/aktiv/A-20-der-zustand-steht-an-vier-orten.md`, Kopfzeile wörtlich: *„Der Zustand steht
+an vier Orten, und 17 von 24 Blättern widersprechen sich selbst"*, und
+`docs/auftraege/aktiv/A-26-ball-drift-am-tor.md` will sie am Tor fangen statt hinterher zu melden.
+Mein Beitrag ist nur die heutige Grundmenge: nicht 24 Blätter, sondern **89**; nicht 17 Widersprüche
+im Allgemeinen, sondern **2 an offenen Aufträgen und 66 tote Felder**.
+
+### 3. Posten (a): die Erhebung, die A-20 abgenommen hat, hat ihre Belege verloren
+
+Träger ist dasselbe Blatt, Abschnitt `A-20-6_rollenvorlagen`, `urteil: ERFUELLT`, Zeilen 309–315,
+geschrieben in `603b875d` (12.08. 15:24) mit der Botschaft *„evaluator: A-20 Runde 2 ABGENOMMEN an
+92c50794"*. Die Erhebung nennt vier prüfbare Angaben. Heute trifft **keine**.
+
+**(1) `rollen/1-planner/1-AUFTRAG.md:79`** — Trägerdatei ist
+`docs/rollenkette/rollen/1-planner/1-AUFTRAG.md` (der Zeiger nennt sie verkürzt; die Trägerdatei kam
+aus dem Satz, nicht aus einer Vermutung — Lehre §190).
+
+    damals Z.79 :  Fließtext, Tabelle und Kriterium.
+    heute  Z.79 :  (leer)
+    derselbe Satz heute:  Z.246          Versatz +167
+    Bewegung: 29 Commits an dieser Datei seit dem Blatt · 173 -> 902 Zeilen
+
+**(2) `werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md:519`**
+
+    damals Z.519:  > und **eine** von zwölf steht auf `status: 'geplant'` statt `'verfuegbar'`. …
+    heute  Z.519:    `buildCompoundPitched` für L- und T-Form)
+    derselbe Satz heute:  Z.607          Versatz +88
+    Bewegung: 8 Commits an dieser Datei seit dem Blatt · 961 -> 1187 Zeilen
+
+Das ist der schärfere der beiden: der Zeiger zeigt nicht ins Leere, sondern auf ein **Code-Zitat aus
+einer Dachgeometrie-Funktion**. Wer ihn heute öffnet, findet Text und hält ihn für den Beleg.
+
+**(3) Die im selben Satz zitierte Umstellung „Z.82-83"** (ohne Datei genannt, gemeint ist
+`1-AUFTRAG.md`) — das Blatt schließt mit *„Es gab genau eine Stelle, sie ist umgestellt (Z.82-83)."*
+
+    damals Z.82-83:  Tafelzeile und `zustand:` im Datensatz … Blattkopf `status:` und
+                     Blattfuß `zustand:` sind entfallen …            <- genau die Aussage
+    heute  Z.82-83:  „die Daten kommen am Mount an" gewesen — die zweite Form hätte sofort
+                     getroffen. **Und wenn die Sache eine Zulieferung ist …**
+
+**(4) Die Zahl „217 Dateien unter docs/rollenkette"**, mit demselben Verfahren an beiden Ständen:
+
+    am Blattstand 603b875d :  225 Dateien (224 .md)
+    heute HEAD             :  351 Dateien (350 .md)
+    Bewegung: 163 Commits an docs/rollenkette seit dem Blatt
+
+**Ehrliche Grenze:** die 217 ist mit meinem Verfahren auch am Blattstand nicht reproduzierbar (225).
+Das melde ich **nicht** als Fehler des Evaluators — er nennt kein Filterkriterium, und ein unbekanntes
+Raster ist kein widerlegtes Raster. Belegbar ist nur das Wachstum: die Grundmenge der Erhebung ist seit
+der Abnahme um **126 Dateien** gewachsen, mehr als die Hälfte des damaligen Bestands.
+
+**Klasse:** fremde Drift (Klasse 1 nach §168) — die Träger haben sich bewegt, 29 bzw. 8 Commits an den
+Zeigerdateien. Kein Streuungsbild und kein gemeinsamer Schnitt: die Versätze sind **+167 und +88**, also
+zwei unabhängige Verschiebungen. Die Erhebung war richtig, als sie geschrieben wurde; sie trägt heute
+ein `urteil: ERFUELLT`, dessen vier Belege alle woandershin zeigen.
+
+### 4. Vier eigene Messfehler dieser Runde, alle vor dem Melden gefangen
+
+1. **Teilstring-Muster zu breit.** `case "$B" in *plan-pruefer*)` meldete **74 von 78** Blättern als
+   meinen Ball — es traf auch Fließtext in Nachbarfeldern.
+2. **Exaktes Muster zu eng.** Der Gegenversuch `[ "$B" = "plan-pruefer" ]` meldete **0**, obwohl A-40
+   meinen Ball trägt: der Wert lautet `"plan-pruefer (DoR)"` mit Anführungszeichen. Beide Extreme sahen
+   aus wie ein Ergebnis; erst die Fangprobe an A-40 zeigte, dass keines eins war.
+3. **Zwei Minuten Zeitüberschreitung** in einer Schleife mit 267 Prozessen und einer `bc`-Pipeline —
+   abgebrochen, kein Ergebnis, neu als ein einziger `awk`-Durchgang.
+4. **`timeout` gibt es auf macOS nicht.** Der Schutzbefehl selbst war der Fehler: *command not found*,
+   Ausgabe eine Zeile, die wie eine Messung aussah.
+
+Nummer 1 und 2 sind dieselbe Klasse in zwei Richtungen: **ein Muster, das man nicht an einem bekannten
+Treffer geeicht hat, liefert eine Zahl — nur nicht die gesuchte.**
+
+### Ball
+
+**Beim Planner:** die vier verlorenen Belege in `docs/auftraege/aktiv/A-20-der-zustand-steht-an-vier-orten.md`
+Zeilen 309–315. Das Blatt trägt ein `urteil: ERFUELLT` ohne tragfähigen Beleg — nicht falsch, aber nicht
+mehr nachprüfbar. Dazu die zwei falschen Ballfelder in
+`docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md` und
+`docs/auftraege/aktiv/A-12-f026-ausfuehren.md`.
+
+**Beim Integrator:** unverändert der Hinweg aus §200 — 6 Stunden 1 Minute ohne einen fremden Commit,
+und die zwei offenen Fences in `docs/STATUS.md:3220` und `:7881`.
+
+**Kein Ball bei mir:** A-37 liegt beim Evaluator, A-12 ist geschlossen. Die vier ENTWURF-Aufträge
+A-38/A-39/A-40/A-42 tragen ihre DoR-Voten seit §108 und seit dem Nachtrag des Integrators auch im Feld.
