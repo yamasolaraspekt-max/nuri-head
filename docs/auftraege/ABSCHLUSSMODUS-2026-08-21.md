@@ -279,6 +279,27 @@ nächsten Werkzeugrunde zugestellt; meine vier Nachrichten (22:04–22:2x) liege
 Folge: A-42-Bilanz kommt erst, wenn Yama die Evaluator-Sitzung anstößt (oder sie von sich aus
 weiterarbeitet). Dasselbe gilt für jede Stopp-Nachricht: **wirksam ist nur, was technisch
 erzwungen wird** — Beleg für Z0-I2 und für die `pre-commit`-Barriere.
+
+### Yama-Entscheidung 21.08. (nach 22:45) — Planner, Evaluator, Generator-Stopp
+> **Punkt 1: Weg (a).** Yama startet eine eigenständige Planner-Sitzung im Worktree
+> `ticket-rolle-planner` mit `TICKET_ROLLE=planner`. Der Dirigent darf keinen Planner im zweiten
+> Glied instanziieren und keine Kriterien stellvertretend schreiben.
+> **Evaluator:** Sitzung `303cefb6` wird angestoßen; sie bearbeitet ausschließlich die unabhängige
+> A-42-Abnahme und bestätigt zuerst den Parkzustand.
+> **Generator-Stopp:** PID `87659` bleibt per `SIGSTOP` angehalten. Keine Wiederaufnahme mit `CONT`,
+> bis (1) A-42 unabhängig abgeschlossen, (2) A-37 einschließlich wirksamem `pre-commit`-Hook fertig,
+> (3) alle fünf Negativproben bestanden, (4) ein nacktes `git commit` das Tor nicht umgehen kann,
+> (5) die unabhängige Evaluator-Abnahme vorliegt.
+> Der zweite Generator im korrekten Worktree, PID `88088`, bleibt verfügbar, darf aber erst nach
+> fertigem Planner-Auftrag und DoR **ausschließlich A-37** bearbeiten.
+> **Verbindliche Reihenfolge: A-42 → A-37 → Z0-I1 → übrige Abnahmen.** Z0-I2 wird vom neuen
+> Planner spezifiziert, aber noch nicht gebaut. A-38, A-39 und weitere Produktarbeit bleiben
+> geparkt. Der Integrator transportiert bis dahin ausschließlich freigegebene Ergebnisse dieser
+> Reihenfolge. Freigabe erteilt: Planner starten und Evaluator wecken. Keine Freigabe: Generator
+> `87659` fortsetzen, weitere Produktarbeit oder Reihenfolge ändern.
+
+Bericht nach Planner-Start und Evaluator-Wecken mit: Rollen-/Sitzungs-ID · Worktree und Zweig ·
+Ausgangs-SHA · erstem tatsächlich bearbeitetem Auftrag · Bestätigung PID `87659` = `T`.
 Die fünf Negativproben gehen als Kriterien
 in das erweiterte A-37-Blatt (Planner); der Integrator transportiert nichts aufgrund der seit 22:04
 entstandenen Generator-Bauten. Das V2-Konzept (`0d897b0e`) ist bereit für die spätere unabhängige
