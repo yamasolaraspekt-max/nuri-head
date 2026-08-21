@@ -11689,3 +11689,79 @@ war. **Fuer A-40 bleibt NICHT ERTEILT** — die Punkte 1, 2 und 4 stehen unabhae
 
 **Ball beim Integrator** fuer die Felder, beim **Generator** fuer den Bau von A-38, A-39 und A-42;
 beim **Planner** die drei verbliebenen A-40-Punkte. Bei mir ist die Reihe der vier abgeschlossen.
+
+## §160 — Posten (c): F-021 verlangt bei 90° eine Absage; der Code liefert 163 Billiarden Meter
+
+*(Messstand 59aa5171, 21.08. 12:52. Nummer gegen den frischen HEAD gewaehlt: 97 Abschnitte, hoechste
+159 — 160 war frei.)*
+
+**Herkunft:** `docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md:243-251` (F-021 · Dach aus
+Skelett anheben), eine der drei nie gerechneten Formeln. Ihre Regel ist `z(Knoten) = t · tan(α)`,
+ihr Grenzfall lautet woertlich: *„α = 90° → `tan` laeuft gegen unendlich, **Absage**."*
+
+### Das Skelett gibt es nicht — die Formel schon
+
+Ueber die Gestalt gesucht: `skelett`, `skeleton`, `Skelett`, `straightSkeleton` geben in
+`resources/planner/hausplaner/` **je null Treffer**. F-020 und F-021 sind als Skelett **nicht
+gebaut** — was zu F-026 passt, das die Sammlung als *„Alternative zu F-020"* fuehrt.
+
+Die **Formel** steht trotzdem im Baum, zweimal:
+`resources/planner/hausplaner/geometry/dachformVorlagen.ts:268-271` als
+`tanGrad(grad) { return endlich(Math.tan(gradToRad(grad))); }` und
+`resources/planner/hausplaner/renderers/three-d/dachMesh.ts:229` als
+`const tan = Math.tan(...)`.
+
+### Gerechnet am echten Modul
+
+esbuild-Bundle von `resources/planner/hausplaner/geometry/dachformVorlagen.ts`, Export `pultRiseM`
+(`:317`), Breite 10 m:
+
+| Neigung | Code | erwartet `10·tan α` | |
+|---|---|---|---|
+| 0 · 15 · 30 · 45 · 60° | 0 · 2,6795 · 5,7735 · 10 · 17,3205 | identisch | **haelt auf 1e-9** |
+| **90°** | **163 312 393 531 953 700** | *Absage* | **kein Wurf, eine Zahl** |
+| 90,0000001° | **−5 729 578 275** | — | **Vorzeichen kippt** |
+| 91° | **−572,9** | — | Dach nach unten |
+
+### Warum der Wächter nicht greift, und das ist der Kern
+
+`endlich(n)` (`resources/planner/hausplaner/geometry/dachformVorlagen.ts:254-256`) lautet
+`Number.isFinite(n) ? n : 0`. Der Kommentar darueber sagt *„tan(alpha) sicher in Bogenmass
+(NaN/Infinity → 0)"*. Gemessen:
+
+```
+Math.tan(90 Grad)              = 16331239353195370      <- ENDLICH
+Number.isFinite(...)           = true                   <- der Waechter laesst es durch
+pultRiseM(10, 90)              = 163312393531953700
+```
+
+**In Gleitkomma wird `tan(90°)` nie unendlich** — π/2 ist nicht exakt darstellbar. Der Waechter
+schuetzt also gegen einen Fall, den die Domaene gar nicht erzeugen kann; gefangen hat er in meiner
+Probe nur `NaN`, `Infinity` und `−Infinity` als **Eingabe**, nicht als Ergebnis.
+
+**F-021 verlangt eine Absage, der Code liefert eine Zahl.** Dieselbe Klasse wie §136 (entartete Wand
+meldet eine zuversichtliche Himmelsrichtung) und §141 (`|| 1` liefert glatte 90°): **ein Schutz, der
+statt zu verweigern etwas Plausibles zurueckgibt** — hier sogar etwas offensichtlich Unsinniges, das
+aber keinen Fehler ausloest.
+
+### Reichweite: latent, nicht scharf
+
+- `clampPitchGrad` (`…/dachformVorlagen.ts:402-406`) klemmt auf **min 1, max 85** — 90° kaeme dort
+  nie durch. Aber der Klemmer wird **einmal** gerufen, bei `…/dachformVorlagen.ts:497`, und **nicht**
+  innerhalb von `tanGrad`.
+- `pultRiseM` und `walmFirstRiseM` haben **keinen einzigen Nicht-Test-Aufrufer**.
+- `geometry/dachformVorlagen.ts` gehoert zu den **33 Modulen ohne Ladeweg** (§133, heute erneut
+  gemessen).
+
+**Kein Schaden heute.** Er entsteht, sobald jemand `pultRiseM` verdrahtet, ohne vorher zu klemmen —
+und der Kommentar ueber `tanGrad` sagt ihm, es sei „sicher".
+
+### Was ich NICHT gemessen habe
+
+F-021 traegt eine **physikalische Probe**: *„Wasser muss von jedem Punkt der Dachflaeche immer zur
+Traufe fliessen."* Sie setzt das Dreiecksnetz aus dem Skelett voraus, und das gibt es nicht. Ich habe
+sie **nicht** geprueft und stelle das ausdruecklich fest, statt sie unter „haelt" zu verbuchen.
+
+**Ball beim Planner:** entweder `tanGrad` sagt bei α ≥ 90° ab (dann stimmt F-021), oder der
+Kommentar bei `…/dachformVorlagen.ts:268` hoert auf, „sicher" zu versprechen. Eine Fachentscheidung,
+keine Messfrage.
