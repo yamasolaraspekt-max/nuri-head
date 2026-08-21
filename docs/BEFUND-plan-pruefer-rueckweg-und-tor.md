@@ -8917,3 +8917,88 @@ darüber hinaus.
 angeschlossen, stillgelegt oder so belassen wird, ist eine Fachentscheidung mit Rechenwirkung.
 **Ball beim Planner**, mit ausdrücklichem Hinweis an **Yama**: hier liegen vier Module und 51
 Exporte, die niemand aufruft — das ist eine Größenordnung, die eine Entscheidung verdient.
+
+## §120 — Erreichbarkeit des ganzen Planers gemessen: 38 von 165 Modulen laufen nicht, und fünf davon sind kein Fund
+
+*(Nummer §120 gegen HEAD `d4ee1555` gewählt und hier benannt.)*
+
+§119 hat eine Kette gemessen. Diese Runde misst den **ganzen Baum**: den Importgraphen von
+`main.tsx` aus durchlaufen, Laufzeitkanten von Typkanten getrennt.
+
+```
+  MIT Typ-Importen              erreichbar 135 von 165     nicht erreichbar 30
+  OHNE Typ-Importe (Laufzeit)   erreichbar 127 von 165     nicht erreichbar 38
+      davon in geometry/                                   23 von 55
+```
+
+### Das Verfahren, bevor die Zahl gilt
+
+Drei Prüfungen, weil eine Reichweitenmessung leicht zu viel meldet:
+
+```
+  Positivkontrolle   fangKern · HausplanerApp · wallGeometry   erreichbar: JA
+  Projekt-Aliase     19 nicht-relative Ziele, ALLE npm-Pakete (react, konva, node:*)
+  dynamische Importe im Produktivcode: 0
+```
+
+Der letzte Punkt ist der wichtigste, und der Code beantwortet ihn selbst. `enginePanels.ts:1-10`:
+
+> *„**Warum eine Zuordnung und kein dynamischer Import:** `faehigkeiten.ts` führt je Engine
+> `engineModul: 'geometry/treppenBerechnung'`. Das ist eine **Deklaration, kein Ladepfad** —
+> `import(variable)` überlebt das Vite-Bundling nicht zuverlässig. Deshalb steht hier eine
+> **explizite Zuordnung mit statischem Import**."*
+
+Die acht `import(`-Treffer im Baum sind sämtlich Kommentare oder Tests. Damit ist der statische
+Graph der vollständige Ladeweg, und die 38 sind belastbar.
+
+### Fünf der 38 sind erklärt — und zwar sauber
+
+`faehigkeiten.ts` deklariert **13** Engine-Module, `enginePanels.ts` verdrahtet **8**. Fünf fehlen:
+`heizkreisVerteiler` · `holzBauteile` · `holzMengen` · `schifterListe` · `wandaufbau`.
+
+Das sah nach einem toten Versprechen aus — eine angebotene Fähigkeit, die nichts lädt. Gemessen:
+
+```
+  die fuenf unverdrahteten     zustand: 'in_entwicklung'   (alle fuenf)
+  zwei verdrahtete zur Probe   zustand: 'verfuegbar'
+```
+
+**Exakte Entsprechung: 8 verfügbar und verdrahtet, 5 in Entwicklung und nicht verdrahtet.** Die
+Deklaration sagt die Wahrheit, die Oberfläche verspricht nichts, was nicht lädt. **Kein Fund** — und
+das gehört genauso berichtet wie ein Fund.
+
+### Was unerklärt bleibt
+
+**Keines der §119-Module ist als Engine deklariert.** Die Kette `polygonFlaeche` ← `deckenMesh` ·
+`dachAusschnitt` · `dachformVorlagen` · `grundriss` fällt nicht unter „in Entwicklung"; sie ist
+gebaut, geprüft und ohne Ladeweg. §119 steht unverändert.
+
+Dazu die schärfere Teilmenge, die erst dieser Durchlauf zeigt:
+
+| Modul | Laufzeit-Exporte | hängt nur an |
+|---|---|---|
+| `dachformVorlagen.ts` | **51** | `import type` |
+| `aufbauPlatzierung.ts` | 8 | `import type` |
+| `dachWerte.ts` | 8 | `import type` |
+| `linienBauteile.ts` | 5 | `import type` |
+| `polygonFlaeche.ts` | 1 | `import type` |
+
+**73 Laufzeit-Exporte in fünf Modulen, die über eine Kante angeschlossen sind, die beim Übersetzen
+verschwindet.** Sie sehen im Editor verbunden aus, in der Anwendung sind sie es nicht. Zwei weitere
+Typ-only-Module (`toolTypes.ts`, `werkzeugArten.ts`) tragen null Laufzeitcode — dort ist die Typkante
+richtig, und sie sind ausdrücklich **kein** Teil des Befunds.
+
+### Einordnung
+
+Die Differenz 135 zu 127 ist die eigentliche Lehre: **acht Module ändern ihren Status, je nachdem ob
+man Typkanten mitzählt.** Wer Erreichbarkeit ohne diese Trennung misst, meldet fünf laufzeitrelevante
+Module als angeschlossen, die es nicht sind. Das ist P7 auf Graphebene — die Kante existiert im
+Quelltext und nicht im Programm.
+
+**Grenze:** gemessen sind statische Importe, Typkanten getrennt, dynamische Importe und Registrierung
+geprüft. Ein Bündlerpfad außerhalb dieser Formen wäre nicht sichtbar; Hinweise darauf gibt es keine.
+
+**Kein Bau, kein Zustandsfeld.** **Ball beim Planner** für die 33 unerklärten; die fünf
+`in_entwicklung`-Engines brauchen nichts. **Hinweis an Yama:** 23 von 55 Geometrie-Modulen laufen
+nicht, davon fünf mit 73 Exporten hinter einer Typkante — ob angeschlossen, stillgelegt oder bewusst
+belassen wird, ist eine Fachentscheidung mit Rechenwirkung.
