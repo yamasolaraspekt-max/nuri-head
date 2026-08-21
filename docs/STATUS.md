@@ -103,7 +103,10 @@
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-4** Wächter: keine neue Web-Route ohne permission: — Ratschen-Test mit Baseline | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-4-route-permission-waechter.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §258): Kriterium C zaehlt drei Routen, es sind sechs · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-5** Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md` · **DoR ERTEILT** (plan-pruefer §259) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · **Blockade-Vermerk berichtigt** (plan-pruefer §259): Y-6 blockiert W0-5 NICHT; offen ist stattdessen beim Planner, wer das Routen-Gate fuer `/planner/*` baut |
-| **Z2-W0-6** Nuriva-API: die vier Token-Abilities werden durchgesetzt — oder sie verschwinden | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-6-api-token-abilities.md` · **DoR steht aus** — plan-pruefer, sechs Runden angekuendigt (§255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
+| **Z2-W0-6** Nuriva-API: die vier Token-Abilities werden durchgesetzt — oder sie verschwinden | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-6-api-token-abilities.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §260): Dateiname im Ist-Beleg berichtigen · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
+| **Z2-W0-7** Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.) | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-7-rechte-schalter-planner-item.md` · **DoR steht aus** · **VORRANG vor Z2-W0-1** (plan-pruefer §260) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
+| **Z2-W0-8** secure.image und Geschwister: Recht + Bindung statt bloßem auth | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-8-secure-image-gate.md` · **DoR steht aus** · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
+| **Z2-W0-9** „Deaktiviert' deaktiviert: echter Kontostatus statt Online-Flag | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-9-kontostatus-echt.md` · **DoR steht aus** · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
 
 ### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
 
@@ -28223,16 +28226,21 @@ herkunft_dieses_datensatzes: |
 auftrag: "Z2-W0-6"
 titel: "Nuriva-API: die vier Token-Abilities werden durchgesetzt — oder sie verschwinden"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: planner
+ballbesitz_nachgezogen: |
+  plan-pruefer -> planner, 21.08. vom integrator. TRANSPORT: die DoR ist gefahren.
+  Paragraf 260: "Planner/Dirigent: Restpunkt 1 (Dateiname)."
 ballbesitz_grund: |
   Die DoR steht aus. Paragraf 255: "Damit liegen sechs DoR in meiner Bahn" — eine ist
   gefahren (Z2-W0-1), fuenf folgen. Bis dahin haelt der Plan-Pruefer den Ball.
 blatt: "docs/auftraege/generator-auftrag-z2-w0-6-api-token-abilities.md"
 basis_sha: cb500067
 dor_beleg: |
-  steht aus — plan-pruefer, angekuendigt in Paragraf 255. Und das ist hier woertlich
-  gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
-  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+  ERTEILT MIT EINEM RESTPUNKT — plan-pruefer, Paragraf 260 (21.08.).
+  Restpunkt 1: der Dateiname im Ist-Beleg ist falsch, die Zeilennummer richtig.
+  Der Plan-Pruefer nennt es "klein, mechanisch — aber der Generator liest" ihn.
+  VORHERIGE FASSUNG, ausdruecklich erhalten: steht aus (Paragraf 255).
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
 herkunft_dieses_datensatzes: |
   Das Blatt verlangt ihn woertlich: "status_steht_in: docs/STATUS.md — Integrator-Lauf
   erforderlich" (alle sechs tragen die Zeile). Zustand und basis_sha sind AUS DEM BLATTKOPF
@@ -28241,4 +28249,74 @@ herkunft_dieses_datensatzes: |
   ZUM ABLAGEORT: die Blaetter liegen in docs/auftraege/, nicht in docs/auftraege/aktiv/.
   Paragraf 255 meldet das; der Pfad hier zeigt auf den ECHTEN Ort, nicht auf den erwarteten.
   Zieht der Planner sie um, wandert dieser Zeiger mit — er gehoert ihm, nicht mir.
+```
+
+
+## Z2-W0-7 bis -9 — Nachtrag zur Welle Z2, Datensaetze vom Integrator angelegt 21.08.2026
+
+```yaml
+auftrag: "Z2-W0-7"
+titel: "Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.)"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+ballbesitz_grund: |
+  Die DoR steht aus. Paragraf 260 meldet die drei als "ohne Block" und weist den Eintrag
+  dem Integrator zu; die Pruefung selbst hat der Plan-Pruefer noch nicht gefahren.
+vorrang: |
+  VOR Z2-W0-1. Paragraf 260 woertlich: "W0-7 hat ausdruecklich Vorrang vor W0-1."
+  Herkunft ist Yamas Entscheidung vom 21.08. (docs/regelwerk/ENTSCHEIDUNG-RECHTE-ALLE-FUER-ALLE.md,
+  zweimal bestaetigt), mit der Y-6 und Y-9 entschieden sind.
+blatt: "docs/auftraege/generator-auftrag-z2-w0-7-rechte-schalter-planner-item.md"
+basis_sha: 114b98f6
+dor_beleg: |
+  steht aus — der Plan-Pruefer hat W0-1 bis W0-6 gefahren, diese drei noch nicht. Woertlich
+  gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+herkunft_dieses_datensatzes: |
+  Zustellung: plan-pruefer Paragraf 260, "Integrator: W0-7/8/9 ohne Block". Zustand und
+  basis_sha AUS DEM BLATTKOPF, Titel aus der Blattueberschrift. Ich setze keinen Zustand
+  und bilde kein Votum. Die Blaetter liegen in docs/auftraege/, nicht in aktiv/ — der Zeiger
+  zeigt auf den echten Ort.
+```
+
+```yaml
+auftrag: "Z2-W0-8"
+titel: "secure.image und Geschwister: Recht + Bindung statt bloßem auth"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+ballbesitz_grund: |
+  Die DoR steht aus. Paragraf 260 meldet die drei als "ohne Block" und weist den Eintrag
+  dem Integrator zu; die Pruefung selbst hat der Plan-Pruefer noch nicht gefahren.
+blatt: "docs/auftraege/generator-auftrag-z2-w0-8-secure-image-gate.md"
+basis_sha: 114b98f6
+dor_beleg: |
+  steht aus — der Plan-Pruefer hat W0-1 bis W0-6 gefahren, diese drei noch nicht. Woertlich
+  gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+herkunft_dieses_datensatzes: |
+  Zustellung: plan-pruefer Paragraf 260, "Integrator: W0-7/8/9 ohne Block". Zustand und
+  basis_sha AUS DEM BLATTKOPF, Titel aus der Blattueberschrift. Ich setze keinen Zustand
+  und bilde kein Votum. Die Blaetter liegen in docs/auftraege/, nicht in aktiv/ — der Zeiger
+  zeigt auf den echten Ort.
+```
+
+```yaml
+auftrag: "Z2-W0-9"
+titel: "„Deaktiviert' deaktiviert: echter Kontostatus statt Online-Flag"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+ballbesitz_grund: |
+  Die DoR steht aus. Paragraf 260 meldet die drei als "ohne Block" und weist den Eintrag
+  dem Integrator zu; die Pruefung selbst hat der Plan-Pruefer noch nicht gefahren.
+blatt: "docs/auftraege/generator-auftrag-z2-w0-9-kontostatus-echt.md"
+basis_sha: 114b98f6
+dor_beleg: |
+  steht aus — der Plan-Pruefer hat W0-1 bis W0-6 gefahren, diese drei noch nicht. Woertlich
+  gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+herkunft_dieses_datensatzes: |
+  Zustellung: plan-pruefer Paragraf 260, "Integrator: W0-7/8/9 ohne Block". Zustand und
+  basis_sha AUS DEM BLATTKOPF, Titel aus der Blattueberschrift. Ich setze keinen Zustand
+  und bilde kein Votum. Die Blaetter liegen in docs/auftraege/, nicht in aktiv/ — der Zeiger
+  zeigt auf den echten Ort.
 ```
