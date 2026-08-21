@@ -19042,3 +19042,113 @@ mit *„exceeds complexity limits"* ab. Kein Teilergebnis, also kein Ergebnis �
 3. Der Nachziehweg gehört an den **Erzeuger** von `docs/STATUS.md`, nicht an die Datei: eine von
    Hand berichtigte Zeile ist beim nächsten Lauf wieder weg. Wer die Statuswahrheit erzeugt, muss
    die Ankerform mit erzeugen.
+
+## §233 · Posten (c): F-001 und F-002 durchgerechnet — die Formeln halten, die Grenzfälle haben drei Schwellen
+
+**Messstand.** HEAD `51fe6149` (21.08. 18:43:35), Baum sauber, **0 neue Commits** — fünfte Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (252 Min). Ballortungsträger über Blob-SHA belegt:
+`810f37d9e560` / `b0f14db4239b`, beide unverändert. Gemessen 21.08. 18:44–18:47.
+
+### 1 · Die Formeln selbst halten
+
+**F-001** (`d = √(Δx²+Δy²)`) und **F-002** (`φ = atan2(Δy, Δx)`) sind im Bestand gebaut:
+`Math.hypot` **60 Vorkommen**, `Math.atan2` **12**, `Math.sqrt` 8. Beides die vorgeschriebene Form.
+
+**Gegenprobe, die einen Fehlfund verhinderte.** F-002 verbietet ausdrücklich *„`atan2` und nicht
+`atan(Δy/Δx)` — sonst geht der Quadrant verloren"*, und `Math.atan(` hat **3 Vorkommen**. Einzeln
+geöffnet sind es keine Verstöße:
+
+    dachVerschneidung.ts:52   Math.atan(tanA / Math.SQRT2)   Neigung aus Tangens
+    gaubeGeometrie.ts:157     Math.atan(tanB)                Neigung aus Tangens
+
+Beide rechnen einen **Neigungswinkel aus einem Tangens**, nicht einen Richtungswinkel aus Δy/Δx —
+dort ist `atan` korrekt, weil der Wertebereich (−π/2, π/2) für eine Dachneigung genügt und es
+keinen Quadranten zu verlieren gibt. Die dritte Stelle ist ein Test. **Meine Grundmenge („alle
+`Math.atan(`") passte nicht zur Frage („Richtungswinkel einer Strecke").**
+
+### 2 · Der Code bestreitet F-001s ε — begründet, und die Begründung rechnet richtig
+
+`geradenGeometrie.ts:26-38` setzt die Schwelle **nicht** auf den Rohwert, sondern auf den
+normalisierten, und sagt warum. Der Kommentar rechnet zwei Zahlen vor; **beide nachgerechnet:**
+
+| Fall | Kommentar | nachgerechnet |
+|---|---|---|
+| zwei Achsen je 10 m, 1° Zwischenwinkel | `m ≈ 1.745.241` | **1745241** — stimmt |
+| zwei Achsen je 100 mm, **derselbe** Winkel | `≈ 175` | **174,52** — stimmt |
+
+Das Argument trägt: derselbe Winkel, Faktor **10000** im Rohwert, weil `m` ein Kreuzprodukt mit der
+Einheit mm² ist. Geteilt durch das Längenprodukt ist es der Sinus — dimensionslos. Der Satz
+*„F-001s ε = 0,5 mm passt nicht — das ist eine Länge"* (`:36`) ist damit **richtig**, nicht nachlässig.
+
+Und der Beleg, den er anführt, **trifft**: `wallGeometry.ts:84` trägt `const EPS = 1e-6;`, angewandt
+bei `:125` auf `sinHalb`. Ein Code-Zeiger, der stimmt — nach §231/§232 mit 9 bzw. 13 falschen
+Dokument-Zeigern ist das der Erwähnung wert.
+
+`EPS_SINUS = 1e-6` entspricht **5,73·10⁻⁵ Grad**; bei einer 10-m-Achse sind das 0,01 mm Querabweichung,
+bei 100 mm 0,0001 mm. Längenunabhängig, wie beabsichtigt.
+
+### 3 · Was ich NICHT melde, weil es schon dasteht
+
+Vor der Meldung geprüft (§224s Lehre). Die Sammlung kennt den ε-Konflikt bereits an **zwei** Stellen:
+
+- `FORMELSAMMLUNG.md:63-73` — *„Der Grenzfall prüft im Code auf ein EPSILON, nicht auf exakte Null —
+  und das ist besser"*, mit `fangKern.ts:100` als Beleg und der Zusage *„die Formelfassung wird auf
+  `< ε` nachgezogen"*. Das betrifft **F-003**, nicht F-001.
+- `FORMELSAMMLUNG.md:1126-1129` — *„F-001s ε trennt hier nichts Fachliches … Die Schwelle ist für
+  Wandanlagen gemacht — dort heißt ‚unter ε' derselbe Punkt. Beim Referenzmaß heißt es zu kurz
+  gezogen, und das ist eine andere Frage."*
+
+Beides zitiert, nichts nachgebaut (P-02 Punkt 4).
+
+### 4 · Was neu ist: eine dritte Schwelle für dieselbe Frage
+
+Die Sammlung kennt zwei Schwellen für „sind zwei Punkte derselbe?". Der Code trägt eine **dritte**,
+an vier Stellen, die in der Sammlung nirgends vorkommt:
+
+    dachAusschnitt.ts:120   Math.hypot(...) < 1e-4   // doppelte Ecke -> Dreieck
+    dachAusschnitt.ts:166   Math.hypot(...) < 1e-4   // keine zwei (nahezu) identischen Ecken
+    dachAusschnitt.ts:171   Math.hypot(...) < 1e-4   // keine Nullkanten
+    gaubeGeometrie.ts:380   Math.hypot(...) < 1e-4   // Dublettenfilter
+
+Das ist **exakt F-001s Frage** — „Prüfung auf Deckungsgleichheit", so nennt es F-001 selbst.
+
+**Einheitengegenprobe, ohne die der Befund um Faktor 1000 falsch gewesen wäre:** `dachAusschnitt`
+rechnet in **Metern**, nicht Millimetern — belegt über `polygonFlaecheM2(poly)` und
+`(uMax−uMin)·(vMax−vMin)` als `M2`. Also ist `1e-4` **0,1 mm** und nicht 0,1 µm. Ich hatte die
+Umrechnung bereits als „Faktor 5000" notiert, bevor ich die Einheit prüfte.
+
+Damit stehen drei Schwellen für dieselbe Frage nebeneinander:
+
+| Ort | Schwelle | Einheit | als Länge |
+|---|---|---|---|
+| F-001 (Sammlung) | `0,5` | mm | **0,5 mm** |
+| `dachAusschnitt` / `gaubeGeometrie`, 4 Stellen | `1e-4` | **m** | **0,1 mm** |
+| `fangKern.ts:100` (§223) | `1e-9` auf laenge² | mm² | **0,0000316 mm** |
+
+Zwischen der größten und der kleinsten liegt Faktor **≈ 15800**, und die mittlere steht in einer
+anderen Einheit als die beiden anderen. Das ist kein Rechenfehler in einer der drei — jede ist für
+ihren Ort plausibel —, sondern **eine Fachaussage („ab wann sind zwei Punkte derselbe?"), die an
+drei Orten dreimal verschieden beantwortet wird**, und die Sammlung führt nur zwei davon.
+
+### 5 · Und ein Befund über den Rang der Zusage
+
+F-001 und F-002 tragen **keine Ampel**. Von 27 Formel-Überschriften tragen **6** eine. Ohne Ampel
+ist F-001s Grenzfall eine *Beschreibung*, keine abgenommene Zusage — das schwächt den Befund
+bewusst ab, und ich sage es, statt es wegzulassen. Der Satz *„Eine Wand mit d < ε darf nicht
+angelegt werden"* ist im Code als Wandanlage-Sperre **nicht** gebaut; gesucht wurde über die Sache
+(`zu kurz`, `Mindestlänge`, `entartet`, `degeneriert`), nicht über die Zahl.
+
+### 6 · Ball
+
+**Planner** — eine Frage, kein Auftrag zur Umsetzung, weil die Antwort fachlich ist:
+
+1. **Welche der drei Schwellen gilt für „derselbe Punkt"?** Solange drei nebeneinanderstehen, ist
+   jede Prüfung, die eine davon zitiert, unwiderlegbar und unbelegbar zugleich. Nach `CLAUDE.md`
+   wird das nicht still automatisiert — es ist eine Maßtoleranz-Entscheidung.
+2. Danach: die vier `1e-4`-Stellen und F-001 aneinander angleichen **oder** F-001 um den Satz
+   ergänzen, dass die Schwelle je nach Frage verschieden ist — die Sammlung tut das bei `:1126`
+   für das Referenzmaß bereits, nur eben nicht für die Deckungsgleichheit.
+
+Bei mir bleiben offen: **F-026, F-031, F-032**. F-026 trägt bereits eine eigene Berichtigung vom
+11.08. und einen Bezug auf Fremdcode außerhalb des Repos (`~/Desktop/Gemini-Code-Ideen-…`) — das
+ist am gültigen Stand nicht messbar und wird als solches benannt, nicht geraten.
