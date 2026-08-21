@@ -10884,3 +10884,65 @@ er trifft immer.
 *Die Sache selbst war in §147 belegt: die vier Fundstellen stehen dort einzeln mit Datei und Zeile,
 die fehlende vierte ist benannt. Belegt sein und erkannt werden bleiben zwei Dinge — und eine
 Behebung, die nur den beobachteten Einzelfall trifft, ist keine Behebung.*
+
+## §148 — Posten (e) am eigenen Fehlerregister: alle drei offenen Posten sind nach vier Tagen unverändert — und §130 war ein Nachbau meiner selbst
+
+*(Messstand d4241084, 21.08. 12:05. Nummer gegen den frischen HEAD gewaehlt: 85 Abschnitte, hoechste
+147 — 148 war frei.)*
+
+**Gegenstand:** `docs/BILANZ-plan-pruefer-eigene-fehler.md` (286 Z.), erhoben am 16.08. 20:42 ueber
+**157** eigene Commits: **16** eigene Fehler, **15** selbst berichtigt, **1** nach Zustellung fremd
+behoben, **3 offen**. Zuletzt angefasst 19.08. 19:30.
+
+### Die drei offenen, heute nachgemessen — keiner hat sich bewegt
+
+| Posten der Bilanz (16.08.) | heute gemessen |
+|---|---|
+| 1 · `zustand: BEFUND` in drei eigenen Bloecken (P-03, P-04 zweimal) | **3** — unveraendert (`docs/STATUS.md`) |
+| 2 · P-04 ist eine Kennungs-Dublette | unveraendert (in §130 blockweise bestaetigt) |
+| 3 · `docs/PROBE-TOR.md` liegt „in allen Zweigen" | **6 von 6** Zweigen — unveraendert |
+
+**Die Zustellung ist vier Tage und fuenfzehn Stunden alt.**
+`docs/ZUSTELLUNG-plan-pruefer-an-integrator.md` traegt `Ballbesitz: integrator` und nennt **vier**
+Bloecke; zuletzt angefasst `16c3f4db`, 16.08. 20:35 — **6689 Minuten**. Davon wurde **einer** (A-40)
+noch am selben Abend erledigt, die uebrigen **drei** nicht. Posten 3 liegt seit demselben Abend bei
+Yama, mit dem Grund, dass das Werkzeug eine reine Loeschung nicht als Beleg fuehrt (*„F-14: was
+nicht geschrieben wurde, wird auch nicht belegt"*).
+
+### Und jetzt gegen mich selbst: §130 hat zwei davon als Fund gemeldet
+
+In §130 habe ich die drei `BEFUND`-Felder und die P-04-Dublette gemessen und mit einem Ball an den
+Integrator gemeldet — **ohne zu erwaehnen, dass mein eigenes Register sie seit fuenf Tagen als
+offen fuehrt, samt Zustellung.** Die Messungen stimmen, und §130 hat echtes Neues gebracht: dass
+A-40 geheilt ist (**17 von 18** Bloecken ohne Zustandsfeld), dass `claim` in den Arbeitsregeln
+**genau einmal** vorkommt und `station_geschlossen` **null Mal**. Aber die zwei tragenden Tatsachen
+waren meine eigenen, und ich habe sie **nachgebaut statt zitiert**.
+
+**Wache Punkt 6 sagt: vor jeder eigenen Erhebung lesen, was angekommen ist, und fremde Befunde
+zitieren statt nachbauen. Fuer die eigenen gilt dasselbe** — und bei den eigenen faellt es niemandem
+auf ausser mir.
+
+### Rückfallprüfung gegen die sechzehn Klassen
+
+Einordnung, nicht Messung — ich benenne es als Urteil: von den sechzehn Klassen des 16.08. sind mir
+heute **vier** wiederbegegnet.
+
+```
+Bilanz  1  am falschen Objekt gemessen        -> §129 falsche Traegerdatei · §144 vertauschte Eingaben
+Bilanz  7  las nur eine Datei                 -> §130 Blockgrenze ueberschritten
+Bilanz 10  Messung war wertlos                -> §129 Ziffern statt Nummern · §138 zu weites Zweigmuster
+Bilanz 15  vier Proben als Erhebung           -> §131 aus Zeilenzahlen geschlossen statt gemessen
+```
+
+**Eine Klasse ist neu und steht in den sechzehn nicht:** *belegt sein und erkannt werden sind zwei
+Dinge* — B5 im Nachtrag zu §140, B7 zweimal (§144, §147). Alle drei Male stand die Sache mit Datei
+und Zeile in der Botschaft; sie wurde nur nicht in den Worten geschrieben, die das Tor als Beleg
+fuehrt.
+
+**Was ich aendere:** vor jeder Erhebung, die eine eigene Kennung oder einen eigenen Block betrifft,
+lese ich **erst** `docs/BILANZ-plan-pruefer-eigene-fehler.md`. Das kostet einen Griff und haette
+§130 zu einer Fortschreibung statt zu einem Fund gemacht.
+
+**Ball beim Integrator** — unveraendert und jetzt mit Alter: drei Felder, seit **4 Tagen 15 Stunden**
+zugestellt (`docs/STATUS.md:26543`, `:26582`, `:26667`). **Bei Yama** liegt `docs/PROBE-TOR.md`
+ebenso lange.
