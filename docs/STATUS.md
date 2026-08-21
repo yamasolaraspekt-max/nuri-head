@@ -107,8 +107,9 @@
 | **Z2-W0-7** Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.) | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-7-rechte-schalter-planner-item.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §261) · **VORRANG vor Z2-W0-1** (plan-pruefer §260) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
 | **Z2-W0-8** secure.image und Geschwister: Recht + Bindung statt bloßem auth | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-8-secure-image-gate.md` · **DoR ERTEILT** (plan-pruefer §262) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
 | **Z2-W0-9** „Deaktiviert' deaktiviert: echter Kontostatus statt Online-Flag | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-9-kontostatus-echt.md` · **DoR ERTEILT** (plan-pruefer §263) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
-| **Z2-W0-10** api/secure/master-sets*: reversible Stilllegung per Schalter (Y-11 entschieden) | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `14dc15f3` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-10-master-set-api-haertung.md` · **DoR steht aus** · Datensatz vom Integrator angelegt 21.08. auf Zustellung §262/§263 |
+| **Z2-W0-10** api/secure/master-sets*: reversible Stilllegung per Schalter (Y-11 entschieden) | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `14dc15f3` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-10-master-set-api-haertung.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §264) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §262/§263 |
 | **Z2-W0-11** POST ids/callback: CSRF-Ausnahme mit Auto-Produktanlage schließen, tote Ausnahmen aufräumen | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `ae7cee9d` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-11-ids-callback-csrf.md` · **DoR steht aus** · Datensatz vom Integrator angelegt 21.08. auf Zustellung §262/§263 |
+| **Z2-W0-12** Nuriva-Token: Laufzeit 8 h (konfigurierbar), Widerruf, Bereinigung (Y-10 entschieden) | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `14dc15f3` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-12-token-laufzeit-widerruf.md` · **DoR steht aus** · Datensatz vom Integrator angelegt 21.08. auf Zustellung §264 |
 
 ### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
 
@@ -28344,15 +28345,26 @@ herkunft_dieses_datensatzes: |
 auftrag: "Z2-W0-10"
 titel: "api/secure/master-sets*: reversible Stilllegung per Schalter (Y-11 entschieden)"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: generator
+ballbesitz_nachgezogen: |
+  plan-pruefer -> generator, 21.08. vom integrator. TRANSPORT: Paragraf 264 —
+  "Generator: W0-10 ist von meiner Seite frei."
 ballbesitz_grund: |
   Die DoR steht aus. Paragraf 262 und 263 melden beide "W0-10 und W0-11 ohne Block" und
   weisen den Eintrag dem Integrator zu; gefahren hat der Plan-Pruefer sie noch nicht.
 blatt: "docs/auftraege/generator-auftrag-z2-w0-10-master-set-api-haertung.md"
 basis_sha: 14dc15f3
 dor_beleg: |
-  steht aus — woertlich gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
-  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+  ERTEILT — plan-pruefer, Paragraf 264 (21.08.), woertlich "Restpunkte: keine".
+  Der Abschnitt haelt zusaetzlich fest, dass ein Fehlbefund (#116) woertlich
+  richtig und in der Folgerung falsch ist. EMPFEHLUNG AN DEN PLANNER, im Feld,
+  weil sie sonst nur im Bericht steht: die Berichtigung TRENNEN —
+  fix-ledger.md:122 ist woertlich richtig und braucht nur den Zusatz "Auth im
+  Controller"; falsch ist allein 01-repository-inventory.md:558 ("ungeschuetzt").
+  Beides in einem Zug zu berichtigen wuerde einen korrekten Eintrag als falsch
+  markieren.
+  VORHERIGE FASSUNG, ausdruecklich erhalten: steht aus.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
 herkunft_dieses_datensatzes: |
   Zustellung: plan-pruefer Paragraf 262 und 263. Zustand und basis_sha AUS DEM BLATTKOPF,
   Titel aus der Blattueberschrift. Ich setze keinen Zustand und bilde kein Votum.
@@ -28374,4 +28386,25 @@ dor_beleg: |
 herkunft_dieses_datensatzes: |
   Zustellung: plan-pruefer Paragraf 262 und 263. Zustand und basis_sha AUS DEM BLATTKOPF,
   Titel aus der Blattueberschrift. Ich setze keinen Zustand und bilde kein Votum.
+```
+
+
+## Z2-W0-12 — dritter Nachtrag zur Welle Z2, Datensatz vom Integrator angelegt 21.08.2026
+
+```yaml
+auftrag: "Z2-W0-12"
+titel: "Nuriva-Token: Laufzeit 8 h (konfigurierbar), Widerruf, Bereinigung (Y-10 entschieden)"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+ballbesitz_grund: |
+  Die DoR steht aus. Paragraf 264 meldet "W0-12 ohne Block" und weist den Eintrag dem
+  Integrator zu; gefahren hat der Plan-Pruefer ihn noch nicht.
+blatt: "docs/auftraege/generator-auftrag-z2-w0-12-token-laufzeit-widerruf.md"
+basis_sha: 14dc15f3
+dor_beleg: |
+  steht aus — woertlich gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+herkunft_dieses_datensatzes: |
+  Zustellung: plan-pruefer Paragraf 264. Zustand und basis_sha AUS DEM BLATTKOPF, Titel aus
+  der Blattueberschrift. Der Auftrag setzt Yamas Entscheidung Y-10 um (Token-Laufzeit).
 ```
