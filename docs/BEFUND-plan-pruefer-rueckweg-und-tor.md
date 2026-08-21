@@ -11201,3 +11201,60 @@ statt an Messungen: **erst einordnen, dann messen — und „alt" ist keine Eino
 liefern kann, und F-028 wird eingehalten. Eine kleine Beobachtung bleibt: meine stehende
 Yama-Liste fuehrt **keine** der beiden — sie ist kein vollstaendiges Verzeichnis der bei Yama
 liegenden Sperren, und ich sollte sie auch nicht dafuer halten.
+
+## §153 — Posten (e) an §107: nach vier Tagen unverändert, am echten Modul nachgerechnet — und eine Präzisierung an meinem eigenen Satz
+
+*(Messstand 4013b62d, 21.08. 12:24. Nummer gegen den frischen HEAD gewaehlt: 90 Abschnitte, hoechste
+152 — 153 war frei.)*
+
+**Verfolgt:** §107 (`3a2bfd6f`, 17.08. 02:33) — F-040s Grenzfall-Spalte sagt *kaufmaennisch*, der
+Code rundet mit `Math.round`. Alter heute: **6348 Minuten = 4 Tage 9 Stunden**.
+
+**Nichts hat sich bewegt, und das ist gemessen:** seit §107 **0 Commits** auf
+`docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md`,
+`resources/planner/hausplaner/geometry/fangKern.ts` und
+`resources/planner/hausplaner/app/HausplanerApp.tsx`.
+
+**Alle drei Zeiger treffen woertlich:**
+
+```
+W-01/3-FORMELN.md:9    "| **F-040** Rasterfang | die Art `raster` | **192** | **JA** —
+                        kaufmaennisch runden, sonst ist das Raster links der Null verschoben |"
+fangKern.ts:192        "return { punkt: { x: Math.round(p.x / r) * r, y: Math.round(p.y / r) * r }, …"
+HausplanerApp.tsx:773  "let y = -((zeiger.y - stage.y()) / zoom);"
+```
+
+### Nachgerechnet am echten Modul, mit Kalibrierprobe
+
+`fange(p, kandidaten, opt)` aus dem esbuild-Bundle, ohne Kandidaten, nur Raster 100:
+
+| Eingabe | Code | kaufmaennisch | |
+|---|---|---|---|
+| x = 50 · 150 · 250 · 120 | 100 · 200 · 300 · 100 | **gleich** | Kalibrierprobe haelt |
+| **y = −50** | **0** | −100 | **Abweichung 100** |
+| **y = −150** | **−100** | −200 | **Abweichung 100** |
+| **y = −250** | **−200** | −300 | **Abweichung 100** |
+| y = −120 *(kein Gleichstand)* | −100 | −100 | gleich |
+
+**Die Zahlen aus §107 reproduzieren exakt**, vier Tage spaeter, und nur **Gleichstaende** sind
+betroffen — `−120` laeuft sauber.
+
+**Und `raster` wird tatsaechlich immer uebergeben:** genau **ein** Produktiv-Aufrufer,
+`HausplanerApp.tsx:805`, und `:810` setzt `raster: scene.settings.gridSize || 100` — mit Rueckfall.
+Der Fall ist also kein Randfall, wie §107 sagt.
+
+### Die Präzisierung — an meinem eigenen Satz
+
+§107 schreibt: *"x bricht Gleichstaende nach aussen, y nach innen."* Die **Gegenprobe auf der
+x-Achse mit negativen Werten** zeigt: `x = −50 → 0`, `−150 → −100`, `−250 → −200` — **exakt dieselbe
+Abweichung wie bei y**. Die Funktion ist **achsensymmetrisch**; sie unterscheidet nicht x von y,
+sondern **positiv von negativ**.
+
+Der Satz aus §107 bleibt in der **Wirkung** richtig — genau deshalb steht dort der Verweis auf die
+Negierung bei `HausplanerApp.tsx:773`: **y ist fuer jede Zeigerposition negativ**, x nicht. Aber als
+Aussage ueber den Code gelesen waere er falsch. **Praeziser:** *negative Gleichstaende brechen nach
+innen, und y ist immer negativ.* So steht die Ursache vor der Wirkung statt daneben.
+
+**Ball unveraendert beim Planner** (§107): Umstellung auf kaufmaennisches Runden **oder**
+Berichtigung der Grenzfall-Spalte in `W-01/3-FORMELN.md:9` — eine Fachentscheidung, keine Messfrage.
+Nach vier Tagen und neun Stunden liegt sie dort unbewegt.
