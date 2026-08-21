@@ -16774,3 +16774,112 @@ Auftragsform, die mir in dieser Reihe untergekommen ist, und sie gehört benannt
 
 **Beim Integrator unverändert:** der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
 und `:7881` — die, wie oben gemessen, **kein** A-25-Kriterium verletzen und trotzdem stehen.
+
+---
+
+## §211 — Posten (a): 806 Zeiger in 89 Blättern. Der eine, der am 14.08. ausdrücklich berichtigt wurde, war zwölf Stunden später wieder falsch
+
+**Messstand 9c2e7241, Baum sauber, 0 neue Commits. Integrationszweig unverändert 7a82ecfb (live).
+Hinweg zu: 40 fehlen mir, 34 von mir fehlen dort. `docs/STATUS.md` und die 89 Blätter an beiden
+Ständen unbewegt, kein Ball in meiner Bahn. Erhebung 21.08. 17:02–17:05.**
+
+Statt wieder einen Träger zu wählen, habe ich zuerst die **Grundmenge** gemessen:
+
+    Code-Zeiger in docs/auftraege/aktiv/:  806 Vorkommen · 516 verschieden · in 89 Blättern
+    häufigste Ziele: HausplanerApp.tsx 29 · Buehne.tsx 28 · wallGeometry.ts 27 · commit-pruefen.sh 24
+    dichtestes Blatt: W-12-1-ansicht-und-kamera-ablesen.md mit 69 Zeigern
+
+Geprüft habe ich das dichteste. Es ist ein besonderer Fall: **vier seiner elf Commits berichtigen
+ausdrücklich Zeiger** — *„vier md-Zeiger berichtigt"*, *„drei BEREIT-Blätter berichtigt — der
+plan-pruefer meldete sechs Zeiger"*, *„W-12/1 berichtigt — zwei Belegmängel"* und *„die Berichtigung war
+NUR HALB GEZOGEN, fünf Reststellen"*.
+
+### 1. Erst Bewegung, dann Urteil — 17 von 20 können nicht gedriftet sein
+
+Mit dem **frühesten** Blatt-Commit als Bezugspunkt (`230fa551`, 13.08. 07:40 — nicht dem letzten, Lehre
+aus §206):
+
+    20 verschiedene Zieldateien, davon bewegt:  HausplanerApp.tsx (2) · hausplanerStore.ts (1)
+                                                rechte.test.ts (1)
+    unbewegt: 17
+
+Die 17 unbewegten kann ich ohne Öffnen abschließen. Von den geprüften treffen alle **wörtlich**:
+
+    hausplanerStore.ts:20    export type HausplanerModus = '2d' | 'split' | '3d';     wie zitiert
+    studioDaten.ts:97        export type StudioModus = 'start' | 'guided' | 'expert'; wie zitiert
+    HausplanerStudio.tsx:23  const [modus, setModus] = React.useState<StudioModus>…   wie zitiert
+    Buehne.tsx:146           {rasterAn && rasterLinien}                               wie zitiert
+    Buehne.tsx:62            rasterAn: boolean;                                       wie zitiert
+    rechte.test.ts:138       …/\[activeWorkspace, modus, selectedNodeIds…/            wie zitiert
+
+    Fangprobe an der unbewegten Datei: Buehne.tsx:146 damals -> heute :146, Versatz 0
+
+### 2. Der Befund: die Berichtigung hielt 12 Stunden 28 Minuten
+
+`W-12-1-ansicht-und-kamera-ablesen.md:52` trägt den Zeiger mit seinem eigenen Berichtigungsvermerk:
+
+    HausplanerApp.tsx:1261-1269  die Linien ENTSTEHEN hier   [BERICHTIGT 14.08., war :1274-1281]
+
+Gemessen:
+
+    am Blattstand afb56886 (14.08. 22:37)   Z.1261 = const rasterLinien: React.ReactElement[] = [];
+                                            -> die Berichtigung war RICHTIG
+    heute                                   Z.1261 = *          (leere Kommentarzeile)
+                                            dieselbe Zeile steht auf Z.1296          Versatz +35
+    Datei 1499 -> 1534 Zeilen
+
+    Verschoben durch: ec12e9b3, 15.08. 11:05, generator
+                      "A-35 gebaut: trimmen ist das erste Werkzeug nach A7, das wirklich etwas tut"
+
+    Abstand Berichtigung -> erneutes Brechen:  14.08. 22:37 -> 15.08. 11:05  =  12 h 28 min
+
+Das ist die schärfste Ausprägung, die mir in dieser Reihe untergekommen ist. In §202 hatte eine Angabe
+63 Minuten Haltbarkeit, in §109 waren es 45 Minuten — aber dort war es die **erste** Fassung. Hier ist
+es die **Berichtigung**: jemand hat den Fehler gefunden, sauber korrigiert und im Blatt vermerkt, und am
+nächsten Vormittag zeigte der Zeiger wieder woandershin. Wer ihn heute öffnet, findet eine leere
+Kommentarzeile und keinen Hinweis, dass die Sache 35 Zeilen tiefer steht.
+
+### 3. Kein einheitlicher Versatz — zwei unabhängige Einschübe
+
+    :349   const [rasterAn, setRasterAn] = useState(true);   -> heute :353    Versatz  +4
+    :1261  const rasterLinien: React.ReactElement[] = [];    -> heute :1296   Versatz +35
+
+Zwei verschiedene Versätze in derselben Datei. Wie in §201 (+167/+88) und anders als bei
+`ARBEITSREGELN.md` (dort einheitlich +161): es gibt keinen einzelnen Bruch zu beheben, sondern zwei
+Einschübe an verschiedenen Stellen. Eine pauschale Verschiebung aller Zeiger um einen festen Betrag
+wäre falsch.
+
+### 4. Zwei eigene Messungen, die nichts taugen — und das sage ich, statt sie zu verwenden
+
+Für `:1269` und `:1409` habe ich denselben Ansatz gefahren (Inhalt der alten Zeile im heutigen Stand
+suchen). Er scheitert, weil der Inhalt nicht eindeutig ist:
+
+    :1269  damals "}"                  -> Treffer bei Z.10      (jede schliessende Klammer passt)
+    :1409  damals "rasterAn={rasterAn}" -> Treffer bei Z.1372   (derselbe wie :1337, mehrfach vorhanden)
+
+**Ein Inhalt, der mehrfach vorkommt, taugt nicht als Anker.** Beide Zeiger sind mit diesem Verfahren
+nicht auflösbar; ich melde sie als ungeprüft, nicht als getroffen und nicht als gewandert. Für `:1337`
+gilt derselbe Vorbehalt, auch wenn der gefundene Versatz (+35) zum Bild passt — ein Treffer, der
+zufällig stimmen könnte, ist kein Beleg.
+
+### Ball
+
+**Beim Planner:** `docs/auftraege/aktiv/W-12-1-ansicht-und-kamera-ablesen.md` — der Zeiger auf
+`HausplanerApp.tsx:1261` kommt **sechsmal** im Blatt vor (Zeilen 24, 52, 82, 173, 201, 318).
+Fuenf davon sind Belegzeiger und heute alle falsch; das Ziel steht auf `:1296`. Das sechste
+(Zeile 318) ist kein Beleg, sondern der Rueckblick des Blattes auf einen eigenen Messfehler
+(*„Mein erster Durchgang suchte szene.ts:627 und HausplanerApp.tsx:1261"*) — es gehoert in die
+Historie und nicht in die Berichtigung. Dazu `:349` mit Versatz +4.
+
+**Zur Erwägung, und diesmal mit einem Fall, der es belegt:** dieses Blatt hat seine Zeiger schon
+viermal berichtigt, und eine dieser Berichtigungen hielt zwölf Stunden. Der Bezeichner `rasterLinien`
+hätte in allen Fassungen getragen — er steht in `Buehne.tsx:146` sogar als Beleg daneben. Das ist
+dieselbe Empfehlung wie in §206 und §208, nur ist sie hier zum dritten Mal an einem anderen Träger
+belegt.
+
+**Nicht gemeldet, aber gezählt:** 806 Zeiger in 89 Blättern, 516 verschieden. Ich habe elf davon
+geöffnet und 20 Zieldateien auf Bewegung gemessen. Der Rest ist **nicht** geprüft, und ich rechne die
+Quote nicht hoch (B6).
+
+**Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
+und `:7881`, dazu der Restpunkt an A-22-1 (§209) und der eine unzuordenbare Block ab `:2397` (§210).
