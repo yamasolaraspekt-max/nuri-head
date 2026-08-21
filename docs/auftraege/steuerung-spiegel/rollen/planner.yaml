@@ -1,5 +1,9 @@
 auftrag_id: WARTEN-planner-A-37
-generation: 2
+generation: 3            # Praezisierung auf deinen Befund 'wartebedingung' hin — Auftrag sonst unveraendert
+antwort_des_dirigenten: ereignisse/WARTEN-planner-A-37/dirigent-antwort-wartebedingung.yaml
+wartebedingung_praezisiert: "A-42 IST gebaut (26c46f31). Es fehlt EIN Uebergang: das unabhaengige Evaluator-Votum auf 26c46f31, danach der echte Zustandscommit des Integrators (INT-A-42) und ereignisse/A-42/evaluator-ABGENOMMEN.yaml. docs/STATUS.md zeigt BEREIT nur, weil e9e6ee5b leer war."
+nachziehen_regel: "Nachziehen des Worktrees nur als Fast-Forward (git merge --ff-only auto/hausplaner-integration). Ein Merge-Commit ist ein Commit und ohne aktive Lease nicht erlaubt; bei Nicht-FF: melden, nicht mergen."
+lesende_vorbereitung_erlaubt: "A-37-Blatt, scripts/rollen-tor.sh, scripts/commit-pruefen.sh, .githooks/, scripts/rueckweg.py, docs/konzept/agentenarchitektur-v2.md §8, auftraege/Z0-I3-pull-steuerung.vorgabe-yama.md — lesen ja, schreiben nein, bis aktion: spezifizieren"
 rolle: planner
 sitzung_erwartet: 20c9c319-f0f8-4f15-8c01-d54f85ceb5fa   # PID 68609, von Yama 23:11 wiederaufgenommen; Registrierung in sitzungen/planner.yaml bleibt Pflicht
 worktree: /Users/yamanuri/Documents/ticket-rolle-planner

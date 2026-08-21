@@ -32,6 +32,10 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
    **Zustellnachweis ist ausschließlich die gültige ACK-Datei** (Rolle, Sitzungs-ID, Generation, Digest) — ein
    Dateizugriff oder eine Zugriffszeit ist kein Nachweis.
 6. Jede Meldung in der Berichtsform: Ausgangs-SHA · Ergebnis-SHA · geänderte Pfade · Votum · Browser · Abweichung · nächster Ball.
+6b. **Antworten des Dirigenten** stehen unter `ereignisse/<auftrag_id>/dirigent-*.yaml` — bei jedem Pull mitlesen.
+    Eine Antwort ändert den Auftrag nicht; ändert sich der Auftrag, steigt `generation` (dann neues ACK).
+6c. **Nachziehen** des eigenen Worktrees gegen `auto/hausplaner-integration` nur als **Fast-Forward**
+    (`git merge --ff-only`); ein Merge-Commit ist ein Commit und braucht Auftrag + Lease. Nicht-FF → melden.
 7. Zustände: `ZUGETEILT → GELESEN → GECLAIMT → IN_ARBEIT → CODE_FERTIG → ABGENOMMEN` — jeder Übergang mit SHA, Zeit, Rolle, Beleg
    (Übergänge schreibt die Rolle als `ereignisse/<auftrag_id>/<rolle>-<zustand>.yaml`; der Dirigent spiegelt nach STATUS über den Integrator).
 
