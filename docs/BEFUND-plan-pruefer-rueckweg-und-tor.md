@@ -21738,3 +21738,91 @@ Einstellung ist die ausdrückliche, nicht die stillschweigende.
 widerspruch aus §259.
 
 **Nicht geprüft:** W0-8, W0-9.
+
+## §262 · DoR Z2-W0-8 — ERTEILT. Ein eigener Leak-Verdacht gemessen und verworfen
+
+**Messstand.** Mein HEAD `294c5345`, Baum sauber. Integrationszweig `f465d8a6` (21.08. 20:28),
+4 neue Commits. Basis-Stand der Prüfung: **`114b98f6`**. Gemessen 21.08. 20:28–20:33.
+
+### 1 · §260 ist behoben, und die Lage hat sich wieder verschoben
+
+`a4f76fa0`: *„W0-6 nachgezogen und drei weitere Aufträge eingetragen — die Welle Z2 ist damit
+vollständig."* Blöcke **6 → 9**, meine Ballortung **41 → 43**.
+
+    W0-1 · W0-3 · W0-5   generator
+    W0-2 · W0-4 · W0-6   planner   (die drei Restpunkte aus §256, §258, §260)
+    W0-7 · W0-8 · W0-9   plan-pruefer
+
+**Aber es sind inzwischen elf Blätter**, und zwei davon haben wieder keinen Block:
+`Z2-W0-10` (Master-Set-API-Härtung) und `Z2-W0-11` (IDS-Callback-CSRF). Das Muster aus §169, §255
+und §260 wiederholt sich zum **vierten Mal** — nicht als Versäumnis, sondern weil die Blätter
+schneller entstehen, als sie eingetragen werden.
+
+Dazu neu: `14dc15f3` *„GESAMTAUFTRAG Teststand (Yama 21.08., nahezu 1:1) als Klammer — Phasen 1-4"*.
+**Nicht geprüft**, nur zur Kenntnis genommen.
+
+### 2 · DoR Z2-W0-8 — die Belege
+
+| Beleg | frisch gemessen am Stand `114b98f6` | |
+|---|---|---|
+| `routes/web.php:1447` Gruppe `['web','auth']` | `Route::group(['middleware' => ['web', 'auth']], …)` | **trifft** |
+| `:1463-1464` `secure.image` | `Route::get('/secure-image/id/{id}', …)->name('secure.image')` | **trifft** |
+| `ImageController:753-767` — `findOrFail` **vor** `auth()->check()` | `:755` `$image = Image::findOrFail($id);` · `:757` `if (!auth()->check()) { abort(403); }` | **trifft** |
+| `images.customer_id` vorhanden, ungenutzt / 7 Erzeuger | siehe Abschnitt 4 | **teils ungeklärt** |
+
+### 3 · Der Leak-Verdacht — gemessen und verworfen
+
+Die Reihenfolge `findOrFail` → `auth()->check()` legt nahe, dass ein **nicht angemeldeter** Nutzer
+den Unterschied zwischen 403 (ID existiert) und 404 (existiert nicht) sehen kann — ein
+Existenz-Leak. **Der Satz war halb geschrieben.**
+
+Gemessen, wo die Route registriert ist:
+
+    routes/web.php:1473   Route::get('/image/secure/{id}', [ImageController::class, 'secureDownloadScreenshot'])
+    umgebende Gruppe      Z.1447  Route::group(['middleware' => ['web', 'auth']], …)
+
+**Alle drei Routen liegen in der `auth`-Gruppe.** Die Middleware fängt vorher ab; der Controller wird
+für Nicht-Angemeldete nie erreicht. **Kein Leak.** Die Reihenfolge-Korrektur bleibt richtig — aber
+als Härtung in der Tiefe, nicht als Behebung einer offenen Lücke.
+
+**Das Blatt sagt das selbst**, und zwar im Kopf: *„welle: 0 (strukturell; unter der
+Rechte-Entscheidung vom 21.08. heute ohne interne Wirkung — gebaut für den Tag, an dem der Schalter
+zurückgestellt wird)."* Ein Auftrag, der seine eigene heutige Wirkungslosigkeit benennt, statt sie zu
+verschweigen.
+
+### 4 · Eine Zahl, die ich nicht bestätigen kann
+
+Kriterium D verlangt *„7 Erzeuger unverändert (grep-Zählung gleich)"*. Meine Zählung über
+`secure.image|secure-image|image/secure` in `app`, `resources`, `routes` ergibt **11 Dateien**, davon
+eine die Routendefinition → **10 Kandidaten**.
+
+**Ich melde das nicht als Fehler.** Meine Grundmenge ist erkennbar breiter: `ImageController.php`
+ist der **Empfänger**, nicht Erzeuger, und unter den Treffern ist
+`resources/views/admin/new_leads/layouts/profile.blade copy.php` — eine Datei mit **„copy" im Namen
+im Produktivbaum**, die ein Erzeuger sein kann oder eine Leiche. Welche zehn das Blatt auf sieben
+eingegrenzt hat, steht nicht dabei.
+
+**Restpunkt-Kandidat, den ich bewusst nicht als Restpunkt führe:** Kriterium D ist eine
+Zählprobe — sie funktioniert nur, wenn beide Seiten dieselbe Menge zählen. Da das Blatt sein
+Zählverfahren nicht nennt, kann der Evaluator die Zahl nicht nachvollziehen. **Das ist genau die
+B5-Lücke, die das Tor bei meinen eigenen Botschaften bemängelt** — eine Zahl ohne ihren Zählbefehl.
+
+### 5 · Votum
+
+**DoR Z2-W0-8 — ERTEILT. Restpunkte: keine; ein Hinweis.**
+
+Ziel mit ausdrücklichem Nicht-Ziel (*„Objektbindung auf Lead-Ebene ist ausdrücklich Nicht-Ziel — kein
+Lead-Ownership-Modell im Repo"*), Basis-SHA, Ist-Beleg, Scope, vier Kriterien A–D, rotes
+P1-Kriterium, Rückweg. Die drei geprüften Codebelege treffen zeichengenau.
+
+**Hinweis (kein Restpunkt):** Kriterium D sollte den Zählbefehl mitführen, sonst ist es für den
+Evaluator nicht prüfbar.
+
+### 6 · Ball
+
+**Generator**: W0-8 ist von meiner Seite frei.
+**Integrator**: W0-10 und W0-11 ohne Block — viertes Vorkommen.
+**Planner/Dirigent**: Kriterium D um seinen Zählbefehl ergänzen; die Restpunkte aus §256, §258, §260
+und der Widerspruch aus §259 stehen weiter.
+
+**Nicht geprüft:** W0-9, W0-10, W0-11, Gesamtauftrag Teststand.
