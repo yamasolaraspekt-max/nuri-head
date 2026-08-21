@@ -21826,3 +21826,84 @@ Evaluator nicht prüfbar.
 und der Widerspruch aus §259 stehen weiter.
 
 **Nicht geprüft:** W0-9, W0-10, W0-11, Gesamtauftrag Teststand.
+
+## §263 · DoR Z2-W0-9 — ERTEILT. Der wirkungslose Abmelde-Knopf ist vollständig belegt
+
+**Messstand.** Mein HEAD `7a79fe6d`, Baum sauber. Integrationszweig `4ec245de` (21.08. 20:29),
+1 neuer Commit: *„Z2-W0-7 nachgezogen — DoR erteilt ohne Restpunkte, und der Auftrag mit Vorrang ist
+frei"* (§261 gewirkt). Ballortung **43 → 42**. Blätter **11**, Blöcke **9** — W0-10/11 weiterhin ohne
+Eintrag. Basis-Stand der Prüfung: **`114b98f6`**. Gemessen 21.08. 20:31–20:36.
+
+### 1 · Sechs Code-Belege, alle geprüft
+
+| Beleg | frisch gemessen | |
+|---|---|---|
+| `LogUserLogin.php:26` setzt `is_active = 1` | `$user->update(['is_active' => 1]); // Set the user as active` | **trifft** |
+| `LogUserLogout.php:16` setzt `is_active = 0` | `$user->update(['is_active' => 0]);` | **trifft** |
+| geprüft **nur** in `MobileAuthController:68-73` | `:68` `if (Schema::hasColumn('users','is_active') && isset($user->is_active) && !$user->is_active)` → 403 | **trifft** |
+| `logOffUser` (`UserController:449-455`) — falscher Session-Schlüssel | `:451` `$sessionId = session('user_session_' . $userId);` | **trifft** |
+| keine `sessions`-Tabelle | **0** Migrationen mit `session` im Namen | **trifft** |
+| `PlannerApiAuthController:50-59` ohne Statusprüfung | (in §260/§261 bereits gelesen: `:50-80` vergibt Token, keine Statusabfrage) | **trifft** |
+
+**Die Zeilenangabe `:449-455` ist dabei präzise**: Die Signatur steht bei `:437`, aber `:449-455`
+sind genau die **Wirkzeilen** — dieselbe Sorgfalt wie bei W0-2 (§256).
+
+### 2 · Warum der Knopf nichts tut — beide Ursachen belegt
+
+    :449  $user->update(['is_active' => 0]);              // nur das Online-Flag
+    :451  $sessionId = session('user_session_' . $userId);
+    :453  if ($sessionId) {
+    :454      DB::table('sessions')->where('id', $sessionId)->delete();
+    :455  }
+    :457  return redirect()->back()->with('success', 'User has been logged off.');
+
+**Erstens** liest `:451` die Session **des aufrufenden Admins** — `session()` greift immer auf die
+eigene. Ein Schlüssel `user_session_<X>` steht dort nie, also ist `$sessionId` null.
+**Zweitens** ist die Tabelle, die `:454` leeren würde, nicht vorhanden (0 Migrationen).
+
+Selbst wenn der Schlüssel stimmte, liefe das Löschen ins Leere. **Und `:457` meldet Erfolg.** Der
+Admin sieht *„User has been logged off"*, der Nutzer bleibt angemeldet.
+
+### 3 · Der Kern, den ich bestätigen kann
+
+`is_active` wird bei **jedem Login auf 1** gesetzt (`LogUserLogin:26`). Ein Admin, der einen Nutzer
+deaktiviert, setzt dasselbe Feld auf 0 — und der nächste Login des Nutzers setzt es **selbst wieder
+auf 1**, weil kein Anmeldeweg es prüft. Nur `MobileAuthController:68` prüft es, und zwar auf der
+falschen Seite: Es sperrt den Mobil-Login **nach einem Web-Logout**.
+
+**Die Einordnung des Blattes ist damit belegt:** `is_active` ist ein **Online-Flag**, kein
+Kontostatus — und die Oberfläche beschriftet es als „Deactivated".
+
+Der Kopf zieht daraus die richtige Folgerung: *„`is_active` bleibt unangetastet als Online-Flag
+(kein Bestandsverhalten kippt)"*, und der neue Status kommt **additiv** als `users.disabled_at`.
+Das ist die Schutzgrenze aus `CLAUDE.md` (keine Nebenwirkung auf Bestandsdaten) im Auftrag selbst.
+
+### 4 · Was ich nicht prüfen konnte
+
+*„DB: alle 52 Nutzer `is_active=1`"* — eine **Datenbankaussage**. Hier steht keine Datenbank zur
+Verfügung, und nach `CLAUDE.md` dürfte ich ohnehin nur gegen `ticket_testing` messen. Die Zahl 52
+deckt sich mit der aus `114b98f6` (*„Radius jeder der **52** Accounts"*), aber das ist eine
+Übereinstimmung zweier Berichte, **keine eigene Messung** — und nach H-8 kein Beleg.
+
+### 5 · Votum
+
+**DoR Z2-W0-9 — ERTEILT. Restpunkte: keine.**
+
+Ziel, Basis-SHA, sechs geprüfte Ist-Belege, Reproduktion, additives Schema, Scope mit Trait-Muster
+und Middleware in **beiden** Gruppen (`web` und `auth:sanctum`) liegen vor. Der Kopf trägt
+`welle: 0 … **gilt UNABHÄNGIG von der Rechte-Entscheidung vom 21.08.**` — die richtige Einordnung:
+Dies ist **Authentifizierung**, nicht Autorisierung, und fällt damit nicht unter „alle Rechte für
+alle". `ae7cee9d` sagt dasselbe (*„Authentifizierung bleibt unberührt"*).
+
+**Damit sind alle drei Nachzügler-DoR gefahren**: W0-7 (§261), W0-8 (§262), W0-9 (§263) — zusammen
+mit der Welle-0-Reihe aus §255–§260 **neun Voten**.
+
+### 6 · Ball
+
+**Generator**: W0-9 ist von meiner Seite frei.
+**Integrator**: W0-10 und W0-11 ohne Block — fünftes Vorkommen.
+**Yama**: unverändert; A-7 ist der Fall, der **unabhängig** von der Rechte-Entscheidung wirkt — ein
+entlassener Mitarbeiter bleibt heute angemeldet, und das ist keine Rechte-, sondern eine
+Zugangsfrage.
+
+**Nicht geprüft:** W0-10, W0-11, Gesamtauftrag Teststand.
