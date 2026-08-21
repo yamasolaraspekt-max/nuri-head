@@ -13925,3 +13925,101 @@ wandert zu dem Auftrag, der sie baut. **Kein Ball beim Generator** — sein Code
 genauer als die Formel, aus der er stammen soll.
 
 Damit sind **12 von 27** Formeln durchgerechnet.
+
+## §184 — Posten (d): der Ordner „aktiv" ist der stillste im Haus, und die lebenden Aufträge liegen nicht darin
+
+**Messstand** `c0e2a07f` · Baum sauber · 0 neue Commits, weder bei mir noch auf dem
+Integrationszweig (`7a82ecfb`). Dessen Arbeitsbaum trägt unverändert die drei Einträge aus §183,
+darunter `docs/backlog/inventur-2026-08-21-z2.md` — flüchtig, nicht gemessen.
+
+Gegenstand: die **89 Blätter in `docs/auftraege/aktiv/`**, gealtert nach letzter Berührung im
+HEAD-Stand.
+
+### Alter
+
+```
+ältestes    23366 min = 16 T  5 h   A-03-browser-buehne-testdatenbank.md
+            23347 min = 16 T  5 h   A-01-dach-aus-kontur.md
+Median      12623 min =  8 T 18 h
+jüngstes     6654 min =  4 T 14 h   A-37-rollen-tor-und-drei-fehlerursachen.md
+```
+
+**Kein einziges der 89 ist jünger als vier Tage und vierzehn Stunden.**
+
+### Und die Aufträge, an denen heute gearbeitet wird, liegen nicht darin
+
+```
+docs/auftraege/aktiv/     enthält Z1-W1:  0
+docs/auftraege/  (lose)   enthält Z1-W1:  5   — unter insgesamt 120 losen .md-Dateien
+```
+
+Jüngste Berührung eines `Z1-W1`-Blattes: **23 Minuten**. Jüngste Berührung in `aktiv/`:
+**6654 Minuten**. **Faktor 289.** Die fünf Blätter, die gerade fünf Bauten, fünf DoR-Runden und eine
+angeordnete Nachbesserung tragen, liegen zwischen 115 Auftragsblättern aus dem Juli
+(`generator-auftrag-auf27-…` bis `…-auf91-…`).
+
+**Der Ordnername beschreibt das Gegenteil des Inhalts.** Das ist kein Schönheitsfehler: `aktiv/` ist
+der Ort, an dem die Wache jede Runde nach offenen Blättern sucht — Punkt 2 und 3 meines eigenen
+Auftrags nennen ihn wörtlich.
+
+### Was in `aktiv/` wirklich offen ist: neun von 89
+
+Zustand je Kennung, **aus dem Feld `auftrag:` gelesen**, nie aus dem Dateinamen, und nach der
+Zählregel der Wache nur Blöcke **mit** `zustand`-Feld:
+
+```
+77  BETRIEBSBESTAETIGT        1  ERLEDIGT            <- 78 abgeschlossen = 87,6 %
+ 4  ENTWURF                   2  ABGENOMMEN
+ 1  ZURUECKGEZOGEN            1  DECISION_BLOCKED
+ 1  CODE_FERTIG               2  ohne Zustandsfeld
+```
+
+Die neun offenen mit ihrem Alter:
+
+```
+A-05    ABGENOMMEN         13 T  0 h
+A-12    ABGENOMMEN          8 T 23 h
+W-21L   DECISION_BLOCKED    8 T 23 h   <- steht auf Yamas Postenliste
+A-36    ZURUECKGEZOGEN      4 T 17 h
+A-38    ENTWURF             4 T 17 h   ┐
+A-39    ENTWURF             4 T 17 h   │ meine vier DoR-Blätter
+A-40    ENTWURF             4 T 16 h   │
+A-42    ENTWURF             4 T 15 h   ┘
+A-37    CODE_FERTIG         4 T 14 h   <- der EINZIGE CODE_FERTIG im ganzen Statusträger
+```
+
+**W-21L wartet seit 12955 Minuten auf eine Entscheidung**, die auf Yamas Liste steht. Das ist die
+Zahl, die dieser Posten bisher nie hatte.
+
+### A-08 — zwei Blätter, eine Kennung, und der Zustand steht nur in der Tafel
+
+`A-08-halter-nach-kommando.md` und `A-08-NACHTRAG-drei-nein.md` tragen beide `auftrag: A-08`.
+In der Statuswahrheit gemessen:
+
+```
+fünf yaml-Blöcke mit auftrag: A-08   —   zustand-Feld: KEINER
+Tafelzeile :30                       —   `BETRIEBSBESTAETIGT`
+```
+
+Der Zustand existiert also **nur in der Tafel, nicht im Datensatz** — die Lage, die A-30 „die halbe
+Statuswahrheit" nennt, hier in der zweiten Richtung. Bei einem abgeschlossenen Auftrag ist das eine
+Dokumentationslücke, kein laufendes Risiko; ich melde es als Messung, nicht als Alarm.
+
+**Keine Kennungs-Dublette:** über alle Blöcke mit `zustand`-Feld gezählt trägt **jede** Kennung
+genau einen. Gegenprobe an A-38: sieben Blöcke, davon **einer** mit Zustandsfeld — das Verfahren
+unterscheidet richtig.
+
+### Eigener Messfehler, an der Ausgabe erkannt
+
+Meine erste Kennungs-Auslese meldete **87 von 89 „KEIN-BLOCK"** — und lieferte als Kennungen Dinge
+wie `auftrag: A-01` und `"A-13`. Ein Verfahren, das 98 % einer Menge als „nicht auffindbar" meldet,
+ist kein Ergebnis, sondern ein kaputtes Verfahren. **Ursache:** `sed 's/^auftrag: *"\?//'` — das
+`\?` ist in BSD-`sed` keine gültige Wiederholung in BRE, die Ersetzung griff nie. Neu ausgelesen mit
+`awk` (`gsub(/"/,"",v)`), Fangprobe an den ersten fünf Zeilen: `A-01 … A-05`, sauber. Erst danach
+gezählt.
+
+**Ball beim Planner:** die Ablage — entweder ziehen die fünf `Z1-W1`-Blätter nach `aktiv/`, oder der
+Ordner heißt anders. Solange beides nicht stimmt, sucht jede Rolle am falschen Ort.
+Dazu: 78 abgeschlossene Blätter in einem Ordner für Offenes.
+**Ball bei Yama:** `W-21L` ist seit **8 T 23 h** `DECISION_BLOCKED` — mit Zahl, wie verlangt.
+**Ball beim Integrator:** A-08 trägt seinen Zustand nur in der Tafelzeile.
