@@ -24993,3 +24993,109 @@ korrekt gewarnt.
 
 **Unverändert offen beim Planner:** die sechs Posten aus §293. **Beim Generator:** die zwei
 Vorschläge aus §295 (Laufort in der Bilanzzeile, Reichweite von `:201` im Kopf).
+
+## §297 · Posten (c): die Walm-Flächenformel ist exakter als ihre Zusage — und zwei Kanten davor lassen ein leeres Polygon als NaN durch
+
+**Messstand.** HEAD und Zweig beide `830774ba`, Rückstand 0, Baum sauber. Nichts angekommen seit
+§296; der letzte fremde Commit auf dem Zweig war vor 12 Minuten ein Rückweg meiner eigenen Arbeit.
+Ballortung beidseitig **1** (P-02, VORLAGE) und **35** — nichts in meiner Bahn.
+Gemessen 21.08. 22:58–23:08.
+
+Ich habe die Formel gewählt, die am meisten trägt: `walmIstKonsistent`
+(`resources/planner/hausplaner/geometry/dachformVorlagen.ts:414`) ist nach §290 die **einzige**
+Laufzeitkante in ihre Datei hinein.
+
+### 1 · Die Zusage hält — und ist schwächer als die Wahrheit
+
+`dachGeometrie.ts:144-149` begründet, warum der Aufrufer bei `:150` **zusammengesetzt** prüft
+(`!walmIstKonsistent(...) && laengeM !== spannM`): `L === B` sei ein gültiges **Zeltdach** und rechne
+*„nachgemessen bei 30°, 35° und 45° je ±0,0 % gegen den Erhaltungssatz"*. Nachgerechnet mit der
+Formel aus `:157-160`, gegen `Fläche = Grundriss / cos α`:
+
+    L = W = 8 m      30°  ist 73.90  soll 73.90   +0.0 %
+                     35°  ist 78.13  soll 78.13   +0.0 %
+                     45°  ist 90.51  soll 90.51   +0.0 %
+    L > W (nicht behauptet, trotzdem geprueft)
+    10x6  @30°       ist  69.28  soll  69.28   +0.0 %
+    12x8  @35°       ist 117.19  soll 117.19   +0.0 %
+    20x7  @45°       ist 197.99  soll 197.99   +0.0 %
+
+**Die Identität gilt für den ganzen gültigen Bereich L ≥ W, nicht nur beim Gleichstand.** Der Grund
+steht in der Algebra: mit `first = L − W` ist
+
+    2·((L+first)/2)·((W/2)/cos) + 2·(W²/(4cos)) = [W(2L−W) + W²]/(2cos) = LW/cos
+
+— **die W²-Glieder heben sich auf.** Der Kommentar rechtfertigt nur den Gleichstand; er dürfte mehr
+behaupten.
+
+**Und der Defektrand reproduziert auf die letzte Stelle.** Die drei Zahlenpaare aus `:141-142`:
+
+    6x8  @30°   ist  64.66  soll  55.43   +16.7 %      (Kommentar: 64,66 / 55,43 / +16,7)
+    4x10 @30°   ist  80.83  soll  46.19   +75.0 %      (Kommentar: 80,83 / 46,19 / +75,0)
+    3x12 @35°   ist 109.87  soll  43.95  +150.0 %      (Kommentar: 109,87 / 43,95 / +150)
+
+**Sechs von sechs Zahlen exakt.** Die Sperre sitzt richtig, und ihre Begründung ist nachfahrbar.
+
+### 2 · Beim Rechnen gefunden: zwei Fassungen derselben Ableitung
+
+    dachformVorlagen.ts:349   return endlich(Math.max(0, lengthM - widthM));   MIT Schutz
+    dachGeometrie.ts:158      const firstLenM = Math.max(0, laengeM - spannM); OHNE Schutz
+
+`endlich(n)` gibt bei NaN/Infinity **0** zurück (`dachformVorlagen.ts:254-256`). Die geschützte
+Fassung ist **exportiert und hat nur Testverbraucher** (`dachformVorlagen.test.ts:18`, `:175`); im
+Betrieb läuft die ungeschützte Inline-Fassung. Die Auflage *„walmIstKonsistent benutzen, keine
+dritte Fassung"* gilt für die **Konsistenzregel** und ist eingehalten — für die **Firstlänge** gibt
+es zwei Fassungen, und die schwächere ist die laufende.
+
+### 3 · Und daraus folgt ein Fund meiner meistverfolgten Klasse
+
+Bei **leerem Polygon** laufen die Schleifengrenzen in `pruefeRechteckigeKontur:66-79` nie, also
+bleiben `sMin = Infinity`, `sMax = -Infinity`. Gerechnet, nicht geschlossen:
+
+    laengeMm = -Infinity · spannMm = -Infinity · bboxM2 = +Infinity
+    Kante :90   bboxM2 <= 0                     -> false
+    Kante :90   |konturM2 - bboxM2| / bboxM2     -> NaN,  und NaN > 0.01  -> false
+                (polygonFlaecheM2([]) = 0, eigens nachgerechnet)
+    ==> die Kante wirft NICHT
+
+    weiter: laengeM = spannM = -Infinity
+    walmIstKonsistent -> false, ABER laengeM !== spannM -> false
+    ==> auch :150 wirft NICHT
+    firstLenM = Math.max(0, NaN) = NaN · first_laenge_mm = NaN · Flaeche = NaN
+
+**Zwei Schutzprüfungen hintereinander, beide umgangen, Ergebnis NaN — lautlos.** Das ist die
+Fehlerklasse, die ich in dieser Datei elfmal gefunden habe, hier in ihrer reinsten Form: **nicht ein
+falscher Wert, sondern ein Vergleich, der zu NaN wird — und `NaN > x` ist immer falsch, also
+schweigt jede Schranke, die so gebaut ist.**
+
+**Bitter ist die zweite Hälfte:** Die Ausnahme `&& laengeM !== spannM` ist für endliche Werte
+**richtig** (sie lässt das Zeltdach zu) und verschluckt zugleich `-Infinity === -Infinity`. **Eine
+korrekte Ausnahme wird zur Lücke, sobald die Werte den Zahlenbereich verlassen.**
+
+### 4 · Was ich NICHT gemessen habe
+
+**Ob ein leeres `roof.polygon` im Betrieb entstehen kann.** Das entscheidet die Schwere, und es ist
+eine Frage an den Erzeugerpfad, nicht an dieser Datei. Was ich dazu messen kann, ist der
+Hausbrauch — **neun Stellen prüfen `polygon.length >= 3`**, darunter `dachAusschnitt.ts:322` und
+`:488`, `linienBauteile.ts:159`, `roomDetection.ts:167`, `deckenMesh.ts:19`/`:21` und
+`szene.ts:432`/`:461`/`:480`/`:488`. **`dachGeometrie.ts` hat null Längen- und null
+Endlichkeitsprüfungen** — es ist die Ausnahme von einem sonst durchgehaltenen Brauch.
+
+### 5 · Ball
+
+**Planner** — eine Zeile, und sie folgt dem eigenen Hausbrauch:
+
+    in pruefeRechteckigeKontur (dachGeometrie.ts:60) vor der Schleife:
+      polygon mit weniger als 3 Punkten -> DachGeometrieUngueltig, wie an neun anderen Stellen
+
+Zweitens, kleiner: `:158` könnte `walmFirstlaengeGleicheNeigungM` rufen statt die Formel zu
+wiederholen — dann gilt der `endlich()`-Schutz auch im Betrieb, und die exportierte Fassung hätte
+ihren ersten Produktivverbraucher.
+
+**Nicht Ball, sondern Würdigung:** Der Kommentar bei `:140-149` ist die beste Begründung einer
+Ausnahme, die ich in dieser Datei gelesen habe — er nennt die Regel, die Ausnahme, die Messung und
+den Grund, warum die Regel trotzdem die eine Fassung bleibt. **Sechs seiner Zahlen habe ich
+nachgerechnet, alle sechs stimmen.**
+
+**Unverändert offen beim Planner:** die sechs Posten aus §293. **Beim Generator:** die zwei
+Vorschläge aus §295.
