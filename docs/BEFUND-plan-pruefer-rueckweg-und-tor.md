@@ -18401,3 +18401,94 @@ Tor (§220), vier in der FORMELSAMMLUNG (§206), einer in A-29 (§221). Nur die 
 
 **Beim Integrator:** unverändert der Rückweg (49 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
 und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
+
+---
+
+## §227 — Posten (b): der Yama-Posten trägt die Zahl 33. Am gültigen Stand sind es 27 — und die drei Engines ohne Ladeweg sind keine
+
+**Messstand dd1583cf, Baum sauber, 0 neue Commits. Integrationszweig lokal 7a82ecfb (14:31, Alter
+220 Min). Rückstand: ich 40 · planner 104. `docs/STATUS.md` und die 89 Blätter unbewegt, kein Ball in
+meiner Bahn. Erhebung 21.08. 18:11–18:14.**
+
+Die Wache nennt in jeder Runde den offenen Posten *„Entscheidung zu §119/§120 (33 Module ohne
+Ladeweg)"*. Die Zahl gehört frisch gemessen — und nach §224/§226 **am gültigen Stand**, nicht im
+Arbeitsbaum. Die Insel aus `7a82ecfb` extrahiert (346 Dateien, 160 Module ohne Tests, `main.tsx`
+vorhanden) und die Erreichbarkeit über Laufzeit-Kanten gemessen:
+
+    Grundmenge   160 Module (ohne __tests__/__domtests__)
+    Startpunkt   main.tsx
+    erreichbar   133        NICHT erreichbar   27
+
+### 1. Der Verlauf der Zahl
+
+    §120 (Erhebung)         38 von 165   ·  geometry 23 von 55
+    §120 berichtigt          33 von 160
+    Yama-Posten (heute)      33
+    gemessen am gültigen Stand   27 von 160  ·  geometry 18 von 55
+
+**Von 33 auf 27** — sechs Module haben seit der Berichtigung einen Ladeweg bekommen, in `geometry/`
+fünf von 23 auf 18. Die Grundmenge ist unverändert 160; die 165 aus §120 enthielt `__domtests__`.
+
+Verteilung der 27: `geometry/` **18**, `app/tools/` **6**, `projection/` **2**, `domain/` **1**.
+
+### 2. Der Fast-Fehlbefund: drei Engines ohne Ladeweg
+
+In der Liste stehen drei der elf Engines aus §218:
+
+    geometry/heizkreisVerteiler.ts     nicht erreichbar
+    geometry/treppenTypen.ts           nicht erreichbar
+    geometry/wandaufbau.ts             nicht erreichbar
+
+Und `app/dashboard/enginePanels.ts` — die einzige Aufrufstelle nach §206 — nennt **keine** von ihnen
+(je 0 Treffer). Ich war beim Satz „drei Fach-Engines sind vom Startpunkt nicht erreichbar". Die
+Gegenprobe, wer sie überhaupt nennt, hat ihn gekippt:
+
+    app/tools/faehigkeiten.ts:77   { id: 'engine-heizkreis', label: 'Heizkreis-Verteiler',
+                                     gruppe: 'tga-heizung', art: 'engine', zustand: 'in_entwicklung' … }
+    app/tools/faehigkeiten.ts:81   { id: 'engine-uwert', label: 'U-Wert (Wandaufbau)',
+                                     gruppe: 'bau', art: 'engine', zustand: 'in_entwicklung' … }
+    geometry/treppenBauarten.ts:2  // … Getrennt von den Berechnungstypen in treppenTypen.ts.   (Kommentar)
+    domain/scene.types.ts:126      // Nicht `geometry/wandaufbau.Schicht`: …                    (Kommentar)
+
+**Keine der Nennungen ist ein Import.** Zwei sind Registrierungszeilen mit
+**`zustand: 'in_entwicklung'`**, zwei sind Kommentare. Die drei Engines sind nicht verdrahtet, weil sie
+als in Entwicklung geführt werden — und **§120 hat genau das bereits festgehalten**: *„`in_entwicklung`-Engines
+brauchen nichts."*
+
+**Kein Befund.** Zum vierten Mal in dieser Reihe (§221, §222, §223, jetzt §227) hat der geprüfte
+Gegenstand meinen Einwand vorweggenommen. Das ist kein Zufall mehr: **wenn eine Messung einen groben
+Mangel findet, steht die Erklärung meistens schon im Dokument — man muss nur weiterlesen als bis zur
+Zahl.**
+
+### 3. Was das für den Yama-Posten heißt
+
+Der Posten heißt „33 Module ohne Ladeweg". Frisch gemessen sind es **27**, und die Zusammensetzung ist
+bekannt:
+
+    18 in geometry/     6 in app/tools/     2 in projection/     1 in domain/
+    darunter 3 Engines mit ausdrücklichem Zustand 'in_entwicklung'  -> kein Handlungsbedarf
+    darunter 1 Modul mit sprechendem Namen: app/tools/toolCatalogStillgelegt.ts
+
+Die Entscheidung, die Yama offen hat, wird davon nicht kleiner, aber ihre Grundlage ist genauer: **es
+sind 27, nicht 33, und mindestens vier davon sind erklärt.** Ob die übrigen 23 ein Rückbau-, ein
+Verdrahtungs- oder ein Dokumentationsfall sind, ist die Fachentscheidung — meine Aufgabe ist die Zahl,
+und sie ist hiermit frisch.
+
+### 4. Zur Methode
+
+Diese Runde ist die erste, in der ich die Regel aus §226 **vor** der Messung angewandt habe: erst
+geprüft, dass die Insel sich zwischen meinem Baum und dem gültigen Stand um 12 Dateien unterscheidet,
+dann am gültigen Stand gemessen. Hätte ich im Arbeitsbaum gemessen, wäre die Grundmenge dieselbe
+gewesen (160) — die Erreichbarkeit aber möglicherweise nicht, weil `raumProjektion.ts` und
+`dachGeometrie.ts` zu den zwölf unterschiedlichen gehören und beide Kanten tragen.
+
+### Ball
+
+**Bei Yama**, mit frischer Zahl: der Posten „33 Module ohne Ladeweg" steht heute bei **27 von 160**
+(geometry 18 von 55). Drei davon sind Engines mit `zustand: 'in_entwicklung'` und brauchen nach §120
+nichts; eine heißt `toolCatalogStillgelegt.ts` und sagt ihren Zustand im Namen.
+
+**Kein Ball beim Planner aus dieser Runde.**
+
+**Beim Integrator:** unverändert der Rückweg (49 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
+und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
