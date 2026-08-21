@@ -88,6 +88,17 @@ export function projiziereRaum(
         bis: { x: kante.bis.x, y: kante.bis.y },
         grenzflaeche: aussen ? 'aussen' : 'innen',
         azimut_grad: aussen ? azimutDerNormalen(kante.von, kante.bis, ccw ? 'rechts' : 'links') : null,
+        // **Z1-W1-1..5 / K-1 · ehrlicher Ausweis 21.08.:** dieser Ternary liefert heute für JEDE
+        // Wand konstant `'wand'` — der Zweig `'aussenwand_gedaemmt'` ist tot. Gemessen über
+        // `resources/`: `insulationType` hat **genau drei** Fundstellen, und keine davon schreibt —
+        // `domain/scene.types.ts:109` (Typ), `domain/validation.ts:46` (Zod), und diese Zeile
+        // (Lesestelle). Der einzige `construction`-Regler im Panel (`EigenschaftenPanel.tsx:324`)
+        // schreibt ausschließlich `materialId`.
+        //
+        // **Der Zweig wird trotzdem NICHT entfernt.** Das Feld ist nicht falsch, nur unverdrahtet;
+        // ob ein Dämmungs-Regler kommt und was „gedämmt" fachlich für den Bauteiltyp jenseits der
+        // PHP-Grenze bedeutet, ist Y-3 und liegt bei Yama. Bis dahin gilt hier dieselbe Haltung wie
+        // zwei Zeilen tiefer bei `decke`/`boden`: **ehrlich benannt statt still erfunden.**
         bauteil_typ: wandVon.get(kante.wallId)?.construction?.insulationType ? 'aussenwand_gedaemmt' : 'wand',
         oeffnungen,
       };

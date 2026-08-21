@@ -94,3 +94,33 @@ test('Innenwand: geteilte Kante ist innen, Azimut null; Außenkanten bleiben au�
   assert.ok(aussen.length >= 3);
   assert.ok(aussen.every((s) => s.azimut_grad !== null));
 });
+
+// ---- Z1-W1-5 · K-1: der tote Zweig, charakterisiert statt behauptet --------------------------
+//
+// `bauteil_typ` liest `construction.insulationType`. Gemessen über `resources/`: das Feld hat
+// **genau drei** Fundstellen — Typ (`scene.types.ts:109`), Zod (`validation.ts:46`) und die
+// Lesestelle in `raumProjektion.ts:91` — und **keine Schreibstelle**. Der einzige
+// `construction`-Regler im Panel schreibt nur `materialId`.
+//
+// Die beiden Zusagen halten die zwei Hälften auseinander, damit niemand die falsche Folgerung
+// zieht: **der Zweig ist nicht kaputt, er wird nur nicht gefüttert.** Ob ein Dämmungs-Regler kommt,
+// ist Y-3 und liegt bei Yama; bis dahin bleibt Feld, Schema und Zweig unangetastet.
+test('Z1-W1-5 A: ohne insulationType ist bauteil_typ für JEDE Wand konstant "wand"', () => {
+  const waende = rechteck();
+  const raeume = erkenneRaeume(waende, 2500);
+  const projektion = projiziereRaum(raeume[0], raeume, waende, 0, 2500);
+  assert.ok(projektion.wand_segmente.length > 0, 'Vorbedingung: es gibt Segmente');
+  for (const seg of projektion.wand_segmente) {
+    assert.equal(seg.bauteil_typ, 'wand', 'heute wird das Feld von nichts gesetzt');
+  }
+});
+
+test('Z1-W1-5 B (Gegenprobe): mit gesetztem insulationType feuert der Zweig sehr wohl', () => {
+  const waende = rechteck().map((w) =>
+    w.id === 'sued' ? { ...w, construction: { insulationType: 'wdvs' } } : w,
+  );
+  const raeume = erkenneRaeume(waende, 2500);
+  const projektion = projiziereRaum(raeume[0], raeume, waende, 0, 2500);
+  const gedaemmt = projektion.wand_segmente.filter((s) => s.bauteil_typ === 'aussenwand_gedaemmt');
+  assert.equal(gedaemmt.length, 1, 'genau das eine gedämmte Segment — der Zweig ist funktionsfähig');
+});
