@@ -1,6 +1,7 @@
 auftrag_id: A-42
-generation: 2
+generation: 3            # Praezisierung nach Planner-Befund 'codefertig-betreff' (23:22); Auftrag sonst unveraendert
 steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
+warnung_bau_sha: "Die CODE_FERTIG-Meldung e9e6ee5b ist leer, nennt ZWEI Kennungen (A-38 · A-42) und als Bau 0f731c22 — das ist der A-38-Bau (zwei Hook-Dateien). Der A-42-Bau ist 26c46f31 (BEFUNDNOTIZEN.md +9470, STATUS.md -9241, scripts/a42-befundnotizen-umzug.py +407). Abnehmen NUR auf 26c46f31; der Meldung nicht folgen."
 rolle: evaluator
 sitzung_erwartet: 303cefb6-35fd-4c36-9aca-ed10515f59b3   # PID 87750
 worktree: /Users/yamanuri/Documents/ticket-rolle-evaluator

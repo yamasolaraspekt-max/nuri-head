@@ -1,6 +1,7 @@
 auftrag_id: INT-A-42
-generation: 2
+generation: 3            # Praezisierung nach Planner-Befund 'codefertig-betreff' (23:22); Auftrag sonst unveraendert
 steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
+zustandscommit_form: "EIN Zustandscommit je Kennung, Wortlaut exakt nach scripts/status-erzeugen.sh: '<rolle>: zustand: <KENNUNG> · <ZUSTAND> · <rolle> · <beleg-sha>' — e9e6ee5b nannte zwei Kennungen (A-38 · A-42) und den falschen Bau 0f731c22 und wurde vom Muster NICHT erkannt. Fuer A-42 gilt Bau-SHA 26c46f31; Beleg-SHA = Votum-Commit des Evaluators. Vor dem Commit: Muster-Probe gegen die eigene Betreffzeile fahren; nachher git show --stat zeigt docs/STATUS.md."
 rolle: integrator
 sitzung_erwartet: 03737d75-b216-4299-b4ea-595407d3e457   # PID 80335
 worktree: /Users/yamanuri/Documents/ticket
