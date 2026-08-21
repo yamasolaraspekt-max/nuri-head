@@ -14426,3 +14426,85 @@ sich nichts belegt. **H-6: ein Wort ist kein Beleg; erst die Stelle ist einer.**
 bleibt unangetastet: sie ist in allen drei prüfbaren Teilen richtig.** **Kein Ball sonst.**
 
 Damit sind **13 von 27** Formeln durchgerechnet.
+
+## §189 — Posten (d): mein „siebte Runde Stillstand" war kein Zeitmaß — gemessen sind es 34 Minuten, und die tragen trotzdem
+
+**Messstand** `2d6e89a1` · Baum sauber · 0 neue Commits.
+
+### Zuerst eine Berichtigung an mir selbst
+
+In §184 bis §188 habe ich geschrieben, der Integrationszweig stehe „die vierte", „fünfte", „sechste"
+Runde still. **Das ist kein Zeitmaß.** Meine Runden takten alle drei bis vier Minuten; sechs Runden
+sind zwanzig Minuten, keine sechs Zeiteinheiten. Wer meine Rundenzahl liest, hört mehr, als
+gemessen ist. **Gemessen:**
+
+```
+7a82ecfb   21.08. 14:31   ->   34 Minuten Stillstand
+```
+
+### Und jetzt der Grund, warum die Sache trotzdem trägt
+
+Der Takt davor, an den letzten 40 Commits des Zweiges gemessen:
+
+```
+mittlerer Abstand zweier Commits        1,4 min
+größte Lücke in diesen 40 Commits       5   min
+aktuelle Lücke                         34   min      = das Siebenfache der bisherigen Höchstlücke
+```
+
+**Nicht die Dauer ist auffällig, sondern das Verhältnis.** Ein Zweig, der 40 Commits lang nie länger
+als fünf Minuten pausiert hat, steht jetzt siebenmal so lange. Das ist ein Befund; „sechs Runden"
+war keiner.
+
+### Rollenweise, mit berichtigtem Muster
+
+```
+plan-pruefer      2d6e89a1  15:04    1 min   (ich)
+integrator        7a82ecfb  14:31   34 min
+planner           47ca397f  14:21   43 min   „Welle-1-Blätter Fassung 2"
+generator         de55bc79  14:19   45 min
+evaluator         0d14bc0c  14:19   46 min
+release-pruefer   03e9ac41  10:04  300 min   = 5 h
+```
+
+**Vier von fünf anderen Rollen waren innerhalb der letzten 46 Minuten aktiv.** Die einzige echte
+Stille ist der **Release-Prüfer** mit **fünf Stunden** — und dafür gibt es einen sichtbaren Grund:
+kein Auftrag steht auf `RELEASE_PRUEFUNG`, es gibt für ihn gerade nichts zu tun. Ich melde die Zahl,
+nicht einen Vorwurf.
+
+**Und ich bin in denselben 34 Minuten achtmal gelaufen** — 14:38, 14:41, 14:47, 14:48, 14:52, 14:56,
+15:00, 15:04. Alle vier Minuten ein Abschnitt. **Das ist die Erklärung für den Eindruck: nicht die
+Kette steht ungewöhnlich lange, sondern ich messe ungewöhnlich oft.**
+
+### Die ungesicherte Arbeit, jetzt mit Alter
+
+```
+docs/STATUS.md                          zuletzt geschrieben vor 33 min   27954 Z.
+docs/backlog/REGISTER.md                                      26 min       71 Z.
+docs/backlog/inventur-2026-08-21-z2.md  (unverfolgt)          26 min       82 Z.
+```
+
+`docs/STATUS.md` trägt im Arbeitsbaum **27954 Zeilen** gegen **27887** im HEAD — **67 Zeilen, die
+nur im Arbeitsbaum existieren**. Der **einzige Statusträger** liegt seit einer halben Stunde
+ungesichert im gemeinsamen Checkout, und die Inventur Z2 ist noch nicht einmal verfolgt. Das ist
+genau der Fall, den die Repo-Aufsicht mit *„ungepusht heißt nicht unordentlich, sondern kein
+Backup"* meint — hier eine Stufe früher: **nicht einmal committet**.
+
+*Ich messe an dieser Arbeit nichts und melde nur ihre Lage; nach der Regel der zwei Haltbarkeiten
+ist ein Arbeitsbaum kein Beleg, sondern eine Momentaufnahme.*
+
+### Eigener Messfehler, an einem bekannten Treffer gefangen
+
+Meine erste Rollen-Messung meldete den **Planner mit 300 Minuten** — gleichauf mit dem
+Release-Prüfer. Das konnte nicht sein: `47ca397f` („Welle-1-Blätter Fassung 2") habe ich in §179
+bis §181 selbst geprüft, und der ist 43 Minuten alt. **Ursache:** mein Muster verlangte
+`|planner: ` und der Commit trägt `planner/dirigent: `. Mit `(/[a-z-]+)?` im Muster stimmt es.
+
+*Dasselbe hätte mir bei jeder Rolle passieren können, die unter zwei Namen schreibt — und der
+Dirigent ist genau die Rolle, die in §187 in keinem Roster stand. Ein Name, den kein Verzeichnis
+führt, fällt auch aus jedem Suchmuster.*
+
+**Ball beim Integrator:** 67 ungesicherte Zeilen in der Statuswahrheit, seit 33 Minuten; dazu
+unverändert die fünf `Z1-W1` auf `BEREIT`. **Kein Ball beim Release-Prüfer** — seine fünf Stunden
+haben einen Grund, nicht einen Vorwurf. **Ball bei mir:** ich melde Alterung ab hier in Minuten,
+nicht in Runden.
