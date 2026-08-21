@@ -22152,3 +22152,88 @@ getrennt) gehören zu denselben Klassen, die ich in dieser Sitzung an Dokumenten
 §265 (IDS-Shop).
 
 **Nicht geprüft:** Gesamtauftrag Teststand (`14dc15f3`), Konzept Dachschichten-Modell (`53cf8b75`).
+
+## §267 · Posten (b): die zehn TESTBEREIT-Kriterien gemessen — und drei gebaute Aufträge stehen auf ENTWURF
+
+**Messstand.** Mein HEAD `3199a62f`, Baum sauber. Integrationszweig `0ff95a04` (21.08. 20:41),
+4 neue Commits. Ballortung **42 → 41**; einziger eigener Ball ist `Z2-W0-12`, dessen Votum (§266)
+unterwegs ist. **Nichts Neues in meiner Bahn** — daher Vorratsprüfung, Posten **(b)**, am
+ungeprüften Gesamtauftrag. Gemessen 21.08. 20:42–20:44.
+
+### 1 · Dritter Bau aus meinen Voten
+
+`5831c06a`: *„Z2-W0-7 gebaut — ein Schalter statt 52 mal N Datenzeilen, das Item Planner additiv."*
+Damit sind aus zwölf Voten **drei Bauten** geworden: W0-1 (`10c05d8b`, 20:18), W0-3 (`69c85d01`,
+20:36), W0-7 (`5831c06a`, 20:40). Und `0ff95a04` hat W0-11 nachgezogen — mit meiner Formulierung im
+Titel: *„und ein Operand, der im Haus nicht messbar ist"*.
+
+### 2 · Der Gesamtauftrag nennt meine Rolle dreimal — und die Pflicht ist erfüllt
+
+`docs/auftraege/GESAMTAUFTRAG-TESTSTAND-2026-08-21.md` (108 Zeilen, Yama 21.08., *„Wortlaut nahezu
+1:1"*):
+
+    :6   gilt_fuer: alle Rollen (Planner, Plan-Prüfer, Generator, Evaluator, Integrator, Release-Prüfer)
+    :39  Planner vervollständigt den Auftrag, Plan-Prüfer erteilt die DoR, anschließend baut der Generator
+    :52  Jeder Auftrag durchläuft einzeln: Planner → Plan-Prüfer → Generator → Evaluator → Integrator
+
+**Meine Pflicht daraus ist erfüllt**: zwölf DoR (§255–§266), keine verweigert.
+
+Und seine Abgrenzung `:25-27` deckt sich **wörtlich** mit meiner Tabelle aus §260: *„Der Schalter
+betrifft Berechtigungen zum Sehen und Bedienen. Er darf **nicht** erlauben: fremde Datensätze zu
+verfälschen · einen fremden Mitarbeiter als Verfasser einzutragen · fremde Objekte ohne fachliche
+Zuordnung zu überschreiben · Authentifizierung oder echten Kontostatus zu umgehen."* Das sind
+genau W0-2, W0-5/A-4, W0-3 und W0-9.
+
+### 3 · Die zehn Kriterien, gemessen
+
+`:69-74` nennt zehn Bedingungen. Was heute davon nachweisbar ist:
+
+| # | Kriterium | Stand |
+|---|---|---|
+| 1 | alle fünf Z1-Aufträge `ABGENOMMEN` | **nein** — alle fünf `CODE_FERTIG` |
+| 2 | W0-7 abgenommen | **nein** — `ENTWURF` (obwohl gebaut) |
+| 3 | W0-1 bis W0-3 abgenommen | **nein** — alle `ENTWURF` |
+| 4 | Tests nur gegen `ticket_testing` | nicht messbar (kein Testlauf hier) |
+| 5 | Schalter `false` und `true` geprüft | nicht messbar |
+| 6 | ohne Recht bei `false` → 403 | nicht messbar |
+| 7 | Eigentumsverletzungen schalterunabhängig verhindert | nicht messbar |
+| 8 | deaktivierte Nutzer können sich nicht anmelden | **nein** — W0-9 nicht gebaut (§263) |
+| 9 | Browserprüfung durchgeführt | nicht messbar |
+| 10 | Arbeitsbaum sauber, Test-SHA eindeutig | mein Baum sauber; die übrigen kann ich nicht sehen |
+
+**Null von zehn sind heute nachweisbar erfüllt.** Vier sind messbar und **nicht** erfüllt, fünf
+brauchen einen Testlauf oder eine Browserabnahme, einer ist teilweise.
+
+**Die Aussage `TESTBEREIT` / `NICHT TESTBEREIT` spreche ich nicht** — `:86` weist sie einer anderen
+Rolle zu. Ich liefere die Messung, nicht das Urteil.
+
+### 4 · Der Befund: drei gebaute Aufträge stehen vier Stufen zurück
+
+    W0-1  gebaut 10c05d8b 20:18   zustand: ENTWURF
+    W0-3  gebaut 69c85d01 20:36   zustand: ENTWURF
+    W0-7  gebaut 5831c06a 20:40   zustand: ENTWURF
+
+Nach `ARBEITSREGELN.md` §3 liegen zwischen `ENTWURF` und dem Bau **drei Übergänge** (BEREIT →
+IN_ARBEIT → CODE_FERTIG). **Das ist §229 in neuer Auflage** — dort standen fünf gebaute Z1-W1 auf
+`ENTWURF`, und der Integrator hat es damals ausdrücklich eingeordnet (*„die Stufe wird nachgetragen,
+nicht durchlaufen — siehe Paragraf 170, dort an Yama adressiert"*, §253).
+
+**Die Lage ist dieselbe, und sie ist nicht schlimmer geworden**: Der Bau läuft schneller als die
+Statuswahrheit. Aber sie hat jetzt eine **neue Folge**, die es bei Z1-W1 nicht gab: Die
+TESTBEREIT-Kriterien 2 und 3 fragen nach `ABGENOMMEN`. Solange der Zustand vier Stufen hinter dem
+Bau herläuft, ist **kein einziges dieser Kriterien erfüllbar** — unabhängig davon, wie gut gebaut
+wurde.
+
+**Das ist kein Vorwurf an eine Rolle**, sondern die messbare Folge der Reihenfolge, die §170 an Yama
+adressiert hat und die seither offen ist.
+
+### 5 · Ball
+
+**Yama**: Der Posten aus §170 (Stufe wird nachgetragen statt durchlaufen) hat jetzt eine benennbare
+Folge — er blockiert die TESTBEREIT-Feststellung. Das ist neu und ändert seine Dringlichkeit.
+
+**Evaluator**: Kriterium 1 hängt an fünf Abnahmen (Z1-W1-1…5), die laut `fb27bbec` beansprucht sind.
+
+**Integrator**: die Zustände der drei gebauten W0-Aufträge.
+
+**Nicht geprüft:** Konzept Dachschichten-Modell (`53cf8b75`), die Verweistabelle des Fahrplans.
