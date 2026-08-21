@@ -325,6 +325,34 @@ Planner `20c9c319` gen 3 · Plan-Prüfer `3870df7a` gen 2 · Integrator `03737d7
 Auftrag gen 3 übernommen; doppelter `ticket-rolle-generator`-Baum im Evaluator-Scratchpad → A-37-22
 wählt Bäume über Pfad + Zweig). Keine Sacharbeit, kein Commit, keine Lease außerhalb A-42. PID 87659 = `T`.
 Grenze (Yama): Sofortlösung, noch keine unübergehbare Barriere — Durchsetzung gehört in A-37/Z0-I3.
+
+### 23:38–23:55 — A-42 NACHBESSERN → A-42-1 gebaut; Planner-Besetzung Variante C (Yama)
+- **Evaluator-Votum `3f7f61d6`** (rolle/evaluator, `VOTUM-A-42.md`): NACHBESSERN, **ein** Punkt — 10/11
+  erfüllt, 7 zeichengenau, Idempotenz belegt, Bau-Identität selbst geprüft (`26c46f31` = A-42-Bau,
+  `0f731c22` = A-38-Bau, `e9e6ee5b` leer und nennt **beide** SHAs). Punkt 8: drei verwaiste Überschriften.
+  Befunde ohne Abzug: `BEFUNDNOTIZEN.md` ohne Schreibbarriere (bestätigt); vier Wächter kennen die Datei nicht.
+- **Entscheidung Dirigent (Vollmacht):** Nachbesserung = **Verweis** unter jeder Überschrift, nichts entfernen;
+  zuständig **Integrator** (einziger STATUS-Schreiber), nicht Generator.
+- **Integrator `d17d2ddf`** (23:44, nur `docs/STATUS.md`, numstat 4/0): **zwei** Verweise gesetzt (Anker
+  `statuswahrheit_in_zwei_fassungen`, `P-05`, beide in BEFUNDNOTIZEN nachgewiesen); die dritte
+  („A-17 MESSBERICHT") **bewusst nicht** — sie hatte schon vor `26c46f31` keinen Block (am 12.08. nach
+  `6d6823dd` entfernt); ein Verweis wäre eine unrichtige Herkunftsangabe. Gegenprobe 850/850 Zäune,
+  104/104 Datensätze, Zustandszählungen unverändert. Ereignis `integrator-A-42-1-CODE_FERTIG.yaml`,
+  Lease A-42-1 Token 1 gezogen und freigegeben. Rückweg `6af8a5d1` holt das Votum in die Kette.
+  **Formbefund des Integrators an mich:** er las `integrator.yaml` gen 4 mit dem Digest von gen 3 —
+  Datei und `.sha256` entstanden in zwei Runden → README: **atomar veröffentlichen** (tmp + mv beide).
+- **Planner-Besetzung, Yama Variante C:** `79285cf2`/PID 70499 (frühere zweite Plan-Prüfer-Instanz im
+  gemeinsamen Checkout, Commits 291–298 direkt auf der Integration; hat Kollision korrekt gemeldet,
+  keinen Anspruch erhoben) wird **geschlossen** — bis dahin `SIGSTOP` (jetzt `T`); Meldung
+  `SITZUNG-70499-ROLLENWECHSEL` bleibt Beleg; ihr **PID-Befund** (flüchtige Shell-PID statt
+  Sitzungsprozess in 3 von 4 Einträgen) → A-37-25/Z0-I3. `20c9c319`: Hauptprozess 68609 **existiert
+  nicht mehr**, nur sein Cron-Takt läuft headless alle 4 Min (`--resume=20c9c319`) — kein Lebensnachweis
+  als Sitzung; Transkript-mtime ist keiner. `rollen/planner.yaml` gen 4 = **FORMAL UNGÜLTIG, NICHT
+  QUITTIERBAR, Planner NICHT_BESETZT_GEPARKT**; Generation 5 erst mit frischer Sitzung im Worktree
+  `ticket-rolle-planner` (gleiche Sitzungs-ID in `sitzung_erwartet`, Registrierung, ACK; pid =
+  Sitzungsprozess + Startkennung). Meine Zwischenentscheidung „Variante A" (gen 5, 23:47) war vor
+  Yamas C **falsch angesetzt** und ist zurückgenommen/als überholt markiert — Lektion: Rollenbesetzung
+  ist Yamas Entscheidung, nicht Routing. **Kein „6/6 aktiv"**: fünf Rollen quittiert, Planner unbesetzt.
 Die fünf Negativproben gehen als Kriterien
 in das erweiterte A-37-Blatt (Planner); der Integrator transportiert nichts aufgrund der seit 22:04
 entstandenen Generator-Bauten. Das V2-Konzept (`0d897b0e`) ist bereit für die spätere unabhängige
