@@ -53,7 +53,9 @@ in drei Monaten wieder auf und niemand weiß mehr, warum sie damals fiel.
 | [`inventur-2026-08-20-z1.md`](inventur-2026-08-20-z1.md) | Rohbefunde Z1: 7 Befunde (4 Finder), Negativ-Ergebnis Fehler-Linse, Linsen-Übergabe | abgelegt |
 | [`fahrplan-2026-08-20.md`](fahrplan-2026-08-20.md) | Fahrplan in 3 Wellen + 5 Yama-Posten (Y-1/Y-2 entschieden 21.08.) | Welle 1 in Regularisierung |
 | [`inventur-2026-08-21-z2.md`](inventur-2026-08-21-z2.md) | Rohbefunde Z2 Routen/Rechte: 5 Befunde, davon **3 Rechte-Lücken im LIVE-System** (S-1/S-2/S-5) | abgelegt — **Security-Gegenprobe läuft** |
-| [`inventur-2026-08-21-z1-konsistenz.md`](inventur-2026-08-21-z1-konsistenz.md) | Z1 zweite Stufe: Übergabe bestätigt (Ü-1, Y-Kandidat Re-Integration), K-5 Einheiten-Vertrag, K-6 Schreibweisen; 1 Negativ-Ergebnis | abgelegt |
+| [`inventur-2026-08-21-z1-konsistenz.md`](inventur-2026-08-21-z1-konsistenz.md) | Z1 zweite Stufe: Übergabe bestätigt (Ü-1, Y-8 Re-Integration), K-5 Einheiten-Vertrag, K-6 Schreibweisen; 1 Negativ-Ergebnis | abgelegt |
+| [`inventur-2026-08-21-z2-folge.md`](inventur-2026-08-21-z2-folge.md) | Z2b `/admin/energie/*` (E-1 Rückfrage Y-7, E-2 toter Redirect) · Z2c **Nuriva-API: 5 Erstfunde A-1..A-5** (GPS/Fotos/Pläne fremder Kollegen per Token) | abgelegt — Gegenprobe A-1..A-4 läuft |
+| **Welle 0 (Sicherheit LIVE)** | Aufträge Z2-W0-1…6 in `docs/auftraege/`, Übersicht im [Fahrplan-Kopf](fahrplan-2026-08-20.md) | ENTWURF → DoR → Bau, Vorrang |
 
 ## Vorhandene Sammlungen (noch nicht migriert)
 
