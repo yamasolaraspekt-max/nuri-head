@@ -733,8 +733,32 @@ yaml_bericht() { node -e "$YAML_PRUEFER" "$1" 2>&1; }
 # Die Zahl aus dem Bericht — EIN Ort, damit die beiden Laeufe nicht verschieden gelesen werden.
 yaml_kaputt_zahl() { printf '%s\n' "$1" | awk '/^BLOECKE/ {print $4; exit}'; }
 
+# ## Ein verschwundener Pfad ist nicht dasselbe wie ein falscher — seit 20.08.
+#
+# **Gemessen, nicht vermutet:** `git commit -- <alt>` verbucht die Loeschung, sobald der alte Pfad
+# genannt ist (Probe: `alt.md | 1 -`, danach nicht mehr in HEAD). Wird nur der NEUE Pfad genannt,
+# bleibt die Loeschung im Index haengen und der alte Pfad steht weiter in HEAD. **Die Pfadform kann
+# eine Umbenennung also — der einzige Riegel war die `-e`-Pruefung hier.**
+#
+# **Warum ein Schalter und nicht einfach durchlassen:** eine Datei, die aus Versehen verschwunden
+# ist, saehe genauso aus. Ohne ausdrueckliche Absicht waere die Abhilfe fuer Umbenennungen zugleich
+# ein stiller Loeschweg — gegen die Dauerregel „kein Loeschen ohne Freigabe". **Mit `TICKET_ENTFERNEN=1`
+# ist die Entfernung eine Handlung, ohne ihn ein Fehler mit eigener Meldung.**
+#
+# **Was der Riegel weiter faengt:** ein vertippter Pfad ist im Baum NICHT da und in HEAD NICHT da —
+# er faellt unveraendert als `FEHLT` durch. Der Schalter oeffnet nichts fuer ihn.
 for p in "$@"; do
   if [ ! -e "$p" ]; then
+    if [ -n "$(git --no-optional-locks ls-tree --name-only HEAD -- "$p" 2>/dev/null)" ]; then
+      if [ "${TICKET_ENTFERNEN:-0}" = "1" ]; then
+        echo "ENTFERNT   $p  — im Baum weg, in HEAD vorhanden; wird als Loeschung verbucht" >&2
+        continue
+      fi
+      echo "VERSCHWUNDEN $p  — im Baum weg, aber in HEAD vorhanden." >&2
+      echo "           Ist das eine Entfernung oder eine Umbenennung, dann TICKET_ENTFERNEN=1 voranstellen." >&2
+      echo "           Ist es keine, dann ist die Datei verlorengegangen — erst suchen, nicht committen." >&2
+      FEHLER=1; continue
+    fi
     echo "FEHLT      $p" >&2; FEHLER=1; continue
   fi
   if [ ! -s "$p" ]; then
