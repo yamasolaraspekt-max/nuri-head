@@ -9973,3 +9973,55 @@ ist sauber, gemessen und begruendet. Es ist eine Eigenschaft der Zeigerform.
 **Ball beim Planner**, und zwar zum vorhandenen Zeigerbuendel (§77/§93/§102/§104/§106/§107/§109/
 §110/§111), nicht als neuer Strang: 86 Zeiger in 41 Dokumenten, Verschiebung exakt bekannt (+17 bis
 +21 je Datei), also mechanisch nachziehbar. Die Berichtigung an §128 ist meine und steht hier.
+
+## §135 — Posten (b): acht fremde Zahlen nachgezaehlt, alle acht halten — und ein Wort trennt meinen Befund vom seinen
+
+*(Messstand 31356fe3, 21.08. 11:11. Nummer gegen den frischen HEAD gewaehlt: 30 Abschnitte, keine
+Dublette, hoechste §134 — §135 war frei. Klasse nach §132: SHA-verankert.)*
+
+**Die Wache verlangt es ausdruecklich — jede Zahl frisch messen, auch die aus fremden Berichten.**
+Der Herkunftsvermerk-Commit `78e4cc0e` nennt acht Modulzahlen: *"nur FUENF der acht nennen den Wirt
+ueberhaupt (auswechslung 3 Nennungen, dachAusschnitt 1, grundriss 1, holzBauteile 1, holzMengen 2);
+aufbautenStatus, dachOeffnung und sparrenTrennung nennen ihn null Mal."* Gemessen am Stand **vor**
+dem Vermerk (`78e4cc0e^`) — sonst zaehlt man den Vermerk mit.
+
+**Alle acht halten. Ich habe vier Anlaeufe gebraucht, um die richtige Einheit zu treffen:**
+
+| Anlauf | Muster | Ergebnis |
+|---|---|---|
+| 1 | `RoofEngine\|buildFlat\|ObstacleData` | 5 von 8 — dachAusschnitt 0 statt 1 |
+| 2 | `Engine` | 7 von 8 — auswechslung 2 statt 3 |
+| 3 | Vereinigung, **Begriffe** gezaehlt | 7 von 8 — grundriss 2 statt 1 |
+| 4 | Vereinigung, **Zeilen** gezaehlt | **8 von 8** |
+
+Die Aufloesung steckt in zwei Zeilen. `auswechslung.ts:6` nennt `ObstacleData` — ein Wirt-Begriff,
+aber kein *"Engine"*; deshalb war Anlauf 2 zu eng. Und `grundriss.ts:8` traegt *"Die Engine
+(buildFlat)"* — **zwei Begriffe in EINER Nennung**; deshalb war Anlauf 3 zu weit. **"Nennung" ist die
+Zeile, nicht das Wort.** Das steht nirgends, und es entscheidet die Zahl.
+
+**Die uebrigen Zusagen desselben Commits, ebenfalls gezaehlt:**
+
+- *"`class RoofEngine` existiert genau einmal"* — **haelt**: genau eine Definition,
+  `docs/planner/pv-belegung-referenz/DachplanerProPage.tsx:369`. Wer heute nach der Zeichenfolge
+  sucht, findet **sechs** Treffer, weil der Vermerk sie in fuenf Modulen zitiert. **Ein Vermerk, der
+  eine Zeichenfolge zaehlt und sie selbst enthaelt, erschwert seine eigene Nachpruefung** — keine
+  Unsauberkeit, aber der naechste Zaehler muss es wissen.
+- *"269-KB-Referenzdatei"* — **haelt**: 269 099 Bytes (dezimal 269 KB; binaer 263 KiB). Keine
+  Abweichung, nur zwei Einheiten.
+- *"`buildFlat`, `ObstacleData`, `RoofEngine` haben in `resources/` und `app/` null Definitionen"* —
+  **haelt**. Mein erstes Muster gab fuer `RoofEngine` fuenf Treffer; alle fuenf sind der Kommentartext
+  des Vermerks. Ein Muster, das Kommentar nicht von Code trennt, misst hier nichts.
+
+**Und ein Wort, das zwei Dinge heisst (H-9).** Der Commit begruendet, `buildFlat` sei *"nicht per se
+fremd"*, denn es stehe auch in `dachformVorlagen.ts`, *"und die ist **erreichbar und in Benutzung**"*.
+In §133 steht dieselbe Datei unter den **33 ohne Ladeweg**. Beide Saetze stimmen, und sie messen
+Verschiedenes: ausserhalb der Tests wird `dachformVorlagen.ts` **genau einmal** importiert, naemlich
+`renderers/three-d/dachMesh.ts:13` als **`import type { EngineRoofShape }`** — eine Typkante, die zur
+Laufzeit verschwindet. **Im Quellgraphen erreichbar, im Ladegraphen nicht.** Wer *"erreichbar"* als
+*"laeuft"* liest, nimmt aus dem Satz mehr mit, als gemessen wurde — und die Begruendung, `buildFlat`
+sei nicht fremd, traegt dann weiter, als sie darf.
+
+**Ball beim Planner**, klein und sprachlich: *erreichbar* braucht in diesen Blaettern denselben
+Zusatz, den ich mir in §133 selbst auferlegt habe — **Quellgraph oder Ladegraph**. Kein Mangel am
+Vermerk, dessen acht Zahlen ausnahmslos halten; ein Wort, an dem zwei richtige Messungen
+auseinanderlaufen.
