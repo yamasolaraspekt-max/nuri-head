@@ -16544,3 +16544,134 @@ ihn nicht klein.
 
 **Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
 und `:7881`.
+
+---
+
+## §209 — Posten (d): die neun Yama-Posten sind zugestellt, seit viereinhalb Tagen fällig — und es gibt keine Liste, in der sie stehen. Dazu ein Restpunkt an einem abgenommenen Kriterium
+
+**Messstand cc8b3682, Baum sauber, 0 neue Commits. Integrationszweig unverändert 7a82ecfb (live).
+Hinweg zu: 40 fehlen mir, 32 von mir fehlen dort. `docs/STATUS.md` und die 89 Blätter an beiden
+Ständen unbewegt. Erhebung 21.08. 16:49–16:55.**
+
+Die Wache nennt in jeder Runde neun offene Posten bei Yama. Wenn ich sie vorlege, muss ihr Alter frisch
+gemessen sein — also habe ich es gemessen, statt es zu wiederholen.
+
+### 1. Das Alter, je Posten, in Minuten
+
+| Posten | Melde-Commit | Datum | Minuten | |
+|---|---|---|---:|---|
+| Fach-Gate N-003 | `7b8dec42` | 16.08. 20:14 | **6996** | 4 T 20 h 36 min |
+| W-21L | `dc6abbd1` | 16.08. 21:08 | **6942** | 4 T 19 h 42 min |
+| driftender Zeiger `raumAuswahl.ts` | `94c98ad0` | 16.08. 21:46 | **6903** | 4 T 19 h 03 min |
+| Regelkollision §3/E1/Beifang | `eb713631` | 16.08. 22:54 | **6836** | 4 T 17 h 56 min |
+| A-13-Veröffentlichungsbedingung | `82c3e33b` | 16.08. 23:10 | **6820** | 4 T 17 h 40 min |
+| Tragwerk an die Zeichenfläche | `82c3e33b` | 16.08. 23:10 | **6820** | 4 T 17 h 40 min |
+| versatz-Quittung | `82c3e33b` | 16.08. 23:10 | **6820** | 4 T 17 h 40 min |
+| Seed-Weg der Prüfbühne | `82c3e33b` | 16.08. 23:10 | **6820** | 4 T 17 h 40 min |
+| §119 / §120 | `d4ee1555` / `e44825d5` | 20.08. 13:52 / 21.08. 09:57 | **1618 / 413** | 1 T 2 h 58 / 6 h 53 |
+
+**Acht der neun stammen aus einem einzigen Abend:** erste Meldung 20:14, letzte 23:10 — **176 Minuten**.
+Der neunte ist zweigeteilt und jünger.
+
+Commits seit dem jeweiligen Schnitt, im Integrationszweig gemessen:
+
+    seit 7b8dec42 (N-003)          640 Commits
+    seit dc6abbd1 (W-21L)          507 Commits
+    seit 82c3e33b (vier Posten)    361 Commits
+
+**Die Wartezeit ist keine Untätigkeit.** In den 6996 Minuten seit N-003 sind 640 Commits entstanden.
+Das Haus hat gearbeitet — nur nicht an diesen neun.
+
+### 2. Zugestellt sind sie. Das ist der Unterschied zu §199/§200
+
+    7b8dec42  16.08. 20:14   im Integrationszweig: JA
+    dc6abbd1  16.08. 21:08   JA        94c98ad0  16.08. 21:46   JA
+    eb713631  16.08. 22:54   JA        82c3e33b  16.08. 23:10   JA
+    d4ee1555  20.08. 13:52   JA        e44825d5  21.08. 09:57   JA
+
+    Fangprobe (muss NEIN liefern): cc8b3682 -> NEIN, das Verfahren trennt
+
+Alle sieben Melde-Commits sind Vorfahren von `7a82ecfb`. Diese neun Posten liegen **nicht** am zugen
+Hinweg aus §200 — sie sind lesbar, sie warten auf eine Entscheidung. Das gehört ausdrücklich gesagt,
+damit die beiden Sachen nicht vermengt werden.
+
+### 3. Der Befund: es gibt keine Liste, in der sie stehen
+
+Wenn neun Posten bei einer Person liegen, sollte man sie an einem Ort abfragen können. Gemessen in der
+Statuswahrheit:
+
+    Feldnamen, die "yama" enthalten:   45 verschiedene
+    Vorkommen gesamt:                  48
+    davon Unikate (genau 1x):          42
+    häufigster Feldname:               an_yama:  (2x)
+
+Die Namen lauten unter anderem `an_yama`, `bei_yama`, `bei_yama_bleibt`, `bitte_an_yama`,
+`bitte_an_yama_und_es_eilt`, `bitte_an_yama_und_es_ist_dringend`, `was_yama_tun_muss`,
+`was_yama_jetzt_tun_muss`, `was_yama_entscheiden_muss`, `was_yama_bestaetigen_muss`,
+`was_yama_bestaetigen_muesste`. **Fast jedes Vorkommen erfindet seinen eigenen Feldnamen.**
+
+Die Gegenprobe zeigt, dass das nicht die Norm des Hauses ist:
+
+    basis_sha     90 Vorkommen ·  1 Schreibweise      <- Musterfall
+    zustand       92 Vorkommen · 13 Schreibweisen
+    ballbesitz   298 Vorkommen · 14 Schreibweisen
+    yama-Felder   48 Vorkommen · 45 Schreibweisen     <- fast 1:1
+
+**Folge:** Die einzige verlässliche Liste der neun Posten steht **im Wach-Auftrag**, nicht in der
+Statuswahrheit. Fiele die Wache aus, wäre sie nicht rekonstruierbar — man müsste 45 Feldnamen raten.
+Zwei Posten sind besonders schwach verankert: `versatz-Quittung` mit **2** Nennungen in `STATUS.md`
+und `Seed-Weg` mit **3**, gegenüber 64 für N-003 und 53 für W-21L.
+
+**Nicht nachgebaut:** `docs/auftraege/aktiv/A-22-die-statuswahrheit-maschinell-lesbar.md` trägt genau
+diese Klasse — sein Titel lautet *„Doppelte yaml-Schlüssel und uneinheitliche Feldform in
+docs/STATUS.md"*. Sein Kriterium **A-22-4** lautet aber ausdrücklich *„Alle `auftrag:`-Felder tragen
+dieselbe Form"*. Die Yama-Felder waren nicht sein Gegenstand. Das ist **kein** Widerspruch zu A-22,
+sondern eine Luecke daneben, und ich melde sie als solche.
+
+### 4. Restpunkt an einem abgenommenen Kriterium: A-22-1
+
+A-22-1 lautet: **„0 doppelte yaml-Schlüssel MIT ABWEICHENDEM Wert in `docs/STATUS.md`."** A-22 steht
+auf `BETRIEBSBESTAETIGT`, abgenommen `32a2d087` (12.08. 18:11) mit *„sechs von sechs"*. Gemessen mit
+einem Verfahren, das Blockgrenze, Schlüssel **und Wertgleichheit** prüft:
+
+    am Abnahme-Stand 0c53eb7e (12.08. 17:56):  Block Z.1270  A-09  release_vermerk 2x MIT ABWEICHENDEM WERT
+    am heutigen Stand 7a82ecfb:                Block Z.3264  A-09  release_vermerk 2x MIT ABWEICHENDEM WERT
+    Fangprobe an einem konstruierten Block:    greift
+
+**Genau ein Fall, an beiden Ständen derselbe.** Er ist nicht nachträglich entstanden — er stand am
+Abnahmetag schon dort, zwei Tage nachdem ihn `7f592b20` und `aebed075` (beide 10.08., 21:03 und 21:04)
+erzeugt hatten. Die beiden Werte sind verschieden:
+
+    [1] release_vermerk: "release-pruefer (Stamm-Instanz) 10.08.: §10 an der Abnahme af8f2054 …"
+    [2] release_vermerk: "release-pruefer 10.08.: RELEASE_FREI an af8f2054 (§10-Abschnitt im Blatt …"
+
+Beim Parsen gewinnt der zweite; der erste ist für jedes Werkzeug unsichtbar. **Und das Schärfste steht
+im selben Block:** dort finden sich `release_vermerk_1` und `release_vermerk_2` — die nummerierte Form,
+mit der A-22 genau dieses Problem gelöst hat. Die Lösung wurde angewandt und **im selben Block
+unvollständig gelassen**. Der Bau ist nicht falsch; er ist an einer Stelle nicht zu Ende geführt, und
+die Abnahme hat es nicht bemerkt.
+
+### 5. Drei eigene Fehler, alle vor dem Melden gefangen
+
+1. **Suchstring statt Kennung.** Für den neunten Posten suchte ich `119/120` — 0 Treffer. Mit `## §119`
+   bzw. `## §120` sofort gefunden. Eine Kennung, die man verkürzt, ist keine Kennung mehr.
+2. **Falsche Erwartung in der eigenen Fangprobe.** Ich prüfte das Verfahren an §108 und erwartete
+   „21.08."; es lieferte 17.08. 02:39. Nicht das Verfahren war falsch, sondern meine Annahme — §108 ist
+   vier Tage alt. Ich war einen Moment davon entfernt, ein funktionierendes Verfahren zu verwerfen.
+3. **Ein veraltetes Blattfeld für einen Ball gehalten.** `A-22`s Blatt trägt `dor_beleg: "steht aus —
+   plan-pruefer."`, was nach einer offenen DoR in meiner Bahn aussieht. Der Block sagt
+   `BETRIEBSBESTAETIGT`, Ball `—`. Das ist exakt die Klasse aus §201 (66 tote Ballfelder), diesmal an
+   mir selbst erprobt: **hätte ich das Blatt geglaubt, hätte ich eine erledigte DoR neu aufgerollt.**
+
+### Ball
+
+**Bei Yama, mit frisch gemessenem Alter:** die neun Posten oben. Sieben davon sind seit **mehr als
+6800 Minuten** fällig, alle sieben zugestellt und lesbar.
+
+**Beim Integrator** (alleiniger Schreiber der Statuswahrheit): der Restpunkt an A-22-1 —
+`docs/STATUS.md`, A-09-Block ab Z.3264, zweimal `release_vermerk` mit abweichendem Wert, während
+`release_vermerk_1` und `_2` im selben Block korrekt aufgelöst sind. Dazu unverändert der Hinweg und
+die zwei offenen Fences in `docs/STATUS.md:3220` und `:7881`.
+
+**Beim Planner, klein aber folgenreich:** ein einheitliches Feld für Posten, die bei Yama liegen. Heute
+sind es 45 Namen für 48 Vorkommen; `basis_sha` zeigt mit 90:1, dass das Haus es kann.
