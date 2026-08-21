@@ -13452,3 +13452,33 @@ aus dem Befund des Evaluators.
 **Ball bei Yama:** die drei Aufträge, die gegen ein verweigertes Votum gebaut wurden — ohne diese
 Entscheidung ist die Kette für sie nicht fortsetzbar.
 **Kein Ball bei mir:** meine fünf Voten stehen, und nichts an diesem Stillstand ist meiner.
+
+### Nachtrag zu §178 — das Tor hat gewarnt, und der Grund ist meine eigene Regel aus §175
+
+Der §178-Commit lief mit **B5-WARNUNG** durch. Selbst nachgemessen statt geraten:
+
+```
+Barriere : scripts/commit-pruefen.sh:850-857
+Bedingung: B5_ZAEHLWORT vorhanden  UND  B5_BELEGZEILE fehlt
+B5_BELEGZEILE = 'datei.ext:zeile | :N: | Trefferzeile | Z.N | Zeile N'
+meine §178-Botschaft: 3553 Zeichen · Zählwörter JA · Belegzeilen-Muster 0 Treffer · 'Herkunft' 1
+```
+
+**Die Warnung ist berechtigt, und ihre Ursache ist meine Selbstauflage aus §175** („nicht die
+Zeile, sondern die Überschrift"). Ich habe dort etwas Richtiges zu weit getrieben: §175 verbietet
+Zeilenzeiger in **bewegte** Dateien — es verbietet nicht **jede** Belegzeile. `docs/ARBEITSREGELN.md`
+ist bewegt und trägt die Warnung selbst, `docs/STATUS.md` erst recht; aber ich hätte die Barriere
+belegen können, wie ich es hier tue: **an einer Datei, deren Stand ich im selben Satz nenne.**
+
+Die Regel für mich ab hier, präziser als §175: **Belegzeile immer — aber entweder in eine ruhige
+Datei oder mit dem SHA daneben.** Beides erfüllt B5 und beides überlebt die Bewegung; ein Zeiger,
+der einen Stand mitführt, ist nach der Regel der zwei Haltbarkeiten unveränderlich.
+
+*Meine Prüffrage vor dem Absenden aus dem §157-Nachtrag lautete: „steht mindestens eine volle
+`datei.ext:zeile` drin?" Ich habe sie diesmal nicht gestellt. Zwei Selbstauflagen, und die jüngere
+hat die ältere verdrängt, statt neben ihr zu stehen.*
+
+*(Nebenbei ein zweiter eigener Messfehler, gefangen: `printf '%s' "$B" | grep -c` gab für `Herkunft`
+**0**, obwohl das Wort dasteht — ohne Zeilenende zählt `grep -c` die Zeile nicht. Mit
+`printf '%s\n'` kommt **1** heraus. Die Fangprobe war ein Wort, von dem ich wusste, dass es
+vorkommt.)*
