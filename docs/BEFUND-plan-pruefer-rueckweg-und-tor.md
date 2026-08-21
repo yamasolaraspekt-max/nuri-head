@@ -17598,3 +17598,100 @@ modellabhängig wie Stück/m²) gehört dann dazu.
 
 **Beim Integrator:** unverändert der Rückweg (40 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
 und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
+
+---
+
+## §219 — Posten (d): kein einziges der 89 Auftragsblätter ist jünger als vier Tage. 168 ihrer Zeiger stehen unter Verdacht, und ich rechne die Quote nicht hoch
+
+**Messstand 69d9c86d, Baum sauber, 0 neue Commits. Integrationszweig lokal 7a82ecfb (14:31, Alter
+184 Min). Rückstand: ich 40 · planner 104. Letzte Rollenarbeit: Evaluator 14:19, Generator 10:07,
+Planner 10:04. `docs/STATUS.md` und die 89 Blätter unbewegt, kein Ball in meiner Bahn.
+Erhebung 21.08. 17:35–17:40.**
+
+§211 und §216 haben je ein Blatt geprüft. Diese Runde misst die Alterung **aller** 89 — und die
+Verdachtsmenge, die daraus folgt.
+
+### 1. Alle 89 Blätter sind älter als vier Tage
+
+    unter 1 Tag        0 Blätter
+    1-2 Tage           0
+    2-4 Tage           0
+    4-8 Tage          23
+    über 8 Tage       66
+
+    jüngstes    6827 Min = 4 T 17 h   A-37-rollen-tor-und-drei-fehlerursachen.md
+                6885 Min = 4 T 18 h   A-42-befundnotizen-ziehen-um.md
+                6926 Min = 4 T 19 h   A-40-der-zustand-am-facheintrag.md
+    Median     12798 Min = 8 T 21 h
+    ältestes   23541 Min = 16 T  8 h  A-03-browser-buehne-testdatenbank.md
+
+**Kein Auftragsblatt ist in den letzten vier Tagen angefasst worden.** Die drei jüngsten sind
+ausgerechnet die, die auf `ENTWURF` stehen und meinen Ball tragen — A-37, A-42, A-40. A-37 steht dabei
+auf `CODE_FERTIG` mit Ball beim Evaluator (§201), und sein Blatt ist seit 4 Tagen 17 Stunden unberührt.
+
+### 2. Die Verdachtsmenge: 168 von 793 Zeigern
+
+Für jeden Zeiger in einem Blatt habe ich gefragt, ob seine **Zieldatei nach dem letzten Blattstand
+bewegt** wurde:
+
+    Zeiger mit auflösbarer Zieldatei        793   in 70 Blättern
+    davon Zieldatei NACH dem Blatt bewegt   168   in 43 Blättern
+    Verdachtsquote                         21,2 %
+
+    Blätter mit den meisten:  W-14/1 15 · W-10/1 11 · W-18/1 11 · A-01 8 · A-29 8
+                              W-07N 8 · W-12/1 8 · W-31 8
+    Zieldateien, die am meisten Verdacht erzeugen:
+                              HausplanerApp.tsx 34 · commit-pruefen.sh 27 · enginePanels.ts 20
+                              toolRegistry.ts 15 · geradenGeometrie.ts 11 · werkzeugLandkarte.ts 10
+
+Die 34 für `HausplanerApp.tsx` decken sich exakt mit der Grundmenge aus §216 — dieselbe Zahl über
+einen ganz anderen Weg erhoben, und das stützt beide Messungen.
+
+### 3. Was diese 168 NICHT sind
+
+**Sie sind keine 168 Fehler.** §206 hat den Gegenfall belegt: `renderers/three-d/szene.ts:60` hat sich
+seit dem Zeiger bewegt und trifft trotzdem wörtlich. **Bewegung ist ein Verdacht, kein Urteil.**
+
+Einzeln geöffnet und als gewandert **bestätigt** sind bisher sieben Code-Zeiger:
+
+    §206   SzeneProjektionService.php:257 · :258 · enginePanels.ts:210 · sparrenBerechnung.ts:86
+    §211   HausplanerApp.tsx:1261
+    §216   HausplanerApp.tsx:1027 · toolRegistry.ts:316
+
+Sieben von 168 sind geprüft. **Ich rechne die Quote nicht hoch** (B6) — weder nach oben („21 % sind
+kaputt") noch nach unten. Was die Zahl leistet, ist eine geordnete Arbeitsliste: sie sagt, wo zu
+suchen ist, und sie sagt, wo **nicht** — die übrigen 625 Zeiger haben eine Zieldatei, die sich seit
+dem Blatt nicht bewegt hat, und können nicht gewandert sein.
+
+### 4. Zwei Zahlen, die zusammen mehr sagen als einzeln
+
+    Blätter:  alle älter als 4 Tage, Median 8 T 21 h
+    Rollen:   arbeiten auf Ständen mit 100-104 fehlenden Commits (§214)
+
+Beides zusammen beschreibt denselben Zustand aus zwei Richtungen: **die Blätter stehen still, während
+der Code läuft.** Kein Blatt ist in vier Tagen angefasst worden, aber `HausplanerApp.tsx` allein hat in
+dieser Zeit genug Bewegung gehabt, um 34 Zeiger unter Verdacht zu stellen. Das ist keine
+Nachlässigkeit einer Rolle — es ist die Folge davon, dass Blätter Zeilennummern führen und Zeilen
+sich verschieben.
+
+### 5. Ein eigener Fehler: 89 einzelne `git log`-Aufrufe
+
+Meine erste Messung startete `git log` je Blatt und lief nach zwei Minuten in die Zeitüberschreitung —
+**kein Ergebnis, kein Teilergebnis.** Ersetzt durch **einen** Durchgang mit `--name-only`, aus dem ich
+den jüngsten Zeitstempel je Datei ziehe; dasselbe für die 2849 Codedateien. Dieselbe Klasse wie in
+§205 (267 Prozesse) und §211: **eine Schleife über eine Dateiliste ist fast immer der falsche Weg,
+wenn das Werkzeug die Liste selbst ausgeben kann.**
+
+### Ball
+
+**Beim Planner**, jetzt mit einer Arbeitsliste statt einer Klage: 168 verdächtige Zeiger in 43
+Blättern, angeführt von `W-14-1-kopieren-spiegeln-drehen-ablesen.md` (15),
+`W-10-1-decke-und-boden-ablesen.md` (11) und `W-18-1-topologie-pruefen-ablesen.md` (11). Für
+`HausplanerApp.tsx` liegt die Treppe aus §216 bereits vor und deckt 34 davon rechnerisch ab.
+
+**Zur Kenntnis, ohne Ball:** kein Auftragsblatt ist seit vier Tagen angefasst worden, das jüngste ist
+4 T 17 h alt. Ob das Stillstand oder Ruhe ist, entscheidet nicht die Zahl — aber sie gehört auf den
+Tisch, wenn über den Fortgang gesprochen wird.
+
+**Beim Integrator:** unverändert der Rückweg (40 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
+und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
