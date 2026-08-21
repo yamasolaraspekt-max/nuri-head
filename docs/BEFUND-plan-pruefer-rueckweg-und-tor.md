@@ -11064,3 +11064,68 @@ raten waere schlechter als offenlassen.
 **Ball beim Planner**: zwei Zahlen im Messblock neu erheben —
 `REGISTER.md:300` („14 Module") und `:310` („NUR EIN Treffer"). Beide sind kleine Korrekturen an
 einem Block, dessen uebrige sechs Zahlen und dessen Legende sauber sind.
+
+## §151 — Posten (c): F-025 hält in allen 25 Kombinationen, und ihr einziger Beleg liegt außerhalb des Repos
+
+*(Messstand af28b5ea, 21.08. 12:16. Nummer gegen den frischen HEAD gewaehlt: 88 Abschnitte, hoechste
+150 — 151 war frei.)*
+
+**Gegenstand: F-025 · Verbindungstyp einer Ecke (Grat · Kehle · Ortgang)**
+(`docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md:423-438`), eine der noch nie gerechneten.
+Ihre Regel ist vollstaendig entscheidbar, und ihr Grenzfall verknuepft sie mit F-014: *"Eine Kehle
+entsteht **nur** an einspringenden Ecken … wenn doch eine gemeldet wird, ist F-014 falsch."*
+
+### Durchgerechnet am echten Modul — 25 von 25
+
+Umsetzung: `resources/planner/hausplaner/geometry/dachTopologie.ts:160-168`, gerechnet ueber ein
+esbuild-Bundle. `istTraufeImWeiterenSinn` (`:95-97`) fasst genau die drei Typen, die F-025
+„traufartig" nennt: `TRAUFE`, `WALM`, `TEILWALM`.
+
+Alle **25** Kantentyp-Paare an einer Aussenecke gegen die Regel gestellt — **0 Abweichungen**:
+
+```
+             TRAUFE   GIEBEL   PULT_W   WALM     TEILWALM
+TRAUFE       grat     ortgang  neutral  grat     grat
+GIEBEL       ortgang  neutral  neutral  ortgang  ortgang
+PULT_WAND    neutral  neutral  neutral  neutral  neutral
+WALM         grat     ortgang  neutral  grat     grat
+TEILWALM     grat     ortgang  neutral  grat     grat
+```
+
+Verteilung, programmatisch gezaehlt statt abgelesen: **grat 9 · ortgang 6 · neutral 10**.
+
+### Der Grenzfall hält in beide Richtungen
+
+| Lage | innenEcken | Kehlen | Grate |
+|---|---|---|---|
+| Rechteck, alle Kanten Traufe | **0** | **0** ✓ | 4 |
+| L-Form mit einer einspringenden Ecke | **1** | **1** ✓ | 5 |
+
+Sechs Ecken = 1 Kehle + 5 Grate. **Die Querprobe zwischen F-014 und F-025 traegt in beide
+Richtungen** — keine Kehle ohne einspringende Ecke, und genau eine, wo eine ist.
+
+### Der eine Punkt: die Belegstelle ist von innen nicht prüfbar
+
+F-025 nennt als **Belegstelle** `dachdecker_pro_3d.tsx:153–158`. **Diese Datei existiert im Repo
+nicht.** Sie ist **M-01** und liegt ausserhalb: `docs/UEBERNAHME-PLAYGROUND-DACH.md:81` fuehrt sie
+als `~/Desktop/…/dachdecker_pro_3d.tsx`, in `BESTAND-YAMA.md` als *"der wertvollste Fund"*
+bezeichnet. Und `docs/BEFUND-VIER-DACHWELTEN.md:90` haelt ausdruecklich fest, was hier davon gelesen
+wurde: *"Den Inhalt von `dachdecker_pro_3d.tsx` — nur den Eintrag in BESTAND-YAMA.md gelesen."*
+
+**Das ist kein toter Zeiger und kein Vorwurf** — die Formel ist offensichtlich richtig, ihre
+Umsetzung deckt sie in allen 25 Faellen, und die Herkunft ist ehrlich benannt. Es ist eine
+**Eigenschaft**: der einzige Beleg dieser Formel kann von niemandem im Repo nachgeschlagen werden,
+und der Repo-Bestand sagt selbst, dass niemand ihn gelesen hat.
+
+### Zwei Anmerkungen
+
+1. **Zehn von 25 Paaren fallen auf `neutral`** — die ganze `PULT_WAND`-Zeile und -Spalte sowie
+   `GIEBEL`/`GIEBEL`. Die Regel deckt sie mit *"sonst → neutral"* ab; **was dort handwerklich
+   entsteht, sagt sie nicht.** Das ist eine Fachfrage und gehoert an die Dachdecker-Linse, nicht an
+   mich.
+2. **Das Modul hat keinen Ladeweg.** `geometry/dachTopologie.ts` gehoert zu den 33 (§133); alle
+   Aufrufer von `analyzeTopology` stehen in einer Testdatei (§141). Die Formel ist geprueft, sie
+   laeuft nur nicht.
+
+**Kein Ball aus dieser Runde** — F-025 verlangt nichts. Die Belegstelle ist ein Hinweis fuer den
+Planner, falls M-01 je hereingeholt wird: dann waere sie zum ersten Mal pruefbar.
