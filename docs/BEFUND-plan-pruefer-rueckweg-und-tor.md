@@ -20506,3 +20506,97 @@ Ein Hinweis ohne Auftrag für den **Planner**: Diese Zusage ist die einzige mir 
 Bestand, an der eine Reichweiten-Messung **mit Datum, Verfahren und Suchbegriff** dokumentiert ist.
 Wenn irgendein Muster es verdient, kopiert zu werden, dann dieses — und zwar dorthin, wo heute
 Zeilennummern die Last tragen.
+
+## §248 · Posten (e): der Vorlagenweg ist gebaut und ungerufen — 2402 Zeilen hängen an einer Funktion
+
+**Messstand.** HEAD `87076cbb` (21.08. 19:40:47), Baum sauber, **0 neue Commits** — zwanzigste Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (310 Min), STATUS-Blob `810f37d9e560`. Gemessen
+21.08. 19:41–19:42.
+
+§243 hat den Posten vorgemerkt: `applyVorlage` hat keinen gemessenen Aufrufer, obwohl es die
+zentrale Anwendungsfunktion der Dachform-Vorlagen ist. Nach dem Muster aus §247 gemessen — statisch
+**und** dynamisch, mit Suchbegriff und Trefferzahl.
+
+### 1 · Die Kante hinein
+
+    geometry/dachformVorlagen.ts     2402 Zeilen · 41 exportierte Funktionen · 33 Konstanten/Typen
+
+    ALLE Importe des Moduls im gesamten Hausplaner:
+      geometry/dachGeometrie.ts:17    import { walmIstKonsistent } from './dachformVorlagen'   LAUFZEIT
+      renderers/three-d/dachMesh.ts:13  import type { EngineRoofShape } from '…'                nur TYP
+
+**Von 41 exportierten Funktionen wird genau eine zur Laufzeit importiert** — ein Prädikat, das zwei
+Zahlen vergleicht. Der zweite Import ist `import type` und verschwindet beim Kompilieren.
+
+### 2 · Kein zweiter Weg — dynamisch geprüft
+
+    dynamische Importe im Hausplaner: 8
+    davon mit festem Ziel:            import('node:fs') · import('node:path') · import('node:url')
+
+Drei Node-Module, kein Hausplaner-Modul. Die übrigen haben eine Variable als Ziel, und
+`app/dashboard/enginePanels.ts:6` sagt dazu selbst: *„**Deklaration**, kein Ladepfad —
+`import(variable)` überlebt das Vite-Bundling [nicht zuverlässig]."* **Kein dynamischer Weg zum
+Vorlagenmodul.**
+
+### 3 · Null Aufrufe, über Funktionsnamen gemessen
+
+| gesuchte Funktion | Dateien außerhalb des Moduls (ohne Tests) |
+|---|---|
+| `alleVorlagen` | **0** |
+| `findeVorlage` | **0** |
+| `applyVorlage` | **0** |
+| `vorlagenListe` | **0** |
+
+Acht Dateien in `app/` und `renderers/` enthalten die Wörter „dachform" oder „vorlage" — **alle acht
+sind Wortnennungen, keine Verwendungen**: `HausplanerApp.tsx:113` importiert `geschossVorlage` (ein
+anderes Modul), `arbeitsbereiche.ts:71` und `studioDaten.ts:209` tragen Hinweistexte,
+`toolRegistry.ts:126` einen Tooltip, `EigenschaftenPanel.tsx:246` ein Label.
+
+### 4 · Und die Oberfläche führt ihre eigene Liste
+
+`EigenschaftenPanel.tsx:247-255` — das `<select>` für die Dachform:
+
+    <option value="sattel">  <option value="walm">  <option value="pult">  <option value="flach">
+    <option value="l-shape"> <option value="t-shape"> <option value="u-shape">
+
+**Sieben fest verdrahtete Werte.** Die Datei importiert von den Dach-Modulen nur
+`istVerschneidungsForm` aus `domain/roofShape` (`:23`) — **nicht** `dachformVorlagen`.
+
+Im unerreichbaren Modul stehen dagegen **144 `id:`-Kennungen** (Stichprobe, nicht jede einzeln als
+Dachform-Vorlage verifiziert): `zeltdach`, `krueppelwalm`, `mansard`, `mansardwalm`, `schleppdach`,
+`versetztes-pult`, `l-shape-pitched`, `t-shape-pitched` und weitere.
+
+**Das ist eine zweite Wahrheit im Sinne von `CLAUDE.md`** — dieselbe Frage („welche Dachformen gibt
+es?") an zwei Orten beantwortet, und nur einer wirkt. Nicht der größere.
+
+### 5 · Was das an drei eigenen Befunden schärft
+
+- **§229** fand, die Zeltdach-Vorlage sei eine `geplanteVorlage` *„ohne Build-Pfad in updateBuilding"*.
+  Das war zu eng gefasst: **nicht diese eine Vorlage hat keinen Pfad, das ganze Modul hat keinen.**
+- **§230** und **§238** melden Befunde in `dachformVorlagen` (drei Schwellen, `ok` ohne Leser,
+  F-031). Alle betreffen Code, der **geladen, aber nicht gerufen** wird. Der Unterschied ist wichtig
+  und ich hatte ihn nicht: Das Modul liegt seit `60c04eef` (13:33) im Bundle — es wird also
+  ausgeliefert —, aber keine seiner 40 übrigen Funktionen wird betreten.
+- **§243** hat die Ballreihenfolge schon einmal berichtigt. Sie bleibt richtig, und die Begründung
+  ist jetzt stärker: `dachGeometrie.ts:150` ist die **einzige** betretene Stelle des ganzen Moduls.
+
+### 6 · Ball
+
+**Planner** — eine Frage, kein Bauauftrag, weil beide Antworten Fachentscheidungen sind:
+
+> **Ist der Vorlagenweg (2402 Zeilen, 144 Kennungen) unfertig oder aufgegeben?**
+
+| Antwort | Folge |
+|---|---|
+| **unfertig** | Der Anschluss ist der nächste Bauschritt; die 7 hartkodierten `<option>`-Werte werden dann von den Vorlagen abgelöst, nicht ergänzt |
+| **aufgegeben** | Das Modul gehört in den Vorrat oder heraus; solange es im Bundle liegt, wird es ausgeliefert, ohne benutzt zu werden |
+
+Das ist **derselbe Komplex wie §119/§120** (27 Module ohne Ladeweg, Yama-Posten 9) — mit einem
+Unterschied, der ihn schärfer macht: Dieses Modul hat einen Ladeweg und ist trotzdem ungerufen. Es
+fällt damit durch beide Raster: Die Erreichbarkeitsmessung zählt es als erreichbar, die Nutzung
+findet nicht statt.
+
+**Nicht gemessen und ausdrücklich offen:** ob die 144 Kennungen tatsächlich alle Dachform-Vorlagen
+sind — ich habe die Zahl über `id:`-Einträge erhoben und acht davon einzeln gesehen. Und ob das
+Bundling ungerufene Exporte entfernt (*tree shaking*), kann ich hier nicht messen: Dazu gehört ein
+Bauwerkzeug, und in diesem Worktree liegt kein `node_modules` — das Rollen-Tor sagt es in jedem Lauf.
