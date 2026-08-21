@@ -22914,3 +22914,132 @@ Schemaänderung, also Ihr Gate. Das ist kein Sicherheitsloch im Sinne der Rechte
 
 **Nicht geprüft:** die fünf Blätter ohne Block (A-17, A-18, A-37, W-15/1, W-27) — verschoben, weil
 zwei fremde Befunde meine eigene Arbeit betrafen und Vorrang hatten. A-40s Restpunkte stehen aus.
+
+## §275 · Berichtigung zu §273: mein Messfenster war zu kurz — und dahinter lag ein Votum von heute Vormittag, das in keinem Feld steht
+
+**Messstand.** Runde begonnen an `b0f36f66` (Zweig `7ab0fcba`, Rückstand 0). **Vor dem Schreiben neu
+gemessen 21:25: HEAD `28ca0834`, Zweig `2a64326a`, Rückstand 1**, Baum sauber. Gemessen
+21.08. 21:21–21:30. Alle Zahlen unten am jeweils genannten Stand, A-37 zuletzt am Zweigstand
+`2a64326a` bestätigt.
+
+**Angekommen:** `28ca0834` Z2-W0-5 gebaut — **achter Bau aus meinen zwölf Voten** · `2a64326a`
+vier Aufträge auf CODE_FERTIG · `c4edd2cc` *„eigene Fussnote berichtigt"* — dazu Abschnitt 5.
+
+### 1 · Zuerst die Berichtigung — zwei Zahlen in §273 sind falsch
+
+§273 meldete: *„69 der 74 haben einen zustand-Block … 5 ohne Block: A-17 · A-18 · A-37 · W-15/1 ·
+W-27."* **Beides stimmt nicht.**
+
+| | §273 sagte | fensterfrei gemessen |
+|---|---|---|
+| Blätter mit Ball bei mir | 74 | **74** (hält) |
+| davon mit `zustand`-Block | 69 | **74** |
+| ohne Block | 5 | **0** |
+
+Die fünf angeblich blocklosen tragen alle einen Zustand: A-17, A-18, W-15/1, W-27
+**BETRIEBSBESTAETIGT**, A-37 **CODE_FERTIG**.
+
+**Die Ursache ist mein eigenes Muster.** Ich habe den Block ab der `auftrag:`-Zeile über ein Fenster
+von zwölf bis vierzehn Zeilen abgesucht. Der Abstand zwischen Kennung und Zustandsfeld ist aber
+nicht fest:
+
+    A-38     Abstand  1     <- deshalb hielt das Fenster bei den vier aus §272
+    A-18     Abstand 19
+    A-37     Abstand 21
+    A-17     Abstand 25
+    W-15/1   Abstand 27
+    W-27     Abstand 32
+
+Fünf von fünf liegen jenseits des Fensters. Ich habe das Verfahren an A-38 geprüft — an einem Fall
+mit Abstand 1 — und daraus geschlossen, es trage. **H-9 an mir selbst: ein Muster misst, woran es
+ansetzt.** Die vorgeschriebene Probe am bekannten Treffer war richtig gefordert und falsch gewählt:
+sie muss am **ungünstigsten** bekannten Fall ansetzen, nicht am nächstbesten.
+
+**Was §273 inhaltlich sagte, wird dadurch stärker.** Neue Verteilung:
+
+    67 BETRIEBSBESTAETIGT · 3 BEREIT · 1 ENTWURF · 1 CODE_FERTIG · 1 ABGENOMMEN · 1 ZURUECKGEZOGEN
+
+**67 von 74** statt 63 von 69 zeigen auf mich für betriebsbestätigte Aufträge. Der Schluss — das
+Blattfeld ist eine Rollenfolge, kein Ballstand — steht unverändert.
+
+### 2 · Was das Fenster verdeckt hat: A-37 auf CODE_FERTIG
+
+`CODE_FERTIG` ist nach der Wache **meine Bahn**. A-37 lag in §273 als „ohne Block" und fiel damit
+aus jeder Prüfung. Gemessen:
+
+    zustand: CODE_FERTIG      seit 15e11078, 16.08. 20:16   ->  7267 Minuten, 761 Commits
+    ballbesitz: evaluator     seit 8232b63a, 20.08. 15:34   ->  1789 Minuten, 323 Commits
+    Tafelzeile CODE_FERTIG | Evaluator  --  stimmt mit dem Datensatz ueberein
+
+Die im Block notierte Abweichung (*„Die Tafelzeile fuehrt Plan-Pruefer, dieser Datensatz
+integrator"*) ist **behoben**. Der Ball liegt nicht bei mir.
+
+### 3 · Der Fund: das Abnahme-Votum steht in keinem Feld
+
+`62b41d23`, **21.08. 10:04**: *„VOTUM A-37 — **NACHBESSERN**, 20 von 21 Kriterien erfuellt."*
+
+Der Block trägt **24 Schlüssel**. Drei halten die DoR fest — `dor_beleg` (Z.18642),
+`dor_votum_runde_2` (Z.18679), `dor_votum` (Z.18712). **Keiner hält die Abnahme.** Die Wörter
+*NACHBESSERN*, *62b41d23* und *20 von 21* kommen im ganzen Block nicht vor — auch nicht am
+neuesten Zweigstand `2a64326a`, dort eigens nachgemessen.
+
+**Alterung: 681 Minuten, 301 Commits** seit dem Votum; der Zustand steht auf dem Wert von davor.
+Welcher Wert richtig ist, entscheide ich nicht — der offene Punkt A-37-21 wurde um 09:54 vom
+Generator als geschlossen gemeldet und um 21:01 vom Dirigenten entschieden. **Ich melde, dass der
+Vorgang stillsteht und sein Ergebnis nirgends verzeichnet ist.**
+
+### 4 · Warum die neue Probe des Integrators das nicht finden konnte
+
+`7d32c055` meldet: *„Jeder trägt ein erteiltes Votum **im Feld** und stand trotzdem auf dem Zustand
+davor."* Zwölf Fälle, die gesamte Welle 0. **A-37 ist nicht darunter — und kann es nicht sein**,
+denn sein Votum steht in keinem Feld, sondern nur in einer Commit-Botschaft.
+
+**Eine feldlesende Probe findet genau den Fall nicht, bei dem der Transport ins Feld unterblieben
+ist** — den schwersten ihrer eigenen Klasse. Sie meldet zwölf und ist bei dreizehn blind.
+
+**Zweiter, unabhängiger Befund:** Die Probe liegt **nicht im Bestand**. Am Stand `2a64326a`:
+
+    Skripte, die dor_beleg / abnahme_beleg / votum lesen : 0
+    7d32c055 beruehrte genau eine Datei: docs/STATUS.md 112+/16-
+    in den zwoelf Commits davor kein neues Skript
+
+`scripts/drift.py:117-131` vergleicht **Tafelzeile gegen Datensatz** — eine andere Frage. Die
+Votum-Prüfung existiert nur in dem Lauf, der sie erzeugt hat: **ihr Ergebnis ist überliefert, ihr
+Verfahren nicht wiederholbar.**
+
+**Ein eigener Fehlgriff dabei, gefangen bevor er in diesen Abschnitt kam:** Meine erste Gegenprobe
+suchte in `scripts/` nach dem Wort *NACHBESSERN* und meldete **fünf** Treffer — scheinbar der
+Widerspruch zu meiner eigenen Null. Die fünf sind `a27-bau-commit.sh`, `drift.py`,
+`evaluator-rueckstand.py`, `status-erzeugen.sh` und `weck-runde.sh`, und in allen fünf steht
+NACHBESSERN als **Zustandswort in einer Aufzählung**, nie als gelesenes Votum-Feld. Falsche Frage,
+richtige Zahl — die Grundmenge passte zum Verfahren und nicht zur Frage.
+
+### 5 · §273 ist behoben, in sechs Minuten
+
+`c4edd2cc` (21:22) berichtigt die Fußnote, die §273 beanstandet hatte:
+
+    vorher:  "Nr. 116 — der Befundtext ist falsch, das Ergebnis stimmt trotzdem"
+    nachher: "Nr. 116 — die Einstufung ist falsch, nicht der Befundtext"
+
+Der Generator übernimmt die Gegenmessung wörtlich (`routes/api.php:208`/`:219`,
+`app/Http/Kernel.php:47-51`) und zieht die Lehre selbst weiter: *„Ort ist nicht Wirkung schneidet in
+beide Richtungen. Wer vom Ort auf die Wirkung schliesst, irrt — aber wer deshalb die Aussage über
+den Ort für falsch erklärt, irrt auch."* Der alte Absatz bleibt stehen, *„damit die Berichtigung
+nachvollziehbar ist statt spurlos"* — Rückfall-Regel gewahrt. **§273 ist erledigt; 6 Minuten
+zwischen Meldung und Behebung.**
+
+### 6 · Ball
+
+**Evaluator** — A-37: Das Votum vom 10:04 ist seit 681 Minuten ohne Spur in der Statuswahrheit; Ball
+liegt laut Datensatz und Tafel bei Ihnen.
+
+**Integrator** — zwei Posten:
+1. A-37s Abnahme-Votum gehört in ein Feld, wie es die zwölf aus `7d32c055` bekommen haben. Erst
+   danach wird A-37 für die eigene Probe überhaupt sichtbar.
+2. Die Votum-Probe gehört nach `scripts/`, sonst ist ihre nächste Ausführung ein Neubau.
+
+**Planner** — unverändert der Zielsatz von Z2-W0-11 (§274). `fix-ledger.md:143` ist erledigt.
+
+**In eigener Sache:** Die Fenstergrenze steckte in mehreren Messungen dieser Sitzung. §272 und §274
+sind **nicht** betroffen — dort ging es um A-38/A-39/A-40/A-42 mit Abstand 1, und die Werte sind
+heute fensterfrei bestätigt. Ab hier messe ich Blöcke bis zum Zaun statt bis zu einer Zeilenzahl.
