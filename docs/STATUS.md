@@ -99,7 +99,7 @@
 | **Z1-W1-4** dachWerte: eine Quelle, Stilllegung statt Loeschung | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` · **DoR ERTEILT** (plan-pruefer §146) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §146), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Generator** |
 | **Z1-W1-5** insulationType: der tote Zweig sagt, dass er tot ist | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §147), offen: die Zahl · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §180), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
-| **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR steht aus** — plan-pruefer, sechs Runden angekuendigt (§255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
+| **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR steht aus** — plan-pruefer, sechs Runden angekuendigt (§255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-4** Wächter: keine neue Web-Route ohne permission: — Ratschen-Test mit Baseline | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-4-route-permission-waechter.md` · **DoR steht aus** — plan-pruefer, sechs Runden angekuendigt (§255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-5** Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md` · **DoR steht aus** — plan-pruefer, sechs Runden angekuendigt (§255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
@@ -28084,16 +28084,26 @@ herkunft_dieses_datensatzes: |
 auftrag: "Z2-W0-2"
 titel: "Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: planner
+ballbesitz_nachgezogen: |
+  plan-pruefer -> planner, 21.08. vom integrator. TRANSPORT: die DoR ist gefahren,
+  damit endet der Grund, aus dem der Plan-Pruefer den Ball hielt. Paragraf 256 weist
+  weiter: "Planner/Dirigent: Restpunkt 1 — vorschau in den Scope aufnehmen oder
+  ausdruecklich ausschliessen." Der Generator ist erst nach dieser Klaerung frei;
+  das steht dort ebenso woertlich und ist deshalb NICHT der Ball.
 ballbesitz_grund: |
   Die DoR steht aus. Paragraf 255: "Damit liegen sechs DoR in meiner Bahn" — eine ist
   gefahren (Z2-W0-1), fuenf folgen. Bis dahin haelt der Plan-Pruefer den Ball.
 blatt: "docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md"
 basis_sha: 7a82ecfb
 dor_beleg: |
-  steht aus — plan-pruefer, angekuendigt in Paragraf 255. Und das ist hier woertlich
-  gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
-  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+  ERTEILT MIT EINEM RESTPUNKT — plan-pruefer, Paragraf 256 (21.08.).
+  Restpunkt 1: die vierte Route (vorschau) fehlt im Scope des Auftrags. Der
+  Plan-Pruefer ordnet den Fall derselben Klasse zu wie Paragraf 251 bei S-1
+  (fuenf statt acht Controller): "die Grundmenge des Auftrags ist um eins zu klein,
+  und der Auftrag wuerde als erfuellt gelten, ohne es zu sein."
+  VORHERIGE FASSUNG, ausdruecklich erhalten: steht aus (Paragraf 255).
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
 herkunft_dieses_datensatzes: |
   Das Blatt verlangt ihn woertlich: "status_steht_in: docs/STATUS.md — Integrator-Lauf
   erforderlich" (alle sechs tragen die Zeile). Zustand und basis_sha sind AUS DEM BLATTKOPF
