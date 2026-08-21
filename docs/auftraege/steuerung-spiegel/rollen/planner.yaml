@@ -1,0 +1,34 @@
+auftrag_id: WARTEN-planner-A-37
+generation: 1
+rolle: planner
+sitzung_erwartet: "neue Sitzung, von Yama gestartet (TICKET_ROLLE=planner) — Sitzungs-ID bei Registrierung in sitzungen/planner.yaml"
+worktree: /Users/yamanuri/Documents/ticket-rolle-planner
+branch: rolle/planner
+basis_sha: c10c25a7
+prioritaet: P1
+aktion: warten_dann_spezifizieren
+gegenstand: "Warten auf das A-42-Votum. Danach AUSSCHLIESSLICH das A-37-Blatt erweitern (docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md) — Kriterien gehoeren dem Planner, nicht dem Dirigenten."
+vorgaben_yama_fuer_A-37-erweiterung:
+  - "A-37-22 scripts/rueckweg.py kennt ALLE Rollenbaeume inkl. ticket-rolle-release und ticket-rolle-dirigent"
+  - "A-37-23 Rollen-Tor kennt dirigent (Worktree ticket-rolle-dirigent, Zweig rolle/dirigent) mit technisch begrenztem Schreibbereich docs/konzept/, docs/regelwerk/, Steuerungsblaetter in docs/auftraege/; kein Produktcode, kein docs/STATUS.md, kein docs/BEFUNDNOTIZEN.md; Dirigent-Vorgriff 5c9afbc7 uebernehmen ODER ersetzen"
+  - "A-37-24 docs/BEFUNDNOTIZEN.md unter dieselbe Schreibbarriere wie docs/STATUS.md (nur Integrator)"
+  - "A-37-25 echtes pre-commit-Tor (.githooks/pre-commit; core.hooksPath=.githooks; commit-msg prueft heute nur Merges): nackter Commit im falschen Worktree abgewiesen; fehlende Rolle abgewiesen (Exit 5); falscher Zweig abgewiesen; Integrator darf den begrenzten Integrationscommit; Merge-Hook bleibt wirksam; --no-verify als nicht technisch verhinderbare Grenze dokumentiert; jede Negativprobe tatsaechlich ausgeloest"
+  - "js-yaml direkt in package.json + Lockfile, reproduzierbare Installation; Tor in allen Baeumen; 21/21 plus neue Kriterien"
+danach_nach_dor_A-37:
+  - "Z0-I1 vervollstaendigen: TEST_ROLLE verpflichtend, kein Rueckfall auf gemeinsames ticket_testing; Rollen evaluator, generator, security, browser; SELECT DATABASE() vor Migration/Seed/Truncate; vier dauerhafte Testdatenbanken auf der normalen MySQL-Instanz (Y-13); parallele Positiv- und Kollisionsprobe"
+  - "Z0-I2 Claim-Sperre spezifizieren (nicht bauen): docs/konzept/agentenarchitektur-v2.md §8 (rolle/dirigent 0d897b0e)"
+  - "Z0-I3 Pull-Auftragssteuerung spezifizieren (nicht bauen): Yamas Wortlaut in /Users/yamanuri/.ticket-steuerung/auftraege/Z0-I3-pull-steuerung.vorgabe-yama.md"
+voraussetzungen:
+  - "A-42 ABGENOMMEN (ereignisse/A-42/evaluator-ABGENOMMEN.yaml) — dann neue generation dieser Datei mit aktion: spezifizieren"
+erlaubte_pfade:
+  - docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md
+  - "docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md (Erweiterung)"
+  - "docs/auftraege/generator-auftrag-z0-i2-*.md, -z0-i3-*.md (neu, ENTWURF)"
+verboten:
+  - Produktcode aendern
+  - Voten erteilen
+  - docs/STATUS.md / docs/BEFUNDNOTIZEN.md schreiben
+  - Bauen
+status: ZUGETEILT
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/WARTEN-planner-A-37/planner-ack.yaml
+erstellt: "2026-08-21T23:1x Dirigent"

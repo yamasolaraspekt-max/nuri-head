@@ -1,0 +1,20 @@
+auftrag_id: PARKEN-plan-pruefer
+generation: 1
+rolle: plan-pruefer
+sitzung_erwartet: 3870df7a-b0ad-4c78-bcb2-c5aa83a4c09d   # PID 88049
+worktree: /Users/yamanuri/Documents/ticket-rolle-plan-pruefer
+branch: rolle/plan-pruefer
+basis_sha: 1cd33614
+prioritaet: P0
+aktion: parken
+gegenstand: "Sofortiger Stopp fuer A-39 und alle Altposten/Nebenanalysen (Posten 283-297). Keine 'Kein Ball'-Commits. Keine Arbeit bis zum A-42-Votum."
+naechster_auftrag_nach_voraussetzung: "DoR fuer das erweiterte A-37-Blatt (Planner legt vor); danach Z0-I1/Z0-I2; spaeter Konzeptpruefung docs/konzept/agentenarchitektur-v2.md (rolle/dirigent 0d897b0e)"
+voraussetzungen:
+  - "A-42 ABGENOMMEN (ereignisse/A-42/evaluator-ABGENOMMEN.yaml) UND neue generation dieser Datei"
+erlaubte_pfade: []
+verboten:
+  - jede Schreibarbeit
+  - jeder Commit
+status: ZUGETEILT
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/PARKEN-plan-pruefer/plan-pruefer-ack.yaml
+erstellt: "2026-08-21T23:1x Dirigent"

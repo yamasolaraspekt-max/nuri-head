@@ -1,0 +1,23 @@
+auftrag_id: WARTEN-generator-A-37
+generation: 1
+rolle: generator
+sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8   # PID 88088 — die Sitzung im RICHTIGEN Worktree
+sitzung_gestoppt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b   # PID 87659, SIGSTOP, committete direkt im gemeinsamen Checkout; kein CONT ohne Yama
+worktree: /Users/yamanuri/Documents/ticket-rolle-generator
+branch: rolle/generator
+basis_sha: abd1719c
+prioritaet: P1
+aktion: warten
+gegenstand: "Nichts bauen. Warten auf die DoR des erweiterten A-37-Blatts (pre-commit-Barriere, fuenf Negativproben, js-yaml direkt, Tor in allen Baeumen, rueckweg.py alle Baeume, BEFUNDNOTIZEN-Barriere). Danach AUSSCHLIESSLICH A-37, im eigenen Worktree, ueber scripts/commit-pruefen.sh."
+voraussetzungen:
+  - "A-42 ABGENOMMEN"
+  - "A-37-Blatt erweitert (Planner) und DoR ERTEILT (Plan-Pruefer) — kommt als neue generation dieser Datei"
+erlaubte_pfade: []
+verboten:
+  - jeder Bau
+  - jeder Commit
+  - jeder Schreibzugriff im gemeinsamen Checkout /Users/yamanuri/Documents/ticket
+  - W0-5-Staende (28ca0834, ef7a8c89) ueberschreiben oder loeschen
+status: ZUGETEILT
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/WARTEN-generator-A-37/generator-ack.yaml
+erstellt: "2026-08-21T23:1x Dirigent"

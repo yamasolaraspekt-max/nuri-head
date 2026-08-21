@@ -1,0 +1,20 @@
+auftrag_id: PARKEN-release-pruefer
+generation: 1
+rolle: release-pruefer
+sitzung_erwartet: 4a2203cb-127f-4c71-aeb4-206a86181667   # PID 87761
+worktree: /Users/yamanuri/Documents/ticket-rolle-release
+branch: rolle/release-pruefer
+basis_sha: 4630d658
+prioritaet: P2
+aktion: parken
+gegenstand: "Keine Lockerungen von Einfrierungen (844ae872 hob eine auf und der Generator baute danach direkt im Checkout), keine Transporte, keine andere Arbeit. Kommt mit A-37-22 in den Rueckweg."
+voraussetzungen:
+  - "neue generation dieser Datei"
+erlaubte_pfade: []
+verboten:
+  - jede Schreibarbeit
+  - jeder Commit
+  - Einfrierungen lockern
+status: ZUGETEILT
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/PARKEN-release-pruefer/release-pruefer-ack.yaml
+erstellt: "2026-08-21T23:1x Dirigent"

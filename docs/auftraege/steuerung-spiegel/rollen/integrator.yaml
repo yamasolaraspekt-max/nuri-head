@@ -1,0 +1,29 @@
+auftrag_id: INT-A-42
+generation: 1
+rolle: integrator
+sitzung_erwartet: 03737d75-b216-4299-b4ea-595407d3e457   # PID 80335
+worktree: /Users/yamanuri/Documents/ticket
+branch: auto/hausplaner-integration
+basis_sha: 1cd33614
+prioritaet: P0
+aktion: transport_nur_kette
+gegenstand: "Ausschliesslich Ergebnisse der Reihenfolge A-42 -> A-37 -> Z0-I1 transportieren, und nur nach belegtem Votum bzw. DoR."
+regeln:
+  - "A-42: ERST nach dem Evaluator-Votum Datensatz + Tafel in EINEM echten, nicht leeren Zustandscommit; Gegenprobe git show --stat zeigt docs/STATUS.md"
+  - "Leere Zustandscommits abweisen (e9e6ee5b war leer)"
+  - "Keine Rueckwege von Altposten-/Nebenanalyse-Commits; keine Zustands-/Abnahmenachtraege fuer A-38, A-39, Z1-W1-5-1, Symbol-/Zaehl-/Maurer-Arbeiten"
+  - "Uncommittete docs/FACHPRUEFUNG-DREI-LINSEN.md im Checkout NICHT anfassen (gehoert der gestoppten Sitzung 7df19ed4)"
+  - "Rueckweg von rolle/dirigent erst, wenn rueckweg.py den Baum kennt (A-37-22)"
+  - "Der eng begrenzte Integrationscommit im gemeinsamen Checkout bleibt dein Recht — sonst committet dort niemand"
+voraussetzungen:
+  - "fuer A-42-Zustandscommit: ereignisse/A-42/evaluator-ABGENOMMEN.yaml oder -CODE_FERTIG.yaml mit Votum-SHA"
+erlaubte_pfade:
+  - docs/STATUS.md
+  - docs/BEFUNDNOTIZEN.md
+  - "Rueckweg-Commits (Merge/FF) der Rollenzweige innerhalb der Kette"
+verboten:
+  - Produktcode aendern
+  - Transport von A-38/A-39/Z1-W1-5-1-Bauten als Fortschritt
+status: ZUGETEILT
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/INT-A-42/integrator-ack.yaml
+erstellt: "2026-08-21T23:1x Dirigent"

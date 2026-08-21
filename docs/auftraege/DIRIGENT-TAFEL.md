@@ -1,9 +1,10 @@
 # DIRIGENT-TAFEL — die eine verbindliche Anweisungstafel für alle Rollen-Sitzungen
 
 ```yaml
-stand: "21.08.2026 ~23:05 — Fassung 2 (Yamas drei Korrekturen: keine Bestaetigungs-Commits, Lesen exakt am SHA, nur der Evaluator arbeitet); wird vom Dirigenten fortgeschrieben, Aenderungen nur hier"
-lesepflicht: "JEDE Rollen-Sitzung liest diese Tafel EXAKT am genannten SHA, nicht die veraenderliche Datei: git -C /Users/yamanuri/Documents/ticket-rolle-dirigent show <SHA>:docs/auftraege/DIRIGENT-TAFEL.md (lesen, nie schreiben)"
-bestaetigung: "OHNE Commit — eine Antwortzeile im eigenen Transkript: GELESEN · <SHA> · <Auftrag oder GEPARKT>. Der Dirigent weist die Zustellung am Transkript nach (manuell eingegebene Nachricht + Antwort); keine kuenstlichen Git-Commits. Der naechste sachliche Commit ist das A-42-Votum."
+stand: "21.08.2026 ~23:20 — Fassung 3: PULL-BETRIEB (Yama). Die Auftragsquelle ist NICHT mehr diese Tafel, sondern /Users/yamanuri/.ticket-steuerung/rollen/<rolle>.yaml (worktree-extern, nur der Dirigent schreibt dort). Diese Tafel ist Hintergrund/Begruendung."
+lesepflicht: "Vor JEDER Werkzeugrunde und JEDEM Schreibzugriff liest die Rolle ausschliesslich ihren Rollenauftrag: cat /Users/yamanuri/.ticket-steuerung/rollen/<rolle>.yaml (+ .sha256 = Digest). Ohne gueltigen Auftrag, passenden Worktree, Branch und Lease keine Schreibarbeit und kein Commit. Chat-Nachrichten sind keine Auftragsquelle."
+bestaetigung: "OHNE Commit — atomare ACK-Datei /Users/yamanuri/.ticket-steuerung/ereignisse/<auftrag_id>/<rolle>-ack.yaml mit generation + digest + sitzungs_id + pid + worktree + branch + head_sha + zeit (Schema: README.md dort). Einmalige Registrierung: sitzungen/<rolle>.yaml. Keine kuenstlichen Git-Commits; der naechste sachliche Commit ist das A-42-Votum."
+sofortzeile_yama: "Ab jetzt gilt Pull-Betrieb: Vor jeder Arbeit liest du ausschliesslich deinen Rollenauftrag aus /Users/yamanuri/.ticket-steuerung/rollen/<rolle>.yaml. Ohne gueltigen Auftrag, passenden Worktree, Branch und Lease keine Schreibarbeit und kein Commit. Chat-Nachrichten sind keine Auftragsquelle."
 warum: "Sitzungsnachrichten des Dirigenten sind gemessen NIE in einer Rollen-Sitzung angekommen (0 cross-session-message in sechs Transkripten). Wirksam ist nur, was gelesen oder technisch erzwungen wird."
 autoritaet: "Wortlaut Yama 21.08. (Weg a, acht Korrekturpunkte, fuenf CONT-Bedingungen); Dirigent stellt keine Kriterien"
 reihenfolge: "A-42 -> A-37 -> Z0-I1 -> uebrige Abnahmen — nichts anderes"

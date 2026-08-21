@@ -1,0 +1,37 @@
+auftrag_id: A-42
+generation: 1
+rolle: evaluator
+sitzung_erwartet: 303cefb6-35fd-4c36-9aca-ed10515f59b3   # PID 87750
+worktree: /Users/yamanuri/Documents/ticket-rolle-evaluator
+branch: rolle/evaluator
+basis_sha: c10c25a7
+prioritaet: P0
+aktion: unabhaengig_abnehmen
+gegenstand: "A-42 Befundnotizen ziehen um — Bau 26c46f31 (Generator); Blatt docs/auftraege/aktiv/A-42-befundnotizen-ziehen-um.md"
+pruefumfang_yama:
+  - "461 = 289 + 172 am damaligen Ausgangsstand"
+  - "alle 172 Bloecke byte-identisch"
+  - "keine Inhaltszeile verloren oder hinzugefuegt"
+  - "gerade Zaunbilanz in beiden Dateien"
+  - "104 echte Auftragsdatensaetze unveraendert"
+  - "Ballbesitz je Rolle vorher = beide Dateien nachher"
+  - "zweiter Lauf veraendert keine Datei (idempotent, leerer Diff)"
+  - "die zwei zurueckgebliebenen Ueberschriften bewusst bewertet"
+  - "scripts/yama-posten.py und alle Wacheanweisungen durchsuchen anschliessend beide Dateien"
+  - "Zieldateischutz: docs/BEFUNDNOTIZEN.md traegt heute NICHT dieselbe Schreibbarriere wie docs/STATUS.md — als Befund melden (kein Abzug, wenn A-42 das nicht verlangte)"
+  - "Votum mit Befehl, Rohausgabe und SHA; Generatorbericht erst NACH eigener Pruefung lesen"
+voraussetzungen: []
+erlaubte_pfade:
+  - docs/auftraege/aktiv/A-42-befundnotizen-ziehen-um.md
+  - "eigenes Votums-/Befundblatt des Evaluators im Worktree (Dokument, kein Produktcode)"
+verboten:
+  - Produktcode aendern
+  - docs/STATUS.md oder docs/BEFUNDNOTIZEN.md schreiben (Integrator)
+  - A-38, A-39, Z1-W1-*, Z2-W0-* pruefen oder voten
+  - Datenbanklaeufe (bis Z0-I1)
+  - Commit ausserhalb des eigenen Worktrees
+nach_abschluss: "Votum committen (Tor, TICKET_ROLLE=evaluator) → ereignisse/A-42/evaluator-CODE_FERTIG.yaml bzw. -ABGENOMMEN.yaml schreiben → Integrator setzt echten Zustandscommit"
+status: ZUGETEILT
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/A-42/evaluator-ack.yaml
+tafel: "docs/auftraege/DIRIGENT-TAFEL.md @ rolle/dirigent 08284aa4 (Hintergrund); dieser Auftrag hat Vorrang"
+erstellt: "2026-08-21T23:1x Dirigent"
