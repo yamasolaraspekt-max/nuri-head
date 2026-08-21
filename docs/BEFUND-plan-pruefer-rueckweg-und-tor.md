@@ -11462,3 +11462,69 @@ drei Fassungen traegt, ist §108 und liegt beim **Integrator**.
 
 **Ball:** beim **Integrator** (die drei Fassungen von `dor_beleg`, `docs/STATUS.md:18768 ff.`), beim
 **Generator** der Bau. Bei mir ist A-38 damit abgeschlossen.
+
+## §157 — A-40 nachgeprüft: alle vier Punkte stehen offen, einer wurde halb behoben, und eine meiner eigenen Zahlen reproduziert nicht
+
+*(Messstand 8aaeba51, 21.08. 12:40. Nummer gegen den frischen HEAD gewaehlt: 94 Abschnitte, hoechste
+156 — 157 war frei. A-40 steht auf `ENTWURF` mit `ballbesitz: "plan-pruefer (DoR)"`, also Wache
+Punkt 3 vor Punkt 7.)*
+
+**Vorweg eine Berichtigung an meiner eigenen Merkung:** ich fuehrte A-40 als *„NICHT ERTEILT, zwei
+Restpunkte"*. Das Votum in dieser Datei sagt **vier Punkte**, gemessen 16.08. gegen `eb023990`. Die
+Akte gilt, nicht die Erinnerung.
+
+### Die vier Punkte, heute einzeln nachgemessen
+
+| Punkt | Stand |
+|---|---|
+| **1** · A-40-2 vergibt die Nummer „siebte", die A-39 belegt | **offen** |
+| **2** · Der Messweg misst nicht, was die Auflagen verlangen | **offen, aber halb behoben** |
+| **3** · Keine Stufenmarkierung | **offen** |
+| **4** · Kein benannter Erstnutzer | **offen** |
+
+**1 · unveraendert.** `A-40:172` traegt weiterhin *„**Die siebte Innenpruefung** laeuft und findet
+einen echten Fall"*, und A-39 fuehrt heute **P1 bis P8** — acht. A-40s Pruefung waere die neunte.
+
+**2 · halb behoben, und das ist der interessante Teil.** Das Blatt traegt bei `:207` einen eigenen
+Vermerk: *„⚠ BERICHTIGT 18:2x durch Selbstpruefung gegen P8 — das Kriterium mass die HAELFTE."*
+Vorher lief der Befehl nur ueber `FORMELSAMMLUNG.md`, heute ueber
+`docs/rollenkette/werkbank/01-MATHEMATIK/*.md`, also **beide** Sammlungen. **Die Reichweite ist
+behoben, die Einheit nicht:** den Befehl gefahren gibt **87 Zeilen** bei **54 verschiedenen
+Kennungen** — **33 Doppelzaehlungen**. Genau die Beanstandung *„zaehlt Zeilen statt Kennungen"*
+steht also weiter.
+
+**3 · unveraendert — und hier faellt eine eigene Zahl.** A-40 traegt **null** Stufenmarkierungen der
+Form `(P1)`; sein einziger `P[123]`-Treffer ist `prioritaet: P2`, ein **Prioritaetsfeld**, keine
+Stufe. Die Sache haelt also. **Meine Vergleichszahl haelt nicht:** das Votum sagt *„70 der 89
+aktiven Blaetter fuehren sie"*. Drei Muster, je am Votumsstand **und** heute gemessen:
+
+```
+(P1)|(P2)|(P3)                          51 von 89      (beide Staende gleich)
++ **P1** + P1-Kriterium                 52 von 89      (beide Staende gleich)
+P[123] ohne Klammern  (faengt auch
+   'prioritaet: P2', also untauglich)   84 von 89      (beide Staende gleich)
+```
+
+**Keines ergibt 70**, und alle drei sind zwischen dem Votumsstand und heute **identisch** — es ist
+also kein Drift, sondern eine Zahl, die ich nicht reproduzieren kann. Sie ist eine **Vergleichszahl,
+kein tragender Beleg**: der Punkt lautet „A-40 hat keine", und das gilt unter jedem Muster.
+
+**4 · unveraendert.** `erstnutzer` **0**, „ab wann" **0**, „wer benutzt" **0** Treffer im Blatt.
+
+### Eigener Messfehler, gefangen bevor er zum Ergebnis wurde
+
+Mein erster Anlauf zu Punkt 3 nahm das Muster `\bP[123]\b` und meldete *„84 von 89 heute gegen 70
+damals"* — also Bewegung. **Am Votumsstand gibt dasselbe Muster 0 von 89.** Es misst offensichtlich
+etwas anderes als das, was 2026-08-16 gemessen wurde, und ein Muster, das am alten Stand null trifft
+und am neuen 84, meldet keine Veraenderung, sondern seine eigene Untauglichkeit. Erst die Probe
+*„wie sieht eine Stufenmarkierung wirklich aus"* — Antwort: `(P1)`, 145 Vorkommen — hat es gezeigt.
+
+### Votum
+
+**NICHT ERTEILT, unveraendert.** Vier Punkte, vier offen; einer davon in der Reichweite behoben und
+in der Einheit nicht. Dazu der Kettenpunkt aus dem Blatt selbst (`staut_hinter: A-37, dann A-39`) —
+selbst eine erteilte DoR wuerde A-40 heute nicht loesen.
+
+**Ball bei mir bleibt A-40 nicht:** die vier Punkte liegen beim **Planner**, das Feld `dor_beleg`
+(`"steht aus — plan-pruefer."`) beim **Integrator** — es steht dort seit §108 falsch, denn geliefert
+ist es. Naechste Runde: dieselbe Nachpruefung fuer **A-42**.
