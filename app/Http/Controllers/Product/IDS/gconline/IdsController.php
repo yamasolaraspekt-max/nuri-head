@@ -52,9 +52,21 @@ class IdsController extends Controller
         // build batch id
         $batchId = 'IDS-' . str_replace(['-', ':'], '', ($data['date'] ?? '') . ($data['time'] ?? ''));
 
-        // user + auto flag from query
-        $userId = $request->query('uid');
-        $userId = $userId ? (int) $userId : null;
+        // Z2-W0-11 Teil A (21.08.2026): der Importeur kommt aus der SITZUNG, nicht aus der Query.
+        //
+        // Vorher stand hier `$request->query('uid')`. Wer die Adresse kannte, konnte den Import
+        // einem beliebigen Kollegen zuschreiben — `?uid=<fremde-id>` genuegte, und im
+        // Produktstamm stand danach dessen Name an einer Anlage, die er nie ausgeloest hat.
+        //
+        // Der Wert aus der Sitzung ist verfuegbar und nicht bloss ein Ersatz: die Route liegt
+        // hinter `web` + `Authenticate` (`routes/web.php:511`, per route:list belegt) und der
+        // Konstruktor setzt zusaetzlich `auth`. Der Kommentar "must remain PUBLIC" ueber
+        // callback() beschreibt einen Zustand, den es hier nicht gibt — der Rueckweg laeuft
+        // durch den Browser des angemeldeten Nutzers, samt Sitzungskeks.
+        //
+        // Eine `uid` in der Query wird bewusst NICHT mehr gelesen, auch nicht als Rueckfall.
+        // Ein Rueckfall waere genau das Loch: wer ihn ausloest, bestimmt wieder frei.
+        $userId = auth()->id();
         $auto   = $request->query('auto') == '1';
 
         Log::info("🟦 IDS meta", ['batch_id' => $batchId, 'user_id' => $userId, 'auto' => $auto]);
