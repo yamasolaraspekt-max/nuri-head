@@ -12718,3 +12718,534 @@ und §167. Die Fangprobe hat beide gefangen, bevor etwas gemeldet wurde. Für al
 steht in **keinem Feld**. Ein Bau, an dem neun von neun Zahlen halten, ist in der Statuswahrheit
 nicht vorhanden. **Ball beim Evaluator** für die Abnahme. **Kein Ball beim Generator** — hier ist
 nichts zu berichtigen.
+
+## §172 — Posten (c): F-023 verlangt eine Absage über 85°. Die Zahl 85 steht im Code — nur nicht auf dem Weg.
+
+**Messstand** `adc11c58` · Baum sauber · 0 neue Commits · Zweigprobe live: `auto/hausplaner-integration`
+unverändert `4d37a3ef`, `origin/main 4ed11218`, `origin/rolle/plan-pruefer b43d26a7`. Nichts angekommen,
+also Vorratsprüfung, Posten **(c)**.
+
+Gewählt: **F-023 · Wahre Dachfläche aus Grundfläche** (`FORMELSAMMLUNG.md:265-269`), die elfte der
+27 Formeln, die ich durchrechne. Gewählt, weil sie der **Erhaltungssatz** ist, an dem der Generator
+in §169 seinen ganzen Z1-W1-2-Befund gemessen hat — und ich hatte sie selbst nie geprüft.
+
+```
+Formel:     A_Dach = A_Grundriss / cos(α)
+Grenzfall:  α → 90° → cos → 0 → Fläche → unendlich. ÜBER 85° ABSAGEN.
+```
+
+### Die gelebte Fassung
+
+`dachGeometrie.ts:114` — `const cos = sichererCos(roof.neigungGrad);` — und `sichererCos`
+(`dachWerte.ts:99-103`) lautet vollständig:
+
+```ts
+const rad = istGrad ? (v * Math.PI) / 180 : v;
+return Math.max(1e-3, Math.cos(rad));
+```
+
+Durchgerechnet, Grundriss 100 m²:
+
+```
+  Grad    cos          Faktor      A_Dach      geklemmt?
+    30    8.66e-1         1.2         115      nein
+    60    5.00e-1         2.0         200      nein
+    85    8.72e-2        11.5        1147      nein      <- ab hier verlangt F-023 eine ABSAGE
+    86    6.98e-2        14.3        1434      nein
+    89    1.75e-2        57.3        5730      nein
+  89.9    1.75e-3       573.0       57296      nein
+ 89.99    1.75e-4      1000.0      100000      JA
+    90    6.12e-17      1000.0      100000      JA
+```
+
+**Die Absage gibt es nicht.** Und der Schutz, den es gibt, greift erst bei **89,9427°** —
+`arccos(1e-3)` —, also **fast fünf Grad hinter der Linie**, die das Blatt zieht.
+
+Dazu ein zweiter Befund an derselben Stelle: oberhalb 89,9427° ist das Ergebnis kein Fehler mehr,
+sondern ein **Plateau**. 89,99° und 90° liefern **dieselbe** Zahl, 100 000 m². Das ist heikler als
+der Fall aus §160, wo F-021 mit `endlich()` auf 1,63·10¹⁷ m sprang: eine absurde Zahl fällt auf,
+**100 000 m² fallen nicht auf.** Ein Wert, der eine Plausibilitätsprüfung besteht und trotzdem
+falsch ist.
+
+### Und jetzt das Eigentliche: die Grenze ist gebaut, sie steht nur woanders
+
+`dachformVorlagen.ts:402-406`:
+
+```ts
+export function clampPitchGrad(pitchGrad: number, min = 1, max = 85)
+```
+
+**Die 85 ist da** — die exakte Zahl aus F-023, unter dem richtigen Namen, mit einem eigenen Wächter
+(`dachformVorlagen.test.ts:228`: `clampPitchGrad(90) === {wert: 85, geklemmt: true}`). Sie hilft nur
+nichts:
+
+1. **Sie klemmt, sie sagt nicht ab.** Aus 90° wird still 85°, das Ergebnis wird geliefert.
+2. **Ihr einziger Aufrufer ist `validateVorlage`** (`:497`), und der erzeugt daraus
+   `code: 'PITCH_GEKLEMMT', schwere: 'warnung'`. Die Rückgabe ist
+   `ok: !warnungen.some(w => w.schwere === 'fehler')` — **eine Warnung lässt `ok` auf `true`.**
+3. **Sie berührt die Flächenrechnung nicht.** `validateVorlage` prüft Vorlagen; die Fläche entsteht
+   in `dachGeometrie`.
+4. Über den ganzen Hausplaner ohne Tests gemessen kommt die Zahl `85` in Neigungs-Zusammenhang an
+   **genau zwei** Stellen vor: `dachformVorlagen.ts:405` (die Vorgabe) und `:497` (der eine Aufruf).
+   Sonst nirgends.
+
+### Der Nachschlag: die Funktion, die F-023 heißt, läuft nicht
+
+`dachformVorlagen.ts:357-360` trägt den Formelnamen wörtlich im Kommentar
+(*„Geneigte Fläche aus Grundrissprojektion rechteckiger Flächen: A_grundriss/cos(alpha)"*):
+
+```ts
+export function geneigteFlaecheAusGrundrissM2(grundrissProjM2: number, pitchGrad: number): number {
+  if (!Number.isFinite(grundrissProjM2)) return 0;
+  return endlich(grundrissProjM2 / sichererCos(pitchGrad));
+}
+```
+
+Sie reicht `pitchGrad` **roh** an `sichererCos` — obwohl `clampPitchGrad` **in derselben Datei**,
+45 Zeilen weiter, steht. Und über den Funktionsnamen gemessen hat sie **NULL produktive
+Verbraucher**; der einzige Import kommt aus `dachformVorlagen.test.ts:20`.
+
+**Damit steht F-023 zweimal im Code und keinmal richtig:** einmal als benannte Funktion, die die
+Grenze nicht anwendet und die niemand ruft, und einmal als gelebte Rechnung in `dachGeometrie`, die
+die Grenze nicht kennt. Alle drei beteiligten Module — `dachGeometrie`, `dachformVorlagen`,
+`dachWerte` — sind **erreichbar**; das ist kein latenter Fall.
+
+### Was NICHT betroffen ist
+
+`domain/validation.ts:240-249` begrenzt `neigungGrad` auf `[0, 89]`. Wenn diese Prüfung auf dem
+Live-Weg greift — **das habe ich nicht verfolgt und behaupte es nicht** —, ist 90° unerreichbar und
+das Plateau bleibt theoretisch. Das Band, das dann bleibt, ist genau **85° bis 89°**: vier Grad, in
+denen F-023 eine Absage verlangt und der Code bis zum **57,3-fachen** der Grundfläche rechnet. Die
+Schemagrenze steht auf 89, nicht auf 85.
+
+Und ausdrücklich: **der Befund aus §169 bleibt unberührt.** Der Generator hat den Erhaltungssatz bei
+30°, 35° und 45° angewandt — weit vor der Grenze —, und alle seine Zahlen habe ich dort auf die
+Stelle bestätigt. Diese Formel trägt in ihrem normalen Bereich einwandfrei.
+
+### Die Klasse
+
+Dieselbe wie §136 (entartete Wand → sichere Himmelsrichtung), §141 (`|| 1` → 90°), §160 (F-021 →
+1,63·10¹⁷ m) und §165 (500-m-Gaube besteht die Prüfung): **ein Schutz, der einen plausiblen Wert
+liefert statt zu verweigern.** Neu ist hier die Verschärfung — der richtige Wert für die
+Verweigerung ist bereits programmiert, getestet und benannt. Er liegt nur nicht auf dem Weg, den
+die Rechnung nimmt.
+
+**Ball beim Planner:** Entweder wird die Absage über 85° gebaut — der Baustein `clampPitchGrad`
+existiert und müsste nur an `dachGeometrie.ts:114` bzw. in `sichererCos` gezogen werden —, oder
+F-023s Grenzfall wird gestrichen und durch das ersetzt, was der Code tut (Klemme bei 89,94°,
+Plateau darüber). Dazu die Frage, was mit `geneigteFlaecheAusGrundrissM2` geschehen soll: eine
+Funktion mit dem Namen der Formel und ohne Verbraucher ist eine zweite Wahrheit, die nur darauf
+wartet, benutzt zu werden.
+
+## §173 — Z1-W1-1 gebaut in derselben Minute, in der die Statuswahrheit „nicht baubar" schrieb — und der Bau widerlegt zwei meiner drei Restpunkte
+
+**Messstand** `23770d35` · Baum sauber · 0 neue Commits in meinem Zweig.
+**Integrationszweig:** `4d37a3ef` → `2feccdca`, 5 Commits. Zwei fallen in meine Bahn:
+`6ece5379` 13:56 *fünf Z1-W1-Aufträge in die Statuswahrheit eingetragen* und
+`2bc0d2f2` 13:56 *Z1-W1-1 gebaut*.
+
+### Erledigt: die Statuswahrheit kennt die fünf Aufträge
+
+Der Integrator hat geliefert, was §169/§170/§171 angemahnt haben:
+
+- **fünf Tafelzeilen** (`docs/STATUS.md:96-100`) und **fünf Datensätze** (ab `:27761`),
+- meine DoR-Voten **wörtlich** übernommen, inklusive `NICHT ERTEILT` bei W1-1, W1-3, W1-5,
+- **`bau_sha` in einem FELD** für alle drei damals gemeldeten Bauten: `:27805` `60c04eef`,
+  `:27835` `d7651d9c`, `:27870` `b2371d7e`,
+- und die Zustandsfrage **ausdrücklich nicht selbst entschieden**: *„Ich setze keinen Zustand: dass
+  Z1-W1-2 seit dem Bau nicht mehr auf dem Blattwert stehen dürfte, ist eine Fachentscheidung und
+  gehört nicht dem Eintragenden."*
+
+**Sauber gearbeitet, Rollengrenze eingehalten.** Der Posten ist geschlossen; offen ist nur noch
+`2bc0d2f2`, und der entstand in derselben Minute wie der Eintrag.
+
+### Der Zusammenstoß
+
+`docs/STATUS.md`, Datensatz `Z1-W1-1`, Feld `dor_beleg`, geschrieben **13:56**:
+
+> „NICHT ERTEILT — plan-pruefer, Paragraf 143 (21.08.). Offen: drei Punkte.
+> **Der Auftrag ist bis zur Nachbesserung am Blatt nicht baubar.**"
+
+`2bc0d2f2`, *generator: Z1-W1-1 gebaut*, **13:56**. Das Blatt selbst ist unverändert — es trägt
+weiterhin genau **einen** Commit, `f350befc` 10:00, den Schnitt. **Eine Nachbesserung am Blatt hat es
+nicht gegeben.** Das ist der zweite Fall nach §170 (Z1-W1-3), und er macht dieselbe Kettenlücke
+sichtbar: **der Satz „nicht baubar" steht in einem Feld und hält nichts auf.**
+
+### Und jetzt das, was ich nicht erwartet hatte: der Bau löst zwei meiner Restpunkte
+
+**Restpunkt 1 aus §143** lautete, Kriterium A sei im eigenen Scope nicht prüfbar, und dort steht
+wörtlich von *„den beiden einzig möglichen Wegen"* — neuer DOM-Test oder Textableitung in eine
+Funktion. **Das war falsch. Es gibt einen dritten.** Der Bau setzt in
+`__tests__/eigenschaftenPanel.test.ts` eine **Quelltext-Zusage**, die nicht nur den Text prüft,
+sondern seine **Aufhängung**:
+
+```js
+const zeile = panel.split('\n').find((z) => z.includes("pr.id === 'durchgangshoehe'")) ?? '';
+assert.ok(zeile.includes('!erg.pruefungen.some'),
+  'der Vorbehalt muss an der FEHLENDEN Prüfung hängen, nicht fest angezeigt werden');
+```
+
+Damit ist das Kriterium im Scope prüfbar, ohne Bauteil-Umbau. Der Test benennt seine eigene Grenze
+(*„sie liest Quelltext, sie rendert nicht"*). **Berichtigung an §143: „die beiden einzig möglichen
+Wege" ist widerlegt.**
+
+**Restpunkt 2** lautete, B sei nur gegen `berechneTreppe` selbst prüfbar — *„und
+`geometry/treppenBerechnung.ts` ist ausdrückliches Nicht-Ziel"*. Auch das trägt nicht: der Bau prüft
+genau dort, **ohne die Datei anzufassen**. Selbst gemessen, `git diff --numstat 2bc0d2f2^ 2bc0d2f2`:
+
+```
+22  0  __tests__/eigenschaftenPanel.test.ts
+26  0  __tests__/treppenBerechnung.test.ts
+13  0  app/rahmen/EigenschaftenPanel.tsx
+```
+
+`treppenBerechnung.ts` **kommt im Diff nicht vor**. Die Unterscheidung, die ich nicht gemacht habe:
+**ein Nicht-Ziel verbietet, ein Modul zu ändern — nicht, es zu prüfen.**
+
+Zwei von drei tragenden Restpunkten sind damit erledigt, und einer davon durch einen Fehler in
+meinem eigenen Votum.
+
+### Restpunkt 3 steht — heute neu gemessen
+
+Über den Funktionsnamen, ohne Tests, am heutigen Stand:
+
+```
+berechneTreppe — Nicht-Test-Aufrufer          durchgangshoehe?   erreichbar
+  app/rahmen/EigenschaftenPanel.tsx:494       nein               ja
+  app/dashboard/enginePanels.ts:164           nur wenn eingegeben ja
+  geometry/treppe2D.ts:54                     nein               ja
+  geometry/treppe3D.ts:44                     nein               ja
+  geometry/treppenTypen.ts:48                 nein               NEIN
+```
+
+**Fünf, vier davon erreichbar — unverändert gegenüber §143.** Das Blatt nennt weiter zwei.
+
+### Neuer Befund, eine Ebene tiefer: der Vorbehalt reist nicht überallhin
+
+Der Bau setzt den Vorbehalt an **einer** Anzeigestelle. Gemessen, wo `bestanden` sonst noch ankommt:
+
+`app/rahmen/Buehne.tsx:337` ruft `treppe2DSymbol({ start, end, laufbreite, geschosshoehe,
+gewuenschteSteigung, bereich })` — **ohne `durchgangshoehe`** —, und `:343` färbt damit das Symbol:
+
+```js
+const farbe = ausgewaehlt ? FARBEN.auswahl : (sym.bestanden ? FARBEN.wand : FARBEN.gefahr);
+```
+
+**Auf der Zeichenfläche entscheidet ein Urteil über „unauffällig oder Gefahrfarbe", das die
+Kopfhöhe nie geprüft hat** — und der neue Vorbehalt erreicht diese Stelle nicht, weil sie gar keinen
+Text zeigt. `treppe2D.ts:91` und `treppe3D.ts:72` reichen `bestanden` unverändert durch.
+
+### Fehlverdacht, vor der Meldung gefangen
+
+Ich hielt `app/EngineFlaeche.tsx:138-146` für eine zweite, unbehandelte Überzusage — dort steht bei
+`ergebnis.bestanden` wörtlich **„Alle Prüfungen bestanden"**, also mehr als das Badge. Nachgemessen:
+Das Treppen-Panel führt `durchgangshoehe` als **eigenes Eingabefeld** (`enginePanels.ts:141`,
+`pflicht: false`, `vorgabe: 2000`) und setzt **kein** `keinGesamturteil` — jene Fläche *kann* das
+Kriterium also prüfen, anders als das Eigenschaften-Panel. **Ob der Vorgabewert tatsächlich
+übergeben wird, habe ich nicht verfolgt und behaupte es nicht** (`enginePanels.ts:113` übergibt nur,
+was definiert ist). Der Verdacht ist damit nicht bestätigt und wird nicht als Befund geführt.
+
+**Ball beim Planner:** Restpunkt 3 aus §143 steht unverändert (Blatt sagt zwei, gemessen sind fünf),
+und dazu neu: `Buehne.tsx:343` färbt nach einem `bestanden`, dem dieselbe Prüfung fehlt, die
+Z1-W1-1 im Panel gerade offengelegt hat. **Ball beim Evaluator:** Kriterium C, die Browserabnahme.
+**Ball beim Integrator:** `2bc0d2f2` fehlt noch als `bau_sha` bei `Z1-W1-1`.
+**Ball bei Yama, unverändert und jetzt zum zweiten Mal belegt:** ein `NICHT ERTEILT` im Feld hält
+keinen Bau auf.
+
+## §174 — Posten (d): drei Blätter, drei tote Zeiger — und jedes hat sich selbst umgebracht
+
+**Messstand** `b3c6ac29` · Baum sauber · 0 neue Commits · Zweigprobe live: `auto/hausplaner-integration`
+unverändert `2feccdca`. Nichts Neues **committet**, also Vorratsprüfung, Posten **(d)**.
+
+Gegenstand: die fünf `Z1-W1`-Blätter, alle mit `basis_sha: 11f7c4c3`.
+
+```
+Basis 11f7c4c3   21.08. 09:54
+Alter             248 Minuten (4 h 8 min)
+Commits gesamt     96
+```
+
+Nach der Regel aus §167 ist die Gesamtzahl die falsche Zahl. Gemessen, was die **Trägerdateien**
+berührt hat:
+
+```
+geometry/dachGeometrie.ts        3 Commits   153 -> 175 Z.   <- Träger von W1-2, W1-3 UND W1-4
+geometry/kontur.ts               1 Commit    175 -> 190 Z.
+app/rahmen/EigenschaftenPanel.tsx 1 Commit    563 -> 576 Z.
+geometry/treppenBerechnung.ts    0
+renderers/three-d/szene.ts       0
+geometry/dachWerte.ts            0
+```
+
+**Drei von 96 Commits** treffen den gemeinsamen Träger. Sie genügen.
+
+### Die drei Zeiger — gegen den HEAD-Blob geprüft, nicht gegen den Arbeitsbaum
+
+Alle drei Blätter tragen **genau einen** Commit (`f350befc` 10:00, den Schnitt), alle drei Zeiger
+waren am eigenen Basis-Stand **zeichengenau richtig**:
+
+| Blatt | Zeiger | am Basis | heute an derselben Zeile |
+|---|---|---|---|
+| Z1-W1-2 | `dachGeometrie.ts:134-146` | `case 'walm': {` | `}` |
+| Z1-W1-3 | `dachGeometrie.ts:39-45` | `function polygonM2(poly: readonly P[])` | `function normAz(grad: number)` |
+| Z1-W1-4 | `dachGeometrie.ts:13` | `import { sichererCos } from '../../utils/dachWerte';` | der Z1-W1-4-Kommentar |
+
+**Alle drei zeigen auf etwas anderes.** 248 Minuten Haltbarkeit.
+
+### Die neue Klasse: die Drift ist selbst verschuldet
+
+In §109, §110, §166, §167 und §168 haben **fremde** Commits die Zeiger verschoben. Hier nicht:
+`geometry/dachGeometrie.ts` wurde in diesen drei Commits von **genau den drei Bauten** verändert,
+die diese drei Blätter beauftragt haben. **Der Auftrag hat seinen eigenen Zeiger erschlagen, indem
+er ausgeführt wurde.**
+
+Am schärfsten bei **Z1-W1-3**: der Auftrag verlangte, die private `polygonM2`-Kopie zu entfernen.
+Der Bau hat sie entfernt — und damit zeigt `:39-45` nicht ins Leere, sondern auf `normAz`, eine
+völlig andere Funktion, die nachgerückt ist. Wer das Blatt heute liest, um den Bau zu prüfen, liest
+eine Ortsangabe, die auf einen Fremden zeigt.
+
+Das ist keine Nachlässigkeit von irgendjemandem, sondern eine **Bauart**: ein Blatt, das eine
+Zeilennummer als Ist-Beleg führt, wird durch seine eigene Erfüllung ungültig. Die Abhilfe steht
+längst in `docs/ARBEITSREGELN.md` — **nicht die Zeile, sondern die Überschrift** —, und ich habe sie
+mir in §167 selbst auferlegt.
+
+### Zwei eigene Fehler, beide vor der Meldung gefangen
+
+**1. Meine Pfaderkennung hat ein Blatt für leer erklärt, das nicht leer ist.** Mein Muster verlangte
+ein führendes Verzeichnis aus einer festen Liste (`app|geometry|renderers|domain|store|utils`).
+Ergebnis: *„Z1-W1-5 — 0 Modulpfade genannt."* Fangprobe: das Blatt nennt **vier** —
+`projection/raumProjektion.ts:91`, `domain/scene.types.ts:109`, `domain/validation.ts:46`,
+`app/rahmen/EigenschaftenPanel.tsx:324`. `projection/` fehlte in meiner Liste, und zwei Nennungen
+stehen ohne Verzeichnis da. **Grundmenge gegen die Frage prüfen, nicht gegen das Verfahren.**
+
+**2. Ich habe „heute" aus dem Arbeitsbaum gelesen statt aus dem HEAD-Blob.** Damit meldete meine
+erste Erhebung `raumProjektion.ts:91` als **GEWANDERT**. Aufgefallen ist es an einem Widerspruch, der
+nicht sein kann: **0 Commits auf die Datei, aber anderer Inhalt.** Aufgelöst:
+
+```
+BASIS 11f7c4c3 : bauteil_typ: wandVon.get(kante.wallId)?.construction?.insulationType ?
+HEAD  2feccdca : bauteil_typ: wandVon.get(kante.wallId)?.construction?.insulationType ?   <- identisch
+Arbeitsbaum    : // **Z1-W1-1..5 / K-1 · ehrlicher Ausweis 21.08.:** dieser Ternary lie…
+```
+
+Blob am Basis und am HEAD sind **derselbe** (`f0660fb8…`). **Der Zeiger trifft.** Der Unterschied kam
+aus ungesicherter Arbeit. Von den vier Zeigern in Z1-W1-5 treffen damit **alle vier**.
+
+### Flüchtiger Befund — Beleg ist der Zeitstempel, er läuft ab
+
+Beim Auflösen des Widerspruchs gemessen: der **gemeinsame Integrations-Checkout**
+(`/Users/yamanuri/Documents/ticket`, HEAD `2feccdca`) hat **keinen sauberen Arbeitsbaum**:
+
+```
+24  0  docs/STATUS.md
+30  0  resources/planner/hausplaner/__tests__/raumProjektion.test.ts
+11  0  resources/planner/hausplaner/projection/raumProjektion.ts
+```
+
+Zwei Rollen zugleich, unversichert. Der `docs/STATUS.md`-Teil ist der **Integrator**, und er trägt
+genau meinen §170-Befund nach — wörtlich: *„DER BAU LIEGT GEGEN EIN VERWEIGERTES VOTUM … Ich trage
+den SHA ein, WEIL DER BAU EINE TATSACHE IST."* Die beiden anderen sind der **Generator** an
+`Z1-W1-5`; der Kommentar im Arbeitsbaum nennt sich selbst *„Z1-W1-1..5 / K-1 · ehrlicher Ausweis
+21.08."*.
+
+**Damit ist Z1-W1-5 der dritte Auftrag, an dem gegen ein `NICHT ERTEILT` gebaut wird** (§147),
+nach Z1-W1-3 (§170) und Z1-W1-1 (§173). Vier von fünf Aufträgen dieser Welle sind gebaut oder im
+Bau; drei davon tragen mein verweigertes Votum. Ich melde die Lage, **nicht** den Inhalt der
+ungesicherten Arbeit — die ist nicht committet und damit nach der Regel der zwei Haltbarkeiten
+kein Beleg, sondern eine Momentaufnahme.
+
+**Ball beim Planner:** drei Blätter führen Ortsangaben, die ihre eigenen Bauten ungültig gemacht
+haben — Feldname oder Überschrift statt Zeilennummer, sonst wiederholt sich das bei jeder Welle.
+**Ball bei Yama, jetzt dreifach belegt:** ein `NICHT ERTEILT` hält keinen Bau auf.
+**Kein Ball beim Integrator** — er arbeitet gerade an genau dem, was ich gemeldet habe.
+
+## §175 — Posten (e): fünf Zeilen ganz oben, zehn tote Zeiger — §167s Vorhersage ist eingetreten, gegen mich
+
+**Messstand** `5014f7a1` · Baum sauber · 0 neue Commits in meinem Zweig · `auto/hausplaner-integration`
+committet unverändert `2feccdca`; sein Arbeitsbaum trägt weiterhin die **drei ungesicherten Dateien**
+aus §174 (flüchtig, Beleg ist der Zeitstempel).
+
+### Zwei eigene Posten sind erledigt — und ich habe sie nicht geglaubt, sondern nachgemessen
+
+**§163 (fünf Code-Zeiger).** `7e28d051` beantwortet ihn und zitiert die Zustellung wörtlich. Der
+Integrator gibt an, jeden Träger selbst geöffnet zu haben. **Alle seine Angaben unabhängig
+nachgemessen, an `scripts/commit-pruefen.sh` (1066 Z., seine Zahl):**
+
+```
+:72  exit 2                    :73  fi                     :83  ROLLE="$(printf '%s' "${TICKET_ROLLE:-}"…
+:163 #                         :501 fi                     :510 if { GROESSE -eq 0 && ALTER -ge 60 } || ALTER -ge 120
+:642 #                         :713 const bloecke = [...t.matchAll(/```yaml\n([\s\S]*?)```/g)]   <- MIT g
+:925/:934/:949  bash scripts/a26-ball-drift.sh · a27-bau-commit.sh · a30-datensatz-paar.sh  || true
+:706/:717/:725  catch (e) {
+```
+
+**Elf von elf.** Und **additiv** gearbeitet: `git diff --numstat` an `docs/STATUS.md` zeigt
+**72 Anfügungen, 0 Löschungen**. Seine Begründung dafür — die fünf Fundstellen sind *datierte
+Messungen in fremden Blöcken*, und zwei liegen **innerhalb mehrzeiliger yaml-Strings**, wo eine
+`#`-Zeile Stringinhalt wäre — habe ich an `:16724` geprüft: der Satz steht dort tatsächlich im
+doppelt zitierten Skalar `warum_es_bisher_niemand_gefangen_hat:`. **Der technische Grund trägt.**
+Meine §163-Anweisung lautete bei `:501` *„streichen, nicht nachziehen"*; er hat stattdessen daneben
+geschrieben und **gesagt, warum**. Das erreicht dasselbe Ziel, ohne einen fremden Beleg zu
+verändern — ich nehme die Abweichung an.
+
+**§130 (drei erfundene Zustandsfelder).** `86398891` räumt sie **je Feld statt je Block**, lässt den
+alten Wert als Kommentar stehen und misst die Behauptung selbst nach: *„BEFUND kommt in
+ARBEITSREGELN.md dreimal vor — zweimal als Dateiname, einmal in einer Fehlertabelle. **NULL
+definitorische Nennungen.**"* Sauber.
+
+### Eine seiner Zahlen ist gealtert — in sechzehn Minuten, durch ihn selbst
+
+Als Gegenprobe zum g-Flag schreibt er: *„an dieser Datei selbst gegengeprobt werden **443** Blöcke
+gefunden, nicht einer."* Nachgemessen, je Stand:
+
+```
+7e28d051  13:40   27721 Z.   443 yaml-Blöcke     <- sein Stand: exakt
+5ccc707f  13:45   27753 Z.   443
+6ece5379  13:56   27887 Z.   448                 <- +5: seine eigenen fünf Z1-W1-Datensätze
+```
+
+**Haltbarkeit 16 Minuten**, und die Ursache ist derselbe Schreiber. Für seine Aussage folgenlos —
+der Punkt war „nicht einer", nicht die Ziffer. Aber es ist die Klasse aus §174, jetzt auf der
+anderen Seite des Tisches.
+
+### Und nun gegen mich: §167 ist eingetreten
+
+§167 endete mit dem Satz, die zehn treffenden Zeiger bewiesen nichts: *„Sie halten, weil sich nichts
+bewegt hat, nicht weil ich sorgfältig war."* Seither hat sich `docs/STATUS.md` bewegt —
+**27619 → 27887 Zeilen** am Integrationsstand. Alle zehn neu geprüft, gegen den **HEAD-Blob**:
+
+| Zeiger | heute auf | Verschiebung |
+|---|---|---|
+| `:3443` `:3447` | 3448 · 3452 | **+5** |
+| `:16719` | 16724 | +5 |
+| `:18614` `:18768` | 18619 · 18773 | +5 |
+| `:22096` `:22099` | 22126 · 22129 | **+30** |
+| `:25411` | 25441 | +30 |
+| `:26537` | 26574 | **+37** |
+| `:26543` | 26580 — **Ziel entfernt** | +37 |
+
+**Zehn von zehn treffen nicht mehr.** Die Treppe hat drei Stufen, und die erste ist die
+lehrreiche: `6ece5379` fügt **fünf Zeilen bei Zeile 96** ein — die fünf `Z1-W1`-Tafelzeilen. Fünf
+Zeilen ganz oben, und **jeder Zeiger in eine 27 000-Zeilen-Datei ist tot**. Die zweite Stufe (+25)
+sind die vier DoR-Transporte aus `5ccc707f`, die dritte (+7) `86398891`.
+
+Der Fall `:26543` ist von eigener Art: dort stand `zustand: BEFUND`, und dieses Feld ist **nicht
+verschoben, sondern entfernt** — auf **meine eigene** Zustellung aus §130 hin. Der Zeiger ist durch
+die Erfüllung des Auftrags gestorben, den er belegte. Genau die Klasse aus §174, diesmal an meinem
+eigenen Verweis.
+
+**Zwei Stände, zwei Antworten:** in *meinem* Zweig steht `docs/STATUS.md` weiter bei 27619 Zeilen,
+dort treffen alle zehn unverändert. Sie fehlen nur an dem Stand, an dem ein Leser sie benutzen
+würde. Das ist kein Trost, sondern die Präzisierung.
+
+### Zwei eigene Messfehler, beide vor der Meldung gefangen
+
+**1. Ein Test, der nicht scheitern kann.** Meine erste Fassung verglich fünf Zeilen gegen ein
+**leeres** Erwartungsmuster. Ein leeres Muster trifft nie — der Test meldete pflichtschuldig
+„GEWANDERT" für alle elf, darunter Zeilen, die ich nicht geprüft hatte. Gefangen mit der Frage, ob
+das Verfahren überhaupt ein „TRIFFT" erzeugen kann.
+
+**2. Ein Muster, das nicht eindeutig ist.** Für `:26543` suchte ich `zustand: BEFUND` mit
+`grep | head -1` und bekam **26801** — eine Zeile, die das Wort nur *erwähnt* (*„Vier Blöcke in
+meinem Baum tragen 'zustand: BEFUND'"*). Ersetzt durch eine **arithmetische** Rekonstruktion aus den
+Hunk-Köpfen (`@@ -95,0 +96,5 @@` usw.), jede Zielzeile danach einzeln geöffnet. Erst damit kam
+26580 heraus — und die Erkenntnis, dass dort gar nichts mehr steht.
+
+**Ball bei mir:** meine §167-Selbstauflage ist damit keine Vorsichtsmaßnahme mehr, sondern belegt —
+Zeiger in `docs/STATUS.md` tragen ab sofort **Feldnamen und Blockkennung**, die Zeilennummer nur als
+Beiwerk. **Ball beim Planner:** derselbe Schluss für die Auftragsblätter (§174).
+**Kein Ball beim Integrator** — zwei meiner Posten sind erledigt, beide mit Beleg und Rückweg.
+
+## §176 — Posten (a): die Statuswahrheit zeigt achtzehnmal auf sich selbst. Drei Zeiger treffen.
+
+**Messstand** `9fbbe43d` · Baum sauber · 0 neue Commits · `auto/hausplaner-integration` committet
+unverändert `2feccdca`. Nichts angekommen, also Vorratsprüfung, Posten **(a)**.
+
+Trägerdatei zuerst gewählt (Verfahren aus §168), und diesmal die am stärksten bewegte überhaupt:
+`docs/STATUS.md`. Aus `docs/` wird sie **50-mal** mit Zeilennummer zitiert, auf **34** verschiedene
+Zeilen. Davon stehen **18 in ihr selbst** — die Statuswahrheit verweist auf die Statuswahrheit.
+Genau diese 18 habe ich geprüft, gegen den **HEAD-Blob** (27887 Z.), nicht gegen den Arbeitsbaum
+(27911 Z., ungesichert).
+
+### Das Ergebnis
+
+```
+ 3  treffen
+12  treffen nicht
+ 2  sind vom Autor SELBST als falsch gekennzeichnet
+ 1  unentschieden (Z.60 -> :5355, das Ziel könnte der gemeinte Beleg sein; ich behaupte es nicht)
+```
+
+**Die drei Treffer stehen auf Zeile 31 und 36.** Beide im Kopf der AUFTRAGSTAFEL:
+
+```
+:31  | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | …
+:36  | **B5** Zählergebnis mit Trefferzeilen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `157576c2` …
+```
+
+Das ist kein Zufall und keine Sorgfalt, sondern Arithmetik: **in einer Datei, die nur wächst,
+überleben genau die Zeiger, die nach ganz oben zeigen.** Die oberste Einfügung seit dem 20.08. lag
+auf Zeile 96 (§175); alles darunter ist gewandert, alles darüber steht.
+
+### Die Verschiebungen sind nicht einheitlich — und das ist die Aussage
+
+Für die eindeutig zitierbaren Fälle gemessen, wohin der Text heute gewandert ist:
+
+```
+:1466  "node_modules-Bedingung"   -> 1476    (+10)
+:567   "211 Dateien liegen N…"    ->  581    (+14)
+:438   "zz-unlink-probe"          ->  538   (+100)
+:1268 / :1338 / :1467             -> 3265 / 3335 / 3464   (+1997, alle drei)
+```
+
+Von +10 bis +1997. Jeder Zeiger wurde an einem anderen Stand geschrieben, und die Datei ist seither
+an unterschiedlich vielen Stellen gewachsen. **Es gibt keine „Korrekturkonstante".** Wer diese
+Zeiger nachziehen wollte, müsste jeden einzeln datieren.
+
+### Der Musterfall: drei Zeiger in einem Satz, exakt gleich verschoben
+
+`docs/STATUS.md` Z.9066-9067 nennt in **einem** Satz drei Fundstellen — *„ich habe sie danach selbst
+aufgeschlagen: `STATUS.md:1268` auftrag A-09, `:1338` auftrag A-11, `:1467` auftrag A-12"*. Heute
+stehen die drei auf **3265 · 3335 · 3464**, also **jeder um exakt +1997**.
+
+Das ist die Grenzregel aus §168 in Reinform: **gleicher Schreibzeitpunkt → gleiche Verschiebung.**
+Umgekehrt heißt das: wo Zeiger unterschiedlich weit gewandert sind, sind sie zu unterschiedlichen
+Zeiten geschrieben worden — die Streuung ist ein Altersmesser, kein Fehlerbild.
+
+Und die drei haben zusätzlich die **Form** gewechselt. Derselbe Satz diagnostiziert das selbst:
+
+> *„DIE URSACHE IST DIE FORM DIESER DATEI: die auftrag-Felder sind uneinheitlich, jetzt 32 mit und
+> 19 ohne Anführungszeichen, und genau diese drei stehen ohne. Ein Raster mit
+> Anführungszeichen-Pflicht findet sie nicht."* — `docs/STATUS.md` Z.9067-9069
+
+**Fremder Befund, zitiert und nicht nachgebaut** (P-02 Punkt 4). Was ich dazu beitrage, ist die
+Nachmessung von heute: **0 ohne, 264 mit Anführungszeichen** — `A-09`, `A-11`, `A-12` stehen alle
+drei mit. **Der strukturelle Mangel ist behoben**, und der Zeiger, der ihn belegte, zeigt damit
+gleich zweifach ins Alte: falsche Zeile *und* falsche Schreibweise.
+
+Derselbe Block zieht die härtere Bilanz, ebenfalls zitiert statt nachgebaut: *„32 zu 19
+uneinheitliche Feldformen in derselben Datei haben heute DREI Rollen falsch messen lassen — den
+Generator, den Evaluator und mich."* (Z.9076-9078)
+
+### Zwei Zeiger, die ihre eigene Unrichtigkeit mitliefern
+
+`Z.11946` und `Z.11993` zeigen beide auf `:5302` — und **sagen im selben Satz, dass es nicht
+stimmt**: *„DIE FUNDSTELLE FÜR M-02 STIMMT NICHT GENAU"* und *„(`STATUS.md:5302`) ist überhaupt
+keine Auftragszeile, sondern eine Zeile in einer BEFUND-…"*. Ich zähle sie **nicht** als Fehlzeiger,
+sondern als das Gegenteil: ein Verweis, der seine Grenze mitträgt, führt niemanden in die Irre. Das
+ist die Bauform, die ich in §175 für mich selbst übernommen habe.
+
+### Die Folgerung
+
+Von 18 Selbstverweisen tragen **drei**, und die tragen nur, weil sie auf die ersten 40 Zeilen
+zeigen. Das ist kein Vorwurf an einzelne Autoren — jeder dieser Zeiger war beim Schreiben richtig,
+und mehrere habe ich in früheren Abschnitten selbst so gesetzt. Es ist eine Eigenschaft des Trägers:
+**`docs/STATUS.md` wächst an vielen Stellen zugleich, und darin ist eine Zeilennummer kein Ort,
+sondern ein Zeitstempel.**
+
+**Ball beim Planner** (Regelwerk) und **beim Integrator** (alleiniger Schreiber): Verweise innerhalb
+der Statuswahrheit brauchen **Blockkennung und Feldname** (`auftrag: "A-09"` → Feld `basis_sha`),
+nicht die Zeilennummer. Beide haben das Muster bereits im Haus — `86398891` und `7e28d051` arbeiten
+genau so. **Nachziehen der 12 alten Zeiger empfehle ich NICHT**: sie stehen in datierten Messungen
+fremder Blöcke, und dafür gilt dieselbe Begründung, die der Integrator in §175 gegeben und die ich
+dort angenommen habe.
