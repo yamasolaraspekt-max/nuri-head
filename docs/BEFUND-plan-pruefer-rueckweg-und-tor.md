@@ -11555,3 +11555,72 @@ Fundstellen, sind aber keine, weil `A-40` kein Dateiname ist — und das Wort He
 Blicke, und beide Warnungen sind strukturell unmoeglich. Dass ich sie dreimal einzeln „behoben" habe
 (§140, §144, §147) und sie beim vierten Mal doppelt auftraten, ist der Beleg, dass eine Absicht
 keine Pruefung ersetzt.
+
+## §158 — A-42 nachgeprüft: mein Restpunkt ist sauber behoben, und dabei fällt ein Punkt auf, den ich damals übersehen habe
+
+*(Messstand 8a0020c7, 21.08. 12:44. Nummer gegen den frischen HEAD gewaehlt: 95 Abschnitte, hoechste
+157 — 158 war frei. A-42 steht auf `ENTWURF` mit `ballbesitz: "plan-pruefer (DoR)"`.)*
+
+**Herkunft aller Zahlen unten:** eigene Messung, blockweise an den ```yaml-Zaeunen von
+`docs/STATUS.md`, gegen mein Votum in dieser Datei (`docs/BEFUND-plan-pruefer-rueckweg-und-tor.md:1958 ff.`,
+gemessen 16.08. gegen `88f7bc2b`) und gegen `docs/auftraege/aktiv/A-42-befundnotizen-ziehen-um.md`.
+
+### Die tragende Zahl reproduziert exakt
+
+Mein Fund lautete: *„der Umzug nimmt 120 von 137 Baellen mit."* Definition scharf — Bloecke **mit**
+`auftrag:` und **ohne** `zustand:` ziehen um. Heute nachgemessen:
+
+| Rolle | heute (bleibt/um/gesamt) | Votum 16.08. |
+|---|---|---|
+| planner | 3 / 78 / 81 | **identisch** |
+| plan-pruefer | 8 / 31 / 39 | **identisch** |
+| generator | 4 / 6 / 10 | **identisch** |
+| release-pruefer | 0 / 5 / 5 | **identisch** |
+| integrator | 1 / 0 / 1 | 2 / 0 / 2 |
+| evaluator | 1 / 0 / 1 | 0 / 0 / 0 |
+| **Summe** | **17 / 120 / 137** | **17 / 120 / 137** |
+
+**Vier von sechs Zeilen identisch, und die Summen exakt** — integrator und evaluator haben je um
+eins in Gegenrichtung getauscht, netto null. Nach fuenf Tagen und **208 Commits** auf
+`docs/STATUS.md`.
+
+**Eine Praezisierung an meiner eigenen Tabelle:** sie kennt nur die sechs Rollen. Heute traegt
+`docs/STATUS.md` ausserdem **`yama` mit 8/4/12** und **`offen` mit 1/0/1**. Ueber **alle**
+Ballwerte gerechnet sind es **124 von 150**, nicht 120 von 137. Der Satz stimmt fuer seine
+Grundmenge; die Grundmenge stand nicht dabei.
+
+### Der Restpunkt ist behoben, und zwar gut
+
+Meine Beanstandung war: *„kein Kriterium erwaehnt das."* Heute traegt das Blatt bei
+`docs/auftraege/aktiv/A-42-befundnotizen-ziehen-um.md:113` einen eigenen Abschnitt
+(*„DER UMZUG NIMMT 120 VON 137 BAELLEN MIT — Befund des Plan-Pruefers, zutreffend"*), bei `:126` die
+Tabelle und bei `:142-154` **zwei** Kriterien:
+
+- **A-42-11** — Ballbesitz je Rolle **vor** dem Lauf in `docs/STATUS.md`, **nach** dem Lauf ueber
+  **beide** Dateien; Summen muessen uebereinstimmen, sonst ist der Lauf nicht abgeschlossen.
+- **A-42-12** — jede Rolle bekommt ihren neuen Ortungsbefehl namentlich in den Bericht, und der
+  Kommentar bei `:151-153` schreibt die **Ankerpflicht** ausdruecklich hin: *„ohne sie zaehlt der
+  Befehl jede Zeile mit, in der die Zeichenfolge irgendwo vorkommt, auch in Prosa."*
+
+Das ist genau die Falle, in die ich in §130 (End-Anker) und §157 (untaugliches Muster) gelaufen bin.
+**Der Punkt ist geschlossen.**
+
+### Und der Punkt, den ich übersehen habe
+
+`docs/auftraege/aktiv/A-42-befundnotizen-ziehen-um.md` traegt **null** Stufenmarkierungen der Form
+`(P1)` — **und trug schon am Votumsstand `88f7bc2b` null.** Mein A-42-Votum erwaehnt sie mit
+**null Treffern**. **In derselben Sitzung habe ich genau diesen Mangel bei A-40 als Punkt 3 geruegt.**
+Gleicher Mangel, gleiche Sitzung, einmal gesehen und einmal nicht. Damit ist §5s Satz *„jedes
+P1-Kriterium ist vor dem Bau wirksam rot"* auch hier nicht pruefbar.
+
+### Votum
+
+**NICHT ERTEILT — aber aus einem anderen Grund als beim letzten Mal.** Der alte Restpunkt ist
+behoben; offen ist die fehlende Stufenmarkierung, die ich haette nennen muessen. Dazu zwei Angaben
+fuer die Akte, keine Beanstandungen: die Konfliktpruefung ergibt **208 Commits** auf den
+Scope-Gegenstand seit der Basis (`e802c1f8`, 16.08. 17:24) — die tragende Struktur ist trotzdem
+stabil, denn die Balltabelle reproduziert exakt; und `docs/BEFUNDNOTIZEN.md` existiert noch nicht,
+was fuer ein Umzugsziel richtig ist.
+
+**Ball beim Planner** fuer die Stufenmarkierung — derselbe Punkt wie A-40 Punkt 3, jetzt an zwei
+Blaettern. Das Feld `dor_beleg` bleibt beim **Integrator**.
