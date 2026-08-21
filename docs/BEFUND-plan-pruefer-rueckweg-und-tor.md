@@ -19251,3 +19251,101 @@ A-13-Veröffentlichungsbedingung, Tragwerk an die Zeichenfläche, W-21L, versatz
 der Prüfbühne, driftender Zeiger `raumAuswahl.ts`, Regelkollision §3/E1/Beifang, §119/§120) altern
 seit 14:31 nicht mehr *im Betrieb*, sondern *im Stillstand*. Das ist ein Unterschied, den eine
 reine Minutenzahl verdeckt.
+
+## §235 · Posten (e): §226s Korrektur hält — und ein Befund wirkte, sieben nicht
+
+**Messstand.** HEAD `b5dcb6af` (21.08. 18:52:41), Baum sauber, **0 neue Commits** — siebte Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (262 Min). Gemessen 21.08. 18:53–18:56.
+
+**Nachtrag zur Vorrunde:** §234s Commit gab „Warnung, kein Abbruch" aus, ohne dass ich den Wortlaut
+sah. Der Trockenlauf konnte sie nicht reproduzieren — das Tor bricht bei unveränderter Datei vorher
+ab (*„KEIN COMMIT. F-14: was nicht geschrieben wurde, wird auch nicht belegt."*). Kein Ergebnis,
+also kein Ergebnis; ich lasse mir beim nächsten echten Commit mehr Zeilen ausgeben.
+
+### 1 · Die Zahlen, die als Auftrag beim Planner liegen, halten
+
+§216 meldete 24 gebrochene Zeiger, §226 musste die Zielzahlen um +1 berichtigen. **Über den Text
+gesucht, nicht über die Zeilennummer**, am gültigen Stand (`HausplanerApp.tsx`, 1535 Zeilen):
+
+| gesuchter Text | §226 sagt | heute |
+|---|---|---|
+| `const rasterLinien` | 1297 | **1297** |
+| `type: 'ADD_CEILING'` | 1063 | **1063** |
+| `const [rasterAn` | 354 | **354** |
+
+Alle drei treffen, und zwischen `de55bc79` (14:19) und dem gültigen Stand gab es **0 weitere
+Commits** auf die Datei. Die Korrektur der Korrektur hält — der Planner kann mit diesen Werten
+arbeiten.
+
+### 2 · Erst die falsche Reaktion gemessen
+
+Dann habe ich gefragt, was aus den Befunden geworden ist, und die letzte Änderung der **Code-Träger**
+gemessen:
+
+    §136  dachAusschnitt.ts     Befund 21.08. 11:16   Traeger zuletzt 20.08. 13:54   keine
+    §160  dachformVorlagen.ts   Befund 21.08. 12:53   Traeger zuletzt 13.08. 08:00   keine
+    §165  gaubeGeometrie.ts     Befund 21.08. 13:13   Traeger zuletzt 23.07. 15:40   keine
+    §172  dachGeometrie.ts      Befund 21.08. 13:57   Traeger zuletzt 21.08. 13:42   keine
+
+**Das ist die falsche Messung**, und ich verwerfe sie als Beleg: Bei diesen Befunden liegt der Ball
+laut meinen eigenen Abschnitten beim **Planner**, und dessen Antwort wäre ein Auftrag, ein Blatt
+oder ein Datensatz — **kein Code-Commit**. Wer nach der falschen Reaktionsform sucht, findet
+garantiert keine und hält das für ein Ergebnis.
+
+### 3 · Die richtige Messung: wird der Befund aufgegriffen?
+
+Suchmuster zuerst an einem bekannten Treffer verifiziert — `Paragraf 169` liefert 2 Treffer, aus
+dem Z1-W1-Block. Die Suche funktioniert also. Gemessen in `docs/` **ohne** meine eigene Datei:
+
+| Abschnitt | Zitierungen | Verlangt |
+|---|---|---|
+| **§169** | **6** | Eintragung: Datensatz und Bau-SHA in ein Feld |
+| §136 | 0 | Fachentscheidung |
+| §160 | 0 | Fachentscheidung |
+| §165 | 0 | Fachentscheidung |
+| §172 | 0 | Fachentscheidung |
+| §179 | 0 | — |
+| §205 | 0 | Fachentscheidung |
+| §207 | 0 | Fachentscheidung |
+
+**Ein Befund wirkte, sieben nicht** — und der Unterschied ist nicht Wichtigkeit, sondern **Form**.
+§169 verlangte eine mechanische Eintragung ohne Ermessen; der Integrator hat sie ausgeführt und in
+`6ece5379` mit Herkunft belegt (§229). Die sieben anderen verlangen eine Fachentscheidung — und
+genau die bewegt sich nicht.
+
+Das deckt sich mit den neun offenen Posten bei Yama: Fach-Gate N-003, A-13, Tragwerk, W-21L,
+versatz-Quittung, Seed-Weg, `raumAuswahl.ts`, Regelkollision, §119/§120. **Alle neun sind
+Entscheidungen, keine Eintragungen.** Der Engpass hat eine Form, keinen Adressaten.
+
+### 4 · Eine Zahl, die ich nicht melde
+
+Ich wollte die Bilanz vollständig statt stichprobenhaft (B6) und habe alle dreistelligen Verweise in
+`docs/` gezählt: **32 verschiedene Nummern**, bei 80 angekommenen Abschnitten im Bereich 100–179.
+**Die Zahl ist unbrauchbar**, und der Beleg steht in den Treffern selbst:
+
+    …technisch unveraenderbar (§146 AO). Aenderungen steuerrelevanter D…
+    …Aufbewahrung nach §147 AO (i.d.R. 8/10 Jahre)…
+
+Das sind **Abgabenordnung**, nicht meine Abschnitte. Nach Ausschluss von `docs/uebernahme` und
+`docs/accounting` blieben es **weiterhin 32** — die Mehrdeutigkeit sitzt also nicht nur dort.
+
+**Damit ist mein eigenes Nummernschema von fremden Paragraphen maschinell nicht unterscheidbar.**
+Dritte zu breite Grundmenge in Folge (§232 Zitat-vs-Behauptung, §233 `Math.atan`, jetzt hier) —
+diesmal vor der Meldung gefangen. Belastbar ist nur die Tabelle in Abschnitt 3, weil dort jeder
+Abschnitt **einzeln** geprüft ist.
+
+### 5 · Ball
+
+**Yama**, ein Posten, und er folgt aus §234:
+
+Die Wirkungsform ist gemessen: Eintragungen werden ausgeführt, Fachentscheidungen nicht. Seit
+14:31 steht ohnehin alles (§234), aber die sieben Befunde aus Abschnitt 3 sind **vor** 14:31
+angekommen — im laufenden Betrieb mit 128 Commits — und wurden auch dort nicht aufgegriffen. Das
+ist kein Vorwurf an eine Rolle: **keine Rolle darf sie aufgreifen**, weil Fach-, Rechts-, Geld- und
+Datenbankentscheidungen nach `CLAUDE.md` nicht still automatisiert werden. Sie liegen konstruktions-
+bedingt bei Yama, und dort stauen sie sich.
+
+**Plan-pruefer** in eigener Sache: Für die Unterscheidbarkeit meiner Abschnittsnummern gibt es
+bereits einen Träger — `docs/YAMA-KONVENTION-NUMMERN-UND-INSTANZEN.md`. Ich schreibe nicht hinein
+(nicht meine Datei, B6), aber ich melde: ein reines `§NNN` ist als Verweisform nicht eindeutig,
+und das trifft dieselbe Wunde wie A-34 — **eine Nummer ist kein Anker**.
