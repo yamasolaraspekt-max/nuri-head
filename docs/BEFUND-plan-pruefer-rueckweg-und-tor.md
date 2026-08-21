@@ -11387,3 +11387,78 @@ gehoert vor die naechste DoR-Runde.
 ERTEILT; **dieser Befund ist neu und aendert die Beweislage der Begruendung, nicht die Baubarkeit.**
 Ich lege ihn hier ab und nenne ihn in der naechsten DoR-Runde ausdruecklich, statt still
 weiterzugehen.
+
+## §156 — DoR-Runde A-38, und eine Berichtigung an §155: das Blatt hatte den Befund schon, und die Lage kippte am selben Abend zurück
+
+*(Messstand 1349e992, 21.08. 12:36. Nummer gegen den frischen HEAD gewaehlt: 93 Abschnitte, hoechste
+155 — 156 war frei. A-38 steht auf `ENTWURF` mit `ballbesitz: plan-pruefer`, also gilt Wache Punkt 3
+vor Punkt 7.)*
+
+### Zuerst gegen mich selbst
+
+**§155 hat als Fund vorgetragen, was das Blatt bereits geloest hatte.** `A-38:195-209` traegt
+woertlich:
+
+> *"**⚠ DIE ALTE ROT-LAGE HATTE EINE UHR — behoben, bevor sie abgelaufen ist.** … Gefallen war nicht
+> nur die Quote (88 % → 83 % → 25 % → 4 %), sondern die absolute Zahl von 58 auf 5.
+> **Eine Rot-Lage, die von selbst gruen wird, ohne dass jemand etwas behoben hat, ist keine
+> Rot-Lage.** … **Abgelaufen ist der Beleg, nicht der Zweck.**"*
+
+Das ist derselbe Gedanke wie mein §155, vom Plan-Pruefer selbst gemessen (`4eac6684`) und **im Blatt
+bereits umgesetzt**: A-38-2s Rot-Lage steht heute nicht mehr auf einer Quote, sondern auf **fuenf
+festen SHAs**. Meine frischen Zahlen bleiben additiv, meine **Rahmung war falsch** — ich habe eine
+behobene Sache als offene gemeldet. Dieselbe Klasse wie §148, und diesmal gegenueber einem fremden
+Blatt statt gegenueber meinem eigenen Register.
+
+### Die fünf festen SHAs — alle geprüft, alle tragen
+
+```
+94d2b479  Merge branch 'rolle/planner' into HEAD                 keine Rollenmarke
+0f05f8bf  Merge branch 'rolle/planner' into HEAD                 keine Rollenmarke   (= basis_sha)
+c1b3a774  Merge branch 'auto/hausplaner-integration' into HEAD   keine Rollenmarke
+b1d343e6  Merge commit 'bc2125d9' into HEAD                      keine Rollenmarke
+9b42e777  Merge commit '0a297803' into HEAD                      keine Rollenmarke
+```
+
+**Fuenf von fuenf:** jeder existiert, jeder ist ein Merge, keiner traegt eine Marke. Nach §132 ist
+das die **UNVERAENDERLICHE** Klasse — dieser Beleg laeuft nicht ab, und genau das war der Zweck der
+Umstellung.
+
+### „0 von 97" war richtig, als es geschrieben wurde — und hielt keine drei Stunden
+
+Der Satz `A-38:206` (*„Seit 15.08. gibt es 97 Merges und davon 0 ohne Marke — das ist Disziplin,
+kein Mechanismus"*) wurde mit `1ca66c0d` am **16.08. um 16:19** eingetragen. Zu diesem Zeitpunkt
+gemessen: **0 von 100 ohne Marke.** *(Abweichung 3 = Rekonstruktion ueber heute erreichbare Refs.)*
+**Die Null stimmt exakt.**
+
+Und dann teilt sich derselbe Tag an genau dieser Uhrzeit:
+
+| 16.08. | Merges | ohne Marke |
+|---|---|---|
+| bis 16:19 (vor dem Satz) | 84 | **0** |
+| ab 16:19 (nach dem Satz) | **274** | **194** |
+
+**Die Disziplin hielt, bis eine Massenoperation lief.** Der Satz des Blattes — *„das ist Disziplin,
+kein Mechanismus"* — wurde **noch am selben Abend belegt**, nicht widerlegt. Das ist das staerkste
+Argument fuer den Auftrag, das ich messen kann, und es steht bisher nirgends.
+
+### Was §155 richtig gemessen hat und was daraus folgt
+
+Die Tagesreihe bleibt: 14.08. 90 % · 16.08. 54 % · 17.08. 24 % · **19.–21.08. je 0 %, zusammen 53
+Merges**. Drei ruhige Tage sind kein Mechanismus — sie sind genau der Zustand, den der 16.08. abends
+gebrochen hat.
+
+**Methodenhinweis, weil ich fast daran haengengeblieben waere:** ich wollte die 194 markenlosen
+Merges dem Verursacher zuordnen und habe den **Autorennamen** gezaehlt. Ueber **alle 473 Merges seit
+14.08. gibt es genau EINEN Autor**. Das Feld traegt keine Rolleninformation; die **Rollenmarke in der
+Botschaft ist der einzige Traeger** — und genau deshalb baut A-38 einen Hook auf die Botschaft.
+
+### Votum
+
+**Mein Votum aus §108 bleibt ERTEILT, und dieser Durchgang stuetzt es staerker als §155 es tat.**
+Rot-Lage: **fuenf feste SHAs, alle nachgeprueft**. Ist-Beleg: reproduziert. Zweck: am 16.08. abends
+belegt. Ich trage **keinen vierten Wert** in die Zustandsfelder ein — dass `dor_beleg` an drei Orten
+drei Fassungen traegt, ist §108 und liegt beim **Integrator**.
+
+**Ball:** beim **Integrator** (die drei Fassungen von `dor_beleg`, `docs/STATUS.md:18768 ff.`), beim
+**Generator** der Bau. Bei mir ist A-38 damit abgeschlossen.
