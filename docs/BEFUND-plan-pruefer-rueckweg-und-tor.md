@@ -9270,3 +9270,69 @@ verteilt, und §5 kennt nur eine.
 Entscheidung: §5 auf „der Schneidende veranlasst den Eintrag" ändern, oder der Sperre eine Ausnahme
 für neu geschnittene Blöcke geben. **Bis dahin bleibt das Fenster offen**, und jede Ballortung über
 die Statuswahrheit sieht diese fünf Aufträge nicht — meine eingeschlossen.
+
+## §124 — K-4 geprüft statt neu erhoben: alle vier Zeiger treffen, und der Wirkweg ist schärfer als der Beleg
+
+*(Nummer §124 gegen HEAD `99974f24` gewählt und hier benannt. **Prüfen statt erheben** — der Befund
+gehört der Inventur, meine Rolle ist die Gegenprobe.)*
+
+Herkunft: **Befund K-4**, `docs/backlog/inventur-2026-08-20-z1.md`, ausgeschnitten als Auftrag
+`Z1-W1-1 · Das DIN-18065-Badge sagt, was es nicht geprüft hat` (`f350befc`). Sein Ist-Beleg nennt vier
+Zeiger. Jeden einzeln geöffnet:
+
+| Zeiger | Behauptung | gemessen |
+|---|---|---|
+| `treppenBerechnung.ts:97-99` | Kopfhöhe nur `if (e.durchgangshoehe !== undefined)` | **trifft wörtlich** |
+| `treppenBerechnung.ts:58` | `DURCHGANG_MIN = 2000` | **trifft** — `// mm, DIN 18065 lichte Höhe` |
+| `EigenschaftenPanel.tsx:494` | Aufruf ohne das Feld | **trifft** — `durchgangshoehe` 0 Treffer im Aufruf |
+| `EigenschaftenPanel.tsx:499` | Badge „DIN 18065 erfüllt" | **trifft** — `{erg.bestanden ? 'DIN 18065 erfül…'}` |
+
+Vier von vier. Dazu `szene.ts:406-412`: `treppe3DKoerper({ laufbreite, geschosshoehe,
+verfuegbareLauflaenge, gewuenschteSteigung, bereich })` — fünf Felder, **keines** ist die Durchgangshöhe.
+
+### Was der Ist-Beleg nicht ausführt: warum das Badge grün bleibt
+
+```
+  :97    if (e.durchgangshoehe !== undefined) { push('durchgangshoehe', …) }
+  :112   bestanden: !p.some((x) => x.schwere === 'fehler' && !x.bestanden)
+```
+
+**Die Prüfung kommt nur dann überhaupt in die Liste, wenn das Feld da ist — und `bestanden` heißt
+„nichts in der Liste ist fehlgeschlagen".** Fehlt das Feld, existiert die Prüfung nicht, kann folglich
+nicht fehlschlagen, und das Badge zeigt **„DIN 18065 erfüllt"** für ein Kriterium, das nie geprüft
+wurde. Nicht „ungeprüft", nicht „unbekannt" — **erfüllt**.
+
+Das ist die schärfere Fassung des Befunds: der Beleg zeigt, dass die Prüfung bedingt ist; die
+Verbindung `:97 → :112` zeigt, dass die Bedingung als *Bestehen* durchschlägt.
+
+### Und es ist kein toter Code
+
+```
+  app/rahmen/EigenschaftenPanel.tsx   erreichbar JA
+  geometry/treppenBerechnung.ts       erreichbar JA
+  renderers/three-d/szene.ts          erreichbar JA
+```
+
+Anders als die Fälle aus §119/§120/§122 läuft das hier. Der Anwender sieht das Badge.
+
+### Yamas Verdacht, nachgelesen
+
+`A-15-fachaussage-oder-hinweis.md:315-324` trägt ihn wörtlich:
+
+> *„DIN 18065 verlangt zusätzlich lichte Durchgangshöhe, Laufbreite, Podestmaße. Die Eingabe ist
+> ‚Höhen + Fläche'; die Durchgangshöhe hängt an der **Deckenöffnung**, die die Engine nicht kennt.
+> Mein Verdacht: unvollständig."*
+
+Der Verdacht war richtig, und die Messung geht darüber hinaus: es ist nicht nur unvollständig, es
+**meldet sich als vollständig**.
+
+### Ergebnis
+
+**Kein neuer Fund — eine bestätigte fremde Messung mit ergänztem Wirkweg.** Das ist der Ausgang, den
+ich in dieser Rolle öfter haben sollte als eigene Erhebungen, und er ist nach P-02 Punkt 4 der
+richtige.
+
+Der Ball bleibt, wo er liegt: `baut: generator`, `nimmt_ab: evaluator`. Ich melde nur, dass der
+Ist-Beleg trägt und der Auftrag auf einer richtigen Grundlage steht. **An Yama:** dein Verdacht ist
+gemessen bestätigt, und der Auftrag dazu ist geschnitten — er steht allerdings in keiner
+Statuswahrheit (§123).
