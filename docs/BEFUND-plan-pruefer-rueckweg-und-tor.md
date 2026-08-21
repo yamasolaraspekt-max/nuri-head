@@ -14907,3 +14907,79 @@ also 14,36°) oder der Code die der Formel. **Zwei Zahlen für dieselbe Grenze s
 **Kein Ball beim Generator** — der Bau ist an dieser Stelle vollständiger als die Vorschrift.
 
 Damit sind **14 von 27** Formeln durchgerechnet.
+
+## §194 — Posten (d): die neun Yama-Posten datiert — sieben stammen aus 176 Minuten eines Abends, und ein Fehlbefund gegen mich selbst ist im letzten Moment gefallen
+
+**Messstand** `a9c9a3c0` · Baum sauber · 0 neue Commits; Integrationszweig unverändert, letzter
+Commit vor **51 Minuten**.
+
+Ich reiche jede Runde neun Posten an Yama weiter. **Datiert habe ich bisher zwei** (W-21L in §184,
+`raumAuswahl.ts` in §190). Diese Runde alle, über den Erstauftritt in dieser Datei, in Minuten
+(§189):
+
+```
+Fach-Gate N-003                 7b8dec42  16.08. 20:14    6909 min = 4 T 19 h
+W-21L                           dc6abbd1  16.08. 21:08    6854 min = 4 T 18 h
+Zeiger raumAuswahl.ts           94c98ad0  16.08. 21:46    6816 min = 4 T 17 h
+Regelkollision §3/E1/Beifang    eb713631  16.08. 22:54    6748 min = 4 T 16 h
+A-13-Veröffentlichungsbedingung 82c3e33b  16.08. 23:10    6733 min = 4 T 16 h
+Tragwerk an die Zeichenfläche   82c3e33b  16.08. 23:10    6733 min = 4 T 16 h
+versatz-Quittung                82c3e33b  16.08. 23:10    6732 min = 4 T 16 h
+Seed-Weg der Prüfbühne          82c3e33b  16.08. 23:10    6732 min = 4 T 16 h
+§119 (F-011 unerreichbar)       d4ee1555  20.08. 13:52    1531 min = 1 T  1 h
+§120 (Erreichbarkeit gesamt)    e44825d5  21.08. 09:57     326 min = 0 T  5 h
+```
+
+**Sieben der neun sind am selben Abend entstanden**, zwischen 20:14 und 23:10 — **innerhalb von
+176 Minuten**. Drei davon in einem einzigen Commit. Die Yama-Liste ist also nicht über Tage
+gewachsen; sie ist zu großen Teilen das Ergebnis **eines Abends**, und sie liegt seither
+**4 Tage 16 bis 19 Stunden** unbeantwortet.
+
+*Zwei neue aus dieser Reihe stehen daneben:* die Kettenlücke (§170) **93 min**, das Fach-Gate
+Dachneigung (§185) **31 min**.
+
+### Und jetzt der Fehlbefund, der im letzten Moment gefallen ist
+
+§120 trägt die Überschrift *„**38 von 165** Modulen laufen nicht"*. Ich habe mein eigenes
+Erreichbarkeits-Skript **am Stand von §120** (`d4ee1555`) laufen lassen:
+
+```
+erreich.js an d4ee1555:   Grundmenge 160 · erreichbar 127 · nicht erreichbar 33
+§120 behauptet:           Grundmenge 165 · erreichbar 127 · nicht erreichbar 38
+```
+
+Die **127 stimmt**, Grundmenge und Fehlzahl sind je **um 5** höher. Ich war dabei, das als eigenen
+Zahlenfehler zu melden — als „eine Summe aus Addition statt aus Erhebung", B6, und zwar gegen mich
+selbst. **Die Gegenprobe hat es verhindert:**
+
+```
+alle .ts/.tsx                                338
+ohne __tests__ UND __domtests__              160     <- meine heutige Grundmenge
+ohne __tests__, ABER MIT __domtests__        165     <- die Grundmenge von §120
+__domtests__-Dateien                           5
+```
+
+**165 ist keine erfundene Zahl, sondern eine andere Grundmenge** — und die Differenz sind genau die
+fünf DOM-Test-Dateien. `38 − 5 = 33`. **Dieselbe Messung, zwei Mengen.**
+
+Und §120 sagt es **im selben Satz**: *„38 von 165 Modulen laufen nicht, **und fünf davon sind kein
+Fund**."* Die Erklärung stand in der Überschrift, die ich gerade anklagen wollte.
+
+### Was daraus folgt — und es richtet sich gegen mein Verfahren, nicht gegen die Zahl
+
+„**Grundmenge gegen die Frage prüfen**" habe ich in dieser Reihe elfmal von anderen verlangt. Hier
+zeigt sich die Rückseite: **bevor ich zwei eigene Zahlen gegeneinanderstelle, muss ich prüfen, ob
+sie dieselbe Menge zählen.** Zwei Zahlen, die verschiedene Mengen zählen, widersprechen sich nicht —
+sie antworten auf verschiedene Fragen.
+
+**Es bleibt aber ein echter Mangel**, nur ein anderer als gedacht: der **stehende Posten** führt
+seit dem 20.08. „**33 Module ohne Ladeweg**", die **Überschrift von §120** führt „**38 von 165**".
+Beide sind richtig — und **nebeneinander gelesen widersprechen sie sich**, weil keine von beiden
+ihre Grundmenge im Kurztext nennt. Genau das habe ich in §184 an der „33er-Liste" und in §187 an
+„15 Agenten" beanstandet; hier ist es meine eigene Buchführung.
+
+**Ball bei mir:** der Posten heißt ab hier **„Module ohne Ladeweg — heute 27 von 160 (ohne
+`__tests__`/`__domtests__`); §120 zählte 38 von 165, weil die fünf `__domtests__` darin enthalten
+waren"**. Eine Zahl ohne ihre Menge ist keine Zahl.
+**Ball bei Yama, unverändert und jetzt datiert:** sieben Posten warten seit **4 T 16 h bis 4 T 19 h**,
+zwei weitere seit 31 und 93 Minuten.
