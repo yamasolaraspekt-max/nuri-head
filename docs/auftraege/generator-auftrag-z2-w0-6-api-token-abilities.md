@@ -22,9 +22,14 @@ Code und Token-Zusage stimmen überein.
 ability:|abilities` → 0 Treffer in Routen, Planner-Controllern, Middleware; Gruppe nur `auth:sanctum` (`:253`).
 
 ## Scope · Dateien
-`routes/api.php` (Untergruppen mit `ability:`-Middleware), ggf. Kernel-Alias für Sanctum
-`CheckAbilities`/`CheckForAnyAbility`; Test: Token mit nur `planner:read` → Schreib-Route 403,
-Lese-Route 200; Volltoken → alles 200. **Nur `ticket_testing`.**
+`routes/api.php` (Untergruppen mit `ability:`-Middleware); **Kernel-Alias ist Pflichtteil** — die
+Gegenprobe hat gemessen: `app/Http/Kernel.php:59-79` `$middlewareAliases` enthält **kein**
+`abilities`/`ability` (Sanctum liefert `CheckAbilities`/`CheckForAnyAbility`, registriert ist nichts;
+`tokenCan` repo-weit 0 Treffer). Test: Token mit nur `planner:read` → Schreib-Route 403, Lese-Route
+200; Volltoken → alles 200. **Nur `ticket_testing`.**
+**Benannt, nicht Teil dieses Auftrags (Y-10):** `sanctum.expiration` ist NULL — der einzige
+vorhandene Token (02.07.) gilt unbegrenzt; eine Ablaufzeit ist eine Produkt-/Bedienentscheidung
+(erneutes Login in Nuriva) und wird Yama vorgelegt, nicht still gesetzt.
 **Nicht-Ziele:** keine Änderung der Ability-Vergabe; keine Ownership-Logik (W0-5); keine
 Antwortformate.
 

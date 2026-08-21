@@ -49,6 +49,27 @@ einer Rechteabstufung ohne Durchsetzung; ein eingeschränkter Token bliebe voll 
 **erledigt_wenn:** Abilities per `ability:`-Middleware je Untergruppe durchgesetzt ODER aus
 `createToken()` entfernt — Code und Zusage stimmen überein. **aufwand:** S
 
+### Gegenprobe Z2c (security-reviewer, opus, 21.08.) — A-1..A-4 BESTÄTIGT
+`route:list --path=api/planner`: 20 Routen, nur `api` + `Authenticate:sanctum`; `permission:` in
+routes/api.php 0×; keine Policy/Gate::before/globaler Scope/`resolveRouteBinding`; Contract-Test
+berührt A-1..A-4 nicht. **Radius:** Token für **jeden** Account mit Passwort (kein Rollenfilter;
+52 User, 49 Nicht-Admins, 1 Token seit 02.07.); `sanctum.stateful` enthält `ticket.test` → **jede
+eingeloggte CRM-Browser-Session** erreicht die API per Cookie. A-2 Upload-Härtung (Typ, Größe,
+Pfad, `storage/app`) **grün** — nur Ownership rot. A-4 verschärft: Client-Wert gewinnt (`:130-131`).
+Baustein A-1: `directSupervisor`/`resolveReviewer` (`:1978-2018`) + `isSuperAdmin()`.
+
+### A-6 · Bestand (aus Gegenprobe) · `secure.image` liefert jedes Bild nach Auth ohne Ownership
+**beleg:** `routes/web.php:1447` Gruppe `['web','auth']`; `ImageController::secureImage` (`:770-785`)
+`Image::findOrFail($id)` ohne Bindung. **wirkung:** mittel–hoch (Kundenfotos per ID). **aufwand:** S/M.
+Gegenprobe ausstehend (außerhalb A-2 gemessen).
+
+### A-7 · Auth · `users.is_active` wird nirgends geprüft; Token laufen nie ab
+**beleg:** `grep -rn "is_active" app/` → nur Fillable/Cast (`User.php:18,30`); `config('sanctum.expiration')`
+= NULL; `PlannerApiAuthController:50-80` prüft nur Passwort. **erklaerung:** ein deaktivierter
+Ex-Mitarbeiter zieht sich weiter einen Dauer-Token — und ob der **Web-Login** `is_active` prüft,
+ist **nicht gemessen** (Messauftrag, nicht annehmen). **Y-10:** Token-Ablaufzeit (Bedienfolge Nuriva).
+Entwarnung: Selbstregistrierung ist zu (`Auth::routes(['register'=>false])`).
+
 **Z2c nicht geprüft:** `PlannerEmployeeApiController` jenseits der genannten Methoden;
 `PlannerItemMaterialController` :100-610 (Accept/Reject); `config/sanctum.php` Token-Ablauf;
 `secure.image`-Auslieferung (eigener Anschlussfund möglich); `/api/mobile/*`, `/api/secure/master-sets/*`

@@ -61,3 +61,33 @@ Nuriva-App darf nicht brechen: die App lädt „eigene" Daten — alle Eigen-Pfa
 ## Rückweg
 Ein Commit, zurückdrehbar; kein Schema, keine Daten. Entdeckung einer Fehlsperre: Nuriva-Nutzer
 bekämen 403 auf eigene Daten — Kriterium F + die Eigen-Pfade fangen es; bei Zweifel Rückweg per Commit.
+
+## Nachtrag 21.08. — Security-Gegenprobe (opus): A-1..A-4 BESTÄTIGT, Blatt präzisiert
+
+**Gegenprobe:** `route:list --path=api/planner` — alle 20 Routen nur `api` + `Authenticate:sanctum`;
+`grep -c "permission:" routes/api.php` → 0; keine Policy, kein `Gate::before`, kein globaler Scope,
+kein `resolveRouteBinding`; `PlannerApiContractTest.php` berührt A-1..A-4 nicht. **Radius:** jeder
+Account mit Passwort bekommt einen Token mit allen vier Abilities (`PlannerApiAuthController:50-80`,
+kein Rollenfilter; 52 User, 49 Nicht-Admins); `sanctum.stateful` enthält `ticket.test` → **jede
+eingeloggte CRM-Browser-Session** erreicht `/api/planner/*` per Cookie ohne Token. **Teil-Entwarnung
+A-2:** Upload-Typ (`mimes`), Größe (25 MB), Pfad (`basename` + Whitelist, `storage/app`) sind sauber —
+nur Ownership fehlt. **Verschärfung A-4:** `:130-131` bevorzugt den Client-Wert aktiv vor
+`authEmployeeId()`, kein `exists:employees,id`.
+
+**Baustein für A-1, im Haus vorhanden:** `directSupervisor()` (`:1978-1987`) + `resolveReviewer()`
+(`:1994-2018`, zyklensicher, Tiefe 15) — A-1 braucht die **Umkehrung** (vom Ziel aufsteigen, Treffer
+auf `authEmployeeId()`), ein Schleifenaufruf, kein neuer Mechanismus. Zweite Achse `isSuperAdmin()`.
+
+**Zwei Baustufen — Stufe 1 ist OHNE offenen Operanden baubar:**
+- **Stufe 1 (dieser Auftrag):** A-1: `$employee === authEmployeeId() || isSuperAdmin()`, sonst 403 —
+  schließt den GPS-Leak sofort, die 3 Admins arbeiten weiter. A-2/A-3/A-4 wie oben (Zuständigkeit
+  über `planner_item_employees`, 404 statt Leak; A-4 `requested_by_employee_id` aus der Validierung
+  entfernen, hart `authEmployeeId()`).
+- **Stufe 2 (nach Y-9):** Vorgesetztenkette für A-1 — und ob Disponenten/Planer ohne
+  Vorgesetztenverhältnis fremde Tage sehen dürfen, ist **Y-9** (Rechte-Fachentscheidung).
+- **Matrix-Ergänzung:** G: Stufe-1-Regel für A-1 getestet (fremd → 403, Admin → 200); H: der
+  **Cookie-Pfad** (stateful Browser-Session) ist an denselben Prüfungen gebunden — Test über
+  `actingAs` ohne Token auf einen A-Endpunkt → 403 für fremd.
+
+**Nebenbefunde aus der Gegenprobe (außerhalb dieses Auftrags, abgelegt in z2-folge):** `secure.image`
+ohne Ownership (Bestand); `sanctum.expiration` NULL; `users.is_active` nirgends geprüft.
