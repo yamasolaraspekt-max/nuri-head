@@ -15821,3 +15821,141 @@ Ordnung und brauchen nichts.
 
 **Beim Integrator:** unverändert der Hinweg (6 h 07 min ohne einen fremden Commit) und die zwei offenen
 Fences in `docs/STATUS.md:3220` und `:7881`.
+
+---
+
+## §203 — Posten (c): F-054 durchgerechnet. Die Formel stimmt, ihre eigene Regel wird gebrochen, und der unbrauchbare Wert wird gespeichert
+
+**Messstand 526fb5d8, Baum sauber, 0 neue Commits. Integrationszweig unverändert 7a82ecfb (live).
+Hinweg zu: 40 fremde Commits fehlen mir, 26 von mir fehlen dort; letzter fremder Commit `03e9ac41`
+21.08. 10:04. Punkt 2 und 3 unverändert gegenüber §201/§202, kein Ball in meiner Bahn.**
+
+Gegenstand: **F-054 · Maßstab aus einer Referenzstrecke**, `FORMELSAMMLUNG.md:1082-1151`. Gewählt, weil
+ein Maßstabsfaktor alles Nachfolgende skaliert — er ist tragend im Wortsinn.
+
+### 1. Die Rechnung stimmt vollständig
+
+Sieben Tabellenzeilen (`:1109-1116`) und zwei Gegenproben (`:1122-1123`) eigenhändig nachgerechnet,
+`soll = 1000 mm`, Zeigefehler `0,1 mm`:
+
+    gemessen    Massstab (Blatt)      rel. Fehler (Blatt)
+       0,3      3333,33  3333,33         33,3 %  33,3 %
+       0,5      2000,00  2000,00         20,0 %  20,0 %
+       1,0      1000,00  1000,00         10,0 %  10,0 %
+       5,0       200,00   200,00          2,0 %   2,0 %
+      50,0        20,00    20,00          0,2 %   0,2 %
+     200,0         5,00     5,00          0,1 %   0,1 %
+    1000,0         1,00     1,00          0,0 %   0,0 %
+
+    Abweichungen: 0
+
+Auch die beiden **abgeleiteten** Angaben halten: das Blatt sagt, der Unterschied zwischen 0,49 mm und
+0,51 mm betrage „4 % im Maßstab und 0,8 Prozentpunkte im Fehler" — gerechnet sind es **3,92 %** und
+**0,80 Prozentpunkte**. Die Zeile `200,0 → 0,1 %` sieht falsch aus (0,1/200 = 0,05 %) und ist richtig:
+auf eine Nachkommastelle kaufmännisch gerundet ergibt 0,05 genau 0,1.
+
+### 2. Der Grenzfall ist erfüllt — sauber
+
+`:1094` verlangt: `gemessen_mm = 0` → **kein Maßstab, nicht 0 und nicht ∞**.
+
+    resources/planner/hausplaner/app/unterlage/kalibrierung.ts:39
+        if (!(eingegebeneLaengeMm > 0) || !(alterMassstab > 0)) return null;
+    resources/planner/hausplaner/app/unterlage/kalibrierung.ts:41
+        if (gemessen <= 0) return null;
+
+Erfüllt, und besser als verlangt: die Form `!(x > 0)` fängt zusätzlich `NaN`, weil jeder Vergleich mit
+`NaN` falsch ist. Auch der Aufrufer behandelt es richtig —
+`app/unterlage/UnterlagenWerkzeuge.tsx:146-149` setzt einen Fehlertext und kehrt zurück, statt
+weiterzurechnen. Das ist die saubere Gegenrichtung zu §185 und §195.
+
+### 3. Der Befund: die zweite zugesagte Ausgabe existiert nicht
+
+`FORMELSAMMLUNG.md:1093` sagt: **„Ausgabe: beides — der Maßstab und sein relativer Fehler."**
+`FORMELSAMMLUNG.md:1134` verschärft das zu einer Vorschrift:
+
+    Kein Aufrufer darf `massstab` ohne `rel_fehler` verwenden.
+
+Die Funktion gibt `number | null`. Über **Bezeichner** gesucht, nicht über Dateinamen:
+
+    zeigefehler · Zeigefehler · relFehler · rel_fehler · relativerFehler · genauigkeit · Genauigkeit
+        -> 0 Dateien unter resources/planner/hausplaner
+
+    Fangprobe desselben Suchverfahrens: 'berechneMassstab' -> 3 Dateien (bekannt: 3)
+    In kalibrierung.ts selbst: fehler|Fehler|toleranz|Toleranz|epsilon|EPS -> 0 Treffer
+
+Das Verfahren greift, der Wert existiert nicht — an keiner Stelle, unter keinem der geprüften Namen.
+
+**Der einzige Produktivaufrufer bricht die Vorschrift.** `berechneMassstab` hat drei Fundstellen:
+Definition, ein Test, ein Aufruf. Der Aufruf ist
+`app/unterlage/UnterlagenWerkzeuge.tsx:145` — und er verwendet den Maßstab ohne jeden Fehlerwert.
+
+### 4. Und der unbrauchbare Wert wird persistiert
+
+Das ist die Verschärfung gegenüber §185/§195, wo der falsche Wert nur angezeigt wurde:
+
+    UnterlagenWerkzeuge.tsx:153-157   PUT an aktuelle.massstabUrl
+                                      body: { massstab_mm_pro_einheit: neuerMassstab }
+    app/Http/Controllers/Energie/PlanUploadController.php:118
+        'massstab_mm_pro_einheit' => ['required', 'numeric', 'gt:0'],
+    database/migrations/2026_07_08_180006_create_plan_uploads_table.php:31
+        $table->float('massstab_mm_pro_einheit')->nullable();
+
+`gt:0` ist die **einzige** Schranke — keine obere Grenze, keine Plausibilität. Der Fall, den F-054
+selbst beschreibt (`:1103`: *„Ein Abstand von 0,3 mm bei 1000 mm Eingabe liefert 3333,33 statt null.
+Der Aufrufer bekommt eine unbrauchbare Zahl, die aussieht wie ein Maßstab"*), passiert die
+Client-Prüfung, passiert `gt:0` und landet als `float` in der Tabelle. Von dort holt ihn
+`GrundrissController.php:184` wieder heraus.
+
+### 5. Die Zeitachse erklärt es — und sie ist eine eigene Klasse
+
+    30.07. 18:21   f45b9f22   kalibrierung.ts gebaut (AUF-88-P1)
+                              -> EINZIGER Commit an dieser Datei. Seither unberührt.
+    14.08. 22:15   bc2125d9   Generator meldet beim Bau von W-16/1: die Massstabsrechnung fehlt
+                              in der FORMELSAMMLUNG — als Lücke gemeldet, keine Nummer erfunden
+    15.08. 11:52   bb97fd5c   F-054 aufgenommen, samt Regel „kein Aufrufer ohne rel_fehler"
+    heute                     W-16/1 steht auf BETRIEBSBESTAETIGT
+
+Die Formel ist **16 Tage jünger als der Code**, den sie beschreibt. Sie wurde aus ihm abgeleitet, beim
+Aufschreiben verschärft — und die Verschärfung ist **nie zurückgeflossen**: `kalibrierung.ts` hat genau
+einen Commit in seiner ganzen Geschichte, vom 30.07.
+
+Das ist keine Drift im Sinne von §168 — es ist die Umkehrung. Bei Drift bewegt sich der Code unter dem
+Dokument. Hier hat sich das **Dokument über den Code hinausbewegt** und eine Vorschrift aufgestellt, die
+nie jemand eingebaut hat. Ich führe sie als **Klasse 7: die Regel ist jünger als ihr Gegenstand**.
+
+### 6. Was das Blatt selbst schon richtig gesagt hat — gewürdigt
+
+`FORMELSAMMLUNG.md:1146-1151` benennt die Fehlerform vollständig und richtig:
+
+    Die Formel ist richtig, der Grenzfall prüft die Größe, die leicht zu prüfen ist (ist es null?),
+    und nicht die, an der die Antwort scheitert (wie genau ist sie?). … aber der Schaden kam nicht
+    als Absturz, sondern als plausibel aussehende Zahl. Ein Absturz wäre billiger gewesen.
+
+Das ist dieselbe Klasse, die ich in §136, §141, §160, §165, §172, §185 und §195 gefunden habe — **ein
+Schutz, der einen plausiblen Wert liefert statt zu verweigern** — und das Blatt hat sie vor mir und
+schärfer formuliert. Ich baue sie nicht nach. **Mein Beitrag ist der Teil, den das Blatt nicht misst:
+dass die Vorschrift aus `:1134` heute an ihrer einzigen Fundstelle gebrochen wird, dass der Wert bis in
+die Datenbank durchläuft, und dass die Trägerdatei seit 30.07. unberührt ist.**
+
+### Ball
+
+**Beim Planner:** `FORMELSAMMLUNG.md:1134` ist als Vorschrift formuliert („kein Aufrufer darf"), aber es
+gibt keinen Auftrag, der sie baut. Zu entscheiden ist, ob `berechneMassstab` um den zweiten Rückgabewert
+erweitert wird (`{ massstab, relFehler }`) und ob eine obere Schranke in
+`PlanUploadController.php:118` gehört — Letzteres ist eine Fach- und Datenbankfrage und damit
+**Yamas Operand**, nicht meiner: F-054 sagt selbst in `:1138`, die fachliche Grenze hänge am
+Anwendungsfall und sei ein *benannter Operand*.
+
+**Bei Yama** kommt damit ein zehnter Posten hinzu: die höchste zulässige relative Ungenauigkeit einer
+Referenzstrecke beim maßhaltigen Unterlegen. F-054 sagt in `FORMELSAMMLUNG.md:1143` selbst, wohin der
+Wert gehört — wörtlich: *„Der Operand ist der höchste zulässige `rel_fehler`, und er gehört ins
+Auftragsblatt, nicht in die Formel."* Der Zahlenwert ist Yamas, der Ort ist damit schon entschieden.
+
+**Eigener Fehler in dieser Runde, gefangen vor dem Melden:** ich hatte diese Zeile zunächst nur
+abgeschnitten gesehen — bis `…der Operand ist der höchste zulässige` — und daraus geschlossen, das Feld
+sei „leer vorbereitet". Es ist nicht leer, es benennt den Ort. Dieselbe Falle wie in §111, wörtlich
+dieselbe Lehre: **ein abgeschnittenes Zitat ist kein Zitat.** Zweimal dieselbe Klasse, jetzt mit einer
+Gegenmaßnahme statt eines Vorsatzes: bei jeder Tabellenzeile, die ich zitiere, messe ich vorher ihre
+Länge gegen die Breite meiner Ausgabe.
+
+**Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences.
