@@ -1,5 +1,6 @@
 auftrag_id: PARKEN-release-pruefer
-generation: 1
+generation: 2
+steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/ — keine Sacharbeit, ohne Lease erlaubt]
 rolle: release-pruefer
 sitzung_erwartet: 4a2203cb-127f-4c71-aeb4-206a86181667   # PID 87761
 worktree: /Users/yamanuri/Documents/ticket-rolle-release
@@ -12,7 +13,7 @@ voraussetzungen:
   - "neue generation dieser Datei"
 erlaubte_pfade: []
 verboten:
-  - jede Schreibarbeit
+  - jede Sacharbeit (Dateien im Worktree aendern, Pruefungen, Transporte)
   - jeder Commit
   - Einfrierungen lockern
 status: ZUGETEILT

@@ -4,6 +4,12 @@
 Deshalb **holt jede Rolle ihren Auftrag selbst** — Chat-Nachrichten sind keine Auftragsquelle.
 **Nur der Dirigent schreibt hier** (`rollen/`, `auftraege/`). Rollen schreiben nur `ereignisse/`, `sitzungen/`, `leases/`.
 Diese Stelle ist **Betriebszustand**, keine zweite Statuswahrheit — `docs/STATUS.md` bleibt der Statusträger.
+**Autorität:** `/Users/yamanuri/.ticket-steuerung/` ist die operative Wahrheit. Der Spiegel im Repo
+(`docs/auftraege/steuerung-spiegel/**` auf `rolle/dirigent`) ist **nur ein belegter Snapshot** mit Generation und
+Digest — nie Autorität, nie Quelle eines Auftrags; er wird als eigener, pfadbegrenzter Commit je vollständiger
+Momentaufnahme abgelegt, nie mit anderen Ereignissen vermischt.
+**Bisher gilt:** solange kein Commit-Hook Auftrag, Generation, Digest, Worktree, Branch und Lease technisch prüft,
+ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung gehört in A-37/Z0-I3.
 
 ## Für jede Rolle — vor JEDER Werkzeugrunde und vor JEDEM Schreibzugriff
 1. `cat /Users/yamanuri/.ticket-steuerung/rollen/<rolle>.yaml` und `cat rollen/<rolle>.yaml.sha256` (Digest).
@@ -17,8 +23,14 @@ Diese Stelle ist **Betriebszustand**, keine zweite Statuswahrheit — `docs/STAT
    nach V2 §8 — `counter` (dauerhaft), `counter.lock/` (mkdir-Sperre für den ganzen Vergabevorgang), `active/lease.yaml`
    (mkdir-atomar über tmp + `mv`), mit `fencing_token` aus `counter`, `heartbeat_bis`, `owner` (sitzungs_id, pid, rolle).
    Zwei Sitzungen derselben Rolle können denselben Auftrag nicht gleichzeitig halten. Existiert `active/` gültig → nicht arbeiten.
-5. Arbeiten **nur** im genannten `worktree`/`branch`, **nur** in `erlaubte_pfade`, **nie** in `verboten`.
-   Ohne gültigen Auftrag, passenden Worktree, Branch und Lease: **keine Schreibarbeit, kein Commit.**
+5. **Steuerungshandlungen vor Sacharbeit (Yama 21.08.):** Registrierung, Lease-Anforderung und ACK sind
+   **erlaubte Steuerungshandlungen und keine Sacharbeit** — sie sind ohne Lease erlaubt und auch dann, wenn der
+   Auftrag `parken`/`warten` lautet. **Sacharbeit** (Dateien im Worktree ändern, Tests/DB-Läufe, Commits) nur im
+   genannten `worktree`/`branch`, nur in `erlaubte_pfade`, nie in `verboten`. Ohne gültigen Auftrag, ACK, passenden
+   Worktree, Branch und **aktive Lease**: keine Sacharbeit, kein Commit. `TICKET_ROLLE` muss bei jedem Prüf- und
+   Commitbefehl tatsächlich in der Prozessumgebung gesetzt sein.
+   **Zustellnachweis ist ausschließlich die gültige ACK-Datei** (Rolle, Sitzungs-ID, Generation, Digest) — ein
+   Dateizugriff oder eine Zugriffszeit ist kein Nachweis.
 6. Jede Meldung in der Berichtsform: Ausgangs-SHA · Ergebnis-SHA · geänderte Pfade · Votum · Browser · Abweichung · nächster Ball.
 7. Zustände: `ZUGETEILT → GELESEN → GECLAIMT → IN_ARBEIT → CODE_FERTIG → ABGENOMMEN` — jeder Übergang mit SHA, Zeit, Rolle, Beleg
    (Übergänge schreibt die Rolle als `ereignisse/<auftrag_id>/<rolle>-<zustand>.yaml`; der Dirigent spiegelt nach STATUS über den Integrator).

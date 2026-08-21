@@ -1,5 +1,6 @@
 auftrag_id: PARKEN-plan-pruefer
-generation: 1
+generation: 2
+steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/ — keine Sacharbeit, ohne Lease erlaubt]
 rolle: plan-pruefer
 sitzung_erwartet: 3870df7a-b0ad-4c78-bcb2-c5aa83a4c09d   # PID 88049
 worktree: /Users/yamanuri/Documents/ticket-rolle-plan-pruefer
@@ -13,7 +14,7 @@ voraussetzungen:
   - "A-42 ABGENOMMEN (ereignisse/A-42/evaluator-ABGENOMMEN.yaml) UND neue generation dieser Datei"
 erlaubte_pfade: []
 verboten:
-  - jede Schreibarbeit
+  - jede Sacharbeit (Dateien im Worktree aendern, Analysen, Voten)
   - jeder Commit
 status: ZUGETEILT
 ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/PARKEN-plan-pruefer/plan-pruefer-ack.yaml

@@ -1,5 +1,6 @@
 auftrag_id: WARTEN-generator-A-37
-generation: 1
+generation: 2
+steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/ — keine Sacharbeit, ohne Lease erlaubt]
 rolle: generator
 sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8   # PID 88088 — die Sitzung im RICHTIGEN Worktree
 sitzung_gestoppt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b   # PID 87659, SIGSTOP, committete direkt im gemeinsamen Checkout; kein CONT ohne Yama
@@ -14,7 +15,7 @@ voraussetzungen:
   - "A-37-Blatt erweitert (Planner) und DoR ERTEILT (Plan-Pruefer) — kommt als neue generation dieser Datei"
 erlaubte_pfade: []
 verboten:
-  - jeder Bau
+  - jede Sacharbeit (jeder Bau, jede Dateiaenderung im Worktree)
   - jeder Commit
   - jeder Schreibzugriff im gemeinsamen Checkout /Users/yamanuri/Documents/ticket
   - W0-5-Staende (28ca0834, ef7a8c89) ueberschreiben oder loeschen

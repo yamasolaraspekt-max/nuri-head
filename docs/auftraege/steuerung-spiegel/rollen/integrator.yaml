@@ -1,5 +1,6 @@
 auftrag_id: INT-A-42
-generation: 1
+generation: 2
+steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
 rolle: integrator
 sitzung_erwartet: 03737d75-b216-4299-b4ea-595407d3e457   # PID 80335
 worktree: /Users/yamanuri/Documents/ticket

@@ -1,7 +1,7 @@
 auftrag_id: WARTEN-planner-A-37
-generation: 1
+generation: 2
 rolle: planner
-sitzung_erwartet: "neue Sitzung, von Yama gestartet (TICKET_ROLLE=planner) — Sitzungs-ID bei Registrierung in sitzungen/planner.yaml"
+sitzung_erwartet: 20c9c319-f0f8-4f15-8c01-d54f85ceb5fa   # PID 68609, von Yama 23:11 wiederaufgenommen; Registrierung in sitzungen/planner.yaml bleibt Pflicht
 worktree: /Users/yamanuri/Documents/ticket-rolle-planner
 branch: rolle/planner
 basis_sha: c10c25a7
