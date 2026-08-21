@@ -10146,3 +10146,57 @@ falscher Einheit ist keine Zahl.
 Satz. Entweder er bekommt ein verbindliches Ende (ein Feld, eine Frist, oder "terminaler Zustand
 schliesst automatisch"), oder er wird als das benannt, was er heute ist — eine Notiz, keine Schranke.
 Solange beides offen ist, misst die Wache (Punkt 4) ein Merkmal, das nichts sperrt.
+
+## §138 — Posten (e): §123 haelt, und das Fenster ist keine Woche alt, sondern 82 Minuten
+
+*(Messstand 34802356, 21.08. 11:25. Nummer gegen den frischen HEAD gewaehlt: 33 Abschnitte, keine
+Dublette, hoechste §137 — §138 war frei. Klasse nach §132: SHA-verankert.)*
+
+**Die Kennung stand nicht, wo ich sie suchte.** Die fuenf Welle-1-Blaetter tragen **kein**
+`auftrag:`-Feld; ihr Kopfblock fuehrt `zustand`, `basis_sha`, `herkunft`, `vorbestand`, `baut`,
+`nimmt_ab`, `fachliche_gegenprobe`, `status_steht_in` — und keine Kennung. Es sind **feldlose
+Blaetter** im Sinn von Wache Punkt 2, also gilt der Rueckfall auf die Kopfzeile, und dort steht
+`Z1-W1-1` bis `Z1-W1-5`. Mit der Dateinamensform haette ich nichts gefunden und daraus womoeglich
+"kein Datensatz" geschlossen, was zufaellig richtig, aber falsch begruendet gewesen waere.
+
+**Nachgemessen an der richtigen Kennung: 0 von 5.** Keine der fuenf Kennungen kommt in
+`docs/STATUS.md` auch nur **einmal** vor — weder Tafelzeile noch Datensatz. Jedes Blatt sagt es
+selbst: `status_steht_in: "docs/STATUS.md — Integrator-Lauf erforderlich"`.
+
+**Neu und schaerfer als bisher berichtet: das Fenster ist 82 Minuten alt.** Alle fuenf entstanden am
+**21.08. 10:00** im selben Commit `f350befc` — und der traegt die Rollenmarke **`planner`**. In diesen
+82 Minuten ist der Integrator **dreimal** gelaufen (`3555565a`, `a651e886`, `22c5ed7a`, alle 10:04),
+**alle drei reiner Rueckweg-Transport**, je eine Datei, **keiner** auf `docs/STATUS.md`. Das ist
+dieselbe Beobachtung wie in §108, hier an einem frischen Fall: die einzige Rolle mit Schreibrecht
+laeuft, und sie transportiert.
+
+**Die Kollision aus §123 haelt, beide Seiten am HEAD nachgemessen:**
+
+- `ARBEITSREGELN.md:233` — *"Wer ein Auftragsblatt schneidet, legt im SELBEN Commit Tafelzeile UND
+  Datensatz-Block in …"*
+- `scripts/rollen-tor.sh:344` — `if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]`,
+  und der Vollzug bei `:403-407` ist **`exit 1`**, nicht nur eine Meldung.
+
+Der Schneider war der Planner. Er kann `docs/STATUS.md` nicht schreiben. **Die Regel ist fuer jeden
+Schneider ausser dem Integrator nicht erfuellbar** — das ist §123, unveraendert, jetzt mit
+benanntem Schneider und benanntem Zeitfenster.
+
+**Zuendbedingung selbst gerechnet, nur lesend: die Sperre IST scharf.** `TOR_MIT = 6` von
+`TOR_ZWEIGE = 6`, also greift der `elif`-Zweig mit `exit 1`, nicht der Hinweis-Zweig.
+
+**Und dabei mein eigener Fehler, gefangen bevor er gemeldet wurde.** Mein erster Lauf gab
+*"6 von 20 — NOCH NICHT scharf"*, also das Gegenteil. Ursache: ich hatte das Zweigmuster als
+`refs/heads/auto/hausplaner*` geschrieben; das Tor prueft aber **`refs/heads/auto/hausplaner-integration`**,
+den exakten Namen. Vierzehn unbeteiligte Feature-Zweige waren in meiner Grundmenge. Gefangen hat es
+nur, dass ich die Musterzeile `:390` ungekuerzt nachgelesen habe — dieselbe Lehre wie in §111: ein
+abgeschnittenes Zitat ist kein Zitat, und hier war es ein abgeschnittenes *Muster*.
+
+**Fremder Befund, zitiert und nicht nachgebaut.** Der Tor-Kopf (`:349-371`) haelt fest, dass die
+Sperre am 16.08. **verkehrt herum** wirkte: gebunden waren nur die drei Zweige, die das Tor besassen,
+waehrend `planner` und `plan-pruefer` weiterschrieben — *"eine Barriere, die nur die Ausgestatteten
+bindet, schuetzt die Datei nicht, sie waehlt aus, wer sie schreibt."* Das ist behoben, seit das Tor
+in allen sechs Zweigen liegt. Es erklaert aber, warum die Statuswahrheit heute so aussieht, wie sie
+aussieht.
+
+**Ball unveraendert**: beim **Integrator** die fuenf Datensaetze, bei **Yama** die Regelkollision
+§123. Neu ist nur die Praezision — 82 Minuten, ein Planner-Commit, drei Transportlaeufe dazwischen.
