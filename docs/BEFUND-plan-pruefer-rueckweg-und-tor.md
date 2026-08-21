@@ -23743,3 +23743,113 @@ Entscheidung, nicht meine. Ich lege die Messung vor.
 **In eigener Sache:** Ab hier prüfe ich die Vorlage an Yama nicht nur auf frische Zahlen, sondern
 auch darauf, **ob der Posten noch existiert**. Eine Zahl frisch zu messen und den Posten nicht,
 war die Lücke.
+
+## §283 · Yamas Posten 3 zum ersten Mal gemessen: Tragwerk ist gerechnet, nirgends gezeichnet und zu fünf Sechsteln nicht einmal geladen
+
+**Messstand.** Runde begonnen an `bac97045` / Zweig `1271c034`. **Vor dem Schreiben neu gemessen
+22:07: Zweig `82dc8d47`, Rückstand 2** (angekommen: `a4144ff4`, Votum Z1-W1-5 NACHBESSERN, und mein
+eigenes §282). **Die Hausplaner-Insel ist zwischen beiden Ständen unberührt** (numstat leer), die
+Erreichbarkeits- und Verbraucherzahlen unten gelten am neuen Stand. Baum sauber. Ballortung
+beidseitig **1** (P-02, VORLAGE) und **35** (Blöcke ohne Zustandsfeld) — nichts in meiner Bahn.
+Gemessen 21.08. 22:04–22:09.
+
+§282 hat gemeldet, dass Posten 3 seit **7128 Minuten** auf Yamas Liste steht und **nie gemessen**
+wurde. Das hole ich hier nach. **Ich entscheide nichts** — die Vorlage stuft ihn als
+*Produktentscheidung* ein, und Produktfragen werden nach `CLAUDE.md` nicht still automatisiert.
+Was ich liefere, ist die Lage.
+
+### 1 · Die Frage im Original
+
+`docs/VORLAGE-AN-YAMA-2026-08-12.md:34`, Punkt 14 der Übersicht:
+
+    | 14 | **Tragwerk sichtbar?** | Gehört Tragwerk an die Zeichenfläche? | Produktentscheidung |
+
+Und in der Statuswahrheit (`docs/STATUS.md`, über die Ankerform gefunden — `offen_bei_yama`):
+*„nur die Fachfrage aus Punkt 4 — gehoert Tragwerk an die Zeichenflaeche?"*
+
+### 2 · Was an Tragwerk existiert — und wo es endet
+
+**Gezeichnet wird nichts.**
+
+    app/rahmen/Buehne.tsx (2D-Zeichenflaeche)   Nennungen von sparren/pfette/holz:  0
+    renderers/three-d/dachMesh.ts (3D)          :53-54  const SPARREN_HOEHE_CM = 20
+                                                :90     rafterHeight: SPARREN_HOEHE_CM
+
+Im 3D geht die Sparrenhöhe als **Konstruktions-Konstante** in die Dachdicke ein — ein einzelner
+Sparren wird nirgends dargestellt. Die Datei nennt sie selbst *„Konstruktions-Konstante, nicht im
+Modell"*.
+
+**Gerechnet wird an genau einer Stelle.** `berechneSparren` (`geometry/sparrenBerechnung.ts:105`)
+wird von `app/dashboard/enginePanels.ts:227` aufgerufen, und `enginePanels.ts` **ist** ab `main.tsx`
+erreichbar. Das ist ein **Rechenpanel**, kein Zeichnen: `faehigkeiten.ts:83` führt es als
+`engine-sparren`, *„Sparren-Vorbemessung"*, `zustand: 'verfuegbar'`.
+
+**Der Rest hängt in der Luft.** Sieben exportierte Tragwerks-Funktionen haben **null**
+Produktivverbraucher außerhalb ihrer eigenen Datei:
+
+    schifterAusFlaeche · schifterMengen · schifterMengenAusListe   (schifterListe.ts)
+    sparrenTeilstuecke · istSicherTrennbar                          (sparrenTrennung.ts, ganze Datei)
+    sparrenPositionenU · analysiereAuswechslung                     (auswechslung.ts, ganze Datei)
+
+Und **fünf Tragwerks-Dateien haben ab `main.tsx` gar keinen Ladeweg**: `schifterListe.ts`,
+`sparrenTrennung.ts`, `auswechslung.ts`, `holzMengen.ts`, `holzBauteile.ts`.
+
+### 3 · Der Katalog ist kein Verbraucher — nachgeprüft, nicht angenommen
+
+Meine erste Zählung meldete für `klassifiziereSchifter`, `holzMengenAusListe` und
+`holzBauteileAusListe` je **einen** Verbraucher. Alle drei Treffer liegen in
+`app/tools/faehigkeiten.ts:85-87` und sehen so aus:
+
+    { id: 'engine-schifter', label: 'Schifter-Liste', gruppe: 'dach-zimmerei', art: 'engine',
+      zustand: 'in_entwicklung', funktion: 'Schiftsparren klassifizieren + Stueckliste', … }
+
+**Das sind Beschreibungsfelder eines Katalogs.** Die Gegenprobe an der Importzeile ist eindeutig:
+`faehigkeiten.ts` importiert **genau eine** Sache — `TOOL_DEFINITIONS` aus `./toolRegistry`, sonst
+nichts. Kein Aufruf, keine Bindung. **Ein Eintrag, der eine Funktion beschreibt, benutzt sie nicht**
+— P7 in der Katalogform, und drei meiner Zahlen hingen daran.
+
+Drei der fünf Einträge tragen ohnehin `zustand: 'in_entwicklung'`; nur `engine-sparren` und
+`engine-treppe` stehen auf `'verfuegbar'`.
+
+### 4 · Nebenbei gemessen: Yamas Posten 9 nennt 33, es sind 27 — und davon 25
+
+Derselbe Lauf beantwortet den zweiten Posten:
+
+    Grundmenge  160 Module (ohne __tests__/__domtests__)
+    erreichbar  133      OHNE LADEWEG  27      (Posten 9 nennt 33)
+      davon reine Typdateien ohne ausfuehrbaren Export:  2
+      mit ausfuehrbarem Export und ohne Ladeweg:        25
+
+**Die 2 muss man abziehen, und der Grund liegt in meinem Werkzeug:** Es zählt `import type`
+absichtlich nicht als Laufzeitkante, also erscheinen typenreine Module zwangsläufig als
+unerreichbar, obwohl sie einwandfrei benutzt werden. Eine Zahl, die das nicht trennt, meldet zwei
+Tote, die leben.
+
+### 5 · Was Yamas Frage damit ist — und was sie nicht ist
+
+Die Frage lautet nicht *„sollen wir Tragwerk bauen?"*. **Es ist gebaut** — Berechnung, Schifterliste,
+Auswechslung, Holzmengen, Bauteilaggregation. Die Frage ist gemessen eine andere:
+
+> **Soll eine vorhandene, überwiegend unverbundene Rechenschicht an die Zeichenfläche angeschlossen
+> werden — oder bleibt Tragwerk eine Zahl im Panel?**
+
+Das ist eine Produktentscheidung und bleibt Ihre. Die Lage dazu:
+
+    heute sichtbar   :  nichts
+    heute gerechnet  :  Sparren-Vorbemessung (ein Panel, verfuegbar)
+    heute vorhanden
+    aber unverbunden :  5 Dateien ohne Ladeweg, 7 Funktionen ohne Verbraucher
+
+### 6 · Ball
+
+**Yama** — Posten 3 ist erstmals gemessen und damit entscheidbar; die Entscheidung liegt bei Ihnen.
+**Posten 9**: die Zahl **33** stimmt heute nicht mehr, gemessen sind **27**, davon **25** mit
+ausführbarem Export.
+
+**Nicht geprüft:** ob die fünf unverbundenen Dateien fachlich richtig rechnen — das wäre die
+Fach-Linse (Zimmerer/Statiker) und nicht meine. Ich habe die **Erreichbarkeit** gemessen, nicht die
+**Richtigkeit**.
+
+**Unverändert offen beim Planner:** Schreibschutz der Zieldatei (§278),
+`…w0-11-ids-callback-csrf.md:22` (§276), die Rundungsfrage (§277), der zweite Pfad in der
+Wache-Anweisung (§279).
