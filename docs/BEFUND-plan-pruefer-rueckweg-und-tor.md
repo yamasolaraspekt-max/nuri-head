@@ -16883,3 +16883,98 @@ Quote nicht hoch (B6).
 
 **Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
 und `:7881`, dazu der Restpunkt an A-22-1 (§209) und der eine unzuordenbare Block ab `:2397` (§210).
+
+---
+
+## §212 — Posten (b): A-15s beide Zahlen halten, die Menge ist unbewegt, die Wirkung besteht fort. Nur der Titel trägt die Zahl, die das Blatt selbst widerrufen hat
+
+**Messstand 63f403ce, Baum sauber, 0 neue Commits. Integrationszweig unverändert 7a82ecfb (live).
+Hinweg zu: 40 fehlen mir, 35 von mir fehlen dort. `docs/STATUS.md` und die 89 Blätter an beiden
+Ständen unbewegt, kein Ball in meiner Bahn. Erhebung 21.08. 17:06–17:09.**
+
+Wieder Grundmenge zuerst: von den 89 Blättern tragen einige eine **Zahl in der Kopfzeile** — die sind am
+schärfsten prüfbar, weil die Behauptung ohne Kontext steht. Gewählt:
+`docs/auftraege/aktiv/A-15-fachaussage-oder-hinweis.md` (771 Zeilen, `BETRIEBSBESTAETIGT`, Ball `—`),
+Kopfzeile: *„A-15 — **dreizehn** Rechnungen klassifizieren: Fachaussage oder Hinweis."*
+
+### 1. Die Zahl ist reproduzierbar — mit der Grundmenge, die das Blatt selbst benennt
+
+Meine erste Messung ergab **17** und hätte eine Abweichung von 4 gemeldet:
+
+    'bestanden' (breit) in resources/planner/hausplaner, ohne Tests:  17 Dateien
+    darunter: hausplaner.css, Buehne.tsx, EigenschaftenPanel.tsx     <- weder Rechnung noch Engine
+
+Das Muster war zu breit. Mit `bestanden:` als **Feld** gemessen und gegen die Erläuterung des Blattes
+gehalten (`A-15:263-265`), geht die Rechnung exakt auf:
+
+    'bestanden:' als Feld                                14 Dateien
+      − app/EngineFlaeche.tsx        (Anzeige)           13   <- Blatt: "dreizehn Dateien"
+      − app/dashboard/enginePanels.ts  (Durchreiche)
+      − geometry/werkzeugRegistry.ts   (Typdeklaration)  11   <- Blatt: "elf ENGINES"
+
+Die drei Ausnahmen sind im Code selbst belegt, nicht von mir zugeordnet:
+
+    EngineFlaeche.tsx:12    "bestanden: false ist ein gueltiger Zustand, kein Fehlerbildschirm"
+    enginePanels.ts:72      "Kein Gesamturteil anzeigen — auch dann nicht, wenn die Engine ein
+                             bestanden liefert"
+    werkzeugRegistry.ts:13-14  /** true, wenn alle harten Fachpruefungen bestanden sind */
+                               bestanden: boolean;          <- Typ, keine Rechnung
+
+**Und der Abgleich in die andere Richtung stimmt auch:** von den 14 Dateien mit `bestanden:` nennt das
+Blatt **alle 14** namentlich. Keine fehlt.
+
+### 2. Die Menge ist unbewegt — die Entdeckungsregel des Blattes ist nicht ausgelöst
+
+`A-15:207-209` formuliert eine Wirkungsprüfung: *„Erscheint später eine neue Engine mit `bestanden` und
+ohne Klassifikation, hat der Bericht keine Wirkung gehabt."* Gefahren:
+
+    am Blattstand 48fac1f0 (12.08. 14:49):  'bestanden' breit 17 · 'bestanden:' als Feld 14
+    heute:                                  'bestanden' breit 17 · 'bestanden:' als Feld 14
+    dazugekommen: KEINE · weggefallen: KEINE
+
+**Neun Tage, keine neue Engine, keine verschwundene.** Die Regel ist nicht eingetreten; der Bericht hat
+seine Wirkung behalten. Das ist der eigentliche Ertrag dieser Runde, und er ist ein Positivbefund.
+
+### 3. Der Befund: der Titel trägt die widerrufene Zahl
+
+Das Blatt korrigiert sich in `A-15:263-265` ausdrücklich und benennt den Grund:
+
+    MENGE  elf ENGINES (nicht dreizehn Dateien — werkzeugRegistry und enginePanels tragen
+           'bestanden' als DURCHREICHE, nicht als Aussage. Yamas Richtigstellung, und es
+           war mein Zaehlfehler: Dateien erhoben, Engines gemeint.)
+
+Die Kopfzeile sagt aber weiterhin **„dreizehn Rechnungen"**. Eine *Rechnung* ist eine Engine, und davon
+sind es elf — nicht dreizehn. Die 13 ist die **Dateizahl**, und die steht im Titel an der Stelle, an
+der die Rechnungszahl stehen müsste. Das ist genau der Fehler, den das Blatt 262 Zeilen weiter unten
+als seinen eigenen beschreibt: *„Dateien erhoben, Engines gemeint."*
+
+Zweite Fundstelle, mit Vorbehalt: `A-15:208` schreibt *„die Zahl 13 ist dann größer"* als
+Entdeckungsschwelle. Ob dort 13 (Dateien) oder 11 (Engines) richtig ist, hängt daran, worüber der
+angekündigte `grep` läuft — der Satz sagt *„über dieselbe Menge"* und ist damit auf die Dateimenge
+lesbar. **Ich melde diese Stelle nicht als falsch**, sondern als mehrdeutig; der Titel ist der klare
+Fall.
+
+### 4. Zwei eigene Fehler, beide vor dem Melden gefangen
+
+1. **Muster zu breit, Faktor 4.** `bestanden` ohne Doppelpunkt zog `hausplaner.css`, `Buehne.tsx` und
+   `EigenschaftenPanel.tsx` mit hinein — Dateien, die das Wort in Prosa oder CSS-Klassen tragen. 17
+   statt 13, und ich hätte eine Abweichung gemeldet, die nur in meinem Muster existierte. Dieselbe
+   Klasse wie §207 (Archiv mitgezählt) und §202 (falscher Baum): **die Grundmenge zuerst, dann die
+   Zahl** — zum dritten Mal in fünf Runden.
+2. **Beinahe die richtige Zahl für falsch erklärt.** Nach der ersten Messung stand „13 stimmt nicht" im
+   Raum. Erst die Erläuterung im Blatt selbst (`:263`) hat die Grundmenge geliefert — und sie stand die
+   ganze Zeit dort. **Wer eine fremde Zahl prüft, liest zuerst, wie sie gezählt wurde.**
+
+### Ball
+
+**Beim Planner**, klein: `docs/auftraege/aktiv/A-15-fachaussage-oder-hinweis.md:1` — die Kopfzeile sagt
+„dreizehn Rechnungen", das Blatt selbst hat auf elf Engines korrigiert. Eine Zahl im Titel, die der
+eigene Text 262 Zeilen weiter widerruft.
+
+**Ausdrücklich kein Befund** gegen A-15 im Übrigen: beide Zahlen sind reproduzierbar, die Ausnahmen
+sind im Code belegt, das Blatt nennt alle 14 Dateien namentlich, und seine Wirkungsprüfung ist nach
+neun Tagen nicht ausgelöst. Zusammen mit §210 (A-25) ist das der zweite abgenommene Auftrag in dieser
+Reihe, der seine eigene Prüfung mitgeliefert hat und dessen Prüfung heute noch trägt.
+
+**Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
+und `:7881`, dazu der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
