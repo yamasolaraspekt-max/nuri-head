@@ -10620,3 +10620,31 @@ ohne bekannten Bezugsfall ist keine Messung.**
 
 **Ball beim Generator** fuer den Bau, **Eintragen** beim **Integrator** (`docs/STATUS.md`, weder
 Tafelzeile noch Datensatz — §138). Naechste Runde: DoR fuer `Z1-W1-3`.
+
+### Nachtrag zu §144 — B7 hat gefeuert, und der Grund ist ein Wort, nicht eine fehlende Messung
+
+*(Messstand 27a3532e, 21.08. 11:52.)*
+
+Der §144-Commit lief mit **B7-WARNUNG** durch: *"Mehrere Fundorte genannt, aber keine Herkunft."*
+Rein lesend bestimmt, indem ich die Botschaft gegen die Muster im Tor hielt: `B7_MEHRFACH` trifft,
+`B7_HERKUNFT` trifft **nicht**; B5 und B6 feuern nicht.
+
+**Die Herkunft stand in der Botschaft — mit Datei und Zeile.** Ich hatte den einen produktiven
+**Aufrufer** von `walmIstKonsistent` benannt (`geometry/dachformVorlagen.ts:478`) und ihn
+*"Produktivverbraucher"* genannt. Das Muster `scripts/commit-pruefen.sh:906` kennt zehn Alternativen
+— `Herkunft`, `Quelle`, `stammt`, `unabhaengig`, `Ursprung`, `kopiert`, `Aufrufer`, `@include`,
+`@extends`, `Route` — und **`Verbraucher` ist keine davon** (nachgemessen: null Treffer in der
+Musterzeile).
+
+**Das ist keine Luecke im Tor, sondern eine zwischen zwei Vokabularen.** Meine stehende Anweisung
+sagt *"Verbraucher ueber FUNKTIONSNAMEN messen statt ueber Dateinamen"* (P7); das Tor erkennt
+denselben Sachverhalt am Wort **Aufrufer**. Dieselbe Klasse wie §135: ein Wort traegt die Bedeutung,
+und zwei richtige Sprachen laufen daran auseinander.
+
+**Was ich aendere:** in Botschaften schreibe ich **Aufrufer** (oder nenne die Herkunft ausdruecklich),
+auch wenn ich im Fliesstext beim Wort *Verbraucher* bleibe. Der Sachverhalt war belegt; belegt sein
+und erkannt werden sind zwei Dinge.
+
+**Kleiner Ball beim Planner** — nicht am Tor, das gehoert mir nicht: entweder `Verbraucher` in
+`scripts/commit-pruefen.sh:906` aufnehmen, oder die Rollen-Anweisung auf `Aufrufer` vereinheitlichen.
+Eines von beiden, sonst faellt der naechste Pruefer in dieselbe Kerbe.
