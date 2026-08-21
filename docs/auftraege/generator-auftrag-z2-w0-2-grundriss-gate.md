@@ -31,8 +31,11 @@ denselben Vorgang; dort zusätzlich `abort_unless($planUpload->user_id === auth(
 Polygon → 200 `{"anforderungsprofil_id":…,"version":N+1}`.
 
 ## Scope · Dateien
-- `routes/web.php:5658-5664`: `permission:Hausplaner,read` auf index/editor, `permission:Hausplaner,update`
-  auf speichern (Muster `:4988`).
+- **Vier Routen, nicht drei** (gemessen 21.08.: `routes/web.php:5661-5668` — `index`, `editor/{projekt?}`,
+  **`POST vorschau`** (`GrundrissController:198`, rechnet transient `baueProjekt($data, null)`),
+  `speichern`): `permission:Hausplaner,read` auf index/editor/**vorschau**, `permission:Hausplaner,update`
+  auf speichern (Muster `:4988`). *(Gesamtauftrag 21.08.: „Vorher muss der Planner die vierte Route
+  `vorschau` in Scope und Kriterien aufnehmen" — hiermit.)*
 - `GrundrissController.php:114`: Fremdprojekt → `abort(404)` statt Leak (Hausmuster: 404, nicht 403,
   damit keine Existenz geleakt wird); `index()` auf berechtigte Projekte eingrenzen ODER — wenn kein
   Ownership-Modell für `HeizlastProjekt` existiert — das Permission-Gate als hinreichend begründen
@@ -44,8 +47,8 @@ Polygon → 200 `{"anforderungsprofil_id":…,"version":N+1}`.
 ## Nachvollzugs-Matrix (Fassung 1.7, §5)
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
-| A: `route:list --name=energie.grundriss` zeigt die drei permission-Middlewares (Rohausgabe) | Gate | *n.U.* | route:list |
-| B: ohne Hausplaner → 403 ×3; read → editor 200 / speichern 403; update → speichern 200 | Test | *n.U.* | Testnamen |
+| A: `route:list --name=energie.grundriss` zeigt die **vier** permission-Middlewares (Rohausgabe) | Gate | *n.U.* | route:list |
+| B: ohne Hausplaner → 403 ×4; read → editor/vorschau 200, speichern 403; update → speichern 200 — **je in Schalterstellung false; bei true alles 200** | Test | *n.U.* | Testnamen |
 | C: `speichern` mit fremder `alternative_id` durch Nutzer MIT update-Recht: Verhalten im Baubericht benannt (Ownership-Modell vorhanden? ja/nein, mit Messung) | Ehrlichkeit | *n.U.* | Bericht |
 | D: `git diff --numstat`: nur routes/web.php, GrundrissController.php, Testdatei | Grenze | *n.U.* | Rohausgabe |
 

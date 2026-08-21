@@ -99,6 +99,30 @@ Browser-Cookie erreichbar.
 Authentifizierung** (nur `throttle:60,1`), nur am Middleware-Stack gemessen — **Inhalt nicht geprüft**.
 **A-9 NEU:** `ImageController.php:30` Upload-Regel `file.*` ohne `max:` (andere Pfade 25–50 MB) — GELB, S.
 
+### Messung A-8 (security-reviewer, 21.08.) — KORREKTUR + zwei echte Punkte
+**A-8 zurückgenommen als Auth-Loch:** `api/secure/master-sets*` sperrt in `MasterSetApiController::authApi()`
+(`:26-79`) als erste Anweisung jeder Methode; live anonym → **401**; Vergleich `hash_equals` (`:64-65`),
+kein fester String. Der alte Fund #116 (`software-audit/fix-ledger.md:122`) war ein falscher Alarm
+(`reproduktion.md:56` führte ihn schon so). **Offen (GELB/ROT):** Secret wird auch aus dem
+**Query-String** angenommen (`:28-34`, live bestätigt → Passwort im Access-Log) · `env()` statt
+`config()` (`:36-37`; unter `config:cache` → 500, Schnittstelle in Produktion latent tot; kein
+`config/`-Eintrag, Hausmuster `services.php:34-36`) · keine Protokollierung von Fehlversuchen bei
+`throttle:60,1` · Payload = EK-Preise/Margen/Skonto/Lieferantenkonditionen + Stundensätze +
+**Mitarbeiter-Klarnamen/Fotos** (`loadComponents:649ff`, `loadLabor:932-1041`) · **Debug-Endpunkt ROT:**
+Schema/Spalten/10 Rohzeilen + ungegateter Exception-Text (`:388-393`, `index/show` gaten auf
+`app.debug`) · `with_deleted=1` (`:262`) post-auth. **Kein Konsument im Repo** (Nuriva nutzt
+`/api/mobile/*` + `/api/planner/*`) → **Y-11.** → **W0-10.**
+
+### A-10 NEU · CSRF · `POST ids/callback` in den Ausnahmen — Fremdzuschreibung per Auto-Submit
+**beleg:** `VerifyCsrfToken.php:14-29` nimmt `ids/callback` aus; Route hinter `Authenticate`;
+`IdsController@callback:33-78` legt `ImportedIdsItem` an, `?auto=1` → `autoPromoteItem():89ff` →
+`Distributor::firstOrCreate('GC Online')` + Produktanlage; `uid` frei aus Query (`:56`), keine
+Signatur/kein Nonce. **erklaerung:** eingeloggtes Opfer + fremde Seite mit Auto-Submit-Form →
+Import + Auto-Promotion unter fremder `uid`. **wirkung:** ROT (Integrität, Produktstamm) → **W0-11.**
+Dazu: `POST ai/chats/{chat}/message` ohne Token (Kosten, niedriger); `supplier-connectors/.../return`
+GELB by design ohne State-Parameter; **5 von 11 Ausnahmen sind tot** (Pfade `api/reminder/*/status`,
+`api/due-personal-notes`, `ids/search/callback`, `/ids/receive`, `/ids/callback` treffen keine Route).
+
 **Z2c nicht geprüft:** `PlannerEmployeeApiController` jenseits der genannten Methoden;
 `PlannerItemMaterialController` :100-610 (Accept/Reject); `config/sanctum.php` Token-Ablauf;
 `secure.image`-Auslieferung (eigener Anschlussfund möglich); `/api/mobile/*`, `/api/secure/master-sets/*`
