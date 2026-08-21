@@ -19,8 +19,23 @@
  * die Formen, für die es Z-05 gibt. *Eine Wiederverwendung hätte den Zweck der Scheibe
  * zunichtegemacht.* **Begründete Nicht-Wiederverwendung nach Klasse R5** (`CLAUDE.md`).
  *
- * **Wiederverwendet wird dagegen `signierteFlaeche`** aus `roomDetection.ts` — die Flächenformel
- * steht damit weiterhin an genau einer Stelle.
+ * **Wiederverwendet wird dagegen `signierteFlaeche`** aus `roomDetection.ts` — statt eine achte
+ * Fassung der Formel zu schreiben.
+ *
+ * **BERICHTIGT 21.08. (Z1-W1-3, Kriterium D):** hier stand „die Flächenformel steht damit
+ * weiterhin an genau einer Stelle". **Das trifft nicht zu und traf nie zu.** Gemessen über
+ * `geometry/` und `renderers/` (Muster `a.x * b.y - b.x * a.y`, ohne Tests):
+ *
+ *   polygonFlaeche.ts:44     polygonFlaecheM2      Modul, als die eine Fassung gedacht
+ *   roomDetection.ts:75      signierteFlaeche      LIVE — von dieser Datei benutzt
+ *   dachMesh.ts:104          inline im Renderer    LIVE
+ *   dachAusschnitt.ts:107 · dachTopologie.ts:109 · grundriss.ts:98   unerreichbar (K3)
+ *
+ * **Sechs Fassungen, davon drei erreichbar.** Eine siebte — die private `polygonM2` in
+ * `dachGeometrie.ts` — ist mit Z1-W1-3 entfallen; das war der Auftrag. Die verbleibenden sind
+ * ausdrücklich NICHT Gegenstand gewesen. Der Satz wird deshalb nicht wieder wahr gemacht,
+ * sondern durch die Messung ersetzt: **wer ihn liest, soll die Lage kennen, nicht eine
+ * Absichtserklärung.**
  *
  * ---
  *

@@ -12,6 +12,7 @@
 import type { RoofNode } from '../domain/scene.types';
 import { sichererCos } from '../../utils/dachWerte';
 import { walmIstKonsistent } from './dachformVorlagen';
+import { polygonFlaecheM2 } from './polygonFlaeche';
 
 export interface DachFlaeche {
   flaeche_m2: number;
@@ -36,16 +37,7 @@ function normAz(grad: number): number {
   return ((grad % 360) + 360) % 360;
 }
 
-/** mm-Polygon → m² (Shoelace, absolut). */
-function polygonM2(poly: readonly P[]): number {
-  let s = 0;
-  for (let i = 0; i < poly.length; i++) {
-    const a = poly[i];
-    const b = poly[(i + 1) % poly.length];
-    s += a.x * b.y - b.x * a.y;
-  }
-  return Math.abs(s) / 2 / 1_000_000;
-}
+
 
 export interface DachKontur {
   laengeMm: number;
@@ -85,7 +77,13 @@ export function pruefeRechteckigeKontur(poly: readonly P[], azGrad: number): Dac
 
   // Kante 1: Kontur ~= Bounding-Box, sonst kein stilles Falschdach.
   const bboxM2 = (laengeMm / 1000) * (spannMm / 1000);
-  const konturM2 = polygonM2(poly);
+  // Z1-W1-3: die private Shoelace-Kopie ist entfallen; gerechnet wird mit `polygonFlaecheM2`.
+  // **Einheiten-Vertrag aufgelöst, indem die EINGABE gezogen wird, nicht das Ergebnis:**
+  // `polygonFlaeche.ts:11-13` verpflichtet die Funktion auf **Meter**, `poly` liegt in **mm** vor.
+  // Umgerechnet wird deshalb hier und sichtbar — ein `/ 1_000_000` auf das Ergebnis wäre zwar
+  // rechnerisch gleich (Shoelace ist homogen vom Grad 2), würde den Vertrag der Funktion aber
+  // stillschweigend auf mm ausdehnen. Die Datei behält ihre eine Einheiten-Zusage.
+  const konturM2 = polygonFlaecheM2(poly.map((p) => ({ x: p.x / 1000, y: p.y / 1000 })));
   if (bboxM2 <= 0 || Math.abs(konturM2 - bboxM2) / bboxM2 > 0.01) {
     throw new DachGeometrieUngueltig(
       'Traufkontur ist nicht rechteckig — V1 unterstützt nur rechteckige Grundrisse (kein stilles Falschdach).',

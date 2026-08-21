@@ -157,3 +157,34 @@ test('Z1-W1-2 C: Zeltdach 8×8 m wird NICHT abgewiesen und erfüllt den Erhaltun
     for (const f of fl) assert.equal(f.first_laenge_mm, 0, 'Zeltdach hat Firstlänge 0');
   }
 });
+
+// ---- Z1-W1-3 · Kriterium B: NaN-Verhalten, VORHER und NACHHER am echten Modul gemessen -------
+//
+// **Ergebnis: unverändert — die NaN-Kontur wird in BEIDEN Fassungen abgewiesen.** Gemessen, indem
+// dieselbe Zusage einmal gegen die alte private Shoelace-Kopie und einmal gegen `polygonFlaecheM2`
+// gefahren wurde; beide Male wirft `pruefeRechteckigeKontur` mit `kontur_nicht_rechteckig`.
+//
+// **Und das ist eine Berichtigung meiner eigenen Annahme.** Ich hatte an einem NACHBAU der Formeln
+// gerechnet und daraus geschlossen, die Prüfung lasse NaN durch, weil `bboxM2` selbst NaN werde und
+// jeder Vergleich mit NaN falsch sei. Am echten Modul trifft das nicht zu. Der Nachbau war ein
+// schlechtes Modell — die Lehre steht hier, weil sie sonst niemand sieht: **eine Verhaltensaussage
+// gehört an das Objekt, nicht an eine Nachbildung davon.**
+//
+// Die Zusage bleibt trotzdem stehen: sie hält fest, dass der Formeltausch die Abweisung NICHT
+// geschwächt hat — genau das, was Kriterium B belegen soll.
+test('Z1-W1-3 B: NaN-Kontur wird abgewiesen — vor und nach dem Formeltausch gleich', () => {
+  const nanPoly = [{ x: 0, y: 0 }, { x: NaN, y: 0 }, { x: 8000, y: 12000 }, { x: 0, y: 12000 }];
+  assert.throws(
+    () => dachFlaechen(dach({ roofType: 'sattel', neigungGrad: 30, firstAzimutGrad: 0, polygon: nanPoly })),
+    (e: unknown) => e instanceof DachGeometrieUngueltig && e.grund === 'kontur_nicht_rechteckig',
+    'die Abweisung darf durch den Formeltausch nicht verloren gehen',
+  );
+});
+
+// Gegenprobe zur Zusage darüber: die gültige Kontur läuft weiterhin durch und liefert dieselbe
+// Fläche wie vor dem Tausch (8×12 m ⇒ 96 m² Grundfläche). Ohne sie wäre „wirft immer" auch grün.
+test('Z1-W1-3 B (Gegenprobe): gültige Kontur läuft durch und liefert unveränderte Fläche', () => {
+  const fl = dachFlaechen(dach({ roofType: 'flach', neigungGrad: 0, firstAzimutGrad: 0, polygon: rechteck(8000, 12000) }));
+  const summe = fl.reduce((s, f) => s + f.flaeche_m2, 0);
+  assert.ok(Math.abs(summe - 96) < EPS, `Grundfläche ${summe} ≠ 96 m²`);
+});
