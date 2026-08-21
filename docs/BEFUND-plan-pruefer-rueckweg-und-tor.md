@@ -14540,3 +14540,96 @@ so gesagt, statt es ein viertes Mal zu versprechen.**
 
 *(Der Befund aus §189 ist unberührt: die 34 Minuten, das Siebenfache der Höchstlücke, die sechs
 Rollenzeiten und die 67 ungesicherten Zeilen sind gemessen und stehen.)*
+
+## §190 — Posten (e): der Yama-Posten „driftender Zeiger raumAuswahl.ts" ist kein driftender Zeiger — er war nie richtig
+
+**Messstand** `3a6c3353` · Baum sauber · 0 neue Commits; Integrationszweig unverändert, letzter
+Commit vor **37 Minuten**, drei ungesicherte Einträge.
+
+Gegenstand: einer der neun stehenden Posten bei Yama, den ich jede Runde weiterreiche und zuletzt
+am **16.08.** gemessen habe — also vor rund 7000 Minuten.
+
+### Der Posten selbst: unverändert bis auf das Byte
+
+```
+app/raumAuswahl.ts:7        sagt  „Ihre heutige Identität ist der Index … (`Buehne.tsx:147`)"
+app/rahmen/Buehne.tsx:162   trägt `<Group key={`raum${i}`} listening={werkzeug === 'auswahl'}>`
+app/rahmen/Buehne.tsx:147   trägt `{massElemente}`
+Buehne.tsx                  439 Zeilen — genau wie bei meiner Messung am 16.08.
+Commits an Buehne.tsx       4 gesamt · 0 seit dem 16.08. · letzte Änderung 13.08. 00:56
+```
+
+Meine Aussage vom 16.08. hält damit **zeichengenau**. Nur ihre **Deutung** hält nicht.
+
+### Es ist keine Drift — der Zeiger war im Moment des Schreibens falsch
+
+Der Zeiger wurde eingefügt in **`83d6e108`, 13.08. 00:56**. Und dieser Commit hat **beide Dateien
+zugleich** angefasst:
+
+```
+83d6e108   app/rahmen/Buehne.tsx      +34
+           app/raumAuswahl.ts         +78
+           __tests__/raumAuswahl.test.ts  +96
+```
+
+**Im Baum genau dieses Commits** nachgesehen:
+
+```
+Buehne.tsx:162  <Group key={`raum${i}`} …>     <- der gemeinte Inhalt, schon damals auf 162
+Buehne.tsx:147  {massElemente}                 <- die zitierte Zeile, schon damals etwas anderes
+```
+
+**Der Autor hatte beide Dateien im selben Commit offen und schrieb `:147` für Inhalt auf `:162`.**
+Der Zeiger ist nicht gewandert; er war von der ersten Sekunde an fünfzehn Zeilen daneben.
+
+**Damit berichtige ich meine eigene Formulierung vom 16.08.:** dort steht *„Die Drift beträgt
+fünfzehn Zeilen und sie ist STABIL"* und *„ein offener Posten, der nicht driftet, während er offen
+ist"*. **Er driftet nicht, weil er nie gewandert ist.** Die „Stabilität", die ich als bemerkenswert
+notiert habe, hat eine viel einfachere Erklärung: es gab nie eine Bewegung, die man hätte
+nachziehen müssen.
+
+**Alter, in Minuten statt in Runden (§189):** der falsche Zeiger steht seit **12373 Minuten
+= 8 T 14 h**.
+
+### Eine Nachbesserung ging daran vorbei
+
+`ebe99ba6` (13.08. 07:40) hat **genau diesen Kommentarkopf** überarbeitet — `30+/8−` Zeilen, mit
+einer ausdrücklichen Berichtigung im Text (*„die alte Begründung war sachlich falsch"*). **Die
+Zeile mit `Buehne.tsx:147` blieb unangetastet.** Wer einen Kopf berichtigt, liest ihn — und die
+falsche Zahl steht drei Zeilen über der Stelle, die berichtigt wurde.
+
+### Die zwei anderen Zeiger im selben Kopf treffen
+
+```
+app/ableitungen.ts:61          export function raeumeAus(waende: readonly WallNode[], level: Le…   TRIFFT
+geometry/roomDetection.ts:35   export interface ErkannterRaum {                                    TRIFFT
+```
+
+**Zwei von drei sind richtig.** Das ist kein Muster von Nachlässigkeit, sondern ein einzelner
+Zahlendreher — und genau deshalb gehört er berichtigt statt verallgemeinert.
+
+### Eigener Messfehler, vor der Meldung gefangen
+
+Ich habe `ableitungen.ts` zuerst unter `geometry/` gesucht, weil der Nachbar-Zeiger im selben Satz
+`geometry/roomDetection.ts` lautet. Ergebnis: eine **leere Zeile 61** — und beinahe die Meldung
+„Zeiger ins Leere". Tatsächlich liegt die Datei unter **`app/`**, und `:61` trifft. **Eine fehlende
+Datei sieht genauso aus wie eine leere Zeile, wenn man den Fehlerkanal nicht liest.** Der Fehler
+stand in der Ausgabe (`No such file or directory`), ich hatte ihn hinter der Zeilenausgabe übersehen.
+
+### Die neue Klasse
+
+Bisher habe ich drei Sorten unterschieden: **fremde Drift** (§109, §166 — ein anderer verschiebt),
+**selbstverschuldete Drift** (§174 — die eigene Erfüllung verschiebt) und **Aussage repariert**
+(§168 — die Zeile wandert und der Satz stimmt nicht mehr). Hier kommt eine vierte:
+**nie richtig gewesen.**
+
+Und sie ist die tückischste, weil sie von außen **wie Drift aussieht**. Am heutigen Stand allein ist
+sie nicht zu erkennen — beides zeigt auf die falsche Zeile. **Nur der Schreib-Commit entscheidet
+es**, und den muss man aufsuchen. Ich habe diesen Posten fünf Tage lang als „stabil driftend"
+weitergereicht, weil ich genau das nicht getan hatte.
+
+**Ball bei Yama, mit berichtigtem Wortlaut:** der Posten heißt nicht mehr *„driftender Zeiger
+raumAuswahl.ts"*, sondern **„falscher Zeiger `raumAuswahl.ts:7` → `Buehne.tsx:147`, richtig ist
+`:162`, seit 8 T 14 h, nie richtig gewesen"**. **Ball beim Planner** für die eine Zahl — sie steht
+in einem Kommentarkopf, der seine eigene Identitätsregel erklärt, und dort ist eine falsche
+Fundstelle mehr wert als anderswo.
