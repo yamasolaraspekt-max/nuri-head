@@ -18307,3 +18307,97 @@ mitzählt; drei Fälle sind kein Zufall mehr, sondern eine Bauform, die eine Reg
 
 **Beim Integrator:** unverändert der Rückweg (47 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
 und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
+
+---
+
+## §226 — Posten (a): §224s Reichweiten-Prüfung war unvollständig. Die Zielzahlen aus §211 und §216 sind am gültigen Stand um eins daneben
+
+**Messstand 899b1017, Baum sauber, 0 neue Commits. Integrationszweig lokal 7a82ecfb (14:31, Alter
+217 Min). Rückstand: ich 40 · planner 104. `docs/STATUS.md` und die 89 Blätter unbewegt, kein Ball in
+meiner Bahn. Erhebung 21.08. 18:08–18:10.**
+
+§224 hat festgestellt, dass ich Code am Arbeitsbaum gemessen habe statt am gültigen Stand, und die
+Reichweite auf **einen** Abschnitt begrenzt: *„von zehn Trägern meiner Code-Befunde unterscheidet sich
+EINER."* Diese Runde prüft dieselbe Frage für die **Zeiger**-Befunde — und die Begrenzung hält nicht.
+
+### 1. Der Fehler in §224s eigener Prüfung
+
+Meine Zehnerliste in §224 enthielt die Träger der **Fehlerklasse** (`sparrenBerechnung`,
+`fbhAuslegung`, `gaubeGeometrie`, `kalibrierung` …). Die Träger der **Zeiger**-Befunde standen nicht
+darin — obwohl ein Zeiger auf Code eine Code-Aussage ist. Nachgeholt:
+
+    §211/§216  HausplanerApp.tsx              1 Commit fehlt mir     <-- BETROFFEN
+    §216       toolRegistry.ts                0
+    §220       commit-pruefen.sh              0
+    §221       werkzeugLandkarte.ts           0
+    §206       SzeneProjektionService.php     0
+    §206       enginePanels.ts                0
+    §201       1-AUFTRAG.md · FORMELSAMMLUNG.md   0
+
+**Einer von acht ist betroffen** — aber es ist der, an dem die meisten Zahlen hängen.
+
+**Die Lehre:** eine Reichweiten-Prüfung bildet ihre Grundmenge nach der **Frage**, nicht nach der
+Kategorie, in der ich meine eigenen Befunde abgelegt habe. Ich hatte „Code-Befunde" und
+„Zeiger-Befunde" getrennt geführt und nur die erste Schublade geöffnet.
+
+### 2. Was zu berichtigen ist
+
+`de55bc79` (21.08. 14:19, *„K1-Anschluss deckenOberkanteMm"*) fügt in `HausplanerApp.tsx` eine Zeile
+bei 112 ein. Ab Zeile 118 verschiebt sich alles um **eins**.
+
+    Ziel aus §211/§216         mein Baum      gültiger Stand
+    const rasterLinien…            1296            1297
+    type: 'ADD_CEILING'            1062            1063
+    const [rasterAn, …]             353             354
+
+Und die **Treppe aus §216**, neu gemessen vom Blattstand `afb56886` auf den gültigen Stand:
+
+    ab alter Zeile   §216 (mein Baum)   gültiger Stand
+        118                 +1                +2
+        342                 +4                +5
+        462                 +6                +7
+        633                +34               +35
+        675                +35               +36
+        976                  —               +36     ← sechste Stufe, in §216 nicht enthalten
+
+**Jede Stufe ist um eins höher, und es gibt eine Stufe mehr.**
+
+### 3. Was NICHT zu berichtigen ist
+
+Die tragenden Aussagen beider Abschnitte bleiben:
+
+* §211: der Zeiger `HausplanerApp.tsx:1261` war **berichtigt** und ist erneut gewandert; die
+  Berichtigung hielt **12 Stunden 28 Minuten**. Beides unverändert richtig.
+* §216: `ec12e9b3` hat zwei Blätter gebrochen, beide an berichtigten Zeigern; der Versatz ist eine
+  **Treppe** und keine Zahl; **24 von 34** Zeigern sind daneben. Auch das bleibt — die Zahl 24 zählt
+  betroffene Zeiger, nicht Zielwerte.
+* §216s zweiter Fall `toolRegistry.ts:316 → :343` ist unbetroffen (0 Commits).
+
+**Falsch sind allein die drei Zielzahlen und die Stufenhöhen** — jeweils um eins, weil ich sie im
+Arbeitsbaum abgelesen habe.
+
+### 4. Warum derselbe Fehler zweimal in zwei Runden auftrat
+
+§224 hat die Regel aufgestellt und in derselben Runde unvollständig angewandt. Der Grund ist nicht
+Nachlässigkeit im Messen, sondern eine **falsche Ablage**: ich habe meine Befunde nach ihrer Form
+sortiert (Fehlerklasse / Zeiger / Zahlen) und die Reichweitenfrage nur an einer Form gestellt. Eine
+Regel, die für „jede Code-Aussage" gilt, braucht eine Grundmenge, die alle Code-Aussagen enthält —
+und die entsteht nicht aus meiner Gliederung, sondern aus der Frage *„welche Datei habe ich
+zitiert?"*.
+
+Praktisch heißt das ab hier: **vor jeder Aussage über eine Datei einmal
+`git rev-list --count HEAD..7a82ecfb -- <pfad>`**, unabhängig davon, in welcher Rubrik der Befund
+später steht. Zwei Sekunden, und §207 wie §226 wären nicht entstanden.
+
+### Ball
+
+**Bei mir, mit diesem Abschnitt erledigt:** die Berichtigung der drei Zielzahlen und der Treppe aus
+§211 und §216. Für den Planner gelten die Werte der rechten Spalte — `:1297`, `:1063`, `:354`, und die
+Stufen +2/+5/+7/+35/+36 ab 118/342/462/633/675.
+
+**Beim Planner unverändert im Gegenstand:** 24 gebrochene Zeiger in zehn Blättern (§216), 13 auf das
+Tor (§220), vier in der FORMELSAMMLUNG (§206), einer in A-29 (§221). Nur die Zielzahlen für
+`HausplanerApp.tsx` sind die berichtigten.
+
+**Beim Integrator:** unverändert der Rückweg (49 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
+und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
