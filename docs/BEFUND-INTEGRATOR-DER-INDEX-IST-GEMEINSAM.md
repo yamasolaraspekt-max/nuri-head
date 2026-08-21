@@ -193,3 +193,67 @@ nicht den Zuschnitt.
 | **Planner** | die Stelle ist gemessen: `pre-commit`, `git diff --cached --name-only`, ohne Fehlalarm, ein Ort für sechs Bäume — gegen den Preis der Unsichtbarkeit. Beides steht oben mit Befehl |
 | **Generator** | zur Kenntnis: seine Messung ist unabhängig bestätigt, mein Zuschnitt war falsch |
 | **Yama** | unverändert die Regelfrage — sie bleibt die Abhilfe, die keinen Bau braucht |
+
+---
+
+# NACHTRAG 21.08. 20:1x — zweites Vorkommen, umgekehrte Richtung, und diesmal hatte ich die Abhilfe schon gemessen
+
+**Am 20.08. hat der Generator meine vorgemerkte Arbeit mitcommittet. Heute habe ich seine
+mitcommittet.** Dasselbe Loch, andere Seite.
+
+## Was geschehen ist
+
+```text
+mein Commit 314ea991, 21.08. 20:17, Marke "integrator:"
+  docs/STATUS.md                                 24 +   <- meine Arbeit
+  routes/web.php                                 10 +   <- Bau Z2-W0-1, nicht meiner
+  tests/Feature/Security/ObjektakteGateTest.php  84 +   <- Bau Z2-W0-1, nicht meiner
+
+'web.php' oder 'ObjektakteGate' in meiner Botschaft:   0 mal
+Generator-Commit zu Z2-W0-1:                            existiert nicht
+```
+
+**Der Bau existiert nur in meinem Commit.** Ein Generator baut Produktivcode an einer
+Rechte-Route eines LIVE-Systems, und der Bestand schreibt ihn dem Integrator zu — unter einer
+Botschaft, die von Zustandsfeldern handelt und die Dateien nicht einmal nennt.
+
+## Der Teil, der schwerer wiegt als der Vorfall
+
+**Meine eigene Prüfung hat es angezeigt, und ich bin trotzdem durchgelaufen.** In meiner
+Befehlskette steht seit der Freigabe vom 16.08. `git diff --cached --name-only` vor jedem Commit.
+Sie hat die drei Dateien ausgegeben. **Sie war ein `echo`, kein Tor** — mit `&&` verkettet, ohne
+Bedingung, ohne Abbruch. Eine Prüfung, deren Ergebnis niemand liest, ist keine Prüfung.
+
+**Und die Abhilfe stand schon gemessen in diesem Blatt.** Ein Abschnitt weiter oben, vom 20.08.,
+eigene Probe, eigenes Repo:
+
+> *„`git commit -- <pfad>` nimmt den Arbeitsbaum-Stand der genannten Pfade und übergeht den übrigen
+> Index."*
+
+**Ich habe die Eigenschaft selbst nachgemessen, in dieses Blatt geschrieben — und dann die
+pfadlose Form benutzt.** Das ist kein Wissensmangel, sondern ein Verfahrensmangel: die Erkenntnis
+lag in einem Bericht statt im Befehl.
+
+## Was sich ab jetzt ändert, und zwar am Befehl, nicht am Vorsatz
+
+```text
+vorher   git add <pfad> && git commit -F -                 committet den GANZEN Index
+ab jetzt git commit -F - -- <pfad>                          committet NUR die genannten Pfade
+```
+
+Dazu die Prüfung als **Tor statt als Ausgabe**: passt die Liste der vorgemerkten Pfade nicht zu
+dem, was ich schreibe, wird abgebrochen — nicht gemeldet und weitergemacht.
+
+## Was ich NICHT tue
+
+**`314ea991` bleibt, wie er ist.** Auflage 2: was committet ist, gehört dem Bestand. Kein `reset`,
+kein `amend`, keine Umschreibung — und hier besonders nicht, weil der Commit **fremde
+Produktivarbeit** trägt, die dabei verlorenginge.
+
+## Ball
+
+| an wen | was |
+|---|---|
+| **Generator** | zur Kenntnis: sein Z2-W0-1-Bau (`routes/web.php`, `ObjektakteGateTest.php`) liegt in `314ea991` unter fremder Marke. Er hat keinen eigenen Bau-Commit; wer nach einem sucht, findet keinen |
+| **Evaluator** | die Abnahme von Z2-W0-1 muss den Bau in einem Integrator-Commit suchen — das ist der Fundort, nicht der Autor |
+| **Yama** | die Regelfrage aus dem Hauptteil dieses Blattes bekommt ihr zweites Vorkommen: darf im gemeinsamen Checkout getrennt vorgemerkt werden? Zwei Vorfälle in 24 Stunden, beide Richtungen |
