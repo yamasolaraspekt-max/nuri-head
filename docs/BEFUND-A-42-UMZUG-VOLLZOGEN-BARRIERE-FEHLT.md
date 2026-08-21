@@ -95,3 +95,63 @@ sich messbar unterscheiden:
 
 **Bei mir** — der Nachzug von `bloecke.py` und `drift.py`. **Bis er steht, gilt jede Grundlinienzeile
 dieses Takts ausdrücklich nur für `docs/STATUS.md`.**
+
+---
+
+## Berichtigung 21.08. ~21:5x, in eigener Sache — zwei Werkzeuge, zwei verschiedene Lagen
+
+**Ich habe oben geschrieben, `bloecke.py` und `drift.py` seien blind geworden und „32 % der Zeilen
+liegen außerhalb meiner Messung". Beides ist zu prüfen gewesen, bevor ich es schreibe. Nachgeholt:**
+
+### `bloecke.py` — nicht blind, nur nicht aufgerufen
+
+```
+scripts/bloecke.py:65    def main(pfad=P):
+                  :288   sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else P))
+```
+
+**Der Pfad ist ein Parameter, seit jeher.** Gemessen, ohne eine Zeile zu ändern:
+
+```
+$ python3 scripts/bloecke.py docs/BEFUNDNOTIZEN.md
+  A  Zaunbilanz 348 · gerade
+  B  Zaun mitten in einer Zeile: 3
+  C  Bloecke 172 · parsen 172 · kaputt 0
+  D  Oeffner ohne Schliesser 0
+  D2 auftrag-Zeilen 172 · erfasst 172 · verschluckt 0
+```
+
+> ***Alle 172 Blöcke parsen, kein einziger kaputt, nichts verschluckt, keine offene Klammer.***
+> **Die ausgezogene Datei ist sauberer als die, aus der sie kommt** (dort 23 kaputte Blöcke).
+
+**Mein Satz „liegen außerhalb meiner Messung" war falsch. Richtig: außerhalb meines *Aufrufs*.**
+Der Unterschied ist keine Wortklauberei — im ersten Fall fehlt ein Werkzeug, im zweiten eine
+Gewohnheit. **Es fehlte die Gewohnheit.**
+
+### `drift.py` — braucht keinen Nachzug, und der Grund ist messbar
+
+```
+Tafelzeilen '| **X-NN**' in docs/BEFUNDNOTIZEN.md   0
+                       in docs/STATUS.md           58
+```
+
+**`drift.py` misst Tafelzeile gegen Datensatz. In der ausgezogenen Datei gibt es keine Tafelzeilen**
+— dort ist nichts zu driften. **Ein Nachzug wäre nicht Vorsorge, sondern ein Messgerät für einen
+Gegenstand, den es nicht gibt.**
+
+### Was von dem Befund unverändert steht
+
+**Der Barriere-Teil.** `rollen-tor.sh` 0 · `commit-pruefen.sh` 0 — **die Datei hat keinen
+Schreibschutz, und daran ändert sich durch diese Berichtigung nichts.** Sie trägt jetzt 172
+Befundnotizen und läuft durch kein Tor.
+
+### Neue Grundlinie — zwei Zeilen statt einer
+
+```
+docs/STATUS.md         Zaun  850 gerade · B 7 · C 23 kaputt · D 0 · D2 verschluckt 0
+docs/BEFUNDNOTIZEN.md  Zaun  348 gerade · B 3 · C  0 kaputt · D 0 · D2 verschluckt 0
+Drift 0/0 (nur STATUS.md — die andere Datei hat keine Tafelzeilen)
+```
+
+**Ab sofort läuft `bloecke.py` in jedem Takt zweimal.** Eine Messlatte, die einen Aufruf vergisst,
+meldet dasselbe wie eine, die nicht messen kann — **der Unterschied ist nur, wem man es vorwirft.**
