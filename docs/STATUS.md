@@ -105,8 +105,10 @@
 | **Z2-W0-5** Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md` · **DoR ERTEILT** (plan-pruefer §259) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · **Blockade-Vermerk berichtigt** (plan-pruefer §259): Y-6 blockiert W0-5 NICHT; offen ist stattdessen beim Planner, wer das Routen-Gate fuer `/planner/*` baut |
 | **Z2-W0-6** Nuriva-API: die vier Token-Abilities werden durchgesetzt — oder sie verschwinden | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-6-api-token-abilities.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §260): Dateiname im Ist-Beleg berichtigen · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-7** Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.) | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-7-rechte-schalter-planner-item.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §261) · **VORRANG vor Z2-W0-1** (plan-pruefer §260) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
-| **Z2-W0-8** secure.image und Geschwister: Recht + Bindung statt bloßem auth | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-8-secure-image-gate.md` · **DoR steht aus** · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
-| **Z2-W0-9** „Deaktiviert' deaktiviert: echter Kontostatus statt Online-Flag | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-9-kontostatus-echt.md` · **DoR steht aus** · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
+| **Z2-W0-8** secure.image und Geschwister: Recht + Bindung statt bloßem auth | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-8-secure-image-gate.md` · **DoR ERTEILT** (plan-pruefer §262) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
+| **Z2-W0-9** „Deaktiviert' deaktiviert: echter Kontostatus statt Online-Flag | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-9-kontostatus-echt.md` · **DoR ERTEILT** (plan-pruefer §263) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 |
+| **Z2-W0-10** api/secure/master-sets*: reversible Stilllegung per Schalter (Y-11 entschieden) | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `14dc15f3` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-10-master-set-api-haertung.md` · **DoR steht aus** · Datensatz vom Integrator angelegt 21.08. auf Zustellung §262/§263 |
+| **Z2-W0-11** POST ids/callback: CSRF-Ausnahme mit Auto-Produktanlage schließen, tote Ausnahmen aufräumen | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `ae7cee9d` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-11-ids-callback-csrf.md` · **DoR steht aus** · Datensatz vom Integrator angelegt 21.08. auf Zustellung §262/§263 |
 
 ### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
 
@@ -28288,16 +28290,21 @@ herkunft_dieses_datensatzes: |
 auftrag: "Z2-W0-8"
 titel: "secure.image und Geschwister: Recht + Bindung statt bloßem auth"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: generator
+ballbesitz_nachgezogen: |
+  plan-pruefer -> generator, 21.08. vom integrator. TRANSPORT: Paragraf 262 —
+  "Generator: W0-8 ist von meiner Seite frei."
 ballbesitz_grund: |
   Die DoR steht aus. Paragraf 260 meldet die drei als "ohne Block" und weist den Eintrag
   dem Integrator zu; die Pruefung selbst hat der Plan-Pruefer noch nicht gefahren.
 blatt: "docs/auftraege/generator-auftrag-z2-w0-8-secure-image-gate.md"
 basis_sha: 114b98f6
 dor_beleg: |
-  steht aus — der Plan-Pruefer hat W0-1 bis W0-6 gefahren, diese drei noch nicht. Woertlich
-  gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
-  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+  ERTEILT — plan-pruefer, Paragraf 262 (21.08.).
+  Der Abschnitt haelt zusaetzlich fest, dass ein eigener Leak-Verdacht des Pruefers
+  gemessen und VERWORFEN wurde.
+  VORHERIGE FASSUNG, ausdruecklich erhalten: steht aus (angelegt 21.08. auf §260).
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
 herkunft_dieses_datensatzes: |
   Zustellung: plan-pruefer Paragraf 260, "Integrator: W0-7/8/9 ohne Block". Zustand und
   basis_sha AUS DEM BLATTKOPF, Titel aus der Blattueberschrift. Ich setze keinen Zustand
@@ -28309,19 +28316,62 @@ herkunft_dieses_datensatzes: |
 auftrag: "Z2-W0-9"
 titel: "„Deaktiviert' deaktiviert: echter Kontostatus statt Online-Flag"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: generator
+ballbesitz_nachgezogen: |
+  plan-pruefer -> generator, 21.08. vom integrator. TRANSPORT: Paragraf 263 —
+  "Generator: W0-9 ist von meiner Seite frei."
 ballbesitz_grund: |
   Die DoR steht aus. Paragraf 260 meldet die drei als "ohne Block" und weist den Eintrag
   dem Integrator zu; die Pruefung selbst hat der Plan-Pruefer noch nicht gefahren.
 blatt: "docs/auftraege/generator-auftrag-z2-w0-9-kontostatus-echt.md"
 basis_sha: 114b98f6
 dor_beleg: |
-  steht aus — der Plan-Pruefer hat W0-1 bis W0-6 gefahren, diese drei noch nicht. Woertlich
-  gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
-  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+  ERTEILT — plan-pruefer, Paragraf 263 (21.08.).
+  Der Abschnitt haelt fest, der wirkungslose Abmelde-Knopf sei vollstaendig belegt.
+  VORHERIGE FASSUNG, ausdruecklich erhalten: steht aus (angelegt 21.08. auf §260).
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
 herkunft_dieses_datensatzes: |
   Zustellung: plan-pruefer Paragraf 260, "Integrator: W0-7/8/9 ohne Block". Zustand und
   basis_sha AUS DEM BLATTKOPF, Titel aus der Blattueberschrift. Ich setze keinen Zustand
   und bilde kein Votum. Die Blaetter liegen in docs/auftraege/, nicht in aktiv/ — der Zeiger
   zeigt auf den echten Ort.
+```
+
+
+## Z2-W0-10 und -11 — zweiter Nachtrag zur Welle Z2, Datensaetze vom Integrator angelegt 21.08.2026
+
+```yaml
+auftrag: "Z2-W0-10"
+titel: "api/secure/master-sets*: reversible Stilllegung per Schalter (Y-11 entschieden)"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+ballbesitz_grund: |
+  Die DoR steht aus. Paragraf 262 und 263 melden beide "W0-10 und W0-11 ohne Block" und
+  weisen den Eintrag dem Integrator zu; gefahren hat der Plan-Pruefer sie noch nicht.
+blatt: "docs/auftraege/generator-auftrag-z2-w0-10-master-set-api-haertung.md"
+basis_sha: 14dc15f3
+dor_beleg: |
+  steht aus — woertlich gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+herkunft_dieses_datensatzes: |
+  Zustellung: plan-pruefer Paragraf 262 und 263. Zustand und basis_sha AUS DEM BLATTKOPF,
+  Titel aus der Blattueberschrift. Ich setze keinen Zustand und bilde kein Votum.
+```
+
+```yaml
+auftrag: "Z2-W0-11"
+titel: "POST ids/callback: CSRF-Ausnahme mit Auto-Produktanlage schließen, tote Ausnahmen aufräumen"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+ballbesitz_grund: |
+  Die DoR steht aus. Paragraf 262 und 263 melden beide "W0-10 und W0-11 ohne Block" und
+  weisen den Eintrag dem Integrator zu; gefahren hat der Plan-Pruefer sie noch nicht.
+blatt: "docs/auftraege/generator-auftrag-z2-w0-11-ids-callback-csrf.md"
+basis_sha: ae7cee9d
+dor_beleg: |
+  steht aus — woertlich gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+herkunft_dieses_datensatzes: |
+  Zustellung: plan-pruefer Paragraf 262 und 263. Zustand und basis_sha AUS DEM BLATTKOPF,
+  Titel aus der Blattueberschrift. Ich setze keinen Zustand und bilde kein Votum.
 ```
