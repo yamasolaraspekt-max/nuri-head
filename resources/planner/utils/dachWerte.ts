@@ -1,4 +1,32 @@
 /**
+ * ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+ * │ **STILLGELEGT am 21.08.2026 — Z1-W1-4. Nicht gelöscht, nicht ändern.**                        │
+ * └─────────────────────────────────────────────────────────────────────────────────────────────┘
+ *
+ * **Was hier gilt:** Diese Datei war bis zum 21.08. byte-identisch mit
+ * `resources/planner/hausplaner/geometry/dachWerte.ts` — md5 `b5738234bebca5a3599f65c3f797c06f`,
+ * 103 Zeilen, 4188 Bytes. Zwei identische Fassungen mit je einem eigenen Verbraucher:
+ *
+ *   dachGeometrie.ts:13     -> ../../utils/dachWerte   (DIESE Datei)   ← umgezogen, Z1-W1-4
+ *   dachformVorlagen.ts:34  -> ./dachWerte             (geometry-Fassung)
+ *
+ * **Warum das gefährlich war und nicht bloß doppelt:** getestet ist nur die geometry-Fassung
+ * (`__tests__/dachWerte.test.ts:12`). Eine Änderung an *dieser* Datei wäre durch keine Zusage
+ * gefallen — zwei Wahrheiten, von denen eine unbewacht ist. Seit Z1-W1-4 zieht `dachGeometrie` auf
+ * die getestete Fassung; **diese Datei hat keinen Verbraucher mehr.**
+ *
+ * **Warum sie trotzdem liegen bleibt:** Y-2 (21.08.) hat ausdrücklich gegen Löschung entschieden —
+ * Rückfall-/Archiv-Regel. Ein Stilllegungsvermerk nach dem Muster von
+ * `app/tools/toolCatalogStillgelegt.ts`: die alte Fassung bleibt auffindbar, aber niemand kann sie
+ * versehentlich für die gültige halten.
+ *
+ * **Wer sie wieder in Benutzung nimmt, hebt Z1-W1-4 auf** und muss vorher entscheiden, welche der
+ * beiden Fassungen die Wahrheit ist — nicht beide.
+ *
+ * ---
+ */
+
+/**
  * Zentrale, getestete Klemm- und Umrechnungslogik für Dachstuhl-Maße des
  * 3D-Dach-&-PV-Planers.
  *

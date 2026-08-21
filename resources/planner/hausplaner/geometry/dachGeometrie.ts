@@ -10,7 +10,10 @@
  * V1-Grenze (Kante 1): nur rechteckige Traufkonturen; alles andere wird abgelehnt (nie stilles Falschdach).
  */
 import type { RoofNode } from '../domain/scene.types';
-import { sichererCos } from '../../utils/dachWerte';
+// Z1-W1-4: gezogen von `../../utils/dachWerte` auf die Fassung IN der Insel. Beide Dateien waren
+// byte-identisch (md5 b5738234…, 103 Z./4188 B); nur die geometry-Fassung ist getestet
+// (`__tests__/dachWerte.test.ts:12`), eine Abweichung in der utils-Kopie wäre nirgends aufgefallen.
+import { sichererCos } from './dachWerte';
 import { walmIstKonsistent } from './dachformVorlagen';
 import { polygonFlaecheM2 } from './polygonFlaeche';
 
