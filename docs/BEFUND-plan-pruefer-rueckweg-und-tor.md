@@ -24910,3 +24910,86 @@ Unterdrückung ist die interessantere Hälfte jeder Prüfung. Das nehme ich in m
 **bei einer Prüfung immer beide Zweige lesen, den der meldet und den der schweigt.**
 
 **Unverändert offen beim Planner:** die sechs Posten aus §293.
+
+## §296 · Alle 67 eigenen Botschaften gegen die drei Schranken gefahren: acht hätten gewarnt, fünf habe ich nie bemerkt — und seit der Abhilfe keine mehr
+
+**Messstand.** HEAD und Zweig beide `894e3076`, Rückstand 0, Baum sauber. Nichts angekommen seit
+§295. Ballortung beidseitig **1** (P-02, VORLAGE) und **35** — nichts in meiner Bahn.
+Gemessen 21.08. 22:55–23:04.
+
+B7 hat mich in dieser Sitzung zweimal gerügt (§280 in §281 festgehalten, §295 gemeldet). Zweimal ist
+kein Zufall mehr. Also die ganze Menge: **meine 67 Botschaften auf diesem Zweig**, gegen die
+Musterpaare aus `scripts/commit-pruefen.sh` gefahren, die Muster vorher an einem bekannten Fall
+verifiziert.
+
+### 1 · Das Ergebnis
+
+    geprueft                          67 Botschaften
+    B5  Zaehlwort ohne Belegzeile      4   07ee0a38 · e52b42bb · 55fdaa05 · b5dcb6af
+    B6  Summe ohne genannte Menge      0
+    B7  Fundorte ohne Herkunft         4   894e3076 · e1298913 · 0db88d2e · a2b2d749
+                                      ---
+                                       8  von 67  =  12 Prozent
+
+**B6 hat nie ausgelöst.** Das ist kein Zufall und keine Tugend, sondern die Folge davon, dass ich
+Zahlen fast immer mit ihrem Erhebungsbefehl nenne — genau das, was B6 verlangt.
+
+### 2 · Es sind zwei Gewohnheiten, nicht acht Einzelfälle
+
+    B5-Ausloeser:  "zaehl" (3x) · "Treffer" (1x)
+    B7-Ausloeser:  "23 Dateien" · "acht Dateien" · "23 Stellen" · "an zwei Stellen"
+
+**Beide sind je ein Satzbaustein.** B5 feuert, wenn ich *„gezählt"* schreibe und im selben Text
+keine zusammenhängende `datei.ext:zeile` steht. B7 feuert, wenn ich *„N Stellen"* oder *„N Dateien"*
+nenne und kein Herkunftswort danebensteht. **Zwei Klauseln, achtmal ausgelöst.**
+
+### 3 · Die Zeitachse ist der eigentliche Befund
+
+    18:52  b5dcb6af   B5   unbemerkt
+    18:57  55fdaa05   B5   unbemerkt
+    19:29  a2b2d749   B7   unbemerkt
+    19:44  0db88d2e   B7   unbemerkt
+    20:18  e52b42bb   B5   unbemerkt
+    -------------------------------------------------- fuenf, alle mit `tail -3` gefahren
+    21:56  e1298913   B7   BEMERKT — durch Glueck: die abgeschnittene Ausgabe liess
+                           zufaellig den Schlusssatz durch. Daraus wurde §281.
+    21:58  §281       Umstellung: Filter nach INHALT statt nach Position
+    -------------------------------------------------- ab hier
+    22:17  07ee0a38   B5   bemerkt  -> §286
+    22:54  894e3076   B7   bemerkt  -> gemeldet
+
+**Vor der Umstellung: null von fünf gefangen. Seit der Umstellung: zwei von zwei.** Und der Fall
+dazwischen wurde nicht durch Sorgfalt gefangen, sondern weil `tail -3` zufällig die richtige Zeile
+enthielt.
+
+**Das ist die Messung, die §281 gefehlt hat.** Dort habe ich eine Abhilfe beschlossen; hier ist
+belegt, dass sie wirkt — und wie teuer das Vorher war: **fünf Warnungen eines Tors, das ich selbst
+als Schutz zitiere, sind wirkungslos an mir vorbeigelaufen.**
+
+### 4 · Was ich daraus mache
+
+Nicht „aufmerksamer sein" — das ist keine Abhilfe, sondern ein Vorsatz. Zwei Klauseln:
+
+    (1) Jede Botschaft traegt mindestens EINE zusammenhaengende Belegzeile datei.ext:zeile.
+    (2) Nennt sie eine Anzahl von Stellen oder Dateien, traegt sie das Wort Herkunft
+        und sagt, woher die Menge kommt.
+
+Beide sind mechanisch prüfbar — **ich kann sie an mir selbst messen, wie ich es hier getan habe**,
+und muss mich nicht auf Aufmerksamkeit verlassen.
+
+### 5 · Zwei eigene Messausfälle in dieser Runde
+
+    mapfile -t ...        zsh kennt es nicht -> SHAS leer -> "0 Commits" statt 67
+    sed -n '840,915p'     schnitt B5_ZAEHLWORT weg -> B5 haette 0 gemeldet statt 4
+
+Beide sind **als Ausfall erkannt worden, weil das Ergebnis unmöglich war** — null eigene Commits auf
+einem Zweig, auf den ich seit Stunden schreibe. Dritter Fall dieser Art nach §288 und §284: **die
+Unmöglichkeit der Zahl ist das billigste Prüfmittel, das ich habe.**
+
+### 6 · Ball
+
+**Kein Ball an andere.** Der Befund betrifft meine Botschaften, nicht das Tor — das Tor hat achtmal
+korrekt gewarnt.
+
+**Unverändert offen beim Planner:** die sechs Posten aus §293. **Beim Generator:** die zwei
+Vorschläge aus §295 (Laufort in der Bilanzzeile, Reichweite von `:201` im Kopf).
