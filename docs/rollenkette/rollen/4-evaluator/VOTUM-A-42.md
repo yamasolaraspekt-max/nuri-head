@@ -77,3 +77,80 @@ Inhaltszeilen verloren gingen, macht den Umzug nachprüfbar verlustfrei.
 **NACHBESSERN → Generator** (A-42-1: drei zurückgebliebene Überschriften bewerten).
 Befunde (a) und (b) → **Planner**. Zustand setze ich nicht — `docs/STATUS.md` ist mir gesperrt;
 der Nachtrag gehört dem **Integrator**.
+
+---
+
+# NACHPRÜFUNG A-42-1 — 21.08. 23:5x · Nachbesserung `d17d2ddf` · Lease `fencing_token: 2`
+
+## Ergebnis: erneut NACHBESSERN — EIN Punkt bleibt (A-17), und **eine Berichtigung an mir selbst**
+
+## Zuerst der eigene Fehler (Stopp-Regel)
+
+Mein Votum schrieb, die drei Überschriften „stehen nun **ohne Inhalt**". Der Integrator widerspricht,
+und **er hat recht** — gemessen, nichtleere Zeilen bis zur nächsten Überschrift:
+
+| Überschrift | nichtleere Zeilen |
+|---|---|
+| `## A-17 — MESSBERICHT` | **5** |
+| `## BEFUND — DIE EINE STATUSWAHRHEIT` | **670** |
+| `## BERICHTIGUNG DER CODE-ZEIGER` | **0** |
+
+**„Ohne Inhalt" trifft auf genau eine von dreien zu.** Ich habe von „Block verloren" auf „leer"
+geschlossen, ohne den Rest zu messen — dieselbe Klasse, die ich sonst melde: *eine Zusage trägt den
+Namen eines Kriteriums und misst etwas anderes.* Richtig ist: **drei Überschriften haben ihren
+yaml-Block verloren**; leer steht nur eine. Der Punkt A-42-1 bleibt davon unberührt — er hing nie an
+der Leere, sondern am verlorenen Block.
+
+## Der Einwand des Integrators zu A-17 — gemessen, und er trägt nicht
+
+Der Integrator setzte dort **keinen** Verweis, mit der Begründung, `26c46f31^` habe „schon keinen
+unmittelbar folgenden yaml-Zaun" gehabt und A-42 habe „nichts genommen". Nachgemessen:
+
+```
+## A-17 — MESSBERICHT …                    (Stand 26c46f31^, :7502)
+   +1..+7   Berichtigungstext (Blockquote, 12.08.)
+   +8       ```yaml            <== der Zaun IST da, nur nicht unmittelbar
+   +9       auftrag: "A-17"
+```
+
+Und der Block ist **umgezogen** — byte-identisch nachgewiesen:
+
+| Prüfung | Ergebnis |
+|---|---|
+| Block steht byte-identisch in `docs/BEFUNDNOTIZEN.md` | **ja** |
+| Block steht noch in `docs/STATUS.md` | **nein** |
+| hat `zustand`-Feld | nein |
+| hat `rolle`+`zeit` | nein |
+
+**A-42 hat dort sehr wohl etwas genommen.** Die Begründung trifft einen *anderen* Block — den am
+12.08. nach `6d6823dd` entfernten mit den doppelten Zustandsfeldern; der Berichtigungstext darüber
+spricht genau von jenem. *Zwei Blöcke unter einer Überschrift, und die Begründung meint den falschen.*
+
+**Zugute zu halten:** Der Integrator hat den Fall **gemeldet statt stillschweigend übergangen** und
+die Entscheidung ausdrücklich mir überlassen. Das ist der Grund, warum hier nachgebessert und nicht
+beanstandet wird.
+
+## Was die Nachbesserung richtig macht
+
+| Prüfung | Ergebnis |
+|---|---|
+| zwei Verweise gesetzt, je eine Zeile mit Anker und Bau-SHA | **ja** — `> Block umgezogen nach docs/BEFUNDNOTIZEN.md (A-42, Bau 26c46f31) — Anker: …` |
+| Anker zeigen ins Ziel | **ja** — `statuswahrheit_in_zwei_fassungen` 1 Treffer, `P-05` 2 Treffer |
+| Punkte 1–7 unverändert | **ja** — STATUS `289 / 850 / 104` und BEFUND `172 / 346 / 172` **vor wie nach identisch** |
+| Umfang | **+4 / −0**, nur `docs/STATUS.md` — zwei Leerzeilen, zwei Verweiszeilen |
+| nichts entfernt, nichts zurückgezogen | **ja** — 0 Löschungen |
+
+## Der offene Punkt: A-42-1 (Rest)
+
+**`## A-17 — MESSBERICHT des Planners` braucht denselben Verweis wie die beiden anderen**, weil ihr
+yaml-Block umgezogen ist. Anker: `auftrag: "A-17"`, Bau `26c46f31`.
+
+**Nebenbefund ohne Abzug:** Der Anker `P-05` trifft in `BEFUNDNOTIZEN.md` **zweimal**. Ein Verweis,
+der zwei Blöcke trifft, führt nicht eindeutig — bei Gelegenheit schärfen (z. B. Zeilenangabe oder
+zweites Feld). Kein Mangel dieser Nachbesserung; der Verweis findet sein Ziel.
+
+## Weitergabe
+
+**NACHBESSERN → Integrator** (A-17-Verweis; `docs/STATUS.md` schreibt ausschließlich er — die
+Zuständigkeitskorrektur des Dirigenten habe ich angenommen und im ACK gen 4 festgehalten).
+Danach ist A-42 aus meiner Sicht abgeschlossen.
