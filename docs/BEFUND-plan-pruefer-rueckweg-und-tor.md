@@ -12647,3 +12647,74 @@ Statuswahrheit kennt weder die Aufträge noch die Bauten.
 der Bau ist bereits erfolgt; entweder wird A berichtigt oder ausdrücklich gestrichen.
 **Ball bei Yama:** die Kettenlücke — ein verweigertes DoR-Votum, das in keinem Feld steht, hält
 keinen Bau auf. Drei Bauten aus `zustand: ENTWURF` heraus sind der Beleg.
+
+## §171 — Posten (b): Z1-W1-4 durchgezählt — neun Behauptungen, neun Treffer, und eine Grenze an meiner eigenen Zahl
+
+**Messstand** `39604ba9` · Baum sauber · 0 neue Commits in meinem Zweig.
+**Integrationszweig:** `5ccc707f` → `4d37a3ef`, 2 Commits — beide **mein eigener Rückweg** (§169).
+Von fremder Seite ist nichts angekommen, also Vorratsprüfung, Posten **(b)**.
+
+Gegenstand: **`b2371d7e` 21.08. 13:42, `generator: Z1-W1-4 gebaut`** — der Auftrag, für den ich in
+§146 die DoR **erteilt** habe und den ich in §170 nur gezählt, aber nicht nachgemessen hatte.
+Umfang selbst gemessen: **2 Dateien, 32 Anfügungen, 1 Löschung** (die ersetzte Import-Zeile).
+
+### Die neun Behauptungen
+
+| Behauptung im Bau | gemessen |
+|---|---|
+| md5 `b5738234bebca5a3599f65c3f797c06f`, 103 Z., 4188 B — beide Fassungen zeichengleich | **beide identisch**, alle drei Werte exakt |
+| `utils`-Fassung heute 6176 Bytes | **6176 B** (131 Z.) |
+| `dachGeometrie` zieht jetzt `'./dachWerte'` | `dachGeometrie.ts:16` ✓ |
+| roher Textgrep: noch **zwei** Treffer, beide Kommentare | **2**, beide Kommentar ✓ |
+| Muster für echte Import-Anweisungen: **null** | **0** ✓ |
+| getestet ist nur die `geometry`-Fassung, `__tests__/dachWerte.test.ts:12` | ✓ zieht `"../geometry/dachWerte"` |
+| die `utils`-Kopie ist unbewacht | **0** Testdateien ziehen sie ✓ |
+| „zwei identische Fassungen mit **je einem eigenen Verbraucher**" | vorher genau zwei: `dachGeometrie.ts:13` → `../../utils/dachWerte`, `dachformVorlagen.ts:34` → `./dachWerte` ✓ |
+| Stilllegung nach dem Muster von `app/tools/toolCatalogStillgelegt.ts` | Datei existiert, 75 Z., trägt denselben Gedanken *(„nicht gelöscht, sondern stillgelegt")* ✓ |
+
+**Neun von neun.** Das ist in dieser Reihe der erste Bau, an dem ich keine einzige Zahl korrigieren
+muss. Bemerkenswert dabei: er hat die md5 **vor** der eigenen Kopfergänzung genommen und das
+ausdrücklich gesagt — sonst wäre der Beleg für eine spätere Löschentscheidung durch seinen eigenen
+Eingriff wertlos geworden. Das ist genau die Sorte Standbezug, die §166 an A-38 vermisst hat.
+
+Die Grundmenge habe ich **weiter gefasst als er**: nicht `resources/planner`, sondern der ganze
+`resources/`-Baum, dazu Alias-Formen (`@/…`, `~/…`). Ergebnis unverändert — **0** weitere Verbraucher.
+Seine engere Grundmenge hat hier nichts verdeckt.
+
+### Was ich zusätzlich gefunden habe — an meiner eigenen Zahl
+
+`resources/planner/utils/` enthält nach diesem Bau **genau eine Datei**, und die hat **null
+Verbraucher**. Das Verzeichnis besteht jetzt nur noch, um eine stillgelegte Datei zu halten. Das ist
+kein Vorwurf — Y-2 hat am 21.08. ausdrücklich **gegen** Löschung entschieden (Rückfall-/Archiv-Regel),
+und der Vermerk sagt sauber, was gilt, warum es gefährlich war und was zu tun ist, wenn jemand die
+Datei wieder in Benutzung nimmt.
+
+**Aber es rührt an meine Zahl aus §170.** Meine Erreichbarkeitsmessung hat als Grundmenge
+`resources/planner/hausplaner` — **160 Module**. `resources/planner/utils/dachWerte.ts` liegt
+**daneben**, nicht darin. Die „**28 Module ohne Ladeweg**" enthalten sie also **nicht**. Ehrlich
+ausgedrückt: 28 innerhalb der Insel, und **eine weitere außerhalb**, absichtlich und dokumentiert
+liegengelassen. Wer meine 28 gegen eine Frage stellt, die „alles unter `resources/planner`" meint,
+bekommt eine Antwort auf eine andere Frage. **Grundmenge gegen die Frage prüfen, nicht gegen das
+Verfahren** — diesmal an meiner eigenen Zahl.
+
+### Eigene ausgefallene Messung, gefangen
+
+Meine erste Erhebung des Vorher-Stands lieferte **eine leere Liste** — also scheinbar „keine
+Verbraucher vor dem Bau", was seiner Aussage direkt widersprochen hätte. Fangprobe am bekannten
+Treffer (dieselbe Suche am heutigen Stand **muss 2 ergeben**): sie ergab **0**. Damit war klar, dass
+die Suche und nicht der Baum leer war.
+
+**Ursache:** `git grep -E` kennt `\s` nicht — das ist eine PCRE-Eigenschaft und bräuchte `-P`; das
+`grep -E` im Arbeitsbaum hat es klaglos angenommen. **Dasselbe Muster, zwei Werkzeuge, zwei
+Ergebnisse.** Mit `[[:space:]]` statt `\s` kamen die zwei Vorher-Verbraucher sofort. Ein zweiter
+Fehlversuch davor lag am Pfadmuster `resources/*.ts`, das in git-Pathspecs keine Unterverzeichnisse
+überquert.
+
+Beide Male war das Ergebnis eine **Null, die wie eine Messung aussah** — dieselbe Form wie in §166
+und §167. Die Fangprobe hat beide gefangen, bevor etwas gemeldet wurde. Für alles Weitere:
+**`\s` nie in `git grep`.**
+
+**Ball beim Integrator** (unverändert): `Z1-W1-4` hat weiterhin **keinen Datensatz**, und `b2371d7e`
+steht in **keinem Feld**. Ein Bau, an dem neun von neun Zahlen halten, ist in der Statuswahrheit
+nicht vorhanden. **Ball beim Evaluator** für die Abnahme. **Kein Ball beim Generator** — hier ist
+nichts zu berichtigen.
