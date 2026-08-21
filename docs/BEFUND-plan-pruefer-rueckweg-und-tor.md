@@ -14156,3 +14156,98 @@ Entscheidung, ob `bestanden` an `sparrenBerechnung.ts:148` einen **Bereich** sta
 prüfen soll. **Ball bei Yama** als Fach-Gate: die Grenze selbst (0…85? 0…89? Absage darüber?) ist
 eine Fachfestlegung, kein Programmierdetail — sie gehört neben `N-003` und `W-21L` auf die Liste.
 **Damit ist §172s offene Frage geschlossen.**
+
+## §186 — Posten (a): die Warnung vor toten Zeilenverweisen führt ihre eigenen Belege als tote Zeilenverweise
+
+**Messstand** `3aa2de50` · Baum sauber · 0 neue Commits; der Integrationszweig steht die **vierte**
+Runde auf `7a82ecfb`, mit denselben drei ungesicherten Einträgen.
+
+Gegenstand diesmal: die **Rollenakten** (`docs/rollenkette/rollen/`, 37 Dateien, sechs Rollen) —
+die Texte, aus denen jede Rolle liest, was sie darf. Sie tragen **29 Zeiger** der Form
+`datei.ext:zeile`, verteilt auf sechs Trägerdateien. Ich habe **alle 29 einzeln geöffnet**.
+
+### Der Kern: `docs/ARBEITSREGELN.md:1593`
+
+Die Prozessquelle trägt seit `fd7f30bf` (16.08. 19:56) einen eigenen Abschnitt:
+
+> **⚠ ZEILENVERWEISE AUF DIESE DATEI SIND UNZUVERLÄSSIG — gemessen 16.08. abends**
+> … *„Zwei davon zeigen heute ins Leere, und zwar um denselben Betrag"*
+
+```
+zitiert          gemeint             steht wirklich bei    Versatz
+:739             Paragraf 18a         900                  +161
+:812             Hausregel H-8        973                  +161
+```
+
+**Heute nachgemessen:**
+
+```
+## 18a. Hausregeln …    steht bei  917    Tabelle sagt 900   ->  +17
+### H-8 · Mehrfach…     steht bei  990    Tabelle sagt 973   ->  +17
+```
+
+**Derselbe Versatz an beiden Stellen — wieder.** Die Tabelle, die den Versatz +161 dokumentiert, ist
+seither um weitere **+17** überholt. Der Abschnitt erklärt seinen eigenen Mechanismus richtig
+(*„ein Einschub weiter oben hat alles dahinter verschoben"*) — und ist genau daran ein zweites Mal
+gescheitert. Ursache gemessen: **zehn Commits** an der Datei seit dem 16.08. 18:00, zuletzt
+`0f554dd9` (20.08. 16:04, *„Fassung 1.7 eingearbeitet"*), mit Einschüben bei `:69`, `:73`, `:193`,
+`:280`, `:581`, `:724` — **alle oberhalb von 900**.
+
+**Eine Warnung vor toten Zeilenverweisen, deren Belegzahlen selbst tot sind.** Das ist kein
+Widerspruch aus Nachlässigkeit, sondern der Beweis der Warnung: sie gilt sogar für sie selbst.
+
+### Der Rahmen: 58 Zeiger in eine Datei, die 1925 Zeilen hat
+
+```
+Nennungen ARBEITSREGELN.md:<zeile> im docs-Baum   58
+verschiedene Zielzeilen                           30
+davon LEERE Zielzeilen                             3   ->  :288 · :767 · :1479
+```
+
+Ein Zeiger auf eine **Leerzeile** ist tot ohne jeden Auslegungsspielraum. Die Datei weiß auch das:
+`:1640` notiert zu einem der Fälle wörtlich *„(Anker = LEERZEILE)"*.
+
+### Und die Trefferquote hat ein Muster
+
+Von den 29 Zeigern der Rollenakten:
+
+```
+Ziel ist ein SKRIPT   (.sh/.ts/.tsx)   17 Zeiger   ->  14 treffen   82 %
+Ziel ist ein DOKUMENT (.md)            12 Zeiger   ->   2 treffen   17 %
+```
+
+Die Treffer sind fast alle in **Code**: `editierGeometrie.ts:20` (`export function versetzteWand(`),
+`wallGeometry.ts:110` (`function gehrungsEcken(` — und die Zusage *„nicht exportiert"* stimmt),
+`a30-datensatz-paar.sh:61` (das wörtlich zitierte Muster steht dort), `a33-kennungen-nachziehen.sh:84`,
+`a26-ball-drift.sh:53` **viermal** aus verschiedenen Abschnitten, `commit-pruefen.sh:641` und `:900`,
+`rollen-tor.sh:81`, `module-nachziehen.sh:149`.
+
+Die Fehlschüsse zeigen fast alle in **Dokumente**: `STATUS.md:1621`, `FORMELSAMMLUNG.md:141`,
+`REGISTER.md:35`, `A-13-roof-azimuth-absichern.md:227`, zweimal `ARBEITSREGELN.md:288` (leer),
+`ARBEITSREGELN.md:1479` (leer), `1-AUFTRAG.md:79` (leer).
+
+**Skripte wachsen selten, Dokumente wachsen ständig.** Das ist dieselbe Regel wie in §176 („in einer
+nur wachsenden Datei überleben die Zeiger nach ganz oben") — hier von der anderen Seite: **nicht das
+Alter des Zeigers entscheidet, sondern die Wachstumsrate seines Ziels.**
+
+### Drei einzelne Fälle, die benannt gehören
+
+1. **`1-planner/SKILL-formel-pruefen.md:39`** behauptet: *„Gemessen: `geometry/dachGeometrie.ts:87`
+   wirft `DachGeometrieUngueltig`"*. Dort steht heute ein Kommentar über die Homogenität der
+   Shoelace-Formel. **Eine Skill-Akte, aus der der Planner sein Prüfverfahren nimmt.**
+2. **`1-planner/1-AUFTRAG.md:376`** zeigt auf `a26-ball-drift.sh:56` — **Leerzeile**.
+3. **`6-integrator/5-WAS-ICH-NICHT-DARF.md:23`** → `commit-pruefen.sh:503`: **derselbe Befund wie in
+   §168**, unverändert offen. Dort ist nicht nur der Zeiger gewandert, sondern die Aussage
+   **repariert** — die Regelakte warnt vor einem Verhalten, das seit `374bb851` nicht mehr existiert.
+
+Und ein Fall, der **nicht** zählt: `1-AUFTRAG.md:785` zeigt auf eine Leerzeile und sagt im selben
+Satz *„Nebenbefund, nicht bearbeitet: der Verweis … aus einer älteren Fassung"*. Ein Zeiger, der
+seine eigene Unrichtigkeit mitträgt, führt niemanden in die Irre — dieselbe Bauform, die ich in
+§176 anerkannt und in §175 für mich übernommen habe.
+
+**Ball beim Planner** (Eigentümer der Prozessquelle und der Rollenakten): die Drift-Tabelle bei
+`ARBEITSREGELN.md:1596-1601` nennt Zeilen, die um 17 daneben liegen — **entweder mit Überschrift
+statt Zahl, oder gar nicht**; dazu `SKILL-formel-pruefen.md:39` und `1-AUFTRAG.md:376`.
+**Ball beim Integrator, unverändert seit §168:** `5-WAS-ICH-NICHT-DARF.md:23`.
+**Kein Nachziehen der übrigen 58** — sie stehen in datierten Messungen, und dafür gilt die
+Begründung, die ich in §175 angenommen habe.
