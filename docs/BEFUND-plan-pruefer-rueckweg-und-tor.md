@@ -21100,3 +21100,82 @@ zwei waren zu eng.
 
 **Offen und nicht geprüft:** S-3 (Routing-Dublette), S-4 (Sidebar), K-5/K-6 und die Klassen A/B/C
 aus `cb500067`.
+
+## §255 · DoR Z2-W0-1 — ERTEILT. Und sechs neue Aufträge liegen ohne Datensatz in meiner Bahn
+
+**Messstand.** Mein HEAD `322ff641`, Baum sauber. Integrationszweig `d4ea37ea` (21.08. 20:06),
+**6 neue Commits** seit `fb504d83`. Ballortung: `ballbesitz: plan-pruefer` **40, unverändert**.
+Gemessen 21.08. 20:06–20:13. Basis-Stand der Prüfung: **`7a82ecfb`**, wie im Blatt genannt.
+
+### 1 · Meine beiden Messungen sind übernommen worden
+
+`a7851958` (dirigent, 20:03, *„WELLE 0 Sicherheit LIVE"*) schreibt:
+
+> *„SECURITY-GEGENPROBE (opus, Stand `7a82ecfb`): S-1/S-2/S-5 **BESTÄTIGT**, alle
+> Widerlegungsversuche negativ … **Korrekturen zugunsten der Genauigkeit: 61 statt 70
+> Planner-Routen, `objekte.auslegung` schreibfrei (reine Offenlegung).**"*
+
+Das sind genau §251 („61 gezählte Route-Verben gegen 70 behauptete") und §254 („auslegung() ist
+schreibfrei, 0 save/update/create"). **Beide Korrekturen sind in den Bestand eingegangen** — und
+eine unabhängige Gegenprobe kommt bei S-1/S-2/S-5 zum selben Ergebnis wie ich.
+
+### 2 · Sechs neue Aufträge — Lage gemessen, nicht angenommen
+
+`a7851958` legt **sechs Blätter** an: `Z2-W0-1` bis `Z2-W0-6`. Gemessen an `d4ea37ea`:
+
+| | Ort | `auftrag:` | `zustand:` | `ballbesitz:` | STATUS-Block |
+|---|---|---|---|---|---|
+| alle sechs | `docs/auftraege/` (**nicht** `aktiv/`) | **fehlt** | `ENTWURF` | **fehlt** | **0 Treffer für „Z2-W0"** |
+
+Die Kennung steht in der **Kopfzeile** (`# Z2-W0-1 · …`) — Punkt 2 der Wache lässt das als Rückfall
+ausdrücklich zu, und ich habe sie **nicht** aus dem Dateinamen abgeleitet. Ein `ballbesitz:`-Feld
+gibt es nicht; der Ball folgt aus `spur: A — voller Zyklus **Plan-Prüfer** → Generator → Evaluator`
+und aus `zustand: ENTWURF`, das nach §5 den DoR verlangt. **Damit liegen sechs DoR in meiner Bahn**,
+obwohl die Ballortung in `docs/STATUS.md` unverändert 40 zeigt: Die Aufträge haben dort noch keinen
+Datensatz. Das Blatt sagt es selbst: `status_steht_in: docs/STATUS.md — Integrator-Lauf erforderlich`.
+
+### 3 · DoR Z2-W0-1 · **ERTEILT**
+
+Jede tragende Behauptung selbst am Basis-Stand `7a82ecfb` nachgemessen:
+
+| Behauptung im Blatt | meine Messung | |
+|---|---|---|
+| `ObjektakteController` ohne `authorize`/`hasPermission`/`__construct` | **0** Treffer, Muster verifiziert (31 `hasPermission` im `app/`) — §254 | **belegt** |
+| angelegt `96904b5e` 16.07., nach der Sicherheitsrunde | `96904b5e`, **16.07.2026 10:13** — §254 | **belegt** |
+| `auslegung()` schreibfrei | **0** save/update/create/fill/DB, gegen 623 `->save(` im `app/` — §254 | **belegt** |
+| `scopeGebaeudeSuche` (`LeadAlternativeAdd.php:426-444`) LIKE über Kundenname ohne Bindung | `:426` trifft; `:434-437` LIKE über `street/city/postcode/object_name`, **`:438-441` `orWhereHas('lead')` mit LIKE über `name`, `lastname`, `firma`** | **belegt** |
+| Muster `routes/web.php:4988` für die Middleware | `:4988` trägt `->middleware('permission:Hausplaner,read')->name('hausplaner.index')` | **trifft** |
+| Test-Muster `CustomerPermissionGateTest.php` | existiert, in einer Familie von ≥6 Security-Tests | **trifft** |
+| **Rot-Lage**: P1-Kriterium B vor dem Bau rot | Routen tragen kein `permission` (§254, 0 Treffer) — das Kriterium **kann** heute nicht grün sein | **bestätigt** |
+
+**Die schärfste Aussage des Blattes ist belegt und geht über meinen eigenen §254 hinaus.** Ich hatte
+gemessen, dass die Akte `firma/name/lastname/customer_no` **lädt**. Das Blatt zeigt, dass man
+darüber auch **suchen** kann: `scopeGebaeudeSuche` filtert per LIKE über Kundenname, Nachname und
+Firma, ohne jede Bindung an den anfragenden Nutzer. *„Durchsuchbarer Vollexport des Kundenstamms für
+jeden Login"* ist damit keine Zuspitzung, sondern die Messung.
+
+**Votum: DoR ERTEILT.** Ziel, Basis-SHA, Scope mit Nicht-Zielen, Kanten, vier Abnahmekriterien mit
+Belegform, rotes P1-Kriterium und ein Rückweg mit benannter Entdeckung liegen vor; kein Kriterium
+ist vorab erfüllt. **Restpunkte: keine.**
+
+### 4 · Was ich dabei nicht geprüft habe
+
+- **Die Zahl „16×" für die Schreibweise `Customer`** (Kanten-Abschnitt) — nicht nachgezählt.
+- **`route:list` als autoritative Quelle**: Das Blatt stützt seinen Ist-Beleg darauf. Ich kann es
+  hier nicht ausführen (kein `node_modules`, kein Anwendungskontext) und habe stattdessen über den
+  Quelltext gemessen. Beide Wege ergeben „kein `permission`", aber es sind **zwei Verfahren**, und
+  ich sage, welches meines war.
+- **W0-2 bis W0-6** — je ein DoR, je eine Runde.
+
+### 5 · Ball
+
+**Integrator**: Die sechs Blätter liegen in `docs/auftraege/`, nicht in `docs/auftraege/aktiv/`, und
+haben **keinen Datensatz** in `docs/STATUS.md` (0 Treffer für „Z2-W0"). Ohne Tafelzeile und Block
+ist der Vorgang für jede spätere Messung unsichtbar — genau die Lage aus §169, die damals fünf
+Z1-W1-Aufträge betraf.
+
+**Generator**: Z2-W0-1 ist von meiner Seite frei. Spur A, LIVE, `ticket_testing` only.
+
+**Yama**: unverändert die drei bestätigten Lücken; dazu neu aus `a7851958` **Y-6** (kein
+Permission-Item `Planner` — Rechte-Entscheidung), **Y-7**, **Y-8** und fünf Erstfunde an der
+Nuriva-API (`A-1`…`A-5`), die ich **nicht** geprüft habe.
