@@ -16426,3 +16426,121 @@ ist, und sie geht in PV-Ertrag und Heizlast ein.
 
 **Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
 und `:7881`.
+
+---
+
+## §208 — Posten (c): F-051 ist gesperrt, das Verbot hält — und der Commit, der die Sperre baute, hat die vier Zeiger auf sie gebrochen
+
+**Messstand 9ad968c4, Baum sauber, 0 neue Commits. Integrationszweig unverändert 7a82ecfb (live).
+Hinweg zu: 40 fehlen mir, 31 von mir fehlen dort. `docs/STATUS.md` und die 89 Blätter an beiden
+Ständen unbewegt, kein Ball in meiner Bahn. Erhebung 21.08. 16:44–16:48.**
+
+Gegenstand: **F-051 · Zeitwerte je Gewerk**, `FORMELSAMMLUNG.md:902-915`, Ampel **🔴 GESPERRT**. Bei
+einer gesperrten Formel ist die tragende Frage nicht, ob sie richtig rechnet — sie soll gar nicht
+rechnen. Die tragende Frage ist, **ob das Verbot hält.**
+
+### 1. Das Verbot hält
+
+Der Planner hat den vierten Fundort am 12.08. gemessen (`FORMELSAMMLUNG.md:917-935`). Ich habe seine
+Zahlen nicht übernommen, sondern neu erhoben:
+
+    TIME_VARS im Baum                          1 Datei (roof.blade.php, 12 Vorkommen)
+    statische View-Referenz 'layouts.roof'     1 Treffer  <- Selbsttreffer, siehe 3.
+    'layouts/roof'                             0 Treffer
+    Serverschreibpfade (fetch|axios|form action) 0
+    Historie der Datei                         2 Commits (e14cd1ec 26.06., ad13b732 12.08.)
+
+Kein Aufrufer, kein Schreibpfad. Die elf Zeitwerte stehen im Produktivbaum und werden von nichts
+erreicht. Der Planner hatte recht, und seine ausdrückliche Reichweitengrenze — *„kein STATISCHER
+Aufrufer; dynamische View-Namen sind nicht ausgeschlossen"* — bleibt richtig und bleibt offen.
+
+### 2. Die Sperre wurde gebaut, und die Bauzusage hält zeichenweise
+
+`ad13b732` (12.08. 11:58, Generator, *„A-16 gebaut — der Sperrvermerk steht an der Zahl, und keine
+Ziffer hat sich bewegt"*) hat 43 Zeilen in `roof.blade.php` eingefügt. `roof.blade.php:74` trägt heute:
+
+    // 🔴 F-051 GESPERRT — DIESE ELF ZEITWERTE HABEN KEINE HERKUNFT. NICHT VERWENDEN.
+
+Die Zusage *„keine Ziffer hat sich bewegt"* habe ich geprüft, indem ich den `TIME_VARS`-Block vor und
+nach dem Bau zeichenweise verglichen habe (Leerraum entfernt, dann Stringvergleich):
+
+    ad13b732^ : constTIME_VARS={SCAFFOLD_M2:8,HOOK_STD:6,HOOK_GRIND:5,RAIL_M:4,MOD_MOUNT:12,…
+    heute     : constTIME_VARS={SCAFFOLD_M2:8,HOOK_STD:6,HOOK_GRIND:5,RAIL_M:4,MOD_MOUNT:12,…
+    Vergleich : IDENTISCH
+
+**Die Zusage hält.** Das ist die saubere Bauform: die Sperre steht neben der Zahl, die Zahl selbst ist
+unberührt. Gewürdigt.
+
+### 3. Die Selbsttreffer-Falle — mein Messfehler, und einer, der jedem Nachmesser passieren wird
+
+Meine Zählung der statischen View-Referenzen ergab **1**, wo der Planner **0** gemessen hatte. Ich war
+beim Satz „die Aussage gilt nicht mehr". Der einzige Treffer:
+
+    resources/views/admin/layouts/roof.blade.php:91
+      //   statisch    KEIN Aufrufer — 'admin.layouts.roof' 0 Treffer in app/, routes/, resources/views/
+
+**Der Vermerk, der die Abwesenheit dokumentiert, ist selbst ein Treffer im Suchmuster.** Wer heute
+nachmisst, findet die Aussage über die Null als Verletzung der Null — und zwar in derselben Datei, um
+die es geht. Das ist keine Nachlässigkeit des Generators; es ist eine unvermeidliche Folge davon, dass
+ein Beleg den gesuchten Text enthalten muss, um ihn zu belegen. **Wer eine Abwesenheit nachmisst, muss
+den Beleg der Abwesenheit aus der Grundmenge nehmen.**
+
+### 4. Der Befund: derselbe Commit baute die Sperre und brach die Zeiger auf sie
+
+    12.08. 07:36   7d6c39cf   planner   schreibt in die FORMELSAMMLUNG den Block mit den
+                                        Zeigern roof.blade.php:73, :74, :1672, :2266
+                                        — an diesem Stand treffen alle vier
+    12.08. 11:58   ad13b732   generator baut den Sperrvermerk: +43 Zeilen in roof.blade.php
+                                        UND +33 Zeilen in FORMELSAMMLUNG.md, im selben Commit
+                                        — ab hier trifft keiner der vier mehr
+
+    Abstand: 4 Stunden 22 Minuten
+
+Heute:
+
+    roof.blade.php:73    "time assumptions"-Kommentar   -> steht auf  101   (+28)
+    roof.blade.php:74    const TIME_VARS = {            -> steht auf  102   (+28)
+    roof.blade.php:1672  laborCost = …                  -> steht auf 1715   (+43)
+    roof.blade.php:2266  'Montage (Arbeit)'             -> steht auf 2309   (+43)
+
+Das ist schärfer als gewöhnliche Drift. Bei §201 und §206 hat ein fremder Commit Zeiger in einem
+Dokument gebrochen, das er nicht anfasste. **Hier hatte derselbe Commit beide Dateien in der Hand** —
+er hat die FORMELSAMMLUNG um 33 Zeilen erweitert und die vier Zeilennummern darin stehen lassen, die
+er neun Zeilen weiter oben gerade ungültig machte. Nach §168 bleibt es Klasse 1 (fremde Drift), aber es
+ist ihr vermeidbarster Fall: der Verschieber war der einzige, der es im selben Arbeitsgang hätte
+berichtigen können.
+
+### 5. Eigener Zählfehler, doppelt — und die Lehre daraus ist neu
+
+Der Sperrvermerk sagt „DIESE **ELF** ZEITWERTE". Ich habe nachgezählt, mit zwei Verfahren:
+
+    a) Zeilen mit Bezeichner-Doppelpunkt   ^[[:space:]]*[A-Za-z_]+ *:     -> 10
+    b) Vorkommen von NAME: im ganzen Block  [A-Z_]{2,}[[:space:]]*:       -> 10
+
+Zwei Verfahren, dasselbe Ergebnis — ich hätte „das Blatt sagt elf, es sind zehn" gemeldet. Der
+vollständig ausgegebene Block zeigt elf: `SCAFFOLD_M2, HOOK_STD, HOOK_GRIND, RAIL_M, MOD_MOUNT,
+CABLE_M, INV_SETUP, CLEANUP, MEASURE, DC_BOX, AC_ROUTE`. Beide Verfahren verfehlen genau
+**`SCAFFOLD_M2`** — weil beide Zeichenklassen (`[A-Za-z_]`, `[A-Z_]`) die **Ziffer** im Namen nicht
+zulassen.
+
+**Zwei Verfahren, die dieselbe Annahme teilen, sind ein Verfahren.** In §110 habe ich „mit zwei
+Verfahren bestätigt" als Stärke geführt; hier ist ihre Grenze. Eine Gegenprobe zählt nur, wenn sie eine
+*andere* Annahme macht — hier hätte das Auszählen der ausgegebenen Zeilen genügt, und genau das hat den
+Fehler gefunden. Es ist auch dieselbe Wurzel wie in §203: **abgeschnittene Ausgabe.** Mein erster Blick
+auf den Block war auf 200 Zeichen gekappt und zeigte acht Namen; die letzten drei standen jenseits des
+Schnitts.
+
+### Ball
+
+**Beim Planner:** vier Zeilennummern in `docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md`
+(Block `:923-927`) — Ziele oben gemessen, Berichtigung ist eine Zahlenänderung. Dazu die Erwägung aus
+§206: `TIME_VARS` und `laborCost` sind **Bezeichner**; ein Verweis über sie hätte den Einschub
+überlebt, die Zeilennummer nicht.
+
+**Kein Befund gegen die Sperre:** F-051 ist unerreichbar, der Sperrvermerk steht an der Zahl, die Zahl
+ist unberührt. Der offene Rest ist der, den der Planner selbst benannt hat und der in A-16-1 liegt:
+dynamische View-Namen über `ProductController.php:443`. Ich habe ihn **nicht** aufgelöst und rechne
+ihn nicht klein.
+
+**Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
+und `:7881`.
