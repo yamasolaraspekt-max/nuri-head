@@ -12535,3 +12535,186 @@ und Bau-SHA in ein **Feld**, für alle fünf `Z1-W1`-Kennungen.
 `dachGeometrie.ts:150` es seit `60c04eef` erlaubt — entweder zieht `:478` nach, oder die Ausnahme
 fällt; der Schalter heißt `benoetigtLaengerGleichBreite` und meint offenbar `≥`.
 **Ball beim Evaluator:** Kriterium E, die Browserabnahme.
+
+## §170 — Drei Aufträge gebaut, keiner je BEREIT geworden — und einer trägt mein NICHT ERTEILT
+
+**Messstand** `c4fc07e0` · Baum sauber · 0 neue Commits in meinem Zweig.
+**Integrationszweig:** `7e28d051` → **`5ccc707f`**, 8 Commits. Drei fallen in meine Bahn:
+`d7651d9c` 13:40 *Z1-W1-3 gebaut*, `b2371d7e` 13:42 *Z1-W1-4 gebaut*, `5ccc707f` 13:45
+*vier DoR-Voten in die Felder transportiert*.
+
+### Zuerst das Erledigte: §108 ist geschlossen
+
+Die vier `ENTWURF`-Blöcke **A-38, A-39, A-40, A-42** tragen jetzt alle ein mehrzeiliges `dor_beleg`
+mit meinem Votum. Der Integrator hat **additiv** gearbeitet — der vorherige Wert steht ausdrücklich
+erhalten daneben (`dor_votum_runde_2` im selben Block). Das war der älteste meiner offenen Posten
+(*„meine vier DoR-Voten stehen in keinem Feld"*, §108). **Erledigt, sauber und mit Rückweg.**
+
+### Und jetzt der Befund: drei Bauten, kein einziger Zustand
+
+| | Bau | mein DoR-Votum | Blattzustand | in `docs/STATUS.md` |
+|---|---|---|---|---|
+| Z1-W1-2 | `60c04eef` 13:33 | **ERTEILT** (§144) | `ENTWURF` | **0 Treffer** |
+| Z1-W1-3 | `d7651d9c` 13:40 | **NICHT ERTEILT** (§145) | `ENTWURF` | **0 Treffer** |
+| Z1-W1-4 | `b2371d7e` 13:42 | **ERTEILT** (§146) | `ENTWURF` | **0 Treffer** |
+
+`grep -c 'Z1-W1' docs/STATUS.md` = **0**. Die drei Bau-SHAs: je **0 Treffer**. Alle fünf Blätter
+stehen unverändert auf `zustand: ENTWURF`. **Kein einziger dieser Aufträge ist je `BEREIT`
+geworden** — `docs/ARBEITSREGELN.md` §5 macht `BEREIT` aber davon abhängig, dass der Plan-Prüfer
+belegt hat; das ist der Übergang, der hier dreimal übersprungen wurde.
+
+**Fair getrennt, weil die drei Fälle nicht gleich sind:** Bei **Z1-W1-2** und **Z1-W1-4** ist die
+*Sache* da — mein Votum liegt vor, erteilt, gemessen. Fehlt nur die *Form*, und die Form kann ich
+nach §123 nicht selbst eintragen; `docs/STATUS.md` gehört dem Integrator
+(`scripts/rollen-tor.sh:344`). Das ist ein Transportrückstand, kein Regelbruch des Generators.
+
+**Bei Z1-W1-3 fehlt auch die Sache.**
+
+### Z1-W1-3: gebaut gegen ein verweigertes Votum
+
+§145 lautete: *„NICHT ERTEILT. Zwei tragende Restpunkte (A unerfüllbar **und** falsch gemessen) und
+eine Entscheidung."* Restpunkt 1 hieß: **Kriterium A kann nie grün werden.**
+
+Das Blatt hat sich seither **nicht bewegt**: `docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md`
+trägt genau **einen** Commit, `f350befc` 21.08. 10:00, den Schnitt selbst. Kein Nachtrag, keine
+Berichtigung an Kriterium A.
+
+Und der Generator schreibt in seiner eigenen Baubotschaft:
+
+> **„KRITERIUM A IST SO NICHT ERREICHBAR, und das melde ich statt es zu umgehen"**
+
+Er ist also unabhängig auf meinen Restpunkt 1 gekommen — **und hat trotzdem gebaut**. Das ist keine
+Nachlässigkeit und keine Täuschung; er meldet es im Klartext. Es ist eine **Lücke in der Kette**: es
+gibt keine Stelle, an der ein verweigertes Votum den Bau anhält, weil das Votum nie in ein Feld kam
+und das Blatt nie den Zustand wechselte. **Ein NICHT ERTEILT, das nirgends steht, hält nichts auf.**
+
+### Seine Zahlen, nachgemessen statt geglaubt
+
+**Sechs Shoelace-Fassungen** — alle sechs genannten Stellen einzeln geöffnet, jede trägt die Formel
+wörtlich:
+
+```
+geometry/dachAusschnitt.ts:107   a += p.x * q.y - q.x * p.y;
+geometry/roomDetection.ts:75     summe += p.x * q.y - q.x * p.y;
+geometry/polygonFlaeche.ts:44    summe += a.x * b.y - b.x * a.y;
+geometry/dachTopologie.ts:109    return acc + p.x * n.y - n.x * p.y;
+geometry/grundriss.ts:98         a += p.x * q.y - q.x * p.y;
+renderers/three-d/dachMesh.ts:104 const a = poly[i], b = poly[(i+1)%n]; ...
+```
+
+Eigene Zählung mit einem an `polygonFlaeche.ts:44` verifizierten Muster: **dieselben sechs**, dazu
+eine siebte Nennung in `geometry/kontur.ts:27`, die aber sein berichtigter Kommentartext ist, kein
+Rechencode. **Seine Zahl hält.** Ebenso *„drei erreichbar"*: `roomDetection`, `polygonFlaeche`,
+`dachMesh` erreichbar — `dachAusschnitt`, `dachTopologie`, `grundriss` nicht. **Exakt.**
+
+### Die Totenliste: 33 → 28, und alles ging auf den ERSTEN Bau
+
+Meine Erreichbarkeitsmessung neu gefahren, Grundmenge unverändert 160 Module:
+
+```
+vor den Bauten (85be41e4):  erreichbar 127 · NICHT erreichbar 33
+heute        (5ccc707f):    erreichbar 132 · NICHT erreichbar 28
+verlassen: aufbauPlatzierung · dachWerte · dachformVorlagen · linienBauteile · polygonFlaeche
+neu darauf: keiner
+```
+
+Je Bau zugeordnet, indem ich den Baum an jedem der drei SHAs ausgepackt und einzeln gemessen habe:
+
+```
+durch 60c04eef (Z1-W1-2):  alle fünf
+durch d7651d9c (Z1-W1-3):  keiner
+durch b2371d7e (Z1-W1-4):  keiner
+```
+
+**Der Generator von Z1-W1-2 hat es exakt vorhergesagt:** *„der neue WERT-Import auf dachformVorlagen
+schafft eine Laufzeitkante … (S-1/8, 2402 Zeilen **plus vier Folgemodule**)"*. Nachgemessen an
+`dachformVorlagen.ts:33-36`: genau vier Laufzeit-Importe — `polygonFlaeche`, `dachWerte`,
+`aufbauPlatzierung`, `linienBauteile`. **Vier. Auf die Zahl.**
+
+**Der Generator von Z1-W1-3 hat sich dagegen um genau ein Modul geirrt:** *„polygonFlaeche.ts war in
+S-1/9 als tot geführt … durch diesen Import ist es erreichbar. Die Totenliste ist um ein Modul
+kürzer."* Gemessen: polygonFlaeche war **sieben Minuten vorher** durch `60c04eef` erreichbar
+geworden; sein Bau hat die Liste um **null** verkürzt. Keine Falschaussage, sondern eine Messung
+gegen einen veralteten Ausgangsstand — dieselbe Klasse wie §166 und §167, nur diesmal bei einem
+anderen.
+
+**Änderung an einem stehenden Posten bei Yama:** die Zahl aus §119/§120 lautet nicht mehr 33.
+**28 Module ohne Ladeweg**, Grundmenge 160.
+
+**Ball beim Integrator:** fünf `Z1-W1`-Datensätze und drei Bau-SHAs in **Felder** — die
+Statuswahrheit kennt weder die Aufträge noch die Bauten.
+**Ball beim Planner:** Kriterium A und D von Z1-W1-3 stehen seit dem Schnitt unverändert offen, und
+der Bau ist bereits erfolgt; entweder wird A berichtigt oder ausdrücklich gestrichen.
+**Ball bei Yama:** die Kettenlücke — ein verweigertes DoR-Votum, das in keinem Feld steht, hält
+keinen Bau auf. Drei Bauten aus `zustand: ENTWURF` heraus sind der Beleg.
+
+## §171 — Posten (b): Z1-W1-4 durchgezählt — neun Behauptungen, neun Treffer, und eine Grenze an meiner eigenen Zahl
+
+**Messstand** `39604ba9` · Baum sauber · 0 neue Commits in meinem Zweig.
+**Integrationszweig:** `5ccc707f` → `4d37a3ef`, 2 Commits — beide **mein eigener Rückweg** (§169).
+Von fremder Seite ist nichts angekommen, also Vorratsprüfung, Posten **(b)**.
+
+Gegenstand: **`b2371d7e` 21.08. 13:42, `generator: Z1-W1-4 gebaut`** — der Auftrag, für den ich in
+§146 die DoR **erteilt** habe und den ich in §170 nur gezählt, aber nicht nachgemessen hatte.
+Umfang selbst gemessen: **2 Dateien, 32 Anfügungen, 1 Löschung** (die ersetzte Import-Zeile).
+
+### Die neun Behauptungen
+
+| Behauptung im Bau | gemessen |
+|---|---|
+| md5 `b5738234bebca5a3599f65c3f797c06f`, 103 Z., 4188 B — beide Fassungen zeichengleich | **beide identisch**, alle drei Werte exakt |
+| `utils`-Fassung heute 6176 Bytes | **6176 B** (131 Z.) |
+| `dachGeometrie` zieht jetzt `'./dachWerte'` | `dachGeometrie.ts:16` ✓ |
+| roher Textgrep: noch **zwei** Treffer, beide Kommentare | **2**, beide Kommentar ✓ |
+| Muster für echte Import-Anweisungen: **null** | **0** ✓ |
+| getestet ist nur die `geometry`-Fassung, `__tests__/dachWerte.test.ts:12` | ✓ zieht `"../geometry/dachWerte"` |
+| die `utils`-Kopie ist unbewacht | **0** Testdateien ziehen sie ✓ |
+| „zwei identische Fassungen mit **je einem eigenen Verbraucher**" | vorher genau zwei: `dachGeometrie.ts:13` → `../../utils/dachWerte`, `dachformVorlagen.ts:34` → `./dachWerte` ✓ |
+| Stilllegung nach dem Muster von `app/tools/toolCatalogStillgelegt.ts` | Datei existiert, 75 Z., trägt denselben Gedanken *(„nicht gelöscht, sondern stillgelegt")* ✓ |
+
+**Neun von neun.** Das ist in dieser Reihe der erste Bau, an dem ich keine einzige Zahl korrigieren
+muss. Bemerkenswert dabei: er hat die md5 **vor** der eigenen Kopfergänzung genommen und das
+ausdrücklich gesagt — sonst wäre der Beleg für eine spätere Löschentscheidung durch seinen eigenen
+Eingriff wertlos geworden. Das ist genau die Sorte Standbezug, die §166 an A-38 vermisst hat.
+
+Die Grundmenge habe ich **weiter gefasst als er**: nicht `resources/planner`, sondern der ganze
+`resources/`-Baum, dazu Alias-Formen (`@/…`, `~/…`). Ergebnis unverändert — **0** weitere Verbraucher.
+Seine engere Grundmenge hat hier nichts verdeckt.
+
+### Was ich zusätzlich gefunden habe — an meiner eigenen Zahl
+
+`resources/planner/utils/` enthält nach diesem Bau **genau eine Datei**, und die hat **null
+Verbraucher**. Das Verzeichnis besteht jetzt nur noch, um eine stillgelegte Datei zu halten. Das ist
+kein Vorwurf — Y-2 hat am 21.08. ausdrücklich **gegen** Löschung entschieden (Rückfall-/Archiv-Regel),
+und der Vermerk sagt sauber, was gilt, warum es gefährlich war und was zu tun ist, wenn jemand die
+Datei wieder in Benutzung nimmt.
+
+**Aber es rührt an meine Zahl aus §170.** Meine Erreichbarkeitsmessung hat als Grundmenge
+`resources/planner/hausplaner` — **160 Module**. `resources/planner/utils/dachWerte.ts` liegt
+**daneben**, nicht darin. Die „**28 Module ohne Ladeweg**" enthalten sie also **nicht**. Ehrlich
+ausgedrückt: 28 innerhalb der Insel, und **eine weitere außerhalb**, absichtlich und dokumentiert
+liegengelassen. Wer meine 28 gegen eine Frage stellt, die „alles unter `resources/planner`" meint,
+bekommt eine Antwort auf eine andere Frage. **Grundmenge gegen die Frage prüfen, nicht gegen das
+Verfahren** — diesmal an meiner eigenen Zahl.
+
+### Eigene ausgefallene Messung, gefangen
+
+Meine erste Erhebung des Vorher-Stands lieferte **eine leere Liste** — also scheinbar „keine
+Verbraucher vor dem Bau", was seiner Aussage direkt widersprochen hätte. Fangprobe am bekannten
+Treffer (dieselbe Suche am heutigen Stand **muss 2 ergeben**): sie ergab **0**. Damit war klar, dass
+die Suche und nicht der Baum leer war.
+
+**Ursache:** `git grep -E` kennt `\s` nicht — das ist eine PCRE-Eigenschaft und bräuchte `-P`; das
+`grep -E` im Arbeitsbaum hat es klaglos angenommen. **Dasselbe Muster, zwei Werkzeuge, zwei
+Ergebnisse.** Mit `[[:space:]]` statt `\s` kamen die zwei Vorher-Verbraucher sofort. Ein zweiter
+Fehlversuch davor lag am Pfadmuster `resources/*.ts`, das in git-Pathspecs keine Unterverzeichnisse
+überquert.
+
+Beide Male war das Ergebnis eine **Null, die wie eine Messung aussah** — dieselbe Form wie in §166
+und §167. Die Fangprobe hat beide gefangen, bevor etwas gemeldet wurde. Für alles Weitere:
+**`\s` nie in `git grep`.**
+
+**Ball beim Integrator** (unverändert): `Z1-W1-4` hat weiterhin **keinen Datensatz**, und `b2371d7e`
+steht in **keinem Feld**. Ein Bau, an dem neun von neun Zahlen halten, ist in der Statuswahrheit
+nicht vorhanden. **Ball beim Evaluator** für die Abnahme. **Kein Ball beim Generator** — hier ist
+nichts zu berichtigen.
