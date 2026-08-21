@@ -47,13 +47,32 @@ class PlannerAttendanceController extends Controller
         }
     }
 
+    /**
+     * Z2-W0-3 (21.08.) — **der Mitarbeiter kommt aus der Sitzung, nicht aus dem Request.**
+     *
+     * Vorher nahm diese Methode `employee_id` aus Request oder Query und fiel nur bei `<= 0` auf
+     * den eigenen zurück. Damit konnte jeder eingeloggte Nutzer die Anwesenheits- und
+     * Standortdaten **fremder Mitarbeiter** lesen und schreiben — Spur A, Datenschutz,
+     * betriebsratsrelevant. Neun Aufrufstellen hingen daran (`:284`, `:302`, `:321`, `:409`,
+     * `:428`, `:443`, `:461`, `:479`, `:507`).
+     *
+     * **Warum hier und nicht neun `abort_unless`:** der Auftrag lässt beide Formen und nennt diese
+     * die dichtere. Sie ist es, weil eine neue Aufrufstelle sie automatisch erbt — ein vergessenes
+     * `abort_unless` wäre genau die Lücke, die dieser Auftrag schließt.
+     *
+     * **Warum stillschweigend maßgeblich statt 403:** dies ist der Auflöser der LESEpfade
+     * (`day`, `report`, …). Ein Client, der seine EIGENE Kennung mitschickt, verhält sich korrekt
+     * und darf nicht brechen; ein Client mit fremder Kennung bekommt seine eigenen Daten statt
+     * fremder. Für den SCHREIBpfad `location()` ist die Absage ausdrücklich (403) — dort ist eine
+     * fremde Kennung eine Absicht, keine Gewohnheit.
+     *
+     * **Offene Rückfrage, nicht still entschieden:** gibt es einen legitimen Vorgesetzten-Fall
+     * (Teamleiter trägt für Mitarbeiter ein)? Dann ist das ein Operand und braucht ein eigenes
+     * Recht. Bis dahin gilt „nur eigener Mitarbeiter" — die engere Annahme.
+     */
     private function resolveEmployeeId(Request $request): int
     {
-        $employeeId = (int) $request->input('employee_id', $request->query('employee_id', 0));
-
-        if ($employeeId <= 0) {
-            $employeeId = (int) ($this->authEmployeeId() ?? 0);
-        }
+        $employeeId = (int) ($this->authEmployeeId() ?? 0);
 
         abort_if($employeeId <= 0, 422, 'Mitarbeiter konnte nicht erkannt werden.');
 
@@ -356,7 +375,13 @@ class PlannerAttendanceController extends Controller
         ]);
 
         $date = $this->resolveDate($request);
-        $employeeId = (int) $data['employee_id'];
+
+        // Z2-W0-3: der Schreibpfad nimmt die Kennung NICHT aus dem Request. Eine fremde `employee_id`
+        // ist hier eine Absicht und wird abgewiesen, statt still auf die eigene umgeschrieben zu
+        // werden — der Client soll erfahren, dass sein Wunsch nicht ausgeführt wurde.
+        $employeeId = $this->resolveEmployeeId($request);
+        abort_unless((int) $data['employee_id'] === $employeeId, 403, 'Fremde Mitarbeiter-Kennung.');
+
         $attendance = $this->attendanceFor($plan, $employeeId, $date);
 
         $attendance->current_lat = $data['lat'];
