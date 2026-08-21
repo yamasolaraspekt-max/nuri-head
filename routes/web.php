@@ -814,9 +814,13 @@ Route::group(['middleware' => ['web', 'auth']], function(){
     Route::post('/new_lead_save', [NewLeadsController::class, 'store'])->name('new.lead.store'); 
     Route::get('/new_lead_view', [NewLeadsController::class, 'index'])->name('new.lead.view');
     // Welle A4 (2026-07-16): Gebäudeakte V1 lesend (Spec: docs/planner-spec-gebaeudeakte.md).
-    Route::get('/objekte', [\App\Http\Controllers\Customer\ObjektakteController::class, 'index'])->name('objekte.index');
-    Route::get('/objekte/{alternative}', [\App\Http\Controllers\Customer\ObjektakteController::class, 'show'])->whereNumber('alternative')->name('objekte.akte');
-    Route::post('/objekte/{alternative}/auslegung', [\App\Http\Controllers\Customer\ObjektakteController::class, 'auslegung'])->whereNumber('alternative')->name('objekte.auslegung');
+    // Z2-W0-1 (21.08.): hinter permission:Customer,read — die Sidebar behauptete das Recht bereits
+    // ('permission' => 'Customer'), die Route prüfte es nicht. Ohne Gate lieferte GET /objekte?q=a
+    // jedem Eingeloggten eine durchsuchbare Kundenliste (index paginiert ALLE LeadAlternativeAdd,
+    // scopeGebaeudeSuche filtert per LIKE über den Kundennamen ohne Bindung).
+    Route::get('/objekte', [\App\Http\Controllers\Customer\ObjektakteController::class, 'index'])->middleware('permission:Customer,read')->name('objekte.index');
+    Route::get('/objekte/{alternative}', [\App\Http\Controllers\Customer\ObjektakteController::class, 'show'])->whereNumber('alternative')->middleware('permission:Customer,read')->name('objekte.akte');
+    Route::post('/objekte/{alternative}/auslegung', [\App\Http\Controllers\Customer\ObjektakteController::class, 'auslegung'])->whereNumber('alternative')->middleware('permission:Customer,read')->name('objekte.auslegung');
 
     Route::get('/new_lead_profile/{id}', [NewLeadsController::class, 'view'])->name('new.lead.profile');
     Route::get('/customers/{customer}/price-history',[NewLeadsController::class, 'priceHistoryForCustomer'])->name('customers.price-history');

@@ -100,9 +100,9 @@
 | **Z1-W1-5** insulationType: der tote Zweig sagt, dass er tot ist | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §147), offen: die Zahl · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §180), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
-| **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR steht aus** — plan-pruefer, sechs Runden angekuendigt (§255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
+| **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-4** Wächter: keine neue Web-Route ohne permission: — Ratschen-Test mit Baseline | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-4-route-permission-waechter.md` · **DoR steht aus** — plan-pruefer, sechs Runden angekuendigt (§255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
-| **Z2-W0-5** Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md` · **DoR steht aus** — plan-pruefer, sechs Runden angekuendigt (§255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
+| **Z2-W0-5** Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md` · **DoR steht aus** — plan-pruefer, sechs Runden angekuendigt (§255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · **BLOCKIERT durch Y-6** (Yama): ohne entschiedenes Permission-Item `Planner` kein Routen-Gate fuer 61 Routen (plan-pruefer §257) |
 | **Z2-W0-6** Nuriva-API: die vier Token-Abilities werden durchgesetzt — oder sie verschwinden | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-6-api-token-abilities.md` · **DoR steht aus** — plan-pruefer, sechs Runden angekuendigt (§255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 
 ### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
@@ -28118,16 +28118,21 @@ herkunft_dieses_datensatzes: |
 auftrag: "Z2-W0-3"
 titel: "Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: generator
+ballbesitz_nachgezogen: |
+  plan-pruefer -> generator, 21.08. vom integrator. TRANSPORT: die DoR ist gefahren,
+  damit endet der Grund des Pruefers. Paragraf 257: "Generator: W0-3 ist von meiner
+  Seite frei (wie W0-1 seit Paragraf 255)." Ohne Restpunkt, also ohne Zwischenschritt
+  beim Planner — anders als W0-2.
 ballbesitz_grund: |
   Die DoR steht aus. Paragraf 255: "Damit liegen sechs DoR in meiner Bahn" — eine ist
   gefahren (Z2-W0-1), fuenf folgen. Bis dahin haelt der Plan-Pruefer den Ball.
 blatt: "docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md"
 basis_sha: 7a82ecfb
 dor_beleg: |
-  steht aus — plan-pruefer, angekuendigt in Paragraf 255. Und das ist hier woertlich
-  gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
-  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+  ERTEILT OHNE RESTPUNKT — plan-pruefer, Paragraf 257 (21.08.).
+  VORHERIGE FASSUNG, ausdruecklich erhalten: steht aus (Paragraf 255).
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
 herkunft_dieses_datensatzes: |
   Das Blatt verlangt ihn woertlich: "status_steht_in: docs/STATUS.md — Integrator-Lauf
   erforderlich" (alle sechs tragen die Zeile). Zustand und basis_sha sind AUS DEM BLATTKOPF
@@ -28170,6 +28175,13 @@ ballbesitz: plan-pruefer
 ballbesitz_grund: |
   Die DoR steht aus. Paragraf 255: "Damit liegen sechs DoR in meiner Bahn" — eine ist
   gefahren (Z2-W0-1), fuenf folgen. Bis dahin haelt der Plan-Pruefer den Ball.
+blockiert_durch: |
+  Y-6, bei Yama. Paragraf 257 woertlich: "Y-6 blockiert W0-5 ausdruecklich — das
+  Blatt sagt es selbst. Solange kein Permission-Item Planner entschieden ist, kann
+  das Routen-Gate fuer 61 Routen nicht gebaut werden."
+  Der Ball bleibt beim plan-pruefer (DoR steht aus); die Blockade ist ein eigener
+  Umstand und KEIN Ballwechsel — sie wuerde sonst die ausstehende Pruefung verdecken.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
 blatt: "docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md"
 basis_sha: cb500067
 dor_beleg: |
