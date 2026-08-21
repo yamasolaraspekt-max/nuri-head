@@ -300,6 +300,18 @@ erzwungen wird** — Beleg für Z0-I2 und für die `pre-commit`-Barriere.
 
 Bericht nach Planner-Start und Evaluator-Wecken mit: Rollen-/Sitzungs-ID · Worktree und Zweig ·
 Ausgangs-SHA · erstem tatsächlich bearbeitetem Auftrag · Bestätigung PID `87659` = `T`.
+
+### Ursache der wirkungslosen Steuerung, gemessen (Dirigent, 22:5x)
+`grep -c cross-session-message` in **allen sechs** Rollen-Transkripten = **0**; „WIP-STOPP" = 0; der
+Text „KORRIGIERTE REIHENFOLGE" existiert ausschließlich im Dirigent-Transkript. **Keine einzige
+Sitzungsnachricht des Dirigenten ist je zugestellt worden** — der Sender meldete `success`, der
+Empfänger hat nichts erhalten. Der WIP-Stopp war nicht „ausgegeben, aber unwirksam", er war
+**nicht zugestellt**. Folge: die Rollen arbeiteten den ganzen Abend nach dem integrierten Stand und
+ihren stehenden Anweisungen — konsistent mit allen Abweichungen oben. Der Evaluator wurde von Yama
+mit „schau nach" geweckt (22:51), fand „sechs Bälle unbewegt" und kennt A-42 als seinen Auftrag
+nicht. Kanalwechsel: **`docs/auftraege/DIRIGENT-TAFEL.md`** (dieser Worktree) ist die eine
+Anweisungstafel; jede Rolle liest sie vor jeder Arbeit; Yama tippt je Sitzung einmal den Lesebefehl.
+PID 61814 (22:55) ist die Codex-Sitzung, kein Planner.
 Die fünf Negativproben gehen als Kriterien
 in das erweiterte A-37-Blatt (Planner); der Integrator transportiert nichts aufgrund der seit 22:04
 entstandenen Generator-Bauten. Das V2-Konzept (`0d897b0e`) ist bereit für die spätere unabhängige
