@@ -62,3 +62,29 @@ test('Determinismus: gleiche Eingabe → gleiches Ergebnis', () => {
   const e = { geschosshoehe: 2750, gewuenschteSteigung: 180, laufbreite: 1000 };
   assert.deepEqual(berechneTreppe(e), berechneTreppe(e));
 });
+
+// ---- Z1-W1-1: die Bedingung, auf der das ehrliche Badge steht --------------------------------
+//
+// `berechneTreppe` prüft die lichte Durchgangshöhe **nur, wenn sie übergeben wird**
+// (`treppenBerechnung.ts:97`). Der reale Aufruf im Eigenschaften-Panel übergibt sie nicht — es gibt
+// kein Eingabefeld dafür. Das Badge sagte trotzdem „DIN 18065 erfüllt".
+//
+// Diese Zusage hält die **Bedingung** fest, auf der der neue Vorbehalt im Panel steht: das Fehlen
+// einer `durchgangshoehe`-Prüfung im Ergebnis. Die Rechnung selbst wird NICHT verändert
+// (Nicht-Ziel des Auftrags) — es geht allein darum, dass die Anzeige diese Lücke erkennen kann.
+test('Z1-W1-1: ohne Durchgangshöhe fehlt die Prüfung im Ergebnis — darauf steht der Vorbehalt', () => {
+  const ohne = berechneTreppe({ geschosshoehe: 2800, laufbreite: 1000, bereich: 'wohnung' });
+  assert.equal(
+    ohne.pruefungen.some((p) => p.id === 'durchgangshoehe'), false,
+    'ohne Übergabe darf keine Durchgangshöhen-Prüfung im Ergebnis stehen',
+  );
+  assert.ok(ohne.pruefungen.length > 0, 'die übrigen Kriterien werden sehr wohl geprüft');
+});
+
+test('Z1-W1-1 (Gegenprobe): mit Durchgangshöhe < 2000 mm steht die Prüfung drin und ist verletzt', () => {
+  const mit = berechneTreppe({ geschosshoehe: 2800, laufbreite: 1000, bereich: 'wohnung', durchgangshoehe: 1900 });
+  const pr = mit.pruefungen.find((p) => p.id === 'durchgangshoehe');
+  assert.ok(pr, 'mit Übergabe MUSS die Prüfung im Ergebnis stehen');
+  assert.equal(pr!.bestanden, false, '1900 mm < 2000 mm ⇒ verletzt');
+  assert.equal(mit.bestanden, false, 'und das Gesamturteil kippt mit');
+});

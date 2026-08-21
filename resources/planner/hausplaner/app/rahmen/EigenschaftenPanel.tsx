@@ -497,6 +497,19 @@ export function EigenschaftenPanel({
                 <div><strong>{erg.anzahlSteigungen}</strong> Steigungen · <strong>{erg.anzahlAuftritte}</strong> Auftritte</div>
                 <div>Steigung {erg.steigungshoehe} mm · Auftritt {erg.auftritt} mm</div>
                 <div>Schrittmaß {erg.schrittmass} mm · {erg.bestanden ? 'DIN 18065 erfüllt' : 'DIN 18065 verletzt'}</div>
+                {/* Z1-W1-1: das Badge sagt, was es NICHT geprüft hat. `berechneTreppe` prüft die
+                    lichte Durchgangshöhe nur, wenn sie übergeben wird (`treppenBerechnung.ts:97`) —
+                    dieser Aufruf übergibt sie nicht, es gibt kein Feld dafür. Ohne diesen Zusatz
+                    liest sich „DIN 18065 erfüllt" wie eine Vollprüfung, und die fehlende Größe ist
+                    ausgerechnet die mit Personenschaden-Folge (Kopfhöhe). Der Vorbehalt reist mit
+                    dem Ergebnis (Muster A-14/A-18) und benennt GENAU das eine offene Kriterium —
+                    er stellt die übrigen nicht in Frage. Die Herleitung der Kopfhöhe ist Posten 2.1
+                    (Gate Y-4) und ausdrücklich NICHT Gegenstand dieses Auftrags. */}
+                {!erg.pruefungen.some((pr) => pr.id === 'durchgangshoehe') && (
+                  <div className="hp-ep-lesehinweis">
+                    Ohne lichte Durchgangshöhe — dieses Kriterium wurde nicht geprüft.
+                  </div>
+                )}
               </div>
             );
           })()}

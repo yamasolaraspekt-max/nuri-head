@@ -166,3 +166,25 @@ test('K-01: das Markup steht NICHT mehr ein zweites Mal in der Hauptfunktion', (
   const rufe = [...app.matchAll(/<EigenschaftenPanel\b/g)];
   assert.equal(rufe.length, 1, `${rufe.length} Aufrufe des Panels — erwartet genau einer`);
 });
+
+// ---- Z1-W1-1: das Badge sagt, was es NICHT geprüft hat ---------------------------------------
+//
+// `berechneTreppe` prüft die lichte Durchgangshöhe nur, wenn sie übergeben wird
+// (`treppenBerechnung.ts:97`); der Aufruf hier übergibt sie nicht, es gibt kein Feld dafür. Das
+// Badge las sich trotzdem als Vollprüfung — und die fehlende Größe ist ausgerechnet die mit
+// Personenschaden-Folge. Die Bedingung selbst ist in `treppenBerechnung.test.ts` geprüft (echte
+// Rechnung); hier wird der TEXT festgehalten, damit er nicht still wieder verschwindet.
+//
+// **Grenze dieser Zusage, wie im Kopf dieser Datei:** sie liest Quelltext, sie rendert nicht.
+// Dass der Hinweis im Browser sichtbar ist, ist Kriterium C und Sache der Abnahme.
+test('Z1-W1-1: der Vorbehalt zur Durchgangshöhe steht im Panel und hängt an der fehlenden Prüfung', () => {
+  assert.ok(
+    panel.includes('Ohne lichte Durchgangshöhe'),
+    'der Vorbehaltstext fehlt — das Badge behauptet wieder eine Vollprüfung',
+  );
+  const zeile = panel.split('\n').find((z) => z.includes("pr.id === 'durchgangshoehe'")) ?? '';
+  assert.ok(
+    zeile.includes('!erg.pruefungen.some'),
+    'der Vorbehalt muss an der FEHLENDEN Prüfung hängen, nicht fest angezeigt werden',
+  );
+});
