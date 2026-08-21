@@ -21280,3 +21280,87 @@ Auftrags ist um eins zu klein**, und der Auftrag würde als erfüllt gelten, ohn
 
 **Nicht geprüft:** W0-3 bis W0-6; die Nuriva-Erstfunde A-1…A-5, die `114b98f6` inzwischen als
 bestätigt meldet (*„Radius jeder der 52 Accounts auch per Browser-Cookie"*).
+
+## §257 · DoR Z2-W0-3 — ERTEILT ohne Restpunkt. Und §255 ist behoben: die sechs stehen in der Statuswahrheit
+
+**Messstand.** Mein HEAD `fa4a4028`, Baum sauber. Integrationszweig `eed0d949` (21.08. 20:12),
+6 neue Commits. Basis-Stand der Prüfung: **`7a82ecfb`**. Gemessen 21.08. 20:13–20:14.
+
+### 1 · Zwei Zahlen der Ballortung haben sich bewegt — beide zu meinen Gunsten
+
+    'Z2-W0' in docs/STATUS.md       0  ->  19 Treffer
+    ballbesitz: plan-pruefer       40  ->  45
+
+`eed0d949` (*„sechs neue Z2-Auftraege in die Statuswahrheit eingetragen — dasselbe Muster wie Z1-W1"*)
+**behebt den §255-Befund**. Die sechs Blöcke einzeln geprüft: je **genau einer** je Kennung, keine
+Dublette, alle mit `zustand`-Feld.
+
+| Kennung | Zustand | Ball |
+|---|---|---|
+| `Z2-W0-1` | ENTWURF | **generator** |
+| `Z2-W0-2` … `Z2-W0-6` | ENTWURF | **plan-pruefer** |
+
+**W0-1 ist beim Generator** — mein DoR aus §255 ist angenommen und der Ball weitergegeben. Die
+übrigen fünf liegen bei mir; 40 + 5 = 45, die Rechnung geht ohne Rest auf.
+
+*(W0-2 steht noch auf meinem Ball, weil §256 zum Zeitpunkt des Eintrags noch nicht angekommen war —
+beide Commits tragen 20:12. Das ist Laufzeit, kein Befund.)*
+
+### 2 · DoR Z2-W0-3 · **ERTEILT**
+
+Alle vier Belege am Basis-Stand nachgemessen:
+
+**Erstens** `location()` (`:346-360`): `:348-356` validiert `employee_id` als
+`['required','integer','min:1']`, `:359` setzt `$employeeId = (int) $data['employee_id']` — **direkt
+aus dem Request**, `:360` gibt ihn an `attendanceFor()`. **Kein Abgleich mit `authEmployeeId()`.**
+Belegt.
+
+**Zweitens** `resolveEmployeeId()` (`:50-61`):
+
+    :52  $employeeId = (int) $request->input('employee_id', $request->query('employee_id', 0));
+    :54  if ($employeeId <= 0) { $employeeId = (int) ($this->authEmployeeId() ?? 0); }
+    :58  abort_if($employeeId <= 0, 422, 'Mitarbeiter konnte nicht erkannt werden.');
+
+Genau wie beschrieben: aus **Request oder Query**, Rückfall **nur bei `<= 0`**, und `:58` prüft die
+**Existenz**, nicht die **Identität**. Belegt.
+
+**Drittens die Zahl.** Das Blatt sagt *„16.403 Z., 8 Controller"*. Nachgezählt:
+
+    PlannerPlanController 11097 · PlannerEmployeeApi 2375 · PlannerApiAuth 929 · PlannerAttendance 652
+    PlannerItemMaterial 610 · PlannerMobileCustomerImage 297 · PlannerMasterSet 229 · PlannerItemState 214
+    SUMME 16403 in 8 Controllern
+
+**Punktgenau.** Das ist die zweite fremde Zahl in dieser Sitzung, die der Nachzählung standhält
+(nach den „26 Verweisen" in §232) — und die erste, die auf die Einerstelle stimmt.
+
+**Viertens „0 Treffer"** für `authoriz|gate|haspermission|->can(|permission`: Meine Messung ergab
+**1**. Angesehen:
+
+    PlannerMasterSetController.php:81:  // light aggregates (counts + labor hours) without heavy eager loads
+
+**„gate" als Teilstring in „aggre·gate·s"** — und obendrein in einem Kommentar. **Mein Muster war zu
+breit, nicht das Blatt.** Das ist wörtlich die §213-Falle (*„`kg` trifft Rüc·kg·abe"*) und der
+Gegenstand von H-9. Siebter Fall falscher Grundmenge in dieser Sitzung; gefangen, weil eine 1 gegen
+eine behauptete 0 immer zuerst gegen das eigene Muster spricht.
+
+**Votum: ERTEILT. Restpunkte: keine.** Ziel, Basis-SHA, Ist-Beleg mit Reproduktion, Scope mit zwei
+begründeten Bauformen, Testpfad gegen `ticket_testing`, Abgrenzung zu W0-5 (*„wartet auf Y-6"*) —
+alles vorhanden. Die Abgrenzung ist dabei der stärkste Teil des Blattes: **Es trennt den Teil, der
+ohne den offenen Operanden gebaut werden kann, vom Teil, der auf Yamas Entscheidung wartet.** Genau
+das verlangt `CLAUDE.md` für fehlende Operanden.
+
+### 3 · Was ich nicht geprüft habe
+
+Die **Reproduktion** (*„`POST …/attendance/location` mit fremder `employee_id` → 200, Zeile in
+`attendance_locations`"*) habe ich **nicht ausgeführt** — dazu bräuchte es ein laufendes System und
+eine Datenbank, und beides wäre nach `CLAUDE.md` nur gegen `ticket_testing` zulässig. Die Codelage
+stützt sie vollständig; ausgeführt ist sie nicht, und ich sage es.
+
+### 4 · Ball
+
+**Generator**: W0-3 ist von meiner Seite frei (wie W0-1 seit §255).
+**Planner/Dirigent**: der Restpunkt aus §256 zu W0-2 (`vorschau`) steht weiter offen.
+**Yama**: **Y-6** blockiert W0-5 ausdrücklich — das Blatt sagt es selbst. Solange kein
+Permission-Item `Planner` entschieden ist, kann das Routen-Gate für 61 Routen nicht gebaut werden.
+
+**Nicht geprüft:** W0-4, W0-5, W0-6.
