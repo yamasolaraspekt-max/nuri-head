@@ -73,10 +73,28 @@ dieselbe Frage beantwortet, und beantwortet er sie besser oder schlechter?*
 
 ### Zwei Befunde der Architektur-Linse mit Wirkung heute
 
-**A-1 · Der Sicht-Knopf wirkt nur in 3D.** `SET_NODES_SICHTBAR` wird gesetzt, 3D filtert an vier
-Stellen auf `visible !== false` — **die 2D-Bühne kennt `visible` nicht** (0 Treffer in 439 Zeilen).
-Ausgeblendetes bleibt im Grundriss stehen. Und `locked` wird produktiv an **einer** Stelle
-respektiert (`trimmen.ts:152`): **die Sperre ist heute weitgehend Attrappe.**
+**A-1 · Der Sicht-Knopf wirkt in 2D nur bei Dächern — nachgemessen 21.08., und die Lage ist
+gemischter als gemeldet.** Der Bericht sagte, die 2D-Bühne kenne `visible` gar nicht (0 Treffer).
+Gemessen ist **ein** Treffer, und er ändert den Befund:
+
+```
+3D  szene.ts:351 · :459 · :479 · :513      vier Filter auf `visible !== false`   -> wirkt
+2D  Buehne.tsx:298  (scene.roofs).filter(r => r.visible !== false)                -> nur DÄCHER
+2D  ableitungen.ts:52  scene.nodes.filter(n => n.levelId === level.id)            -> KEIN visible
+```
+
+`knotenImGeschoss` filtert allein nach Geschoss, `waendeAus` allein nach Typ; zwischen Ableitung und
+Bühne wendet **niemand** `visible` auf Knoten an (die Treffer in `HausplanerApp` sind
+Knoten-*Erzeugung*, `visible: true`). **Wer eine Wand ausblendet, sieht sie im Grundriss weiter —
+das Dach daneben verschwindet.** Eine Inkonsistenz *innerhalb derselben Ansicht* ist schwerer zu
+deuten als eine fehlende Funktion: der Nutzer sieht, dass der Schalter wirkt, und schließt daraus,
+dass die Wand absichtlich bleibt.
+
+**Und `locked` wird produktiv an genau EINER Stelle geachtet:** `trimmen.ts:152`. `auswahlUebersicht.ts:68`
+*zählt* gesperrte Knoten, `EigenschaftenPanel.tsx:237-239` ist der Schalter selbst,
+`applyCommand.ts:242` der Setzer. **Keine weitere Operation fragt danach** — Verschieben, Löschen,
+Duplizieren und Spiegeln gehen über gesperrte Knoten hinweg. Die Sperre ist damit heute weitgehend
+eine Zusage ohne Deckung. | ✅ |
 
 **A-2 · `bauteil_typ` verliert die Dämmung auf dem verdrahteten Weg.**
 ```
