@@ -1,10 +1,12 @@
 auftrag_id: WARTEN-planner-A-37
-generation: 4            # NEU 23:42 — SITZUNGSWECHSEL auf Yamas Anweisung ('ich moechte dass du planner bist', an Sitzung 79285cf2); Auftrag sachlich unveraendert
-sitzungswechsel:
-  neue_planner_sitzung: 79285cf2-4231-4f71-8dfc-3306e3371109   # PID 70499, VS Code, frisch 23:16 — registriert sich in sitzungen/planner.yaml (ueberschreiben erlaubt) und quittiert gen 4
-  abgeloeste_sitzung: 20c9c319-f0f8-4f15-8c01-d54f85ceb5fa      # PID 68609/Takt-Kinder — AB SOFORT: keine ACKs, keine Befunde, keine Registrierung mehr; eigenen Planner-Takt (0c29417b) LOESCHEN (CronDelete) und untaetig bleiben. Dank fuer vier belegte Befunde; sie bleiben in ereignisse/ und gelten.
-  regel: "Eine Rolle = eine Sitzung. Zwei Planner-Sitzungen gleichzeitig sind nicht zulaessig (Lease-/ACK-Konflikt)."
-  uebergabe_an_die_neue_sitzung: "Lies zuerst ereignisse/WARTEN-planner-A-37/*.yaml (Befunde + Dirigent-Antworten) — dort steht die gesamte lesende Vorbereitung der Vorgaengerin: Weckerkonflikt, Wartebedingung (A-42 ist gebaut, 26c46f31), CODE_FERTIG-Betreff (e9e6ee5b leer, zwei Kennungen, zwei Bauten), doppelter ticket-rolle-generator-Baum (A-37-22: Baumauswahl ueber Pfad+Zweig)."
+generation: 4            # FORMAL UNGUELTIG, NICHT QUITTIERBAR (Yama 21.08. 23:5x, Variante C) — wird nicht in-place repariert; KEINE ACK fuer diese Generation schreiben
+status: NICHT_BESETZT_GEPARKT
+planner_besetzung_yama_variante_c:
+  entscheidung: "Weder die alte Sitzung 20c9c319 blind beibehalten (Lebensnachweis fehlt — Transkript-mtime ist kein Prozessnachweis; kein --resume=20c9c319-Prozess zum Messzeitpunkt) noch PID 70499/79285cf2 umwidmen (laeuft im gemeinsamen Integrationscheckout, Plan-Pruefer-Historie). Sitzung 79285cf2 wird geschlossen; ihre Meldung bleibt Beleg."
+  bis_auf_weiteres: "Rolle Planner ist NICHT BESETZT. Keine Registrierung, keine ACK, keine Lease, keine Befunde, keine Sacharbeit unter dieser Rolle — von KEINER Sitzung. Sitzung 20c9c319: falls dein Takt dies liest — Takt loeschen (CronDelete), keine weiteren ACKs/Ereignisse; deine vier Befunde bleiben gueltig."
+  generation_5_kommt: "ERST nach Start einer frischen Claude-Sitzung direkt im Worktree /Users/yamanuri/Documents/ticket-rolle-planner (Branch rolle/planner). Generation 5 nennt neue_planner_sitzung = sitzung_erwartet = dieselbe neue Sitzungs-ID; erst danach Registrierung (pid = dauerhafter Claude-Sitzungsprozess ueber die ppid-Kette, plus Prozess-Startkennung, plus Sitzungs-ID) und Generation-5-ACK."
+  fachlich: "Der neue Planner bearbeitet zunaechst nichts. A-42 steht auf NACHBESSERN; zuerst Integrator A-42-1 (d17d2ddf) und Evaluator-Nachpruefung. Erst nach A-42 ABGENOMMEN darf der neue Planner A-37 spezifizieren (Vorgaben unten bleiben gueltig)."
+  pid_befund_uebernommen: "pid in ACK/Registrierung = PID des Sitzungsprozesses, nicht die fluechtige Shell-PID (Befund 79285cf2) — geht als Kriterium in A-37/Z0-I3."
 neu_aus_evaluator_votum_3f7f61d6_fuer_A-37:
   - "Befund (a): docs/BEFUNDNOTIZEN.md in rollen-tor.sh und commit-pruefen.sh 0x — jede Rolle kann sie aus jedem Baum schreiben → A-37-24 (bereits Vorgabe), jetzt mit Messbeleg"
   - "Befund (b) Vorratsposten: a26-ball-drift, a30-datensatz-paar, a33-kennungen-nachziehen, status-erzeugen kennen BEFUNDNOTIZEN 0x — heute wirkungslos (104 = 104), wirkt erst wenn dort zustand/ballbesitz landet"

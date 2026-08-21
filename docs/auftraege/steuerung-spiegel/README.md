@@ -15,6 +15,8 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
 1. `cat /Users/yamanuri/.ticket-steuerung/rollen/<rolle>.yaml` und `cat rollen/<rolle>.yaml.sha256` (Digest).
 2. Einmalig **registrieren** (atomar: erst `.tmp` schreiben, dann `mv`):
    `sitzungen/<rolle>.yaml` mit `sitzungs_id`, `pid`, `rolle`, `worktree`, `branch`, `zeit`.
+   **`pid` = PID des Sitzungsprozesses** (`claude`, über die ppid-Kette von `$$` aufwärts: Shell → claude → VS Code),
+   **nicht** die flüchtige Shell-PID einer Werkzeugrunde (Befund 79285cf2: drei von vier Einträgen trugen eine tote Zahl).
 3. **ACK** — die einzige gültige Bestätigung, **kein Git-Commit**: Datei
    `ereignisse/<auftrag_id>/<rolle>-ack.yaml` atomar anlegen mit
    `auftrag_id, generation, digest (aus rollen/<rolle>.yaml.sha256), rolle, sitzungs_id, pid, worktree, branch, head_sha, zeit, antwort: GELESEN`.
@@ -41,6 +43,12 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
 
 ## Für den Dirigenten
 - Änderung eines Auftrags = `generation` +1, Datei neu schreiben, Digest neu berechnen (`shasum -a 256`), alte ACKs verfallen.
+- **Atomar veröffentlichen** (Befund Integrator 23:44 — er las gen 4 mit dem Digest von gen 3, weil Datei und
+  `.sha256` in zwei Runden entstanden): erst `rollen/<rolle>.yaml.tmp` schreiben, Digest in `.sha256.tmp` rechnen,
+  dann **beide** per `mv` umbenennen — nie eine Runde lang Datei und Digest auseinanderklaffen lassen.
+- Rollenbesetzung: eine Sitzung je Rolle; `sitzung_erwartet`, Registrierung und ACK müssen **dieselbe** Sitzungs-ID
+  nennen, sonst ist die Generation nicht quittierbar. Lebensnachweis einer Sitzung = laufender Sitzungsprozess, nie
+  Transkript-mtime.
 - Eine Rolle hat **höchstens einen** aktiven Auftrag. Kein „nebenbei".
 - Eine schlafende Sitzung gilt **nicht** als informiert — bis ein Orchestrator existiert, stößt Yama sie einmal manuell an.
 - Technische Commit-Barriere (Rolle, Sitzung, Worktree, Branch, aktiver Auftrag, erlaubte Pfade, Voraussetzungen; auch nackter `git commit` und Merge)
