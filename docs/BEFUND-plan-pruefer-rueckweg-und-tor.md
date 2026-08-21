@@ -24206,3 +24206,88 @@ Wache-Anweisung (§279).
 **In eigener Sache:** Meine DoR-Prüfung trennt ab hier die beiden SHA-Sorten und misst beide. Die
 157 Funde des ersten Sammellaufs prüfe ich **nicht** nach — das ist der Abnahmegegenstand und gehört
 dem Evaluator.
+
+## §288 · Die Gegenprobe zu §287: A-38s Belege halten alle — mein Fehler war nicht das Verfahren, sondern das eine Blatt
+
+**Messstand.** Runde begonnen an `051dc066` / Zweig `90c2de4e`, Rückstand 9. **Vor dem Schreiben neu
+gemessen 22:25: HEAD `90c2de4e`, Zweig `ada3b645`, Rückstand 1** — angekommen ist `ada3b645`
+(Symbolebene gemessen, sieben wirklich tote Exporte von 281 verdächtigen). **A-38s Blatt ist
+zwischen beiden Ständen unverändert** (numstat leer), und die Gegenprobe am neuen Stand liefert
+für den Schnitt 16.08. 19:35 unverändert **284**. Baum sauber. Ballortung beidseitig **1** (P-02,
+VORLAGE) und **35** — nichts in meiner Bahn. Gemessen 21.08. 22:22–22:27.
+
+§287 hat einen Fehler in meiner DoR zu A-39 offengelegt: Ich prüfte, **dass** ein Stand genannt ist,
+nicht **ob** er trägt. Die naheliegende Frage danach ist nicht bequem, aber sie ist die richtige:
+**steckt derselbe Fehler in meinen anderen Voten?**
+
+### 1 · Wo überhaupt etwas zu prüfen ist
+
+    A-40-der-zustand-am-facheintrag.md      291 Z.  ·  0 SHAs
+    A-42-befundnotizen-ziehen-um.md         236 Z.  ·  1 SHA
+    A-38-merges-laufen-am-tor-vorbei.md     335 Z.  ·  6 SHAs   <- hier
+
+**A-38 ist der einzige Nachbar mit einer prüfbaren Menge.** §156 hatte ich damit begründet, *„fünf
+feste SHAs als Rot-Lage einzeln nachgeprüft"* zu haben — die sechste und die Zahlen waren die Frage.
+
+### 2 · Drei Positivproben, drei Treffer
+
+`docs/auftraege/aktiv/A-38-merges-laufen-am-tor-vorbei.md:250-252` behauptet konkret:
+
+    c425638d und a4694b21 tragen  "release-pruefer (in Yamas Namen): "
+    4ed51b8f          traegt      "plan-pruefer (release-pruefer in Rollenwechsel): "
+
+Am Betreff jedes Commits gemessen: **3 von 3 tragen den behaupteten Präfix wörtlich.** Kein Fund.
+
+### 3 · Der Zahlenblock reproduziert exakt — auf die Minute
+
+`…A-38-merges-laufen-am-tor-vorbei.md:239-246` nennt einen Block und die Grundmenge dazu
+(*„Commits am 16.08. gesamt 472"*, erhoben *„19:2x"*). Nachgezählt auf dem Integrationszweig:
+
+    Schnitt 16.08. 19:29   gesamt 455 · Merges 177 · Nicht-Merges 278
+    Schnitt 16.08. 19:35   gesamt 472 · Merges 188 · Nicht-Merges 284   <- ALLE DREI treffen
+    Schnitt 16.08. 19:40   gesamt 484 · Merges 195 · Nicht-Merges 289
+
+Und die tragende Aussage:
+
+    am Schnitt 19:35   Nicht-Merges 284 · mit Rollenmarke 284 · OHNE 0
+    Merges-Anteil      188/472 = 39,8 %   (Blatt: 40 %)
+
+**Vier Zahlen, vier Treffer, und die Kernaussage „lückenlos, 100 %" hält ohne Abzug.** Die einzige
+Ungenauigkeit im ganzen Block ist die Uhrzeit: Das Blatt schreibt *„gemessen 19:2x"*, gemessen ist
+**19:35**. Eine Ziffer — und sie hat mich zehn Minuten gekostet, weil ich zuerst bei 19:29 suchte.
+*Wer eine Uhrzeit abkürzt, kürzt die Reproduzierbarkeit mit.*
+
+### 4 · Was das über §287 sagt
+
+    A-39   10 SHAs in Kriterien  ->  4 tragen ihren Fall nicht
+    A-38    3 Positivproben       ->  0 fallen
+            4 Zahlen              ->  0 fallen
+
+**Der Fehler war nicht mein Verfahren, sondern dieses eine Blatt.** Das ist die Entlastung, die ich
+nicht behaupten, sondern nur messen konnte — und sie ist begrenzt: A-40 und A-42 tragen zusammen
+**einen** SHA, dort war schlicht nichts zu verfehlen. **Geprüft ist die Klasse an genau zwei
+Blättern**, nicht an allen.
+
+### 5 · Ein eigener Musterfehler, am bekannten Treffer gefangen
+
+Meine erste Zählung der Rollenmarken meldete **3 von 278**. Ursache: Mein Muster verlangte nach dem
+Rollennamen ein Leerzeichen oder eine Klammer — `^(planner|…)[ (]` — und die Marke lautet
+`rolle**:** `. **Der Doppelpunkt fehlte in der Zeichenklasse.**
+
+Gefunden habe ich es, weil die Zahl unmöglich war: 3 von 278 in einem Haus, dessen Tor die Marke
+erzwingt. Dann die vorgeschriebene Probe **am bekannten Treffer** — `4ed51b8f` und mein eigenes
+`051dc066`, beide müssen matchen — und mit `( \(|:)` matchten beide. **Aus 3 wurden 278.**
+
+Das ist derselbe Fehler wie in §284 (`Lattweite` statt `Lattmaß`) und §280 (der grep-Präfix): das
+Muster passte zum Verfahren und nicht zum Gegenstand. **Dritter Fall in fünf Runden, und jedes Mal
+hat die Unmöglichkeit der Zahl ihn verraten, nicht die Sorgfalt.** Eine Zahl, die man nicht glauben
+kann, ist das billigste Prüfmittel im Haus.
+
+### 6 · Ball
+
+**Kein Ball an andere.** A-38s Belege halten; das Blatt braucht keine Berichtigung. Wer die Zahlen
+nachfahren will, findet den Schnitt bei **16.08. 19:35**, nicht bei 19:2x.
+
+**Unverändert offen beim Planner:** A-39s vier widerlegte Proben (§287), Schreibschutz der Zieldatei
+(§278), `…w0-11-ids-callback-csrf.md:22` (§276), die Rundungsfrage (§277), der zweite Pfad in der
+Wache-Anweisung (§279).
