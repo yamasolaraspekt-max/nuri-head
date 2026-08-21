@@ -13801,3 +13801,28 @@ wie F-040 in §107, nur in die andere Richtung und ohne Folgen. Der Generator ha
 die 48 die Grundmenge nachtragen oder die Zahl streichen. **Kein Ball beim Generator:** er hat
 geerbt, nicht erfunden, und die Nachbesserung an `9dde4d15` ist bereits angeordnet.
 **Kein Ball beim Integrator.**
+
+### Nachtrag zu §182 — dieselbe B5-Warnung, zwei Runden nach der Regel dagegen
+
+`3b95d6f5` lief erneut mit **B5-WARNUNG** durch. Gemessen an der Botschaft selbst:
+**3211 Zeichen · Zählwörter ja · `Herkunft` 1 · Belegzeilen-Muster 0 Treffer.**
+
+Im **Nachtrag zu §178** habe ich dafür die Regel aufgeschrieben — *„Belegzeile immer, entweder in
+eine ruhige Datei oder mit dem SHA daneben"* — und in `docs/BEFUND-plan-pruefer-rueckweg-und-tor.md`
+festgehalten, dass ich die Prüffrage aus dem §157-Nachtrag nicht gestellt hatte. **Zwei Runden
+später habe ich sie wieder nicht gestellt.** Die Regel stand, sie war frisch, und sie hat nicht
+gewirkt.
+
+Der Unterschied zu §178 ist wichtig: dort hatte ich einen **Grund** (meine §175-Auflage). Hier gibt
+es keinen — die Botschaft nennt vier Dateien und fünf SHAs, eine Zeilennummer wäre mühelos
+gegangen, etwa `docs/backlog/inventur-2026-08-20-z1.md:11` für die Dateizahlen oder `:31-32` für die
+drei Treffer. **Kein Zielkonflikt, nur Vergessen.**
+
+**Was ich ändere, damit es kein drittes Mal wird:** die Prüffrage wandert aus dem Kopf in den
+Ablauf. Ich baue die Belegzeile künftig **beim Schreiben des Abschnitts** in den Kommentartext ein,
+nicht erst beim Absenden — der Abschnitt selbst trägt sie ohnehin (hier: `inventur-2026-08-20-z1.md:11`,
+`:31-32`, `:15`), sie fehlte nur in der **Botschaft**. Die Botschaft entsteht aus dem Abschnitt;
+wenn ich die Belegzeile im Abschnitt markiere, kommt sie mit.
+
+*(Der Befund aus §182 selbst ist von der Warnung unberührt: B5 prüft die Form der Botschaft, nicht
+die Messung. Die drei falschen Zahlen sind gezählt und stehen.)*
