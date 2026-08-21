@@ -118,3 +118,42 @@ test('Kante 3: Überstand 500 mm vergrößert Fläche und First-Länge (Traufe +
   assert.ok(mit[0].flaeche_m2 > ohne[0].flaeche_m2);
   assert.equal(mit[0].first_laenge_mm, 11000); // 10000 + 2·500
 });
+
+// ---- Z1-W1-2: Walmdach mit Giebelbreite > Gebäudelänge wird ABGELEHNT (Y-1) -------------------
+//
+// Vorher lieferte `dachFlaechen()` hier stumm eine zu große Fläche, weil die Firstlänge auf 0
+// geklemmt wurde, während die Walm-Dreiecke auf voller Giebelbreite blieben. Die Zahlen unten sind
+// von Hand gegen den Erhaltungssatz (Σ Facetten = Grundriss / cos α) gerechnet.
+// `firstAzimutGrad: 0` ⇒ First entlang y, also `laenge` = y-Ausdehnung, `spann` = x-Ausdehnung.
+
+test('Z1-W1-2 A: Walm 6×8 m, 30° (Giebel breiter als Länge) wirft statt 64,66 m² zu liefern', () => {
+  assert.throws(
+    () => dachFlaechen(dach({ roofType: 'walm', neigungGrad: 30, firstAzimutGrad: 0, polygon: rechteck(8000, 6000) })),
+    (e: unknown) => e instanceof DachGeometrieUngueltig && e.grund === 'walm_giebelbreite_ueber_laenge',
+    'erwartet: Absage. Vorher: 64,66 m² statt 55,43 m² (+16,7 %)',
+  );
+});
+
+test('Z1-W1-2 B: Walm 4×10 m, 30° wirft statt 80,83 m² zu liefern (+75 %)', () => {
+  assert.throws(
+    () => dachFlaechen(dach({ roofType: 'walm', neigungGrad: 30, firstAzimutGrad: 0, polygon: rechteck(10000, 4000) })),
+    (e: unknown) => e instanceof DachGeometrieUngueltig && e.grund === 'walm_giebelbreite_ueber_laenge',
+    'erwartet: Absage. Vorher: 80,83 m² statt 46,19 m² (+75,0 %)',
+  );
+});
+
+// **Die Gegenrichtung — und der Grund, warum `walmIstKonsistent` NICHT allein die Sperre stellt.**
+// Die Funktion verlangt `L > B` und würde damit auch `L === B` abweisen. Das ist aber ein gültiges
+// **Zeltdach**: vier gleiche Dreiecke, Firstlänge 0, und die Fläche stimmt exakt. Ohne diesen Test
+// könnte jemand die Bedingung auf `!walmIstKonsistent(...)` verkürzen und dabei einen
+// funktionierenden Fall sperren, ohne dass etwas rot wird.
+test('Z1-W1-2 C: Zeltdach 8×8 m wird NICHT abgewiesen und erfüllt den Erhaltungssatz', () => {
+  for (const grad of [30, 35, 45]) {
+    const fl = dachFlaechen(dach({ roofType: 'walm', neigungGrad: grad, firstAzimutGrad: 0, polygon: rechteck(8000, 8000) }));
+    assert.equal(fl.length, 4, `Zeltdach ${grad}°: vier Flächen`);
+    const summe = fl.reduce((s, f) => s + f.flaeche_m2, 0);
+    const soll = (8 * 8) / cosG(grad);
+    assert.ok(Math.abs(summe - soll) < EPS, `Zeltdach ${grad}°: Summe ${summe} ≠ ${soll}`);
+    for (const f of fl) assert.equal(f.first_laenge_mm, 0, 'Zeltdach hat Firstlänge 0');
+  }
+});

@@ -11,6 +11,7 @@
  */
 import type { RoofNode } from '../domain/scene.types';
 import { sichererCos } from '../../utils/dachWerte';
+import { walmIstKonsistent } from './dachformVorlagen';
 
 export interface DachFlaeche {
   flaeche_m2: number;
@@ -132,6 +133,26 @@ export function dachFlaechen(roof: RoofNode): DachFlaeche[] {
     }
 
     case 'walm': {
+      // Z1-W1-2 (Y-1 ENTSCHIEDEN 21.08.: ABLEHNEN, keine stille Dreh-Korrektur).
+      // **Warum hier gesperrt wird:** `Math.max(0, laengeM - spannM)` klemmte die Firstlänge still
+      // auf 0, während die Walm-Dreiecke auf voller Giebelbreite blieben — die Summe wuchs damit
+      // unbegrenzt über den Erhaltungssatz (Σ Facetten = Grundriss / cos α) hinaus. Gemessen bei 30°:
+      // 6×8 m → 64,66 statt 55,43 m² (+16,7 %), 4×10 m → 80,83 statt 46,19 m² (+75,0 %);
+      // 3×12 m bei 35° → 109,87 statt 43,95 m² (+150 %). Diese Fläche speist PV-Ertrag und Heizlast.
+      //
+      // **Zur Auflage „walmIstKonsistent benutzen, keine dritte Fassung":** sie wird benutzt — aber
+      // sie verlangt `L > B` und weist damit auch den GLEICHSTAND ab. `L === B` ist jedoch ein
+      // gültiges **Zeltdach** und rechnet heute exakt: nachgemessen bei 30°, 35° und 45° je ±0,0 %
+      // gegen den Erhaltungssatz. Ein Wurf dort wäre eine Fehlsperre gegen einen funktionierenden
+      // Fall. Gesperrt wird deshalb nur der gemessene Defektrand `spannM > laengeM`; die Regel
+      // selbst bleibt die eine Fassung in `dachformVorlagen.ts:414-416`.
+      if (!walmIstKonsistent(laengeM, spannM) && laengeM !== spannM) {
+        throw new DachGeometrieUngueltig(
+          'Walmdach: Giebelbreite größer als Gebäudelänge — die Firstlänge wäre negativ. ' +
+            'Firstrichtung anders legen (kein stilles Falschdach).',
+          'walm_giebelbreite_ueber_laenge',
+        );
+      }
       // Firstlänge = L − B (symmetrischer Walm, gleiche Neigung ringsum); 2 Trapez- + 2 Walm-(Dreiecks-)Flächen.
       const firstLenM = Math.max(0, laengeM - spannM);
       const trapez = ((laengeM + firstLenM) / 2) * ((spannM / 2) / cos);
