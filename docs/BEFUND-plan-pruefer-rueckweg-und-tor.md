@@ -22811,3 +22811,106 @@ markierter richtiger Eintrag ist beim nächsten Durchgang ein Eintrag, den niema
 
 **Nicht geprüft:** die fünf Blätter ohne Block (A-17, A-18, A-37, W-15/1, W-27) — nächster Posten.
 Ob A-40s Restpunkte sich bewegt haben, steht weiter aus.
+
+## §274 · §272 ist in sieben Minuten vollständig behoben — und der zweite Bau in Folge bestreitet die Prämisse eines Auftrags, dem ich die DoR erteilt habe
+
+**Messstand.** Runde begonnen an `3462c132` (Zweig `7ab0fcba`, Rückstand 2). **Vor dem Schreiben neu
+gemessen 21:20: mein HEAD steht selbst auf `7ab0fcba`, Rückstand 0** — §273 ist im Zweig, der
+Rückweg holte mich während der Runde ein. Baum sauber. Gemessen 21.08. 21:16–21:22.
+
+**Angekommen** (zitiert, nicht nachgebaut): `7d32c055` *„die neue Zustands-Probe fand zwölf Fälle —
+acht nachgezogen, vier absichtlich stehengelassen"* · `fd94dea5` *„Z2-W0-11 Teil A gebaut — und der
+Auftrag beschreibt einen Schaden, den es so nicht gibt: die uid wurde nie gespeichert."*
+
+### 1 · §272 ist behoben, alle drei Zeilen
+
+§272 meldete drei verschiedene Antworten auf dieselbe Frage. Frisch gemessen am Stand `7ab0fcba`:
+
+| Kennung | Datensatz `zustand` | `ballbesitz` | Tafelzeile |
+|---|---|---|---|
+| A-38 | **BEREIT** | **generator** | *„DoR ERTEILT (plan-pruefer §156), … nachgezogen 21.08. auf §272"* |
+| A-39 | **BEREIT** | **generator** | *„DoR ERTEILT (plan-pruefer §159), … nachgezogen"* |
+| A-42 | **BEREIT** | **generator** | *„DoR ERTEILT (plan-pruefer §158), … nachgezogen"* |
+| A-40 | ENTWURF | **planner** | *„DoR NICHT ERTEILT (§157/§159, Punkte 1, 2, 4), Ball … nachgezogen"* |
+
+*„DoR steht aus"* kommt in keiner der vier Zeilen mehr vor (viermal 0 Treffer). **Acht Felder,
+acht nachgezogen** — und A-40 ist als einziges nicht auf BEREIT gesetzt, sondern an den Planner
+gegeben, genau wie §272 es unterschieden hatte.
+
+**Alterung: 7 Minuten, 23 Commits.** `fde08c7e` 21:08 → `7d32c055` 21:15. Zum Vergleich: Die
+Tafelzeile, die §272 beanstandete, war zu diesem Zeitpunkt **7417 Minuten** alt.
+
+Der Integrator hat aus dem Einzelfall eine **Probe** gebaut und sie auf die ganze Welle 0 angewandt
+— zwölf Fälle, acht nachgezogen, **vier bewusst nicht** (W0-2, W0-4, W0-6, W0-11, alle „ERTEILT MIT
+EINEM RESTPUNKT", Ball beim Planner). Seine Begründung zitiert §272 und zieht die Grenze **am Ball**:
+*„wo der Pruefer weitergegeben hat, ziehe ich nach; wo er gehalten hat, nicht."* Das ist die
+Unterscheidung, die ich gemeint habe, schärfer gefasst als ich sie geschrieben hatte.
+
+### 2 · Posten (e): W0-11s Prämisse ist zur Hälfte falsch — unabhängig nachgemessen
+
+`fd94dea5` bestreitet den Auftrag, dem ich in §265 die DoR erteilt habe. Ich messe das selbst, am
+Stand **vor** dem Bau (`2414430d`):
+
+    imported_ids_items — beide Migrationen, Treffer fuer user_id:            0
+      2025_12_04_191014_create_… : 12 Spaltenzeilen, keine user_id
+      2025_12_04_223128_add_product_id_… : nennt user_id nicht
+    app/Models/ImportedIdsItem.php — $fillable: 10 Eintraege, davon user_id:  0
+
+**Die Gegenbehauptung hält.** `create()` verwirft den Wert zweimal: keine Spalte, kein `$fillable`.
+Der Auftrag sagt *„uid kommt frei aus der Query"* — **wahr** — *„also kann ein Import einem Fremden
+zugeschrieben werden"* — **falsch**, weil überhaupt nichts zugeschrieben wird.
+
+### 3 · Warum sich alle daran getäuscht haben — die Zeile, die eine Zuschreibung behauptet
+
+Am Stand `2414430d`, `IdsController.php:62-73`:
+
+    62|  foreach ($data['items'] as $i) {
+    63|      $item = ImportedIdsItem::create([
+    64|          'batch_id'    => $batchId,
+    65|          'user_id'     => $userId,      <-- liest sich als Zuschreibung
+    66|          'article_no'  => $i['article_no'],
+    …
+    73|      ]);
+
+Vier Verbraucher von `$userId` insgesamt: `:56` lesen, `:57` casten, `:60` protokollieren, `:65`
+schreiben. **`:65` sieht aus wie das Speichern und ist eine Leerzeile mit Semantik.** Die
+Massenzuweisung verwirft still, statt zu klagen — die Fehlerklasse, die ich zehnmal in fremdem Code
+gefunden habe, hier in der Gestalt „Zuschreibung liefert plausible Form statt zu verweigern".
+
+Die Zeile steht auch nach dem Bau noch da (`:77`), jetzt aus `auth()->id()` gespeist. **Das ist
+richtig so:** eine Spalte anzulegen ist ein Schemaeingriff und damit ein Gate. Der Generator meldet
+es und baut es nicht — *„DER IDS-IMPORT HAT KEINEN URHEBER"* — und verankert es als
+Charakterisierungs-Zusage, die rot wird, sobald jemand die Spalte anlegt.
+
+### 4 · Was das über meine eigene DoR sagt
+
+§265 hat **sechs Belege geprüft, sechs trafen**, darunter `:56 $userId = $request->query('uid')`.
+Der Zeiger war richtig. **Gemessen habe ich, worauf die Behauptung ZEIGT — nicht, was sie
+BEHAUPTET.** Zwischen *„der Wert kommt aus der Query"* und *„also wird er einem Fremden
+zugeschrieben"* liegt eine Wirkkette, die ich nie verfolgt habe; sie ist vier Zeilen lang und endet
+im Nichts.
+
+**Zur Fairness gegen mich selbst, gemessen statt gefühlt:** In §264 habe ich dieselbe Kette
+verfolgt und den Fehler **gefunden** (*„keine Middleware stimmt, ungeschützt nicht"*). Es sind also
+nicht zwei Versäumnisse in Folge, sondern eines von zwei — und der Unterschied liegt nicht am
+Fleiß, sondern daran, dass ich in §264 eine *Verneinung* prüfte („fehlt Schutz") und in §265 eine
+*Folgerung* („also Zuschreibung"). Verneinungen habe ich mir angewöhnt zu misstrauen. Folgerungen
+noch nicht.
+
+**Regel für meine eigenen künftigen DoR-Prüfungen** (Vorschlag, kein Bau): Enthält ein Ziel ein
+*„also"* — eine Folgerung vom Fund auf den Schaden —, dann ist die Folgerung ein eigener Beleg und
+wird eigens gemessen. Der Zeiger belegt den Fund, nie die Folge.
+
+### 5 · Ball
+
+**Planner/Dirigent**: Das Blatt Z2-W0-11 beschreibt einen Schaden, den es nicht gibt; der Generator
+hat den wirklichen benannt (kein Urheber am IDS-Import). Der Zielsatz gehört berichtigt, damit die
+nächste Runde nicht denselben Schaden sucht. Dazu unverändert `fix-ledger.md:143` aus §273.
+
+**Yama**: Der IDS-Import schreibt über `Distributor::firstOrCreate` und den `ProductIdentityService`
+in den **Produktstamm** und hinterlässt keine Spur, wer es war. Die Abhilfe ist eine neue Spalte —
+Schemaänderung, also Ihr Gate. Das ist kein Sicherheitsloch im Sinne der Rechte-Entscheidung vom
+21.08., sondern eine fehlende Nachvollziehbarkeit an schreibendem Bestand.
+
+**Nicht geprüft:** die fünf Blätter ohne Block (A-17, A-18, A-37, W-15/1, W-27) — verschoben, weil
+zwei fremde Befunde meine eigene Arbeit betrafen und Vorrang hatten. A-40s Restpunkte stehen aus.
