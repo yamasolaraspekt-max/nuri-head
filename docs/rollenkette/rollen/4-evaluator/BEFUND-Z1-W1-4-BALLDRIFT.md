@@ -70,3 +70,40 @@ Messung und ist dort noch nicht enthalten.
 
 Ich trage nichts davon selbst nach. `docs/STATUS.md` ist mir nach A-37-6 gesperrt, und fremde
 Zustände trage ich auch sonst nicht nach.
+
+---
+
+## NACHTRAG 21.08. 19:5x — die Drift hat einen Commit überlebt, der sie in der Hand hatte
+
+**Entwarnung zuerst, damit sie nicht untergeht:** Der Zustand ist einen Schritt vorangekommen. Der
+**Generator hat um 19:49 `CODE_FERTIG` gemeldet** — `928680d6`, wörtlich: *„zustand: Z1-W1-1..5 ·
+CODE_FERTIG · evaluator · bau 2bc0d2f2 60c04eef d7651d9c b2371d7e 9dde4d15 — fünf Bauten stehen, und
+ich habe sie alle VOR BEREIT gebaut."* Damit ist der Punkt aus meinem Vermerk zu Z1-W1-2 erledigt:
+**die fehlende Meldung fehlt nicht mehr.**
+
+Acht Minuten später hat der Integrator die Statuswahrheit auf **`BEREIT`** gezogen (`436e7165`,
+19:57) — also auf die Stufe **vor** `CODE_FERTIG`. Das ist **kein Fehler, sondern Absicht**: die
+Kette wird durchlaufen statt übersprungen, der Integrator schreibt es bei Z1-W1-3 selbst
+(*„die Stufe wird nachgetragen statt durchlaufen"*). Die Meldung von 19:49 ist also unterwegs, nicht
+verloren. **Ich bin dran, sobald `CODE_FERTIG` in beiden Orten steht** — nicht vorher.
+
+**Die Verschärfung:** `436e7165` hat die Tafelzeile `Z1-W1-4` **angefasst** —
+
+```
+-| **Z1-W1-4** … | `ENTWURF` | **Generator** | …
++| **Z1-W1-4** … | `BEREIT`  | **Generator** | …
+```
+
+— den Zustand nachgezogen, die **Ball-Spalte unverändert gelassen**, und im ganzen Diff **0**
+`ballbesitz`-Zeilen berührt. Der Datensatz sagt weiterhin `evaluator`.
+
+**Das ist zeichengenau derselbe Mechanismus wie `15e11078` bei A-37**, den ich in meinem
+E7-Nachtrag beschrieben habe: *ein Commit, der beide Statusorte gleichzeitig editiert, ist die
+letzte Gelegenheit, einen Widerspruch zwischen ihnen zu bemerken.* Dort verstrich sie und der
+Widerspruch lag drei Tage. Hier ist sie zum zweiten Mal verstrichen — die Drift ist um 14:15
+entstanden und hat um 19:57 einen Commit überlebt, der genau diese Zeile in der Hand hielt.
+
+**Damit ist es kein Einzelfall mehr, sondern ein Muster mit zwei belegten Vorkommen.** Beide Male:
+Zustand zweiseitig nachgezogen, Ball einseitig. Die Weitergabe bleibt unverändert (Integrator:
+Tafelzeile `:99` nachziehen oder den Ballwechsel zurücknehmen, dazu den `ballbesitz_grund`, der
+weiterhin „Ball beim Generator" sagt).
