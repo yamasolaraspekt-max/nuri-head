@@ -13647,3 +13647,83 @@ genau der Umfang meines §177-Befundes und nichts darüber hinaus.
 
 **Für Yamas Postenliste, frisch gemessen:** die Zahl aus §119/§120 lautet heute **27** Module ohne
 Ladeweg bei Grundmenge 160 — plus die eine stillgelegte Datei **außerhalb** der Insel (§171).
+
+## §181 — DoR Z1-W1-1, Fassung 2: **ERTEILT**. Alle fünf Voten stehen, und zwei Nicht-Ziele sind messbar eingehalten
+
+**Messstand** `ac6b50ee` · Baum sauber · 0 neue Commits in meinem Zweig; auf dem Integrationszweig
+zwei, beide mein eigener Rückweg. Damit die letzte offene Aufgabe aus §179/§180: die Neu-DoR zu
+**`Z1-W1-1`, Fassung 2** (64 Z.).
+
+### Alle acht Ist-Zeiger einzeln geöffnet — acht Treffer
+
+```
+geometry/treppenBerechnung.ts:58    const DURCHGANG_MIN = 2000; // mm, DIN 18065 lichte Höhe
+geometry/treppenBerechnung.ts:97    if (e.durchgangshoehe !== undefined) {
+app/rahmen/EigenschaftenPanel.tsx:499   …{erg.bestanden ? 'DIN 18065 erfül…
+app/rahmen/EigenschaftenPanel.tsx:494   const erg = berechneTreppe({ geschosshoehe: …
+geometry/treppe2D.ts:54  ·  geometry/treppe3D.ts:44  ·  geometry/treppenTypen.ts:48   je `const t = berechneTreppe({`
+renderers/three-d/szene.ts:406-412  → `treppe3DKoerper({` steht auf :407, also IM angegebenen Bereich
+```
+
+Der letzte ist der einzige **Bereichs**-Zeiger, und er hält: `:406` selbst trägt `if (!tp) continue;`,
+der genannte Aufruf sitzt eine Zeile darunter. Ein Bereich, der den Treffer enthält, ist ein
+Treffer — ich habe ihn geöffnet, bevor ich ihn gezählt habe.
+
+**Restpunkt 3 aus §143 ist eingearbeitet:** das Blatt führt **fünf** Aufrufer statt zwei, mit
+Zeilen, und erklärt vier davon zum Nicht-Ziel. Das ist eine saubere Abgrenzung, keine Auslassung.
+
+### Zwei Nicht-Ziele, messbar eingehalten
+
+| Nicht-Ziel | Messung |
+|---|---|
+| `geometry/treppenBerechnung.ts` bleibt unverändert | `git diff 2bc0d2f2^ 2bc0d2f2 --numstat -- …/treppenBerechnung.ts` → **leere Ausgabe** = 0 Zeilen ✓ |
+| keine neue CSS-Klasse (Budget AUF-38-P1) | `hp-ep-lesehinweis` existierte **am Basis** `11f7c4c3` bereits in `hausplaner.css` (samt eigenem Wächter `__tests__/eigenschaftenPanelStil.test.ts`) ✓ |
+| Inline-Zeilen-Budget | `style={{` im Panel: **32 am Basis, 32 heute** ✓ — der Generator hatte gemeldet, seine erste Fassung habe 33 gemacht und sei umgestellt worden; das ist nachmessbar wahr |
+
+### Rot-Lage, am Basis-Stand belegt
+
+```
+'Ohne lichte Durchgangs' in EigenschaftenPanel.tsx   am Basis 11f7c4c3: 0   ·   heute: 1
+Panel-Zeilen                                          563 -> 576
+```
+
+**Kriterium A war vor dem Bau wirksam rot** ✓. Und die Test-Naht ist zweischichtig gebaut, wie das
+Blatt sie erlaubt: **1** neuer Panel-Test (Quelltext-Zusage) plus **2** neue Engine-Tests
+(Bedingung an der echten Rechnung) — gezählt aus `git diff 2bc0d2f2^ 2bc0d2f2`.
+
+Auch die Herkunftszeiger treffen: `A-15-fachaussage-oder-hinweis.md:315` trägt *„Der
+Treppen-Verdacht ist Yamas, und er ist prüfbar"*, `:298` trägt
+`treppenBerechnung   PERSONENSCHADEN (Sturz)`. Und `status_steht_in: docs/STATUS.md (Zeile 96)`
+trifft die Tafelzeile — **schon der zweite Zeiger dieser Art, der hält**, aus demselben Grund wie in
+§180: er zeigt in den Kopf der Datei.
+
+### Restpunkt (klein, nicht tragend) — wieder die „33er-Liste"
+
+Das Blatt nennt `treppenTypen.ts` „kein Ladeweg, **33er-Liste**". **Die Aussage hält** — neu
+gemessen steht `geometry/treppenTypen.ts` weiterhin darauf. **Der Name nicht:** die Liste hat heute
+**27** Einträge. Damit ist derselbe Restpunkt aus §180 nun am **zweiten** Blatt belegt; der Name
+steht insgesamt in drei aktiven Blättern.
+
+### Votum
+
+**DoR ERTEILT** für `Z1-W1-1`, Fassung 2.
+
+**Damit sind alle fünf Voten der Welle erteilt:**
+`W1-1` ✓ (§181) · `W1-2` ✓ (§144) · `W1-3` ✓ (§179) · `W1-4` ✓ (§146) · `W1-5` ✓ (§180).
+Der Gate-Schritt `ENTWURF → BEREIT` ist damit **inhaltlich für alle fünf frei**; er wartet nur noch
+auf den Eintrag.
+
+### Was dieser Auftrag ausdrücklich NICHT löst
+
+Mein §173-Befund zur **Bühnen-Färbung** bleibt offen: `app/rahmen/Buehne.tsx:343` färbt das
+Treppensymbol nach einem `bestanden`, das über `treppe2DSymbol` **ohne** `durchgangshoehe` entsteht
+— dieselbe Lücke, die das Panel jetzt benennt, nur ohne Text. Das Blatt schließt `treppe2D.ts` und
+`szene.ts` ausdrücklich als Nicht-Ziel aus, und das ist richtig geschnitten. **Es heißt aber, dass
+der Hinweis an genau einer von mehreren Anzeigestellen steht.** Gehört als eigener Posten in Welle 2,
+nicht in diesen Auftrag.
+
+**Ball beim Integrator:** alle fünf `Z1-W1` können auf `BEREIT` — die Voten stehen vollständig hier.
+**Ball beim Generator:** danach fünf `CODE_FERTIG`-Meldungen, plus die Nachbesserung an `9dde4d15`.
+**Ball beim Planner:** der Listenname (drei Blätter) und die Bühnen-Färbung für Welle 2.
+**Kein Ball mehr bei mir** — meine Neu-DoR-Runde ist abgeschlossen; ab der nächsten Runde wieder
+Vorratsprüfung, Posten (b).
