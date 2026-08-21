@@ -19815,3 +19815,122 @@ nächsten beiden Runden.** Ich nenne die Zahl, damit „Teil 1" nicht zur offene
 Yama nur die Antwort, keinen Bau.
 
 **Planner** für Posten 3, sofern Yama der Umhängung nicht widerspricht.
+
+## §241 · Die Yama-Vorlage, Teil 2 von 3 — und der zweite Posten, der nicht auf die Liste gehört
+
+**Messstand.** HEAD `364efa4b` (21.08. 19:16:37), Baum sauber, **0 neue Commits** — dreizehnte Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (285 Min), STATUS-Blob `810f37d9e560`. Gemessen
+21.08. 19:17–19:18.
+
+---
+
+### Posten 4 · A-13-Veröffentlichungsbedingung — **nicht mehr offen**
+
+**Frisch gemessen, beide Seiten:**
+
+    docs/STATUS.md:26     | **A-13** roof_azimuth absichern | `BETRIEBSBESTAETIGT` | – | a09b69af · Basis 783d47c1 |
+    docs/STATUS.md:3789   auftrag: "A-13"
+                          zustand: BETRIEBSBESTAETIGT
+
+Tafelzeile und Datensatz stimmen überein. Der Datensatz trägt zusätzlich `release_vermerk_1`
+(*„§10 an der Abnahme c9397575/a09b69af — ERSTER PRODUKTI…"*) und einen Vermerk
+`statusdrift_korrigiert` vom Release-Prüfer.
+
+**Das ist keine Meinung, sondern der Zustandsfilter der Wache selbst.** Punkt 3 des Auftrags
+schreibt vor, negativ zu filtern: *„alles außer BETRIEBSBESTAETIGT / ERLEDIGT / VERWORFEN /
+ABGELOEST"*. A-13 trägt genau den ersten dieser vier Zustände — **der Auftrag, der ihn als offenen
+Posten führt, würde ihn nach seiner eigenen Regel ausschließen.**
+
+> **Empfehlung: A-13 von der Liste streichen.** Keine Frage an Yama, sondern eine Streichung.
+
+---
+
+### Posten 5 · versatz-Quittung — eine Ja/Nein-Frage, mehr nicht
+
+**Stand, gemessen.** `docs/STATUS.md:3047` trägt den Kopf
+*„VERTRETUNGSENTSCHEID `versatz` (Release-Pruefer in Yamas Namen, 13.08.) — ERZEUGEND"*, mit
+Grundlage und Inhalt im Wortlaut:
+
+> `grundlage:` *„Yamas Anweisung 13.08. im Wortlaut: 'du uebernimmt alle fragen und aufgaben in
+> namen von Yama'. Der Planner hat die Frage am 13.08. in die Vorlage gelegt (`5c7eb4e5`),
+> ausdruecklich mit Empfehlung und ausdruecklich ohne Entscheid."*
+>
+> `DIE ENTSCHEIDUNG:` *„versatz ist **ERZEUGEND**. Ein Parallelversatz legt eine NEUE Wand im
+> Abstand d neben die vorhandene; die vorhandene bleibt unveraendert stehen."*
+
+Und `docs/STATUS.md:3095` trägt die Selbstbeschränkung im Feld `revidierbar:`
+*„Diese Entscheidung ist eine Vertretung, kein Fachurteil. Yama kann sie mit einem [Satz umdrehen]."*
+
+**Die eine offene Frage** — und sie ist mit einem Wort zu beantworten:
+
+> **Bleibt es dabei, dass `versatz` erzeugend ist (die vorhandene Wand bleibt stehen, eine neue
+> entsteht daneben) — oder soll der Versatz die vorhandene Wand verschieben?**
+
+| Antwort | Folge |
+|---|---|
+| **bestätigt** | Der Vertretungsentscheid wird zum Fachurteil; das Feld `revidierbar:` kann geschlossen werden, der Posten fällt weg |
+| **umgedreht** | Rückbau des erzeugenden Verhaltens; betrifft F-020 (Parallelversatz) und den Werkzeugweg |
+
+**Wirkung mittel, Aufwand bei „bestätigt" gleich null.** Der Posten heißt „Quittung", weil genau
+das fehlt: Die *Entscheidung* liegt vor, die *Bestätigung durch den Vertretenen* nicht. Ich habe ihn
+deshalb bewusst offen gelassen und lasse ihn offen — aber er ist der billigste der neun.
+
+---
+
+### Posten 6 · Tragwerk an die Zeichenfläche — der Idealfall eines Yama-Postens
+
+**Stand, gemessen.** Die Frage stammt wörtlich aus einer Planner-Vorlage:
+
+> *„W-21 Sparren/Lattung — EIN Aufrufer, und der ist ein ENGINE-PANEL, keine Zeichenflaeche. Das
+> ist eine ANZEIGE, kein Werkzeug … → ZULETZT, und die Frage lautet nicht ‚Werkzeug bauen', sondern
+> **‚gehoert Tragwerk ueberhaupt an die Zeichenflaeche?'**"*
+
+Die Statuswahrheit ordnet ihn selbst ein: **„Handwerkspraxis. Vom Bildschirm nicht zu klären."**
+
+**Die offene Frage** steht damit bereits in ihrer entscheidbaren Form; ich kann sie nur bestätigen,
+nicht verbessern:
+
+| Antwort | Folge |
+|---|---|
+| **ja, gehört dorthin** | W-21 wird ein Werkzeug; die Anzeige im Engine-Panel bleibt als zweiter Weg oder entfällt |
+| **nein** | W-21 bleibt Anzeige; der Posten fällt weg, und die N-003-Auflage aus §240 gilt nur dort |
+
+**Wirkung hoch** (entscheidet über den Zuschnitt eines Werkzeugs), **Aufwand: reine Entscheidung**.
+Dies ist der einzige der sechs bisher aufbereiteten Posten, der **ausschließlich** von Yama
+beantwortet werden kann — bei ihm ist „nicht messbar" kein Mangel meiner Prüfung, sondern die
+Natur der Frage.
+
+---
+
+### Zwischenbilanz nach sechs von neun
+
+| Posten | gehört zu | Zustand |
+|---|---|---|
+| 1 N-003 | **Yama** | eine Restfrage (drei von vier Ausgabeorten) |
+| 2 W-21L | **Yama** | zwei Fachfragen, entsperrt zwei Vorgänge |
+| 3 raumAuswahl | Planner | gewanderter Zeiger, A-34 gilt bereits (§240) |
+| 4 A-13 | **niemand** | `BETRIEBSBESTAETIGT` — streichen |
+| 5 versatz | **Yama** | Ja/Nein, Aufwand null bei „bestätigt" |
+| 6 Tragwerk | **Yama** | echte Handwerksfrage |
+
+**Zwei von sechs gehören nicht auf die Liste.** Das ist keine neue Erkenntnis von mir allein — ein
+früherer eigener Abschnitt hielt bereits fest: *„Mindestens vier der acht liegen nicht mehr bei
+Yama."* **Die Liste wurde seither trotzdem unverändert weitergeführt**, auch von mir, in jeder
+Runde. Eine Postenliste, die ihre erledigten Einträge behält, macht die verbliebenen unsichtbar.
+
+### Zwei eigene Fehler dieser Runde
+
+1. **Zeiger-Drift in meinen eigenen Notizen:** Mein früherer Abschnitt nennt den versatz-Entscheid
+   bei `STATUS.md:3042`; er steht heute bei **3047**. Fünf Zeilen — dieselbe Klasse, die ich in
+   §231/§232/§236 bei anderen gemessen habe.
+2. **Backtick-Muster, zum zweiten Mal:** Die Suche nach `VERTRETUNGSENTSCHEID versatz` ergab null
+   Treffer, weil im Text `` `versatz` `` mit Backticks steht — exakt der Fehler aus §231. Ich habe
+   ihn dort beschrieben und hier wiederholt. Gefangen, weil ein Nulltreffer bei einem bekannten
+   Gegenstand zuerst gegen das Muster spricht.
+
+### Ball
+
+**Yama**: Posten 5 (ein Wort) und Posten 6 (eine Fachaussage). Beide ohne Bauaufwand.
+**Niemand**: Posten 4 ist zu streichen.
+
+Teil 3 folgt in der nächsten Runde: Seed-Weg der Prüfbühne, Regelkollision §3/E1/Beifang, §119/§120.
