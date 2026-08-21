@@ -8,6 +8,16 @@ entschieden_nicht_mehr_rueckfragen: "Y-10 (8 h), Y-11 (reversible Stilllegung), 
 stand_bei_uebernahme: "Z1-W1-3 ABGENOMMEN (b9fe55c0) · W1-1 Kriterium C ENV_BLOCKED (DB-Kollision, kein Produktfehler) · gebaut: W0-1 10c05d8b, W0-3 69c85d01, W0-7 5831c06a, W0-8 29eb791c, W0-9 f595d654, W0-10 cb771cbf, W0-11A fd94dea5, W0-12 976f7d6b · W0-5 uncommittiert im Integrationscheckout (Eigentuemer Generator, Sicherung angewiesen) · A-37 NACHBESSERN 20/21, Blatt berichtigt (rolle/dirigent) · Z0-I1 ENTWURF, DoR angewiesen"
 ```
 
+## Nachtrag Yama (21.08., spät) — Maßstab „sehr gut" und geänderte Reihenfolge
+Abnahme-Maßstab: [`SEHR-GUT-KRITERIEN-ABSCHLUSS-2026-08-21.md`](SEHR-GUT-KRITERIEN-ABSCHLUSS-2026-08-21.md)
+(zwölf Muss-Kriterien; ein roter Punkt wird durch keine Menge grüner Tests ausgeglichen).
+**Neue Reihenfolge (ersetzt Phase-2/3-Folge unten):** **1 A-42 unabhängig schließen** (Evaluator:
+Block-/Zeilen-/Zaun-/Ballbilanz, idempotenter Zweitlauf) → **2 A-37 als technische Schreibbarriere
+vollständig aktivieren** (21/21, js-yaml direkt + Lockfile, sechs Worktrees, jeder Negativfall
+tatsächlich ausgelöst) → **3 Z0-I1 bauen und abnehmen** (SHOW GRANTS, vier DBs, Rollenautomatik,
+Guard, Parallel- und Kollisionsprobe, Evaluator wiederholt) → **4 erst danach die übrigen parallelen
+Abnahmen.** W0-11: Teil A ehrlich auf Session-/Request-Schutz begrenzt, Urheberspalte = W0-11c (separat).
+
 ## Ziel
 Der aktuelle Stand wird kontrolliert bis zu einem eindeutigen Urteil gebracht: **TESTBEREIT** mit
 Test-SHA und Browsernachweis **oder** **NICHT TESTBEREIT** mit exakt benannten Restpunkten und

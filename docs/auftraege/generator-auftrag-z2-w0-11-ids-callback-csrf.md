@@ -15,7 +15,8 @@ status_steht_in: docs/STATUS.md — Integrator-Lauf erforderlich
 ## Abgrenzung (Restpunkt §265, Planner 21.08.): zwei Teile, verschieden abhängig
 | Teil | Inhalt | hängt am Operanden? | läuft |
 |---|---|---|---|
-| **A — unabhängig, JETZT** | (A1) `uid` kommt nicht mehr frei aus der Query — Zuschreibung aus Session/auth; (A2) die **fünf toten Ausnahmen** in `VerifyCsrfToken::$except` entfallen (treffen keine Route, schützen niemanden) | nein | dieser Auftrag, sofort baubar |
+| **A — unabhängig, JETZT (ehrlich begrenzt, Planner 21.08. nach Yamas Maßstab Nr. 8)** | (A1) `uid` aus der Query wird **nicht mehr gelesen** — der Import läuft unter dem authentifizierten Nutzer; **KEIN Persistenzversprechen**: `ImportedIdsItem` speichert keine Urheberschaft (`user_id` wird nicht persistiert — die „bestehende Fremdzuschreibung" war deshalb nicht wirksam, der Befund A-10 ist in diesem Punkt berichtigt); die Schutzwirkung von A1 ist die **Session-/Request-Bindung**, nicht eine gespeicherte Zuschreibung; (A2) die **fünf toten Ausnahmen** in `VerifyCsrfToken::$except` entfallen | nein | dieser Auftrag; **Kriterium A/C dürfen NICHT grün werden, weil ein nicht speicherbares Feld an `create()` übergeben wird** — sie messen Ablehnung/Ignorieren, nicht Speicherung |
+| **C — Urheberspalte (separater Modell-/Fachauftrag W0-11c, ENTWURF)** | additive Spalte/Beziehung „Importeur" an `ImportedIdsItem` + Migration + Rückweg + Fremdzuschreibungsprobe — **kein stiller Zusatz zu W0-11** (Yama 21.08.) | Modellentscheidung | eigenes Blatt nach Abschlussurteil (Spur Sicherheit, Welle 2) |
 | **B — operandenabhängig** | CSRF-Schutz des echten IDS-Rückwegs (externer Shop postet zurück): signierter/nonce-gebundener State statt Ausnahme | **ja — Y-12: wie liefert der IDS-Shop zurück?** (Frage an externen Partner, im Haus nicht messbar) | eigener Folgeauftrag Z2-W0-11b nach Y-12; bis dahin bleibt die Ausnahme für `ids/callback` (mit A1 ist die Fremdzuschreibung bereits weg, der Rest-Schaden ist ein unerwünschter Import unter eigener `uid`) |
 
 ## Ziel (Teil A)
@@ -43,10 +44,11 @@ mit gültigem State → wie bisher. **Nur `ticket_testing`.**
 ## Nachvollzugs-Matrix (Fassung 1.7, §5)
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
-| A: Auto-Submit-POST ohne gültigen State → 4xx, 0 neue `imported_ids_items` | Schutz | *n.U.* | Testname + DB-Probe |
-| B: Regulärer Rückweg mit State → wie bisher (Items angelegt) | Funktion | *n.U.* | Testname |
-| C: `uid` wird nicht mehr aus der Query übernommen (grep + Test) | Zuschreibung | *n.U.* | grep |
-| D: `VerifyCsrfToken::$except` enthält die fünf toten Einträge nicht mehr; die verbleibenden treffen reale Routen (route:list-Abgleich) | Aufräumen | *n.U.* | Rohausgabe |
+| A (Teil B, nach Y-12): Auto-Submit-POST ohne gültigen State → 4xx, 0 neue `imported_ids_items` | Schutz | *n.U.* | Testname + DB-Probe |
+| B (Teil B, nach Y-12): Regulärer Rückweg mit State → wie bisher (Items angelegt) | Funktion | *n.U.* | Testname |
+| C (Teil A): `uid` wird aus der Query **nicht mehr gelesen** — `grep -n "input('uid')\|query('uid')\|->uid" IdsController.php` → 0 Lesestellen; Test: Request mit fremder `uid` → der Lauf verwendet `auth()->id()` (Rohausgabe) — **ausdrücklich KEIN Test auf gespeicherte Zuschreibung** (Modell speichert sie nicht; das wäre ein Scheintest) | Session-/Request-Bindung | *n.U.* | grep + Testname |
+| D (Teil A): `VerifyCsrfToken::$except` enthält die fünf toten Einträge nicht mehr; die verbleibenden treffen reale Routen (route:list-Abgleich) | Aufräumen | *n.U.* | Rohausgabe |
+| E (Teil A): Baubericht benennt ehrlich die Grenze — „Urheberschaft wird nicht persistiert, W0-11c offen" | Ehrlichkeit | *n.U.* | Zitat |
 
 **P1-Kriterium A ist vor dem Bau wirksam rot** (Ausnahme aktiv, `uid` aus Query).
 
