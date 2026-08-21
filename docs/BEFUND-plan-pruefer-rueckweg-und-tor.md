@@ -9336,3 +9336,74 @@ Der Ball bleibt, wo er liegt: `baut: generator`, `nimmt_ab: evaluator`. Ich meld
 Ist-Beleg trägt und der Auftrag auf einer richtigen Grundlage steht. **An Yama:** dein Verdacht ist
 gemessen bestätigt, und der Auftrag dazu ist geschnitten — er steht allerdings in keiner
 Statuswahrheit (§123).
+
+## §125 — K-1 geprüft: drei Behauptungen treffen, eine Zahl weicht ab, und das Nachbarfeld ist schlimmer
+
+*(Nummer §125 gegen HEAD `04ac3290` gewählt und hier benannt. Zweite Gegenprobe an der Inventur,
+wieder **prüfen statt erheben**.)*
+
+Herkunft: **Befund K-1**, ausgeschnitten als `Z1-W1-5 · insulationType: der tote Zweig sagt, dass er
+tot ist`. Vier Behauptungen im Ist-Beleg.
+
+### Was trifft
+
+| Behauptung | gemessen |
+|---|---|
+| keine Schreibstelle im ganzen Baum | **trifft** — der einzige `insulationType[:=]`-Treffer ist `validation.ts:46` `z.string().optional()`, eine Deklaration, keine Zuweisung |
+| `EigenschaftenPanel.tsx:324` schreibt nur `materialId` | **trifft** — `value={selectedWall.construction?.materialId ?? ''}`, Mauerwerk-Auswahl |
+| `raumProjektion.ts:91` Ternary, Zweig `aussenwand_gedaemmt` tot | **trifft wörtlich** — `bauteil_typ: …?.construction?.insulationType ? 'aussenwand_gedae…'` |
+
+Da nichts das Feld je setzt, ist die Bedingung immer falsch: **der Zweig ist unerreichbar, nicht
+selten genommen.**
+
+### Was abweicht
+
+Der Ist-Beleg sagt `grep -rn insulationType` → **„genau 3 Treffer"**. Ich messe **vier**:
+
+```
+  domain/validation.ts:46                    z.string().optional()
+  domain/scene.types.ts:109                  insulationType?: string;
+  projection/raumProjektion.ts:91            die Lesestelle
+  domain/scene-document-v2.schema.json:142   "insulationType": { "type": "string" }   <- der vierte
+```
+
+Der vierte ist das **gespeicherte Dokumentformat**, eine `.json` statt einer `.ts`. Ob sein Suchraum
+auf TypeScript beschränkt war, kann ich nicht messen — sein Befehl steht ohne Filter im Blatt. **Ich
+melde die Zahl mit meinem Suchraum dazu**, statt sie als Fehler zu führen: über den ganzen Baum sind
+es vier, über `*.ts` drei.
+
+Das ist nicht kosmetisch: das Feld steht damit **im persistierten Schema**. Gespeicherte Dokumente
+dürfen es tragen, und der Auftrag fasst das Schema in seinem Scope nicht an (`raumProjektion.ts`
+plus ggf. ein Charakterisierungstest).
+
+### Und der Nachbar ist der schärfere Fall
+
+Direkt unter `insulationType` steht im Schema `insulationThickness`. Gemessen:
+
+```
+  insulationThickness   6 Nennungen ohne Tests, ALLE in Typ / Schema / Validierung
+     validation.ts:47 · validation.ts:149 · scene.types.ts:110 · scene.types.ts:238
+     scene-document-v2.schema.json:145 · scene-document-v2.schema.json:622
+  Lesestelle im Code: KEINE      Schreibstelle im Code: KEINE
+```
+
+**`insulationType` hat wenigstens einen Leser — den toten Ternary. `insulationThickness` hat gar
+keinen.** Es ist an vier Stellen deklariert, an zwei Stellen validiert, an zwei Stellen im
+Dokumentschema geführt, und kein Codepfad berührt es. Zwei Felder derselben Dämmungs-Sache, beide
+unverdrahtet, eines davon vollständig unbenutzt.
+
+*(Zwischenkorrektur: mein erster grober Zähler meldete für `insulationThickness` „2 echte
+Zuweisungen". Nachgesehen sind das die beiden Zod-Zeilen `mmNonNeg.optional()` — mein Filter hat
+`z.`-Präfixe ausgeschlossen, die Zod-Kurzform aber nicht erkannt. **Null Zuweisungen.**)*
+
+### Ergebnis
+
+**Der Befund K-1 trägt.** Drei von vier Behauptungen wörtlich bestätigt, die vierte ist eine
+Zählfrage des Suchraums und keine Fehlaussage. Ball bleibt beim Generator (Bau) und Evaluator
+(Abnahme).
+
+**Zwei Hinweise dazu, beide nicht meine Entscheidung:** der Scope des Auftrags nennt das
+Dokumentschema nicht, obwohl das Feld dort steht — und `insulationThickness` kommt in K-1 überhaupt
+nicht vor, obwohl es denselben Zustand teilt und keinen einzigen Leser hat. Ob das ein eigener Posten
+wird, gehört zum offenen Gate **Y-3** („Dämmungs-Regler + Fachbedeutung"), das der Auftrag
+ausdrücklich bei **Yama** lässt.
