@@ -9542,3 +9542,74 @@ sieben Formelfassungen, das ungenannte Nachbarfeld `insulationThickness`, die Gr
 
 Ball bleibt bei **Generator** (Bau) und **Evaluator** (Abnahme). Keine dieser fünf Sachen liegt bei
 mir; **bei Yama** liegen die Gates `Y-3` (Dämmung) und die Regelkollision aus §123.
+
+## §128 — W-10 ohne einen einzigen gewanderten Zeiger, und drei Aussagen über eine Einheit
+
+*(Nummer §128 gegen HEAD `b5af089e` gewählt und hier benannt. Posten (a) an W-10, 77 Zeiger,
+49 verschieden — die dichteste noch ungeprüfte Scheibe.)*
+
+### Das Ergebnis von Posten (a): nichts
+
+```
+  49 verschiedene Zeiger geprueft   Zeile traegt Inhalt: 49   ueber Dateiende: 0   leer: 0
+```
+
+Und weil „trägt Inhalt" der schwache Test ist, **fünfzehn davon am Wortlaut**:
+
+```
+  applyCommand.ts:119  treppenDurchbrueche          Blatt: "treppenDurchbrueche"        trifft
+  applyCommand.ts:126  dx/dy                        Blatt: F-001-Umfeld                 trifft
+  applyCommand.ts:127  Math.hypot(dx, dy) || 1      Blatt: "Math.hypot auf :127"        trifft
+  applyCommand.ts:288  case 'ADD_CEILING'           Blatt: ":288 ADD"                   trifft
+  applyCommand.ts:296  pruefeDeckeProLevel(…)       Blatt: woertlich mit Argumenten     trifft
+  applyCommand.ts:298  Aufruf treppenDurchbrueche   Blatt: "aufgerufen :298"            trifft
+  applyCommand.ts:300  pruefeDeckeGanzzahlig(gesp.) Blatt: "auf dem GESPEICHERTEN"      trifft
+  applyCommand.ts:305  case 'UPDATE_CEILING'        Blatt: ":305 UPDATE"                trifft
+  applyCommand.ts:320  case 'REMOVE_CEILING'        Blatt: ":320 REMOVE"                trifft
+  deckenMesh.ts:10/11/14/18/32                      alle tragen den benannten Gegenstand
+```
+
+**W-10 ist die erste Scheibe, an der ich keinen einzigen gewanderten Zeiger finde.** Nach W-36
+(§109), W-38 (§110) und W-29 (§111) ist das der Gegenbefund — und er gehört genauso gemeldet.
+Die Erklärung liegt vermutlich in der Zieldatei: `applyCommand.ts` trägt 17 der 77 Zeiger und ist in
+den letzten Wochen nicht umgebaut worden, während `studioDaten.ts` (§109/§110) den A-23-Einschub bekam.
+
+### Was die Scheibe dabei zeigt: drei Aussagen über eine Einheit
+
+`deckenMesh.ts:14` trägt einen Kommentar, der dem Kopf der aufgerufenen Funktion widerspricht:
+
+```
+  polygonFlaeche.ts:12   "Eingabe sind die 2D-Punkte … in Metern … Ergebnis … in m2"
+  deckenMesh.ts:14       "polygonFlaecheM2 rechnet KEINE Einheit um (Input in mm => Ergebnis mm2)"
+                         const MM2_PRO_M2 = 1_000_000;
+  Rumpf polygonFlaecheM2 Division durch 1000 / 1e6:  0
+```
+
+**Der Rumpf entscheidet: es gibt keine Umrechnung.** Damit ist `deckenMesh.ts:14` sachlich richtig,
+und der Funktionskopf formuliert eine **Vorbedingung**, keine Zusicherung. Die stärkste Behauptung
+macht der **Name**: `polygonFlaecheM2` sagt „m²" und kann es nicht halten, wenn man ihm mm gibt.
+
+Damit stehen im Baum **drei Aussagen über dieselbe Einheit**:
+
+| Ort | Aussage |
+|---|---|
+| Name `polygonFlaecheM2` | Ergebnis in m² |
+| Kopf `polygonFlaeche.ts:12` | Eingabe in Metern, Ergebnis in m² |
+| Verbraucher `deckenMesh.ts:14` | Eingabe in mm, Ergebnis in mm², selbst umgerechnet |
+
+**Die Einheiten-Falle ist bekannt** — `Z1-W1-3` nennt sie ausdrücklich („exakt die W-08-Falle m gegen
+mm"), der Befund gehört der Inventur. Was ich hinzufüge: **der Rumpf rechnet nichts um**, also ist
+der Kopf keine Garantie; und ein **zweiter** Verbraucher dokumentiert die mm-Lesart in einer eigenen
+Konstante. Zusammen mit `dachGeometrie.ts:44` aus §122 (`/1_000_000`, also ebenfalls mm) heißt das:
+**beide gemessenen Verbraucher rechnen mm, der Meter-Vertrag steht nur im Kopf der unerreichbaren
+Datei.**
+
+Das ist auch die Erklärung meines eigenen Fehlers aus §101: ich habe mm eingegeben und einen Faktor
+1.000.000 gesehen. Ich habe damals den Kopf gelesen und für einen Vertrag gehalten. **Er ist eine
+Bitte.**
+
+### Ball
+
+Beim **Planner**, zum Bündel der Einheiten-Sache (`Z1-W1-3` läuft ohnehin auf diese Datei zu).
+Kein neuer Auftrag nötig — nur der Hinweis, dass der Kopf beim Zusammenführen mitentschieden werden
+muss, weil er heute etwas zusagt, was der Rumpf nicht prüft.
