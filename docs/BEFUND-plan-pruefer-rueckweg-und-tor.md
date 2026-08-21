@@ -15160,3 +15160,88 @@ und eines als „leer". Beides war mein Suchpfad — `objekt.blade.php`, `studio
 `szene.ts:522` aus zwei Dateien, um genau eine Zeile. **Ball beim Planner auch für den
 historischen Fall:** `buehnenBreite.ts:4` braucht den SHA, nicht die Streichung — der Befund ist
 richtig und soll lesbar bleiben.
+
+## §197 — Posten (b): die Landkarte stimmt oben und hat unten drei Löcher — eines davon ist die Datei, auf die sich das Roster dreimal stützt
+
+**Messstand** `028c0fb0` · Baum sauber · 0 neue Commits; Integrationszweig unverändert, letzter
+Commit vor **63 Minuten**.
+
+Gegenstand: die **fünf Ablagen** aus `CLAUDE.md:15-23`, deren Landkarte dort so eingeführt wird:
+*„Landkarte: `docs/REGISTER.md`. **Wer etwas sucht, greift dorthin statt zu raten.**"* Geprüft
+**zweiseitig**: nennt das Register, was da ist — und ist da, was es nennt?
+
+### Oben stimmt es
+
+```
+docs/REGISTER.md nennt:  regelwerk ✓  ·  backlog ✓  ·  konzept ✓  ·  fortschritt ✓  ·  .claude/agents ✓
+```
+
+**Alle fünf Fächer sind in der Landkarte auffindbar.**
+
+### Unten fehlen drei von zehn
+
+Je Fach die Sachdateien (ohne das Register selbst) gegen die Nennungen im eigenen Register:
+
+```
+regelwerk      4 Sachdateien   2 genannt   2 NICHT genannt -> INVENTUR-VERFAHREN.md · QUELLEN.md
+backlog        3               3           0
+konzept        2               2           0
+fortschritt    1               0           1 NICHT genannt -> inventur-2026-08-20.md
+```
+
+**Drei von zehn Sachdateien sind über ihr eigenes Fach-Register nicht auffindbar** — 30 %.
+`backlog` und `konzept` sind vollständig.
+
+### Der schwerste Fall: `INVENTUR-VERFAHREN.md`
+
+Das Roster `docs/regelwerk/AGENTEN-UND-SKILLS.md` stützt sich **dreimal** darauf:
+
+```
+:4   „Inventur-Läufe und Modell-Stufen: INVENTUR-VERFAHREN.md"
+:28  „Zuordnungslogik und Regeln in INVENTUR-VERFAHREN.md, Abschnitt Modell-Zuordnung"
+:92  „Fehler-/Schwächen-Inventur je Zone … Ablauf in INVENTUR-VERFAHREN.md"
+```
+
+Gemessen:
+
+```
+'INVENTUR-VERFAHREN' in docs/regelwerk/REGISTER.md    0 Treffer
+'INVENTUR-VERFAHREN' in docs/REGISTER.md              0 Treffer
+```
+
+**Eine Datei, auf die sich das Roster dreimal stützt — darunter für die Modell-Zuordnung und für den
+Ablauf jedes Inventur-Laufs —, steht in keinem der beiden Register.** Wer sie über die Landkarte
+sucht, findet sie nicht; wer sie findet, hat geraten oder ist über das Roster gestolpert. Genau das,
+was `CLAUDE.md` mit *„statt zu raten"* ausschließen wollte.
+
+### Der kuriose Fall: das Fach „was erreicht ist"
+
+```
+docs/fortschritt/   enthält genau zwei Dateien:  REGISTER.md  und  inventur-2026-08-20.md
+docs/fortschritt/REGISTER.md nennt 14 .md-Verweise — ALLE nach außen:
+   ../STATUS.md · ../STAND.md · ../AUFTRAGSZAEHLER.md · ../handoff-status.md
+   ../auftraege/AUFTRAGSTAFEL.md · ../backlog/REGISTER.md · ../regelwerk/REGISTER.md · …
+'inventur' im Register:  0 Treffer
+```
+
+**Das Register des Fachs „was erreicht ist" nennt vierzehn fremde Dateien und seinen einzigen
+eigenen Inhalt nicht.** Es ist ein Wegweiser, der ausschließlich nach draußen zeigt.
+
+### Eigener Messfehler, vor der Meldung gefangen
+
+Mein erstes Muster meldete drei fehlende Dateien:
+
+```
+-03.md                                     -> Bruchstück aus „`PROZESSPRUEFUNG-01.md` … `-03.md`"
+/.claude/skills/governance-zyklus/SKILL.md -> mein Muster hatte die Tilde abgeschnitten
+/.claude/skills/qualitaetsraster/SKILL.md  -> dito; beide liegen unter ~/.claude/skills/ und existieren
+```
+
+**Alle drei existieren.** Ein Muster, das Pfade an der Tilde zerschneidet und Auslassungspunkte für
+Dateinamen hält, **erzeugt Geisterdateien** — und ich hätte drei davon gemeldet. Geprüft wurde erst
+gegen das Dateisystem, dann gezählt.
+
+**Ball beim Planner** (die Register sind seine): `INVENTUR-VERFAHREN.md` und `QUELLEN.md` gehören in
+`docs/regelwerk/REGISTER.md`, `inventur-2026-08-20.md` in `docs/fortschritt/REGISTER.md`. **Die
+Landkarte oben ist in Ordnung** — die Lücken sitzen ausschließlich auf der untersten Ebene, und die
+ist die, an der jemand tatsächlich sucht.
