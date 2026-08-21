@@ -9039,3 +9039,73 @@ und 33 unerreichbaren Module**. Das ist etwas wert — aber es ist Bestätigung,
 
 **§119 bleibt davon unberührt**: die `polygonFlaeche`-Kette habe ich am 20.08. gemessen, bevor S-1/8
 transportiert war, und sie ist in seiner Aufstellung als eigener Fall geführt.
+
+## §121 — Zwei Berichtigungen zu A-37: mein Scope war zu klein, und das einzige ROT ist an HEAD grün
+
+*(Nummer §121 gegen HEAD `03e9ac41` gewählt und hier benannt. Der Zweig wurde um 10:05:03 per
+Fast-forward transportiert, neun Sekunden nach meinem ersten Messstand — deshalb neu gemessen.)*
+
+Der Evaluator hat mit `62b41d23` sein A-37-Votum abgegeben: **NACHBESSERN, 20 von 21**. Zwei Punkte
+daraus betreffen mich unmittelbar.
+
+### 1. Mein §117 hat den Scope zu klein gemessen — er hat recht
+
+Sein Satz: *„DEN BAU GESUCHT statt aus `bau_sha` genommen … das Tor selbst entstand in VIERZEHN
+weiteren Commits — Scope 16 Commits, 4 Dateien."* Selbst nachgemessen:
+
+```
+  scripts/rollen-tor.sh   Commits gesamt 14   davon seit basis_sha bc2125d9: 14
+                          angelegt 0ee521f7, 16.08. 13:38
+  meine zwei SHAs (374bb851, 139872cb)   fassen rollen-tor.sh NICHT an
+  scripts/commit-pruefen.sh              12 Commits seit dem Basis-Stand, meine zwei sind zwei davon
+```
+
+**A-37 heißt „Rollen-Tor", und die Datei, die das Tor ist, kommt in meiner Scope-Messung nicht vor.**
+§117 schrieb: *„beide Bau-Commits fassen je genau eine Datei an, keine Streuung"* — das ist über die
+zwei Commits wahr und über den Auftrag falsch.
+
+Der Fehler ist benennbar: **ich habe `bau_sha` als Definition des Baus genommen, statt den Bau zu
+suchen.** Dasselbe Feld, dessen Fehlen ich in §117 gerügt habe, hat mir dann den Gegenstand
+vorgegeben. Das ist die Klasse aus dem §120-Nachtrag — das Verfahren bestimmte die Grundmenge statt
+der Frage —, hier ein zweites Mal und aus einer anderen Richtung.
+
+Was von §117 bleibt: die Feststellung, dass der Beleg in keinem Feld stand, war richtig und ist
+eingelöst (`bau_sha`, `bau_sha_zweiter`). Was fällt: die Aussage über den Umfang.
+
+### 2. Das einzige ROT ist an HEAD grün — und niemand hat einen Fehler gemacht
+
+`A-37-21`: *„js-yaml ist weder in dependencies noch in devDependencies, installiert nur transitiv."*
+Vierfach gegengeprüft, bevor er rot schrieb. Gemessen:
+
+```
+  Pruefstand   f374c73a  20.08. 16:35:51   js-yaml in package.json:  0   -> ROT ist dort RICHTIG
+  Votum        62b41d23  21.08. 10:04:35   js-yaml in package.json:  1
+  HEAD         03e9ac41                    js-yaml in package.json:  1   devDependencies:23 "^4.1.0"
+```
+
+Die Behebung ist `e5aa5af7` („js-yaml deklariert — eine Zeile"), **20.08. 14:01:47** — also **zwei
+Stunden vor** dem Prüfstand. Und trotzdem:
+
+```
+  e5aa5af7 Vorfahr von f374c73a (Pruefstand)?   NEIN
+  e5aa5af7 Vorfahr von 62b41d23 (Votum)?        JA
+```
+
+Sie lag auf einem Parallelzweig und war zum Prüfstand noch nicht zusammengeführt. **Der Evaluator hat
+an seinem Stand korrekt gemessen; der Mangel war zu diesem Zeitpunkt real.** Er war nur, als das
+Votum geschrieben wurde, bereits behoben — im selben Baum, aus dem das Votum committet wurde.
+
+Das ist genau die Zeitachse aus §109/§110/§111, die ich an fremden Blättern gemessen habe, und aus
+§113, wo sie mich selbst traf: **richtig gemessen, beim Aussprechen überholt.** Neu ist nur, dass die
+Ursache diesmal nicht Zeit ist, sondern **Zweigtopologie** — zwei Stunden Vorsprung nützen nichts,
+wenn der Commit auf einem anderen Ast hängt.
+
+### Folge
+
+`A-37-21` ist die einzige Rot-Lage des Votums. Ist sie grün, steht **21 von 21**. Das nachzumessen
+ist **nicht meine Entscheidung** — das Votum gehört dem Evaluator, und ein Prüfer, der fremde Voten
+umschreibt, ist keiner. **Ball beim Evaluator**, mit dem Hinweis und den drei Zahlen oben.
+
+Der Generator ist ausdrücklich **nicht** betroffen: er hatte den Mangel selbst gemessen, dokumentiert
+und bewusst nicht behoben (package.json ist gemeinsamer versionierter Code) — und dann hat ihn
+jemand doch deklariert. Auch das gehört zur Lage und nicht zur Schuld.
