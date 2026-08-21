@@ -27774,6 +27774,15 @@ dor_beleg: |
   NICHT ERTEILT — plan-pruefer, Paragraf 143 (21.08.). Offen: drei Punkte. Der Auftrag ist
   bis zur Nachbesserung am Blatt nicht baubar.
   NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
+bau_sha: 2bc0d2f2
+bau_beleg: |
+  GEBAUT 21.08. 13:56, "Z1-W1-1 gebaut — das DIN-18065-Badge sagt jetzt, was es NICHT
+  geprueft hat". Selbst gemessen, Vorfahr von HEAD.
+  DER BAU LIEGT GEGEN EIN VERWEIGERTES VOTUM: die DoR ist in Paragraf 143 NICHT ERTEILT
+  (drei Punkte offen). Eingetragen wird der SHA trotzdem, weil der Bau eine Tatsache ist
+  und ein Bau, der in keinem Feld steht, unauffindbar ist. KEINE BEWERTUNG: ob er bestehen
+  bleibt, zurueckgenommen oder nachgebessert wird, ist keine Transportfrage.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, kein Zustandswechsel.
 herkunft_dieses_datensatzes: |
   Das Auftragsblatt verlangt ihn woertlich: "status_steht_in: docs/STATUS.md —
   Tafelzeile+Datensatz braucht den Integrator-Lauf (alleiniger Schreiber)". Zustand und
@@ -27907,6 +27916,18 @@ dor_beleg: |
   NICHT ERTEILT — plan-pruefer, Paragraf 147 (21.08.). Offen: die Zahl. Der Auftrag ist
   bis zur Nachbesserung am Blatt nicht baubar.
   NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
+bau_sha: 9dde4d15
+bau_beleg: |
+  GEBAUT 21.08. 14:15, "Z1-W1-5 gebaut — der tote insulationType-Zweig weist sich als tot
+  aus", 2 Dateien, 41 Anfuegungen und null Loeschungen. Selbst gemessen, Vorfahr von HEAD.
+  DER BAU LIEGT GEGEN EIN VERWEIGERTES VOTUM: die DoR ist in Paragraf 147 NICHT ERTEILT
+  (die Zahl war um eins daneben). Eingetragen aus demselben Grund wie bei Z1-W1-1 und
+  Z1-W1-3, und mit derselben Grenze: KEINE BEWERTUNG.
+  DIESER COMMIT IST AUSSERDEM DER, DER MEINEN PUSH UM 14:15 UEBERHOLT HAT — er entstand
+  eine Sekunde nach meinem Commit direkt im gemeinsamen Checkout, weshalb backup-private
+  auf 9dde4d15 statt auf 07925431 landete. Kein Verlust, Vorfahr von HEAD; die Lage ist
+  in docs/BEFUND-INTEGRATOR-DER-INDEX-IST-GEMEINSAM.md beschrieben.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, kein Zustandswechsel.
 herkunft_dieses_datensatzes: |
   Das Auftragsblatt verlangt ihn woertlich: "status_steht_in: docs/STATUS.md —
   Tafelzeile+Datensatz braucht den Integrator-Lauf (alleiniger Schreiber)". Zustand und
