@@ -18941,3 +18941,104 @@ Beides ist die Gegenform, und beides gehört in denselben Befund wie der Mangel.
 Nicht gemessen: die übrigen zwei der sechs Blatt-Zeiger (`:103` in `A-19:92`, `:812` in `A-19:63`)
 — beide stehen dort ausdrücklich als dokumentierter oder berichtigter Fehler. Das ist eine bewusste
 Grenze, kein Ausfall.
+
+## §232 · Posten (b): die Zahl „26 Verweise" hält — und in der Statuswahrheit trifft heute keiner von neun
+
+**Messstand.** HEAD `5b122cfa` (21.08. 18:38:40), Baum sauber, **0 neue Commits** — vierte Runde
+ohne Ankunft. Integrationszweig unverändert `7a82ecfb` (247 Min). Ballortungsträger über Blob-SHA
+belegt statt angenommen: `docs/STATUS.md` `810f37d9e560`, Baum `docs/auftraege/aktiv`
+`b0f14db4239b` — beide identisch zur Vorrunde. Gemessen 21.08. 18:39–18:42.
+
+### 1 · Die genannte Zahl, nachgezählt
+
+§231 prüfte die **elf Zeilen** der Selbstprüfung in `ARBEITSREGELN.md:1636-1656`, nicht ihre
+Mengenangabe. Der Block sagt: *„Systematisch gemessen: 26 Verweise auf 11 verschiedene Zeilen."*
+**Die Grundmenge nennt er nicht** — also habe ich sie gesucht statt geraten, und am Stand der
+Messung gemessen (Elternteil `fd7f30bf`, nicht heute):
+
+| Grundmenge | am Stand `fd7f30bf` | heute `7a82ecfb` |
+|---|---|---|
+| `docs/ARBEITSREGELN.md` | 1 Verweis / 1 Zeile | 1 / 1 |
+| **`docs`** | **26 Verweise / 11 Zeilen** | **57 / 30** |
+| ganzes Repo | 27 / 11 | 59 / 31 |
+
+**Die Zahl hält exakt**, und sie identifiziert ihre eigene Grundmenge: `docs/`. Das ist die
+seltenere Sorte Befund — eine fremde Zahl, die der Nachzählung standhält, samt einer Grundmenge,
+die sich aus der Zahl rekonstruieren lässt.
+
+Heute sind es **57 auf 30**. In fünf Tagen mehr als verdoppelt, die Zeilen fast verdreifacht —
+**nach** dem Erlass der Regel *„Wer eine Zeilennummer nennt, nennt sie zusätzlich zur Sache und nie
+statt ihrer"* (`:1622`, verbindlich seit 16.08. 19:59).
+
+### 2 · Mein erstes Verfahren war zu grob, und das ist der Lehrsatz dieser Runde
+
+Ich habe zunächst alle 54 Verweiszeilen maschinisch klassifiziert („trägt die Zeile zusätzlich §,
+H-Kennung, Abschnitt?") und kam auf **14 mit Sache, 40 ohne**. Die Zahl ist wertlos, und die Probe
+zeigte sofort warum: unter den „40 ohne" stehen Zeilen wie
+
+    NICHT   ARBEITSREGELN.md:739
+    B7:215 sagt 'ARBEITSREGELN.md:834 traegt die Reichweiten-Zeile: …'
+
+Die erste ist das **Verbot selbst**, die zweite mein eigener Befund aus §231. **Ein Verweis, der
+zitiert wird, um ihn zu melden, ist kein Verstoß gegen die Regel, sondern ihr Gegenstand.**
+`docs/BEFUND-plan-pruefer-rueckweg-und-tor.md` trägt allein **24 der 57** — meine Datei ist der
+größte Einzelträger, und ausnahmslos als Prüfgegenstand.
+
+Das ist die Wache-Regel „Grundmenge gegen die Frage prüfen statt gegen das Verfahren", einmal an
+mir selbst vorgeführt: Mein Verfahren konnte Behauptung und Zitat nicht unterscheiden, also war
+seine Grundmenge falsch — nicht sein Muster. Ich habe die Zahl **verworfen** statt sie zu melden.
+
+### 3 · Die richtige Grundmenge: `docs/STATUS.md`
+
+Dort stehen Verweise **als Beleg in Datensätzen**, nicht als Prüfgegenstand — die verbindliche
+Statuswahrheit (`CLAUDE.md`, ARBEITSREGELN §16). Neun verschiedene Zeiger, alle einzeln geöffnet
+und gegen die **behauptete Sache** geprüft:
+
+| Zeiger | was der Datensatz behauptet | Zeiger trägt heute | Sache steht bei |
+|---|---|---|---|
+| `:103` | IN_ARBEIT-Zählbefehl, *„traegt woertlich"* | §3-Prosa | **132** |
+| `:255` | *„steht woertlich auf"* — „kein Kriterium ist bereits erfüllt," | `- exakter Basis-SHA,` | **264** |
+| `:504` | E1 „als eigenen Abschnitt" | `merge_basis_sha: SHA` | **518** |
+| `:509` | E1, „die Messung am Commit" | `artefakte_reproduzierbar` | **518** |
+| `:693` | *„§14-Zeiger stimmt woertlich"* — „Vor jedem Commit wird" | Zitatzeile | **708** |
+| `:739` | „§18a existiert" | Auftragsblatt-Zeile | **917** |
+| `:767` | „(H-6) ruft B5 dort bereits auf" | **Leerzeile** | **973** |
+| `:812` | „H-8 als letzte Hausregel" | `inhalt_sha`-Aufzählung | **990** |
+| `:1469-1516` | „A-41-1 Wortlaut" | `geltungsbereich: …` | **1509** |
+
+**Neun von neun treffen nicht.** Drei behaupten dabei ausdrücklich Wörtlichkeit — *„traegt
+woertlich"*, *„steht woertlich auf"*, *„stimmt woertlich"*. Genau diese drei sind die schärfsten
+Fälle: ein Zitat mit Zeilenangabe ist eine überprüfbare Zusage, und sie ist heute nicht mehr wahr.
+
+`:767` ist der Sonderfall aus §231 in neuer Gestalt: Der Zeiger ist eine **Leerzeile** — wer dort
+nachsieht, findet nichts und hält den Verweis für einen Tippfehler statt für eine falsche Aussage.
+
+### 4 · Was das nicht ist
+
+Es ist **kein** Vorwurf an den Integrator. `docs/STATUS.md` wird erzeugt; die Datensätze tragen,
+was ihre Quelle zum Zeitpunkt des Eintrags sagte, und das war richtig. Es ist dieselbe Ursache wie
+in §231 — sechs Commits, +302 Zeilen, Fassung 1.7 — nur trifft sie hier den Träger, der laut
+`CLAUDE.md` als einziger Zustand führt.
+
+**Offen und ausdrücklich nicht gemessen:** mehrere dieser Datensätze tragen Prüfer-Diktion
+(*„Rot-Lage SELBST gelesen"*, `was_paragraf_5_verlangt:`). Ob sie aus meinen eigenen DoR-Belegen
+stammen, habe ich nicht erhoben — es hätte einen `git log -S`-Lauf über 27938 Zeilen gebraucht.
+Für den Befund ist es gleichgültig; **falls es meine sind, gilt er erst recht**, und ich sage das
+lieber hier als nach der Rückfrage.
+
+Ausgefallene Messung, nicht als Ergebnis verbucht: mein `grep -oE` mit `.{0,60}`-Quantoren brach
+mit *„exceeds complexity limits"* ab. Kein Teilergebnis, also kein Ergebnis — mit `awk` und
+`index()` wiederholt.
+
+### 5 · Ball
+
+**Planner** — und diese Runde schärft die Reihenfolge aus §231 statt sie zu wiederholen:
+
+1. `ARBEITSREGELN.md:1636-1656` in die Ankerform (§231 Punkt 1) bleibt der erste Griff. Diese
+   Runde belegt, warum: Der Bestand ist seit dem Erlass der Regel von **26 auf 57** Verweise
+   gewachsen. Die Form erzeugt schneller neue falsche Zeiger, als Einzelkorrekturen sie einholen.
+2. Die **neun Zeiger in `docs/STATUS.md`** kommen danach — mit dem Zusatz, dass drei von ihnen
+   Wörtlichkeit zusagen und deshalb nicht bloß eine Zahl, sondern eine Aussage berichtigen müssen.
+3. Der Nachziehweg gehört an den **Erzeuger** von `docs/STATUS.md`, nicht an die Datei: eine von
+   Hand berichtigte Zeile ist beim nächsten Lauf wieder weg. Wer die Statuswahrheit erzeugt, muss
+   die Ankerform mit erzeugen.
