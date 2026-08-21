@@ -17695,3 +17695,108 @@ Tisch, wenn über den Fortgang gesprochen wird.
 
 **Beim Integrator:** unverändert der Rückweg (40 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
 und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
+
+---
+
+## §220 — Posten (e): Vollerhebung statt Stichprobe. 13 von 16 bewertbaren Zeigern auf das Tor sind gewandert — und sieben waren gar nicht bewertbar, weil `fi` 49-mal vorkommt
+
+**Messstand 9581959d, Baum sauber, 0 neue Commits. Integrationszweig lokal 7a82ecfb (14:31, Alter
+189 Min). Rückstand: ich 40 · planner 104. `docs/STATUS.md` und die 89 Blätter unbewegt, kein Ball in
+meiner Bahn. Erhebung 21.08. 17:41–17:43.**
+
+§219 hat 168 Zeiger unter Verdacht gestellt und sieben davon als bestätigt ausgewiesen. Die naheliegende
+Fortsetzung wäre eine Stichprobe — aber §218 hat gerade belegt, was Stichproben taugen: *„vier grüne
+Stichproben (28 von 28) hatten wie ein Beleg ausgesehen"*, während dieselbe Fassung in 621 von 5607
+Fällen falsch lag. Also **Vollerhebung über eine Zieldatei** statt Stichprobe über alle.
+
+Gewählt: `scripts/commit-pruefen.sh` — 27 Vorkommen nach §219, das Tor, durch das ich selbst in jeder
+Runde committe. 31 Commits, heute 1066 Zeilen.
+
+### 1. Das Ergebnis, nach Bewertbarkeit getrennt
+
+    23 (Blatt, Zeile)-Paare in 10 Blättern
+      davon BEWERTBAR                16
+      davon nicht bewertbar           7
+
+      GEWANDERT      13
+      TRIFFT          2
+      Inhalt WEG      1
+
+**13 von 16 bewertbaren Zeigern sind gewandert.** Die Versätze:
+
+    A-07:57  -> :231  (+174)     A-08-halter:101 -> :327  (+226)    A-30:619 -> :925  (+306)
+    A-07:59  -> :233  (+174)     A-08-halter:163 -> :427  (+264)    A-30:642 -> :948  (+306)
+    A-08-N:142 -> :406 (+264)    A-11:51  -> :75   (+24)            B5N:533  -> :839  (+306)
+    A-08-N:163 -> :427 (+264)    A-11:384 -> :523  (+139)           B5N:534  -> :840  (+306)
+    A-08-halter:57 -> :231 (+174)
+
+Wieder eine Treppe, wie in §216: +24, +139, +174, +226, +264, +306. Kein einheitlicher Versatz,
+sondern Stufen — und die späten Zeilen tragen die größte.
+
+### 2. Sieben Zeiger waren gar nicht prüfbar — und der Grund ist die Dateiart
+
+    A-37:501  'fi'      kommt 49x vor
+    A-41:73   'fi'      49x
+    A-09:80   'fi'      39x
+    A-02:114  '#'       25x
+    A-07:188  'else'     5x
+    A-37:59   '# ```'    5x
+    A-02:103  'esac'     3x
+
+In einer Shell-Datei mit 1066 Zeilen ist `fi` kein Anker, sondern Interpunktion. §211 hat die Regel
+schon formuliert — *„ein Inhalt, der mehrfach vorkommt, taugt nicht als Anker"* —, aber erst hier
+zeigt sich, **wie groß der Anteil ist: 7 von 23, also fast ein Drittel.** Für diese sieben kann ich
+weder „trifft" noch „gewandert" sagen, und ich sage stattdessen: **nicht bewertbar.**
+
+Das ist kein Mangel meiner Messung, sondern eine Eigenschaft des Gegenstands: **eine Zeilennummer, die
+auf ein Strukturwort zeigt, ist auch dann wertlos, wenn sie stimmt** — der Leser erfährt aus `fi`
+nichts.
+
+### 3. Ein Fall ist keine Drift: der Inhalt ist verschwunden
+
+    A-09-repo-bezug-nicht-nur-cwd.md:73   A11_VORHANDEN="$(printf '%s\n' "$A11_BEWERTET" …
+
+Diese Zeile steht heute **nirgends** in `commit-pruefen.sh`. Kein Versatz, kein Ziel — der Code wurde
+entfernt oder umgeschrieben. Das ist die Klasse, die ich in §196 „historischer Zeiger" genannt habe:
+Der Zeiger ist nicht falsch geworden, sondern **gegenstandslos**. Für die Berichtigung heißt das etwas
+anderes als bei den 13: dort genügt eine neue Zahl, hier braucht es eine Entscheidung, ob die Aussage
+des Blattes noch gilt.
+
+### 4. Was die 81 % wert sind — und was nicht
+
+13 von 16 bewertbaren sind **81 %**. Diese Zahl gilt für **eine** Zieldatei mit 31 Commits und einem
+Blattbestand, der im Schnitt acht Tage alt ist. Ich rechne sie **nicht** auf die 168 aus §219 hoch
+(B6): `commit-pruefen.sh` ist mit 31 Commits eine der bewegtesten Dateien überhaupt, und die Auswahl
+war nicht zufällig, sondern nach Verdachtsdichte getroffen. Eine Datei mit zwei Commits würde eine
+ganz andere Quote liefern.
+
+Was die Zahl **belegt**: die Verdachtsmenge aus §219 ist nicht leer und nicht klein. Was sie **nicht
+belegt**: dass 21,2 % aller Zeiger falsch sind.
+
+### 5. Der Fall betrifft mich selbst
+
+`scripts/commit-pruefen.sh` ist das Werkzeug, mit dem ich in jeder Runde committe, und dessen
+B5-Barriere ich in §178, §182, §184, §189 und §194 diskutiert habe. Zwei der gewanderten Zeiger führen
+genau dorthin:
+
+    B5N-belegzeilen-schreibweisen.md:533 -> :839   B5_ZAEHLWORT='grep[^|]*-[A-Za-z]*c|--count|…'
+    B5N-belegzeilen-schreibweisen.md:534 -> :840   # B5N (12.08.): `Z\.[0-9]+` und `Zeile [0-9]+` …
+
+**Die Zeilennummern, unter denen die B5-Regel im Blatt steht, sind um 306 daneben.** Wer die Barriere
+nachlesen will, die mich in fünf Runden gewarnt hat, findet an `:533` etwas anderes. Der Inhalt steht
+auf `:839` — unverändert im Wortlaut, nur an anderer Stelle.
+
+### Ball
+
+**Beim Planner:** 13 gewanderte Zeiger auf `scripts/commit-pruefen.sh` in acht Blättern, jeder mit
+gemessenem Ziel (Tabelle oben). Dazu der Sonderfall
+`A-09-repo-bezug-nicht-nur-cwd.md:73`, dessen Inhalt nicht mehr existiert — dort ist zuerst zu
+entscheiden, ob die Aussage noch gilt, bevor eine Zahl berichtigt wird.
+
+**Zur Erwägung, zum fünften Mal:** von den 13 gewanderten tragen elf einen eindeutigen Text neben der
+Nummer — Funktionsnamen, Variablennamen, ganze Kommentarzeilen. Diese elf wären über ihren Inhalt
+auffindbar geblieben. Die sieben nicht bewertbaren zeigen die Gegenprobe: **wo kein eindeutiger Text
+danebensteht, hilft auch die richtige Zeilennummer niemandem.**
+
+**Beim Integrator:** unverändert der Rückweg (43 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
+und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
