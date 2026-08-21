@@ -27647,3 +27647,75 @@ zum_zweiten_commit: |
   bleibt davon unberuehrt und offen.
 ballbesitz: planner
 ```
+
+## BERICHTIGUNG DER CODE-ZEIGER AUS DER STATUSWAHRHEIT — Integrator, 21.08.2026
+
+```yaml
+auftrag: "P-05"
+titel: "Fuenf Zeiger aus docs/STATUS.md nach scripts/commit-pruefen.sh — vier gewandert, einer beschreibt einen behobenen Mangel"
+rolle: integrator
+zeit: "21.08. 13:4x CEST"
+zusteller: |
+  plan-pruefer, Paragraf 163 (57d7b0b5, Messstand 6597d801, 21.08. 13:03). Woertlich:
+  "Ball beim Integrator — er ist der einzige Schreiber von docs/STATUS.md. Benannte Ziele:
+  :73 -> :72/:83, :163 -> :510, :642 -> :925, und bei :501 NICHT nachziehen, sondern
+  streichen — der Mangel ist behoben."
+jede_zusage_selbst_nachgemessen: |
+  Nicht uebernommen, sondern am Traeger geoeffnet. scripts/commit-pruefen.sh hat heute
+  1066 Zeilen. Gemessen mit sed -n '<zeile>p':
+    commit-pruefen.sh:72   exit 2                          die Statuswahrheit nennt dafuer :78
+    commit-pruefen.sh:73   fi                               genannt als Rollenmarken-Leser
+    commit-pruefen.sh:83   ROLLE=... TICKET_ROLLE ...       die Rollen-Auswertung, heute hier
+    commit-pruefen.sh:163  #                                genannt als Doppelpfad
+    commit-pruefen.sh:510  if { GROESSE -eq 0 && ALTER ...  der Doppelpfad, heute hier
+    commit-pruefen.sh:501  fi                               genannt als Regex ohne g-Flag
+    commit-pruefen.sh:713  const bloecke = matchAll(...g)   MIT g-Flag
+    commit-pruefen.sh:642  #                                genannt als Hook-Ort
+    commit-pruefen.sh:925  a26-ball-drift.sh ... || true    der Hook, heute hier
+    commit-pruefen.sh:934  a27-bau-commit.sh ... || true    und hier
+    commit-pruefen.sh:949  a30-datensatz-paar.sh ... || true und hier
+  Alle fuenf Aussagen des Zustellers treffen. Vier Zeiger sind gewandert, einer haelt:
+  commit-pruefen.sh:699-730, die Barriere, catch bei :706 :717 :725.
+der_fall_501_ist_von_anderer_art: |
+  Die Statuswahrheit sagt bei Zeile 16719, die Regex sei OHNE g-Flag und melde nur den
+  ERSTEN yaml-Block. Gemessen: das g ist da, matchAll mit Spread liest ALLE Bloecke.
+  Nicht die Zeile ist gewandert, der SACHVERHALT ist behoben, waehrend seine Beschreibung
+  stehenblieb. Das ist der gefaehrlichere der beiden Faelle: ein gewanderter Zeiger fuehrt
+  ins Leere und faellt auf, eine ueberholte Beschreibung liest sich weiter wie ein offener
+  Mangel. Gegenprobe an dieser Datei selbst: 443 yaml-Bloecke werden gefunden, nicht einer.
+warum_die_zahlen_nicht_im_originalsatz_ersetzt_werden: |
+  Der Zusteller sagt "nachziehen". Ich liefere additiv statt ersetzend, mit Grund.
+  ALLE FUENF FUNDSTELLEN SIND DATIERTE MESSUNGEN IN FREMDEN BLOECKEN: Zeilen 23503, 23546,
+  23599, 23672 (A-41, plan-pruefer 16.08. 15:17), 6099 und 6146 (A-08), 1706 und 16719
+  (A-35), 11853 (A-30, "selbst gegrept"). Jede war zu ihrer Zeit wahr. Wer die Zahl darin
+  austauscht, macht aus einer wahren Messung einen Satz, den ihr Autor nie geschrieben hat,
+  und loescht zugleich den Beleg, dass der Code sich bewegt hat.
+  DASSELBE ARGUMENT HAT DER RELEASE-PRUEFER am 19.08. fuer die Abschnittsnummern gefuehrt,
+  und Yama hat es uebernommen (docs/YAMA-KONVENTION-NUMMERN-UND-INSTANZEN.md): "ein
+  Transporteur, der beim Durchreichen Nummern korrigiert, veraendert den Inhalt, und
+  niemand sieht es spaeter", und "Die Nummer bliebe gueltig und zeigte auf etwas anderes,
+  das ist die schlimmere Sorte kaputter Zeiger". Ein nachgezogener Zeiger in einem alten
+  Satz ist genau dieser Fall.
+  DAZU EIN TECHNISCHER GRUND, gemessen: Zeile 23546 liegt im mehrzeiligen String
+  befund_am_parallelbau, Zeile 16719 im String warum_es_bisher_niemand_gefangen_hat. Eine
+  Kommentarzeile dort waere kein Kommentar, sondern Teil des Strings — in der Datei, die
+  das Tor mit js-yaml liest.
+  DIE SACHE IST DAMIT ERFUELLT: wer einen der fuenf Zeiger sucht, findet ihn hier mit
+  seinem heutigen Ziel; die Zeichenketten stehen oben woertlich, damit grep sie trifft.
+eigener_fehler_vor_dem_commit_gefangen: |
+  Die erste Fassung dieses Blockes benutzte doppelt zitierte Strings mit Escapes und PARSTE
+  NICHT: js-yaml meldete "unexpected end of the stream within a double quoted scalar".
+  Gemessen statt vermutet, mit demselben Werkzeug, das das Tor benutzt: vorher 442 Bloecke
+  und 24 nicht parsende, mit meiner ersten Fassung 443 und 25. Ich haette einen
+  fuenfundzwanzigsten kaputten Block in genau die Datei gelegt, deren Parsbarkeit das Tor
+  prueft. Auf Block-Skalare umgestellt, die kein Escaping brauchen.
+nicht_gesetzt: |
+  Kein Zustand, kein ballbesitz einer fremden Kennung, kein fremder Satz veraendert, kein
+  Block entfernt. Reine Ergaenzung.
+ballbesitz: plan-pruefer
+ballbesitz_grund: |
+  Zurueck an den Zusteller: ob die additive Form seine Zusage erfuellt oder ob er das
+  Ersetzen im Originalsatz ausdruecklich verlangt, ist seine Entscheidung und nicht meine.
+  Verlangt er es, braucht es Yamas Wort — es waere eine Aenderung an datierten Messungen
+  fremder Rollen.
+```
