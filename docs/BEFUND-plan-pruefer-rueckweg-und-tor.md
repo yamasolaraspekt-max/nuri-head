@@ -22426,3 +22426,75 @@ Abschnitt einen Messstand behauptet, den es beim Schreiben nicht mehr gab.
 **Die Zahlen des Abschnitts bleiben gültig**, weil sie ausdrücklich gegen `8c4d06e9` erhoben sind und
 dieser Stand unveränderlich ist (Zwei-Haltbarkeiten-Regel: Commits sind unveränderlich, Arbeitsbäume
 flüchtig).
+
+## §270 · Posten (d): die Welle 0 läuft in 23 Minuten von Schnitt bis Code — und der Stillstandsvergleich, den ich zurückziehe
+
+**Messstand.** Mein HEAD `4e28e133`, Baum sauber. Integrationszweig `8d910672` (21.08. 20:50),
+**0 neue Commits**, Rückstand ein Commit (§269). Ballortung **40, unverändert**, kein Welle-0-Ball
+bei mir. Gemessen 21.08. 20:54–20:55.
+
+### 1 · Die Durchlaufzeit, zum ersten Mal gemessen
+
+Vier der zwölf Aufträge sind bis in den Code gelaufen. Jede Wegmarke ist ein Commit, also
+unveränderlich messbar:
+
+| Auftrag | Schnitt | DoR | Bau | Schnitt→DoR | DoR→Bau | **gesamt** |
+|---|---|---|---|---|---|---|
+| W0-1 | 20:03 | 20:09 (§255) | 20:18 | 6 Min | 9 Min | **15 Min** |
+| W0-3 | 20:03 | 20:15 (§257) | 20:36 | 12 Min | 21 Min | **33 Min** |
+| W0-7 | 20:20 | 20:28 (§261) | 20:40 | 8 Min | 12 Min | **20 Min** |
+| W0-8 | 20:20 | 20:31 (§262) | 20:45 | 11 Min | 14 Min | **25 Min** |
+| **Mittel** | | | | **9,3 Min** | **14,0 Min** | **23,3 Min** |
+
+**Von der Auftragserteilung bis zum gebauten Code: im Mittel 23 Minuten.** Mein eigener Anteil —
+Schnitt bis Votum — liegt bei **9,3 Minuten**, und darin steckt jedes Mal eine vollständige
+Belegprüfung am Basis-Stand.
+
+Die beiden Schnitte sind belegt: `a7851958` (20:03) legte W0-1…6 an, `ae7cee9d` (20:20) W0-7…9.
+
+### 2 · Einen Vergleich ziehe ich zurück, bevor ihn jemand liest
+
+Beim Rechnen stand da: *„Der Stillstand aus §234 (320 Min) hätte 13,8 solche Durchläufe getragen."*
+**Der Satz ist arithmetisch richtig und sachlich unredlich.** Gegenprobe:
+
+    Z2-W0-Blätter am Stand 7a82ecfb (14:31, Beginn des Stillstands):   0
+    Z2-W0-Blätter heute:                                              12
+
+**In den 320 Minuten gab es diese Aufträge nicht.** Es war keine verlorene Bauzeit, sondern Zeit
+**ohne Gegenstand** — man kann nicht bauen, was nicht geschnitten ist. Ein Vergleich, der eine
+Durchlaufzeit gegen eine Wartezeit stellt, unterstellt, beide hätten dasselbe tun können. Das ist
+die Sorte Rechnung, vor der H-2 warnt: *ein Fachurteil, das wie eine Messung aussieht.*
+
+### 3 · Der Vergleich, der trägt
+
+    Stillstand 14:31–19:50   320 Min   22 eigene Abschnitte (§229–§250)   0 DoR-Voten möglich
+    Betrieb    seit 19:50     65 Min   19 eigene Abschnitte (§251–§269)   12 DoR-Voten
+
+    Rate im Stillstand:  1 Abschnitt je 14,5 Min
+    Rate im Betrieb:     1 Abschnitt je  3,4 Min      -> Faktor 4,3
+
+**Ich war im Betrieb 4,3-mal schneller — nicht durch mehr Anstrengung, sondern weil es Gegenstände
+gab.** Im Stillstand habe ich Vorratsposten gemessen: gewanderte Verweise, Zahlen, Formeln,
+Alterungen. Das ist Arbeit, und §231/§236/§250 gehören zu den schärfsten Befunden dieser Sitzung.
+Aber jede davon musste ich mir **selbst suchen**; im Betrieb kommt der Gegenstand zu mir.
+
+**Das ist die messbare Fassung dessen, was §235 vermutet hatte** (*„ein Befund wirkte, sieben
+nicht"*) und §253 korrigierte (*„an den Stillstand gebunden, nicht an die Form"*): Prüfarbeit
+braucht ein Gegenüber. Ohne eines misst sie weiter — nur trifft sie niemanden.
+
+### 4 · Was die Zahl nicht sagt
+
+Die 23,3 Minuten stammen von **vier** Aufträgen — genau denen, die schon gebaut sind. **Das ist
+keine Zufallsauswahl, sondern die schnellen.** Acht weitere sind geschnitten und begutachtet, aber
+noch nicht gebaut; ihre Durchlaufzeit ist offen und wird die Mittelwerte heben. Ich melde die Zahl
+deshalb als **Untergrenze der Durchlaufzeit**, nicht als deren Mittel (B6: kein Bild der Menge aus
+einem Teil).
+
+### 5 · Ball
+
+**Kein Ball.** Dies ist eine Standortmessung ohne Mangel.
+
+Ein Hinweis für **Yama**, weil er die Reihenfolge betrifft: Die vier gebauten Aufträge tragen alle
+noch `zustand: ENTWURF` (§267). Die Durchlaufzeit **bis zum Code** ist 23 Minuten; die Durchlaufzeit
+**bis zum Zustand** ist offen. Solange das so bleibt, misst jede Statusabfrage einen Bestand, den
+der Code längst überholt hat — und die TESTBEREIT-Kriterien 2 und 3 bleiben unerfüllbar.
