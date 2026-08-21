@@ -831,3 +831,77 @@ Kennungen als „nicht getroffen". Ursache war nicht der Bestand, sondern `sed '
 BSD-sed auf macOS ist `\?` kein Optional-Quantor, das Präfix blieb stehen und verglich
 `auftrag: "A-01` gegen das Muster. Mit `-E` neu gefahren. Eine Messung, in der *alles* auffällig
 ist, ist fast immer das Werkzeug.
+
+---
+
+# E16 · Meine eigenen Zeiger sind gewandert — gefunden bei der dritten Gegenprobe, BEHOBEN
+
+Die Gegenprobe zu Posten 1 (§6 Test-DB) hat den Posten nicht erschüttert, aber einen Fehler an
+**meiner eigenen Belegzeile** aufgedeckt. Nach der Stopp-Regel steht er hier vor dem Ergebnis.
+
+## Beide Zeiger zeigen ins Falsche, einer ins Leere
+
+E6 zitiert `ARBEITSREGELN.md:288` für den Satz *„Insbesondere dürfen Generator und Evaluator nicht
+gleichzeitig dieselbe `ticket_testing`-Datenbank verwenden"* und `:290` für `ENV_BLOCKED`.
+
+| Zeiger | Stand 16.08. (`d11deee9`) | heute |
+|---|---|---|
+| `:288` Test-DB-Satz | **trägt ihn wörtlich** | **leer** — steht heute auf `:302` |
+| `:290` ENV_BLOCKED | **trägt ihn wörtlich** | Kommentar — steht heute auf `:304` |
+
+**Glatter Versatz von 14 Zeilen, kein Streuungsbild.** Verschoben hat sie **`0f554dd9`**
+(20.08. 16:04, *„ARBEITSREGELN Fassung 1.7 eingearbeitet"*) — der **einzige** Commit an dieser
+Datei seit meinem Eintrag. Meine Zeiger waren wahr, als ich sie schrieb, und hielten **vier Tage**.
+
+**Der Zeiger `:288` ist der gefährlichere**, obwohl er der harmlosere aussieht: Er zeigt heute auf
+eine **leere Zeile**. Ein Zeiger auf etwas Falsches weckt Verdacht; ein Zeiger ins Leere sieht aus
+wie ein Formatierungsfehler. *Berichtigt: `:288` → `:302`, `:290` → `:304`.*
+
+Das ist dieselbe Klasse, die ich in fremden Blättern gemessen habe, an mir selbst. Und die Lehre
+ist nicht „sorgfältiger zeigen", sondern: **eine Zeilennummer ist ein Beleg mit Verfallsdatum.**
+Wo der Text eindeutig ist, gehört er zitiert und die Nummer daneben — dann findet die nächste
+Messung die Stelle auch nach einem Einschub.
+
+# GEGENPROBE 3 — Posten 1 (§6 Test-DB) hält in der Sache, ist aber schmaler als gedacht
+
+## Was hält
+
+**Alle sechs Bäume erzwingen denselben Datenbanknamen**, je selbst geöffnet:
+
+```
+ticket · ticket-rolle-planner · ticket-rolle-plan-pruefer
+ticket-rolle-generator · ticket-rolle-evaluator · ticket-release-pruefung
+    → phpunit.xml   <env name="DB_DATABASE" value="ticket_testing" force="true"/>
+```
+
+Die E15-Frage *„gibt es das Verlangte vielleicht schon?"* habe ich diesmal **zuerst** gestellt:
+Es gibt genau **eine** `phpunit.xml` je Baum, keine baumeigene Alternativkonfiguration, und
+`.env.testing` sagt mit `DB_DATABASE=ticket_testing` dasselbe. Eine bestehende Trennung, die ich
+übersehen hätte, gibt es nicht.
+
+## Was schmaler ist, als mein Posten klingt
+
+**Die Trennung fehlt — aber sie wirkt fast nie.** Der Satz verlangt, dass Generator und Evaluator
+nicht *gleichzeitig* dieselbe Datenbank benutzen. Gemessen: meine Prüfarbeit berührt die Datenbank
+praktisch nicht. Die Insel-Suite (`npm run test:hausplaner`, 1765 Tests) hat **0** Datenbank-Bezüge
+in `package.json`; die A-37-Abnahme umfasste 4 Shell-Skripte und keinen PHP-Test.
+
+**Der Posten bleibt also richtig und unverändert offen — aber er ist kein Hindernis, sondern eine
+schlafende Falle:** Er schlägt in dem Moment zu, in dem zwei Rollen zufällig gleichzeitig PHP-Tests
+fahren, und das Fehlerbild wäre dann ein sprunghaft fehlschlagender Test ohne erkennbare Ursache.
+Genau dafür gibt es `ENV_BLOCKED` (`:304`).
+
+**Ball unverändert beim Planner** — `phpunit.xml` ist gemeinsamer versionierter Code, dieselbe
+Einordnung wie bei `js-yaml` (A-37-21).
+
+## Bilanz der drei Gegenproben
+
+| Posten | Ergebnis der Gegenprobe |
+|---|---|
+| Bestandsprüfer für Ball-Drift | **gefallen** (E15) — `a26` hätte gegriffen, Belegzeile zurückgezogen |
+| `a26:53` Kennungsmuster | **entlastet** — acht echte Datensätze, aber `P-` begründet ausgeschlossen und die sieben übrigen ohne Ball |
+| §6 Test-DB-Trennung | **hält**, Wirkung gering; dabei **E16** an meiner eigenen Belegzeile gefunden |
+
+Zwei von drei Posten sind durch die Gegenprobe kleiner geworden, keiner größer. Das ist das
+Ergebnis, und es ist ein besseres als drei bestätigte Posten: **Ich habe vier Tage lang drei
+Punkte beim Planner geführt, von denen einer nicht trug.**
