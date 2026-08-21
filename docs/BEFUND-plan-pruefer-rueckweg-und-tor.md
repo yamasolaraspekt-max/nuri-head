@@ -17084,3 +17084,100 @@ die Kennwerte haben den Produktivcode nie erreicht.
 
 **Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
 und `:7881`, dazu der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
+
+---
+
+## §214 — Posten (d): der zugefahrene Hinweg ist nicht mein Einzelfall. Alle fünf Rollen hängen zurück, und ich am wenigsten — der Planner um 104 Commits
+
+**Messstand c4f2e049, Baum sauber, 0 neue Commits. Integrationszweig unverändert 7a82ecfb.
+`docs/STATUS.md` und die 89 Blätter an beiden Ständen unbewegt, kein Ball in meiner Bahn.
+Erhebung 21.08. 17:14–17:17.**
+
+Seit §200 melde ich in jeder Runde „mir fehlen 40 Commits" als **meine** Lage. Diese Runde misst, ob
+das stimmt — und es stimmt nur zur Hälfte.
+
+### 1. Die Zweigprobe misst einen Ort, an dem niemand arbeitet
+
+Die Wache verlangt in jedem Durchgang eine Zweigprobe per `ls-remote`. Sie ist richtig gemessen und
+sagt trotzdem nichts über die Arbeit:
+
+    Zweig                  auf dem Remote (live)              LOKAL                        Abstand
+    rolle/evaluator        171f9e60  16.08. 22:25  6890 Min   0d14bc0c  21.08. 14:19  176 Min   4 T 15 h
+    rolle/generator        171f9e60  16.08. 22:25  6890 Min   1407b9dd  21.08. 10:07  427 Min   4 T 12 h
+    rolle/planner          171f9e60  16.08. 22:25  6890 Min   03e9ac41  21.08. 10:04  430 Min   4 T 12 h
+    rolle/release-pruefer  839a8621  17.08. 02:46  6628 Min   03e9ac41  21.08. 10:04  430 Min   4 T  8 h
+    rolle/plan-pruefer     b43d26a7  16.08. 22:31  6883 Min   c4f2e049  21.08. 17:14    1 Min   4 T 18 h
+
+**Alle fünf Rollenzweige liegen auf dem Remote vier bis viereinhalb Tage zurück** — und alle vier
+fremden tragen dort ausgerechnet einen **plan-pruefer**-Commit als Spitze (`171f9e60`, `839a8621`,
+`b43d26a7`). Lokal dagegen hat der Evaluator vor **176 Minuten** gearbeitet.
+
+Das ist kein Messfehler der Zweigprobe, sondern ihre Grenze: **niemand pusht Rollenzweige.** Bei mir
+steht das ausdrücklich im Auftrag („KEIN PUSH"); offenbar gilt es für alle. Die Probe beantwortet
+zuverlässig die Frage „was liegt außerhalb der Maschine" — sie beantwortet **nicht** die Frage „wer hat
+zuletzt gearbeitet", und ich habe sie in den letzten Runden implizit so gelesen.
+
+### 2. Kein Rollenzweig hat unveröffentlichte Arbeit — der Rückweg funktioniert
+
+    Commits in rolle/<rolle>, die 7a82ecfb NICHT hat:
+        evaluator 0 · generator 0 · planner 0 · release-pruefer 0
+
+Alles, was die vier gebaut haben, ist im Integrationszweig angekommen. Der Transport **von** den Rollen
+**zur** Integration arbeitet. Das ist ein Positivbefund und die Gegenprobe zu §199, wo ich für meine
+eigenen Abschnitte das Gegenteil gemessen habe.
+
+### 3. Der Befund: der Rückstand ist die Regel, und ich bin der geringste Fall
+
+    Commits, die dem Rollenzweig von 7a82ecfb FEHLEN:
+
+        rolle/planner            104
+        rolle/release-pruefer    104
+        rolle/generator          103
+        rolle/evaluator          100
+        rolle/plan-pruefer        40      <- mein Zweig
+
+**Der Planner arbeitet auf einem Stand, dem 104 Commits fehlen. Ich habe seit §200 meine 40 gemeldet,
+als wäre es mein Sonderfall — tatsächlich bin ich der Zweig mit dem kleinsten Rückstand.**
+
+Das ordnet mehrere frühere Befunde neu ein, ohne sie zu entwerten:
+
+* §201 — vier verlorene Belege in A-20: der Planner sieht die Bewegung nicht, die sie verschoben hat.
+* §201/§209 — 66 tote Ballfelder und ein Blattfeld, das eine erledigte DoR als offen führt: wer 104
+  Commits zurückliegt, liest genau solche Felder als gültig.
+* §211 — eine Zeigerberichtigung, die zwölf Stunden hielt: der Berichtigende sah den Commit nicht, der
+  sie brach.
+
+**Ich melde das nicht als Schuld.** Es ist eine Eigenschaft des Aufbaus: fünf Worktrees, fünf Zweige,
+ein gemeinsamer Integrationszweig, und nur eine Rolle mit Schreibrecht auf ihn. Wer nicht nachzieht,
+misst einen Stand von gestern — und `ARBEITSREGELN.md` sagt das unter *NACHZIEHEN VOR DEM ARBEITEN*
+bereits, für einen Vorfall vom 16.08.
+
+### 4. Was daraus für meine eigenen Zahlen folgt
+
+Zwei meiner stehenden Formulierungen waren zu eng:
+
+1. *„mir fehlen 40 Commits"* — richtig, aber es ist die **kleinste** der fünf Zahlen, nicht die
+   auffällige. Ab hier nenne ich sie im Verhältnis.
+2. *„Integrationszweig unverändert 7a82ecfb (live)"* — richtig gemessen, aber die Zweigprobe belegt
+   nur den Remote-Stand. Dass der lokale Integrationszweig seit 164 Minuten steht, ist die Zahl, die
+   zählt, und die stammt aus dem Commit-Datum, nicht aus `ls-remote`.
+
+### 5. Eine Beobachtung ohne Befund, weil ich sie nicht bewerten kann
+
+`git worktree list` zeigt **16 Arbeitsbäume** auf dieser Maschine, darunter vier in `detached HEAD`
+und zwei unter `/private/tmp/…/scratchpad/` einer fremden Sitzungskennung
+(`303cefb6-…`), beide auf `f374c73a`. Ob das Reste sind oder laufende Arbeit, kann ich von hier nicht
+entscheiden — ein Arbeitsbaum ist nach der Haltbarkeitsregel **flüchtig**, und ich habe keinen
+Zeitstempel seiner Benutzung, nur den seines Commits. **Ich melde es als Beobachtung, nicht als
+Befund**, und rechne nichts daran hoch.
+
+### Ball
+
+**Beim Integrator**, unverändert und jetzt mit dem Verhältnis dahinter: der Hinweg ist bei **allen
+fünf** Rollen zu, mit 40 bis 104 fehlenden Commits. Dazu die zwei offenen Fences in
+`docs/STATUS.md:3220` und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block
+ab `:2397` (§210).
+
+**Kein Ball beim Planner aus dieser Runde** — aber die Zahl gehört ihm zur Kenntnis: sein Zweig ist der
+am weitesten zurückliegende, und drei meiner Befunde aus §201, §209 und §211 lassen sich damit
+erklären, ohne dass jemand nachlässig gewesen wäre.
