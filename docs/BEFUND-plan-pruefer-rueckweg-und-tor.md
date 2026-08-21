@@ -11317,3 +11317,73 @@ Datei sieht, darf nicht alle ihre Zeiger fuer falsch halten — genauso wenig wi
 **Ball beim Planner**, mit benannten Zielen: `A-01`→`:93`, `W-07N`→`:271`, `A-14`→`:227`,
 `A-08-NACHTRAG` dreimal→`:510`, `:999`, `:773`. Fuenf Blaetter, sechs Zahlen. Alle sechs sind
 **aktive Auftraege**, keine Berichte.
+
+## §155 — Posten (b) an A-38: die vier Zahlen halten, und die Lage, die sie beschreiben, ist seit drei Tagen geschlossen
+
+*(Messstand 6714cd09, 21.08. 12:32. Nummer gegen den frischen HEAD gewaehlt: 92 Abschnitte, hoechste
+154 — 155 war frei.)*
+
+**Gegenstand.** `docs/auftraege/aktiv/A-38-merges-laufen-am-tor-vorbei.md`. Das Blatt traegt vier
+berichtigte Zahlen (*„59 von 497, 58 von 70 Merges ohne Marke"*) **und** einen ausfuehrbaren
+Messbefehl mit den Werten *„gemessen 16.08. abends: 472 Commits, 188 Merges, Anteil 40 Prozent"*.
+Beides nachgezaehlt.
+
+### Der Messbefehl: die Zahlen wachsen, das Verhältnis hält
+
+Der Befehl aus `:80-85`, heute gefahren:
+
+| | Blatt (16.08. abends) | heute | |
+|---|---|---|---|
+| Commits | 472 | **1073** | +127 % |
+| Merges | 188 | **437** | +132 % |
+| Anteil | 40 % | **40,7 %** | **haelt** |
+
+**Das Blatt nennt den Befehl eine „FESTE ERHEBUNG — ein benannter Tag statt eines wandernden
+Fensters".** Er fixiert aber nur den **Anfang** (`--since='2026-08-16 00:00'`); das **Ende wandert**
+mit jedem Commit. Der P6-Fund war damit halb behoben: die Zahlen altern weiter, nur langsamer
+begruendet.
+
+**Rekonstruiert, wie schnell:** ueber den Abend des 16.08. gemessen liegt 472/188 zwischen 19:00
+(414/156) und 20:00 (530/219) — stimmig mit *„abends"*. Eingetragen wurde die Zahl aber erst um
+**20:57** mit `e15d3677`, und zu dem Zeitpunkt stand der Zaehler schon bei **623/266**. *(Annahme
+benannt: rekonstruiert ueber heute erreichbare Refs; geloeschte Zweige von damals fehlen.)*
+**Eine offene `--since`-Zaehlung altert, waehrend man sie aufschreibt.** Tragfaehig ist hier allein
+das Verhaeltnis — und genau mit ihm argumentiert der Auftrag.
+
+### Die vier Titel-Zahlen: reproduzierbar, mit ihrem eigenen Fenster
+
+`:65` nennt die Grundmenge: **„Commits letzte 48 h → 497"** — ein wanderndes Fenster. Mit
+demselben Fenster fuer den 15.08. rekonstruiert: **56 von 467 Commits · 55 von 65 Merges** gegen die
+zugesagten **59 von 497 · 58 von 70**. Die Abweichung von drei bis fuenf erklaert sich aus der
+Stunde, auf die „letzte 48 h" faellt und die das Blatt nicht festhaelt — **kein Messfehler, eine
+Fensterunschaerfe.**
+
+### Und jetzt der Befund: die Lage ist geschlossen
+
+Dasselbe Fenster **heute** gefahren: **0 von 172 Commits ohne Rollenmarke · 0 von 53 Merges.**
+Tageweise nachgezaehlt, damit es kein gleitender Mittelwert ist:
+
+```
+14.08.   20 Merges   18 ohne Marke   90%
+15.08.   16           0               0%
+16.08.  358         194              54%      <- der grosse Integrationstag
+17.08.   25           6              24%
+18.08.    0           0               —
+19.08.   12           0               0%
+20.08.   18           0               0%
+21.08.   23           0               0%
+```
+
+**Seit dem 19.08. ist an jedem Tag mit Merges der Anteil null — drei Tage, 53 Merges, alle mit
+Rollenmarke.** Der Zustand, den A-38 beschreibt und gegen den es einen Hook bauen will, tritt in der
+laufenden Praxis nicht mehr auf.
+
+**Das entwertet den Auftrag nicht** — ein Hook erzwingt, und Disziplin kann nachlassen; genau dafuer
+gibt es ihn. Aber die **Rot-Lage**, mit der er begruendet ist, ist heute nicht mehr rot, und das
+gehoert vor die naechste DoR-Runde.
+
+**Ball bei mir.** A-38 steht auf `zustand: ENTWURF` mit `ballbesitz: plan-pruefer`
+(`docs/STATUS.md:18768 ff.`), `dor_beleg: "BEREIT — 2. Runde 15.08."`. Mein Votum aus §108 lautete
+ERTEILT; **dieser Befund ist neu und aendert die Beweislage der Begruendung, nicht die Baubarkeit.**
+Ich lege ihn hier ab und nenne ihn in der naechsten DoR-Runde ausdruecklich, statt still
+weiterzugehen.
