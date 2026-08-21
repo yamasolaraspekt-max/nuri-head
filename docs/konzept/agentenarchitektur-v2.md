@@ -130,17 +130,28 @@ ticket-leases/<auftrag>/
 **Vergabe — robuste Reihenfolge (Crash-Kante Yama 21.08., dritte Runde; Z0-I2-Implementierungsregel,
 vom Plan-Prüfer mitzuprüfen):** *Naiv* wäre `mkdir active/` → dann `lease.yaml` schreiben; stürzt der
 Prozess dazwischen ab, existiert `active/` **ohne** `heartbeat_bis`, und keine Ablaufprüfung kann
-entscheiden, wann eine Übernahme erlaubt ist. Deshalb:
-1. Fencing Token unter `counter.lock/` erhöhen (Token ist damit verbraucht, ob die Vergabe gelingt
-   oder nicht);
-2. `active.tmp.<token>/lease.yaml` **vollständig** schreiben (inkl. `heartbeat_bis`, `fsync`);
-3. Verzeichnis **atomar** zu `active/` umbenennen (`rename(2)`, scheitert, wenn `active/` existiert);
-4. existiert `active/` bereits → Übernahme ablehnen; der verbrauchte Token verfällt einfach
-   (Monotonie bleibt, Lücken sind erlaubt);
-5. **Recovery-Regel:** `active.tmp.<token>/`-Verzeichnisse ohne erfolgreiches Rename sind
-   Abbruchreste — jeder Hook darf sie entfernen, wenn ihr Token kleiner als der aktuelle `counter`
-   ist **und** keine `lease.yaml` mit gültigem `heartbeat_bis` darin liegt; sie repräsentieren nie
-   ein Lease, `active/` ist die einzige Wahrheit.
+entscheiden, wann eine Übernahme erlaubt ist. *Ebenso naiv* wäre, die Sperre nur für den Zähler zu
+halten (Parallelrennen, Yama 21.08., vierte Runde): A erhöht auf 1 und löst, B erhöht auf 2 und löst,
+A benennt `tmp.1` erfolgreich nach `active/` um — A besitzt `active/` mit Token 1 < Counter 2, die
+Hooks lehnen A ab, B kann nicht umbenennen: ein gültig aussehendes, sofort veraltetes Lease.
+**Deshalb serialisiert `counter.lock/` den gesamten kurzen Vergabevorgang (Endfassung):**
+1. `counter.lock/` atomar anlegen (`mkdir`; scheitert → kurz warten, erneut; niemals wegräumen,
+   solange frisch);
+2. vorhandenes `active/` prüfen: `heartbeat_bis` gültig → Vergabe **ablehnen**; abgelaufen →
+   kontrolliert entfernen (nur hier, unter der Sperre);
+3. `counter` erhöhen und **dauerhaft** schreiben (`fsync`);
+4. `active.tmp.<token>/lease.yaml` **vollständig** schreiben (inkl. `heartbeat_bis`);
+5. Datei **und** temporäres Verzeichnis mit `fsync` sichern;
+6. **atomar und ohne Überschreiben** nach `active/` umbenennen (`rename(2)`, scheitert bei Existenz
+   → ablehnen, Token verfällt);
+7. Elternverzeichnis mit `fsync` sichern;
+8. **erst danach** `counter.lock/` lösen;
+9. Abbruchreste (`active.tmp.*` ohne erfolgreiches Rename) **ausschließlich unter dieser Sperre**
+   bereinigen; `active/` bleibt die einzige Wahrheit.
+Damit können zwei Bewerber weder den Gewinner veralten lassen noch gleichzeitig übernehmen; ein
+unter der Sperre abgestürzter Bewerber hinterlässt `counter.lock/` — sie gilt nach fester, kurzer
+Frist (Sekunden, nicht Minuten) als verwaist und darf vom nächsten Bewerber entfernt werden, weil
+unter ihr nie ein Lease entsteht, das nicht in `active/` sichtbar wäre.
 Übernahme nach Ablauf: `active/` darf nur entfernt werden, wenn `heartbeat_bis` verstrichen ist; der
 neue Bewerber erhält aus dem **dauerhaften** `counter` zwingend einen höheren Token — ein Token kann
 nach Löschung von `active/` nie wiederverwendet werden. **Ablehnung veralteter Token durch drei Hooks**: (1) `scripts/commit-pruefen.sh` vor jedem Commit (Lease
