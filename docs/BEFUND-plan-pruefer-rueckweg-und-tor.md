@@ -23259,3 +23259,109 @@ einem Weg dorthin, der ohne Zeiger und Zoom auskommt:
 Ich empfehle keine Umstellung, sondern die **Entscheidung** — eine Rundungsregel ist eine
 Fachfestlegung. Die Ratsche wäre ein Test mit einer Wand ungerader Länge und negativen Koordinaten;
 heute hat die Suite beides nicht.
+
+## §278 · A-42 gebaut: die Summengleichung geht auf, jede Inhaltszeile ist erhalten — und die Byte-Gleichheit hält, weil die Marken außerhalb des Zauns stehen
+
+**Messstand.** Mein HEAD `3fedf00b`, Baum sauber. Zweig bei Rundenbeginn `c41968f6`, vor dem
+Schreiben `53bcbe90`, Rückstand 8. **`docs/STATUS.md`, `docs/BEFUNDNOTIZEN.md` und das Umzugsskript
+sind zwischen `c41968f6` und `53bcbe90` unverändert** (numstat leer) — meine Zahlen gelten an beiden
+Ständen. Gemessen 21.08. 21:41–21:48.
+
+A-42 ist einer der vier aus §272; die DoR habe ich in §158 erteilt, und die **tragende Prüfung ist
+A-42-2, die Summengleichung**. Deshalb rechne ich sie selbst, statt den Bericht zu lesen.
+
+### 1 · Vier Proben, selbst gefahren
+
+**(1) Blocksumme.** Zäune einzugstreu gepaart, Stand vor dem Bau `34f6f5a9` gegen danach:
+
+    yaml-Bloecke vorher STATUS   461
+                 nachher STATUS  289
+                 NOTIZEN         172
+                 Summe           461      GEHT AUF
+
+Dazu **172 Herkunftszeilen** zu 172 Umzügen. Die Zahlen des Generators sind unabhängig bestätigt.
+
+**(2) Zog ein Auftragsdatensatz mit um?** Das wäre der schwere Fall — die Regel lautet: nur Blöcke
+**ohne** `zustand:`.
+
+    Bloecke MIT zustand-Feld in docs/BEFUNDNOTIZEN.md:  0
+
+**(3) Ist A-42s eigener Datensatz heil?** Der zweite Fehlschlag hatte einen Datensatz mitten
+durchgeschnitten, deshalb geprüft:
+
+    ein Block, docs/STATUS.md:18592-18624, Laenge 32, zustand@18593 — zusammenhaengend
+
+**(4) Zeilenbilanz als Multimenge** — die Probe, die im Blatt **nicht** verlangt war und die den
+ersten Fehlschlag gefunden hat. Jede Zeile vorher gegen jede Zeile nachher plus umgezogen:
+
+    echte Zeilen  vorher 28555 · nachher 19376 · umgezogen 9177  ->  Summe 28553
+      Inhaltszeilen die fehlen : 0
+      Zeilen die hinzukamen    : 0
+      Leerzeilen die fehlen    : 2
+
+**Keine einzige Inhaltszeile ist verloren.** Die zwei Leerzeilen sind vollständig abgerechnet:
+`docs/STATUS.md` verliert 174 Leerzeilen (1791 → 1617), die Zieldatei schreibt 172 (je eine vor
+jedem Block, Skript `:280`). Differenz 2 — Trennweiß zwischen zwei benachbarten Blöcken, kein
+Inhalt.
+
+### 2 · Die Byte-Gleichheit: erst schien sie widerlegt, dann hielt sie
+
+Meine erste Zeilenbilanz meldete **92 Zeilen zu viel**:
+
+    79x  kennung_nicht_zuordenbar: true   # Freitext statt Kennung …
+    13x  kennung_unbekannt: true          # K3 — Kennung ohne Auftragsdatensatz …
+
+Beide kommen in `docs/STATUS.md` **null** mal vor. Die Zieldatei sagt aber im Kopf
+(`docs/BEFUNDNOTIZEN.md:13`): *„Nichts wurde geloescht, gekuerzt oder umformuliert. Jeder Block
+steht hier byte-identisch."* Das sah nach einem Widerspruch aus.
+
+**Er ist keiner, und zwar aus einem messbaren Grund.** Das Skript setzt die Marke **außerhalb des
+Zauns** (`scripts/a42-befundnotizen-umzug.py:279-283`):
+
+    herkunft: docs/STATUS.md · Block 356 · 34f6f5a9
+    kennung_unbekannt: true   # K3 — …
+    ```yaml            <- erst hier beginnt der Block
+    auftrag: "BERICHTIGUNG-W-17-1-TAFELZEILE"
+
+Der Blockinhalt `e['inhalt']` ist unberührt; A-42-3 hasht genau ihn. **Am Rohtext der Zieldatei
+nachgesehen, nicht aus dem Skript geschlossen.** Und der Generator hat die 92 gemeldet — Botschaft
+Zeile 68: *„79 Freitext markiert, 13 Kennung ohne Datensatz"*, exakt meine Zahlen.
+
+**Mein Fehler lag in der Grundmenge:** Ich hatte die 172 Herkunftszeilen aus dem Vergleich genommen,
+die 92 Markenzeilen aber nicht — obwohl beide dieselbe Sache sind, nämlich Beiwerk außerhalb des
+Blocks. Die Frage lautete „ist der Blockinhalt erhalten", gemessen habe ich „ist die Datei
+zeilengleich".
+
+### 3 · Fremder Befund, zitiert statt nachgebaut
+
+`5ef6b274` (release-pruefer): *„Die Datei mit 172 Befundnotizen hat keinen Schreibschutz und laeuft
+durch kein Tor … 32 Prozent der Zeilen und 29 Prozent der Zaeune liegen ausserhalb meiner
+Messung."* Das ist sein Befund, nicht meiner; ich habe ihn nicht nachgemessen und melde ihn nicht
+als eigenen. Seine Zuordnung teile ich ausdrücklich: *„Ich werfe dem Bau nichts vor … Der Befund
+liegt beim Zuschnitt, nicht bei der Ausfuehrung."* A-42 hatte zwölf Kriterien, und **keines nannte
+das Tor** — auch meine DoR in §158 hat es nicht verlangt.
+
+**Eine Zahl darin habe ich frisch gemessen**, wie es die Vorlagenregel verlangt: Er nennt
+*„STATUS.md -9241"*. Gemessen sind **9210 entfernte und 31 eingefügte Zeilen**, netto
+**−9179** (28555 → 19376). 9210 + 31 = 9241 — die Zahl ist der **Änderungsumfang**, nicht die
+Entfernung. Am Ergebnis ändert das nichts, seine Aussage „nichts verloren" trägt; ich nenne es, weil
+die Zahl sonst als Verlustmenge weitergereicht wird.
+
+### 4 · Ball
+
+**Von meiner Seite ist A-42s Umzug in Ordnung.** Die tragende Prüfung geht auf, kein Auftragsdatensatz
+ist mitgewandert, keine Inhaltszeile fehlt, die Byte-Gleichheit hält. Ich spreche kein Abnahme-Votum
+aus — das ist der Evaluator.
+
+**Planner** — der Zuschnitt-Befund des Release-Prüfers (Schreibschutz der Zieldatei) liegt bei Ihnen;
+er nennt zwei Wege und verlangt ausdrücklich eine Entscheidung, auch wenn sie „bewusst offen" lautet.
+Dazu unverändert `…w0-11-ids-callback-csrf.md:22` (§276) und die Rundungsfrage (§277).
+
+**In eigener Sache:** Meine DoR zu A-42 (§158) hat zwölf Kriterien geprüft und keines davon fragte
+nach dem Tor der **Zieldatei**. Der Umzug schafft eine neue Datei mit 172 Belegen — dass eine neu
+geschaffene Datei denselben Schutz braucht wie die, aus der sie stammt, ist eine Frage, die eine DoR
+stellen kann. Ich nehme sie in meine Prüfliste auf: **schafft der Auftrag einen neuen Ort für
+Wahrheit, dann gehört die Frage nach seinem Schutz in die Kriterien.**
+
+**Nicht geprüft:** der Scope-Diff des Baus gegen A-42s zwölf Kriterien im Einzelnen — das ist die
+Abnahme und liegt beim Evaluator.
