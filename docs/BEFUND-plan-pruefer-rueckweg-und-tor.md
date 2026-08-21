@@ -22677,3 +22677,137 @@ Ball und Tafelzeile ist Transport, kein Votum.
 **Nicht geprüft:** ob sich A-40s drei Restpunkte seit §159 bewegt haben, und ob die vier in
 `9d76f698` als erledigt gemeldeten Restpunkte tragen. Beides ist der nächste (e)-Posten. Ich melde
 hier den Ballstand, nicht die Restpunkte neu.
+
+## §273 · Posten (e): meine Empfehlung aus §264 ist zu zwei Dritteln befolgt — und die Fußnote erklärt den einen Satz für falsch, der wahr ist
+
+**Messstand.** Runde begonnen an `fde08c7e`; **mein HEAD bewegte sich während der Messung** auf
+`dec226c4`, weil `86e1e801` (21:10) meinen eigenen Commit über den Rückweg zurückbrachte —
+`fde08c7e` ist Vorfahr, §272 unversehrt (22679 Z.), kein Verlust. Zweig `2414430d`, Rückstand 1.
+Gemessen 21.08. 21:08–21:15. **Vier Dateien haben sich unter mir geändert**
+(routes/api.php 5+/2-, fix-ledger.md 28+/1-, 01-repository-inventory.md 9+/2-, STATUS.md 2+/0-);
+jede Zahl unten nennt deshalb ihren Stand.
+
+**Angekommen** (zitiert, nicht nachgebaut): `cb771cbf` Z2-W0-10 gebaut · `b9fe55c0` Votum Z1-W1-3
+**ABGENOMMEN**, fünf von fünf · `ad340caf` *„Das Buendel gebaut — die zehn Quellcommits seit dem
+15.08. erreichen jetzt den Browser"* · `d40adbf5` Z1-W1-1 Kriterium C **ENV_BLOCKED**.
+
+**Siebter Bau aus meinen zwölf Voten** — und die Zahl ist der erste Fund der Runde, s. Abschnitt 4.
+
+### 1 · Was §264 empfohlen hat, und was daraus wurde
+
+§264 hat Kriterium E von Z2-W0-10 geprüft und ausdrücklich gewarnt:
+
+> *„Bei Kriterium E empfehle ich, die Berichtigung zu **trennen** — `fix-ledger.md:122` ist wörtlich
+> richtig und braucht nur den Zusatz ‚Auth im Controller'; falsch ist allein
+> `01-repository-inventory.md:558` (‚ungeschützt'). **Beides in einem Zug zu ‚berichtigen' würde
+> einen korrekten Eintrag als falsch markieren.**"*
+
+Der Bau `cb771cbf` hat davon **zwei Teile befolgt und einen nicht**:
+
+| Ort | Behandlung | Urteil |
+|---|---|---|
+| `01-repository-inventory.md:558` | durchgestrichen, Berichtigung angehängt | **richtig** — dieser Satz *war* falsch |
+| Tabellenzeile in `01-repository-inventory.md` | Berichtigungsblock mit `authApi()`, 401/200 | **richtig** |
+| `fix-ledger.md:122` — **Wortlaut** | **unverändert stehen geblieben**, nur `⬜` → `✅¹` | **richtig**, Rückfall-Regel gewahrt |
+| `fix-ledger.md:143` — **Fußnote** | *„Nr. 116 — der **Befundtext ist falsch**, das Ergebnis stimmt trotzdem"* | **falsch** |
+
+### 2 · Warum die Fußnote nicht trägt — zweifach gemessen
+
+Der Befundtext lautet: *„api/secure/master-sets fehlt Authentifizierungs**middleware** — nur
+Thrott[le]"* (`docs/software-audit/fix-ledger.md:122`, 145 Zeichen; die Zelle bricht im Original
+mitten im Wort ab, das ist ein alter Mangel und nicht aus diesem Bau).
+
+**Erste Messung, Routenebene** am Stand `fde08c7e`, also vor dem Bau:
+
+    routes/api.php:208   ->middleware('throttle:60,1')     Gruppe index + show
+    routes/api.php:219   ->middleware('throttle:60,1')     debug, ausserhalb der Gruppe
+
+**Zweite Messung, Gruppenebene** — eine Auth-Middleware könnte auch global hängen:
+
+    app/Http/Kernel.php:47-51   'api' => [ EnsureFrontendRequestsAreStateful, 'throttle:api',
+                                           SubstituteBindings ]
+
+Keine Authentifizierung, an keiner der beiden Ebenen. **Der Befundtext ist wahr.** Er war es, als er
+geschrieben wurde, und er blieb es bis zum Bau. Die Fußnote erklärt ihn für falsch — genau der
+Vorgang, den §264 als Folge benannt hatte.
+
+**Falsch war nicht der Text, sondern die Einstufung.** Die Zeile trägt `security | hoch`, und diese
+Stufe ruht auf der stillen Folgerung „keine Middleware, also ungeschützt". Die richtige Berichtigung
+lautet deshalb: *Text bleibt, Einstufung fällt, Grund ist die Prüfung im Controller.*
+
+### 3 · Die Substanz des Generators hält — unabhängig nachgemessen
+
+Ich nehme die Korrektur nicht auf sein Wort. Gemessen über den **Funktionsnamen**, nicht über die
+Datei, am Stand `fde08c7e`:
+
+    MasterSetApiController.php:26    private function authApi(...): array
+    MasterSetApiController.php:44-55 hash_equals gegen MASTER_SET_API_USER/-PASSWORD -> 401
+    oeffentliche Methoden  :88 index   :239 show   :303 debug
+    authApi aufgerufen bei :90        :241       :305        (je erste Anweisung)
+    Ergebnis geehrt bei    :92        :243       :307        if (!$auth['ok']) return
+
+Drei Methoden, drei Aufrufe, drei Abweisungen — **die Kette ist geschlossen**, und `hash_equals`
+macht den Vergleich laufzeitkonstant. Die Schnittstelle war **nie offen**. Der Generator hat recht
+in der Sache; er hat nur den falschen Satz für den falschen erklärt.
+
+Am HEAD `dec226c4` tragen alle drei Routen zusätzlich `EnsureMasterSetApiAktiv`
+(`routes/api.php:211` und `:222`) — die Stilllegung ist gebaut.
+
+### 4 · P-03, die zweite Seite der Ballortung: 74 gegen 5
+
+Die Vorschrift verlangt die Ballortung **zweiseitig**. Ich habe die zweite Seite bisher nie
+ausgezählt. Sie sagt etwas anderes als die erste:
+
+    Statuswahrheit, Bloecke MIT zustand, Ball bei mir :   5
+    Blaetter in docs/auftraege/aktiv/, Ball bei mir   :  74     (Kennung je aus dem Feld auftrag:)
+
+**Die 74 sind kein Rückstand.** Zustandsfilter über die Kennung, Stand `38dc8ae0`:
+
+    69 der 74 haben einen zustand-Block
+       63  BETRIEBSBESTAETIGT
+        4  ENTWURF          (A-38, A-39, A-40, A-42 — dieselben vier wie in §272)
+        1  ABGENOMMEN
+        1  ZURUECKGEZOGEN
+     5 ohne Block: A-17 · A-18 · A-37 · W-15/1 · W-27
+
+**63 von 69 zeigen auf mich für Aufträge, die betriebsbestätigt sind.** Stichprobe A-25: das Blatt
+sagt `ballbesitz: "plan-pruefer (DoR)"`, der Datensatz sagt `BETRIEBSBESTAETIGT`.
+
+**Der Grund steht im Feld selbst.** 29 Blätter schreiben `ballbesitz: "plan-pruefer (DoR), danach
+generator"`. **Ein Ballort kann keinen Nachfolger nennen.** Das Feld ist eine *Rollenfolge*, beim
+Schnitt des Blattes aufgeschrieben, und keine Ortsangabe. Es ist nie falsch geworden, weil es nie
+eine Aussage über das Jetzt war.
+
+**Folge für P-03:** Die beiden Seiten messen verschiedene Größen und dürfen weder addiert noch
+gegeneinander gehalten werden. Die Statuswahrheit trägt den *Ort*, das Blatt den *Weg*. Wer sie
+vergleicht, findet 69 Widersprüche, von denen keiner einer ist. Ich melde die Blattseite ab hier als
+**Rollenfolge**, nicht als Ballstand.
+
+### 5 · Vier eigene Messfehler dieser Runde, alle vor der Meldung gefangen
+
+1. Die awk-Zuordnung „öffentliche Methode → ruft sie authApi" lief **ohne jede Ausgabe** durch. Ich
+   habe sie als ausgefallen gemeldet und über die Rohtreffer neu gemessen, statt das Schweigen als
+   „keine Treffer" zu lesen.
+2. Ein Sentinel `X` aus meinem eigenen awk **leckte in die Kennungsliste** und erschien als Auftrag.
+   74 wären als 75 gemeldet worden.
+3. `sed 's/…"\?//'` — **BSD-sed kennt `\?` nicht**; die Kennungen kamen als `auftrag: A-09` heraus
+   und die Verknüpfung fand null Paare. Portabel neu, danach Probe am bekannten Treffer A-25.
+4. **Grundmenge gegen die Frage geprüft, und sie hielt nicht:** mein Muster verlangte
+   `Z2-W0-N gebaut`, aber `10c05d8b` schreibt *„Z2-W0-1 **ist** gebaut"*. Gemeldet hätte ich
+   **sechs** Baue; es sind **sieben**. Der Fehler wäre in eine Vorlage an Yama gewandert.
+
+### 6 · Ball
+
+**Planner/Dirigent** — eine Zeile, `docs/software-audit/fix-ledger.md:143`:
+
+    ist:  "Nr. 116 — der Befundtext ist falsch, das Ergebnis stimmt trotzdem"
+    soll: Text bleibt richtig (keine Auth-Middleware, gemessen an Route und api-Gruppe);
+          falsch war die Einstufung security/hoch, weil die Pruefung im Controller sitzt.
+
+Das ist keine Wortklauberei: Der Ledger ist die Liste, an der später abgehakt wird. Ein als falsch
+markierter richtiger Eintrag ist beim nächsten Durchgang ein Eintrag, den niemand mehr prüft.
+
+**Integrator**: die acht Felder aus §272 stehen unverändert.
+
+**Nicht geprüft:** die fünf Blätter ohne Block (A-17, A-18, A-37, W-15/1, W-27) — nächster Posten.
+Ob A-40s Restpunkte sich bewegt haben, steht weiter aus.
