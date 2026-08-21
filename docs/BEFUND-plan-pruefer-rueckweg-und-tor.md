@@ -9476,3 +9476,69 @@ der Auftrag beim **dachdeckermeister** vorgesehen, nicht bei mir.
 Ein Hinweis an den Bauenden: `Z1-W1-2` und `Z1-W1-3` fassen dieselbe Datei an und sollen in dieser
 Reihenfolge laufen — und `Z1-W1-3` führt ausgerechnet die Flächenformel zusammen, deren siebenfache
 Fassung ich in §122 gemessen habe. Beide Aufträge berühren damit dasselbe Feld aus zwei Richtungen.
+
+## §127 — R-2 geprüft: der getestete Zwilling liegt auf dem toten Pfad, der benutzte nicht
+
+*(Nummer §127 gegen HEAD `2fe1c3d5` gewählt und hier benannt. Vierte und letzte Gegenprobe der
+Welle 1.)*
+
+Herkunft: **Befund R-2**, ausgeschnitten als `Z1-W1-4 · dachWerte: eine Quelle, Stilllegung statt
+Löschung`, Entscheidung `Y-2 ENTSCHIEDEN 21.08. — NICHT löschen; Stilllegungsvermerk`.
+
+### Was trifft
+
+```
+  geometry/dachWerte.ts   103 Z. · 4188 B
+  utils/dachWerte.ts      103 Z. · 4188 B
+  cmp                     IDENTISCH
+
+  dachGeometrie.ts:13     import { sichererCos } from '../../utils/dachWerte';
+  dachformVorlagen.ts:34  import { sichererCos, cmZuMFloor, DACH_FLOOR_CM } from './dachWerte';
+  dachWerte.test.ts:12    } from "../geometry/dachWerte";
+
+  00bfed2b  18.07. 15:19  "Hausplaner-Heimat nach ticket: komplette TS-Quelle …"
+  588283df  23.07. 12:03  "W-1: Dach-Werte + Verschneidung (dachWerte/dachVerschneidung/…"
+```
+
+Byte-Identität, beide Verbraucher, der Test und beide Entstehungs-Commits — **alles wörtlich
+bestätigt**, inklusive der Daten und Betreffzeilen.
+
+*Eine Zahl um eins:* Der Beleg nennt „104 Z."; ich messe **103**, mit `wc -l` und `awk` gleich, und
+die Datei endet mit Zeilenumbruch. Die Byte-Zahl (4188) stimmt dagegen exakt — die Identitätsaussage
+ist unberührt, es geht nur um die Beschriftung.
+
+### Der Kern, den der Beleg benennt und der die Gegenprobe bestätigt
+
+```
+  dachGeometrie.ts      erreichbar JA     ->  importiert die utils-Kopie      ->  KEIN Test
+  dachformVorlagen.ts   erreichbar NEIN   ->  importiert die geometry-Kopie   ->  getestet
+```
+
+**Der Test deckt den Zwilling, den niemand benutzt; benutzt wird der, den kein Test deckt.** Eine
+Änderung an `utils/dachWerte.ts` fiele heute nirgends auf — nicht weil ein Test fehlt, sondern weil
+er auf die andere Datei zeigt.
+
+Das ist **dieselbe Bauform wie §122**: dort ist die einzige geschützte Fassung der Flächenformel die
+unerreichbare, hier ist die einzige getestete Fassung der Dach-Werte die unbenutzte. Zweimal
+unabhängig gemessen, zweimal dieselbe Richtung — **die Prüfung sitzt auf dem toten Pfad.**
+
+### Damit ist die Welle-1-Gegenprobe vollständig
+
+| Auftrag | Befund | Gegenprobe |
+|---|---|---|
+| `Z1-W1-1` DIN-Badge | K-4 | §124 — 4/4 Zeiger, Wirkweg ergänzt (`:97`→`:112`) |
+| `Z1-W1-2` Walmdach | P-1 | §126 — 3/3 Zeiger, beide Zahlen auf die Stelle nachgerechnet |
+| `Z1-W1-3` Shoelace | R-1 | §122 — bestätigt, sieben Fassungen gemessen |
+| `Z1-W1-4` dachWerte | R-2 | §127 — 4/4 Behauptungen, Inversion bestätigt |
+| `Z1-W1-5` insulationType | K-1 | §125 — 3/4 wörtlich, eine Zählfrage des Suchraums |
+
+**Fünf von fünf tragen.** Keine Fehlaussage gefunden; zwei Abweichungen sind Beschriftung
+(Zeilenzahl, Suchraum), eine ist Rundung (16,6 gegen 16,7). Das ist eine hohe Trefferquote für
+Befunde, die aus einer Inventur stammen und nicht aus einer Einzelmessung.
+
+Was die Gegenprobe **hinzugefügt** hat, steht in den vier Abschnitten: der Wirkweg beim Badge, die
+sieben Formelfassungen, das ungenannte Nachbarfeld `insulationThickness`, die Graphfolge der
+`walmIstKonsistent`-Auflage, und hier die Test-Inversion.
+
+Ball bleibt bei **Generator** (Bau) und **Evaluator** (Abnahme). Keine dieser fünf Sachen liegt bei
+mir; **bei Yama** liegen die Gates `Y-3` (Dämmung) und die Regelkollision aus §123.
