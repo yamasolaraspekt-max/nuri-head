@@ -208,9 +208,13 @@ case "$STAMM" in
   generator)       SOLL_VERZ="ticket-rolle-generator";    SOLL_ZWEIG="rolle/generator" ;;
   evaluator)       SOLL_VERZ="ticket-rolle-evaluator";    SOLL_ZWEIG="rolle/evaluator" ;;
   release-pruefer) SOLL_VERZ="ticket-rolle-release";      SOLL_ZWEIG="rolle/release-pruefer" ;;
+  # dirigent: siebter Eintrag, 21.08. (Gesamtauftrag v2 Phase 0/2 — nur der Integrator schreibt im
+  # Integrationscheckout; der Dirigent verlaesst ihn in einen eigenen Worktree). Additiv, dieselbe
+  # Zuordnungsform wie die sechs davor; Vollmacht docs/regelwerk/VOLLMACHT-DIRIGENT.md.
+  dirigent)        SOLL_VERZ="ticket-rolle-dirigent";     SOLL_ZWEIG="rolle/dirigent" ;;
   *)
     echo "ROLLEN-TOR  unbekannte Rolle '$ROLLE' (Stamm '$STAMM') — die Tabelle kennt sie nicht." >&2
-    echo "            Bekannt: integrator planner plan-pruefer generator evaluator release-pruefer" >&2
+    echo "            Bekannt: integrator planner plan-pruefer generator evaluator release-pruefer dirigent" >&2
     [ "$NUR_MELDEN" = "1" ] && exit 0
     exit 1 ;;
 esac
