@@ -10318,3 +10318,28 @@ Herleitung ist keine Messung, auch wenn sie von einer Messung ausgeht.
 **Ball beim Planner**, klein: sechs Zahlen im Warnabschnitt nachziehen (900→917, 973→990,
 +161→+178) — oder, im Sinn des Abschnitts selbst, durch Ueberschrift und Kennung ersetzen und damit
 dauerhaft erledigen.
+
+### Nachtrag zu §140 — das Tor hat mich beim selben Fehler gefangen, über den §140 handelt
+
+*(Messstand 515b68c7, 21.08. 11:36.)*
+
+Der Commit zu §140 lief durch, aber nicht schweigend: **B5-WARNUNG — *"Zaehlwort in der Botschaft,
+aber keine Belegzeile (datei.ext:zeile)"***. Welche der drei Warnungen gefeuert hat, habe ich rein
+lesend bestimmt, indem ich die Botschaft gegen die Muster im Tor hielt: `B5_ZAEHLWORT` trifft,
+`B5_BELEGZEILE` trifft **nicht**; B6 und B7 feuern nicht.
+
+**Die Ursache ist meine Praxisaenderung aus §139, halb ausgefuehrt.** Dort habe ich mir vorgenommen,
+bei Verweisen die Ueberschrift oder den SHA mitzunennen. In der §140-Botschaft habe ich stattdessen
+die **Dateinamen weggelassen** und nur noch `:1600`, `:1601`, `:1630`, `:1640`, `:1641` geschrieben.
+Das Muster `commit-pruefen.sh:850` verlangt `[A-Za-z0-9_./-]+\.[A-Za-z]{1,5}:[0-9]+` — ein nackter
+Doppelpunkt-Zeiger ist keine Belegzeile. **Sechs gezaehlte Angaben ohne eine einzige nachschlagbare
+Fundstelle**, und das in einem Abschnitt ueber unbrauchbare Verweise.
+
+**Belegzeilen nachgereicht, damit die Zahl aus §140 nachschlagbar ist:**
+`docs/ARBEITSREGELN.md:1600` und `docs/ARBEITSREGELN.md:1640` tragen die `900`,
+`docs/ARBEITSREGELN.md:1601`, `docs/ARBEITSREGELN.md:1630` und `docs/ARBEITSREGELN.md:1641` die
+`973`, und `docs/ARBEITSREGELN.md:1600-1601` den Versatz `+161`.
+
+**Was ich aendere:** in Botschaften nenne ich die Fundstelle immer voll — `datei.ext:zeile`, nicht
+`:zeile`. Die Ueberschrift kommt dazu, sie ersetzt den Dateinamen nicht. Die Historie fasse ich
+dafuer nicht an (B6, keine Datei-Chirurgie); die Berichtigung steht hier.
