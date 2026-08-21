@@ -708,3 +708,51 @@ bleibt, ohne Yama-Entscheidung anschließbar zu sein, sind **drei Module mit 181
 **Das ist ein unbequemes Ergebnis und es ist das gemessene.** Der Bestand ist nicht voller
 anschlussbereiter Rechnungen; er ist voller Rechnungen, die eine Entscheidung brauchen, die über
 einem Anschluss liegt.
+
+---
+
+# S-1/10 — die Typ-Kante hat einen Preis: 62.358 Bytes, gemessen
+
+*21.08. gegen `60c04eef`. In S-1/8 stand: `dachformVorlagen.ts` hängt an einer einzigen
+`import type`-Kante, und ob ein Wert-Import die 2.402 Zeilen ins Bündel zieht, sei „messbar, aber von
+niemandem geprüft". Der Auftrag Z1-W1-2 verlangte genau diesen Wert-Import. Also gemessen.*
+
+## Verfahren
+
+Zweimal gebaut, nur eine Datei verschieden, Artefakt danach wiederhergestellt:
+
+```
+npm run build:hausplaner   mit    `import { walmIstKonsistent } from './dachformVorlagen'`
+npm run build:hausplaner   ohne   (Vorzustand derselben Datei aus 60c04eef^)
+```
+
+## Ergebnis
+
+| | Bytes |
+|---|---|
+| ohne den Import | 1.453.590 |
+| **mit** dem Import | **1.515.948** |
+| **Differenz** | **+62.358** (+4,3 %) |
+
+**Das Tree-Shaking wirft die Bibliothek nicht weg.** Ein einziger Wert-Import auf eine ihrer
+kleinsten Funktionen — `walmIstKonsistent` sind drei Zeilen — zieht **61 KB** ins Bündel.
+
+## Was daraus folgt, und was nicht
+
+**Es ist kein Grund, den Bau zurückzunehmen.** Der Fehler, den Z1-W1-2 behebt, ist eine bis zu
+150 % zu große Fläche in PV-Ertrag und Heizlast; 61 KB sind dagegen billig. Die Auflage des
+Auftrags — *keine dritte Fassung der Regel bauen* — bleibt richtig.
+
+**Es ist ein Grund, die Frage aus S-1/8 jetzt zu entscheiden.** Bisher war „anschließen oder
+stilllegen" bei `dachformVorlagen.ts` eine Frage ohne Preisschild. Jetzt hat sie eines:
+
+- **Anschließen** heißt: die Bibliothek ist ohnehin im Bündel — dann sollten auch ihre
+  Regeldachneigungen und Warnungen benutzt werden, statt weiter 61 KB für drei Zeilen zu zahlen.
+- **Stilllegen** heißt: `walmIstKonsistent` gehört in ein kleines eigenes Modul, und die 61 KB
+  fallen weg.
+
+**Beides ist eine Planner-/Yama-Entscheidung, keine Messfrage.** Gemeldet, nicht entschieden.
+
+*(Nebenbei bestätigt: das eingecheckte Artefakt war vom 15.08. und damit sechs Tage älter als der
+Code — der Bau ohne meinen Import ergibt 1.453.590 Bytes gegen die eingecheckten 1.453.603. Die
+13 Bytes Unterschied stammen aus dem Code, der seit dem 15.08. dazukam, nicht aus meiner Änderung.)*
