@@ -23365,3 +23365,108 @@ Wahrheit, dann gehört die Frage nach seinem Schutz in die Kriterien.**
 
 **Nicht geprüft:** der Scope-Diff des Baus gegen A-42s zwölf Kriterien im Einzelnen — das ist die
 Abnahme und liegt beim Evaluator.
+
+## §279 · Mein eigener Ballortungs-Befehl misst nach A-42s Umzug 1 statt 36 — und dieselbe Bewegung hat die Dublettenfalle aus §272 beseitigt
+
+**Messstand.** Runde begonnen an `577e2b50` / Zweig `0f731c22`. **Vor dem Schreiben neu gemessen
+21:50: HEAD `ec78d757`, Zweig `97df7133`, Rückstand 2**, Baum sauber. Angekommen dabei `e9e6ee5b`
+(A-38 und A-42 auf CODE_FERTIG angesagt). **`docs/STATUS.md` und `docs/BEFUNDNOTIZEN.md` sind
+zwischen beiden Ständen unverändert** (numstat leer), und die Gegenprobe am neuesten Stand
+liefert dieselben Zahlen: 1 und 35. Gemessen 21.08. 21:47–21:55.
+
+### 1 · Die Wache nennt einen Pfad, und die Daten liegen jetzt in zweien
+
+Schritt 3 meiner stehenden Anweisung lautet wörtlich: *„Ballortung ZWEISEITIG (P-03):
+`grep -n '^ballbesitz: plan-pruefer' docs/STATUS.md` … **Dazu die Bälle in Blöcken OHNE
+zustand-Feld.**"* Genau diese Blöcke sind mit A-42 ausgezogen. Derselbe Befehl, drei Stände:
+
+    vor dem Umzug (34f6f5a9)   docs/STATUS.md         36
+    nach dem Umzug             docs/STATUS.md          1
+                               docs/BEFUNDNOTIZEN.md  35
+
+**Der vorgeschriebene Befehl findet noch ein Sechsunddreißigstel dessen, wofür er geschrieben
+wurde.** Er ist nicht falsch geworden — er zeigt auf eine Datei, die den gesuchten Gegenstand nicht
+mehr enthält. Klasse 4, diesmal nicht an einem Blatt, sondern an einer **Betriebsanweisung**.
+
+Der Teilsatz *„dazu die Bälle in Blöcken OHNE zustand-Feld"* ist dabei der Kern: In
+`docs/STATUS.md` gibt es diese Klasse nicht mehr, sie ist vollständig in der zweiten Datei.
+
+### 2 · In der Sache ist nichts verloren — und das ist messbar, nicht beruhigend gemeint
+
+    docs/STATUS.md          289 Bloecke · 104 mit zustand · 104 mit auftrag
+                            auftrag OHNE zustand:   0
+                            weder auftrag noch zustand: 185
+                            Ball bei mir: 1
+    docs/BEFUNDNOTIZEN.md   172 Bloecke ·   0 mit zustand · 172 mit auftrag
+                            auftrag OHNE zustand: 172
+                            Ball bei mir: 35
+
+Die 35 stehen ausnahmslos in Blöcken **ohne** Zustandsfeld — nach §271 ist das die **Rollenfolge**,
+kein Ballstand. Und der eine in `docs/STATUS.md` ist `P-02` mit `zustand: VORLAGE`
+(`docs/STATUS.md:18406-18409`), eine Prozessvorlage, kein Auftrag.
+
+**In der Statuswahrheit liegt damit kein einziger offener Vorgang auf meinem Namen.** Die vier aus
+§272 sind weitergewandert (§274), und nachgerückt ist nichts.
+
+### 3 · Der Umzug hat §271s Unterscheidung in die Ablage gebaut
+
+In §271 musste ich 40 Feldnennungen von Hand in 5 filterbare und 35 unbewegliche trennen, indem ich
+je Block das Zustandsfeld las. **Diese Trennung ist jetzt die Trennung der beiden Dateien** —
+`auftrag` ohne `zustand` steht links, mit `zustand` steht rechts, und die Zahlen oben zeigen es ohne
+Rest: 0 gegen 172.
+
+**Die Folge für Schritt 2 meiner Wache:** Die Vorschrift *„pro Kennung die Blöcke MIT zustand-Feld
+zählen, nicht die auftrag-Zeilen"* war nötig, weil beide Zählweisen weit auseinanderlagen. In
+`docs/STATUS.md` fallen sie jetzt zusammen. Gemessen an den vier Kennungen aus §272:
+
+    Kennung   STATUS auftrag-Zeilen   STATUS Bloecke mit zustand   NOTIZEN auftrag-Zeilen   Summe
+    A-40              1                        1                          16                17
+    A-39              1                        1                          10                11
+    A-38              1                        1                           6                 7
+    A-42              1                        1                           6                 7
+
+**Alle vier Summen stimmen exakt mit den Zahlen aus §272** (17, 11, 7, 7). Das ist zugleich eine
+kennungsgenaue Gegenprobe des Umzugs, die §278s Blocksumme ergänzt: dort ging die Gesamtzahl auf,
+hier geht sie **je Kennung** auf.
+
+**Die Falle bleibt trotzdem stehen**, nur woanders: In `docs/BEFUNDNOTIZEN.md` trägt A-40 sechzehn
+`auftrag:`-Zeilen und null Zustandsfelder. Wer dort nach Dubletten sucht, findet sechzehn, die keine
+sind. Die Vorschrift gilt also weiter — sie zielt ab jetzt auf die zweite Datei.
+
+### 4 · Was A-42 nicht angefasst hat
+
+**185 Blöcke in `docs/STATUS.md` tragen weder `auftrag:` noch `zustand:`** — die „dritte Klasse".
+Sie standen nicht im Zuschnitt (A-42 nennt Blöcke *mit* `auftrag:` und ohne `zustand:`) und sind
+korrekt geblieben. Ich melde sie als Zahl, nicht als Mangel: ob sie einen erzeugten `--tafel`-Lauf
+überstehen, ist dieselbe Frage, die A-42 für die 172 gestellt hat, und sie ist für diese 185 nicht
+gestellt worden.
+
+### 5 · Blattseite unverändert
+
+74 Kennungen mit Ball bei mir, **identisch mit §273** — keine neu, keine weg (`comm` beidseitig
+leer). Die Blätter wurden vom Umzug nicht berührt, und ihr Ballfeld bleibt, was §273 gemessen hat:
+eine Rollenfolge vom Schnitt.
+
+### 6 · Eine ausgefallene Messung
+
+Mein Zähler für die Blattdateien lief in einer **Subshell** (die Schleife hing an einer Pipe) und
+meldete `0`. Null Dateien mit einem Ballfeld, während 74 Kennungen aus derselben Schleife kamen —
+ein Widerspruch im selben Befehl. Als ausgefallen gemeldet, nicht als Ergebnis gelesen.
+
+### 7 · Ball
+
+**Yama / Planner** — die Wache-Anweisung (Schritt 3) nennt einen Pfad und braucht zwei:
+
+    ist:   grep -n '^ballbesitz: plan-pruefer' docs/STATUS.md
+    soll:  … docs/STATUS.md docs/BEFUNDNOTIZEN.md
+    Grund: die in Schritt 3 ausdruecklich verlangten "Bloecke OHNE zustand-Feld" stehen
+           seit 26c46f31 vollstaendig in der zweiten Datei — 35 von 36.
+
+Das ist keine Formsache: Ein Prüfer, der die Anweisung wörtlich befolgt, misst heute **1** und
+schließt daraus „kein Ball". Dass diese Folgerung *zufällig* zutrifft — die 35 sind Verlaufsnotizen —
+macht den Befehl nicht wieder richtig; beim nächsten Umzug stimmt sie nicht mehr.
+
+**Ich selbst messe ab hier beide Dateien**, unabhängig davon, wann die Anweisung nachgezogen wird.
+
+**Unverändert offen:** der Zuschnitt-Befund des Release-Prüfers zum Schreibschutz der Zieldatei
+(§278), `…w0-11-ids-callback-csrf.md:22` (§276), die Rundungsfrage (§277).
