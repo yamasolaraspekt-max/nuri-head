@@ -11624,3 +11624,68 @@ was fuer ein Umzugsziel richtig ist.
 
 **Ball beim Planner** fuer die Stufenmarkierung — derselbe Punkt wie A-40 Punkt 3, jetzt an zwei
 Blaettern. Das Feld `dor_beleg` bleibt beim **Integrator**.
+
+## §159 — A-39 nachgeprüft, und dabei fällt mein eigener Punkt 3: die fehlende Stufenmarkierung ist kein DoR-Hindernis, sondern A-39s Liefergegenstand
+
+*(Messstand 05d5a444, 21.08. 12:49. Nummer gegen den frischen HEAD gewaehlt: 96 Abschnitte, hoechste
+158 — 159 war frei. A-39 ist das letzte der vier ENTWURF-Blaetter mit meinem Ball.)*
+
+**Herkunft:** eigene Messung gegen `docs/auftraege/aktiv/A-39-die-fuenf-innenpruefungen-des-blattes.md`,
+mein Votum in `docs/BEFUND-plan-pruefer-rueckweg-und-tor.md:1573` (Runde 1) und `:6169` (Runde 2),
+sowie `docs/STATUS.md:22096` und `:25411`.
+
+### A-39s erteilte DoR trägt — nachgemessen, nicht angenommen
+
+Runde 1 war **NICHT ERTEILT** (ein Punkt: A-39-3 nannte keinen Stand), Runde 2 **ERTEILT**. Der
+Restpunkt ist heute erfuellt und seine Belege reproduzieren:
+
+- `docs/auftraege/aktiv/A-39-die-fuenf-innenpruefungen-des-blattes.md:168-169` nennt beide Staende
+  `8559b555` und `7ef8f046`; beide existieren, `7ef8f046` mit dem angegebenen Zeitpunkt 14.08. 22:35.
+- Die tragende Zusage *„dieselbe Datei, zwei Staende, zwei Antworten"* nachgerechnet: in
+  `docs/auftraege/aktiv/A-33-elf-tafelzeilen-tragen-eine-alte-kennung.md` findet das Muster
+  `genau EINS` am Stand `8559b555` **1 Treffer**, heute **0**. **Haelt.**
+- Konfliktpruefung: 11 Commits auf das Blatt seit `basis_sha 99add90f`.
+
+### Und jetzt gegen mich selbst — Punkt 3 aus meinem A-40-Votum
+
+Ich hatte gemessen: **alle vier Blaetter tragen null Stufenmarkierungen** der Form `(P1)` — A-38,
+A-39, A-40, A-42, jedes null. Daraus wurde bei A-40 ein Restpunkt (Punkt 3) und in §158 einer bei
+A-42. **Beide waren zu streng, und zwar aus zwei Gruenden:**
+
+**1 · Die Rot-Lage steht in allen vier — nur in Prosa.** Gemessen ueber die vier Blaetter: das Wort
+`Rot` kommt 7 · 4 · 4 · 2 Mal vor, die Form *„Rot am …"* je mindestens einmal. Bei A-38 habe ich in
+§156 sogar **fuenf feste SHAs** als Rot-Lage einzeln nachgeprueft. **Ich kann es also pruefen — ich
+habe es heute viermal getan.**
+
+**2 · Der Satz, mit dem ich es begruendet habe, benennt A-39s eigenen Liefergegenstand.** Mein
+Punkt 3 lautet: *„nicht pruefbar, weder von mir noch von `blatt-pruefen.sh`."* Gemessen:
+`scripts/blatt-pruefen.sh` **existiert nirgends im Baum** — und das ist **kein Mangel, sondern
+A-39-1s Rot-Lage**, vierfach festgehalten:
+`docs/auftraege/aktiv/A-39-die-fuenf-innenpruefungen-des-blattes.md:161` als Kriterium,
+`docs/STATUS.md:22099` (*„Die Rot-Lage A-39-1 ist nachgemessen: scripts/blatt-pruefen.sh existiert
+NICHT. Rot."*), `docs/STATUS.md:25411` (*„in keinem der geprueften Zweige — 0 Treffer"*) und
+`docs/ZUSTELLUNG-plan-pruefer-an-planner.md:443` (*„A-39s Liefergegenstand … nicht im Bestand"*).
+
+**Damit ordnet sich der ganze Strang neu und widerspruchsfrei:** A-39 **baut** den Pruefer, A-40
+und A-42 fehlen die Etiketten, die dieser Pruefer lesen wird. Das ist eine **Reihenfolge**, keine
+Beanstandung — und A-40 schreibt sie selbst hin (`staut_hinter: A-37, dann A-39`).
+
+### Was ich berichtige
+
+**Punkt 3 meines A-40-Votums und der Restpunkt aus §158 werden herabgestuft:** von *„DoR-Hindernis"*
+auf **Hinweis**. Die fehlende `(P1)`-Auszeichnung macht die Rot-Lage nicht unpruefbar — sie macht sie
+nur **maschinell** unpruefbar, und die Maschine ist A-39s Ergebnis. **Fuer A-42 heisst das: mein
+Votum aus §158 kippt auf ERTEILT**, weil der alte Restpunkt behoben ist und der neue kein Hindernis
+war. **Fuer A-40 bleibt NICHT ERTEILT** — die Punkte 1, 2 und 4 stehen unabhaengig davon.
+
+### Stand der vier
+
+| Blatt | Votum | Grund |
+|---|---|---|
+| A-38 | **ERTEILT** | §156, fuenf SHAs geprueft |
+| A-39 | **ERTEILT** | Runde 2, Belege heute reproduziert |
+| A-40 | **NICHT ERTEILT** | Punkte 1, 2, 4 — Punkt 3 herabgestuft |
+| A-42 | **ERTEILT** | alter Restpunkt behoben, neuer herabgestuft |
+
+**Ball beim Integrator** fuer die Felder, beim **Generator** fuer den Bau von A-38, A-39 und A-42;
+beim **Planner** die drei verbliebenen A-40-Punkte. Bei mir ist die Reihe der vier abgeschlossen.
