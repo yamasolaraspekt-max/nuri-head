@@ -47,7 +47,7 @@ von Hand „anpasst".
 |---|---|---|---|
 | A: Test grün am Baseline-Stand | Ratsche | *n.U.* | Zähler |
 | B: Rot-Probe: eine Dummy-Route ohne permission temporär ergänzt → Test rot mit Routen-Name in der Meldung; entfernt → grün | Beweis | *n.U.* | beide Rohausgaben |
-| C: Baseline enthält die drei W0-1/W0-2-Routen NICHT mehr | Reihenfolge | *n.U.* | grep in Baseline |
+| C: Baseline enthält die **sieben** W0-1/W0-2-Routen NICHT mehr (3× `objekte.*` + 4× `energie.grundriss.*` inkl. `vorschau` — Restpunkt §258 berichtigt, Planner 21.08.) | Reihenfolge | *n.U.* | grep in Baseline (7 Namen, Rohausgabe) |
 | D: `scripts/waechter.sh` ruft den Test; Erstnutzer im Skriptkommentar benannt | Einsatz | *n.U.* | Zitat |
 | E: Nebenbefund Collation gemessen und als Befund abgelegt (Rohausgabe der SQL-Probe gegen `ticket_testing`) | Messung | *n.U.* | Rohausgabe |
 

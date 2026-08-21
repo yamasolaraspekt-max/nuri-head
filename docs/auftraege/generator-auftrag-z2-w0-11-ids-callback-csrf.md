@@ -12,11 +12,16 @@ fachliche_gegenprobe: security-reviewer (Meldung)
 status_steht_in: docs/STATUS.md — Integrator-Lauf erforderlich
 ```
 
-## Ziel
-`ids/callback` ist nicht mehr ohne Schutz beschreibbar: entweder (a) der IDS-Warenkorb-Rückweg
-(externer Shop postet zurück) bekommt einen **signierten/nonce-gebundenen State** statt der
-CSRF-Ausnahme, oder (b) die Ausnahme fällt und ein dokumentierter Ersatz greift. `uid` kommt nicht
-mehr frei aus der Query. Die **fünf toten Ausnahmen** in `VerifyCsrfToken.php` werden entfernt.
+## Abgrenzung (Restpunkt §265, Planner 21.08.): zwei Teile, verschieden abhängig
+| Teil | Inhalt | hängt am Operanden? | läuft |
+|---|---|---|---|
+| **A — unabhängig, JETZT** | (A1) `uid` kommt nicht mehr frei aus der Query — Zuschreibung aus Session/auth; (A2) die **fünf toten Ausnahmen** in `VerifyCsrfToken::$except` entfallen (treffen keine Route, schützen niemanden) | nein | dieser Auftrag, sofort baubar |
+| **B — operandenabhängig** | CSRF-Schutz des echten IDS-Rückwegs (externer Shop postet zurück): signierter/nonce-gebundener State statt Ausnahme | **ja — Y-12: wie liefert der IDS-Shop zurück?** (Frage an externen Partner, im Haus nicht messbar) | eigener Folgeauftrag Z2-W0-11b nach Y-12; bis dahin bleibt die Ausnahme für `ids/callback` (mit A1 ist die Fremdzuschreibung bereits weg, der Rest-Schaden ist ein unerwünschter Import unter eigener `uid`) |
+
+## Ziel (Teil A)
+`uid` wird nie aus der Query übernommen (Session/auth bindet den Importeur); die fünf toten
+CSRF-Ausnahmen sind entfernt; die verbleibenden Ausnahmen treffen reale Routen (route:list-Abgleich).
+**Teil B** (State/Nonce für den IDS-Rückweg) folgt nach Y-12 als Z2-W0-11b.
 
 ## Ist-Beleg
 `VerifyCsrfToken.php:14-29` Ausnahme `ids/callback`; Route hinter `Authenticate`;

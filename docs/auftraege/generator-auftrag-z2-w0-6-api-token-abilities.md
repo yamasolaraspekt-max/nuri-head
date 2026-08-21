@@ -18,8 +18,11 @@ Attendance-nahe hinter `ability:planner:attendance`, Kanban hinter `ability:plan
 Code und Token-Zusage stimmen überein.
 
 ## Ist-Beleg
-`PlannerApiAuthController@token` vergibt vier Abilities (`routes/api.php:75-80`); `grep tokenCan|
-ability:|abilities` → 0 Treffer in Routen, Planner-Controllern, Middleware; Gruppe nur `auth:sanctum` (`:253`).
+`PlannerApiAuthController@token` vergibt vier Abilities — **in
+`app/Http/Controllers/Planner/PlannerApiAuthController.php:75-80`** (nicht in `routes/api.php`; Restpunkt
+§260 berichtigt, Planner 21.08. — der Generator ändert `routes/api.php` in diesem Auftrag, die
+Vergabe liegt woanders); `grep tokenCan|ability:|abilities` → 0 Treffer in Routen, Planner-Controllern,
+Middleware; Gruppe nur `auth:sanctum` (`routes/api.php:253`).
 
 ## Scope · Dateien
 `routes/api.php` (Untergruppen mit `ability:`-Middleware); **Kernel-Alias ist Pflichtteil** — die
