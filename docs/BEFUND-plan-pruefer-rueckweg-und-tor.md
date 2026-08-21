@@ -18213,3 +18213,97 @@ habe, und sie gehört genannt — ich habe sie drei Stunden lang nicht gesehen.
 
 **Beim Integrator:** unverändert der Rückweg (47 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
 und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
+
+---
+
+## §225 — Posten (e): die zehn Fundstellen am gültigen Stand nachgeprüft. Neun bestehen fort, eine ist eingerahmt — und der scheinbar neue Ersatzwert ist ein Kommentar
+
+**Messstand 9fa09802, Baum sauber, 0 neue Commits. Integrationszweig lokal 7a82ecfb (14:31, Alter
+213 Min). Rückstand: ich 40 · planner 104. 12 Insel-Dateien unterscheiden sich zwischen meinem Baum und
+dem gültigen Stand. `docs/STATUS.md` und die 89 Blätter unbewegt, kein Ball in meiner Bahn.
+Erhebung 21.08. 18:04–18:07.**
+
+§224 hat die Regel verschärft: **jede Code-Aussage am gültigen Stand messen.** Diese Runde wendet sie
+rückwirkend auf die eigene Fehlerklasse an — „ein Schutz, der einen plausiblen Wert liefert statt zu
+verweigern", zehn Fundstellen aus §136 bis §207.
+
+### 1. Neun bestehen fort, am gültigen Stand gelesen
+
+    §185  sparrenBerechnung.ts:112   const lsMm = cosA > 0 ? lhMm / cosA : lhMm;        besteht
+    §185  sparrenBerechnung.ts:121   const wPerp = wDesign * cosA;                      besteht
+    §195  fbhAuslegung.ts:83         p.push({ id: 'kreislaenge', schwere: 'fehler', …   besteht
+    §205  gaubeGeometrie.ts:244      const pG = (endlich(e.pitch, 35) || 35) * …        besteht
+    §205  gaubeGeometrie.ts:62       function norm(a) { const l = laenge(a) || 1; … }   besteht
+    §136 §141 §160 §165 §172 §203    Träger an beiden Ständen identisch (§224)          besteht
+
+**Kein Befund ist durch die fünf Z1-W1-Bauten hinfällig geworden** — außer dem einen, den §224 bereits
+widerrufen hat.
+
+### 2. §207 ist eingerahmt, nicht entfernt — und das ist die bessere Lösung
+
+    gueltiger Stand, dachGeometrie.ts:150   if (!walmIstKonsistent(…) && laengeM !== spannM) throw …
+    gueltiger Stand, dachGeometrie.ts:158   const firstLenM = Math.max(0, laengeM - spannM);
+
+**Die Klemmung steht noch.** Sie wurde nicht entfernt, sondern für den Defektfall unerreichbar gemacht:
+was `spannM > laengeM` liefert, wirft vorher. Für den verbleibenden Fall `L === B` (Zeltdach) ist
+`Math.max(0, …)` weiterhin richtig — er fängt Rundungsreste, wo die Firstlänge rechnerisch null ist.
+
+Das gehört genau so festgehalten: **eine Klemmung ist nicht per se falsch.** Falsch war, dass sie den
+einzigen Schutz gegen einen Defektfall darstellte. Die Behebung hat den Schutz davorgesetzt und die
+Klemmung dort gelassen, wo sie hingehört. Ich führe das als die saubere Gegenform zu meiner
+Fehlerklasse.
+
+### 3. Der scheinbar neue Ersatzwert ist ein Kommentar — dritte Instanz desselben Effekts
+
+Die Grundmenge aus §205, an beiden Ständen gemessen:
+
+    Stand        Vorkommen   Zeilen   Kommentarzeilen   Code-Zeilen
+    mein HEAD          112      109                 1           108
+    gültig 7a82ecfb    113      110                 2           108
+
+**Die Code-Zeilen sind identisch: 108 an beiden Ständen.** Der eine zusätzliche Treffer ist die Zeile,
+die die Behebung erklärt:
+
+    dachGeometrie.ts:138   // **Warum hier gesperrt wird:** `Math.max(0, laengeM - spannM)` klemmte
+                           // die Firstlänge still …
+
+Das ist die **dritte** Instanz desselben Effekts in dieser Reihe:
+
+    §208   roof.blade.php:91          der Vermerk „0 Treffer" enthält den gesuchten Ausdruck
+    §221   werkzeugLandkarte.ts:27    der P-04-Absatz nennt das Kennungsmuster im Fließtext
+    §225   dachGeometrie.ts:138       der Erklärkommentar zitiert das geklemmte Muster
+
+**Wer ein Muster zählt, muss die Belege über dieses Muster aus der Grundmenge nehmen.** §221 hat den
+Ausweg vorgeführt — das Muster in Prosa beschreiben statt es auszuschreiben. Der neue Kommentar
+schreibt es aus; inhaltlich ist er vorbildlich, für jeden künftigen Zähler ist er ein falscher Treffer.
+
+### 4. Nachtrag zu §205, keine Korrektur
+
+§205 nannte *„112 Vorkommen in 28 Dateien"* für `geometry/`. Die Zahl stimmt — sie zählt **Vorkommen**.
+Verfeinert: es sind **109 Zeilen**, davon **eine Kommentarzeile**, also **108 Code-Zeilen**. Wer die
+Liste abarbeiten will, hat 108 Stellen vor sich, nicht 112. Das ist die Einheiten-Trennung aus §192
+(Vorkommen ≠ Zeilen), diesmal an meiner eigenen Zahl.
+
+### 5. Zwei eigene Messfehler, beide durch Selbstwiderspruch gefangen
+
+1. **Vorkommen gegen Zeilen.** Mein erster Trennversuch meldete 110 statt 113 — weil `grep -n` Zeilen
+   zählt und `grep -o` Vorkommen. Dieselbe Falle wie §192, und ich bin ihr in derselben Messung
+   begegnet, in der ich sie hätte kennen müssen.
+2. **Kaputtes Trennmuster.** Derselbe Lauf meldete „0 Kommentarzeilen", während die Fangprobe eine
+   zeigte. Ursache: ich hatte mit `sed` das Zeilennummernpräfix entfernt und danach auf ein Muster
+   geprüft, das genau dieses Präfix erwartete. **Zwei Schritte, die sich gegenseitig aufheben, sehen
+   aus wie ein Ergebnis.**
+
+### Ball
+
+**Kein neuer Befund.** Neun Fundstellen bestehen unverändert fort, die zehnte ist sauber behoben, und
+die Grundmenge hat sich nicht bewegt. Die Bälle aus §185, §195, §203 und §205 liegen weiter beim
+Planner — jetzt mit dem Zusatz, dass sie am gültigen Stand geprüft sind und nicht am Arbeitsbaum.
+
+**Zur Erwägung, mit einem Vorbild:** wenn ein Kommentar ein Suchmuster erklären muss, hat
+`werkzeugLandkarte.ts:45-47` die Form dafür gefunden — das Muster beschreiben, nicht ausschreiben, und
+den Grund dazuschreiben. `dachGeometrie.ts:138` ist der dritte Fall, in dem ein Beleg sich selbst
+mitzählt; drei Fälle sind kein Zufall mehr, sondern eine Bauform, die eine Regel verdient.
+
+**Beim Integrator:** unverändert der Rückweg (47 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
+und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
