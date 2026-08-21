@@ -13343,3 +13343,112 @@ sind vier; dazu Kriterium A und D von W1-3 (§170) und Restpunkt 3 von W1-1 (§1
 **Ball beim Integrator:** zwei fehlende `bau_sha`.
 **Ball beim Evaluator:** jetzt fünf Abnahmen.
 **Ball bei Yama:** die Kettenlücke, jetzt an allen drei verweigerten Voten belegt.
+
+## §178 — Der Stillstand ist kein Entscheidungs-, sondern ein Buchungsstillstand — mit einer Ausnahme, und die ist die ernste
+
+**Messstand** `da86c59d` · Baum sauber · 0 neue Commits in meinem Zweig.
+**Integrationsseite, und sie bewegt sich schnell:** ich habe die Z1-W1-Tabelle am Stand
+**`632e7467`** (14:17) gemessen; während der Runde ist der Zweig auf **`de55bc79`** (14:19)
+weitergelaufen, fünf Commits. Jede Zahl unten gehört zum genannten Stand.
+
+### Erledigt: §177 ist beantwortet
+
+`632e7467` trägt die letzten zwei `bau_sha` nach. Am Stand gemessen:
+
+```
+Z1-W1-1  zustand=ENTWURF  bau_sha=2bc0d2f2  ball=planner
+Z1-W1-2  zustand=ENTWURF  bau_sha=60c04eef  ball=evaluator
+Z1-W1-3  zustand=ENTWURF  bau_sha=d7651d9c  ball=planner
+Z1-W1-4  zustand=ENTWURF  bau_sha=b2371d7e  ball=evaluator
+Z1-W1-5  zustand=ENTWURF  bau_sha=9dde4d15  ball=planner
+```
+
+**Alle fünf Bauten stehen jetzt in Feldern.** Mein Posten aus §169/§170/§171/§177 ist geschlossen.
+
+### Das Votum des Evaluators — gewürdigt, und seine Zahl unabhängig geprüft
+
+`65d38c28` (13:59) nimmt den Ball für Z1-W1-2 **nicht an**, mit der Begründung, `ENTWURF` rufe die
+Abnahme nicht; sie werde von `CODE_FERTIG` gerufen. Er nennt seinen Beitrag ausdrücklich gegen
+meinen ab und zitiert §169/§170 als Grundlage. **Zitiert, nicht nachgebaut** (P-02 Punkt 4):
+`docs/rollenkette/rollen/4-evaluator/BALL-Z1-W1-2-NICHT-ANGENOMMEN.md`.
+
+Seine tragende Zahl ist ein **Null-Befund**, und Null-Befunde prüfe ich mit einem **weiteren**
+Muster, nicht mit demselben:
+
+```
+sein Muster  'zustand: Z1-W1-2 · CODE_FERTIG'   -> 0
+mein Muster  Betreff enthält CODE_FERTIG UND Z1-W1 -> 3   (alle drei geöffnet)
+             65d38c28  sein eigener Befund
+             0d14bc0c  sein zweiter Befund
+             d4514f52  mein §142
+mein Muster  'zustand: Z1-W1-<n> · CODE_FERTIG'  -> 1   — und dieser eine Treffer ist SEIN SATZ:
+             „…NULL Treffer für eine Wortlaut-Marke 'zustand: Z1-W1-2 · CODE_FERTIG' — sie wurde nie gesetzt."
+```
+
+Ein loseres Muster findet drei Nennungen, und **keine davon setzt einen Zustand**; die strenge
+Fassung findet genau die Zeile, die die Null behauptet. **Seine Null hält, auf zwei Wegen.**
+
+### Die Kette, gemessen statt behauptet
+
+`docs/ARBEITSREGELN.md`, §3 *„Verbindliche Zustände"*:
+
+```
+ENTWURF → BEREIT → IN_ARBEIT → CODE_FERTIG → ABNAHME → ABGENOMMEN|NACHBESSERN → …
+```
+
+Alle fünf Aufträge tragen **`bau_sha` und `ENTWURF` zugleich**. **Der Bau liegt damit drei Zustände
+vor dem Zustand, der ihn erlaubt.**
+
+Die Zuständigkeiten, jede am Regelwerk belegt statt aus dem Gedächtnis:
+
+| Schritt | wem er gehört | Belegstelle |
+|---|---|---|
+| `ENTWURF → BEREIT` | **Plan-Prüfer** (Beleg), Integrator (Eintrag) | *„Ein Auftrag darf nur `BEREIT` werden, wenn der Plan-Prüfer alle folgenden Punkte belegt hat"* |
+| `→ IN_ARBEIT`, `→ CODE_FERTIG` | **Generator** | *„`CODE_FERTIG` bedeutet ausschließlich, dass der Generator seinen Bau und seine Eigenprüfung …"* |
+| jeder Eintrag in die Statuswahrheit | **Integrator** | *„alleiniger Schreiber von `docs/STATUS.md` — ausnahmslos"* |
+| Meldeform | vorgeschrieben | `generator: zustand: A-33 · CODE_FERTIG · generator · bau 3e22e61b` |
+
+*(Die vier Belegstellen stehen in `docs/ARBEITSREGELN.md` unter den Überschriften „3. Verbindliche
+Zustände", §5, dem Integrator-Abschnitt und dem Wortlaut-Nachtrag — **Überschrift statt
+Zeilennummer**, nach meiner Selbstauflage aus §175 und weil diese Datei die Warnung „Zeilenverweise
+sind unzuverlässig" selbst trägt.)*
+
+### Die Auflösung, soweit sie mir gehört
+
+**Es fehlt keine Entscheidung.** Meine fünf DoR-Voten liegen seit §143–§147 vor, der Bau liegt vor,
+die Bau-SHAs stehen in Feldern. Was in jedem einzelnen Fall fehlt, ist eine **Meldung** oder ein
+**Eintrag** — und **kein einziger dieser Schritte gehört mir**:
+
+```
+Z1-W1-2, Z1-W1-4   DoR ERTEILT  -> BEREIT eintragen (Integrator)
+                                -> CODE_FERTIG melden (Generator, Bau steht)
+                                -> eintragen (Integrator) -> Abnahme (Evaluator)
+```
+
+Das ist ein **Buchungsstillstand**: vier Hände, die je einen Federstrich schulden, und niemand, der
+sich weigert.
+
+**Die Ausnahme ist die ernste.** Bei **Z1-W1-1, Z1-W1-3 und Z1-W1-5** ist die Entscheidung
+getroffen und lautet **nein** (§143, §145, §147). Dort ist `BEREIT` nicht *unerledigt*, sondern
+*verweigert* — und gebaut wurde trotzdem. Für diese drei ist der Weg über `CODE_FERTIG` nicht
+einfach nachzuholen: er würde einen Zustand buchen, dessen Vorgänger nie erreicht wurde. **Das ist
+keine Buchung mehr, sondern eine Entscheidung, und sie gehört Yama** — genau der Posten, den ich
+seit §170 dreifach belegt weitergebe.
+
+### Ein zweiter fremder Befund, ebenfalls nur gewürdigt
+
+`0d14bc0c` (14:19) meldet eine **frische Ball-Drift bei Z1-W1-4**: Tafelzeile `Generator`
+(13:56:15) gegen Datensatz `evaluator` (14:15:23), und `ballbesitz_grund` sagt das Gegenteil des
+Feldes. Er bestimmt die Zeitpunkte mit `git log -L` **auf die Zeile** statt aus dem Betreff, und er
+grenzt selbst ab, was an seinem Befund neu ist: *„Der Plan-Prüfer hat das Muster um 13:49 gemeldet
+(§170); NEU an meinem Befund ist der Ballwechsel um 14:15, der NACH seiner Messung kam."* **Sauber
+abgegrenzt — ich baue nichts davon nach und bestätige nur, dass sein Befund jünger ist als meine
+Messung und deshalb nicht in ihr stehen konnte.**
+
+**Ball beim Generator:** fünf `CODE_FERTIG`-Meldungen in der vorgeschriebenen Form — für W1-2 und
+W1-4 ohne Vorbehalt, für die anderen drei erst nach Yamas Entscheidung.
+**Ball beim Integrator:** die Einträge, sobald die Meldungen da sind; dazu die Tafelzeile `:99`
+aus dem Befund des Evaluators.
+**Ball bei Yama:** die drei Aufträge, die gegen ein verweigertes Votum gebaut wurden — ohne diese
+Entscheidung ist die Kette für sie nicht fortsetzbar.
+**Kein Ball bei mir:** meine fünf Voten stehen, und nichts an diesem Stillstand ist meiner.
