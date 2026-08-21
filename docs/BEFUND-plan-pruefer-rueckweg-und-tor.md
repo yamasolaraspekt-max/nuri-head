@@ -15415,3 +15415,160 @@ selbst ein nachziehender Rollenzweig sie nicht finden.
 **Ball beim Integrator** — und diesmal ist er der einzige, der zählt: **19 Abschnitte warten auf den
 Rückweg.** Alles andere, was ich in dieser Reihe gemeldet habe, hängt daran; ohne den Transport sind
 die 31 Bälle keine Zustellung, sondern eine Ablage in meinem eigenen Zweig.
+
+---
+
+## §200 — Posten (e): der Kanal ist in BEIDE Richtungen zu, und die Gegenrichtung ist die gefährlichere
+
+**Messstand 29b5fafc, Baum sauber, 0 neue Commits seit 29b5fafc. Integrationszweig `auto/hausplaner-integration`
+= 7a82ecfb (21.08. 14:31), live per `ls-remote` bestätigt. Uhrzeit der Erhebung: 21.08. 15:51.**
+
+§199 hat gemessen, dass neunzehn meiner Abschnitte den Integrationszweig nicht erreichen. Diese Runde
+misst die Gegenrichtung — und sie ist schlimmer, denn sie verfälscht nicht die Zustellung, sondern
+**die Messung selbst**.
+
+### 1. Der Verzweigungspunkt ist mein eigener Commit
+
+    Verzweigungspunkt HEAD / 7a82ecfb  :  c4452644  = 21.08. 14:28, "plan-pruefer §179"
+    Commits in 7a82ecfb, die MIR fehlen:  40   (27 integrator · 8 generator · 4 evaluator · 1 planner/dirigent)
+    davon an docs/STATUS.md             :   6
+    Commits in mir, die DORT fehlen     :  23
+
+Der jüngste gemeinsame Vorfahr beider Zweige ist ein Commit **von mir**. Seit ihm läuft mein Zweig
+linear weiter und nimmt nichts auf. Der letzte fremde Commit in meinem Zweig ist `03e9ac41`
+(21.08. 10:04, `release-pruefer: Transport — Vorlauf zusammengeführt`); dahinter stehen **87 eigene
+Commits am Stück**. Ich bin seit **5 Stunden 47 Minuten** blind für alles, was andere tun.
+
+### 2. Die Folge: ich messe an einem Datensatz von gestern
+
+`docs/STATUS.md` ist nach ARBEITSREGELN §16 der einzige Statusträger. Er existiert bei mir in einer
+anderen Fassung als bei allen anderen:
+
+    mein Zweig       letzter Commit an docs/STATUS.md :  8232b63a   20.08. 15:34
+    Integrationszweig dito                            :  632e7467   21.08. 14:17
+    Unterschied                                       :  326 Zeilen hinzu, 7 entfernt
+    Zeilen gesamt                                     :  27619   gegen   27938
+    Zeilen "^zustand:"                                :     90   gegen      92
+    Zeilen "^ballbesitz: plan-pruefer"                :     39   gegen      40
+
+Mein Statusträger ist **24 Stunden 17 Minuten** alt. Und die Wache befiehlt mir wörtlich
+`grep -n '^ballbesitz: plan-pruefer' docs/STATUS.md` — den **Arbeitsbaum-Pfad**. Genau der ist der
+veraltete. Der Befehl, der meine Ballortung sichern soll, führt mich auf den falschen Stand.
+
+**Konkret falsch gemessen, hätte ich es nicht bemerkt:** P-03 und P-04 (zweimal) führe ich als
+Zustandsträger `BEFUND`. Im gültigen Stand ist ihr `zustand:`-Feld entfernt — sie sind zustandslose
+Ballträger. Das sind drei der sieben entfernten Zeilen:
+
+    -zustand: BEFUND   (dreimal — P-03 Z.26537, P-04 Z.26575, P-04 Z.26660 in meiner Fassung)
+
+### 3. Ballortung am RICHTIGEN Stand
+
+Blockweise über die ```yaml-Fences ausgewertet, negativer Zustandsfilter, an 7a82ecfb:
+
+    A-38   ENTWURF   Z.18772        A-40   ENTWURF   Z.18945        A-42   ENTWURF   Z.25675
+    A-39   ENTWURF   Z.18924        P-02   VORLAGE   Z.19039
+
+**Keine Kennungs-Dubletten** (Blöcke mit `zustand:` gezählt, nicht `auftrag:`-Zeilen). Ein doppelter
+Schlüssel im Bestand: A-09 trägt `release_vermerk` zweimal (Block ab Z.3264). Blätter in
+`docs/auftraege/aktiv/`: 89 an beiden Ständen.
+
+### 4. ZWEI meiner Befunde sind behoben — und ich konnte es nicht erfahren
+
+Das ist der Punkt, der Posten (e) trägt. Ich verfolge eigene Befunde, und zwei von ihnen sind
+erledigt, ohne dass die Erledigung mich je erreicht hat.
+
+**§108 (vier DoR-Voten stehen in keinem Feld) — BEHOBEN.** Die vier Felder trugen dreimal
+`dor_beleg: "steht aus"` und einmal die Runde-2-Fassung. Heute tragen alle vier mein Votum, wörtlich
+und mit Herkunftsangabe. A-39 und A-42 sind ausdrücklich gezeichnet:
+
+    NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung. Das Feld trug "steht aus",
+    waehrend das Votum seit Paragraf 108 geliefert und committet war.
+
+Bei A-42 hat er zusätzlich den Fallstrick markiert, den §108 selbst erzeugt hat: *"ACHTUNG FUER JEDEN,
+DER AELTERE STAENDE LIEST: in Paragraf 108 stand A-42 noch auf NICHT ERTEILT … Der Wert hat sich am
+21.08. gedreht."* Das ist genau die Sorgfalt, die ich in §109/§110/§111 an fremden Blättern vermisst
+habe. Sie gehört gewürdigt.
+
+**Die Kettenlücke (dreimal gemeldet, zuletzt §180) — BEHOBEN.** Die fünf Z1-W1-Aufträge hatten keinen
+Block in der Statuswahrheit. Commit `6ece5379` (21.08. 13:56): *"fünf Z1-W1-Aufträge in die
+Statuswahrheit eingetragen — sie hatten seit dem Schnitt weder …"*. Heute:
+
+    Z1-W1-1  ENTWURF  ball=planner      Z1-W1-4  ENTWURF  ball=evaluator
+    Z1-W1-2  ENTWURF  ball=evaluator    Z1-W1-5  ENTWURF  ball=planner
+    Z1-W1-3  ENTWURF  ball=planner
+
+In **meinem** Stand: `auftrag: "Z1-W1` — **0 Treffer**. Ich hätte die Lücke ein viertes Mal gemeldet.
+
+**Nebenbefund, der meinen §184 verschärft:** von den 89 Blättern in `docs/auftraege/aktiv/` trägt
+**keines** die Kennung Z1-W1 (0 Treffer). Die Blätter liegen eine Ebene höher, z. B.
+`docs/auftraege/generator-auftrag-z1-w1-1-din-badge-ehrlich.md`. Die von der Wache vorgeschriebene
+Grundmenge „jedes Blatt in docs/auftraege/aktiv/ gegen seinen Block" trifft die fünf aktivsten
+Aufträge des Hauses **nicht**.
+
+### 5. Fund unterwegs: zwei unverschlossene ```yaml-Fences in der Statuswahrheit
+
+Beim Abgleich trennten sich zwei Zählungen um eins: 90 Zeilen `^zustand:`, aber nur 89 Blöcke mit
+Zustand. Kein Block hat ein doppeltes Feld, keine Zeile steht außerhalb eines Fences — der Rest war
+ein Block, den kein Verfahren als Block sieht:
+
+    docs/STATUS.md:3220   ```yaml   auftrag: "A-08"   zustand: BETRIEBSBESTAETIGT
+    docs/STATUS.md:3257   ---                          <- schliesst mit einem Strich statt mit ```
+    docs/STATUS.md:3261   ```yaml                      <- neuer Fence, waehrend der alte offen ist
+
+Ein zweiter derselben Art ab `docs/STATUS.md:7881` (ohne `auftrag`). Beide stehen im gültigen
+Integrationsstand. Wirkung: im gerenderten Markdown verschluckt der A-08-Codeblock alles bis zum
+nächsten nackten ``` — einschließlich der Überschrift `## A-09 — RELEASE_FREI an af8f2054`. Und jedes
+blockweise lesende Werkzeug verrechnet sich, **A-39s geplantes Prüfskript für Auftragsblätter
+eingeschlossen**.
+
+### 6. Widerruf: mein eigener A-08-Befund war falsch, und zwar von Anfang an
+
+Der Fund aus 5. trifft mich selbst. In dieser Datei, Zeile 14000, steht von mir:
+
+    fünf yaml-Blöcke mit auftrag: A-08   —   zustand-Feld: KEINER
+
+und daraus abgeleitet in Zeile 14025: *„Ball beim Integrator: A-08 trägt seinen Zustand nur in der
+Tafelzeile."* Am Stand `1c5ed9fc` (21.08. 14:47) — **dem Stand, an dem ich den Satz schrieb** — gilt
+gemessen bis zur echten Blockgrenze:
+
+    ab Z.3216  zustand=BETRIEBSBESTAETIGT   (Blockende: --- in Z.3252)
+    ab Z.6004  zustand=KEINS                ab Z.6210  zustand=KEINS
+    ab Z.6072  zustand=KEINS                ab Z.6262  zustand=KEINS
+    ab Z.6126  zustand=KEINS
+
+Zwei Fehler in einem Satz: es sind **sechs** Blöcke, nicht fünf, und einer **trägt** ein Zustandsfeld.
+Nach der Klassenordnung aus §190 ist das „nie richtig gewesen" — nicht gewandert, nicht überholt,
+sondern falsch beim Schreiben. Die Ursache ist benennbar und dieselbe wie in 5.: mein Verfahren suchte
+das Blockende am Fence, und dieser Block endet an einem Strich. **Der Ball an den Integrator wegen
+A-08 wird hiermit zurückgenommen.** Was bleibt, ist der Fence-Fund — kleiner, aber echt.
+
+### 7. Vier eigene Messfehler dieser Runde, alle vor dem Melden gefangen
+
+1. **awk vererbte Felder über Blockgrenzen.** Die Zuordnung „zuletzt gesehenes `auftrag`/`zustand`"
+   ergab A-40 als BEFUND-Träger und P-05/P-08 als Zustandsträger. Blockweise über die Fences
+   nachgemessen: A-40 hat **einen** Zustandsblock und 16 Meldeblöcke. Bei 326 geänderten Zeilen
+   verschiebt sich eine Erb-Zuordnung lautlos.
+2. **`ls docs/auftraege/aktiv/*Z1-W1-1*`** bricht in zsh mit *no matches found* ab; der Fallback lief
+   ins Leere. „KEIN BLATT GEFUNDEN" war keine Messung, sondern ein abgebrochener Befehl.
+3. **Alterungsfilter über 60 Commits**: alle 60 waren von mir, die Ausgabe blieb leer. Eine leere
+   Ausgabe ist kein „kein fremder Commit" — das Fenster musste bis zum ersten Treffer reichen
+   (Position 88).
+4. **Drei-Zeilen-Fenster hinter `auftrag:`** fand bei A-08 kein `zustand:` und hätte meinen Fehlbefund
+   ein zweites Mal bestätigt. Erst die Messung bis zur echten Blockgrenze brachte
+   `BETRIEBSBESTAETIGT`.
+
+Alle vier sind dieselbe Klasse: **eine ausgefallene oder zu eng geschnittene Messung sieht aus wie ein
+Ergebnis.** Drei davon hätten in dieser Runde einen Fehlbefund erzeugt.
+
+### Ball
+
+**Beim Integrator, für den HINWEG.** §199 verlangte den Rückweg; diese Runde verlangt das Gegenstück.
+Solange mein Zweig nichts aufnimmt, prüfe ich einen Stand von gestern und melde Mängel, die behoben
+sind — zweimal in dieser einen Runde belegt. Dazu die zwei offenen Fences in `docs/STATUS.md:3220`
+und `:7881`.
+
+**Beim Planner:** die Ablage der fünf Z1-W1-Blätter außerhalb von `docs/auftraege/aktiv/` (0 von 89) —
+Verschärfung des §184-Postens, weil die Wache ihre Grundmenge dort zieht.
+
+**Bei mir:** ab hier messe ich Zustände an **beiden** Ständen und nenne beide. Der Arbeitsbaum ist
+kein Statusträger mehr, solange er nichts aufnimmt.
