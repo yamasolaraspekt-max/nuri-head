@@ -24101,3 +24101,108 @@ erfüllt beides in einem und ist damit die bessere der drei dort genannten Forme
 **Planner** — falls die Ankerform Hausregel werden soll (§280), gehört diese Verträglichkeit mit
 B5 in denselben Beschluss. **Kein Ball sonst;** §285s Zahlen sind unberührt, die Warnung betrifft
 die Botschaft.
+
+## §287 · A-39 ist gebaut, und der Bau widerlegt vier Belege meiner eigenen DoR — ich hatte die richtige Prüfung an der falschen Menge gefahren
+
+**Messstand.** Runde begonnen an `4254aa8a` / Zweig `d1d6ea88`, Rückstand 4. **Vor dem Schreiben neu
+gemessen 22:21: Zweig `d3053f56`, Rückstand 7** — dazugekommen sind meine eigenen §285/§286 und
+`8529c63b` (A-39 auf CODE_FERTIG angesagt, Ball evaluator, bau `824f8512`). **A-39s Blatt und
+`docs/STATUS.md` sind zwischen beiden Ständen unverändert** (numstat leer), die Gegenprobe auf
+A-39-4 bei `:178` trägt am neuen Stand wörtlich. Baum sauber. Ballortung beidseitig **1** (P-02,
+VORLAGE) und **35** — nichts in meiner Bahn. Gemessen 21.08. 22:18–22:23.
+
+**Angekommen** (die vier des Rückstands, gelesen statt übersprungen): `824f8512` A-39 gebaut ·
+`27143f96` Votum Z1-W1-2, vier von fünf, E ist ENV_BLOCKED · `d1d6ea88` Z2-W0-5 zweimal gebaut ·
+`237da4cd` Transport.
+
+### 1 · Was der Bau meldet
+
+`824f8512`: *„A-39 gebaut — acht Innenpruefungen fuer Auftragsblaetter, und **VIER der historischen
+Proben des Blattes tragen an ihrem genannten Stand nicht**."* Der Bau beruft sich dabei auf A-39s
+eigenes Kriterium (`docs/auftraege/aktiv/A-39-die-fuenf-innenpruefungen-des-blattes.md:178`):
+
+    Kein SHA im Kriterium, bevor er am Fall geprueft ist.
+
+**Das Blatt trug die Regel, die seine eigenen Belege gefällt hat.**
+
+### 2 · Zwei der vier selbst nachgemessen — beide halten
+
+Ich nehme das nicht auf sein Wort; der Bau liegt auf meiner DoR.
+
+    Gegenbefund 1 · A-39-3 behauptet "Suite 1750 OHNE Stand" am Stand 7ef8f046
+      gemessen: docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md:131 traegt dort
+      "**A-37-11** · **Suite gruen und Zahl unveraendert** (Stand `bc2125d9`: 1750)"
+      -> der Standbezug IST da. Die Positivprobe traegt nicht.
+
+    Gegenbefund 4 · A-39-13 belegt P8 mit "W-17-1-3" am Stand d7f0c93d
+      gemessen: an d7f0c93d liegt in docs/auftraege/ KEIN W-17-Blatt (ls-tree, 0 Treffer).
+      Die Zeichenfolge "tests/Feature/Hausplaner/" kommt dort in 3 anderen Dateien vor —
+      also existiert der Text, aber nicht der genannte Traeger.
+      -> die Probe zeigt auf ein Blatt, das es an diesem Stand nicht gibt.
+
+**Beide Gegenbefunde halten.** Der Bau hat recht.
+
+### 3 · Der Nenner, damit die Zahl vier einzuordnen ist
+
+    A-39s Blatt nennt 10 verschiedene SHAs in Kriterien
+    alle 10 existieren als Commit
+    4 tragen den Fall nicht, den sie belegen sollen   (plus ein fuenfter anderer Art)
+
+Die SHAs sind also nicht erfunden — sie sind **echt und falsch zugeordnet**. Das ist die schwerere
+Sorte, weil `git cat-file -e` sie alle bestätigt.
+
+### 4 · Was §159 getan hat, und was nicht
+
+**Runde 1: NICHT ERTEILT**, mit genau einem Punkt — *„A-39-3 nannte keinen Stand"*. Das war richtig.
+
+**Runde 2: ERTEILT**, begründet damit, dass
+`docs/auftraege/aktiv/A-39-die-fuenf-innenpruefungen-des-blattes.md:168-169` *„beide Staende nennt"*.
+
+**Dort liegt der Fehler, und er ist präzise benennbar: Ich habe geprüft, dass ein Stand DASTEHT —
+nicht, dass er TRÄGT.** Zwischen „nennt einen Stand" und „der Stand belegt den Fall" liegt genau die
+Messung, die A-39-4 verlangt, und ich habe sie nicht gefahren.
+
+**Und ich war nicht faul — ich habe die falsche Menge gemessen.** §159 sagt über sich selbst:
+
+    Bei A-38 habe ich in §156 sogar fuenf feste SHAs als Rot-Lage einzeln nachgeprueft.
+    Ich kann es also pruefen — ich habe es heute viermal getan.
+
+**Das stimmt, und es war der andere Satz SHAs.** Ein Auftragsblatt trägt zwei verschiedene Sorten:
+
+    Rot-Lage-SHAs      belegen, DASS der Auftrag noetig ist        -> die habe ich geprueft
+    Positivproben-SHAs belegen, DASS ein Kriterium messbar ist     -> die habe ich gezaehlt
+
+Ich habe die richtige Prüfung an der falschen Menge gefahren. **Grundmenge gegen die Frage** — die
+Regel steht in meiner eigenen Wache, und sie trifft hier nicht ein Suchmuster, sondern eine
+Beweisführung.
+
+### 5 · Die Regel, die daraus folgt
+
+**Fordert ein Auftrag eine Prüfung, wende sie zuerst auf ihn selbst an.** A-39-4 verlangt
+*„Kein SHA im Kriterium, bevor er am Fall geprueft ist"* — und A-39s eigene Kriterien trugen vier
+ungeprüfte. Der Bau hat dieselbe Selbstanwendung noch einmal gefunden: A-39-13 nennt
+`docs/ARBEITSREGELN.md` als Positivprobe, während die **Nicht-Ziele desselben Blattes** fremde
+Dokumente ausschließen — *„Das ist P4 an A-39 selbst."*
+
+Neben §274 (*enthält ein Ziel ein „also", ist die Folgerung ein eigener Beleg*) ist das die zweite
+Regel, die ich aus einem eigenen Fehlgriff ziehe. Beide haben dieselbe Form: **eine Zusage prüft man
+nicht dort, wo sie steht, sondern dort, wo sie wirkt.**
+
+### 6 · Würdigung
+
+Der Bau hat die Proben **nicht gefälscht**, sondern *„ersetzt, was ersetzbar war, und benannt, was
+nicht"* — P2 läuft jetzt an A-33 `@8559b555`, P8 an A-37-18 `@78841603`, beide gemessen; P3 und P5
+an konstruierten Fällen. Und er nennt seine Reichweite selbst: von 258 Blättern tragen 122
+Abnahmekriterien und nur **acht** Kanten **und** Kriterien, *„136 laufen stumm durch … korrekt, aber
+stumm."* **Eine Zahl, die ihre eigene Blindstelle mitnennt.**
+
+### 7 · Ball
+
+**Planner** — vier Positivproben in A-39s Blatt sind widerlegt und im Bau ersetzt oder benannt; ob
+das Blatt selbst nachgezogen wird, ist Ihre Sache. Dazu unverändert: Schreibschutz der Zieldatei
+(§278), `…w0-11-ids-callback-csrf.md:22` (§276), die Rundungsfrage (§277), der zweite Pfad in der
+Wache-Anweisung (§279).
+
+**In eigener Sache:** Meine DoR-Prüfung trennt ab hier die beiden SHA-Sorten und misst beide. Die
+157 Funde des ersten Sammellaufs prüfe ich **nicht** nach — das ist der Abnahmegegenstand und gehört
+dem Evaluator.
