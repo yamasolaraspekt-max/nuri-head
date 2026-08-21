@@ -10025,3 +10025,62 @@ sei nicht fremd, traegt dann weiter, als sie darf.
 Zusatz, den ich mir in §133 selbst auferlegt habe — **Quellgraph oder Ladegraph**. Kein Mangel am
 Vermerk, dessen acht Zahlen ausnahmslos halten; ein Wort, an dem zwei richtige Messungen
 auseinanderlaufen.
+
+## §136 — Posten (c): F-012 durchgerechnet. Der Code haelt die Formel ein, aber zwei Kommentare versprechen mehr als er tut
+
+*(Messstand bee03edd, 21.08. 11:15. Nummer gegen den frischen HEAD gewaehlt: 31 Abschnitte, keine
+Dublette, hoechste §135 — §136 war frei. Klasse nach §132: SHA-verankert.)*
+
+**Wahl.** Von den **27** Formeln der Sammlung sind sechs in dieser Datei nie vorgekommen; ich nehme
+**F-012 · Punkt in Polygon (Strahlenmethode)** (`FORMELSAMMLUNG.md:198-206`), weil ihre Grenzfaelle
+sich exakt rechnen lassen.
+
+**Zwei Quellen schienen sich zu widersprechen, und taten es nicht.** `W-05-raum-beschreiben.md:296`
+sagt `F-012: "NEIN — 0 Treffer"`, `STATUS.md:3443` nennt *"F-012 in W-13s trefferSuche"*. Der
+vollstaendige Satz loest es auf: dort werden **sieben Formelzuordnungen aufgezaehlt, die GEFALLEN
+sind** — *"F-012 in W-13s trefferSuche Math. **0x**"*. Beide sagen dasselbe. Haette ich das Fragment
+zitiert, waere daraus ein erfundener Widerspruch geworden (dieselbe Klasse wie §111).
+
+**Gebaut ist sie trotzdem — gefunden ueber die Gestalt, nicht ueber den Namen.** Mein erstes
+Idiom-Muster gab **null Treffer im ganzen Repo**, also beweist seine Null nichts und ich habe sie
+nicht verwendet. `inside = !inside` gab **einen**: `punktInPolygon`, `dachAusschnitt.ts:265` —
+**privat**, kein `export`, in einem der 33 Module ohne Ladeweg (§133). Weil sie privat ist, habe ich
+sie programmatisch woertlich entnommen (10 Zeilen, Treue geprueft) statt sie abzuschreiben.
+
+**Gerechnet, Quadrat 1000x1000 mm, acht Randfaelle:**
+
+| Fall | Ergebnis | Kopfzusage `:264` |
+|---|---|---|
+| untere Kante `y=0` | **innen** | innen ✓ |
+| **obere Kante `y=1000`** | **aussen** | innen ✗ |
+| linke Kante `x=0` | **innen** | innen ✓ |
+| **rechte Kante `x=1000`** | **aussen** | innen ✗ |
+| Ecke unten links | **innen** | innen ✓ |
+| Ecke unten rechts · oben links · oben rechts | **aussen** | innen ✗ |
+
+**Drei von acht halten, fuenf nicht.** Der Rand zaehlt nur unten und links als innen.
+
+**Und das ist kein Fehler im Algorithmus.** Genau das schreibt F-012 vor: *"Regel festlegen: untere
+Kante zaehlt, obere nicht."* Die halboffene Regel ist gewollt — sie laesst benachbarte Flaechen
+lueckenlos kacheln, ohne dass ein Punkt zweimal zaehlt. **Falsch sind die beiden Kommentare, die
+etwas anderes versprechen:** `:264` *"Rand zaehlt als innen (mit kleiner Toleranz)"* und die
+Aufrufstelle `:351` *"Oeffnung muss **inkl. Rand** vollstaendig in der Flaeche liegen"*.
+
+**Die Toleranz im selben Kommentar ist wirkungslos.** `tol = 1e-6` bei einer Domaene aus ganzen
+Millimetern (`scene.types.ts:270`) sind **1e-6 mm = ein Nanometer**. Gerechnet: **11 von 11**
+ganzzahligen Faellen liefern mit `tol=1e-6` und mit `tol=0` dasselbe. Der Zusatz *"(mit kleiner
+Toleranz)"* beschreibt nichts, was in dieser Domaene geschieht.
+
+**Die Folge ist gemessen und sie ist null.** Beide Aufrufstellen (`:352`, `:399`) verknuepfen das
+Ergebnis mit `&&` an `rechteckKantenAbstandOk(..., KANTEN_RAND_M)` — und `KANTEN_RAND_M = 0.2`
+(`:101`), also **200 mm Mindestabstand zu jeder Kante**. Eine Ecke genau auf einer Kante hat Abstand
+null und faellt dort ohnehin durch, gleich ob unten oder oben. **Die Asymmetrie entscheidet nie.**
+Dazu kommt, dass das Modul keinen Ladeweg hat. Kein Schaden, an keiner Stelle.
+
+**Warum es trotzdem hier steht.** Die Funktion ist heute privat und zweimal gerufen; beide Male
+haelt eine strengere Pruefung sie ab. Wer sie exportiert oder anderswo wiederverwendet, liest zuerst
+ihren Kopf — und der sagt *"Rand zaehlt als innen"*, was fuer die Haelfte des Randes nicht stimmt.
+Das ist die Sorte Zusage, die genau dann traegt, wenn niemand mehr nachrechnet.
+
+**Ball beim Planner**, klein: zwei Kommentare an `dachAusschnitt.ts:264` und `:351` beschreiben eine
+halboffene Regel als geschlossene. Der Code bleibt, wie er ist — er erfuellt F-012.
