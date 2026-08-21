@@ -16309,3 +16309,120 @@ hätte in allen drei Fällen getragen, wo die Zeilennummer versagte.
 
 **Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
 und `:7881`.
+
+---
+
+## §207 — Posten (b): drei Registerzahlen halten. Eine Ebene tiefer hält P-1 auch — und dort steht die neunte Fundstelle meiner Klasse, die teuerste bisher
+
+**Messstand 5181d0cb, Baum sauber, 0 neue Commits. Integrationszweig unverändert 7a82ecfb (live).
+Hinweg zu: 40 fehlen mir, 30 von mir fehlen dort. `docs/STATUS.md` und die 89 Blätter an beiden
+Ständen unbewegt, kein Ball in meiner Bahn. Erhebung 21.08. 16:39–16:43.**
+
+### 1. Die Zahlen der neuen Fach-Register — alle drei halten
+
+Die am 21.08. angelegten Register (§202) tragen drei prüfbare Zahlen. Im **Hauptbaum** gemessen, nach
+der Lehre aus §202:
+
+    docs/regelwerk/REGISTER.md:66   "349 Dateien" unter docs/rollenkette/
+        am Register-Commit 807c4fe4:  alle Dateien 350 · nur .md 349   -> TRIFFT
+    docs/backlog/REGISTER.md:64     "~50 Blätter docs/BEFUND-*.md lose in docs/"
+        Hauptbaum heute: 50                                            -> TRIFFT
+    docs/backlog/REGISTER.md:53     "7 Befunde (4 Finder), Negativ-Ergebnis Fehler-Linse"
+        Inventur Z.4 nennt wörtlich vier Finder; gezählt K-1..K-4, P-1, R-1, R-2 = 7
+        Zeile 9 trägt "Negatives Ergebnis, ausdrücklich (Fehler-Linse)"  -> TRIFFT
+
+**Eigener Fehler, gefangen:** meine erste Messung ergab 350 und hätte eine Abweichung gemeldet. Die
+Grundmenge war falsch — `docs/rollenkette/` enthält ein `rollenkette.tar.gz`, und das Register zählt
+Blätter, nicht Archive. Dieselbe Falle wie in §202, zwei Runden später. **Bevor eine Differenz von 1
+gemeldet wird, gehört die Grundmenge geprüft, nicht die Zahl.**
+
+Drei von drei — kein Befund. Also eine Ebene tiefer, auf die Zahlen **in** den Befunden.
+
+### 2. P-1 der Inventur durchgerechnet: alle sechs Zahlen exakt
+
+`docs/backlog/inventur-2026-08-20-z1.md:76-91` meldet für das Walmdach eine Flächenabweichung. Ich baue
+den Befund **nicht** nach (P-02 Punkt 4) — ich rechne seine Zahlen. Formel wörtlich aus
+`geometry/dachGeometrie.ts:136-138` übernommen:
+
+    firstLenM = Math.max(0, laengeM - spannM)
+    trapez    = ((laengeM + firstLenM) / 2) * ((spannM / 2) / cos)
+    walm      = (spannM * spannM) / (4 * cos)
+    Summe     = 2*trapez + 2*walm
+
+    6x8 m, 30°   Code 64,66  (Blatt 64,66)   Theorem 55,43  (Blatt 55,43)   +16,67 %  (Blatt +16,6 %)
+    4x10 m, 30°  Code 80,83  (Blatt 80,83)   Theorem 46,19  (Blatt 46,19)   +75,00 %  (Blatt +75 %)
+
+Sechs Zahlen, sechs Treffer. Auch die Zusage *„Fehler wächst unbegrenzt"* hält:
+
+    4x  8 m -> + 50,0 %      4x 20 m -> + 200,0 %      4x100 m -> +1200,0 %
+    4x 10 m -> + 75,0 %      4x 50 m -> + 575,0 %
+
+**Die Gegenprobe ist der eigentliche Beleg:** im gutmütigen Fall, wenn die Firstlänge positiv bleibt,
+rechnet derselbe Code **exakt**:
+
+    10x4 m -> Code 46,19  Theorem 46,19  Abweichung 0,00 %
+    12x6 m -> Code 83,14  Theorem 83,14  Abweichung 0,00 %
+
+Die Formel ist also nicht falsch. Sie bricht an **einer einzigen Stelle** — `Math.max(0, …)` in
+`dachGeometrie.ts:136`. Der Schutz gegen eine negative Firstlänge erzeugt eine Fläche, die um bis zu
+1200 % zu groß ist.
+
+### 3. Damit ist die Klasse aus §205 neunmal belegt — und hier am teuersten
+
+`Math.max(0, …)` war in §205 eine von fünf gezählten Musterformen: **68 Vorkommen in 27 Dateien**. Hier
+ist einer davon einzeln geöffnet, und er kostet im gemessenen Fall +75 %, im Grenzfall +1200 %. Das ist
+die neunte Fundstelle nach §136, §141, §160, §165, §172, §185, §195, §203, §205 — **ein Schutz, der
+einen plausiblen Wert liefert statt zu verweigern**, und der teuerste bisher, weil das Ergebnis laut
+Inventur in PV- und Heizlastrechnung weiterläuft.
+
+Die fremde Inventur und meine Grundmengenmessung haben denselben Fehler unabhängig voneinander
+getroffen. Das stützt beide.
+
+### 4. Die Zeiger von P-1: vier treffen, der fünfte war mein Fehler
+
+    geometry/dachGeometrie.ts:134       -> case 'walm': {                                TRIFFT
+    geometry/dachGeometrie.ts:136       -> const firstLenM = Math.max(0, laengeM-spannM) TRIFFT wörtlich
+    geometry/dachformVorlagen.ts:414    -> export function walmIstKonsistent(…)          TRIFFT
+    geometry/dachformVorlagen.ts:336-341-> Kommentarkopf ab :336, Funktion ab :340       TRIFFT im Bereich
+    projection/dachProjektion.ts:29     -> for (const flaeche of dachFlaechen(roof)) {   TRIFFT
+    HausplanerApp.tsx:1024              -> dachFlaechen(dach);                           TRIFFT
+
+Alle sechs. Drei Trägerdateien haben seit dem Inventur-Commit `f374c73a` (20.08. 16:35) **0 Commits** —
+P-1 ist unverändert gültig.
+
+**Zweiter eigener Fehler, gefangen:** `dachProjektion.ts:29` meldete zunächst eine **leere Zeile**. Die
+Datei liegt unter `projection/`, ich hatte sie unter `geometry/` gesucht. Wörtlich dieselbe Falle wie
+in §190: *eine fehlende Datei sieht aus wie eine leere Zeile.* Ich habe sie damals notiert und bin
+heute erneut hineingelaufen — der Unterschied ist nur, dass ich diesmal nach zwei Minuten statt nach
+einem Fehlbefund gemerkt habe, was los war.
+
+### 5. Zusatzfund: die richtige Rechnung existiert, ist getestet, und ruft niemand
+
+Die Inventur sagt, *„die passende Prüfung existiert bereits"*. Über **Funktionsnamen** gemessen sind es
+sogar zwei — und beide sind im Live-Pfad tot:
+
+    walmIstKonsistent    definiert dachformVorlagen.ts:414
+                         Aufrufe ausserhalb der Tests: 1, und der steht in DERSELBEN Datei (:478)
+    walmFirstlaengeM     definiert dachformVorlagen.ts:340
+                         Aufrufe: 4 Vorkommen in __tests__/dachformVorlagen.test.ts, sonst KEINE
+
+`walmFirstlaengeM` ist der Fall, der sich selbst kommentiert: die Inventur zitiert, die Funktion
+dokumentiere ausdrücklich *„wird NICHT still auf 0 geklemmt"* — genau das, was `dachGeometrie.ts:136`
+tut. **Die richtige Fassung ist geschrieben, dokumentiert und getestet. Sie hat keinen einzigen
+Produktivaufrufer.** Der Live-Pfad läuft über die andere.
+
+### Ball
+
+**Nicht meiner, und das ist der Punkt:** P-1 gehört der Inventur und ist dort vollständig belegt. Ich
+habe seine sechs Zahlen bestätigt, seine sechs Zeiger geprüft und zwei Dinge hinzugefügt, die dort
+nicht stehen: dass `walmFirstlaengeM` **null** Produktivaufrufer hat, und dass der Code im gutmütigen
+Fall auf 0,00 % genau rechnet — der Fehler sitzt an einer Stelle, nicht in der Formel.
+
+**Bei Yama** liegt die Entscheidung, die die Inventur in `:90-91` selbst als ⚠ YAMA-POSTEN ausweist:
+Giebelbreite größer als Firstlänge **ablehnen**, oder den First automatisch auf die längere Achse
+drehen? Beides ist eine Produktentscheidung, keine Rechenfrage. Mein Beitrag dazu ist die Zahl: bis zur
+Entscheidung liefert der Live-Pfad in diesem Fall eine Dachfläche, die um 16 bis über 1000 % zu groß
+ist, und sie geht in PV-Ertrag und Heizlast ein.
+
+**Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
+und `:7881`.
