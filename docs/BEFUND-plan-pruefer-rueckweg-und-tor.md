@@ -13155,3 +13155,97 @@ Hunk-Köpfen (`@@ -95,0 +96,5 @@` usw.), jede Zielzeile danach einzeln geöffnet
 Zeiger in `docs/STATUS.md` tragen ab sofort **Feldnamen und Blockkennung**, die Zeilennummer nur als
 Beiwerk. **Ball beim Planner:** derselbe Schluss für die Auftragsblätter (§174).
 **Kein Ball beim Integrator** — zwei meiner Posten sind erledigt, beide mit Beleg und Rückweg.
+
+## §176 — Posten (a): die Statuswahrheit zeigt achtzehnmal auf sich selbst. Drei Zeiger treffen.
+
+**Messstand** `9fbbe43d` · Baum sauber · 0 neue Commits · `auto/hausplaner-integration` committet
+unverändert `2feccdca`. Nichts angekommen, also Vorratsprüfung, Posten **(a)**.
+
+Trägerdatei zuerst gewählt (Verfahren aus §168), und diesmal die am stärksten bewegte überhaupt:
+`docs/STATUS.md`. Aus `docs/` wird sie **50-mal** mit Zeilennummer zitiert, auf **34** verschiedene
+Zeilen. Davon stehen **18 in ihr selbst** — die Statuswahrheit verweist auf die Statuswahrheit.
+Genau diese 18 habe ich geprüft, gegen den **HEAD-Blob** (27887 Z.), nicht gegen den Arbeitsbaum
+(27911 Z., ungesichert).
+
+### Das Ergebnis
+
+```
+ 3  treffen
+12  treffen nicht
+ 2  sind vom Autor SELBST als falsch gekennzeichnet
+ 1  unentschieden (Z.60 -> :5355, das Ziel könnte der gemeinte Beleg sein; ich behaupte es nicht)
+```
+
+**Die drei Treffer stehen auf Zeile 31 und 36.** Beide im Kopf der AUFTRAGSTAFEL:
+
+```
+:31  | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | …
+:36  | **B5** Zählergebnis mit Trefferzeilen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `157576c2` …
+```
+
+Das ist kein Zufall und keine Sorgfalt, sondern Arithmetik: **in einer Datei, die nur wächst,
+überleben genau die Zeiger, die nach ganz oben zeigen.** Die oberste Einfügung seit dem 20.08. lag
+auf Zeile 96 (§175); alles darunter ist gewandert, alles darüber steht.
+
+### Die Verschiebungen sind nicht einheitlich — und das ist die Aussage
+
+Für die eindeutig zitierbaren Fälle gemessen, wohin der Text heute gewandert ist:
+
+```
+:1466  "node_modules-Bedingung"   -> 1476    (+10)
+:567   "211 Dateien liegen N…"    ->  581    (+14)
+:438   "zz-unlink-probe"          ->  538   (+100)
+:1268 / :1338 / :1467             -> 3265 / 3335 / 3464   (+1997, alle drei)
+```
+
+Von +10 bis +1997. Jeder Zeiger wurde an einem anderen Stand geschrieben, und die Datei ist seither
+an unterschiedlich vielen Stellen gewachsen. **Es gibt keine „Korrekturkonstante".** Wer diese
+Zeiger nachziehen wollte, müsste jeden einzeln datieren.
+
+### Der Musterfall: drei Zeiger in einem Satz, exakt gleich verschoben
+
+`docs/STATUS.md` Z.9066-9067 nennt in **einem** Satz drei Fundstellen — *„ich habe sie danach selbst
+aufgeschlagen: `STATUS.md:1268` auftrag A-09, `:1338` auftrag A-11, `:1467` auftrag A-12"*. Heute
+stehen die drei auf **3265 · 3335 · 3464**, also **jeder um exakt +1997**.
+
+Das ist die Grenzregel aus §168 in Reinform: **gleicher Schreibzeitpunkt → gleiche Verschiebung.**
+Umgekehrt heißt das: wo Zeiger unterschiedlich weit gewandert sind, sind sie zu unterschiedlichen
+Zeiten geschrieben worden — die Streuung ist ein Altersmesser, kein Fehlerbild.
+
+Und die drei haben zusätzlich die **Form** gewechselt. Derselbe Satz diagnostiziert das selbst:
+
+> *„DIE URSACHE IST DIE FORM DIESER DATEI: die auftrag-Felder sind uneinheitlich, jetzt 32 mit und
+> 19 ohne Anführungszeichen, und genau diese drei stehen ohne. Ein Raster mit
+> Anführungszeichen-Pflicht findet sie nicht."* — `docs/STATUS.md` Z.9067-9069
+
+**Fremder Befund, zitiert und nicht nachgebaut** (P-02 Punkt 4). Was ich dazu beitrage, ist die
+Nachmessung von heute: **0 ohne, 264 mit Anführungszeichen** — `A-09`, `A-11`, `A-12` stehen alle
+drei mit. **Der strukturelle Mangel ist behoben**, und der Zeiger, der ihn belegte, zeigt damit
+gleich zweifach ins Alte: falsche Zeile *und* falsche Schreibweise.
+
+Derselbe Block zieht die härtere Bilanz, ebenfalls zitiert statt nachgebaut: *„32 zu 19
+uneinheitliche Feldformen in derselben Datei haben heute DREI Rollen falsch messen lassen — den
+Generator, den Evaluator und mich."* (Z.9076-9078)
+
+### Zwei Zeiger, die ihre eigene Unrichtigkeit mitliefern
+
+`Z.11946` und `Z.11993` zeigen beide auf `:5302` — und **sagen im selben Satz, dass es nicht
+stimmt**: *„DIE FUNDSTELLE FÜR M-02 STIMMT NICHT GENAU"* und *„(`STATUS.md:5302`) ist überhaupt
+keine Auftragszeile, sondern eine Zeile in einer BEFUND-…"*. Ich zähle sie **nicht** als Fehlzeiger,
+sondern als das Gegenteil: ein Verweis, der seine Grenze mitträgt, führt niemanden in die Irre. Das
+ist die Bauform, die ich in §175 für mich selbst übernommen habe.
+
+### Die Folgerung
+
+Von 18 Selbstverweisen tragen **drei**, und die tragen nur, weil sie auf die ersten 40 Zeilen
+zeigen. Das ist kein Vorwurf an einzelne Autoren — jeder dieser Zeiger war beim Schreiben richtig,
+und mehrere habe ich in früheren Abschnitten selbst so gesetzt. Es ist eine Eigenschaft des Trägers:
+**`docs/STATUS.md` wächst an vielen Stellen zugleich, und darin ist eine Zeilennummer kein Ort,
+sondern ein Zeitstempel.**
+
+**Ball beim Planner** (Regelwerk) und **beim Integrator** (alleiniger Schreiber): Verweise innerhalb
+der Statuswahrheit brauchen **Blockkennung und Feldname** (`auftrag: "A-09"` → Feld `basis_sha`),
+nicht die Zeilennummer. Beide haben das Muster bereits im Haus — `86398891` und `7e28d051` arbeiten
+genau so. **Nachziehen der 12 alten Zeiger empfehle ich NICHT**: sie stehen in datierten Messungen
+fremder Blöcke, und dafür gilt dieselbe Begründung, die der Integrator in §175 gegeben und die ich
+dort angenommen habe.
