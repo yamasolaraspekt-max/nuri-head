@@ -18820,3 +18820,124 @@ und trägt sieben Zeilen über der Klemmung die Form, die keines von beidem tät
 Nicht gemessen habe ich, ob eine Oberfläche außerhalb des Hausplaner-Verzeichnisses `ok` liest.
 Die Grundmenge dieser Runde war `resources/planner/hausplaner`. Das ist eine Grenze der Messung,
 kein Ergebnis.
+
+## §231 · Posten (a): die Ankerprüfung im Regelwerk hat sich selbst überholt — 2 von 11 treffen heute
+
+**Messstand.** HEAD `910ece6d` (21.08. 18:32:40), Baum sauber, **0 neue Commits**, Integrationszweig
+unverändert `7a82ecfb` (241 Min). Träger der Ballortung nachweislich unbewegt — `docs/STATUS.md`
+trägt Blob `810f37d9e560`, der Baum `docs/auftraege/aktiv` `b0f14db4239b`, beide am selben Stand
+wie in §229/§230. Gemessen 21.08. 18:33–18:37. Vorratsprüfung Posten **(a)**.
+
+### 1 · Der Einstieg: wer zitiert die Prozessquelle mit einer Zeilennummer?
+
+`docs/ARBEITSREGELN.md` ist heute **1925 Zeilen**, Fassung 1.7 seit 20.08. In den 89 aktiven
+Blättern stehen **6 verschiedene Zeiger** dieser Form mit 10 Nennungen: `:103`, `:145`, `:509`,
+`:693`, `:812`, `:834`. Drei davon prüfte ich gegen die **behauptete Aussage**, nicht auf Existenz:
+
+| Blatt | Zeiger | behauptet | steht heute an | heute bei |
+|---|---|---|---|---|
+| `A-27:25` | `:509` | „Vor jeder CODE_FERTIG-Meldung wird JEDE berührte Datei…" | `artefakte_reproduzierbar: true\|false` | **523** |
+| `A-36:23` | `:693` | „§14, heutiger Wortlaut" | Zitatzeile über gemessen/angenommen | §14 ab **705** |
+| `B7:215` | `:834` | „kein statischer Aufrufer ist…" | „Nach der unabhängigen Abnahme…" | **1012** |
+
+**Eigene Gegenprobe, die einen Fehlfund verhinderte:** Meine erste Suche nach dem A-27-Satz
+(`Vor jeder CODE_FERTIG`) ergab **0 Treffer**, und ich war nahe daran, „die Aussage existiert nicht
+mehr" zu melden. Breiter gesucht steht sie an `:523` — die Datei schreibt `CODE_FERTIG` in Backticks,
+mein Muster lief über die Zeichen dazwischen. Der Satz ist gewandert, nicht verschwunden. **Ein
+Nulltreffer ist ein Verdacht gegen das Muster, bevor er ein Befund über den Text ist.**
+
+### 2 · Der eigentliche Fund liegt eine Ebene tiefer
+
+Die Suche nach dem A-27-Satz traf `ARBEITSREGELN.md:1647` — und diese Zeile steht in einem Block,
+den die Regeldatei **über sich selbst** führt (`:1636-1656`): eine Ankerprüfung, *„26 Verweise auf
+11 Zeilen"*, mit dem Ergebnis **4 falsch, 7 richtig** und dem Satz darunter:
+
+> **Vier von elf sind falsch — 36 Prozent. Mein Skript meldete einen.** Es prüfte, ob dort
+> *etwas* steht; falsch sind sie, weil dort **etwas anderes** steht.
+
+Die Herkunft ist `654e0444` vom **16.08. 19:59** (Planner), und die Commit-Botschaft belegt echte
+Sorgfalt: *„ALLE ELF EINZELN GEOEFFNET, und zwar mit dem Kontext der ZITIERENDEN Stelle statt der
+zitierten."*
+
+### 3 · Alle elf heute nachgemessen
+
+| Zeiger | Bewertung 16.08. | trägt heute | Sache steht heute bei | heute |
+|---|---|---|---|---|
+| `:145` | richtig | Mustertext | — | **trifft** |
+| `:255` | richtig (§5) | `- exakter Basis-SHA,` | §5 ab 229 | **trifft** |
+| `:504` | richtig (E1) | `merge_basis_sha: SHA` | E1 bei **518** | falsch |
+| `:509` | richtig (CODE_FERTIG) | `artefakte_reproduzierbar` | **523** | falsch |
+| `:693` | richtig (Diff-Vorschrift) | Zitatzeile | **690** | falsch |
+| `:834` | richtig (RELEASE_FREI) | Abnahme-Absatz | **849** | falsch |
+| `:1469` | richtig (Nachtrag 16.08.) | `geltungsbereich: …` | **1509** | falsch |
+| `:103` `:739` `:767` `:812` | schon damals falsch | — | — | falsch |
+
+**Von den sieben am 16.08. einzeln bestätigten „richtigen" treffen heute zwei.** Insgesamt
+treffen **2 von 11**.
+
+### 4 · Und die vier angebotenen Korrekturen treffen ebenfalls nicht
+
+Der Block nennt für die vier Fehler die richtigen Stellen. Auch die sind Zeilennummern:
+
+| Korrektur | soll zeigen auf | trägt heute | richtig heute |
+|---|---|---|---|
+| `:739 → 900` | Abschnitt 18a | `## 18. Verbotene Abkürzungen` | 18a bei **917** |
+| `:812 → 973` | Hausregel H-8 | **H-6**-Überschrift | H-8 bei **990** |
+| `:767 → 956` | Hausregel H-6 | Prosa über Sperren | H-6 bei **973** |
+| `:103 → 125` | IN_ARBEIT-Zählbefehl | **Leerzeile** | — |
+
+**Null von vier.** Zwei Details verdienen den Namen: `:812 → 973` zeigt heute auf die *falsche
+Hausregel* — also auf gültigen Regeltext, nur den anderen; und `:103 → 125` landet auf einer
+**Leerzeile**, genau dem Mangel, den derselbe Block bei `:739` anprangert („Anker = LEERZEILE").
+
+Zusammen macht die Tabelle **15 Zeilenaussagen**. Heute stimmen **2**.
+
+### 5 · Die Ursache ist gemessen, nicht vermutet
+
+Seit `654e0444` gab es **6 Commits** auf die Datei; sie wuchs von **1623 auf 1925 Zeilen (+302)**.
+Der Block ist **7118 Minuten alt (4 T 22 h)**. Entscheidend ist der erste dieser Commits:
+
+    b4e5f67e  16.08. 20:03  planner: Ankerlage in allen drei Quellen gemessen …
+
+**Vier Minuten.** Die Ankerprüfung wurde vier Minuten nach ihrer Entstehung von der nächsten
+Ankermessung überholt. Vier weitere Commits folgten bis 21:37, die Fassung 1.7 am 20.08. 16:04.
+
+### 6 · Was das bedeutet — und was es nicht bedeutet
+
+Es bedeutet **nicht**, dass A-27, A-36 oder B7 schlampig gemessen haben. Sie haben aus einer
+Tabelle abgeschrieben, die zum Zeitpunkt des Abschreibens **einzeln geprüft und richtig** war.
+Der Fehler sitzt nicht in den Blättern, sondern in der Form.
+
+Es ist **Drift-Klasse 7** (§203, „die Regel ist jünger als ihr Gegenstand") in ihrer schärfsten
+Ausprägung: *die Regel ist jünger als ihr eigener Verweis auf sich selbst.* Der Abschnitt, der
+begründet, warum Zeilenverweise nicht taugen, besteht aus Zeilenverweisen — und ist ihnen binnen
+fünf Tagen selbst erlegen. Der Commit sagte damals: *„Bei 36 Prozent Fehlerquote nach acht Tagen
+Betrieb ist das keine Stilfrage."* Heute sind es **82 Prozent** (9 von 11).
+
+Damit ist dies der stärkste Beleg für **A-34** (Ankerform statt Zeilennummer, entschieden und
+abgenommen, gebaut in `geradenGeometrie.ts:181-192`, siehe §228) — und zugleich die Antwort auf
+die dort offene Frage, warum die Ankerform erst an einer Stelle steht: **sie steht noch nicht
+dort, wo sie am nötigsten wäre, nämlich in der Prozessquelle selbst.**
+
+### 7 · Die bewusste Ausnahme wird gewürdigt, nicht mitgezählt
+
+`654e0444` schließt: *„EINE STELLE BLEIBT BEWUSST FALSCH: der Verweis auf :145 in A-19 steht dort
+unter der Ueberschrift BELEG SLASH ZITAT, dokumentiert den Fehler, muss bleiben."* Das ist richtig
+und fällt nicht unter diese Bilanz. Ebenso trägt `A-19` an zwei Stellen (`:63`, `:122`) die
+Eintragung **„ANKER BERICHTIGT 16.08."** — das Blatt hat zwei eigene Zeiger selbst nachgezogen.
+Beides ist die Gegenform, und beides gehört in denselben Befund wie der Mangel.
+
+### 8 · Ball
+
+**Planner**, ein Posten mit klarer Reihenfolge:
+
+1. `ARBEITSREGELN.md:1636-1656` in die Ankerform überführen — der Block ist heute zu 13 von 15
+   Aussagen falsch und trägt zugleich die Begründung dafür, warum das passiert. Solange er als
+   Zeilentabelle steht, erzeugt jede weitere Bearbeitung der Datei neue falsche Verweise.
+2. Danach die drei Blätter `A-27:25`, `A-36:23`, `B7:215` — sie zeigen auf gültigen, aber falschen
+   Regeltext. Reihenfolge bewusst nach Ursache statt nach Fund: die Tabelle zuerst, sonst werden
+   die Blätter auf Zahlen berichtigt, die in der nächsten Fassung wieder wandern.
+
+Nicht gemessen: die übrigen zwei der sechs Blatt-Zeiger (`:103` in `A-19:92`, `:812` in `A-19:63`)
+— beide stehen dort ausdrücklich als dokumentierter oder berichtigter Fehler. Das ist eine bewusste
+Grenze, kein Ausfall.
