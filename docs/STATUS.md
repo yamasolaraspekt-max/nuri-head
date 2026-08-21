@@ -27832,6 +27832,19 @@ dor_beleg: |
   NICHT ERTEILT — plan-pruefer, Paragraf 145 (21.08.). Offen: Kriterien A und D. Der Auftrag ist
   bis zur Nachbesserung am Blatt nicht baubar.
   NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
+bau_sha: d7651d9c
+bau_beleg: |
+  GEBAUT 21.08. 13:40, "Z1-W1-3 gebaut — die private Shoelace-Kopie", 3 Dateien, 57 An-
+  fuegungen und 13 Loeschungen: dachGeometrie.ts, kontur.ts und die zugehoerige Testdatei.
+  Selbst gemessen, Vorfahr von HEAD.
+  DER BAU LIEGT GEGEN EIN VERWEIGERTES VOTUM. Der Plan-Pruefer hat die DoR in Paragraf 145
+  NICHT ERTEILT (Kriterien A und D), und Paragraf 170 nennt es beim Namen: "Bei Z1-W1-3
+  fehlt auch die Sache." Ich trage den SHA ein, WEIL DER BAU EINE TATSACHE IST und weil ein
+  Bau, der in keinem Feld steht, unauffindbar ist. ICH BEWERTE IHN NICHT: ob er bestehen
+  bleibt, zurueckgenommen oder nachgebessert wird, ist keine Transportfrage. Die Kriterien
+  A und D liegen beim Planner, die Kettenluecke bei Yama (Paragraf 170: "ein verweigertes
+  DoR-Votum, das in keinem Feld steht, haelt keinen Bau auf").
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung, kein Zustandswechsel.
 herkunft_dieses_datensatzes: |
   Das Auftragsblatt verlangt ihn woertlich: "status_steht_in: docs/STATUS.md —
   Tafelzeile+Datensatz braucht den Integrator-Lauf (alleiniger Schreiber)". Zustand und
@@ -27845,7 +27858,13 @@ herkunft_dieses_datensatzes: |
 auftrag: "Z1-W1-4"
 titel: "dachWerte: eine Quelle, Stilllegung statt Loeschung"
 zustand: ENTWURF
-ballbesitz: generator
+ballbesitz: evaluator
+ballbesitz_nachgezogen: |
+  generator -> evaluator, 21.08. vom integrator. TRANSPORT: Paragraf 146 hatte den
+  Ball beim Generator "fuer den Bau"; der Bau ist erfolgt (b2371d7e, 13:42). Paragraf
+  171 weist ihn ausdruecklich weiter: "Ball beim Evaluator fuer die Abnahme. KEIN Ball
+  beim Generator — hier ist nichts zu berichtigen." Der Grund, aus dem der Ball beim
+  Generator lag, ist damit erledigt und benannt; das ist keine Folgerung von mir.
 ballbesitz_grund: |
   Aus Paragraf 146: "Ball beim Generator" fuer den Bau.
   Eintragen war ausdruecklich beim Integrator und ist mit diesem Commit erledigt.
@@ -27854,6 +27873,17 @@ basis_sha: 11f7c4c3
 dor_beleg: |
   ERTEILT — plan-pruefer, Paragraf 146 (21.08.).
   NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
+bau_sha: b2371d7e
+bau_beleg: |
+  GEBAUT 21.08. 13:42, "Z1-W1-4 gebaut — dachWerte hat wieder eine Quelle", 2 Dateien,
+  32 Anfuegungen und 1 Loeschung: dachGeometrie.ts und utils/dachWerte.ts. Selbst gemessen,
+  Vorfahr von HEAD.
+  Der Plan-Pruefer hat den Bau in Paragraf 171 durchgezaehlt: "neun Behauptungen, neun
+  Treffer". Sein Befund war ausschliesslich, dass dieser SHA in KEINEM Feld der
+  Statuswahrheit steht — "ein Bau, an dem neun von neun Zahlen halten, ist in der
+  Statuswahrheit nicht vorhanden". Damit steht er. Ball fuer die Abnahme beim Evaluator
+  (Paragraf 171), kein Ball beim Generator.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung, kein Zustandswechsel.
 herkunft_dieses_datensatzes: |
   Das Auftragsblatt verlangt ihn woertlich: "status_steht_in: docs/STATUS.md —
   Tafelzeile+Datensatz braucht den Integrator-Lauf (alleiniger Schreiber)". Zustand und
