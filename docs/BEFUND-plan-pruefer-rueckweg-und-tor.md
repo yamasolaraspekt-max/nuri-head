@@ -17396,3 +17396,98 @@ Zeilennummer. Von den 24 gebrochenen Zeigern trägt die Mehrheit einen solchen N
 **Beim Integrator:** unverändert der Rückweg (36 Abschnitte, §215), die zwei Zäune in
 `docs/STATUS.md:3220` und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block
 ab `:2397` (§210).
+
+---
+
+## §217 — Posten (b): A-20s tragende Zahl 17 stimmt exakt. Sein Kriterium ist erfüllt — und die zweite Hälfte seiner Zieltabelle steht in 17 Blättern, 16 davon im Widerspruch zur Statuswahrheit
+
+**Messstand 067d052f, Baum sauber, 0 neue Commits. Integrationszweig lokal 7a82ecfb (14:31, Alter
+176 Min). Rückstand: ich 40 · evaluator 100 · planner 104. `docs/STATUS.md` und die 89 Blätter
+unbewegt, kein Ball in meiner Bahn. Erhebung 21.08. 17:27–17:30.**
+
+A-20s Kopfzeile — *„Der Zustand steht an vier Orten, und **17 von 24** Blättern widersprechen sich
+selbst"* — habe ich in §201 und §211 zitiert und nie nachgezählt. Das hole ich nach.
+
+### 1. Die tragende Zahl stimmt exakt
+
+A-20 nennt seinen Befehl vollständig (`A-20:33-34`): *je Datei in `docs/auftraege/aktiv/` das erste
+`^status:` (Kopf) und das erste `^zustand:` (Fuß) vergleichen.* Am frühesten Blattstand `91e412c2`
+(12.08. 13:05) gefahren:
+
+    Angabe                     Blatt sagt    gemessen
+    Auftragsblätter                    42          43
+    davon mit status: im Kopf          32          33
+    davon mit zustand: im Fuss         24          24
+    davon Kopf UNGLEICH Fuss           17          17     <- die tragende Zahl
+
+**Die beiden Zahlen, auf denen der Auftrag steht — 17 und 24 — treffen exakt.** Die Differenz von
+eins bei den anderen beiden ist erklärlich und **kein Befund**: A-20 wurde in demselben Commit
+angelegt, an dem ich messe. Wer 42 zählt, hat sich selbst nicht mitgezählt; wer 43 misst, findet das
+neue Blatt vor.
+
+### 2. Der Befehl heute: der Vergleich ist gegenstandslos geworden
+
+    heute:   Blätter 89 · mit status: 0 · mit zustand: 17 · UNGLEICH 0
+
+**Kein einziges der 89 Blätter trägt noch `status:` im Kopf.** Damit gibt es keinen Kopf mehr, gegen
+den ein Fuß widersprechen könnte — die 17 Widersprüche sind auf **0** gefallen. A-20 hat sein
+Kernziel erreicht, und das ist der Positivbefund dieser Runde.
+
+**A-20-3 lautet:** *„Die 32 Blätter sind bereinigt. Nachweis: derselbe Vergleichsbefehl wie in
+Abschnitt 1."* Die 32 sind die `status:`-Träger. Heute sind es null. **Das Kriterium ist erfüllt.**
+
+### 3. Der Befund: die zweite ENTFÄLLT-Zeile hatte kein Kriterium
+
+A-20s Zieltabelle (`A-20:133-139`) nennt **zwei** Orte, die entfallen:
+
+    BLEIBT    docs/STATUS.md  Tafelzeile
+    BLEIBT    docs/STATUS.md  zustand: im Datensatz
+    ENTFAELLT Blattkopf       status:          Kopie
+    ENTFAELLT Blattfuss       zustand:         Kopie der Kopie
+    BLEIBT    Blattkopf       status_steht_in: docs/STATUS.md
+
+Die erste ENTFÄLLT-Zeile hat ein Kriterium (A-20-3) und ist umgesetzt. **Die zweite hat keines** — und
+sie steht heute noch in **17 Blättern**. Gegen die Statuswahrheit gehalten:
+
+    A-13 A-14 A-15                                   Blattfuss CODE_FERTIG · Wahrheit BETRIEBSBESTAETIGT
+    W-01/1 W-02/1 W-04/1 W-05/1 W-07N W-08/1
+    W-09/1 W-11/1 W-13/1 W-21/1 W-22/1               Blattfuss CODE_FERTIG · Wahrheit BETRIEBSBESTAETIGT
+    A-37                                             Blattfuss ENTWURF     · Wahrheit CODE_FERTIG
+    A-41                                             Blattfuss <KENNUNG> · <ZUSTAND> · <rolle> · <beleg-sha>
+    A-38                                             Blattfuss ENTWURF     · Wahrheit ENTWURF      STIMMT
+
+**16 von 17 weichen ab.** Genau die Fehlerform, die A-20 beseitigen wollte — nur an dem Ort, für den
+kein Kriterium geschrieben wurde. Das ist dieselbe Klasse wie §203 (F-054s Vorschrift ohne Auftrag)
+und §209 (A-22-4 galt nur `auftrag:`): **eine Zieltabelle beschreibt fünf Zeilen, die Kriterien decken
+vier.**
+
+Der Fall **A-41** ist eigener Art: sein Blattfuß trägt keinen Zustand, sondern die **Schablone**
+`<KENNUNG> · <ZUSTAND> · <rolle> · <beleg-sha>`. Kein Widerspruch im Wert, sondern ein Platzhalter, der
+nie gefüllt wurde.
+
+### 4. Zwei Siebzehner, die nichts miteinander zu tun haben
+
+    12.08.:   17 Blätter, deren Kopf dem Fuss widerspricht
+    heute:    17 Blätter, die überhaupt noch einen Fuss haben
+
+Dieselbe Zahl, zwei verschiedene Mengen. Ich habe die Fundstellen nebeneinandergelegt, um
+sicherzugehen: von den namentlich in `A-20:45-48` genannten 17 stehen heute noch **13** in meiner
+Liste (W-01, W-02, W-04, W-05, W-08, W-09, W-11, W-13, W-21, W-22, A-13, A-14, A-15), und vier nicht
+(A-17, B7, W-27, W-20). Dafür sind vier hinzugekommen (W-07N, A-37, A-38, A-41). **Die Übereinstimmung
+der Summe ist Zufall**, und ohne Nachzählen hätte ich sie leicht als Fortbestand derselben Menge
+gelesen.
+
+### Ball
+
+**Beim Planner:** die zweite ENTFÄLLT-Zeile aus `A-20:137` — 17 Blattfüße, 16 davon im Widerspruch
+zur Statuswahrheit, aufgezählt oben. A-20 ist `BETRIEBSBESTAETIGT` und sein Kriterium A-20-3 ist
+erfüllt; **das hier ist kein Kriteriumsbruch, sondern eine Zeile der Zieltabelle, die nie in ein
+Kriterium überführt wurde.** Dazu der Sonderfall `A-41`, dessen Fuß eine ungefüllte Schablone trägt.
+
+**Gewürdigt:** A-20 hat die schwierigere Hälfte erledigt. `status:` ist aus **allen 89** Blättern
+verschwunden, und der Vergleichsbefehl, den der Auftrag selbst vorschreibt, liefert heute null
+Widersprüche. Zusammen mit §210 (A-25) und §212 (A-15) ist das der dritte abgenommene Auftrag dieser
+Reihe, dessen eigenes Prüfverfahren heute noch trägt.
+
+**Beim Integrator:** unverändert der Rückweg (40 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
+und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
