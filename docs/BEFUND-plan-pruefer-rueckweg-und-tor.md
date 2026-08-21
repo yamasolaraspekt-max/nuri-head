@@ -11828,3 +11828,66 @@ bereits in §134 erfasst. Uebrig bleiben zwei ungeprueste Faelle, davon einer un
 mit genau einer falschen Zahl. **Das ist die Ausbeute, die eine gezielte Suche haben soll.**
 
 **Ball beim Planner**, klein und benannt: drei Zitate derselben Zahl auf `:529` nachziehen.
+
+## §162 — Posten (e) an §128: der Einheiten-Befund hält, und ein eigener Zeiger trägt den falschen Inhalt
+
+*(Messstand ea08339a, 21.08. 12:59. Nummer gegen den frischen HEAD gewaehlt: 99 Abschnitte, hoechste
+161 — 162 war frei.)*
+
+**Herkunft:** mein eigener §128 (`docs/BEFUND-plan-pruefer-rueckweg-und-tor.md:9577-9605`), der
+Einheiten-Teil — *„drei Aussagen ueber dieselbe Einheit"*. Nachgemessen am HEAD.
+
+### Drei von vier Zusagen treffen wörtlich
+
+| Zusage aus §128 | heute gemessen |
+|---|---|
+| `polygonFlaeche.ts:12` sagt *„in Metern … Ergebnis in m²"* | ✓ woertlich |
+| `deckenMesh.ts:14` sagt *„rechnet KEINE Einheit um (Input in mm ⇒ Ergebnis mm²)"* | ✓ woertlich |
+| `MM2_PRO_M2 = 1_000_000` | ✓ bei `renderers/three-d/deckenMesh.ts:15`, benutzt bei `:24` |
+| Rumpf `polygonFlaecheM2`: **0** Divisionen durch 1000 / 1e6 | ✓ **0** |
+
+**Der tragende Satz haelt also:** der Rumpf rechnet nichts um, der Meter-Vertrag steht nur im Kopf.
+
+### Der vierte: richtiger Zeiger, falscher Inhalt daneben
+
+§128 schreibt: *„Zusammen mit `dachGeometrie.ts:44` aus §122 (`/1_000_000`, also ebenfalls mm)"*.
+Gemessen:
+
+```
+geometry/dachGeometrie.ts:44   s += a.x * b.y - b.x * a.y;        <- die Schuhband-Summe
+geometry/dachGeometrie.ts:46   return Math.abs(s) / 2 / 1_000_000; <- die Division
+```
+
+**Und es ist kein Drift:** am Stand von §128 (`b5af089e`) stand dort schon dasselbe, und die Datei
+hat seither **0 Commits**. §122 (`…:9147`) und §145 (`…:10678`) zitieren `:44` **richtig** — als Ort
+der Formel. **Nur §128 hat die Division an diesen Zeiger gehaengt**, und die steht zwei Zeilen
+tiefer.
+
+**Die Folgerung ueberlebt unveraendert:** `dachGeometrie.ts` teilt tatsaechlich durch `1_000_000`,
+rechnet also in mm — nur eben bei `:46`. Beide gemessenen Verbraucher rechnen mm, der Meter-Vertrag
+steht allein im Kopf einer Datei ohne Ladeweg (`geometry/polygonFlaeche.ts`, heute erneut in der
+Tot-Liste).
+
+### Nichts hat sich bewegt
+
+```
+geometry/polygonFlaeche.ts          0 Commits seit b5af089e
+renderers/three-d/deckenMesh.ts     0
+geometry/dachGeometrie.ts           0
+Z1-W1-3 (zustaendiger Auftrag)      0   ·  zustand: ENTWURF
+```
+
+Der Auftrag, der die Falle aufloesen soll, steht unveraendert auf `ENTWURF` mit meinem NICHT ERTEILT
+aus §145 — dessen zwei tragende Restpunkte (Kriterium A unerfuellbar, Kriterium D zweideutig) liegen
+beim Planner.
+
+### Was ich an mir ändere
+
+**Das ist die zweite Stelle, an der ein Abschnitt von mir einen richtigen Zeiger mit dem falschen
+Inhalt verbindet** — hier `:44` mit der Division, in §153 die Achsen-Formulierung neben einer
+richtigen Rechnung. **Ich habe den Zeiger geprueft und den Satz daneben nicht.** Kuenftig gilt fuer
+mich: wenn ich einen Zeiger uebernehme, uebernehme ich **auch dessen Inhalt aus der Quelle**, statt
+ihm meinen eigenen Satz mitzugeben.
+
+**Kein neuer Ball.** Die Einheiten-Sache liegt bei Z1-W1-3 und damit beim Planner; die Berichtigung
+an §128 steht hier.
