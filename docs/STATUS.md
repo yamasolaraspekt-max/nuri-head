@@ -95,7 +95,7 @@
 | **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | **`BETRIEBSBESTAETIGT`** | — | Bau `ec12e9b3` · Schnitt `1df82ee1` | **GEBAUT 15.08.: das erste Werkzeug nach A7, das wirklich etwas tut.** `geradenGeometrie` hatte **null** Produktivimporte, jetzt einen. **`u` gab es vorher nicht** — `geradenSchnittParameter` ist eine **zweite Sicht auf dieselbe Rechnung**, `geradenSchnitt` ruft sie und bleibt in seiner Signatur. **Der lehrreichste Fehler kam von meiner eigenen Zusage:** die erste Fassung verglich `min(t, 1−t)` — in Gleitkomma ist `1−0.8` **nicht** `0.2`, der Gleichstand zweier symmetrischer Schnittkanten wäre **nie** erkannt worden. *Genau das Raten, das K6 verbietet, nur unsichtbar.* Behoben über den **quadrierten Abstand zum gerundeten** Schnittpunkt — ganze Millimeter, exakt vergleichbar. **Drei Entscheidungen benannt statt still getroffen** (K6 ohne Klickpunkt → *kleinste Kürzung*; Gleichstand bei `t = 0,5` → `end`; gesperrte Wand als Schnittkante erlaubt). **UMFANG GRÖSSER ALS DER SCHNITT, gemeldet:** ein Registry-Eintrag ist im Haus **nicht additiv** — **zwölf** bestehende Zusagen wurden rot, alle einzeln nachgemessen; **eine** Zusage habe ich **erweitert** (`art === 'werkzeug'` → auch `'aktion'`), **sechs Zähl-Anker** mit Gegenprobe nachgezogen. **OFFEN und nicht behauptet: die Browserabnahme** — die Bühne `ticket_testing` ist leer (0 Benutzer, 0 Objekte). Suite **1763/1763** (1750 + genau 13 neue), tsc **0**, Bündel frisch. **— SCHNITT:** Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` · **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
 | **Z1-W1-1** Das DIN-18065-Badge sagt, was es nicht geprueft hat | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-1-din-badge-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §143), offen: drei Punkte · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich |
 | **Z1-W1-2** Walmdach: ungueltige Kontur wird abgelehnt statt still falsch gerechnet | `ENTWURF` | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-2-walmdach-sperre.md` · **DoR ERTEILT** (plan-pruefer §144) · **Bau** `60c04eef` (21.08. 13:33) · offen: Kriterium E Browserabnahme, dazu ein Widerspruch an `dachformVorlagen.ts:478` beim Planner (§169) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich |
-| **Z1-W1-3** Eine Formel, eine Stelle: polygonM2-Kopie zusammenfuehren | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md` · **DoR NICHT ERTEILT** (plan-pruefer §145), offen: Kriterien A und D · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich |
+| **Z1-W1-3** Eine Formel, eine Stelle: polygonM2-Kopie zusammenfuehren | `BEREIT` | **Planner** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md` · **DoR NICHT ERTEILT** (plan-pruefer §145), offen: Kriterien A und D · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §179, 21.08.), Zustand vom Integrator nachgezogen |
 | **Z1-W1-4** dachWerte: eine Quelle, Stilllegung statt Loeschung | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` · **DoR ERTEILT** (plan-pruefer §146) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich |
 | **Z1-W1-5** insulationType: der tote Zweig sagt, dass er tot ist | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §147), offen: die Zahl · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich |
 
@@ -27830,7 +27830,18 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z1-W1-3"
 titel: "Eine Formel, eine Stelle: polygonM2-Kopie zusammenfuehren"
-zustand: ENTWURF
+zustand: BEREIT
+zustand_beleg_transport: |
+  Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
+  ARBEITSREGELN.md:253: "Ein Auftrag darf nur den naechsten Zustand erreichen, wenn der
+  Plan-Pruefer alle folgenden Punkte belegt hat." Er hat belegt — Paragraf 179, DoR
+  Fassung 2 erteilt — und den Schritt ausdruecklich mir zugewiesen: "Ball beim
+  Integrator: Z1-W1-3 kann weiter, das Votum steht hier."
+  VORHER: der Wert aus dem Blattkopf.
+  ANMERKUNG, DAMIT DER EINTRAG NICHT MEHR BEHAUPTET ALS ER IST: der Bau d7651d9c liegt
+  seit 13:40 vor, also VOR diesem Schritt. Die Stufe wird hier nachgetragen, nicht
+  durchlaufen. Genau das ist der Befund aus Paragraf 170, den der Plan-Pruefer an Yama
+  adressiert hat; ich loese ihn nicht auf, ich mache ihn sichtbar.
 ballbesitz: planner
 ballbesitz_grund: |
   Aus Paragraf 145: "Ball beim Planner" fuer Kriterien A und D.
@@ -27838,8 +27849,13 @@ ballbesitz_grund: |
 blatt: "docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md"
 basis_sha: 11f7c4c3
 dor_beleg: |
-  NICHT ERTEILT — plan-pruefer, Paragraf 145 (21.08.). Offen: Kriterien A und D. Der Auftrag ist
-  bis zur Nachbesserung am Blatt nicht baubar.
+  ERTEILT — plan-pruefer, Fassung 2, Paragraf 179 (21.08.): "Kriterium A ist heute
+  messbar gruen und mein Paragraf 145 ist damit erledigt." Alle drei Restpunkte aus
+  Paragraf 145 abgearbeitet; Restpunkt 3 (Kriterium D, zwei Lesarten) ist entschieden
+  — berichtigen statt wahr machen, Entscheidung beim Planner, getroffen.
+  VORHERIGE FASSUNG, ausdruecklich erhalten: NICHT ERTEILT aus Paragraf 145 (offen
+  waren Kriterien A und D). Wer einen aelteren Stand liest, findet dort den alten Wert.
+  Offen beim Planner bleibt die Fundstelle in Kriterium D (:22-23 -> :25-26).
   NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
 bau_sha: d7651d9c
 bau_beleg: |
