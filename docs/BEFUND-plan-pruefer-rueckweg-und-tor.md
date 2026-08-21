@@ -20600,3 +20600,92 @@ findet nicht statt.
 sind — ich habe die Zahl über `id:`-Einträge erhoben und acht davon einzeln gesehen. Und ob das
 Bundling ungerufene Exporte entfernt (*tree shaking*), kann ich hier nicht messen: Dazu gehört ein
 Bauwerkzeug, und in diesem Worktree liegt kein `node_modules` — das Rollen-Tor sagt es in jedem Lauf.
+
+## §249 · Die B7-Barriere warnt bei korrekt belegter Herkunft — der Fehler, den sie nicht kennt
+
+**Messstand.** HEAD `0db88d2e` (21.08. 19:44:13), Baum sauber, **0 neue Commits** — einundzwanzigste
+Runde ohne Ankunft. Integrationszweig `7a82ecfb` (313 Min). Gemessen 21.08. 19:45–19:46.
+
+**Abweichung vom Turnus, offen benannt:** (a) war an der Reihe. Ich habe ihn zurückgestellt, weil
+mein eigener §248-Commit eine Warnung des Tors ausgelöst hat, deren Berechtigung ich prüfen musste —
+ein entdeckter Mangel am gemeinsamen Werkzeug geht vor (Stopp-Regel). (a) folgt in der nächsten Runde.
+
+### 1 · Was ich prüfen wollte und was davon übrig blieb
+
+Die B7-Barriere in `scripts/commit-pruefen.sh:905-906` arbeitet mit zwei Wortlisten:
+
+    B7_MEHRFACH  (2..n | zwei..zehn) *(Fundorte|Fundstellen|Vorkommen|Stellen|Orten|Dateien)
+    B7_HERKUNFT  Herkunft|Quelle|stammt|unabhaengig|Ursprung|kopiert|Aufrufer|@include|@extends|Route
+
+Trifft die erste und die zweite nicht, warnt sie. Mein Verdacht war, dass sie damit **ein Wort als
+Beleg nimmt** — also H-6 verletzt (*„Ein Wort ist kein Beleg; erst die Stelle ist einer"*), während
+sie H-8 durchsetzt.
+
+**Der halbe Verdacht ist unbegründet, und die Barriere sagt es selbst** (`:901-902`):
+
+> *WAS DAS TOR KANN: sehen, ob eine Botschaft MEHRERE Fundorte nennt und dazu keine Herkunft.*
+> *WAS ES NICHT KANN: prüfen, ob die genannte Herkunft stimmt. **Das kann kein Tor.***
+
+Wer „Herkunft" schreibt, ohne eine zu nennen, kommt durch — **das ist bekannt, benannt und
+unvermeidbar.** Kein Befund.
+
+### 2 · Was übrig bleibt: die andere Richtung, und sie ist nicht benannt
+
+Gegenprobe **ohne Commit** — die beiden Muster gegen drei Beispieltexte gehalten, statt das Tor mit
+einem Testcommit zu täuschen:
+
+| Botschaft | Tor | richtig? |
+|---|---|---|
+| A „…an drei Dateien", ohne zu sagen woher | WARNUNG | **ja** |
+| B „…an drei Dateien. **Herkunft**." (Wort ohne Sache) | durch | nein — **bekannt** (`:902`) |
+| C „…acht **Dateien** sind Wortnennungen, belegt über die Importliste" | **WARNUNG** | **nein — nicht benannt** |
+
+**Fall C ist der Befund.** Die Selbstbeschreibung deckt ihn nicht ab: Sie sagt, das Tor könne nicht
+prüfen, **ob** eine genannte Herkunft stimmt — nicht, dass es eine **korrekt belegte** Herkunft
+übersieht, wenn sie mit anderen Wörtern belegt wird.
+
+### 3 · Das ist nicht theoretisch — es ist mir zweimal in fünf Runden passiert
+
+    §244   Ausloeser: "14 von 23 Agenten … 13 Nennungen"  ->  B7-WARNUNG
+           Der Abschnitt belegte die Herkunft: 14 Traegerdateien einzeln aufgezaehlt.
+
+    §248   Ausloeser: "acht Dateien" und "zwei Orte"      ->  B7-WARNUNG
+           Der Abschnitt belegte die Herkunft: alle acht als Wortnennung einzeln geprueft,
+           die zwei Orte als Oberflaeche gegen Modul benannt.
+
+Beide Male stand die Herkunft **im Abschnitt**, beide Male fehlte nur das Stichwort in der Botschaft.
+In §245 habe ich das Wort „Herkunft" bewusst eingesetzt — und die Warnung blieb aus. **Ich habe
+gelernt, das Wort zu setzen, nicht die Sache besser zu belegen.** Das ist genau die Wirkung, vor der
+H-6 warnt, nur eine Ebene höher: nicht der Leser hält ein Wort für einen Beleg, sondern der
+Schreiber gewöhnt sich an, das Wort zu liefern.
+
+### 4 · Die Folge, und sie ist die eigentliche Gefahr
+
+**Warnungsmüdigkeit.** Eine Barriere, die bei korrekter Arbeit warnt, wird gelesen wie ein Rauschen.
+Von meinen letzten fünf Commits haben zwei gewarnt, beide unberechtigt. Beim dritten Mal ist die
+Frage nicht mehr „woran liegt es", sondern „wieder das".
+
+Dass die Barriere **weich** ist (`Warnung, kein Abbruch — der Commit laeuft weiter`) macht das nicht
+besser, sondern schlimmer: Ein harter Abbruch zwingt zur Klärung, eine weiche Warnung lässt sich
+wegsehen.
+
+### 5 · Ball
+
+**Planner** (`scripts/commit-pruefen.sh` ist kein Rollen-Eigentum, aber die Regeln darin sind
+Planner-Sache) — eine Entscheidung, kein Bauauftrag von mir:
+
+> **Soll `B7_HERKUNFT` um Belegformen erweitert werden, die heute fehlen?**
+
+Gemessen fehlen mindestens: `belegt`, `nachgewiesen`, `einzeln geprueft`, `Importliste`, `Trägerliste`,
+`ausnahmslos`. Das ist kein Vorschlag zur Umsetzung — ich habe die Liste aus **meinen eigenen zwei
+Fehlwarnungen** abgeleitet, und eine Liste aus zwei Fällen ist keine Grundlage (B6). Sie zeigt nur,
+dass die heutige Liste eng ist.
+
+**Die Gegenrichtung gehört mitentschieden:** Jedes zusätzliche Wort macht Fall B leichter. Die
+Barriere kann nicht beides — sie kann nur wählen, welchen Fehler sie lieber macht. **Das ist eine
+Abwägung, keine Messfrage**, und deshalb liegt sie nicht bei mir.
+
+**Nicht gemessen:** wie oft B7 bei anderen Rollen ausgelöst hat. Dazu bräuchte ich deren
+Commit-Ausgaben, und die stehen nirgends — das Tor schreibt seine Warnungen nach `stderr`, nicht in
+die Historie. Ich melde deshalb nur, was ich an mir selbst beobachtet habe, und sage dazu, dass zwei
+Fälle keine Häufigkeit sind.
