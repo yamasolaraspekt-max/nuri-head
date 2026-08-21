@@ -70,6 +70,35 @@ Ex-Mitarbeiter zieht sich weiter einen Dauer-Token — und ob der **Web-Login** 
 ist **nicht gemessen** (Messauftrag, nicht annehmen). **Y-10:** Token-Ablaufzeit (Bedienfolge Nuriva).
 Entwarnung: Selbstregistrierung ist zu (`Auth::routes(['register'=>false])`).
 
+### Messung A-6/A-7 + Sanctum (security-reviewer, 21.08.) — Ergebnisse
+**A-7 präzisiert — `is_active` ist KEIN Kontostatus, sondern ein Online-Flag:** `LogUserLogin.php:26`
+setzt bei jedem Login `is_active=1`, `LogUserLogout.php:16` bei Logout `0` (EventServiceProvider:22-27).
+Web-Login (`LoginController` nur Trait, kein `credentials()`), laufende Session (keine Middleware)
+und `PlannerApiAuthController@token` prüfen es **nie** — einzig `MobileAuthController:68-73` prüft es
+(und sperrt dadurch fälschlich Nutzer nach regulärem Web-Logout: „Benutzer ist nicht aktiv"). Die UI
+behauptet Kontostatus (`user_view.blade.php:38` Active/Deactivated; Schreibpfade `UserController:518-530,
+734-750`). **Reproduktion:** Admin deaktiviert X → X loggt sich ein → gelingt, Flag springt auf 1.
+**`logOffUser` (`UserController:449-455`) ist vollständig wirkungslos:** liest `session('user_session_'.$userId)`
+der eigenen Admin-Session (immer null für fremde ID) und `sessions`-Tabelle existiert nicht
+(`session.driver=file`). **wirkung:** HOCH (Auth: Entlassene bleiben drin, unabhängig von der
+Rechte-Politik). **→ W0-9.**
+**A-6 bestätigt ROT:** `secure.image` (`routes/web.php:1463-1464`, `ImageController:770-785`
+`findOrFail` ohne Bindung) + Geschwister `secureDownloadScreenshot` (`:753-767`, findOrFail VOR
+auth-check) + `secureImageByFilename` (`:787-819`); `images.customer_id` → `new_leads` existiert, wird
+nicht benutzt; 7 Produktiv-Erzeuger kennen den Kunden an der Aufrufstelle. Lokal 31 von 52 Nutzern
+ohne Customer-Recht → unter Yamas Entscheidung (alle Rechte) heute faktisch 0, **strukturell weiter
+offen → W0-8.** Pfad-Injektion grün (`basename`); Dateinamen nicht ratbar, IDs schon.
+**Sanctum:** `expiration=null` (`config/sanctum.php:49`), **keine** Bereinigung (kein
+`sanctum:prune-expired` im Scheduler), 1 Token seit 02.07. ungenutzt, Admin hat kein Widerrufsmittel
+(`logout-all` ist Selbstbedienung) — **Y-10** Token-Laufzeit (Operand Stunden). `stateful` enthält
+`ticket.test` (Default aus APP_URL), `EnsureFrontendRequestsAreStateful` erste Position der
+api-Gruppe; CSRF greift (11 Ausnahmen in `VerifyCsrfToken:14-29`, u.a. `api/reminder/*/status`);
+Cookie ohne Referer/Origin → 401 (grün). **0 von 59 API-Routen tragen `permission:`**; 35 per
+Browser-Cookie erreichbar.
+**A-8 NEU (Messauftrag):** `api/secure/master-sets`, `/{id}`, `/master-sets-debug` tragen **keine
+Authentifizierung** (nur `throttle:60,1`), nur am Middleware-Stack gemessen — **Inhalt nicht geprüft**.
+**A-9 NEU:** `ImageController.php:30` Upload-Regel `file.*` ohne `max:` (andere Pfade 25–50 MB) — GELB, S.
+
 **Z2c nicht geprüft:** `PlannerEmployeeApiController` jenseits der genannten Methoden;
 `PlannerItemMaterialController` :100-610 (Accept/Reject); `config/sanctum.php` Token-Ablauf;
 `secure.image`-Auslieferung (eigener Anschlussfund möglich); `/api/mobile/*`, `/api/secure/master-sets/*`

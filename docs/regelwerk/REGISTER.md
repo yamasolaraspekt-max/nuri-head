@@ -20,6 +20,11 @@
 vertritt vollständig und weist alle Rollen an; Widerspruch wird gehört und abgewogen; vier
 selbstgezogene Grenzen (Rollentrennung, Deploy/Löschung, Operanden-Gate, main-Weg).
 
+**Entscheidung mit Reichweite (Yama, 21.08.2026):**
+[`ENTSCHEIDUNG-RECHTE-ALLE-FUER-ALLE.md`](ENTSCHEIDUNG-RECHTE-ALLE-FUER-ALLE.md) — alle Nutzer haben
+alle Rechte; gebaut als ein Schalter (`RECHTE_ALLE_FUER_ALLE`), Tore bleiben Struktur; Integrität
+und Authentifizierung unberührt.
+
 **Aufgehoben, aber erhalten:** [`docs/HAUSREGELN.md`](../HAUSREGELN.md) trägt seit 12.08.2026
 keinen Regelinhalt mehr — ihr Inhalt steht in ARBEITSREGELN §18a. Nicht gelöscht, weil der Weg
 dorthin nachvollziehbar bleiben soll.

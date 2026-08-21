@@ -79,8 +79,12 @@ nur Ownership fehlt. **Verschärfung A-4:** `:130-131` bevorzugt den Client-Wert
 auf `authEmployeeId()`), ein Schleifenaufruf, kein neuer Mechanismus. Zweite Achse `isSuperAdmin()`.
 
 **Zwei Baustufen — Stufe 1 ist OHNE offenen Operanden baubar:**
-- **Stufe 1 (dieser Auftrag):** A-1: `$employee === authEmployeeId() || isSuperAdmin()`, sonst 403 —
-  schließt den GPS-Leak sofort, die 3 Admins arbeiten weiter. A-2/A-3/A-4 wie oben (Zuständigkeit
+- **Stufe 1 (dieser Auftrag), angepasst an Yamas Entscheidung vom 21.08. (alle Rechte für alle,
+  Y-9: jeder sieht fremde Tagesberichte):** A-1: `$employee === authEmployeeId() || isSuperAdmin()
+  || hasPermission('Planner','read')`, sonst 403. Mit dem Rechte-Schalter (W0-7) passt heute jeder
+  — das Tor bleibt gebaut und wird mit Schalter **false** getestet (fremd → 403), damit es den Tag
+  überlebt, an dem Yama differenziert. **A-4 (Melder-Spoofing) und die Schreib-Integrität von
+  A-2/A-3 bleiben unabhängig vom Schalter wirksam** (Entscheidungsblatt: „Sehen", nicht „Fälschen"). A-2/A-3/A-4 wie oben (Zuständigkeit
   über `planner_item_employees`, 404 statt Leak; A-4 `requested_by_employee_id` aus der Validierung
   entfernen, hart `authEmployeeId()`).
 - **Stufe 2 (nach Y-9):** Vorgesetztenkette für A-1 — und ob Disponenten/Planer ohne
