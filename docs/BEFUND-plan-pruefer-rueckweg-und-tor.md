@@ -23963,3 +23963,104 @@ ist.
 
 **Nicht geprüft:** Posten 8 (Regelkollision) — der letzte der neun, den ich in dieser Sitzung noch
 nicht neu gemessen habe. Nächste Runde.
+
+## §285 · Yamas Posten 8 nachgemessen — und damit sind alle neun erledigt: sieben Zeilenbelege gewandert, sieben Aussagen unversehrt
+
+**Messstand.** Runde begonnen an `37a001e0` / Zweig `35ae00fe`. **Vor dem Schreiben neu gemessen
+22:15: HEAD und Zweig beide `844ae872`, Rückstand 0.** `docs/ARBEITSREGELN.md`,
+`scripts/commit-pruefen.sh` und `docs/STATUS.md` sind zwischen beiden Ständen **unverändert**
+(numstat leer) — alle Zahlen unten gelten am neuen Stand. Ballortung beidseitig **1** (P-02,
+VORLAGE) und **35** — nichts in meiner Bahn. Gemessen 21.08. 22:13–22:17.
+
+**Den Arbeitsbaum habe ich dabei mitten im Umzug erwischt:** eine Messung meldete drei Dateien
+gleichzeitig als *gelöscht im Index* und *unverfolgt auf der Platte* — der Zwischenzustand,
+während der Rückweg meinen HEAD von `37a001e0` auf `844ae872` zog. Eine Messung später sind alle
+drei regulär im HEAD und auf der Platte, der Baum trägt nur noch meine eigene Änderung. **Kein
+Schaden, aber ein Lehrstück:** der Arbeitsbaum ist eine flüchtige Größe, und wer ihn in der
+falschen Sekunde liest, meldet einen Verlust, den es nie gab. Angekommen dabei: `844ae872` und
+`d78a2211` — eine zu weit gefasste Einfrierung des Release-Prüfers, vom Generator gemeldet statt
+still umgangen und binnen 29 Minuten behoben. Fremde Sache, hier nur zitiert.
+
+Posten 8 war der letzte der neun, den ich in dieser Sitzung nicht neu gemessen hatte.
+
+### 1 · Die Kollision, wie sie protokolliert ist
+
+    Seite A   "unmittelbar nach dem Merge wird dessen SHA in einem Statusuebergang auf dem
+               Zielbranch festgehalten"
+    Seite B   "Nur ausdruecklich gepruefte Pfade werden gestaged; niemals `git add -A`."
+
+Der Datensatz hält fest, sie *„steht unveraendert, weil sie eine **Regelaenderung** braucht und keine
+Arbeitsweise."* In `docs/STATUS.md` ist sie heute noch zweimal protokolliert.
+
+### 2 · Beide Regeln stehen — an neuen Zeilen
+
+`docs/ARBEITSREGELN.md` ist von **1825 auf 1925 Zeilen** gewachsen. Meine Belege vom 16.08.:
+
+    Seite A   Z.409  ->  heute Z.423    (+14)   Wortlaut unveraendert
+    Seite B   Z.692  ->  heute Z.707    (+14)   Wortlaut unveraendert
+
+Beide Zeiger zeigen heute auf etwas anderes; über die **Ankerform** gesucht steht jede Regel
+wörtlich da, wo sie stand — nur vierzehn Zeilen tiefer.
+
+### 3 · Das Tor erzwingt Seite B — heute wie damals
+
+    scripts/commit-pruefen.sh          1016 Zeilen (16.08.)  ->  1066 heute   (+50)
+    git add -- "$p", je Pfad einzeln   Z.945                 ->  Z.995        (+50)
+    git add -A  /  git add .           0 Treffer im ganzen Tor
+    Aufruf ohne Pfadangabe             exit=2, Aufruf-Hinweis   (Exit OHNE Pipe gelesen)
+
+Die Verschiebung der `git add`-Zeile ist **exakt das Wachstum der Datei**. Damit ist mein Befund vom
+16.08. in allen drei Stücken bestätigt: **Regel B ist nicht nur geschrieben, sondern gebaut.** Ein
+Commit ohne benannte Pfade kommt nicht zustande, ein pauschales Einsammeln ist im Tor nirgends
+möglich.
+
+**Votum unverändert: praktisch geschlossen, formal offen.** Die Kollision besteht im *Text* des
+Regelwerks; im *Betrieb* ist sie entschieden, weil nur eine der beiden Seiten erzwingbar ist. Was
+fehlt, ist eine Regeländerung — und die ist Yamas.
+
+### 4 · Damit sind alle neun Posten dieser Sitzung neu gemessen
+
+| # | Posten | Stand heute |
+|---|---|---|
+| 1 | Fach-Gate N-003 | entschieden (Yama 12.08., DAUERGELB) — §282 |
+| 2 | A-13-Veröffentlichungsbedingung | entschieden (Bedingung leer) — §282 |
+| 3 | Tragwerk an die Zeichenfläche | **erstmals gemessen**, entscheidungsreif — §283 |
+| 4 | W-21L | **Bedingung seit 13528 Min erfüllt**, entscheidungsreif — §284 |
+| 5 | versatz-Quittung | **offen**, keine Quittung im Bestand — §282 |
+| 6 | Seed-Weg der Prüfbühne | entschieden (Yama 13.08., WEG C) — §282 |
+| 7 | Zeiger raumAuswahl.ts | **offen**, 147 statt 162, unverändert seit 16.08. — §282 |
+| 8 | Regelkollision §3/E1/Beifang | **formal offen**, betrieblich entschieden — hier |
+| 9 | §119/§120, 33 Module | Zahl ist **27**, davon 25 mit Ladeweg-Bedarf — §283 |
+
+### 5 · Der Ertrag über vier Runden: sieben Zeiger, sieben Wanderungen, null Verluste
+
+Über §282, §284 und diesen Abschnitt habe ich **sieben Zeilenbelege** meiner eigenen Yama-Arbeit
+gegen ihren Erhebungsstand geprüft:
+
+    §282   docs/STATUS.md   Z.3037 · Z.3042 · Z.7038 · Z.16843      4 gewandert
+    §285   ARBEITSREGELN    Z.409 · Z.692                           2 gewandert
+    §285   commit-pruefen   Z.945                                   1 gewandert
+                                                            Summe:  7 von 7 gewandert
+
+**Und in allen sieben Fällen war die Aussage unversehrt** — jede über die Ankerform in Sekunden
+wiedergefunden. Das ist der empirische Beleg für §280s Empfehlung, und er fällt eindeutiger aus, als
+ich ihn dort formuliert habe: **nicht „Zeilenzeiger sind riskant", sondern „in einem Haus, das
+stündlich baut, hält ein Zeilenzeiger fünf Tage nicht durch" — sieben von sieben.**
+
+### 6 · Ein eigener Fehlgriff, gefangen
+
+Ich habe in meiner Messung *„16.08. waren es 1066"* für die Torlänge geschrieben — **das war eine
+Annahme, keine Messung.** Nachgemessen waren es **1016**. Wäre sie stehen geblieben, hätte ich eine
+Zeilenverschiebung bei gleicher Dateilänge gemeldet und daraus einen Umbau geschlossen, den es nicht
+gab. Die Datei ist schlicht um 50 Zeilen gewachsen.
+
+### 7 · Ball
+
+**Yama** — Posten 8 braucht eine **Regeländerung**, keine Messung; betrieblich ist er entschieden.
+Und die Liste der neun ist vollständig neu vermessen: **drei sind belegbar offen** (5 versatz-Quittung,
+7 raumAuswahl-Zeiger, 3 Tragwerk — letzterer entscheidungsreif), **zwei sind entscheidungsreif**
+(3 und 4), **drei sind entschieden** (1, 2, 6), **einer formal offen** (8), **einer frisch mit neuer
+Zahl** (9: 27 statt 33).
+
+**Planner** — unverändert: Schreibschutz der Zieldatei (§278), `…w0-11-ids-callback-csrf.md:22`
+(§276), die Rundungsfrage (§277), der zweite Pfad in der Wache-Anweisung (§279).
