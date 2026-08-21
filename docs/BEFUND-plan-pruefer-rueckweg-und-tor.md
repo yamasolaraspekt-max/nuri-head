@@ -10084,3 +10084,65 @@ Das ist die Sorte Zusage, die genau dann traegt, wenn niemand mehr nachrechnet.
 
 **Ball beim Planner**, klein: zwei Kommentare an `dachAusschnitt.ts:264` und `:351` beschreiben eine
 halboffene Regel als geschlossene. Der Code bleibt, wie er ist — er erfuellt F-012.
+
+## §137 — Posten (d) an der fluechtigen Klasse: 178 Claims, ein Satz im Regelwerk, eine einzige Schliessung
+
+*(Messstand 73b6443d, 21.08. 11:21. Nummer gegen den frischen HEAD gewaehlt: 32 Abschnitte, keine
+Dublette, hoechste §136 — §137 war frei.)*
+
+**Nach §132 zuerst einordnen, dann messen.** Es altert nur die **FLUECHTIGE** Klasse. Ich nehme
+deshalb die **Claim-Felder** — sie sagen "diese Station ist jetzt besetzt", also eine Behauptung ueber
+die Gegenwart, und die Wache verlangt sie ausdruecklich (Punkt 4).
+
+*(Ein erster Versuch, fluechtige Aussagen ueber `node_modules` per Muster zu erfassen, ist
+gescheitert und liefert deshalb keine Zahl: der bekannte Fall — der Anlass der Haltbarkeitsregel
+selbst, `ARBEITSREGELN.md:1327-1329` — laeuft ueber einen Zeilenumbruch, und ein zeilenbasiertes
+Muster kann ihn nicht fassen. Die 53 Treffer sind eine Untermenge unbekannter Groesse.)*
+
+**Die Grundmenge, scharf:** **99** `claim*`-Felder in `docs/STATUS.md` in acht Namensformen
+(`claim` 12, `claim_abnahme` 71, `claim_bau` 4, `claim_dor` 2, `claim_messlauf` 1, `claim_release` 7,
+`claim_spec` 1, `claim_umschnitt` 1) und **79** in den Blaettern — zusammen **178**.
+
+**Was gut ist, und ich sage es zuerst: die Zeitstempel-Pflicht wird eingehalten.** **99 von 99**
+tragen ein Datum. *(Mein erstes Muster meldete 50 ohne Datum — es war zu eng, weil die Rolle dort
+`evaluator (Erstinstanz)` mit Klammer lautet. Korrigiert: null ohne Datum.)*
+
+**Die Alterung:**
+
+| | Datum | Alter |
+|---|---|---|
+| aeltester Claim | 05.08. | **16 Tage 11 Stunden** |
+| juengster Claim | 16.08. | **5 Tage 11 Stunden** |
+
+**Kein einziger Claim ist juenger als der 16.08.** Die dichteste Stelle ist der 12.08. mit 41.
+
+**Das Gegenstueck fehlt fast vollstaendig.** Ein Claim endet in diesem Bestand mit
+`station_geschlossen: "… — Claim eingeloest."` (`STATUS.md:3447`). Dieses Feld existiert **genau
+einmal**. Blockweise gezaehlt: **80 Bloecke tragen einen Claim, 79 davon keine Schliessung.**
+
+**Und das ist kein Regelverstoss — es gibt die Regel nicht.** In `docs/ARBEITSREGELN.md` (1925 Z.)
+kommt `claim` **genau einmal** vor (`:168`), `station_geschlossen` **null Mal**. Der eine Satz sagt:
+*"Wer eine Datei anfassen will, auf der ein Evaluator- oder Release-Claim liegt, muss das selbst
+pruefen — **§3 meldet dort frei**."* Ein abgelaufener Claim ist der Sperre also unsichtbar, und wer
+ihn pruefen soll, hat kein Merkmal, an dem er "abgelaufen" erkennen koennte. **178 Vorkommen, ein
+Satz, kein Ende.**
+
+**Das Regelwerk stellt die Diagnose selbst, drei Zeilen darueber** (`:165`): *"Eine Schranke, deren
+Messvorschrift nirgends verbindlich steht, ist so stark wie die zuletzt kopierte Fassung."*
+
+**Der Fall, an dem es konkret wird — und er betrifft meine eigene Station.** `STATUS.md:18614`
+traegt `claim_dor: "release-pruefer 15.08. AUF YAMAS AUSDRUECKLICHE ANWEISUNG … **Plan-Pruefer-Station
+besetzt**"`, sauber gearbeitet: Rollenwechsel statt Autonomie, Befangenheit offengelegt, und **vor**
+dem Claim gemessen — *"plan-pruefer seit 14.08. 10:11 ohne Commit"*. Das war richtig gemessen. Heute
+gemessen: **308 Commits mit der Rollenmarke `plan-pruefer` seit genau diesem Zeitpunkt**, der letzte
+fuenf Minuten vor dieser Messung. **Der Grund des Claims ist widerlegt, der Claim steht** — 6 Tage
+11 Stunden alt, ohne Schliessungsfeld, und ohne Regel, die eines verlangen wuerde.
+
+**Eigener Rechenfehler, dokumentiert:** ich hatte das Claim-Alter zuerst mit "388 Tage" ausgegeben —
+Sekunden durch 1440 statt Minuten. Korrekt sind **9319 Minuten = 6 Tage 11 Stunden**. Eine Zahl mit
+falscher Einheit ist keine Zahl.
+
+**Ball bei Yama**, als Regelfrage neben den bestehenden: der Claim traegt 178 Vorkommen und einen
+Satz. Entweder er bekommt ein verbindliches Ende (ein Feld, eine Frist, oder "terminaler Zustand
+schliesst automatisch"), oder er wird als das benannt, was er heute ist — eine Notiz, keine Schranke.
+Solange beides offen ist, misst die Wache (Punkt 4) ein Merkmal, das nichts sperrt.
