@@ -18715,3 +18715,108 @@ einer Messung zum Verwechseln ähnlich, wenn ihr Ergebnis plausibel klingt.
    Fachentscheidung über ein Dach und wird nach `CLAUDE.md` nicht still automatisiert. Die Antwort
    entscheidet, ob `dachGeometrie.ts:150` seine Ausnahme verliert oder `dachformVorlagen.ts:478`
    sie bekommt — **eine der beiden Zeilen muss sich bewegen, nicht beide.**
+
+## §230 · Posten (e): §207 verfolgt — eine Klemmung, drei Träger, und die Lösung sieben Zeilen darüber
+
+**Messstand.** HEAD `0e8ffb20` (21.08. 18:27:18), Baum sauber, **0 neue Commits** seit meinem
+letzten Stand — der Transport ist weiter zu. Gültiger Stand `7a82ecfb` (236 Min alt). Gemessen
+21.08. 18:30. Vorratsprüfung Posten **(e)**, eigene Befunde verfolgen.
+
+Anlass ist §224: dort hatte ich einen Befund gemeldet, der 190 Minuten vorher behoben war. Die
+Gegenprobe dazu ist nicht „habe ich zu viel gemeldet", sondern **„habe ich zu wenig gemeldet"** —
+also: gilt der behobene Befund anderswo weiter?
+
+### 1 · Die Klemmung lebt an drei Orten, nicht an einem
+
+Gemessen wurde über das **Codemuster** `Math.max(0, …)` in `geometry/`, nicht über Zeilennummern
+(§216). Für die Firstlängen-Formel `max(0, L − B)` gibt es drei Träger:
+
+| Träger | Zustand | Produktivverbraucher |
+|---|---|---|
+| `dachGeometrie.ts:158` | **eingerahmt** durch den Wurf `:150` (Z1-W1-2) | im Kern |
+| `dachformVorlagen.ts:349` `walmFirstlaengeGleicheNeigungM` | ungeklemmt gelassen | **0** (2 Nennungen, beide Test) |
+| `dachformVorlagen.ts:1310` `hauptflaecheInfo` | ungeschützt **und** ungekennzeichnet | **2** |
+
+An denselben Eingaben durchgerechnet, nicht nachgelesen:
+
+| L × B | Kern `:158` | Richtwert `:349` | `hauptflaecheInfo` `:1310` |
+|---|---|---|---|
+| 12 × 8 | 4 | 4 | 4 |
+| 10 × 10 | 0 | 0 | 0 |
+| 6 × 10 | **wirft** | 0 | 0 |
+| 4 × 10 | **wirft** | 0 | 0 |
+
+Die drei sind einig, solange L ≥ B. Sie trennen sich genau dort, wo Z1-W1-2 den Kern geöffnet hat.
+`hauptflaecheInfo` liefert bei L < B ein `breiteFirstM: 0` — eine Hauptfläche, die vom Trapez zum
+Dreieck kollabiert, ohne ein Wort. Dieselbe Funktion klemmt zwei Zeilen davor auch die Eingaben
+selbst: `:1299-1300` machen aus einer Länge 0 still **0,1 m**.
+
+### 2 · Wirkung getrennt von Ort (P7)
+
+Der Unterschied zwischen den beiden ungeschützten Trägern ist nicht kosmetisch:
+
+- `walmFirstlaengeGleicheNeigungM` hat **null Produktivverbraucher** — der Befund steht, ist aber
+  folgenlos. Sein Doc-Kommentar `:344-347` sagt zudem selbst „RICHTWERT (gekennzeichnet), nicht
+  pauschal für jedes Walmdach". Gekennzeichnet ist nicht verweigert, aber es ist auch nicht still.
+- `hauptflaecheInfo` hat **zwei** — `:1030` (`schneefangWirdGesetzt`) und `:1277`. Nur hier trägt
+  der Befund.
+
+### 3 · Die Gegenform steht sieben Zeilen über dem Problem
+
+`dachformVorlagen.ts:340-342`:
+
+    export function walmFirstlaengeM(lengthM: number, ruecksprungM: number): number {
+      return endlich(lengthM - 2 * ruecksprungM);
+    }
+
+Keine Klemmung. Und der zugehörige Test `__tests__/dachformVorlagen.test.ts:182` heißt wörtlich
+**„walmFirstlaengeM darf negativ werden (Inkonsistenz-Signal, nicht still 0)"** und prüft
+`walmFirstlaengeM(6, 5) < 0`. Nachgerechnet: 6 − 2·5 = **−4**.
+
+Das ist die **vierte gebaute Gegenform** zu meiner Fehlerklasse, nach §225 und §228 — und die
+schärfste, weil sie in derselben Datei sieben Zeilen über der ungeklemmten Stelle steht. Der
+Bestand kennt das Prinzip, hat es getestet und benennt es. Es ist nur nicht durchgezogen.
+
+### 4 · Was ich an meinem eigenen §229 berichtigen muss
+
+§229 hat zu `dachformVorlagen.ts:506` geschrieben: *„Keine Anzeige, eine Sperre."* **Das war zu
+weit gegriffen, und der Fehler ist der, vor dem P7 warnt.** Ich habe die Wirkung am *Erzeuger*
+gemessen — `:506` setzt `ok: false` — statt am *Verbraucher*.
+
+Frisch gemessen, Grundmenge ist die Aufruferliste (nicht eine Feldsuche, für die es keinen
+bekannten Treffer zum Verifizieren gäbe): `validateVorlage` hat im ganzen Hausplaner **8
+Nennungen — 6 in Tests, 1 Definition, 1 Produktivaufruf**. Der eine Produktivaufruf ist
+`dachformVorlagen.ts:1272` und lautet:
+
+    const warnungen = validateVorlage(v).warnungen;
+
+**Er nimmt die Warnungen und lässt `ok` liegen.** Fünf Zeilen später ruft dieselbe Funktion an
+`:1277` `hauptflaecheInfo` auf — die Prüfung läuft, ihr Urteil wird eingesammelt, der Ablauf hält
+nicht an. Der zweite Verbraucher `schneefangWirdGesetzt` `:1030` ruft `validateVorlage` gar nicht.
+
+Richtig ist also: `:506` **erzeugt** eine Sperre, die **niemand liest**. Das ändert die Bewertung
+aus §229 in beide Richtungen — der Widerspruch bei L = B ist nicht so scharf wie dort behauptet
+(es blockiert nichts), und der Fall L < B ist schärfer als gedacht (es prüft auch nichts).
+
+### 5 · Was das für §229 in der Sache heißt
+
+§229 hat gemeldet: bei L = B ist die Vorlage strenger als der Kern. Diese Runde ergänzt: bei
+L < B ist derselbe Vorlagenweg **nachsichtiger** als der Kern. Beides in derselben Datei, weil
+`dachformVorlagen` einen **prüfenden** Pfad (`validateVorlage`) und einen **rechnenden** Pfad
+(`hauptflaecheInfo`) hat und der rechnende nicht prüft. Die Datei enthält damit beide Extreme —
+und trägt sieben Zeilen über der Klemmung die Form, die keines von beidem täte.
+
+### 6 · Ball
+
+**Planner**, ein Posten, drei benannte Zeilen:
+
+1. `dachformVorlagen.ts:1310` — der einzige Träger mit Wirkung. Entweder Wurf wie im Kern oder
+   negatives Signal wie `walmFirstlaengeM`; die Datei hat beide Muster bereits.
+2. `dachformVorlagen.ts:1272` — `ok` wird erzeugt und nicht gelesen. Entweder auswerten oder das
+   Feld streichen; ein Urteil, das niemand abholt, ist eine Zusage ohne Empfänger.
+3. `dachformVorlagen.ts:349` — steht, wirkt nicht. **Nachrangig**, und ich sage das ausdrücklich,
+   damit die Reihenfolge nicht nach Fundreihenfolge statt nach Wirkung gewählt wird.
+
+Nicht gemessen habe ich, ob eine Oberfläche außerhalb des Hausplaner-Verzeichnisses `ok` liest.
+Die Grundmenge dieser Runde war `resources/planner/hausplaner`. Das ist eine Grenze der Messung,
+kein Ergebnis.
