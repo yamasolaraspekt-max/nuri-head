@@ -312,6 +312,19 @@ mit „schau nach" geweckt (22:51), fand „sechs Bälle unbewegt" und kennt A-4
 nicht. Kanalwechsel: **`docs/auftraege/DIRIGENT-TAFEL.md`** (dieser Worktree) ist die eine
 Anweisungstafel; jede Rolle liest sie vor jeder Arbeit; Yama tippt je Sitzung einmal den Lesebefehl.
 PID 61814 (22:55) ist die Codex-Sitzung, kein Planner.
+
+### PULL-Betrieb aktiviert (Yama-Modell, 23:33) — Meilenstein, gemessen
+Steuerungsstelle `/Users/yamanuri/.ticket-steuerung/` (operative Wahrheit; Spiegel `steuerung-spiegel/**`
+nur Snapshot). **Sechs von sechs ACK-Dateien gültig** (Rolle · Sitzung · Generation · Digest):
+Planner `20c9c319` gen 3 · Plan-Prüfer `3870df7a` gen 2 · Integrator `03737d75` gen 3 · Evaluator
+`303cefb6` gen 3 · Generator `aa0cddd3` gen 2 · Release-Prüfer `4a2203cb` gen 2. Registrierungen
+`sitzungen/*.yaml` vollständig. **Erste Lease:** `leases/A-42/` Token 1, Inhaber Evaluator — A-42
+`GECLAIMT`, Bilanz auf `26c46f31` läuft. Planner lieferte drei belegte Befunde ohne Sacharbeit
+(Weckerkonflikt → eigener Takt auf Pull umgestellt; Wartebedingung → berichtigt; CODE_FERTIG-Betreff:
+`e9e6ee5b` leer **und** zwei Kennungen **und** falscher Bau-SHA `0f731c22` → in Evaluator-/Integrator-
+Auftrag gen 3 übernommen; doppelter `ticket-rolle-generator`-Baum im Evaluator-Scratchpad → A-37-22
+wählt Bäume über Pfad + Zweig). Keine Sacharbeit, kein Commit, keine Lease außerhalb A-42. PID 87659 = `T`.
+Grenze (Yama): Sofortlösung, noch keine unübergehbare Barriere — Durchsetzung gehört in A-37/Z0-I3.
 Die fünf Negativproben gehen als Kriterien
 in das erweiterte A-37-Blatt (Planner); der Integrator transportiert nichts aufgrund der seit 22:04
 entstandenen Generator-Bauten. Das V2-Konzept (`0d897b0e`) ist bereit für die spätere unabhängige
