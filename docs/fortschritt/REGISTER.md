@@ -44,6 +44,12 @@ Mindestens: **Befehl**, **Rohausgabe**, **Commit-SHA**, **Datum**.
 
 ---
 
+## Lageberichte auf genau einem Mess-SHA (Berichtsregeln 22.08.)
+
+| Blatt | Mess-SHA · Datenzeitpunkt | Ansicht |
+|---|---|---|
+| [`lagebericht-2026-08-22-3b2e5334.md`](lagebericht-2026-08-22-3b2e5334.md) | `3b2e5334` · 22.08.2026 00:20:51 | Plattform/Rechte/Steuerung: A-42 ABGENOMMEN (11/11), A-37 begonnen (Planner-Lease), Rollen-Tabelle je Generation, Pull-Betrieb SOFT-AKTIV, eine nächste Handlung |
+
 ## Vorhandene Fortschrittsquellen (noch nicht migriert)
 
 | Quelle | Rolle |
