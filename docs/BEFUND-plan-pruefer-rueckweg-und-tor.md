@@ -9863,3 +9863,52 @@ ein Befund ueber `node_modules`, der **vierzehn Sekunden** hielt).
 **Kein Ball aus dieser Runde.** Was an A-38 offen bleibt, ist bereits gemeldet und wird nicht
 nachgebaut: der doppelte Schluessel `dor_beleg` (`:18` *"NICHT ERTEILT — 3. Runde"* gegen `:331`
 *"steht aus"*) und mein geliefertes Votum, das in keinem der beiden Felder steht — §108.
+
+## §133 — Posten (e): die 33 stehen unveraendert, auf meinem Feld ist gearbeitet worden — und ein Satz aus §131 haelt nicht
+
+*(Messstand 3d7d3cb3, 21.08. 11:02. Nummer gegen den frischen HEAD gewaehlt: 28 Abschnitte, keine
+Dublette, hoechste §132 — §133 war frei. Klasse nach §132: alles hier ist SHA-verankert, also
+UNVERAENDERLICH; der Stand ist benannt.)*
+
+**Die Zahl neu gemessen, nicht erinnert.** Erreichbarkeit ab `main.tsx` ueber Laufzeitkanten
+(`import type` zaehlt nicht), Grundmenge `.ts/.tsx` unter `resources/planner/hausplaner` **ohne**
+`__tests__` und `__domtests__`: **160 Module, 127 erreichbar, 33 ohne Ladeweg.** Das ist Zeichen fuer
+Zeichen der berichtigte Wert aus dem Nachtrag zu §120 — die Titelzahl dort (*38 von 165*) bleibt die
+widerlegte. Warum sie steht, habe ich gemessen statt angenommen: seit dem §120-Schnitt `d4ee1555`
+liegen **zwei** Commits auf der Insel, beide beruehren **sieben Dateien, alle nur geaendert**, keine
+angelegt, keine geloescht — der Graph konnte sich nicht bewegen.
+
+**Auf dem Feld ist gearbeitet worden, und das gehoert nicht mir.** Zitiert, nicht nachgebaut:
+`78e4cc0e` (Generator, 20.08. 13:54) traegt in **fuenf** der acht K3-Module einen Herkunftsvermerk —
+sie nennen einen Wirt, den es im Produktivbaum nicht gibt; `class RoofEngine` existiert **genau
+einmal**, in `docs/planner/pv-belegung-referenz/DachplanerProPage.tsx:369`. Drei der acht nennen ihn
+null Mal und blieben deshalb unberuehrt. `e1674e4c` (20.08. 15:34) ordnet `aufbautenStatus` als
+**Modellfrage an Yama** ein: die Lage, die es erkennt, kann nicht eintreten, weil `RoofAufbau` keine
+Flaechenbindung fuehrt. Beide Male ausdruecklich *"nur Kommentare, keine Zeile Verhalten"* — was
+meine Messung bestaetigt.
+
+**Und jetzt die Selbstberichtigung.** In §131 steht: *"Der einzige Laufzeit-Verbraucher ist
+`raumProjektion.ts:90`."* Das tragende Wort ist falsch. `projection/raumProjektion.ts` steht **selbst
+in der Liste der 33** — es hat keinen Ladeweg ab `main.tsx`. Von der anderen Seite gegengeprueft:
+der einzige Import des Moduls kommt aus `__tests__/raumProjektion.test.ts`, und **alle vier**
+Nennungen von `projiziereRaum` ausserhalb des Moduls stehen in eben dieser einen Testdatei. Es ist
+ein Verbraucher **im Quelltext**, kein Verbraucher **zur Laufzeit**.
+
+**Was das an §131 aendert und was nicht.** Die beiden Luecken bleiben unberuehrt: das fehlende ε in
+`FORMELSAMMLUNG.md:278-279` und der Grenzfallwert, der im realistischen Fall 90°/270° statt 0° ist —
+beides am Eintrag gemessen, nicht am Aufrufweg. Der entartete-Wand-Befund wird **schwaecher, nicht
+staerker**: ich hatte ihn als *latent, weil zwei Waechter davor* gemeldet; richtig ist, dass die
+Kette ueberhaupt nicht laeuft. Die zwei Waechter in `roomDetection.ts:89/:102` habe ich damit in
+einer Kette gemessen, die kein Ladeweg erreicht — `roomDetection.ts` selbst ist erreichbar
+(gegengeprueft: null Treffer in der Tot-Liste), `raumProjektion.ts` nicht. Der Befund haelt, seine
+Einordnung war eine Stufe zu scharf.
+
+**Eine Warnung an die Zahl selbst, damit sie nicht ueberlesen wird.** In den 33 steht auch
+`domain/scene.types.ts` — ein Typmodul, das ausschliesslich ueber `import type` haengt, und genau
+diese Kanten schneidet das Verfahren absichtlich weg. **"Ohne Ladeweg" heisst nicht "tot".** Die
+Zahl beantwortet die Frage *"was laedt die laufende Anwendung"* und keine andere; wer sie als
+Loeschliste liest, liest sie falsch.
+
+**Kein neuer Ball.** Die Entscheidung zu den 33 liegt weiter bei Yama (§119/§120/§122), die
+Modellfrage zu `aufbautenStatus` ist dort neu dazugekommen — vom Generator gestellt, nicht von mir.
+Die Berichtigung an §131 ist meine und steht hier.
