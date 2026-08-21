@@ -353,6 +353,30 @@ Grenze (Yama): Sofortlösung, noch keine unübergehbare Barriere — Durchsetzun
   Sitzungsprozess + Startkennung). Meine Zwischenentscheidung „Variante A" (gen 5, 23:47) war vor
   Yamas C **falsch angesetzt** und ist zurückgenommen/als überholt markiert — Lektion: Rollenbesetzung
   ist Yamas Entscheidung, nicht Routing. **Kein „6/6 aktiv"**: fünf Rollen quittiert, Planner unbesetzt.
+
+### 22.08. 00:00–00:15 — A-42 ABGENOMMEN; Planner neu besetzt; Kette läuft
+- **Planner neu besetzt (Variante C, vom Dirigenten in Yamas Vertretung vollzogen):** Sitzung
+  `ef8ec540-263d-4f06-8a02-5a2f1beeb572` headless im Worktree `ticket-rolle-planner` gestartet
+  (`claude -p --session-id`, PID 88928, Start 00:00:48), Generation 5 **vorab** auf diese ID ausgestellt
+  (`sitzung_erwartet` = Registrierung = ACK, atomar mit Digest `59a785fd…`); erster Lauf: Registrierung mit
+  echter Sitzungsprozess-PID + Startkennung (ppid-Kette belegt), ACK gen 5 gültig, gesamte Vorarbeit
+  gelesen, keine Sacharbeit. Takt alle 4 Min durch den Dirigenten (Scheduler, keine Inhalte). Sitzung
+  70499 beendet (kill nach Yamas C); `20c9c319` ohne Sitzungsprozess, nur headless Takt → nicht Planner.
+- **A-42:** Integrator `9e5f1ff5` setzt den dritten Verweis (A-17; sein Einwand war falsch gemessen,
+  selbst berichtigt; Evaluator-Nachprüfung `b193f72e` hatte den umgezogenen Block nachgewiesen) →
+  **Evaluator `b1c0c2d4`: A-42 ABGENOMMEN, 11/11**, drei Verweise `:7434` `:17651` `:18632`, Ereignis
+  `evaluator-ABGENOMMEN.yaml` 00:08:59; Rückweg `b15c938d`. Offen: Integrator-Zustandscommit (eine
+  Kennung, Wortlaut, Bau `26c46f31`, Beleg = Votum-SHA).
+- **Generationen:** Planner 6 = `SPEZ-planner-A-37` (**aktion: spezifizieren**, Lease, commit-pruefen mit
+  `NODE_PATH`, Ergebnis-Ereignis) · Plan-Prüfer 3 = `DOR-plan-pruefer-A-37` (warten auf Planner-CODE_FERTIG,
+  dann DoR) · Integrator 5 · Evaluator 4 · Generator 2 · Release-Prüfer 2.
+- **Planner-Zuschnittfrage** („Kein Hook" ist Nicht-Ziel des A-37-Blatts :229 ↔ A-37-25 verlangt den Hook):
+  entschieden durch **Yama** (Weg a: „A-37 einschließlich wirksamem pre-commit-Hook"); Form = Hausform
+  **ÜBERHOLT-Kennzeichnung** (:205/:220), nichts löschen; A-37-18 ohne feste Baumzahl, Verweis auf
+  A-37-22-Liste. Planner-Ist-Beleg für A-37-22: `rueckweg.py` wählt Bäume über Namen (:128), prüft nie den
+  Zweig, `ticket-release-pruefung` nur als Ziel-Orakel (:118).
+- PID 87659 weiter `T` (Bedingungen 2–5 offen: A-37 mit Hook, fünf Negativproben, nacktes `git commit`
+  gesperrt, Evaluator-Abnahme).
 Die fünf Negativproben gehen als Kriterien
 in das erweiterte A-37-Blatt (Planner); der Integrator transportiert nichts aufgrund der seit 22:04
 entstandenen Generator-Bauten. Das V2-Konzept (`0d897b0e`) ist bereit für die spätere unabhängige
