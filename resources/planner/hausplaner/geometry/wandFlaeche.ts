@@ -128,7 +128,22 @@ function ueberlappen(a: OpeningNode, b: OpeningNode): boolean {
 /**
  * Mengen **einer** Wand im gewählten Bezugsmaß.
  *
- * `oeffnungen` darf die Öffnungen der ganzen Szene enthalten — es wird auf die Wirtswand gefiltert.
+ * **`oeffnungen` muss auf die Wirtswand VORGEFILTERT sein.** Eine fremde Öffnung erzeugt eine
+ * Meldung, und jede Meldung unterdrückt das Zahlenergebnis vollständig (`:216`) — die Funktion
+ * liefert dann `{ art: 'meldung' }` und **keine Mengen**, auch nicht für die eigenen Öffnungen.
+ *
+ * **BERICHTIGT 21.08.2026 (Befund M-3 der Maurer-Linse, am Code nachgemessen).** Hier stand:
+ * *„`oeffnungen` darf die Öffnungen der ganzen Szene enthalten — es wird auf die Wirtswand
+ * gefiltert."* Der zweite Halbsatz stimmt, der erste nicht: gefiltert wird, aber vorher wird
+ * gemeldet, und die Meldung gewinnt. Wer die ganze Szene übergibt, bekommt in jeder Szene mit
+ * mehr als einer öffnungstragenden Wand **nie** eine Zahl. Empirisch geprüft, nicht erschlossen:
+ * eine eigene plus eine fremde Öffnung ergeben `art: 'meldung'`, die eigene wird nicht gerechnet.
+ *
+ * **Das Verhalten bleibt, wie es ist** — es ist die Haltung dieses Moduls: *ein Zweifelsfall
+ * liefert keine Zahl, plausibel falsch ist schlimmer als offensichtlich fehlend.* Ob eine fremde
+ * Öffnung eine sperrende Meldung oder ein Hinweis sein soll, ist eine Fachentscheidung und wird
+ * hier nicht still getroffen. Falsch war die Zusage, nicht die Rechnung.
+ *
  * **Eine fremde Öffnung wird gemeldet, nicht mitgerechnet**: sie stillschweigend abzuziehen wäre
  * ein Fehler, den niemand mehr findet.
  */

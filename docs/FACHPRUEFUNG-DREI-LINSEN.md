@@ -148,7 +148,18 @@ Aufmaß — Aufmaß wird am gebauten Objekt genommen und unterschrieben.
 |---|---|---|
 | **M-1** | **`bruttoM2` ist die Fläche der Achsebene, ausgegeben als Ansichtsfläche „je Seite".** An der 5000×2500×300-Wand mit zwei gehrten Ecken: außen 13,25 m², **Achse 12,50 m²** (was geliefert wird), innen 11,75 m². Am geschlossenen Rechteck fehlen **3,0 m² Fassade** und stehen dieselben 3,0 m² zu viel Innenputz. *Für das Volumen ist das Achsmaß dagegen exakt* — **das Modul rechnet die richtige Größe für den Rohbau und beschriftet sie mit dem Namen der Größe, die es nicht rechnet** | ○ |
 | **M-2** | **Ist die Schichtliste vollständig, liefert `bezug: 'fertig'` eine Wand mit 0 mm und 0 m³ — ohne Meldung.** `:159` prüft **echt größer**, also passiert Σ = Dicke. Dahinter ein Richtungsfehler: **im Handwerk ist das Fertigmaß größer als das Rohbaumaß**, der Code zieht ab | ○ |
-| **M-3** | **Der im Kommentar zugesagte Aufruf kann nie eine Zahl liefern.** `:131` sagt „die ganze Szene darf übergeben werden", `:142-148` erzeugt je fremder Öffnung eine Meldung, `:212` unterdrückt daraufhin das Zahlenergebnis vollständig | ○ |
+| **M-3** | **Der im Kommentar zugesagte Aufruf kann nie eine Zahl liefern.** `:131` sagt „die ganze Szene darf übergeben werden", `:142-148` erzeugt je fremder Öffnung eine Meldung, `:212` unterdrückt daraufhin das Zahlenergebnis vollständig | ✅ |
+
+> **M-3 nachgemessen und behoben, 21.08.2026 — und behoben wurde die ZUSAGE, nicht die Rechnung.**
+> Empirisch geprueft statt erschlossen: `wandMengen` mit einer eigenen **und** einer fremden Oeffnung
+> liefert `art: 'meldung'` und keine Mengen — auch die eigene wird nicht gerechnet. Der Docblock
+> erlaubte genau diesen Aufruf. Er ist berichtigt (`oeffnungen` **muss vorgefiltert sein**), der alte
+> Wortlaut steht als Beleg daneben.
+> **Das Verhalten bleibt unveraendert:** ob eine fremde Oeffnung sperren oder nur warnen soll, ist eine
+> Fachentscheidung — sie wird nicht als Nebenwirkung einer Kommentar-Berichtigung getroffen.
+> Eine **Charakterisierungs-Zusage** in `__tests__/wandFlaeche.test.ts` haelt den gemessenen Zustand
+> fest; Rot-Probe gefahren (fremde Oeffnung entsperrt -> zwei Zusagen rot, zurueckgesetzt 1778/1778).
+> Der vorhandene Test prueft die fremde Oeffnung **allein** und war fuer den Fall der Zusage blind.
 | **M-4** | **`bezug: 'fertig'` verändert keine einzige Flächenzahl** — nur die Volumen. Ein Etikett ohne Inhalt | ○ |
 | **M-5** | **Am T-Stoß zählt das Achsmaß den Einbindebereich doppelt** (0,1125 m³ je Stoß bei 300/2500), ohne dass eine Konvention benannt ist. Fachlich vertretbar — **der Fehler ist, dass nirgends steht, welcher Konvention die Zahl folgt** | ○ |
 | **M-6** | **Öffnung bis Wandoberkante passiert alle Prüfungen** — `>` statt `>=`. Der Sturz fehlt, der Renderer baut ihn nicht, niemand meldet es. Eine Öffnung ohne Restmaß über dem Sturz ist **nicht mauerbar** | ○ |

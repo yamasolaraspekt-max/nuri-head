@@ -183,6 +183,29 @@ test('eine fremde Öffnung wird gemeldet, nicht mitgerechnet', () => {
   assert.match(m[0]!.text, /w2/);
 });
 
+/**
+ * CHARAKTERISIERUNG, kein Soll — Befund M-3 der Maurer-Linse, festgehalten wo er nicht verloren geht.
+ *
+ * Der Docblock von `wandMengen` versprach, man dürfe die Öffnungen der GANZEN SZENE übergeben.
+ * Der Test darüber prüft die fremde Öffnung ALLEIN und ist deshalb blind für den Fall, den die
+ * Zusage erlaubt: eigene UND fremde zusammen. Gemessen liefert dieser Fall `art: 'meldung'` und
+ * KEINE Mengen — auch die eigene Öffnung wird nicht gerechnet, weil jede Meldung das
+ * Zahlenergebnis unterdrückt.
+ *
+ * Diese Zusage ändert das Verhalten NICHT und verlangt es auch nicht. Sie nagelt fest, was ist,
+ * damit die berichtigte Zusage im Modul überprüfbar bleibt. Wird der Umgang mit fremden Öffnungen
+ * je zur Fachentscheidung, geht sie rot — und dann ist das eine Entscheidung und keine Nebenwirkung.
+ */
+test('M-3: ganze Szene übergeben ⇒ Meldung statt Zahlen, auch für die eigene Öffnung', () => {
+  const e = wandMengen(wand(), [fenster(), fenster({ id: 'fremd', hostWallId: 'w2' })], 'roh');
+  assert.equal(e.art, 'meldung', 'die Zusage im Docblock hängt an genau diesem Ergebnis');
+  const m = meldungenVon(e);
+  assert.equal(m.length, 1);
+  assert.equal(m[0]!.art, 'fremde-oeffnung');
+  // Und die Gegenprobe, die den Satz trägt: VORGEFILTERT liefert dieselbe Wand sehr wohl Zahlen.
+  assert.equal(mengenVon(wandMengen(wand(), [fenster()], 'roh')).nettoM2, 10.82);
+});
+
 // --- Kante 5: Null bleibt Null ---------------------------------------------------------------------
 test('Kante 5: Höhe 0 ⇒ Ergebnis 0, kein NaN und kein Infinity', () => {
   const m = mengenVon(wandMengen(wand({ height: 0 }), [], 'roh'));
