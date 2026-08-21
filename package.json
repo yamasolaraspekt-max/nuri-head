@@ -20,6 +20,7 @@
     "autoprefixer": "^10.4.22",
     "axios": "^1.1.2",
     "html5-qrcode": "^2.3.8",
+    "js-yaml": "^4.1.0",
     "jsdom": "^29.1.1",
     "laravel-echo": "^1.19.0",
     "laravel-vite-plugin": "^1.2.0",

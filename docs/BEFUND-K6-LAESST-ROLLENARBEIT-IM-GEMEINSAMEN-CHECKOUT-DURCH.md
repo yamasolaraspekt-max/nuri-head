@@ -176,3 +176,63 @@ ich nicht und behaupte ich nicht* — ich halte nur die Reihenfolge fest.
 **Sein Zusatz zur Regelfrage ist schärfer als meiner und ich übernehme ihn:** wäre K6 am 19.08.
 zu gewesen, *läge S-1 in KEINEM Zweig statt in einem*. **Eine Sperre allein genügt nicht; sie
 braucht den Weg, auf den sie verweist.**
+
+## 8 · Entscheidung in Yamas Namen, 20.08. — kein Bau, der Zuschnitt wird abgewartet
+
+**Yama hat mir die Wahl überlassen** zwischen *warten*, *Hook jetzt bauen* und *nur die Regelfrage*.
+**Ich entscheide: warten** — und nenne die Gründe, damit die Entscheidung nachprüfbar ist statt
+gehorsam.
+
+1. **Der Preis steht schon gemessen da, vom Integrator selbst** (`9ae47791`): ein `pre-commit` liegt
+   nicht in der Versionierung — *nicht committet, nicht geprüft, nicht transportiert, für keine Rolle
+   lesbar ohne Blick in `.git/hooks`*. **Genau deshalb wurde das Tor als Skript gebaut und nicht als
+   Hook.** Eine Barriere, die keine Rolle lesen kann, kann auch keine prüfen.
+2. **Es ist bereits eine zweite Hook-Frage unterwegs.** Das Planner-Konzeptblatt `b3a9c6a4` (N2)
+   schlägt einen `PreToolUse`-Hook gegen Push/Deploy vor und benennt dort dieselbe Schwäche —
+   `settings.json` ist git-ignoriert. **Zwei Hook-Entscheidungen in zwei Dateien, getroffen an zwei
+   Orten, ergeben zwei Wahrheiten darüber, was wo bewacht wird.** Beide gehören auf denselben Tisch.
+3. **Die Regelfrage liegt oberhalb der Barriere.** Wird *„im gemeinsamen Checkout wird nur
+   integriert"* durchgesetzt, ändert das die Form der Barriere oder erübrigt sie. Erst bauen, dann
+   erfahren wofür, ist die Reihenfolge, die A-37 teuer gemacht hat.
+
+**Was ich stattdessen getan habe:** die zwei Posten erledigt, die ohne Zuschnitt entscheidbar waren
+— die Konvention der Werkbank (`68c796e1`, jetzt 42 von 42) und die Deklaration von `js-yaml`
+(`e5aa5af7`), der Abhängigkeit, an der das Commit-Tor selbst hängt.
+
+**Ball:** beim Planner der Zuschnitt beider Hook-Fragen zusammen; bei Yama die Regelfrage. **Sobald
+ein Auftrag steht, baue ich — vorher nicht.**
+
+## 9 · Zwei Berichtigungen an diesem Blatt, 20.08. nachmittags
+
+### (a) Die „Regel 2", auf die sich Abschnitt 3 stützt, ist im Bestand nicht verankert
+
+**Der Release-Prüfer hat das gemessen (`9f33e012`), ich habe es unabhängig nachgemessen:**
+
+```text
+grep -rn 'ausschliesslich integriert' docs/   ->  2 Treffer
+   BEFUND-K6-...md:71                              dieses Blatt, das sie ZITIERT
+   YAMA-REGEL-VORMERKEN-...md:59                   sein Blatt, das ihr Fehlen misst
+grep -n 'gemeinsamen Checkout' docs/ARBEITSREGELN.md  ->  0
+```
+
+**Der Fund selbst bleibt unberührt** — dass K6 Rollenarbeit durchlässt, ist am Code und in der Probe
+gemessen und hängt an keiner Regel. **Was fällt, ist die Form des Widerspruchs in Abschnitt 3:** dort
+steht „Regel 2 gegen K6", und das setzt zwei gleichrangige Sätze voraus. Tatsächlich steht eine
+gebaute, beauftragte Kante gegen einen Satz, der im Bestand nur als Zitat lebt. *Ein Zitat kann keine
+gebaute Kante binden.* **Ob die Regel gelten soll, ist damit keine Auslegung mehr, sondern eine
+Setzung — und die gehört Yama allein.**
+
+### (b) Drei Zeiger in seinem Blatt sind durch MEINEN Commit gewandert, fünf Minuten später
+
+Sein Blatt zitiert `commit-pruefen.sh:971` (`git add` je neue Datei), `:975` (Commit in Pfadform) und
+`:1023` (`read-tree HEAD`). **Alle drei stimmten, als er sie schrieb.**
+
+```text
+seine Messung   9f33e012   13:55:06
+mein Umbau      56ca655e   14:00:28      +24 Zeilen oberhalb der drei Stellen
+heute:  971 -> 995     975 -> 999     1023 -> 1047
+```
+
+**Ich berichtige das hier und nicht in seinem Blatt** — es gehört ihm. **Und ich melde es, statt es
+stehen zu lassen:** genau diese Klasse hat der Plan-Prüfer in §109/§110/§111 dreimal aufgeschrieben,
+und diesmal bin ich die Ursache, nicht der Finder.
