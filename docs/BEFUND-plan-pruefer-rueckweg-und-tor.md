@@ -14338,3 +14338,91 @@ Ziffer nicht, ist kein Muster für Namen.*
 **22** im Roster `:25` sind heute **23** — und `dirigent` fehlt in beiden. Mein Vorschlag ohne
 Entscheidungsanspruch, aus §184 fortgeschrieben: **an dieser Stelle gar keine Zahl**, sondern der
 Pfad; die Zahl gehört in eine Messung, nicht in eine Landkarte.
+
+## §188 — Posten (c): F-028 ist eine Sperre, und sie hält in der Sache vollständig — zwei Zeiger sind gewandert
+
+**Messstand** `bce52bc1` · Baum sauber · 0 neue Commits; Integrationszweig die **sechste** Runde auf
+`7a82ecfb`, unverändert drei ungesicherte Einträge.
+
+Gegenstand: **F-028 · Azimut-Konvention an der Systemgrenze · 🔴**
+(`docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md:610`), die dreizehnte der 27 Formeln.
+Sie sagt selbst: *„Das ist keine Rechenformel, sondern eine Sperre."* Damit ist sie an drei Dingen
+prüfbar: den **Fundstellen**, der **gezählten Zusage** und der **Rechnung**.
+
+### 1. Neun Fundstellen — sieben treffen, zwei sind gewandert
+
+```
+database/migrations/…create_p_v_roofs_table.php:67          "0=N, 90=E, 180=S, 270=W"        TRIFFT
+database/migrations/…create_heizlast_bauteile_table.php:22  "0=N,90=O,180=S,270=W"           TRIFFT
+app/Services/BuildingModel/CanonicalBuildingModelValidator.php:24  "0 ≤ azimut < 360 (0=Nord)" TRIFFT
+app/Services/Energie/PvgisErtragService.php:41              "@param $aspect … 0 = Süd"       TRIFFT
+app/Services/Energie/InverterSizingService.php:69           "(Süd = 0°, Konvention PVGIS)"   TRIFFT
+resources/views/…/energiekonzept.blade.php:394              min="-180" max="180"             TRIFFT
+resources/views/admin/pvgis/index.blade.php:128             min="-180" max="180"             TRIFFT
+app/Services/Geometrie/SzeneProjektionService.php:257       steht heute auf :270             +13
+resources/planner/hausplaner/renderers/three-d/szene.ts:60  steht heute auf :61              +1
+```
+
+Beide Wanderer sind **Code**-Dateien, und die Versätze sind klein (+13, +1) — genau das Bild aus
+§186: Skripte wachsen selten, und wenn, dann wenig.
+
+### 2. Die gezählte Zusage hält
+
+Das Blatt sagt: *„Gemessen: `grep '\+ *180|- *180' app/Services/Energie/*.php` → **0 Treffer**.
+Es GIBT heute keine Umrechnung im Haus."*
+
+```
+app/Services/Energie/*.php            4 Dateien     Treffer: 0
+Fangprobe, ob das Muster überhaupt greift:  app/ gesamt → 5 Treffer
+   PVRoof.php:127 (Kommentar) · EnergiekonzeptController.php:184/:190 (min/max)
+   InventoryController.php:306 (between:-180,180)
+```
+
+**Null ist hier eine echte Null**, keine ausgefallene Messung: dasselbe Muster findet anderswo fünf
+Stellen, und keine davon ist eine Umrechnung — es sind Validierungsbereiche und ein Kommentar.
+
+### 3. Die Rechnung durchgerechnet
+
+Kompass → PVGIS ist `p = k − 180` (mit Umlauf). Was passiert, wenn man **nicht** umrechnet:
+
+```
+Kompass  Bedeutung   PVGIS korrekt   roh übergeben  →  PVGIS liest
+     0   Nord             180              0           Süd          180° Fehler
+    90   Ost              −90             90           West         180° Fehler
+   180   Süd                0            180           Nord         180° Fehler
+   135   Südost           −45            135           westseitig   Fehler
+   270   West              90              –           nicht eingebbar (max 180)  → fällt auf
+   225   Südwest           45              –           nicht eingebbar            → fällt auf
+```
+
+**Die Tabelle des Blattes stimmt exakt**, einschließlich ihrer schärfsten Aussage: der doppelsinnige
+Bereich ist `0..180`, und **genau dort liegen deutsche Dächer**. Ein Süddach (`180`) wird als
+Norddach gerechnet, und nichts schlägt an.
+
+### 4. Wird die Sperre heute verletzt? Nein — und das ist der Punkt
+
+```
+aspect        Eingabe im Energiekonzept, validiert min:-180 max:180   → PVGIS-Konvention, eigener Wert
+roof_azimuth  Feld auf PVRoof, eigener Vertrag (PVRoof.php:121),
+              geprüft durch pruefeAzimut, eigene Ausnahme RoofAzimuthOutOfRangeException
+Berührungspunkt zwischen beiden:  KEINER
+```
+
+Die beiden Konventionen leben heute **getrennt**. Die Sperre beschreibt also keine Verletzung,
+sondern eine **Falle für den nächsten Bau**: sobald jemand den Dachazimut in den PV-Ertrag geben
+will — und das ist der naheliegendste nächste Schritt —, lässt die Validierung `min:-180 max:180`
+genau das doppelsinnige Band **durch**. **Das ist der Grund für die rote Ampel, und er trägt.**
+
+### Fehlverdacht, vor der Meldung gefangen
+
+Genau **eine** Datei enthält beide Wörter: `resources/views/admin/deal_measurements/index.blade.php`.
+Geöffnet: `roof_azimuth` steht auf `:2535`, `aspect` auf `:5270` — und dort ist es die **CSS-Klasse
+`aspect-square`**, 2735 Zeilen entfernt. Ein naives „beide Wörter in einer Datei" hätte hier einen
+Fehlalarm erzeugt; die Fangprobe (23 Dateien enthalten `aspect` überhaupt) zeigt, warum das Wort für
+sich nichts belegt. **H-6: ein Wort ist kein Beleg; erst die Stelle ist einer.**
+
+**Ball beim Planner:** zwei Fundstellen in F-028 nachziehen oder auf die Sache umstellen —
+`SzeneProjektionService.php:257` (heute `:270`) und `szene.ts:60` (heute `:61`). **Die Sperre selbst
+bleibt unangetastet: sie ist in allen drei prüfbaren Teilen richtig.** **Kein Ball sonst.**
+
+Damit sind **13 von 27** Formeln durchgerechnet.
