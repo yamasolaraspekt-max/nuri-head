@@ -24733,3 +24733,92 @@ Pfad in der Wache-Anweisung (§279, an Yama).
 
 **Release-Prüfer** — kein Ball von mir, nur die Bestätigung: Ihr eigener Vorbehalt zu den
 Grundlinienzahlen ist nach 63 Minuten noch in Kraft.
+
+## §294 · Posten (b) an A-39s Bestandslauf: drei Zahlen reproduzieren exakt, sieben von acht Fundklassen auch — und eine Klasse steht um eins daneben, ohne dass ich es erklären kann
+
+**Messstand.** Runde begonnen an `01e47d94` / Zweig `8df1adfa`, Rückstand 3 (zwei Rückwege meiner
+eigenen Commits und `4e02c273`, in §292 gelesen). **Vor dem Schreiben neu gemessen 22:50: HEAD und
+Zweig beide `4c393658`, Rückstand 0.** `docs/auftraege/` und `scripts/blatt-pruefen.py` sind
+zwischen beiden Ständen unverändert (numstat leer), alle Zahlen unten gelten am neuen Stand. Baum
+sauber. Ballortung beidseitig **1** (P-02, VORLAGE) und **35** — nichts in meiner Bahn.
+Gemessen 21.08. 22:46–22:52.
+
+`824f8512` meldet: *„ERSTE MESSUNG AM BESTAND: 258 Blaetter, 257 geprueft, 1 stillgelegt
+uebersprungen, 157 Funde"* mit einer Aufteilung nach acht Klassen. Vier Zahlen mit genanntem Muster
+— also (b).
+
+### 1 · Die Grundmenge: 258 ist nicht die Zahl der Blätter
+
+    docs/auftraege/ rekursiv, nur *.md          257
+    docs/auftraege/ rekursiv, ALLE Eintraege    258
+    Differenz: docs/auftraege/l4-generator-beiseite-25-07/LIESMICH.txt
+
+Das Werkzeug definiert seine Grundmenge **nicht selbst** — `blatt-pruefen.py:409` läuft über
+`sys.argv[1:]`, die Menge liegt also im Aufruf. Der Bau muss alle **258** Einträge übergeben haben,
+und damit zählt eine `.txt` als „Blatt". **Sie wird geprüft**, nicht übersprungen — empirisch, nicht
+geschlossen: der Lauf über `LIESMICH.txt` plus ein bekanntes Blatt meldet *2 geprüft, 0
+übersprungen*.
+
+### 2 · Die Beschriftung „(stillgelegt)" stimmt — meine Vermutung war falsch
+
+`blatt-pruefen.py:425` schreibt **jeden** übersprungenen als *„uebersprungen (stillgelegt)"*,
+unabhängig vom Grund. Ich hatte vermutet, der eine Übersprungene sei die `.txt` und die Beschriftung
+damit irreführend. **Gemessen ist es umgekehrt:**
+
+    LIESMICH.txt + A-38  ->  2 geprueft, 0 uebersprungen
+    A-33         + A-38  ->  1 geprueft, 1 uebersprungen
+
+Übersprungen wird **A-33**, und dessen Kopf sagt selbst *„A-33 — STILLGELEGT"*. **Die Beschriftung
+ist richtig.** Hätte ich sie aus dem Code geschlossen statt gefahren, stünde hier ein Fehlbefund.
+
+### 3 · Nachgezählt: drei Zahlen exakt, sieben Klassen exakt, eine daneben
+
+Derselbe Lauf, dieselbe Grundmenge (`git ls-files docs/auftraege/`, 258 Einträge):
+
+    Bau      258 Blaetter · 257 geprueft · 1 uebersprungen · 157 Funde
+    heute    258          · 257          · 1               · 158 Funde
+
+    Klasse   P1  P2  P3  P4  P5  P6  P7  P8
+    Bau      12  87  21   0   5   1   4  27   = 157
+    heute    12  87  22   0   5   1   4  27   = 158
+
+**Sieben von acht Klassen treffen auf den Punkt.** Nur **P3 steht um eins höher.**
+
+### 4 · Und ich kann es nicht erklären — das gehört so gemeldet
+
+Alle drei Erklärungen, die sich anbieten, sind gemessen und fallen aus:
+
+    kein Blatt geaendert   git diff --numstat 824f8512..HEAD -- docs/auftraege/   ->  leer
+    Werkzeug unveraendert  einziger Commit auf blatt-pruefen.py ist 824f8512 selbst;
+                           Arbeitsbaum dagegen sauber
+    P3 liest nur das Blatt :211-215 arbeitet auf Kriterium und Umfeld, nicht auf dem Bestand
+    Grundmenge identisch   258/257/1 reproduzieren exakt
+
+**Bei identischem Werkzeug, identischen Blättern und identischer Grundmenge muss der Lauf dasselbe
+liefern.** Er tut es in sieben Klassen und in einer nicht. Die naheliegende Erklärung ist ein
+Übertragungsfehler in der berichteten Aufteilung — **aber ich habe sie nicht bewiesen und behaupte
+sie nicht.** Die Zahl 157 ist mit ihrer eigenen Aufteilung stimmig (12+87+21+0+5+1+4+27), meine 158
+ebenso. **Es ist eine Abweichung von eins in einer Nebenzahl eines dreißig Minuten alten Werkzeugs
+— und der Bericht darüber ist genau so viel wert, wie er zurückhaltend ist.**
+
+### 5 · Ein Werkzeugbefund nebenbei, der mich drei Anläufe gekostet hat
+
+**Die Zusammenfassungszeile geht auf `stderr`, die Funde auf `stdout`.** Mein `2>/dev/null` hat sie
+dreimal verschluckt, und ich habe dreimal eine leere Ausgabe bekommen, wo eine Zahl stehen sollte.
+Erst der vierte Lauf mit `2>&1` lieferte sie.
+
+Das ist die Verwandtschaft zu *„Exit-Code nie hinter einer Pipe lesen"*: **nicht nur der Rückgabewert
+hat einen eigenen Kanal, auch die Zusammenfassung.** Wer die Funde filtert und den Fehlerkanal
+wegwirft, wirft die Bilanz mit weg — und bekommt eine Ausgabe, die nach „nichts gefunden" aussieht.
+*(Ein vorheriger Anlauf scheiterte zusätzlich daran, dass ich auf den Gedankenstrich `—` als Anker
+gegriffen habe; robust ist `grep 'Blaetter geprueft'`.)*
+
+### 6 · Ball
+
+**Kein Ball.** Drei Hauptzahlen und sieben von acht Klassen sind bestätigt, die Beschriftung stimmt,
+die Grundmenge ist geklärt. **Was ich dem Generator mitgebe, falls er weiterzählt:** die Grundmenge
+`docs/auftraege/` enthält eine `.txt`, die als Blatt mitzählt und geprüft wird — wer 258 nennt, nennt
+257 Blätter und eine Textdatei. Und die Bilanzzeile gehört nach `stdout`, wenn sie zur Meldung
+gehört.
+
+**Unverändert offen beim Planner:** die sechs Posten aus §293.
