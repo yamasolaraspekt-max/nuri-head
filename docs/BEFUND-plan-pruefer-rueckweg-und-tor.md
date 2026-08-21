@@ -19349,3 +19349,86 @@ bedingt bei Yama, und dort stauen sie sich.
 bereits einen Träger — `docs/YAMA-KONVENTION-NUMMERN-UND-INSTANZEN.md`. Ich schreibe nicht hinein
 (nicht meine Datei, B6), aber ich melde: ein reines `§NNN` ist als Verweisform nicht eindeutig,
 und das trifft dieselbe Wunde wie A-34 — **eine Nummer ist kein Anker**.
+
+## §236 · Posten (a): drei Quellen zählen die Agenten — 15, 22, 23. Und alle drei hatten recht
+
+**Messstand.** HEAD `55fdaa05` (21.08. 18:57:50), Baum sauber, **0 neue Commits** — achte Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (267 Min). Ballortungsträger `810f37d9e560` /
+`b0f14db4239b`, unverändert. Gemessen 21.08. 18:58–19:02.
+
+### 1 · Der Träger, den ich noch nie geprüft habe
+
+`CLAUDE.md` nennt `docs/REGISTER.md` die Landkarte: *„Wer etwas sucht, greift dorthin statt zu
+raten."* Ein falsches Register ist deshalb schädlicher als ein falscher Einzelzeiger — es schickt
+jeden Suchenden in dieselbe Irre. Beim Zählen der Register fiel die erste Zahl auf:
+
+    CLAUDE.md:19   | Agenten | .claude/agents/ | 15 Agenten-Definitionen; Roster in
+                     docs/regelwerk/AGENTEN-UND-SKILLS.md |
+
+**Drei Quellen, drei Zahlen:**
+
+| Quelle | Zahl | selbst nachgezählt |
+|---|---|---|
+| `CLAUDE.md:19` | **15** | — |
+| `docs/regelwerk/AGENTEN-UND-SKILLS.md:25` „Die 22 Agenten" | **22** | 22 Tabellenzeilen — **hält** |
+| `.claude/agents/` | **23** | 23 Dateien, **alle 23** mit `name:` im Frontmatter |
+
+Der Verweis widerspricht sich damit **im selben Satz**: CLAUDE.md nennt 15 und schickt zum Roster,
+der 22 nennt.
+
+### 2 · Der Abgleich, einzeln statt geschätzt
+
+Jede der 23 Dateien gegen den Roster geprüft. **Genau einer fehlt: `dirigent`.** 22 + 1 = 23 — die
+Rechnung geht ohne Rest auf. Und es ist nicht irgendeiner: der Dirigent ist die Orchestrierungs-
+rolle nach ARBEITSREGELN N4, die Aufträge entgegennimmt und Agenten auswählt.
+
+**Eine Gegenliste habe ich verworfen.** Die Rückrichtung („Roster nennt etwas ohne Datei") ergab
+zwölf Treffer — `governance-zyklus`, `qualitaetsraster`, `ticket-main`, `planner-security-review`
+und weitere. Das sind **Skills, keine Agenten**; die Datei heißt „AGENTEN-**UND-SKILLS**". Mein
+Muster hat die halbe Datei als Fehlbestand gemeldet. Vierte zu breite Grundmenge in Folge (§232,
+§233, §235, jetzt hier) — und wieder vor der Meldung gefangen.
+
+### 3 · Die Zeitachse: jede Zahl war wahr, als sie geschrieben wurde
+
+    20.08. 13:17  1c06f9ba  CLAUDE.md: "15 Agenten-Definitionen"
+                            -> zu diesem Commit: GENAU 15 Dateien in .claude/agents/
+    20.08. 13:52  ee19f314  Roster: "Die 22 Agenten", 22 Tabellenzeilen
+                            -> sieben Agenten in 35 Minuten dazugekommen
+    20.08. 16:04  0f554dd9  dirigent.md angelegt (Fassung 1.7)
+                            -> Roster nicht mitgezogen
+
+Am Commit `1c06f9ba` selbst nachgezählt: **15 Dateien.** Die Zahl war korrekt. Sie hielt
+**höchstens 35 Minuten** — bis der Roster 22 nannte.
+
+Das ist Drift-Klasse 4 in der Form aus §109 (dort: 45 Minuten Haltbarkeit). **Niemand hat hier
+falsch gezählt.** Drei Quellen, drei richtige Messungen zu drei Zeitpunkten, und keine wurde
+nachgezogen.
+
+**Und der Verschieber ist ein alter Bekannter:** `0f554dd9` ist derselbe Commit, der in §231 die
+ARBEITSREGELN auf Fassung 1.7 brachte und dort die Ankertabelle `:1636-1656` überholte. Ein
+Commit, zwei unabhängig gemessene Drift-Befunde.
+
+### 4 · Warum das mehr wiegt als ein Zeigerfehler
+
+`CLAUDE.md` ist die Datei, die jede Instanz zu Sitzungsbeginn liest — sie steht in den
+Projektanweisungen und ist damit die einzige Aussage über den Bestand, die **jeder** sieht, bevor
+er irgendetwas misst. Eine Instanz, die dort „15 Agenten" liest und den Dirigenten sucht, findet
+ihn im Roster nicht und im Verzeichnis nur, wenn sie das Register verlässt und selbst nachsieht —
+also genau das tut, was die Landkarte ersparen soll.
+
+Der Fehler ist damit **nicht** die falsche Zahl, sondern ihre Form: eine gezählte Bestandsgröße,
+festgeschrieben an einer Stelle, die kein Bestandszähler ist. Dieselbe Wunde wie A-34 und §235:
+**eine Zahl, die den Zustand behauptet, veraltet in dem Moment, in dem der Zustand sich ändert.**
+
+### 5 · Ball
+
+**Planner** (schreibt `CLAUDE.md` und den Roster), zwei Griffe, Reihenfolge nach Wirkung:
+
+1. `CLAUDE.md:19` — die „15" trifft jede Instanz beim ersten Lesen. Entweder auf 23 nachziehen
+   **oder** die Zahl streichen und nur auf den Roster verweisen; ein Verzeichnis zählt sich selbst.
+2. `docs/regelwerk/AGENTEN-UND-SKILLS.md` — `dirigent` fehlt als 23. Zeile, und die Überschrift
+   „Die 22 Agenten" trägt denselben Mangel wie CLAUDE.md, nur eine Ebene tiefer.
+
+Nicht gemessen: ob die übrigen sechs Register (`docs/REGISTER.md`, backlog, konzept, fortschritt,
+regelwerk, werkbank/02-WERKZEUGE) ähnliche Bestandszahlen tragen. Das ist der nächste (a)-Posten,
+keine Vermutung für diesen.
