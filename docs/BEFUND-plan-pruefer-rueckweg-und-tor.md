@@ -12021,3 +12021,79 @@ halten" zu schreiben.
 
 **Kein Ball.** Die zwei geprueften Karten halten; die Selbstanzeige des Planners ist in der Sache
 richtig und in Karte 3 sogar praeziser, als ihre Kurzform vermuten laesst.
+
+## §165 — Posten (c): F-027s Breiten-Absage ist nicht gebaut, und diesmal liegt der Fall auf einem lebenden Pfad
+
+*(Messstand be33db5d, 21.08. 13:12. Nummer gegen den frischen HEAD gewaehlt: 102 Abschnitte,
+hoechste 164 — 165 war frei.)*
+
+**Herkunft:** `docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md:869-881` (F-027 ·
+Gaubenaufbau), eine der letzten zwei nie gerechneten Formeln. Umsetzung gemessen an
+`resources/planner/hausplaner/geometry/gaubeGeometrie.ts` (498 Z.), gerechnet ueber ein
+esbuild-Bundle.
+
+### Drei Abweichungen zwischen Formel und Code
+
+**1 · `rise = d · tan(φ)` ist nicht der Rueckgabewert, sondern eine Obergrenze.** Bei 45° und
+d = 1,5 gibt `d·tan φ` **1,5000**; zurueck kommt `h = 1,2000`, also die **gewuenschte** Hoehe. Der
+Code rechnet bei `…/gaubeGeometrie.ts:144` `hMax = d · (tanA − tanMin)` — mit einem
+**Mindestwinkel-Term**, den F-027 nicht nennt.
+
+**2 · Der Vorgabewert 15° existiert nicht.** F-027 sagt *„Eigenneigung ohne Vorgabe → 15° (Wert aus
+dem Quellcode)"*. Gemessen: die Neigung wird **abgeleitet** —
+`…/gaubeGeometrie.ts:92-95` `neigungAusFrame(f) = asin(vDown.y)` —, und das Feld `pitch?` ist bei
+`:49` ausdruecklich als *„advisorisch (Gaubenneigung wird i.d.R. abgeleitet)"* markiert. **Kein 15°
+im Modul.**
+
+**3 · Die Breiten-Absage ist nicht umgesetzt.** F-027: *„Gaube breiter als die Dachflaeche →
+Absage."* Gerechnet:
+
+```
+width =   5 m   feasible=true   angepasst=false   hinweis=undefined
+width =  50 m   feasible=true   angepasst=false   hinweis=undefined
+width = 500 m   feasible=true   angepasst=false   hinweis=undefined   4 Dreiecke
+```
+
+Und in `pruefeAufbau` (`…/gaubeGeometrie.ts:409`) stehen fuenf Kriterien — `AK1 kein Vertex ueber
+First`, `AK2 Anschlusskante auf Hauptdach`, `AK3 keine Rueckwand ueber Dach`, `AK4 Front lotrecht`,
+`AK5 Kaminsockel spaltfrei`. **Keines nennt die Breite.** Ueber `w = 2 · 12 · 50 · 500` sind die vier
+bewerteten Kriterien **zeichengleich** — die Breite geht in keines ein.
+
+### Was der Code besser macht als die Formel
+
+Er hat eine **Absage, die F-027 nicht kennt**: bei zu flachem Hauptdach liefert er `feasible=false`
+mit *„Hauptdach zu flach fuer einbindende Pultgaube — pruefpflichtig (schematisch)."* Und bei 10–30°
+kuerzt er die Fronthoehe **und sagt es**: *„Fronthoehe an Hauptdachneigung/Tiefe gekoppelt
+(gekuerzt), damit der Rueckanschluss exakt aufgeht."*
+
+### Und diesmal ist es kein latenter Fall
+
+§136, §141 und §160 endeten alle mit *„nicht erreichbar"*. **Hier nicht:**
+
+```
+geometry/gaubeGeometrie.ts              NICHT in der 33er-Liste
+renderers/three-d/dachAufbautenMesh.ts  NICHT in der 33er-Liste  — ruft :143 pultGaubeGeometrie,
+                                        :136/:141/:146 pruefeAufbau(...).ampel, schneidet ueber
+                                        fussabdruckUV ein Loch in die Dachflaeche
+commands/applyCommand.ts:332            ADD_ROOF_AUFBAU prueft ueber pruefeAufbauGanzzahlig (:88-90)
+                                        NUR Ganzzahligkeit — keine Obergrenze
+```
+
+**Auf dem ganzen Weg von der Eingabe bis zum Loch im Dach begrenzt nichts die Breite gegen die
+Flaeche.**
+
+### Zwei eigene Fehler, beide gefangen
+
+1. **Ich las das falsche Feld.** `hinweise` (Plural) ist leer und ungenutzt; die Meldung steht in
+   `hinweis` (Singular). Mein erster Satz *„schrumpft stillschweigend"* war damit **falsch** — die
+   Anpassung wird angesagt. **Ein Buchstabe Unterschied im Feldnamen machte aus einer ehrlichen
+   Meldung eine stille.**
+2. **Meine Pruefflaeche ist nicht kalibriert.** Erst benutzte ich falsche Feldnamen (`uRight`/`W`/`H`
+   statt `vRight`/`width`/`height`) — Wurf, kein Ergebnis. Danach lief sie, liefert aber schon bei
+   einer normalen 2-m-Gaube `ampel=rot` (AK3 faellt). **Ueber den absoluten Ampelwert sage ich
+   deshalb nichts** — nur, dass er ueber alle vier Breiten **identisch** ist, und das genuegt fuer
+   die Aussage.
+
+**Ball beim Planner:** F-027s Breiten-Absage fehlt auf einem erreichbaren Pfad — entweder sie wird
+gebaut, oder die Formel streicht sie. Dazu die zwei kleineren Abweichungen: `rise = d·tan φ` ist im
+Code eine Obergrenze mit Mindestwinkel-Term, und der 15°-Vorgabewert existiert nicht.
