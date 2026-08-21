@@ -16,6 +16,10 @@
 | 4 | **Qualitätsraster** — was als Befund zählt | `~/.claude/skills/qualitaetsraster/SKILL.md` | nutzerweit |
 | 5 | **Fach-Linsen** — Handwerk und Code | [`.claude/skills/`](../../.claude/skills/) | 16 Skills, siehe [AGENTEN-UND-SKILLS.md](AGENTEN-UND-SKILLS.md) |
 
+**Vollmacht:** [`VOLLMACHT-DIRIGENT.md`](VOLLMACHT-DIRIGENT.md) — Yama, 21.08.2026: der Dirigent
+vertritt vollständig und weist alle Rollen an; Widerspruch wird gehört und abgewogen; vier
+selbstgezogene Grenzen (Rollentrennung, Deploy/Löschung, Operanden-Gate, main-Weg).
+
 **Aufgehoben, aber erhalten:** [`docs/HAUSREGELN.md`](../HAUSREGELN.md) trägt seit 12.08.2026
 keinen Regelinhalt mehr — ihr Inhalt steht in ARBEITSREGELN §18a. Nicht gelöscht, weil der Weg
 dorthin nachvollziehbar bleiben soll.
