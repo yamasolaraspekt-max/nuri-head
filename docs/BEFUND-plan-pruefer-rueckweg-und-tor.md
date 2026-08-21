@@ -17181,3 +17181,93 @@ ab `:2397` (§210).
 **Kein Ball beim Planner aus dieser Runde** — aber die Zahl gehört ihm zur Kenntnis: sein Zweig ist der
 am weitesten zurückliegende, und drei meiner Befunde aus §201, §209 und §211 lassen sich damit
 erklären, ohne dass jemand nachlässig gewesen wäre.
+
+---
+
+## §215 — Posten (e): die Empfänger lesen 58 von 153 Abschnitten. Der Evaluator sieht einen von sechs Bällen, die ihm gehören
+
+**Messstand a95b31cf, Baum sauber, 0 neue Commits. Integrationszweig lokal 7a82ecfb (14:31, Alter
+167 Min). Rückstände: plan-pruefer 40 · evaluator 100 · planner 104. Letzte Rollenarbeit lokal:
+Evaluator 14:19, Generator 10:07, Planner 10:04. `docs/STATUS.md` und die 89 Blätter unbewegt, kein
+Ball in meiner Bahn. Erhebung 21.08. 17:18–17:20.**
+
+§214 hat gemessen, dass alle fünf Rollen zurückhängen. Diese Runde stellt die Anschlussfrage, die
+allein zählt: **wie viel von meiner Arbeit kommt bei den Empfängern an?**
+
+### 1. Meine Befunddatei, gelesen aus vier Ständen
+
+    Stand                          Zeilen   Abschnitte   höchster
+    rolle/planner                    9041           58   §120
+    rolle/evaluator                  9041           58   §120
+    rolle/generator                  9041           58   §120
+    rolle/release-pruefer            9041           58   §120
+    auto/hausplaner-integration     13569          117   §179
+    mein Zweig (HEAD)               17183          153   §214
+
+Alle vier Rollen tragen **dieselbe Fassung**, byte-gleich in der Länge: 9041 Zeilen, 58 Abschnitte,
+zuletzt **§120**.
+
+**Die Empfänger lesen 58 von 153 Abschnitten — 38 %.** Alles ab §121 ist für Planner, Evaluator,
+Generator und Release-Prüfer nicht vorhanden. Darunter: **alle neun Fundstellen** der Klasse „ein
+Schutz, der einen plausiblen Wert liefert statt zu verweigern" (§136 bis §207), die Inventurzahlen
+(§182), die Agentenzahlen (§187), die Registerlücken (§197) und die gesamte laufende Reihe ab §199.
+
+### 2. Die Bälle, je Abschnitt gezählt
+
+    Rolle         Abschnitte mit Ball    davon lesbar    UNSICHTBAR
+    Planner                        91              30            61
+    Integrator                     48              13            35
+    Generator                      12               4             8
+    Evaluator                       6               1             5
+
+**Der Evaluator sieht einen von sechs Abschnitten, die ihm einen Ball zuweisen.** Der Planner sieht
+30 von 91.
+
+**Was diese Zahlen NICHT sind:** Postenzahlen. Ein Abschnitt kann zwei Rollen nennen, und mehrere
+Abschnitte können denselben Posten betreffen — die Summe der vier Spalten ist deshalb keine Zahl
+offener Vorgänge. Belastbar ist das **Verhältnis** je Rolle und die Aussage, dass die Mehrheit meiner
+Zuweisungen ihren Empfänger nicht erreicht.
+
+### 3. Der eigene Zählfehler, den erst die Fangprobe gefunden hat
+
+Meine erste Zählung ergab **70** Planner-Abschnitte statt 91. Die Fangprobe an einem bekannten Fall
+brachte es an den Tag: §213 trägt einen Planner-Ball, wurde aber nicht gezählt — weil dort
+**„Beim Planner, zwei Punkte …"** steht und nicht **„Ball beim Planner"**. Ich habe die Formulierung im
+Lauf der Reihe gewechselt und mein Zählmuster an der alten Form geeicht.
+
+    Muster "Ball beim Planner"                    ->  70 Abschnitte
+    Muster "Ball beim Planner" ODER "Beim Planner" ->  91 Abschnitte
+    Differenz                                          21 Abschnitte, die durchgefallen wären
+
+Dieselbe Klasse wie §210 (`\b` in BSD-awk) und §212 (Muster zu breit), aber mit umgekehrtem Vorzeichen:
+dort fand das Muster zu wenig **im fremden** Text, hier zu wenig **in meinem eigenen**. **Ein Muster,
+das die eigene Sprache abbildet, muss gegen die eigene Sprachänderung geeicht werden** — und die
+merkt man nur, wenn man an einem bekannten Treffer prüft statt an der Gesamtzahl.
+
+### 4. Was das für die bisherige Reihe bedeutet
+
+§199 hat gemessen, dass 19 Abschnitte den Integrationszweig nicht erreichen. Heute sind es **36**
+(153 − 117). Aber das war die kleinere Hälfte: bis zum **Planner** fehlen **95** (153 − 58).
+
+Die drei Stufen, jede mit ihrer eigenen Ursache:
+
+    ich -> Integrationszweig    36 Abschnitte fehlen   Ursache: kein Rückweg seit 14:31 (§199)
+    Integrationszweig -> Rolle  59 Abschnitte fehlen   Ursache: kein Nachziehen, 100-104 Commits (§214)
+    ich -> Rolle                95 Abschnitte fehlen   = die Summe beider Lücken
+
+**Die zweite Stufe ist die größere**, und sie war bis §214 nicht im Blick. Wer nur den Rückweg
+repariert, schließt ein Drittel der Lücke.
+
+### Ball
+
+**Beim Integrator**, unverändert im Gegenstand, geschärft in der Zahl: der Rückweg (36 Abschnitte) und
+die zwei offenen Fences in `docs/STATUS.md:3220` und `:7881`, dazu der Restpunkt an A-22-1 (§209) und
+der unzuordenbare Block ab `:2397` (§210).
+
+**Zur Kenntnis an alle vier Rollen**, ohne Forderung, weil das Nachziehen nicht mein Recht ist: die
+Fassung meiner Befunddatei in euren Zweigen endet bei §120. Was seither an eure Adresse geschrieben
+wurde — 61 Abschnitte für den Planner, 35 für den Integrator, 8 für den Generator, 5 für den Evaluator
+— steht im Integrationszweig oder in `rolle/plan-pruefer`, nicht bei euch.
+
+**Kein Ball bei Yama aus dieser Runde:** seine neun Posten sind zugestellt (§209), und daran hat sich
+nichts geändert.
