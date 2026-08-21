@@ -18095,3 +18095,121 @@ ohne sie zu ändern —
 
 **Beim Integrator:** unverändert der Rückweg (45 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
 und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
+
+---
+
+## §224 — Posten (d): mein §207 hat einen Befund gemeldet, der 190 Minuten vorher behoben war. Und alle fünf Inventur-Befunde sind gebaut
+
+**Messstand 63aa98df, Baum sauber, 0 neue Commits. Integrationszweig lokal 7a82ecfb (14:31, Alter
+207 Min). Rückstand: ich 40 · planner 104. `docs/STATUS.md` und die 89 Blätter unbewegt, kein Ball in
+meiner Bahn. Erhebung 21.08. 17:58–18:03.**
+
+### 1. Die Alterung des Fach-Ankers
+
+`FORMELSAMMLUNG.md` ist der Gegenstand von fünf Prüfungen dieser Reihe (§203, §208, §213, §218, §223).
+Ihre Alterung:
+
+    letzter Commit  15c49f96  16.08. 20:01   Alter 7077 Min = 4 T 21 h
+    18 Commits gesamt · 1187 Zeilen · 32 Formel-Überschriften · 48 verschiedene Kennungen
+    davon mit einer Ampel:  13    ohne Ampel:  35
+
+**Die Ampeltabelle trägt einen eigenen Datumsstempel — und er stimmt nicht.**
+
+    Überschrift (:385):  „AMPELN — Stand der Qualitätsprüfung (07.08.2026)"
+    zuletzt geändert:    1e933a64  10.08. 19:11
+    ein Eintrag nennt:   „ausgeführt 11.08." (F-026)
+    ein Eintrag zuletzt: 1734aa3b  12.08. 00:10  (F-028)
+    Alter des Stempels:  21240 Minuten = 14 Tage
+
+**Die Tabelle wurde bis mindestens 12.08. bearbeitet und trägt den Stempel 07.08.** Der Stempel wurde
+nicht mitgezogen, während der Inhalt weiterwuchs — vier Tage Unterschied beim Schreiben, vierzehn Tage
+Alter heute. Das ist die Klasse aus §202 (Fassung 1.4.2), diesmal an einem selbst gesetzten Datum.
+
+### 2. Der Fund: alle fünf Inventur-Befunde sind gebaut
+
+Seit dem Sammlungsstand sind **10 Commits** an der Insel gelaufen, **5** davon an `geometry/`. Ihre
+Betreffzeilen:
+
+    60c04eef  21.08. 13:33  Z1-W1-2  Walmdach mit Giebelbreite über Gebäudelänge wird abgelehnt
+    d7651d9c  21.08. 13:40  Z1-W1-3  die private Shoelace-Kopie in dachGeometrie.ts ist entfallen
+    b2371d7e  21.08. 13:42  Z1-W1-4  dachWerte hat wieder eine Quelle, die Kopie ist stillgelegt
+    2bc0d2f2  21.08. 13:56  Z1-W1-1  das DIN-18065-Badge sagt jetzt, was es NICHT geprüft hat
+    9dde4d15  21.08. 14:15  Z1-W1-5  der tote insulationType-Zweig weist sich als tot aus
+
+**Das sind genau die fünf Befunde der Inventur Z1** — P-1, R-1, R-2, K-4 und K-1 — in 42 Minuten
+gebaut. Die Kettenlücke, die ich dreimal gemeldet und in §200 als behoben gewürdigt habe, ist nicht nur
+in der Statuswahrheit geschlossen, sondern **auch im Code abgearbeitet**.
+
+Die Behebung von P-1 ist außergewöhnlich sorgfältig (`dachGeometrie.ts:137-156` im gültigen Stand):
+
+    // Z1-W1-2 (Y-1 ENTSCHIEDEN 21.08.: ABLEHNEN, keine stille Dreh-Korrektur).
+    // … Gemessen bei 30°: 6×8 m → 64,66 statt 55,43 m² (+16,7 %), 4×10 m → 80,83 statt 46,19 m²
+    // (+75,0 %); 3×12 m bei 35° → 109,87 statt 43,95 m² (+150 %). Diese Fläche speist PV-Ertrag
+    // und Heizlast.
+    // … `L === B` ist jedoch ein gültiges Zeltdach und rechnet heute exakt: nachgemessen bei
+    // 30°, 35° und 45° je ±0,0 % gegen den Erhaltungssatz. Ein Wurf dort wäre eine Fehlsperre.
+    if (!walmIstKonsistent(laengeM, spannM) && laengeM !== spannM) {
+      throw new DachGeometrieUngueltig('Walmdach: Giebelbreite größer als Gebäudelänge …');
+    }
+
+Es benutzt `walmIstKonsistent` — **genau die Funktion, die ich in §207 als tot gemeldet habe** — und es
+nimmt den Gleichstand als Zeltdach aus, mit eigener Messung. **Und Yamas Entscheidung Y-1 ist
+gefallen:** „ABLEHNEN, keine stille Dreh-Korrektur". Damit ist der Produktposten aus §207 erledigt.
+
+### 3. Mein eigener Fehler, und er ist schwer
+
+    Bau 60c04eef        21.08. 13:33:17
+    mein §207           21.08. 16:44:16
+    Abstand             190 Minuten
+
+§207 schließt mit dem Satz: *„bis zur Entscheidung liefert der Live-Pfad in diesem Fall eine
+Dachfläche, die um 16 bis über 1000 % zu groß ist, und sie geht in PV-Ertrag und Heizlast ein."* Zu
+diesem Zeitpunkt war die Entscheidung gefallen, der Bau fertig und im Integrationszweig — **in
+`7a82ecfb`, also in genau dem Stand, den ich seit §200 in jeder Runde als den gültigen bezeichne.**
+
+Der Grund ist präzise benennbar: **ich habe für `docs/STATUS.md` die Regel aus §200 befolgt und für den
+Code nicht.** Seit §200 messe ich Zustandsfelder an beiden Ständen und nenne beide. Den Code habe ich
+weiter aus dem Arbeitsbaum gelesen — mit `sed -n` und `grep` auf den Pfad, ohne `7a82ecfb:` davor.
+Dabei stand die Zahl direkt daneben: „Rückstand ich 40".
+
+**Reichweite geprüft**, damit der Fehler nicht größer erscheint als er ist:
+
+    von zehn Trägern meiner Code-Befunde unterscheidet sich EINER (dachGeometrie.ts, 3 Commits)
+    gaubeGeometrie · fbhAuslegung · sparrenBerechnung · dachformVorlagen · fangKern
+    kalibrierung · enginePanels · dachWerte · werkzeugLandkarte        alle gleich
+    Insel-Dateien mit Unterschied insgesamt: 12
+    §198s Funktionen in kontur.ts: von d7651d9c NICHT berührt (Diff auf die Funktionsnamen leer)
+
+**Nur §207 ist betroffen.** §205, §213, §218, §221, §223 und §198 stehen auf Trägern, die in beiden
+Ständen gleich sind. Das entschuldigt nichts, aber es begrenzt den Schaden auf einen Abschnitt.
+
+**Was §207 richtig gemessen hat, bleibt richtig:** die sechs Zahlen der Inventur, die Gegenprobe mit
+0,00 % im gutmütigen Fall, die Unbegrenztheit bis +1200 %, und dass `walmFirstlaengeM` keinen
+Produktivaufrufer hat. **Falsch war allein der Schluss, der Fehler stehe noch offen.**
+
+### 4. Die Lehre, und sie ist unangenehm konkret
+
+§200 hat die Regel für Zustandsfelder aufgestellt. Sie gilt für **jede** Messung am Bestand, und ich
+habe sie auf eine Dateiart verengt. Ab hier gilt für mich: **bei jeder Aussage über Code am gültigen
+Stand messen (`git show 7a82ecfb:pfad`), nicht am Arbeitsbaum** — und wenn beide sich unterscheiden,
+beide nennen.
+
+Es ist derselbe Fehlertyp, den ich in §222 an mir festgestellt habe (falsche Grundmenge) und in §223
+(falscher Eingabefall), nur an der teuersten Stelle: **nicht das Muster war falsch, sondern der Baum.**
+
+### Ball
+
+**Bei mir, erledigt mit diesem Abschnitt:** der Widerruf des offenen Teils von §207. Der Befund P-1 ist
+seit 21.08. 13:33 behoben, Yamas Entscheidung Y-1 ist gefallen, und `walmIstKonsistent` ist nicht mehr
+tot.
+
+**Beim Planner, klein:** `FORMELSAMMLUNG.md:385` trägt den Stempel „07.08.2026" für eine Tabelle, die
+bis 12.08. bearbeitet wurde. Ein Stempel, der nicht mitgezogen wird, ist schlechter als keiner — er
+datiert Vertrauen auf einen Stand, den es nicht gibt.
+
+**Zur Kenntnis an alle:** die fünf Z1-W1-Aufträge sind gebaut, in 42 Minuten, und sie decken die
+vollständige Inventur Z1 ab. Das ist die größte abgeschlossene Arbeit, die ich in dieser Reihe gemessen
+habe, und sie gehört genannt — ich habe sie drei Stunden lang nicht gesehen.
+
+**Beim Integrator:** unverändert der Rückweg (47 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
+und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
