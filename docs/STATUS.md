@@ -18782,7 +18782,17 @@ claim_dor: "release-pruefer 15.08. AUF YAMAS AUSDRUECKLICHE ANWEISUNG (der Plan-
   Merges, und ich fahre die meisten davon. Die DoR prueft Baubarkeit und Messbarkeit, nicht
   Wuenschbarkeit; wo ein Punkt mich belastet, entscheide ich im Zweifel FUER den Auftrag und sage
   es an der Stelle."
-dor_beleg: "BEREIT — 2. Runde 15.08., siehe dor_votum_runde_2"
+dor_beleg: |
+  ERTEILT — plan-pruefer, Runde 2, bestaetigt und verstaerkt in Paragraf 156 (21.08. 12:36,
+  Messstand 1349e992) und in der Sammeltabelle Paragraf 159. Woertlich dort: "Mein Votum aus
+  Paragraf 108 bleibt ERTEILT, und dieser Durchgang stuetzt es staerker als Paragraf 155 es tat."
+  Rot-Lage steht auf FUENF FESTEN SHAs statt auf einer Quote, alle fuenf von ihm nachgeprueft:
+  94d2b479, 0f05f8bf (= basis_sha), c1b3a774, b1d343e6, 9b42e777 — jeder existiert, jeder ist ein
+  Merge, keiner traegt eine Rollenmarke. Nach Paragraf 132 die UNVERAENDERLICHE Klasse: dieser
+  Beleg laeuft nicht ab.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung. Das Feld trug bis hierher
+  "BEREIT — 2. Runde 15.08.", also einen Zwischenstand von vor sechs Tagen. VORHERIGER WERT
+  ausdruecklich erhalten: siehe dor_votum_runde_2 im selben Block.
 dor_votum_runde_2_BERICHTIGT: |
   release-pruefer 16.08.: EIN BELEG MEINES EIGENEN RUNDE-2-VOTUMS IST FALSCH, und ich melde ihn,
   bevor jemand danach baut. Im Votum steht bei Restpunkt 1: "Der Grund traegt: ich habe alle
@@ -18916,7 +18926,13 @@ dor_schnitt_sha: "99add90f"
 art: "BAU — ein Pruefskript fuer Auftragsblaetter, laeuft im DoR-SCHRITT."
 spur: A
 prioritaet: P1
-dor_beleg: "steht aus"
+dor_beleg: |
+  ERTEILT — plan-pruefer, Runde 2, in Paragraf 159 (21.08.) nachgeprueft statt angenommen:
+  "A-39s erteilte DoR traegt — nachgemessen, nicht angenommen", Belege heute reproduziert.
+  In derselben Runde faellt sein eigener Punkt 3: die fehlende Stufenmarkierung ist kein
+  DoR-Hindernis, sondern A-39s Liefergegenstand.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung. Das Feld trug "steht aus",
+  waehrend das Votum seit Paragraf 108 geliefert und committet war.
 claim: "planner 16.08. — Claim VOR dem Schnitt; A-39 hatte null Treffer und null Blaetter."
 staut_hinter: "A-37 — das Tor schuetzt A-39, nicht umgekehrt."
 ```
@@ -18931,7 +18947,16 @@ dor_schnitt_sha: "99add90f"
 art: "BAU — drei Zustaende, zwei Pflichtfelder und die sechste Innenpruefung."
 spur: A
 prioritaet: P2
-dor_beleg: "steht aus"
+dor_beleg: |
+  NICHT ERTEILT — plan-pruefer, in Paragraf 157 (21.08. 12:40) nachgeprueft: "NICHT ERTEILT,
+  unveraendert. Vier Punkte, vier offen; einer davon in der Reichweite behoben und in der
+  Einheit nicht." In Paragraf 159 praezisiert auf die Punkte 1, 2 und 4 — Punkt 3 ist
+  herabgestuft, weil die fehlende Stufenmarkierung A-39s Liefergegenstand ist.
+  Dazu sein Kettenpunkt aus dem Blatt selbst (staut_hinter: A-37, dann A-39): selbst eine
+  erteilte DoR wuerde A-40 heute nicht loesen.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung. Ein NICHT ERTEILT mit
+  benannten Restpunkten ist ein Ergebnis, kein Ausstand; "steht aus" war daher nicht
+  ungefaehr richtig, sondern falsch. Die drei Punkte liegen beim Planner.
 claim: "planner 16.08. — Claim VOR dem Schnitt; A-40 hatte null Treffer und null Blaetter."
 staut_hinter: "A-37, dann A-39 — A-39 baut die Bauform, in die A-40 einen sechsten Punkt einhaengt."
 regelgrundlage: "ARBEITSREGELN.md, Nachtrag vom 16.08. Die drei Zustaende, die zwei Pflichtfelder
@@ -25653,7 +25678,14 @@ art: "UMZUG — Bloecke ohne zustand-Feld wandern aus docs/STATUS.md in eine eig
   Datei. KEIN Loeschen, KEIN Hausplaner-Code."
 spur: A
 prioritaet: P1
-dor_beleg: "steht aus"
+dor_beleg: |
+  ERTEILT — plan-pruefer, in Paragraf 158 (21.08.) nachgeprueft; Sammeltabelle Paragraf 159:
+  "A-42 ERTEILT — alter Restpunkt behoben, neuer herabgestuft". Der offene Punkt ist die
+  fehlende Stufenmarkierung, derselbe wie A-40 Punkt 3, und liegt beim Planner.
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung. ACHTUNG FUER JEDEN, DER
+  AELTERE STAENDE LIEST: in Paragraf 108 stand A-42 noch auf NICHT ERTEILT mit einem
+  Restpunkt. Der Wert hat sich am 21.08. gedreht; wer Paragraf 108 als Quelle nimmt, traegt
+  einen ueberholten Stand ein.
 claim: "planner 16.08. — Claim VOR dem Schnitt."
 kennung_geprueft: "NAMENTLICH ueber alle sechs Baeume geprueft, nicht ueber ein
   Namensmuster: null Treffer und null Blaetter in jedem Zweig."
