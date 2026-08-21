@@ -19934,3 +19934,122 @@ Runde. Eine Postenliste, die ihre erledigten Einträge behält, macht die verbli
 **Niemand**: Posten 4 ist zu streichen.
 
 Teil 3 folgt in der nächsten Runde: Seed-Weg der Prüfbühne, Regelkollision §3/E1/Beifang, §119/§120.
+
+## §242 · Die Yama-Vorlage, Teil 3 von 3 — die Liste ist vollständig, und drei der neun gehören nicht darauf
+
+**Messstand.** HEAD `3f253d84` (21.08. 19:19:39), Baum sauber, **0 neue Commits** — vierzehnte Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (288 Min), STATUS-Blob `810f37d9e560`. Gemessen
+21.08. 19:20–19:21.
+
+---
+
+### Posten 7 · Seed-Weg der Prüfbühne — **nicht mehr offen**
+
+**Frisch gemessen:** `docs/STATUS.md:3041` trägt
+
+    ballbesitz: —  # ERLEDIGT 13.08.: Yama hat WEG C entschieden, mit drei Auflagen
+
+Ball leer, Vermerk `ERLEDIGT`, Entscheidung mit Auflagen — der Posten ist beantwortet.
+
+**Ein Widerspruch, den ich benenne statt verschweige:** `docs/STATUS.md:16849` führt denselben
+Posten weiterhin als *„OFFEN — 'ICH ENTSCHEIDE DAS NICHT. Ein Seed schreibt in eine [Datenbank]'"*.
+Das ist ein **eingefrorenes Zitat** aus einem Stand vor dem 13.08., kein zweiter Datensatz —
+maßgeblich ist der Block mit `ballbesitz`-Feld bei `:3041`. Dieselbe Lage wie in §108: derselbe
+Sachverhalt an zwei Orten mit zwei Werten, und der ältere wurde nicht mitgezogen.
+
+> **Empfehlung: streichen.** Was aussteht, ist der **Bau** nach Weg C — und der gehört zum
+> Generator, nicht auf Yamas Entscheidungsliste.
+
+---
+
+### Posten 8 · Regelkollision §3/E1/Beifang — echte Regelfrage, formal offen
+
+**Beide Seiten stehen, und beide Zeiger habe ich vor der Übernahme geprüft** — mit Erfolg, denn
+beide waren gewandert:
+
+| Seite | mein alter Zeiger | **heute** | Inhalt |
+|---|---|---|---|
+| A | `ARBEITSREGELN.md:409` | **:423** | *„unmittelbar nach dem Merge wird dessen SHA in einem Statusübergang … festgehalten"* |
+| B | `ARBEITSREGELN.md:692` | **:707** | *„Nur ausdrücklich geprüfte Pfade werden gestaged; niemals `git add -A`."* |
+
++14 und +15 Zeilen — dieselbe Drift wie in §231/§232/§236. **Hätte ich die Zeiger ungeprüft in
+eine Vorlage an Yama übernommen, wären zwei falsche Fundstellen darin gestanden.**
+
+**Die Kollision** ist im Datensatz protokolliert: *„‚zweiter Commit unmittelbar' gegen ‚nie fremde
+unverfolgte Arbeit einsammeln' — steht unverändert, weil sie eine **Regeländerung** braucht und
+keine Arbeitsweise."*
+
+> **Welche Regel weicht, wenn beide zugleich gelten sollen: darf der Statusübergang nach einem
+> Merge warten, bis der Baum sauber ist — oder wird er auch bei fremder unverfolgter Arbeit sofort
+> gesetzt?**
+
+| Antwort | Folge |
+|---|---|
+| **Übergang darf warten** | `:423` bekommt eine Ausnahme; die Beifang-Regel bleibt unangetastet |
+| **Übergang sofort** | `:707` bekommt eine Ausnahme für genau diesen einen Commit |
+
+**Wirkung mittel, Aufwand gering** (ein Satz im Regelwerk). In der Praxis ist die Frage bereits
+entschieden — das Tor erzwingt eine der beiden —, aber im Regelwerk stehen sie unverändert
+nebeneinander. **Formal offen ist nicht praktisch offen**, und der Unterschied gehört benannt.
+
+---
+
+### Posten 9 · §119/§120 — die Zahl im Auftrag ist überholt: **27, nicht 33**
+
+Frisch gemessen am gültigen Stand, mit demselben Erreichbarkeits-Programm wie früher (Grundmenge:
+`.ts`/`.tsx` unter `resources/planner/hausplaner`, ohne `__tests__` und `__domtests__`, Startpunkt
+`main.tsx`, nur Laufzeit-Importe):
+
+    Grundmenge : 160 Module
+    erreichbar : 133
+    ohne Ladeweg: 27
+
+Der Wache-Auftrag nennt **33**. Mein eigener früherer Abschnitt nannte **160 / 127 / 33**, und ein
+zweiter Prüfer kam *„bei angeglichener Grundmenge auf exakt dieselben 127 erreichbaren"* — die
+Zahl war damals also **bestätigt**. Sie ist nicht falsch gewesen, sondern **eingeholt worden:
+sechs Module haben seither einen Ladeweg bekommen.**
+
+> **Die Frage bleibt dieselbe, nur die Menge schrumpft: Sollen die 27 Module ohne Ladeweg
+> angeschlossen, entfernt oder als bewusster Vorrat geführt werden?**
+
+**Wirkung hoch** (27 Module sind gebauter, geprüfter und unerreichbarer Bestand), **Aufwand je nach
+Antwort sehr verschieden** — und genau deshalb ist es eine Entscheidung und keine Messfrage.
+
+---
+
+### Die vollständige Bilanz der neun
+
+| # | Posten | gehört zu | Art |
+|---|---|---|---|
+| 1 | Fach-Gate N-003 | **Yama** | Restfrage: drei von vier Ausgabeorten |
+| 2 | W-21L | **Yama** | zwei Fachfragen, entsperrt zwei Vorgänge |
+| 3 | raumAuswahl.ts | Planner | gewanderter Zeiger, A-34 gilt bereits |
+| 4 | A-13 | — | `BETRIEBSBESTAETIGT`, **streichen** |
+| 5 | versatz-Quittung | **Yama** | Ja/Nein, Aufwand null bei „bestätigt" |
+| 6 | Tragwerk | **Yama** | reine Handwerksfrage |
+| 7 | Seed-Weg | — | Weg C entschieden 13.08., **streichen** |
+| 8 | Regelkollision | **Yama** | ein Satz im Regelwerk |
+| 9 | §119/§120 | **Yama** | 27 Module (nicht 33) |
+
+**Sechs liegen bei Yama, einer beim Planner, zwei sind zu streichen.** Von den sechs kosten **fünf
+keinerlei Bauarbeit** — nur eine Antwort. Der Posten mit dem geringsten Aufwand ist Nr. 5: ein
+bestätigendes Wort schließt ihn.
+
+### Was diese drei Runden gekostet und gebracht haben
+
+Drei Runden (§240, §241, §242) für neun Posten. Der Ertrag ist nicht die Aufbereitung allein,
+sondern was sie sichtbar gemacht hat: **drei der neun standen zu Unrecht auf der Liste** — zwei
+erledigt, einer beim falschen Adressaten. Ich habe sie in **jeder** Runde mitgenannt, obwohl ein
+früherer eigener Abschnitt bereits *„mindestens vier der acht liegen nicht mehr bei Yama"*
+festhielt. Eine Liste, die ihre erledigten Einträge behält, macht die verbliebenen unsichtbar —
+und sie wächst nur noch.
+
+### Ball
+
+**Yama**: sechs Posten, alle in einem Satz beantwortbar, fünf davon ohne Bauaufwand.
+**Planner**: Posten 3.
+**Zu streichen**: Posten 4 und 7.
+
+Ich schlage vor, die Wache-Liste entsprechend zu kürzen — das ist Yamas Entscheidung, nicht meine,
+und ich führe sie bis dahin unverändert weiter, damit meine Meldung und der Auftrag nicht
+auseinanderlaufen.
