@@ -1,37 +1,32 @@
 auftrag_id: WARTEN-planner-A-37
-generation: 4            # FORMAL UNGUELTIG, NICHT QUITTIERBAR (Yama 21.08. 23:5x, Variante C) — wird nicht in-place repariert; KEINE ACK fuer diese Generation schreiben
-status: NICHT_BESETZT_GEPARKT
-planner_besetzung_yama_variante_c:
-  entscheidung: "Weder die alte Sitzung 20c9c319 blind beibehalten (Lebensnachweis fehlt — Transkript-mtime ist kein Prozessnachweis; kein --resume=20c9c319-Prozess zum Messzeitpunkt) noch PID 70499/79285cf2 umwidmen (laeuft im gemeinsamen Integrationscheckout, Plan-Pruefer-Historie). Sitzung 79285cf2 wird geschlossen; ihre Meldung bleibt Beleg."
-  bis_auf_weiteres: "Rolle Planner ist NICHT BESETZT. Keine Registrierung, keine ACK, keine Lease, keine Befunde, keine Sacharbeit unter dieser Rolle — von KEINER Sitzung. Sitzung 20c9c319: falls dein Takt dies liest — Takt loeschen (CronDelete), keine weiteren ACKs/Ereignisse; deine vier Befunde bleiben gueltig."
-  generation_5_kommt: "ERST nach Start einer frischen Claude-Sitzung direkt im Worktree /Users/yamanuri/Documents/ticket-rolle-planner (Branch rolle/planner). Generation 5 nennt neue_planner_sitzung = sitzung_erwartet = dieselbe neue Sitzungs-ID; erst danach Registrierung (pid = dauerhafter Claude-Sitzungsprozess ueber die ppid-Kette, plus Prozess-Startkennung, plus Sitzungs-ID) und Generation-5-ACK."
-  fachlich: "Der neue Planner bearbeitet zunaechst nichts. A-42 steht auf NACHBESSERN; zuerst Integrator A-42-1 (d17d2ddf) und Evaluator-Nachpruefung. Erst nach A-42 ABGENOMMEN darf der neue Planner A-37 spezifizieren (Vorgaben unten bleiben gueltig)."
-  pid_befund_uebernommen: "pid in ACK/Registrierung = PID des Sitzungsprozesses, nicht die fluechtige Shell-PID (Befund 79285cf2) — geht als Kriterium in A-37/Z0-I3."
-neu_aus_evaluator_votum_3f7f61d6_fuer_A-37:
-  - "Befund (a): docs/BEFUNDNOTIZEN.md in rollen-tor.sh und commit-pruefen.sh 0x — jede Rolle kann sie aus jedem Baum schreiben → A-37-24 (bereits Vorgabe), jetzt mit Messbeleg"
-  - "Befund (b) Vorratsposten: a26-ball-drift, a30-datensatz-paar, a33-kennungen-nachziehen, status-erzeugen kennen BEFUNDNOTIZEN 0x — heute wirkungslos (104 = 104), wirkt erst wenn dort zustand/ballbesitz landet"
-antwort_des_dirigenten: ereignisse/WARTEN-planner-A-37/dirigent-antwort-wartebedingung.yaml
-wartebedingung_praezisiert: "A-42 IST gebaut (26c46f31). Es fehlt EIN Uebergang: das unabhaengige Evaluator-Votum auf 26c46f31, danach der echte Zustandscommit des Integrators (INT-A-42) und ereignisse/A-42/evaluator-ABGENOMMEN.yaml. docs/STATUS.md zeigt BEREIT nur, weil e9e6ee5b leer war."
-nachziehen_regel: "Nachziehen des Worktrees nur als Fast-Forward (git merge --ff-only auto/hausplaner-integration). Ein Merge-Commit ist ein Commit und ohne aktive Lease nicht erlaubt; bei Nicht-FF: melden, nicht mergen."
-lesende_vorbereitung_erlaubt: "A-37-Blatt, scripts/rollen-tor.sh, scripts/commit-pruefen.sh, .githooks/, scripts/rueckweg.py, docs/konzept/agentenarchitektur-v2.md §8, auftraege/Z0-I3-pull-steuerung.vorgabe-yama.md — lesen ja, schreiben nein, bis aktion: spezifizieren"
+generation: 5            # 22.08. 00:0x — Planner NEU BESETZT (Yama Variante C): frische Sitzung direkt im Planner-Worktree, vom Dirigenten in Yamas Vertretung gestartet; ID vorab festgelegt, damit sitzung_erwartet = Registrierung = ACK
 rolle: planner
-sitzung_erwartet: 20c9c319-f0f8-4f15-8c01-d54f85ceb5fa   # PID 68609, von Yama 23:11 wiederaufgenommen; Registrierung in sitzungen/planner.yaml bleibt Pflicht
+neue_planner_sitzung: ef8ec540-263d-4f06-8a02-5a2f1beeb572
+sitzung_erwartet: ef8ec540-263d-4f06-8a02-5a2f1beeb572          # einzige zulaessige Planner-Sitzung; 20c9c319 und 79285cf2 sind NICHT Planner (keine ACK/Registrierung/Lease von ihnen)
+takt: "Der Dirigent stoesst diese Sitzung alle 4 Minuten headless an (claude -p --resume <id>) — kein eigener Cron noetig; jeder Lauf: Auftrag ziehen, Digest pruefen, bei neuer generation ACK, Antworten lesen, handeln nur innerhalb aktion, kurz auf stdout berichten, enden."
+registrierung: "sitzungen/planner.yaml atomar (tmp+mv): sitzungs_id, pid = PID des claude-SITZUNGSPROZESSES (ppid-Kette von $$ aufwaerts bis zum Prozess 'claude'), prozess_start (ps -o lstart=), rolle, worktree, branch, zeit — NICHT die fluechtige Shell-PID (Befund 79285cf2)."
+ack: "ereignisse/WARTEN-planner-A-37/planner-ack.yaml atomar ueberschreiben: auftrag_id, generation 5, digest (aus rollen/planner.yaml.sha256), rolle, sitzungs_id, pid, prozess_start, worktree, branch, head_sha, zeit, antwort: GELESEN"
 worktree: /Users/yamanuri/Documents/ticket-rolle-planner
 branch: rolle/planner
-basis_sha: c10c25a7
+basis_sha: 1cd33614
 prioritaet: P1
 aktion: warten_dann_spezifizieren
-gegenstand: "Warten auf das A-42-Votum. Danach AUSSCHLIESSLICH das A-37-Blatt erweitern (docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md) — Kriterien gehoeren dem Planner, nicht dem Dirigenten."
+gegenstand: "Warten auf A-42 ABGENOMMEN. Danach AUSSCHLIESSLICH das A-37-Blatt erweitern (docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md) — Kriterien gehoeren dem Planner, nicht dem Dirigenten."
+wartebedingung: "A-42 ist gebaut (26c46f31). Votum 3f7f61d6 = NACHBESSERN (ein Punkt); Integrator hat A-42-1 gebaut (d17d2ddf, zwei Verweise, dritte begruendet nicht). Es fehlt: Evaluator-Nachpruefung -> ereignisse/A-42/evaluator-ABGENOMMEN.yaml -> Integrator-Zustandscommit. Erst dann neue generation dieser Datei mit aktion: spezifizieren."
+uebernahme_der_vorarbeit: "Lies ZUERST ereignisse/WARTEN-planner-A-37/*.yaml — Befunde der Vorgaengerin 20c9c319 (Weckerkonflikt; Wartebedingung; CODE_FERTIG-Betreff: e9e6ee5b leer, zwei Kennungen, beide Bau-SHAs; doppelter ticket-rolle-generator-Baum) und die Dirigent-Antworten; dazu ereignisse/SITZUNG-70499-ROLLENWECHSEL/ (PID-Befund) und ereignisse/A-42/ (Votum, A-42-1). Alles gilt."
+lesende_vorbereitung_erlaubt: "A-37-Blatt, scripts/rollen-tor.sh, scripts/commit-pruefen.sh, .githooks/ (nur commit-msg/post-commit, kein pre-commit), scripts/rueckweg.py (BAEUME = 5), docs/konzept/agentenarchitektur-v2.md §8 (rolle/dirigent 0d897b0e), /Users/yamanuri/.ticket-steuerung/auftraege/Z0-I3-pull-steuerung.vorgabe-yama.md — lesen ja, schreiben nein, bis aktion: spezifizieren"
+nachziehen_regel: "Nachziehen des Worktrees nur als Fast-Forward (git merge --ff-only auto/hausplaner-integration). Ein Merge-Commit ist ein Commit und ohne aktive Lease nicht erlaubt; bei Nicht-FF: melden, nicht mergen."
 vorgaben_yama_fuer_A-37-erweiterung:
-  - "A-37-22 scripts/rueckweg.py kennt ALLE Rollenbaeume inkl. ticket-rolle-release und ticket-rolle-dirigent"
+  - "A-37-22 scripts/rueckweg.py kennt ALLE Rollenbaeume ueber (Pfad, Zweig)-Paare aus fester Liste inkl. ticket-release-pruefung (heute Sonderfall :118) und ticket-rolle-dirigent; Namensgleiche ausserhalb der Liste (z.B. Scratchpad-Klon ticket-rolle-generator, detached f374c73a) werden gemeldet und ausgeschlossen"
   - "A-37-23 Rollen-Tor kennt dirigent (Worktree ticket-rolle-dirigent, Zweig rolle/dirigent) mit technisch begrenztem Schreibbereich docs/konzept/, docs/regelwerk/, Steuerungsblaetter in docs/auftraege/; kein Produktcode, kein docs/STATUS.md, kein docs/BEFUNDNOTIZEN.md; Dirigent-Vorgriff 5c9afbc7 uebernehmen ODER ersetzen"
-  - "A-37-24 docs/BEFUNDNOTIZEN.md unter dieselbe Schreibbarriere wie docs/STATUS.md (nur Integrator)"
-  - "A-37-25 echtes pre-commit-Tor (.githooks/pre-commit; core.hooksPath=.githooks; commit-msg prueft heute nur Merges): nackter Commit im falschen Worktree abgewiesen; fehlende Rolle abgewiesen (Exit 5); falscher Zweig abgewiesen; Integrator darf den begrenzten Integrationscommit; Merge-Hook bleibt wirksam; --no-verify als nicht technisch verhinderbare Grenze dokumentiert; jede Negativprobe tatsaechlich ausgeloest"
+  - "A-37-24 docs/BEFUNDNOTIZEN.md unter dieselbe Schreibbarriere wie docs/STATUS.md (nur Integrator) — Messbeleg Evaluator 3f7f61d6: in rollen-tor.sh und commit-pruefen.sh 0x"
+  - "A-37-25 echtes pre-commit-Tor (.githooks/pre-commit; core.hooksPath=.githooks; commit-msg prueft heute nur Merges): nackter Commit im falschen Worktree abgewiesen; fehlende Rolle abgewiesen (Exit 5); falscher Zweig abgewiesen; Integrator darf den begrenzten Integrationscommit; Merge-Hook bleibt wirksam; --no-verify als nicht technisch verhinderbare Grenze dokumentiert; jede Negativprobe tatsaechlich ausgeloest; Sitzungsidentitaet = Sitzungs-ID + PID des Sitzungsprozesses + Prozess-Startkennung (nicht Shell-PID)"
   - "js-yaml direkt in package.json + Lockfile, reproduzierbare Installation; Tor in allen Baeumen; 21/21 plus neue Kriterien"
+  - "Vorratsposten (Evaluator, ohne Wertung): a26-ball-drift, a30-datensatz-paar, a33-kennungen-nachziehen, status-erzeugen kennen BEFUNDNOTIZEN 0x — heute wirkungslos (104 = 104)"
 danach_nach_dor_A-37:
   - "Z0-I1 vervollstaendigen: TEST_ROLLE verpflichtend, kein Rueckfall auf gemeinsames ticket_testing; Rollen evaluator, generator, security, browser; SELECT DATABASE() vor Migration/Seed/Truncate; vier dauerhafte Testdatenbanken auf der normalen MySQL-Instanz (Y-13); parallele Positiv- und Kollisionsprobe"
   - "Z0-I2 Claim-Sperre spezifizieren (nicht bauen): docs/konzept/agentenarchitektur-v2.md §8 (rolle/dirigent 0d897b0e)"
-  - "Z0-I3 Pull-Auftragssteuerung spezifizieren (nicht bauen): Yamas Wortlaut in /Users/yamanuri/.ticket-steuerung/auftraege/Z0-I3-pull-steuerung.vorgabe-yama.md"
+  - "Z0-I3 Pull-Auftragssteuerung mit technischer Auftragsbarriere spezifizieren (nicht bauen): Yamas Wortlaut in /Users/yamanuri/.ticket-steuerung/auftraege/Z0-I3-pull-steuerung.vorgabe-yama.md"
 voraussetzungen:
   - "A-42 ABGENOMMEN (ereignisse/A-42/evaluator-ABGENOMMEN.yaml) — dann neue generation dieser Datei mit aktion: spezifizieren"
 erlaubte_pfade:
@@ -43,6 +38,8 @@ verboten:
   - Voten erteilen
   - docs/STATUS.md / docs/BEFUNDNOTIZEN.md schreiben
   - Bauen
+  - Commit ohne aktive Lease; Commit ausserhalb des eigenen Worktrees
+steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
 status: ZUGETEILT
 ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/WARTEN-planner-A-37/planner-ack.yaml
-erstellt: "2026-08-21T23:1x Dirigent"
+erstellt: "2026-08-22T00:0x Dirigent"

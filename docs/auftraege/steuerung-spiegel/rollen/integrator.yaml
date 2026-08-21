@@ -1,31 +1,28 @@
 auftrag_id: INT-A-42
-generation: 4            # NEU 23:42 — Evaluator-Votum 3f7f61d6 NACHBESSERN (A-42-1): die Nachbesserung ist DEINE Arbeit, weil docs/STATUS.md nur du schreibst
-aktion_jetzt: nachbessern_A-42-1_dann_zustandscommit
-A-42-1:
-  befund: "Drei Ueberschriften in docs/STATUS.md haben ihren yaml-Block durch den Umzug 26c46f31 verloren und stehen ohne Inhalt: '## A-17 — MESSBERICHT des Planners (KEIN Zustandsdatensatz — der steht oben, Z. 2138)', '## BEFUND — DIE EINE STATUSWAHRHEIT HAT GERADE ZWEI FASSUNGEN (Plan-Prüfer, 14.08. 08:23)', '## BERICHTIGUNG DER CODE-ZEIGER AUS DER STATUSWAHRHEIT — Integrator, 21.08.2026' (Votum docs/rollenkette/rollen/4-evaluator/VOTUM-A-42.md @ rolle/evaluator 3f7f61d6, Punkt 8)"
-  entscheidung_dirigent_vollmacht: "Form = VERWEIS, nicht entfernen, nicht zurueckziehen (Yama: nichts loeschen). Unter jeder der drei Ueberschriften genau EINE Zeile: '> Block umgezogen nach docs/BEFUNDNOTIZEN.md (A-42, Bau 26c46f31) — Anker: <auftrag:-Kennung oder erste Zeile des Blocks>'. Die 289 Bloecke in STATUS und die 172 in BEFUNDNOTIZEN bleiben byte-identisch; Idempotenz des Umzugsskripts unberuehrt."
-  vorgehen: "Lease leases/A-42-1/ ziehen (Token aus counter, active/lease.yaml) -> im gemeinsamen Checkout (dein Recht) die drei Zeilen setzen -> EIN Commit nur docs/STATUS.md, Betreff 'integrator: A-42-1 nachgebessert — drei verwaiste Ueberschriften verweisen auf BEFUNDNOTIZEN (Bau 26c46f31, Votum 3f7f61d6)' -> ereignisse/A-42/integrator-A-42-1-CODE_FERTIG.yaml mit Ergebnis-SHA -> Lease freigeben. Die uncommittete docs/FACHPRUEFUNG-DREI-LINSEN.md NICHT mit stagen (gehoert 7df19ed4)."
-  danach: "Evaluator prueft A-42-1 nach (rollen/evaluator.yaml gen 4) und schreibt ereignisse/A-42/evaluator-ABGENOMMEN.yaml -> ERST DANN dein Zustandscommit A-42 (eine Kennung, Wortlaut status-erzeugen.sh, Bau 26c46f31, Beleg = Votum-SHA), Gegenprobe git show --stat."
-praezisierung_aus_dem_votum: "e9e6ee5b nennt BEIDE Bau-SHAs ('bau 0f731c22 26c46f31') — der Fehler ist 'zwei Kennungen und zwei Bauten in einer Meldung', nicht 'falscher SHA'. Regel bleibt: EINE Kennung, EIN Bau je Zustandscommit."
+generation: 5            # 22.08. 00:05 — Evaluator-Nachpruefung b193f72e: A-42-1 REST = genau EIN Verweis fehlt (A-17); dann Zustandscommit
 steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
-zustandscommit_form: "EIN Zustandscommit je Kennung, Wortlaut exakt nach scripts/status-erzeugen.sh: '<rolle>: zustand: <KENNUNG> · <ZUSTAND> · <rolle> · <beleg-sha>' — e9e6ee5b nannte zwei Kennungen (A-38 · A-42) und den falschen Bau 0f731c22 und wurde vom Muster NICHT erkannt. Fuer A-42 gilt Bau-SHA 26c46f31; Beleg-SHA = Votum-Commit des Evaluators. Vor dem Commit: Muster-Probe gegen die eigene Betreffzeile fahren; nachher git show --stat zeigt docs/STATUS.md."
 rolle: integrator
 sitzung_erwartet: 03737d75-b216-4299-b4ea-595407d3e457   # PID 80335
 worktree: /Users/yamanuri/Documents/ticket
 branch: auto/hausplaner-integration
-basis_sha: 1cd33614
+basis_sha: 6af8a5d1
 prioritaet: P0
-aktion: transport_nur_kette
-gegenstand: "Ausschliesslich Ergebnisse der Reihenfolge A-42 -> A-37 -> Z0-I1 transportieren, und nur nach belegtem Votum bzw. DoR."
+aktion_jetzt: A-42-1_rest_dann_zustandscommit
+A-42-1_rest:
+  befund_evaluator_b193f72e: "Dein Einwand zu 'A-17 — MESSBERICHT des Planners' ist geprueft und trifft einen ANDEREN Block: unter dieser Ueberschrift lagen ZWEI Bloecke — der am 12.08. nach 6d6823dd entfernte (Zustandsfelder doppelt; davon spricht der Berichtigungstext) UND ein yaml-Zaun bei +8 nach sieben Zeilen Berichtigungstext, der durch 26c46f31 umgezogen ist (byte-identisch in docs/BEFUNDNOTIZEN.md, in docs/STATUS.md nicht mehr vorhanden). Dir wird zugutegehalten, dass du gemeldet statt uebergangen hast — deshalb Nachbesserung, keine Beanstandung."
+  zu_tun: "Unter '## A-17 — MESSBERICHT des Planners (KEIN Zustandsdatensatz — der steht oben, Z. 2138)' genau EINE Verweiszeile in derselben Form wie die beiden anderen: '> Block umgezogen nach docs/BEFUNDNOTIZEN.md (A-42, Bau 26c46f31) — Anker: auftrag: \"A-17\"' — vorher pruefen, dass der Anker in BEFUNDNOTIZEN trifft (Evaluator: ja)."
+  optional_nebenbefund: "Anker 'P-05' trifft in BEFUNDNOTIZEN zweimal — darf im selben Commit geschaerft werden (zusaetzlich erste Zeile des Blocks als zweites Feld), muss aber nicht."
+  vorgehen: "Lease leases/A-42-1/ erneut ziehen (Token 2) -> EIN Commit nur docs/STATUS.md (+1 Verweiszeile, +1 Leerzeile; Loeschungen 0) -> Betreff 'integrator: A-42-1 Rest — A-17-Verweis gesetzt (Bau 26c46f31, Nachpruefung b193f72e)' -> ereignisse/A-42/integrator-A-42-1-CODE_FERTIG-2.yaml mit Ergebnis-SHA -> Lease freigeben. docs/FACHPRUEFUNG-DREI-LINSEN.md NICHT stagen."
+  danach: "Evaluator prueft erneut (seine Regel gen 4 deckt das; Ausloeser = dein CODE_FERTIG-2-Ereignis) -> evaluator-ABGENOMMEN.yaml -> ERST DANN dein Zustandscommit A-42: EINE Kennung, Wortlaut exakt nach scripts/status-erzeugen.sh, Bau 26c46f31, Beleg = letzter Votum-SHA des Evaluators; Muster-Probe vor dem Commit; git show --stat zeigt docs/STATUS.md."
 regeln:
-  - "A-42: ERST nach dem Evaluator-Votum Datensatz + Tafel in EINEM echten, nicht leeren Zustandscommit; Gegenprobe git show --stat zeigt docs/STATUS.md"
-  - "Leere Zustandscommits abweisen (e9e6ee5b war leer)"
+  - "Leere Zustandscommits abweisen (e9e6ee5b war leer, nannte zwei Kennungen und beide Bau-SHAs)"
   - "Keine Rueckwege von Altposten-/Nebenanalyse-Commits; keine Zustands-/Abnahmenachtraege fuer A-38, A-39, Z1-W1-5-1, Symbol-/Zaehl-/Maurer-Arbeiten"
   - "Uncommittete docs/FACHPRUEFUNG-DREI-LINSEN.md im Checkout NICHT anfassen (gehoert der gestoppten Sitzung 7df19ed4)"
   - "Rueckweg von rolle/dirigent erst, wenn rueckweg.py den Baum kennt (A-37-22)"
   - "Der eng begrenzte Integrationscommit im gemeinsamen Checkout bleibt dein Recht — sonst committet dort niemand"
+  - "Rueckwege innerhalb der Kette A-42 -> A-37 -> Z0-I1 (z.B. Evaluator-Voten) sind erlaubt"
 voraussetzungen:
-  - "fuer A-42-Zustandscommit: ereignisse/A-42/evaluator-ABGENOMMEN.yaml oder -CODE_FERTIG.yaml mit Votum-SHA"
+  - "fuer den Zustandscommit: ereignisse/A-42/evaluator-ABGENOMMEN.yaml mit Votum-SHA"
 erlaubte_pfade:
   - docs/STATUS.md
   - docs/BEFUNDNOTIZEN.md
@@ -35,4 +32,4 @@ verboten:
   - Transport von A-38/A-39/Z1-W1-5-1-Bauten als Fortschritt
 status: ZUGETEILT
 ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/INT-A-42/integrator-ack.yaml
-erstellt: "2026-08-21T23:1x Dirigent"
+erstellt: "2026-08-22T00:05 Dirigent (atomar veroeffentlicht)"
