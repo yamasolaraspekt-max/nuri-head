@@ -10946,3 +10946,59 @@ lese ich **erst** `docs/BILANZ-plan-pruefer-eigene-fehler.md`. Das kostet einen 
 **Ball beim Integrator** — unveraendert und jetzt mit Alter: drei Felder, seit **4 Tagen 15 Stunden**
 zugestellt (`docs/STATUS.md:26543`, `:26582`, `:26667`). **Bei Yama** liegt `docs/PROBE-TOR.md`
 ebenso lange.
+
+## §149 — Posten (a) an den Registern: die Landkarte stimmt, aber sie trägt zwei gewanderte Zeiger — einer davon zweimal
+
+*(Messstand 7b985c0e, 21.08. 12:09. Nummer gegen den frischen HEAD gewaehlt: 86 Abschnitte, hoechste
+148 — 149 war frei.)*
+
+**Warum die Register.** `CLAUDE.md` nennt sie die Landkarte: *"Wer etwas sucht, greift dorthin statt
+zu raten."* Ein gewanderter Zeiger wiegt dort schwerer als in einem Bericht, weil die Karte an die
+Stelle des Ratens tritt.
+
+### Was hält — und das ist der groessere Teil
+
+**Alle 55 Links loesen auf.** Geprueft ueber sechs Register (`docs/REGISTER.md` und die fuenf
+Fach-Register), jeder Zielpfad relativ zum eigenen Verzeichnis geoeffnet: **0 tote Links**.
+
+**Das Werkbank-Register haelt sein eigenes Wort.** Es definiert `BESCHRIEBEN` als *"alle sieben
+Blaetter gefuellt"* und vergibt es **37**-mal. Gemessen:
+
+- **37 von 37** Scheiben haben genau **sieben** Eintraege.
+- **37 von 37** sind auch inhaltlich gefuellt: gegen `_VORLAGE/` gerechnet liegt die **niedrigste**
+  bei **116** eigenen Zeilen (W-04) — gegen die 6 von W-19, das folgerichtig nicht `BESCHRIEBEN`
+  heisst, sondern `GEGENSTANDSLOS`.
+
+Das Vokabular des Registers deckt sich also mit dem Bestand, an beiden Stellen nachgemessen.
+
+### Was nicht hält: 43 Code-Zeiger, und zwei zeigen auf etwas anderes
+
+**1 · `dachAusschnitt.ts:26`** (Zeile W-29). Heute steht dort `* ---`, eine nackte Trennzeile im
+Kommentar. Vor dem Herkunftsvermerk trug `:26`
+`import { polygonFlaecheM2, type Punkt2D } from './polygonFlaeche';` — genau das, was die Zeile
+belegen soll (F-011). Der Inhalt liegt heute auf **`:47`**, also **+21**. *Dieser Zeiger ist bereits
+in den 86 aus §134 enthalten* — er steht hier, weil der Traeger die Landkarte ist.
+
+**2 · `studioDaten.ts:163` — und zwar zweimal**, in den Zeilen **W-38** (`REGISTER.md:125`) und
+**W-40** (`:127`). Heute traegt `:163` einen Kommentar ueber PHP-Routen
+(`web.php:5016/5018/5020` → `objekt.blade.php:144` → `main.tsx:89` → …). Gesucht ist `SchrittStatus`,
+und der steht auf **`:173`** — exakt **+10**, und die Datei misst heute **267** Zeilen, genau wie
+§110 es gemessen hat (damals 257 → 267).
+
+**Dieser Zeiger liegt ausserhalb der Grundmenge von §134**: `studioDaten.ts` gehoert nicht zu den
+fuenf Dateien des Herkunftsvermerks, die Verschiebung hat eine andere Ursache. Er ist damit eine
+**Fortschreibung von §109 und §110**, nicht ein neuer Fund: dort in `W-36/1-ZWECK.md:62`,
+`W-36/2-FUNKTION.md:10` und in W-38 belegt — **mit den beiden Registerzeilen sind es fuenf Stellen,
+an denen dieselbe falsche Zahl steht.**
+
+### Eigener Fehler, gefangen bevor er zum Ergebnis wurde
+
+Mein erstes Zeilenmuster fuer die Registertabelle verlangte ein Sternchen vor der Kennung
+(`\*\*?W-`), die Tabelle fuehrt sie aber **ohne** (`| W-01 | …`). Es traf **nichts** — und die
+Leermeldung sah aus wie *"keine Abweichungen"*. Erst der Blick auf eine echte Tabellenzeile hat es
+gezeigt. **Ein Muster, das nichts trifft, meldet dasselbe wie ein Bestand ohne Mangel;** ich habe es
+am bekannten Treffer nachgezogen, dann stimmten Zeilenzahl (37) und Wortzaehlung (37) ueberein.
+
+**Ball beim Planner**, klein und mit den Zielen benannt: `REGISTER.md:96` soll auf
+`dachAusschnitt.ts:47` zeigen, `REGISTER.md:125` und `:127` auf `studioDaten.ts:173`. Die Landkarte
+ist die letzte Stelle, an der eine falsche Zeile stehen sollte.
