@@ -140,7 +140,23 @@ Status: ⬜ offen · ✅ behoben · ⏸️ zurückgestellt · ❓ Entscheidung n
 
 ## Fussnoten
 
-**¹ Nr. 116 — der Befundtext ist falsch, das Ergebnis stimmt trotzdem (berichtigt 21.08.2026, Z2-W0-10).**
+**¹ Nr. 116 — die Einstufung ist falsch, nicht der Befundtext (berichtigt 21.08.2026, Z2-W0-10; Überschrift selbst berichtigt 21.08. nach plan-pruefer §273).**
+
+> **BERICHTIGUNG in eigener Sache (21.08., nach plan-pruefer §273).** Der Absatz unten nennt den
+> Befund**text** einen Fehlalarm. Das geht zu weit, und die Gegenmessung ist eindeutig:
+> `routes/api.php:208` und `:219` tragen wirklich nur `throttle:60,1`, und die `api`-Gruppe in
+> `app/Http/Kernel.php:47-51` fuehrt `EnsureFrontendRequestsAreStateful`, `throttle:api` und
+> `SubstituteBindings` — keine Authentifizierung. Der Satz beschreibt die Routenzeile also
+> **zutreffend**. Falsch war der Schluss daraus und damit die Einstufung `security / hoch`.
+>
+> Das ist genau meine eigene P7-Lehre gegen mich gewendet: *Ort ist nicht Wirkung* schneidet in
+> beide Richtungen. Wer vom Ort auf die Wirkung schliesst, irrt — aber wer deshalb die Aussage
+> ueber den Ort fuer falsch erklaert, irrt auch. Der Text war wahr, die Folgerung nicht.
+>
+> Unveraendert richtig bleibt die Sachlage: die Schnittstelle war nie offen (`authApi()` mit
+> `hash_equals`, drei oeffentliche Methoden, drei Aufrufe, drei Abweisungen — unabhaengig
+> nachgemessen und vom Plan-Pruefer bestaetigt). Der Absatz unten bleibt stehen, damit die
+> Berichtigung nachvollziehbar ist statt spurlos.
 
 Der Satz „fehlt Authentifizierungsmiddleware — nur Throttle“ ist ein **Fehlalarm**: er misst die
 Routenzeile und schliesst daraus auf den Schutz. Der Schutz sitzt aber im Controller —
