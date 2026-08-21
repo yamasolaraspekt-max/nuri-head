@@ -15340,3 +15340,78 @@ die Formel, denn er ist der Teil, der den Rücklauf fängt, und ohne ihn wäre e
 Vorschrift lückenhaft. **Kein Ball beim Generator.**
 
 Damit sind **15 von 27** Formeln durchgerechnet.
+
+## §199 — Posten (d): neunzehn meiner vierunddreißig Abschnitte liegen nur in meinem eigenen Zweig — und mit ihnen 31 Bälle
+
+**Messstand** `d048b589` · Baum sauber · 0 neue Commits; Integrationszweig unverändert auf
+`7a82ecfb`, letzter Commit vor **69 Minuten**.
+
+§189 hat den Stillstand in Minuten gemessen. Diese Runde misst seine **Folge**: was von meiner
+Arbeit ist überhaupt bei jemandem angekommen?
+
+### Die Grenze liegt bei §180
+
+```
+Abschnitte §165 bis §198                                34
+davon Vorfahren des Integrationsstands 7a82ecfb         15   (bis §179, c4452644, 14:28)
+davon NICHT enthalten                                   19   (ab §180, 14:31)
+```
+
+Gegenprobe an zwei bekannten Fällen: `bf4d67fc` (§165) **ist** Vorfahr, `d048b589` (§198) ist es
+**nicht**. Das Verfahren trennt richtig.
+
+**Neunzehn Abschnitte sind committet — und für keine andere Rolle lesbar.** Sie liegen ausschließlich
+in `rolle/plan-pruefer`. Das ist nicht dasselbe wie „ungesichert": die Historie hat sie. Es ist
+schlimmer im Sinne des Zwecks — **eine Prüfung, die niemand liest, hat nicht geprüft.**
+
+### Was mit ihnen liegt
+
+```
+                 §165–§179 (angekommen)     §180–§198 (nicht angekommen)
+Planner                 12                          18
+Integrator               8                           6
+Yama                     5                           5
+Generator                1                           2
+Evaluator                4                           0
+bei mir                  3                           3
+```
+
+**31 Bälle liegen jenseits der Grenze**, davon **18 beim Planner**. Und ausgerechnet die schwersten
+Posten dieser Reihe sind darunter: das Fach-Gate zur Dachneigung (§185), die Bereichsgrenzen aller
+Engines (§195), die Zahlen der Inventur (§182), die 15/22/23 Agenten (§187), die drei Lücken in den
+Fach-Registern (§197).
+
+### Wer hätte sie sehen können
+
+```
+Planner      zuletzt 14:21    ->  13 meiner Abschnitte lagen davor, 21 danach
+Integrator   zuletzt 14:31    ->  15 davor, 19 danach
+Evaluator    zuletzt 14:19    ->  13 davor, 21 danach
+Generator    zuletzt 14:19    ->  13 davor, 21 danach
+```
+
+**Kein Empfänger hat seit 69 bis 82 Minuten gearbeitet**, und in genau dieser Zeit sind die 19
+Abschnitte entstanden. Der Rückweg gehört dem Integrator; er hat zuletzt **in derselben Minute**
+gearbeitet, in der §180 entstand.
+
+**Das ist die Lücke, die `docs/ARBEITSREGELN.md` unter „NACHZIEHEN VOR DEM ARBEITEN" beschreibt** —
+dort steht der Vorfall vom 16.08. mit derselben Form: *„Von zwölf Befunden … kannte KEIN Rollenzweig
+einen einzigen. Die Lücke liegt NICHT im Transport: sein HEAD war im Integrationszweig enthalten."*
+**Heute ist es eine Stufe früher:** mein HEAD ist **nicht** im Integrationszweig, und deshalb kann
+selbst ein nachziehender Rollenzweig sie nicht finden.
+
+### Zwei eigene Messfehler, beide gefangen
+
+1. **`--all` schlägt die Revision.** Mein erster Befehl lautete
+   `git log --all … 7a82ecfb | grep -m1 'plan-pruefer:'` und meldete `d048b589` (15:39) als „letzten
+   Commit im Integrationszweig" — also meinen allerneuesten. `--all` durchsucht **alle** Refs und
+   ignoriert die angegebene Revision. Ohne `--all` kommt `c4452644` (14:28) heraus, und das ist die
+   Wahrheit. *Eine Einschränkung, die ein Schalter aufhebt, ist keine Einschränkung.*
+2. **„Kein Ball" ist auch ein Ball-Treffer.** Mein Zählmuster `Ball (beim|bei) X` traf auch
+   *„**Kein** Ball beim Generator"* und meldete dadurch 7 Generator-Bälle statt 2. Getrennt gezählt
+   sind es **2 Bälle und 5 ausdrückliche Nicht-Bälle**. Fangprobe: „Kein Ball beim Generator" kommt
+   sechsmal in der Datei vor.
+
+**Ball beim Integrator** — und diesmal ist er der einzige, der zählt: **19 Abschnitte warten auf den
+Rückweg.** Alles andere, was ich in dieser Reihe gemeldet habe, hängt daran; ohne den Transport sind
+die 31 Bälle keine Zustellung, sondern eine Ablage in meinem eigenen Zweig.
