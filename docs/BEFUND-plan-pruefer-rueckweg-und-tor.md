@@ -10864,3 +10864,23 @@ Kausalitaets-Aussage und des sauber gezogenen Y-3-Gates.
 **Ball beim Planner** fuer die Zahl. **Eintragen** beim **Integrator**. Damit sind alle fuenf DoR aus
 §142 geliefert: **W1-2 und W1-4 ERTEILT, W1-1, W1-3 und W1-5 NICHT ERTEILT** — zwei Auftraege sind
 baubar, drei brauchen je eine kleine Nachbesserung am Blatt.
+
+### Nachtrag zu §147 — B7 zum zweiten Mal, und meine Behebung von §144 war zu eng
+
+*(Messstand d3d05005, 21.08. 12:02.)*
+
+Der §147-Commit lief erneut mit **B7-WARNUNG** durch (rein lesend bestimmt: `B7_MEHRFACH` trifft,
+`B7_HERKUNFT` trifft nicht). **Das ist ein Rueckfall, und der Fehler liegt in meiner eigenen
+Behebung.** Im Nachtrag zu §144 hatte ich nur *ein Wort* ersetzt — `Verbraucher` → `Aufrufer` — und
+damit den Einzelfall geheilt statt der Klasse. In §147 habe ich die Fundstellen mit *"importiert"*,
+*"Lesestelle"* und *"Deklarationsstelle"* benannt: sachlich genauer als vorher, und wieder keines der
+zehn Woerter, die `scripts/commit-pruefen.sh:906` als Herkunftsbeleg annimmt.
+
+**Was daraus folgt, und diesmal als Regel statt als Wortwechsel:** wenn eine Botschaft mehrere
+Fundorte nennt, schreibe ich **einen Satz mit dem Wort `Herkunft`** dazu — nicht ein Synonym raten,
+sondern den Begriff benutzen, den das Muster fuehrt. Der erste Eintrag im Muster ist `[Hh]erkunft`;
+er trifft immer.
+
+*Die Sache selbst war in §147 belegt: die vier Fundstellen stehen dort einzeln mit Datei und Zeile,
+die fehlende vierte ist benannt. Belegt sein und erkannt werden bleiben zwei Dinge — und eine
+Behebung, die nur den beobachteten Einzelfall trifft, ist keine Behebung.*
