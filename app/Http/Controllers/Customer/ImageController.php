@@ -752,11 +752,15 @@ public function rename(Request $request)
     }
 public function secureDownloadScreenshot($id)
 {
-    $image = Image::findOrFail($id);
-
+    // Z2-W0-8 · Kriterium C: erst prüfen, dann laden. Vorher stand `findOrFail` VOR der
+    // Auth-Prüfung — ein nicht angemeldeter Aufruf löste damit eine Datenbankabfrage aus und
+    // unterschied über den Statuscode zwischen „gibt es" (403) und „gibt es nicht" (404).
+    // Die Reihenfolge ist die ganze Änderung; geladen wird dasselbe.
     if (!auth()->check()) {
         abort(403);
     }
+
+    $image = Image::findOrFail($id);
 
     $path = 'uploads/customers/' . $image->image;
 

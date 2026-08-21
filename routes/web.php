@@ -1464,17 +1464,34 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::post('/delete-screenshot', [ImageController::class, 'deleteScreenshot'])
         ->name('screenshot.delete');
 
+    // Z2-W0-8 (21.08.): Kundenbilder liegen hinter permission:Customer,read. Vorher reichte ein
+    // beliebiger Login — die Routen lagen in der Gruppe ['web','auth'] ohne Rechteprüfung, und
+    // `secureImage` lud die Datei ohne jede weitere Bedingung. `whereNumber` hält die ID-Routen
+    // auf Zahlen, damit keine Zeichenkette bis zur Abfrage durchläuft.
+    //
+    // **KEIN Route-Model-Binding, und der Grund gehört hierher:** der Auftrag nennt es als Ziel,
+    // aber Laravel bindet über den PARAMETERNAMEN. `{id}` → `Image $image` bindet nicht; nötig
+    // wäre `{image}`. Zwei Erzeuger rufen die Route jedoch NAMENTLICH mit `['id' => …]`
+    // (`DealMeasurementImageController.php:243`, `DealController.php:3452`) — eine Umbenennung
+    // bräche sie, und Kriterium D des Auftrags verlangt die Erzeuger unverändert. Die
+    // Sicherheitswirkung des Bindings (404 statt Durchreichen) leistet `findOrFail` bereits;
+    // was fehlte, war die Rechteprüfung davor. Gemeldet, nicht still umgangen.
     Route::get('/secure-image/id/{id}', [ImageController::class, 'secureImage'])
+        ->whereNumber('id')
+        ->middleware('permission:Customer,read')
         ->name('secure.image');
 
     Route::get('/secure-image/file/{filename}', [ImageController::class, 'secureImageByFilename'])
         ->where('filename', '.*')
+        ->middleware('permission:Customer,read')
         ->name('secure.image.byFilename');
 
     Route::get('/secure-download/{id}', [ImageController::class, 'secureDownload'])
         ->name('document.secureDownload');
 
     Route::get('/image/secure/{id}', [ImageController::class, 'secureDownloadScreenshot'])
+        ->whereNumber('id')
+        ->middleware('permission:Customer,read')
         ->name('image.secure.download');
 
     Route::prefix('document')->group(function () {
