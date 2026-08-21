@@ -9407,3 +9407,72 @@ Dokumentschema nicht, obwohl das Feld dort steht — und `insulationThickness` k
 nicht vor, obwohl es denselben Zustand teilt und keinen einzigen Leser hat. Ob das ein eigener Posten
 wird, gehört zum offenen Gate **Y-3** („Dämmungs-Regler + Fachbedeutung"), das der Auftrag
 ausdrücklich bei **Yama** lässt.
+
+## §126 — P-1 nachgerechnet: beide Zahlen stimmen auf die Stelle, und die Auflage weckt ein totes Modul
+
+*(Nummer §126 gegen HEAD `e7708591` gewählt und hier benannt. Dritte Gegenprobe an der Inventur,
+Posten (c) — Formeln durchrechnen.)*
+
+Herkunft: **Befund P-1**, ausgeschnitten als `Z1-W1-2 · Walmdach: ungültige Kontur wird abgelehnt
+statt still falsch gerechnet`, Entscheidung `Y-1 ENTSCHIEDEN 21.08. — ABLEHNEN mit Meldung`.
+
+### Die Zeiger
+
+```
+  dachGeometrie.ts:136        const firstLenM = Math.max(0, laengeM - spannM);      trifft
+  dachformVorlagen.ts:414-416 walmIstKonsistent = lengthM > widthM                  trifft
+  EigenschaftenPanel.tsx:249  <option value="walm">Walmdach</option>                trifft
+```
+
+### Die Zahlen, selbst gerechnet
+
+Nicht `dachFlaechen()` aufgerufen — die Funktion verlangt einen vollständigen `RoofNode` mit Polygon,
+und den zu bauen wäre Bauarbeit. Stattdessen die **Formel wörtlich aus `:136-138`** übernommen und
+gerechnet:
+
+```
+  L=6  B=8   ->  64.66 m2    firstLen = 0
+  L=8  B=6   ->  55.43 m2    firstLen = 2
+  L=4  B=10  ->  80.83 m2    firstLen = 0
+  L=10 B=4   ->  46.19 m2    firstLen = 6
+```
+
+**Beide Wertepaare des Ist-Belegs treffen auf die zweite Nachkommastelle.** Bei den Prozenten rechne
+ich `+16,7 %` und `+75,0 %`, der Beleg nennt `+16,6 %` und `+75 %` — der Unterschied ist
+Abschneiden gegen Runden bei 16,665, kein Rechenfehler. Ich nenne beide Fassungen, statt eine als
+falsch zu führen.
+
+**Der Mechanismus:** ist die First-parallele Seite kürzer als die Spannweite, klemmt `Math.max(0, …)`
+die Firstlänge auf 0. Gerechnet wird dann ein Walm mit Firstlänge null — und weil die Trapezfläche
+mit `(laengeM + firstLenM)/2` gebildet wird, fällt sie zu groß aus statt die Eingabe zu verwerfen.
+**Bei 4×10 m sind das 75 % zu viel Dachfläche**, still und ohne Meldung.
+
+### Was die Gegenprobe hinzufügt
+
+Die Auflage lautet: *„`walmIstKonsistent` **benutzen** (Import), keine dritte Fassung derselben Regel
+bauen."* Fachlich richtig. Gemessen:
+
+```
+  walmIstKonsistent   Produktivverbraucher ausserhalb der eigenen Datei:  0
+                      benutzt nur intern (dachformVorlagen.ts:478) und in Tests
+  geometry/dachformVorlagen.ts   erreichbar: NEIN   (§120: nur ueber import type angebunden)
+  geometry/dachGeometrie.ts      erreichbar: JA
+```
+
+**Der Import würde die erste Laufzeitkante in ein Modul legen, das heute keine hat** — 2402 Zeilen
+mit 51 Laufzeit-Exporten (Zahl aus `S-1/8` des Generators, nicht meine), von denen genau eine
+gebraucht wird.
+
+Ob das etwas kostet, **kann ich nicht messen**: ein Bündler kann ungenutzte Exporte entfernen
+(tree shaking), und ob er es hier tut, zeigt sich erst am gebauten Ergebnis. Ich melde die
+Graphänderung, nicht eine Folge. **Für den Bauenden ist es eine Frage, für mich keine Feststellung.**
+
+### Ergebnis
+
+**P-1 trägt vollständig** — drei Zeiger wörtlich, zwei Rechnungen auf die Stelle, der Mechanismus
+nachvollzogen. Ball bleibt beim Generator (Bau) und Evaluator (Abnahme); die fachliche Gegenprobe hat
+der Auftrag beim **dachdeckermeister** vorgesehen, nicht bei mir.
+
+Ein Hinweis an den Bauenden: `Z1-W1-2` und `Z1-W1-3` fassen dieselbe Datei an und sollen in dieser
+Reihenfolge laufen — und `Z1-W1-3` führt ausgerechnet die Flächenformel zusammen, deren siebenfache
+Fassung ich in §122 gemessen habe. Beide Aufträge berühren damit dasselbe Feld aus zwei Richtungen.
