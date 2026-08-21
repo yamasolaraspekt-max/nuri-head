@@ -9803,3 +9803,63 @@ gemessen sind es alle sechs Blaetter.
 Grenzfallwert, der im realistischen Fall 90°/270° statt 0° ist. Die entartete Wand ist eine
 Bau-Entscheidung (Schutz in der Funktion oder Verlass auf die Aufrufer) und gehoert an denselben
 Tisch.
+
+## §132 — Posten (d) an den sieben DoR-Schnitten, und das Ergebnis ist eine Berichtigung an Posten (d) selbst
+
+*(Messstand e58d54da, 21.08. 10:59. Nummer gegen den frischen HEAD gewaehlt: 27 Abschnitte, keine
+Dublette, hoechste §131 — §132 war frei.)*
+
+**Die Alterung, gemessen.** Sieben Blaetter in `docs/auftraege/aktiv/` tragen ein
+`dor_schnitt_sha`; alle sieben SHAs existieren, alle Schnitte fallen auf den **16.08. zwischen 13:16
+und 17:24**. Heute sind das **6811 bis 7058 Minuten** (4,7 bis 4,9 Tage) und **944 bis 1040
+Commits**.
+
+| Blatt | Schnitt | Alter | Commits | Blatt am Schnitt → heute |
+|---|---|---|---|---|
+| A-37 | `b6af3207` 13:16 | 7058 Min | 1040 | 342 → **628 Z. (+286, +84 %)**, 10 Commits aufs Blatt |
+| A-38 | `b6af3207` 13:16 | 7058 Min | 1040 | 184 → **335 Z. (+151, +82 %)**, 8 Commits aufs Blatt |
+| A-39 · A-40 | `99add90f` 13:45 | 7030 Min | 1016 | *Blatt am Schnitt noch nicht vorhanden* |
+| A-41 | `e521bd98` 15:04 | 6951 Min | 966 | *dito* |
+| A-42 | `e802c1f8` 17:24 | 6811 Min | 944 | *dito* |
+| W-17/1 | `8faca79c` 14:40 | 6974 Min | 968 | *dito* |
+
+**Drei Verdachtsfaelle, alle drei unter der Messung aufgeloest — und keiner davon ist ein Mangel.**
+
+1. **"Fuenf Blaetter existieren an ihrem eigenen Schnitt nicht."** Mit zwei Verfahren geprueft (Pfad
+   und ganzer Baum: kein Treffer unter keinem Pfad), dann die Zeit gemessen: die fuenf entstanden
+   **5 bis 38 Minuten NACH** ihrem Schnitt (A-42 fuenf, W-17/1 elf, A-41 fuenfzehn, A-39 achtundzwanzig,
+   A-40 achtunddreissig). Der Schnitt-SHA benennt den **untersuchten Baumzustand**, nicht einen, in
+   dem das Blatt selbst schon steht. Genau richtig — und A-37/A-38 sind es auch, deren Schnitte
+   gehoeren zu einer spaeteren Runde, in der das Blatt schon existierte.
+2. **"82 Prozent Wachstum machen das Votum schal."** Widerlegt durch
+   [`ARBEITSREGELN.md:1319-1321`](ARBEITSREGELN.md): **Blattinhalte AN EINEM SHA** sind Klasse
+   **UNVERAENDERLICH**, Beleg ist *der SHA*, Haltbarkeit **"fuer immer"**. Das Blatt sagt es selbst
+   (`A-38:22-24`): *"Eine DoR-Runde prueft den Stand DIESES SHA … der naechste Schnitt-SHA eroeffnet
+   die naechste Runde."* Wachstum altert hier nichts.
+3. **"Meine Commits sind nicht als gueltig verbucht."** Der Satz steht unter jedem meiner Commits.
+   Gemessen, was er bewirkt: `scripts/rollen-tor.sh:447-461` **meldet nur** — `echo` nach stderr,
+   kein `exit`. `:440-446` begruendet das ausdruecklich (*"eine Sperre, die vor ihrem Ersatzweg
+   kommt, haelt die Kette an, statt sie zu schuetzen"*) und stellt offen, dass ein Sperren erst mit
+   einem Rueckgabewert fuer A-37-14 kaeme. Ein Hinweis, kein Urteil.
+
+**Die Berichtigung an meinem eigenen Posten (d).** Die Regel trennt zwei Klassen, und nur eine altert:
+
+| Klasse | Beleg | Haltbarkeit |
+|---|---|---|
+| UNVERAENDERLICH — Historie, Commits, **Blattinhalte an einem SHA** | der SHA | **fuer immer** |
+| FLUECHTIG — Arbeitsbaeume, installierte Module, laufende Prozesse | der Zeitstempel | **"ab dem Zeitstempel, und sie laeuft ab"** |
+
+**Posten (d) muss also erst einordnen und dann messen.** Minuten und Commits sind fuer die
+SHA-verankerte Klasse **Zusammenhang, nicht Verfall** — sie zu melden, als waere es Verfall, waere
+derselbe Fehler wie eine fluechtige Messung ohne Zeitstempel, nur spiegelverkehrt. Ab hier trage ich
+in (d) die Klasse mit.
+
+**Eine fluechtige Messung, regelkonform mit Zeitstempel** (21.08.2026 10:58:14): mein Rollenbaum hat
+**kein** `node_modules`, der Hauptbaum **300** Eintraege. Die Marke, die das Tor sucht, ist
+`node_modules/.aus-lockfile` — sie kann hier gar nicht liegen. Das ist der Grund fuer den Hinweis
+unter jedem Commit, und es ist derselbe Gegenstand wie der Anlass der Regel selbst (`:1327-1329`:
+ein Befund ueber `node_modules`, der **vierzehn Sekunden** hielt).
+
+**Kein Ball aus dieser Runde.** Was an A-38 offen bleibt, ist bereits gemeldet und wird nicht
+nachgebaut: der doppelte Schluessel `dor_beleg` (`:18` *"NICHT ERTEILT — 3. Runde"* gegen `:331`
+*"steht aus"*) und mein geliefertes Votum, das in keinem der beiden Felder steht — §108.
