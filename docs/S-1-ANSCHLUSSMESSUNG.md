@@ -756,3 +756,72 @@ stilllegen" bei `dachformVorlagen.ts` eine Frage ohne Preisschild. Jetzt hat sie
 *(Nebenbei bestätigt: das eingecheckte Artefakt war vom 15.08. und damit sechs Tage älter als der
 Code — der Bau ohne meinen Import ergibt 1.453.590 Bytes gegen die eingecheckten 1.453.603. Die
 13 Bytes Unterschied stammen aus dem Code, der seit dem 15.08. dazukam, nicht aus meiner Änderung.)*
+
+---
+
+# S-1/11 — tote Funktionen in lebenden Dateien: die Untergrenze, jetzt gemessen
+
+*21.08. gegen `928680d6`. Der Architektur-Bericht hatte die Grenze meines Maßes benannt: es misst
+**Dateien**, nicht Funktionen — `kannIntegrieren` in einer lebenden Datei, deren einziger Aufrufer
+tot ist, findet es nicht. „Die 33 sind eine Untergrenze." Hier ist die Ebene darunter.*
+
+## Verfahren, und warum die Rohzahl nicht taugt
+
+Über alle **erreichbaren** Module (Wert-Kanten ab `main.tsx`) jeden Laufzeit-Export gesucht und
+gezählt, wer ihn **importiert**. Die erste Zählung ergab **233 Exporte ohne Verbraucher** — und das
+ist eine Zahl ohne Erhebung, denn sie zählt Symbole mit, die in ihrer eigenen Datei benutzt oder nur
+von Tests gezogen werden. Klassifiziert statt gezählt:
+
+| Klasse | Zahl | Bedeutung |
+|---|---|---|
+| **A** — nur von **unerreichbaren** Modulen importiert | **4** | lebende Datei, toter Verbraucher |
+| **B** — nur von **Tests** importiert | **208** | gebaut, geprüft, nie benutzt |
+| **C** — von niemandem importiert, auch nicht im eigenen Modul | **5** | vollständig unbenutzt |
+| *(aus C ausgeschieden: Eigennutzung in derselben Datei)* | *27* | **kein Befund** |
+
+## A — die vier, die der Architektur-Bericht meinte
+
+```
+app/tools/werkzeugVertrag.ts      WERKZEUG_VERTRAEGE      <- werkzeugLandkarte (unerreichbar)
+geometry/configuratorPackage.ts   kannIntegrieren         <- integrationAbgleich (unerreichbar)
+geometry/wallGeometry.ts          azimutDerNormalen       <- raumProjektion (unerreichbar)
+geometry/linienBauteile.ts        flaecheInfoAusPolygon   <- dachAusschnitt (unerreichbar)
+```
+
+**Genau vier.** Der genannte Beispielfall war einer davon; die anderen drei waren nicht bekannt.
+
+## B — der eigentliche Fund, und er trifft meinen eigenen Bau
+
+**`geometry/dachformVorlagen.ts` allein hat 45 test-only-Exporte.** Das ist dieselbe Datei, die ich
+in Z1-W1-2 mit **einem** Wert-Import erreichbar gemacht habe — für `walmIstKonsistent`, drei Zeilen.
+Die gemessenen **+62.358 Bytes** aus S-1/10 kaufen also drei Zeilen und schleppen fünfundvierzig
+geprüfte, aber nirgends benutzte Funktionen mit ins Bündel.
+
+**Das schärft die offene Frage, es beantwortet sie nicht:** „anschließen oder stilllegen" heißt bei
+dieser Datei nicht 2.402 Zeilen gegen nichts, sondern *45 fertige Rechnungen, die auf einen
+Verbraucher warten* gegen *61 KB für drei Zeilen*. Beides ist eine Entscheidung über den Umfang des
+Produkts, keine Aufräumfrage.
+
+**Und eine Nebenwirkung meines Baus, die ich hier zum ersten Mal sehe:** mit `dachformVorlagen`
+wurden auch `aufbauPlatzierung`, `linienBauteile`, `polygonFlaeche` und `dachWerte` erreichbar — der
+ganze Verbund aus S-1/8. Die Totenliste ist dadurch nicht um zwei, sondern um **sechs** Module
+kürzer. Das war nicht beabsichtigt und ist die Erklärung für die 62 KB.
+
+## C — die fünf, die wirklich niemand zieht
+
+```
+geometry/dachformVorlagen.ts   effektiverSparrenabstandM · GAUBE_SCHEMATISCH_HINWEIS · GAUBE_VORSCHAU_HINWEIS
+app/tools/paketAdapter.ts      paketWerkzeug · schemaSchutzwert
+```
+
+Fünf, nicht zweiundvierzig. **Die übrigen 27 werden in ihrer eigenen Datei benutzt** — Zod-Bausteine,
+die zum Dokumentschema zusammengesetzt werden, und Übersetzer, die die Panel-Datei intern ruft. Ein
+Export, der nur intern gebraucht wird, ist eine Stilfrage, kein toter Code. **Hätte ich die 42 als
+Befund gemeldet, wären 27 davon falsch gewesen.**
+
+## Grenze dieses Maßes, benannt
+
+Gezählt sind **Import-Nennungen**. Ein Symbol, das über `import * as X` oder eine Re-Ausfuhr
+gezogen wird, zähle ich nicht — solche Fälle würden hier fälschlich als unbenutzt erscheinen. Und
+Klasse B sagt nichts über Absicht: ein Modul darf geprüft sein, bevor es einen Verbraucher hat. **Was
+B misst, ist der Abstand zwischen „geprüft" und „benutzt", nicht ein Fehler.**
