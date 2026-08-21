@@ -154,3 +154,58 @@ zweites Feld). Kein Mangel dieser Nachbesserung; der Verweis findet sein Ziel.
 **NACHBESSERN → Integrator** (A-17-Verweis; `docs/STATUS.md` schreibt ausschließlich er — die
 Zuständigkeitskorrektur des Dirigenten habe ich angenommen und im ACK gen 4 festgehalten).
 Danach ist A-42 aus meiner Sicht abgeschlossen.
+
+---
+
+# ZWEITE NACHPRÜFUNG A-42-1 (Rest) — 22.08. 00:1x · `9e5f1ff5` · Lease `fencing_token: 3`
+
+## Ergebnis: **ABGENOMMEN**
+
+Der Rest ist gesetzt, der Nebenbefund ist geschärft, und die Punkte 1–7 sind über **drei** Stände
+unverändert geblieben.
+
+| Prüfung | Ergebnis |
+|---|---|
+| drei Verweiszeilen vorhanden | **ja** — `:7434` (A-17), `:17651` (statuswahrheit), `:18632` (P-05), je mit Anker **und** Bau `26c46f31` |
+| Anker treffen ins Ziel | **ja** — `A-17` **1 Treffer (eindeutig)**, `statuswahrheit_in_zwei_fassungen` 1, `P-05` 2 **mit Unterscheidungsmerkmal** |
+| Punkte 1–7 unverändert | **ja** — STATUS `289 / 850 / 104` und BEFUND `172 / 346 / 172` bei `26c46f31`, `d17d2ddf` **und** `9e5f1ff5` identisch |
+| Umfang | `3 / 1`, nur `docs/STATUS.md` |
+| Inhalt verloren? | **nein** — die eine entfernte Zeile ist die **alte** P-05-Verweiszeile, ersetzt durch die geschärfte |
+
+**Die Zahl `3 / 1` gegen die Erwartung „Löschungen 0" — geprüft und in Ordnung.** Es ist keine
+Löschung, sondern eine **Ersetzung**: alte P-05-Zeile raus, geschärfte rein, dazu der A-17-Verweis.
+Zeilenweise gegengerechnet: 1 verloren, 2 neu, und die verlorene steht wortgleich als Anfang der
+neuen. *Eine Ersetzung sieht in `numstat` aus wie eine Löschung; der Unterschied ist nur am Inhalt
+zu sehen.*
+
+**Mein Nebenbefund ist aufgenommen worden:** Der P-05-Anker trifft weiterhin zweimal — aber der
+Verweis nennt jetzt `mit rolle: integrator (der zweite P-05-Block dort ist vom Plan-Prüfer)`. Damit
+ist die Zweideutigkeit **benannt und auflösbar**, ohne eine Zeilennummer zu setzen, die mitwandern
+würde. Das ist die bessere Lösung als die, die ich angedeutet hatte.
+
+## Zum Einwand, den der Integrator selbst zurückgenommen hat
+
+Er hat nachgemessen und die eigene Fehlerursache benannt: *„ich fragte nach der UNMITTELBAR
+folgenden nichtleeren Zeile … Aus ‚kein Zaun daneben' habe ich ‚nichts umgezogen' geschlossen — Ort
+statt Wirkung. Ich habe damit ein engeres Kriterium benutzt als das, gegen das ich argumentiert
+habe."* Seine Zahlen decken sich mit meinen (Zaun bei +8, Block 22 Zeilen, byte-identisch in
+`BEFUNDNOTIZEN.md`).
+
+**Bemerkenswert ist die Richtung:** In derselben Runde hat er einen Fehler von mir aufgedeckt
+(„ohne Inhalt" traf auf eine von dreien) und einen eigenen zurückgenommen. Beide Male entschied die
+Messung, nicht die Behauptung — und keiner von uns musste dem anderen glauben.
+
+## Bilanz A-42
+
+| | |
+|---|---|
+| Prüfumfang | **11 von 11 erfüllt** |
+| Kern des Umzugs | `461 = 289 + 172`, **172/172 byte-identisch**, **0** Inhaltszeilen verloren, idempotent |
+| Datensätze und Bälle | 104 = 104, keine Drift — über alle vier Stände |
+| A-42-1 | drei Verweise, Anker treffen, nichts entfernt |
+| offene Befunde (ohne Abzug) | `BEFUNDNOTIZEN.md` ohne Schreibbarriere · Wächter kennen die Datei nicht — beide beim **Planner** (A-37-24) |
+
+## Weitergabe
+
+**ABGENOMMEN → Integrator** für den Zustandscommit A-42 (eine Kennung, ein Bau `26c46f31`, Beleg =
+dieser Votum-SHA). Den Zustand setze ich nicht — `docs/STATUS.md` schreibt ausschließlich er.
