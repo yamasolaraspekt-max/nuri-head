@@ -19152,3 +19152,102 @@ angelegt werden"* ist im Code als Wandanlage-Sperre **nicht** gebaut; gesucht wu
 Bei mir bleiben offen: **F-026, F-031, F-032**. F-026 trägt bereits eine eigene Berichtigung vom
 11.08. und einen Bezug auf Fremdcode außerhalb des Repos (`~/Desktop/Gemini-Code-Ideen-…`) — das
 ist am gültigen Stand nicht messbar und wird als solches benannt, nicht geraten.
+
+## §234 · Posten (d): der Stillstand ist 31× länger als die längste Lücke der letzten 24 Stunden — und er ist nicht meiner
+
+**Messstand.** HEAD `3e268992` (21.08. 18:49:02), Baum sauber, **0 neue Commits** — sechste Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (258 Min). Ballortungsträger über Blob-SHA belegt:
+`810f37d9e560` / `b0f14db4239b`, unverändert. Gemessen 21.08. 18:49–18:53.
+
+### 1 · Die Frage, die ich sechs Runden lang nicht gestellt habe
+
+Ich habe in jeder Runde gemeldet, wie alt der gültige Stand ist — 228, 234, 241, 247, 252, 258
+Minuten. Was ich nie gemessen habe: **ob das viel ist.** Eine Alterung ohne Vergleichsmaß ist eine
+Zahl, keine Aussage.
+
+Der Integrationszweig trägt **4625 Commits**. Alle 4624 Lücken zwischen ihnen gemessen, in **einem**
+`git log`-Durchgang (nach §205/§211/§219 keine Schleife über Commits):
+
+| Maß | Wert |
+|---|---|
+| Median-Lücke | **1,6 Min** |
+| 90-Perzentil | 10,7 Min |
+| aktuelle Lücke | **258,7 Min** |
+| Verhältnis zum Median | **167-fach** |
+| historische Lücken, die mindestens so lang sind | **74 von 4624** (1,6 %) |
+
+Ungewöhnlich also — aber **nicht beispiellos**, und das sage ich dazu, weil die 74 sonst unter den
+Tisch fielen. Von ihnen beginnen 38 nachts und 36 tagsüber; der Stillstand ist damit auch nicht
+allein durch „Nachtpause" erklärt.
+
+### 2 · Das harte Maß ist der unmittelbare Vergleich
+
+    letzte 24 Stunden:  128 Commits,  längste Lücke darin  8,4 Min
+    danach:             258,7 Min und laufend
+
+**Der aktuelle Stillstand ist 31-mal länger als die längste Unterbrechung des Betriebs, der ihm
+unmittelbar vorausging.** Zwei unabhängige Gegenproben, weil die Zahl so scharf ist:
+
+- `git log --since='24 hours ago'` liefert direkt **128** — 21.08. 09:52 bis 14:31.
+- Die zehn jüngsten Commits einzeln: Abstände **0,0 / 0,0 / 0,3 / 0,8 / 1,0 / 1,0 / 1,5 / 2,1 / 2,9 / 3,1 Min**.
+
+Der Betrieb lief im Minutentakt und hörte mitten darin auf.
+
+### 3 · Drei Phasen, gemessen
+
+    Stillstand davor : bis 21.08. 09:52    1031 Min  (17,2 h)
+    Betriebsblock    : 09:52 bis 14:31      279 Min, 128 Commits
+    Stillstand jetzt : seit 14:31           260 Min und laufend
+
+Der laufende Stillstand hat **93 %** der Länge des Arbeitsblocks erreicht, aus dem er hervorging.
+
+### 4 · Was ich an meiner eigenen Formulierung berichtigen muss
+
+In §230, §231, §232 und §233 habe ich geschrieben, der Transport sei „weiter zu". **Das war eine
+Deutung, keine Messung** — und sie ist falsch. Die Rollenverteilung der 128 Commits:
+
+| Rolle | Commits in 24 h |
+|---|---|
+| **plan-pruefer** | **66** |
+| integrator | 35 |
+| generator | 10 |
+| release-pruefer | 7 |
+| evaluator | 5 |
+| planner | 4 |
+| planner/dirigent | 1 |
+
+**Meine Rolle stellt mehr als die Hälfte** — mehr als jede andere. Der Rückweg war nicht zu, er war
+der am stärksten befahrene Weg im ganzen Betrieb. Und der **letzte Commit vor dem Stillstand ist
+selbst ein Rückweg für mich**:
+
+> `7a82ecfb integrator: Rueckweg — rolle/plan-pruefer (1 Commit(s)) in auto/hausplaner-integration
+> Herkunft: rolle/plan-pruefer @ c4452644`
+
+Der Betrieb endete mit dem Transport meiner Arbeit. Richtig ist deshalb nicht „mein Rückweg ist
+blockiert", sondern: **um 14:31 sind alle sieben Rollen gleichzeitig stehengeblieben.** Das ist ein
+anderer Befund mit einer anderen Ursache und einem anderen Adressaten.
+
+### 5 · Der Rückstand, frisch gezählt
+
+    angekommen auf dem Integrationszweig : §179        13569 Zeilen
+    bei mir                              : §233        19154 Zeilen
+    Rückstand                            : 54 Nummern   5585 Zeilen
+
+Die 54 sind kein Transportstau im Sinne einer Verweigerung — sie sind schlicht **nach 14:31
+entstanden**. §180 bis §233 wurden alle in den 260 Minuten geschrieben, in denen sonst nichts
+geschah. Das erklärt auch, warum die Zahl in jeder Runde um genau eins wächst.
+
+### 6 · Ball
+
+**Yama** — dieser Posten geht nicht an eine Rolle, weil keine Rolle ihn lösen kann:
+
+Um 14:31 hat der gesamte Betrieb aufgehört, mitten in einem Minutentakt, nach 128 Commits in
+279 Minuten. Seither 260 Minuten Stille bei allen sieben Rollen. Ich kann messen, **dass** es
+aufgehört hat, und ich kann ausschließen, dass es an einer einzelnen Rolle liegt — aber nicht,
+**warum**. Das ist die Grenze dieser Messung und keine Vermutung, die ich hier ergänze.
+
+Für die stehenden Posten heißt das: Die neun offenen Fragen an Yama (Fach-Gate N-003,
+A-13-Veröffentlichungsbedingung, Tragwerk an die Zeichenfläche, W-21L, versatz-Quittung, Seed-Weg
+der Prüfbühne, driftender Zeiger `raumAuswahl.ts`, Regelkollision §3/E1/Beifang, §119/§120) altern
+seit 14:31 nicht mehr *im Betrieb*, sondern *im Stillstand*. Das ist ein Unterschied, den eine
+reine Minutenzahl verdeckt.
