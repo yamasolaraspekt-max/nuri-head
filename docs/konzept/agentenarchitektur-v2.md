@@ -117,11 +117,21 @@ fencing_token, heartbeat_bis`. Regeln: atomare Vergabe · begrenzte Laufzeit · 
 Verlängerung · neuer Besitzer erhält höheren Fencing Token · alter Token darf weder committen noch
 testen · Verlust = sofortiger Stopp · abgestürzte Agenten werden nie automatisch committet.
 **Lease-Autorität (Korrektur 3, Yama 21.08. — festgelegt als ENTWURF für Z0-I2):** genau **ein**
-lokaler Ort außerhalb aller Worktrees, `/Users/yamanuri/Documents/ticket-leases/<auftrag>/`;
-Vergabe atomar über `mkdir` (POSIX-atomar, scheitert bei Existenz — kein Read-then-Write);
-darin `lease.yaml` mit Inhaber, Rolle, Worktree, Zweig, Basis-SHA, `fencing_token` (monoton aus
-`zaehler` im selben Verzeichnis, unter `mkdir`-Sperre erhöht), `heartbeat_bis`; **Ablehnung
-veralteter Token durch drei Hooks**: (1) `scripts/commit-pruefen.sh` vor jedem Commit (Lease
+lokaler Ort außerhalb aller Worktrees, `/Users/yamanuri/Documents/ticket-leases/<auftrag>/`, mit
+**drei getrennten Dingen** (Korrektur Yama 21.08., zweite Runde — Zähler und Sperre dürfen nicht im
+Lease-Verzeichnis liegen, sonst geht die Monotonie mit der Löschung des Sperrverzeichnisses verloren):
+```text
+ticket-leases/<auftrag>/
+├── counter          # dauerhaft, wird NIE gelöscht — einzige Quelle des Fencing Tokens
+├── counter.lock/    # mkdir-Sperre nur für das Erhöhen des Zählers (kurzlebig)
+└── active/          # existiert genau dann, wenn ein Lease aktiv ist; mkdir = Vergabe (atomar)
+    └── lease.yaml   # Inhaber, Rolle, Worktree, Zweig, Basis-SHA, fencing_token, heartbeat_bis
+```
+Vergabe: `mkdir active/` (POSIX-atomar, scheitert bei Existenz — kein Read-then-Write) → unter
+`mkdir counter.lock/` den `counter` lesen, +1 schreiben, Sperre lösen → Token in `lease.yaml`.
+Übernahme nach Ablauf: `active/` darf nur entfernt werden, wenn `heartbeat_bis` verstrichen ist; der
+neue Bewerber erhält aus dem **dauerhaften** `counter` zwingend einen höheren Token — ein Token kann
+nach Löschung von `active/` nie wiederverwendet werden. **Ablehnung veralteter Token durch drei Hooks**: (1) `scripts/commit-pruefen.sh` vor jedem Commit (Lease
 vorhanden · Inhaber = `TICKET_ROLLE`+Worktree · Token = aktueller · Heartbeat nicht abgelaufen, sonst
 Exit ≠ 0, kein Commit); (2) der Test-/DB-Wrapper aus Z0-I1 vor Migration/Seed/Truncate; (3) der
 PreToolUse-Hook `veroeffentlichungs-tor.sh`-Muster für `git push` des Rollenzweigs. Keine Lease-
