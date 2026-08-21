@@ -21547,3 +21547,105 @@ andere. Das ist der eigentliche Ort, an dem Y-6 wirkt.
 **Generator**: W0-5 ist von meiner Seite frei.
 
 **Nicht geprüft:** W0-6.
+
+## §260 · DoR Z2-W0-6 — ERTEILT mit einem Restpunkt. Und Yamas Entscheidung ändert die Lage, nicht die Aufträge
+
+**Messstand.** Mein HEAD `f2e8c75c`, Baum sauber. Integrationszweig `7d905d20` (21.08. 20:21),
+6 neue Commits. Ballortung **43 → 42**. Basis-Stand der Prüfung: **`cb500067`**. Gemessen
+21.08. 20:22–20:28. **Damit ist die Welle-0-Reihe von sechs DoR abgeschlossen.**
+
+### 1 · Zwei Dinge sind eingetreten, die meine bisherige Arbeit betreffen
+
+**Erstens: `10c05d8b` — „Z2-W0-1 ist gebaut."** Mein DoR aus §255 ist über den Generator in Code
+gemündet. Vom Votum zum Bau in **rund 9 Minuten**.
+
+**Zweitens: `ae7cee9d` — Yamas Entscheidung.** *„Alle Nutzer des Ticket-Systems haben alle Rechte,
+Item Planner wird angelegt (Y-6), jeder sieht fremde Tagesberichte/GPS (Y-9). **Einwand gehört,
+dokumentiert, überstimmt.**"* Abgelegt in `docs/regelwerk/ENTSCHEIDUNG-RECHTE-ALLE-FUER-ALLE.md`
+(49 Zeilen, existiert — geprüft).
+
+**Y-6 ist damit entschieden.** Das ist der Operand, den §257 und §259 als offen führten.
+
+**Und die Abgrenzung ist der wichtigste Satz des Commits:**
+
+> *„Yamas Wort galt dem **Sehen**, nicht dem **Fälschen** — Integrität (W0-2 Schreibpfad, W0-3,
+> W0-5 A-4 Melder-Spoofing) und Authentifizierung bleiben unberührt."*
+
+Für meine erteilten DoR heißt das, gemessen an ihren eigenen Zielen:
+
+| DoR | Gegenstand | von der Entscheidung berührt? |
+|---|---|---|
+| W0-1 (§255) | Objektakte lesen hinter `Customer,read` | **Sehen** — Tor wird gebaut, Schalter öffnet es |
+| W0-2 (§256) | Grundriss **schreiben** (`schreibeGeometrieVersion`) | **nein** — Integrität |
+| W0-3 (§257) | fremde `employee_id` **schreiben** | **nein** — Integrität |
+| W0-5 (§259) | A-1 GPS **sehen** / A-4 Melder-ID **fälschen** | **geteilt** |
+
+**W0-5 ist der einzige geteilte Fall**, und das gehört gesagt: Sein Kriterium A (fremder Mitarbeiter
+→ 403) fällt unter Yamas Entscheidung, sein Kriterium D (`requested_by_employee_id` serverseitig)
+nicht. Der Auftrag bleibt richtig — aber **die Tests müssen in beiden Schalterstellungen laufen**,
+und genau das verlangt `ae7cee9d` bereits (*„sonst prüft kein Test mehr, ob ein Tor schließt"*).
+**Kein Restpunkt von mir, nur eine Präzisierung.**
+
+### 2 · Drei neue Blätter ohne Datensatz — dasselbe Muster wie §255
+
+    Blätter im Ordner:  9   (W0-1 … W0-9)
+    Blöcke in docs/STATUS.md: 6   (W0-1 … W0-6)
+
+**W0-7, W0-8, W0-9 haben keinen Block.** W0-7 ist dabei der Schalter selbst und läuft nach
+`ae7cee9d` **VOR W0-1** — ein Auftrag mit Vorrang, der in der Statuswahrheit nicht vorkommt. Das ist
+wörtlich die Lage aus §169 und §255, zum dritten Mal.
+
+### 3 · DoR Z2-W0-6 — die Belege
+
+| Beleg | frisch gemessen am Stand `cb500067` | |
+|---|---|---|
+| `tokenCan` / `ability:` / `abilities` in Routen, Planner-Controllern, Middleware | **0 / 0 / 0** — Muster verifiziert: `abilities` liefert repo-weit **126** Treffer | **trifft** |
+| `app/Http/Kernel.php:59-79` ohne `ability`-Alias | **0** Treffer | **trifft** |
+| Gruppe nur `auth:sanctum` bei `routes/api.php:253` | `Route::middleware('auth:sanctum')->group(function () {` | **trifft** |
+| vier Abilities bei `routes/api.php:75-80` | dort steht ein **Kommentarblock „Fusion Webhooks"** | **falscher Träger** |
+
+### 4 · Der Restpunkt: richtige Zeile, falsche Datei
+
+Die vier Abilities stehen **exakt bei `:75-80`** — aber in
+`app/Http/Controllers/Planner/PlannerApiAuthController.php`:
+
+    :75  $token = $user->createToken($deviceName, [
+    :76      'planner:read',
+    :77      'planner:write',
+    :78      'planner:attendance',
+    :79      'planner:kanban',
+    :80  ])->plainTextToken;
+
+Der Satz im Blatt nennt den Träger selbst (*„`PlannerApiAuthController@token` vergibt vier
+Abilities"*) und die Klammer die falsche Datei. **Die Zeilennummer ist richtig, der Dateiname
+nicht** — und in `routes/api.php:75-80` steht tatsächlich etwas, nämlich ein Kommentarblock. Das ist
+die (a)-Definition wörtlich: *nicht „zeigt ins Leere", sondern „zeigt auf etwas anderes"*.
+
+**Restpunkt 1:** Dateiname im Ist-Beleg berichtigen. Klein, mechanisch — aber der Generator liest
+diesen Beleg, und `routes/api.php` ist zugleich eine Datei, die er in diesem Auftrag **ändern** soll.
+
+### 5 · Votum
+
+**DoR Z2-W0-6 — ERTEILT, mit einem Restpunkt.**
+
+Ziel, Basis-SHA, Ist-Beleg, Scope mit ausdrücklichem Kernel-Alias als Pflichtteil, drei Kriterien
+A–C, rotes P1-Kriterium und Rückweg liegen vor. Zwei Dinge hebe ich hervor, weil sie selten sind:
+Das Blatt **misst seinen eigenen Pflichtteil mit** (*„die Gegenprobe hat gemessen: `Kernel.php`
+enthält kein `abilities`/`ability`"*) statt ihn vorauszusetzen — und es legt **Y-10** offen
+(`sanctum.expiration` ist NULL, Token unbegrenzt gültig) als *„Produkt-/Bedienentscheidung … wird
+Yama vorgelegt, nicht still gesetzt"*.
+
+### 6 · Ball
+
+**Planner/Dirigent**: Restpunkt 1 (Dateiname). Dazu der offene Widerspruch aus §259 — er ist durch
+Y-6 **nicht** erledigt: Die Frage war nicht *ob* das Permission-Item kommt, sondern **wer das
+Routen-Gate für `/planner/*` baut**; W0-3 und W0-5 zeigen weiter aufeinander.
+
+**Integrator**: W0-7/8/9 ohne Block — W0-7 hat ausdrücklich Vorrang vor W0-1.
+
+**Yama**: **Y-6 ist entschieden**, Y-9 mit ihm. Neu offen: **Y-10** (Token-Ablauf). Meine neun
+stehenden Posten bleiben unberührt.
+
+Damit sind **alle sechs DoR der Welle 0 gefahren**: W0-1 (§255, ohne Restpunkt), W0-2 (§256, ein
+Restpunkt), W0-3 (§257, ohne), W0-4 (§258, ein Restpunkt), W0-5 (§259, ohne), W0-6 (§260, ein
+Restpunkt).
