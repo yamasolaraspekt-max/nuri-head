@@ -19519,3 +19519,103 @@ aber der **Beleg** trägt nicht.
 Was **hält**, sage ich mit derselben Deutlichkeit: `16 Skills` und `~50 Blätter` treffen genau, und
 die Tilde bei „~50" ist die ehrlichste Form der fünf — sie sagt, dass die Zahl ungefähr ist, und
 ist es dann auch.
+
+## §238 · Posten (c): F-031 ist nicht gebaut wie beschrieben — und ihr Grenzfall ist besser erfüllt als verlangt
+
+**Messstand.** HEAD `c10b6208` (21.08. 19:04:40), Baum sauber, **0 neue Commits** — zehnte Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (273 Min), STATUS-Blob `810f37d9e560` unverändert.
+Gemessen 21.08. 19:05–19:06.
+
+### 1 · Die Formel ist bewusst nicht gebaut, und der Code sagt es zweimal
+
+F-031 verlangt `Ergebnis = Wand ∖ Öffnung` als boolesche Differenz. Über die Sache gesucht (`csg`,
+`subtract`, `differenz`), nicht über Dateinamen:
+
+    dachAusschnitt.ts:10      Stufe C (NICHT hier): echte Polygonloch-/CSG-Operationen
+    segmentierung.ts:2        CSG-freie Wand-Segmentierung
+    segmentierung.ts:7        Keine CSG-Bibliothek, mm-exakt, unit-testbar ohne Browser
+
+Kein verschwiegener Ausfall, sondern eine benannte Entscheidung mit Ersatzweg: Statt zu subtrahieren
+zerlegt `segmentierung.ts` (124 Z.) die Wand in Brüstungs-, Sturz- und Zwischenquader.
+
+### 2 · Der Grenzfall — und er ist vollständig erfüllt
+
+F-031 verlangt: *„Öffnung breiter/höher als die Wand → **lesbare Absage**, nicht ‚Wand
+verschwindet'."* Am Code nachgemessen, und der Code unterscheidet **feiner als die Formel**:
+
+| Fall | Code | Stelle |
+|---|---|---|
+| Öffnung **breiter** als die Wand | `throw new CommandAbgelehnt` | `applyCommand.ts:46-51` |
+| Öffnung passt, **liegt** aber über dem Ende | verschieben **und** `node.clamped = true` | `applyCommand.ts:52-56` |
+| Öffnung ragt beim **Anlegen** über das Ende | `throw new CommandAbgelehnt` | `applyCommand.ts:99-101` |
+
+Und die Absage ist wirklich lesbar — sie nennt beide Maße:
+
+> `Öffnung ${node.id} (${node.width} mm) passt nicht mehr auf die Wand (${Math.floor(laenge)} mm) — Änderung abgelehnt.`
+
+Die Formel verlangt eine Absage; der Code gibt eine Absage **für den unrettbaren** und eine
+markierte Korrektur **für den rettbaren** Fall. Das ist mehr, als F-031 fordert, und es ist richtig.
+
+### 3 · Die bisher stärkste gebaute Gegenform zu meiner Fehlerklasse
+
+Zehn Fundstellen habe ich gesammelt, an denen „ein Schutz einen plausiblen Wert liefert statt zu
+verweigern" (§136, §141, §160, §165, §172, §185, §195, §203, §205, §207). `segmentierung.ts` ist das
+Gegenteil, und zwar **nicht nur im Kommentar**:
+
+    :12   hier wird GEKLEMMT gerendert … und die Öffnung als geklemmt gemeldet —
+          nie stillschweigend "passend gerechnet"
+    :36   geklemmt?: boolean;                     <- im Quader-Typ
+    :45   geklemmteOeffnungen: string[];          <- im RÜCKGABETYP
+    :86   const geklemmt = oben > hoehe;  // Kante 2 — ehrlich markieren, nie still korrigieren
+    :88   geklemmteOeffnungen.push(o.id);
+    :122  geklemmteOeffnungen,                    <- tatsächlich zurückgegeben
+
+Die Vorgänger (§225 eingerahmte Klemmung, §228 `default: return []`, §230 `walmFirstlaengeM` mit
+Test) waren Kommentar, Rückgabewert oder Test. **Hier ist die Klemmung ein Feld der Schnittstelle** —
+der Aufrufer *kann* sie nicht übersehen, weil sie im Typ steht. Das ist die Form, die ich in allen
+zehn Fundstellen vermisst habe.
+
+### 4 · Der ε-Trick der Formel ist überflüssig geworden
+
+F-031 verlangt weiter: *„Öffnung exakt bündig mit dem Wandrand → CSG erzeugt entartete Flächen;
+deshalb die Öffnung um ε (0,5 mm) über die Wand hinausziehen."* Der Code hat kein CSG und braucht
+den Trick nicht — `segmentierung.ts:10`:
+
+> *„Kante 1: Öffnung exakt am Wandende ⇒ Zwischen-Quader Breite 0 **ENTFÄLLT** (kein 0-Volumen-Mesh)."*
+
+Statt die Geometrie um 0,5 mm zu **verfälschen**, wird der entartete Quader **weggelassen**. Das ist
+sauberer, und es ist zugleich der vierte Ort, an dem F-001s ε auftaucht, ohne dort etwas zu tun
+(vgl. §233: drei Schwellen für dieselbe Frage).
+
+### 5 · F-032: die Warnung hält, die Verkettung ist nicht messbar
+
+F-032s tragende Aussage ist *„Matrixmultiplikation ist **nicht** kommutativ. Erst drehen, dann
+verschieben ist etwas anderes."* Durchgerechnet, Punkt (1000, 0), Drehung 90°, Verschiebung (500, 0):
+
+    T · R  (erst drehen, dann verschieben)  ->  (500, 1000)
+    R · T  (erst verschieben, dann drehen)  ->  (0, 1500)
+    Abstand: 707,1 mm
+
+**Die Warnung hält.** Ob der Code die Reihenfolge `M = T · R · S` einhält, kann ich **nicht** messen:
+`Matrix4` kommt genau **2-mal** vor (`szene.ts:622` `makeBasis`, `:628` `applyMatrix4`) — das ist
+keine T·R·S-Kette. Die Transformationen laufen über `position.set` (6×) und `rotation.` (8×), also
+über die Objekt-API von three.js, die die Matrix intern zusammensetzt. **Diese Bibliothek liegt in
+diesem Worktree nicht vor** (das Rollen-Tor meldet in jedem Lauf „in ticket-rolle-plan-pruefer ist
+gar kein node_modules"). Das ist eine Grenze der Messung und wird als solche benannt, nicht durch
+eine Annahme über three.js ersetzt.
+
+### 6 · Ball
+
+**Planner**, ein Posten, und er ist diesmal ein Gutschreiben statt einer Beanstandung:
+
+1. **F-031 gehört berichtigt, nicht der Code.** Die Formel beschreibt einen Weg (CSG), den der
+   Bestand bewusst nicht geht, und einen ε-Trick, den er nicht braucht. Ihr Grenzfall dagegen ist
+   erfüllt und übererfüllt. Ohne Vermerk liest die nächste Rolle einen Rückstand, wo eine
+   Entscheidung steht — genau die Lage, vor der `FORMELSAMMLUNG.md:60` selbst warnt.
+2. **`segmentierung.ts:45` ist ein Muster, kein Einzelfall.** Wenn eine Klemmung unvermeidbar ist,
+   gehört sie in den Rückgabetyp. Das ist die Antwort auf die zehn Fundstellen meiner Fehlerklasse
+   und auf §230s offene Frage, welche Form der Bestand für „Schutz statt Ratewert" schon kennt.
+
+Offen bleibt aus dieser Runde nur **F-026** — sie verweist auf Fremdcode außerhalb des Repos
+(`~/Desktop/Gemini-Code-Ideen-…`) und ist am gültigen Stand nicht messbar. Das ist keine Lücke in
+der Prüfung, sondern eine im Gegenstand.
