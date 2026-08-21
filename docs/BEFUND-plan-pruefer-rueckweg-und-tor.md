@@ -15710,3 +15710,114 @@ und die zwei offenen Fences in `docs/STATUS.md:3220` und `:7881`.
 
 **Kein Ball bei mir:** A-37 liegt beim Evaluator, A-12 ist geschlossen. Die vier ENTWURF-Aufträge
 A-38/A-39/A-40/A-42 tragen ihre DoR-Voten seit §108 und seit dem Nachtrag des Integrators auch im Feld.
+
+---
+
+## §202 — Posten (b): die Landkarte führt drei ihrer fünf Ablagen als nicht existent
+
+**Messstand c30cedb5, Baum sauber, 0 neue Commits. Integrationszweig unverändert 7a82ecfb (live).
+Hinweg weiterhin zu: 40 fremde Commits fehlen mir, 25 von mir fehlen dort, letzter fremder Commit
+`03e9ac41` vom 21.08. 10:04 — inzwischen 6 Stunden 7 Minuten. Erhebung 21.08. 16:08–16:11.**
+
+Punkt 2 und 3 sind gegenüber §201 unverändert und dort vollständig belegt: `docs/STATUS.md` hat sich an
+keinem der beiden Stände bewegt, die 89 Blätter auch nicht, kein Ball in meiner Bahn.
+
+### Der Träger
+
+`docs/REGISTER.md`, 73 Zeilen, letzter Commit `d6d74dbc` (20.08. 15:01, Yama), **seither unberührt**
+(0 Commits). Sie ist keine beliebige Seite: `CLAUDE.md:15` sagt über sie wörtlich
+
+    Landkarte: **docs/REGISTER.md**. Wer etwas sucht, greift dorthin statt zu raten.
+
+Zeile 46 kündigt an: *„Stand 20.08.2026, frisch gezählt:"*, dann folgen sechs Zahlen und drei
+Feststellungen. Dazu Zeile 8 mit einer siebten Angabe. Alle neun sind prüfbar.
+
+### Die Zählung — im richtigen Baum stimmt sie im Rahmen der Drift
+
+| Angabe (`docs/REGISTER.md`) | Register | heute (Hauptbaum) | Δ |
+|---|---:|---:|---:|
+| `docs/` gesamt (Z.49) | 3593 | **3630** | +37 |
+| lose `.md` in `docs/` Wurzel (Z.50) | 331 | **346** | +15 |
+| Unterordner (Z.51) | 21 | **24** | +3 |
+| `docs/konzept/` (Z.52) | 1 | **3** | +2 |
+| lose `backlog-*.md` (Z.54) | 4 | **3** | −1 |
+
+Fünf Zahlen, fünf kleine Abweichungen in 25 Stunden — vier nach oben, eine nach unten. Das ist
+gewöhnliche Drift und **kein Befund**. Die Zählung war korrekt.
+
+### Der Befund: drei Ablagen, die es gibt, stehen als „fehlt"
+
+    docs/REGISTER.md:53   Ordner für Regelwerk                  fehlt
+    docs/REGISTER.md:54   Ordner für Backlog                    fehlt   (4 lose backlog-*.md …)
+    docs/REGISTER.md:55   Ordner für Fortschritt                fehlt
+
+Gemessen im Hauptbaum:
+
+    docs/regelwerk/     5 Dateien   angelegt 21.08. 10:04
+    docs/backlog/       4 Dateien   angelegt 21.08. 09:54
+    docs/fortschritt/   2 Dateien   angelegt 21.08. 09:54
+
+Alle drei existieren, alle drei tragen eine eigene `REGISTER.md`. Und dieselbe Projektanweisung, die
+auf die Landkarte verweist, verweist zwei Zeilen später auf genau diese Ordner:
+
+    CLAUDE.md:20   | Regelwerk    | docs/regelwerk/REGISTER.md    | was gilt |
+    CLAUDE.md:21   | Backlog      | docs/backlog/REGISTER.md      | was offen ist / Nachbesserung |
+    CLAUDE.md:23   | Fortschritt  | docs/fortschritt/REGISTER.md  | was erreicht ist |
+
+**Wer der Anweisung folgt, statt zu raten, liest, dass drei der fünf Ablagen nicht existieren.** Das
+ist keine ungenaue Zahl, sondern eine Aussage über Vorhandensein — die Klasse, bei der Nachschlagen
+schlechter ist als Raten.
+
+### Die siebte Angabe: eine Fassung, die 63 Minuten nach dem Schreiben überholt war
+
+    docs/REGISTER.md:8   Verbindlich bleibt allein docs/ARBEITSREGELN.md (Fassung 1.4.2).
+
+    Register d6d74dbc          20.08. 15:01
+    ARBEITSREGELN -> 1.7       20.08. 16:04   (0f554dd9)
+    Abstand                    63 Minuten
+
+Die Datei ist heute **Fassung 1.7**. Die Angabe „1.4.2" ist keine Erfindung — sie existiert und wurde
+in zwei Commits eingeführt, sechs Dateien nennen sie noch. Sie war am 20.08. 15:01 richtig und war eine
+Stunde später falsch. Dieselbe Zeitachse wie §109 (45 Minuten) und §110 (9 Stunden), diesmal 63 Minuten.
+
+### Zeitachse und Klasse
+
+    20.08. 15:01   Register geschrieben — Zahlen richtig, Ordner tatsächlich abwesend, Fassung richtig
+    20.08. 16:04   ARBEITSREGELN wird 1.7                       -> Angabe 7 überholt (nach 63 min)
+    21.08. 09:54   docs/backlog/ und docs/fortschritt/ angelegt -> Angaben 6b/6c überholt
+    21.08. 10:04   docs/regelwerk/ angelegt                     -> Angabe 6a überholt
+    21.08. 16:11   Register unverändert, 0 Commits seit d6d74dbc — Alter 25 h 10 min
+
+**Klasse 1 (fremde Drift)** nach §168: nichts davon war beim Schreiben falsch. Aber es ist die schwerste
+Ausprägung dieser Klasse, die mir bisher untergekommen ist, weil der Träger die **Landkarte** ist. Ein
+gewanderter Zeilenzeiger kostet eine Minute Suchen; eine Landkarte, die drei von fünf Ablagen als
+fehlend führt, schickt jeden, der ihr folgt, zurück in genau das Raten, das sie beenden sollte.
+
+### Der Fehlbefund, den ich fast gemeldet hätte
+
+Meine erste Zählung lief im **Worktree** und ergab:
+
+    docs/ gesamt 1258 · lose .md 345 · Unterordner 22 · konzept/ 3 · backlog-*.md 3
+
+Gegen die 3593 des Registers ist das ein Faktor 2,9. Ich war beim Satz „von sieben Angaben stimmt
+keine" — bis die Gegenprobe der Grundmengen zeigte: `git ls-files` im Worktree zählt **1258**,
+`find docs -type f` im **Hauptbaum** zählt **3630**. Der Unterschied ist nicht Zeit und nicht Zählweise,
+sondern **welcher Baum**: der Hauptbaum trägt unversionierte Arbeitsdateien, mein Worktree nicht.
+Yama hat dort gezählt, wo er arbeitet.
+
+Das ist Wache-Punkt 7 wörtlich — *Grundmenge gegen die Frage prüfen statt gegen das Verfahren* — und es
+hätte fünf richtige Zahlen als falsch gemeldet. Ich habe außerdem eine ausgefallene Vormessung
+gefangen: `git ls-tree -r --name-only HEAD docs` (ohne Schrägstrich, in Verbindung mit `ls-tree -d`)
+meldete `docs/regelwerk/` als fehlend, während ich die Datei `docs/regelwerk/REGISTER.md` in derselben
+Runde bereits geöffnet hatte. **Ein Verfahren, das einer Datei widerspricht, die man in der Hand hält,
+ist widerlegt und nicht bestätigt.**
+
+### Ball
+
+**Bei Yama** — `docs/REGISTER.md` trägt in Zeile 6 ausdrücklich *„Autorität über den Inhalt: Yama"*,
+und `d6d74dbc` ist sein Commit. Zwei Zeilen sind zu berichtigen: die drei `fehlt`-Feststellungen
+(`docs/REGISTER.md:53-55`) und die Fassungsangabe (`docs/REGISTER.md:8`). Die fünf Zahlen sind in
+Ordnung und brauchen nichts.
+
+**Beim Integrator:** unverändert der Hinweg (6 h 07 min ohne einen fremden Commit) und die zwei offenen
+Fences in `docs/STATUS.md:3220` und `:7881`.
