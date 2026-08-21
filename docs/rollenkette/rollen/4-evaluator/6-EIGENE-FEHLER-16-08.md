@@ -769,3 +769,65 @@ genommen. `git log -L` auf die Zeile widerlegt beide und kostet einen Befehl.
 Und E15 hat eine eigene Klasse: **ich habe eine Gegenprobe nicht gefahren, weil ihr Ergebnis mir
 recht gegeben hätte.** Die Frage „hätte der vorhandene Prüfer das gefunden?" ist die erste, die
 man stellt, bevor man sagt „es fehlt ein Prüfer". Sie kostete drei Zeilen Shell.
+
+---
+
+# GEGENPROBE 20.08. — meinen zweiten Planner-Posten derselben Frage unterzogen, an der E15 gescheitert ist
+
+E15 ist gefallen, weil ich nicht gefragt habe: *„gibt es das Verlangte vielleicht schon?"* Diese
+Frage schulde ich meinen übrigen Posten. Hier der zweite: `a26-ball-drift.sh:53`, Kennungsmuster.
+
+## Der alte Beleg war schlecht, der neue ist echt — und schwächer, als ich dachte
+
+Damals hatte ich `K5-01`/`K6-01` als Beispiele genannt: **erfundene Kennungen** (das steht als
+Fehler 3 auf Z. 378). Heute am Bestand gemessen: **acht echte Datensätze** fallen durch das
+Muster `[AW]-[0-9]+(/[0-9]+[a-z]?)?` — `B5 · B5N · B6 · B7 · W-01N · W-07N · W-21L · P-02`
+(87 Datensätze insgesamt, gegengezählt mit meinem Werkzeug).
+
+**Aber die Gegenprobe entlastet das Skript weitgehend:**
+
+| Prüfer | Muster | trifft die acht |
+|---|---|---|
+| `a26-ball-drift.sh:53` | `[AW]-[0-9]+(/[0-9]+[a-z]?)?` | 0 von 8 |
+| `a30-datensatz-paar.sh:61` | `[AW]-[0-9]+[A-Z]?(/[0-9A-Za-z]+)?` | W-01N, W-07N, W-21L |
+| `a33-kennungen-nachziehen.sh:84` | `[A-Z]+-?[0-9]+[A-Za-z]?(?:\/[0-9A-Za-z]+)?` | alle 8 |
+
+1. **`P-` ist begründet ausgeschlossen, nicht vergessen.** `a30:26-41` widmet dem einen eigenen
+   Abschnitt (A-30-8): eine VORLAGE ist kein Bauauftrag, und ein `M-`-Muster läse Befundtabellen
+   als Aufträge. Der Autor nennt dort auch die Auslösebedingung für eine Erweiterung: *„Käme je
+   ein `P-` oder `M-` Auftrag MIT Bau-Zustand."* **Gemessen: `P-02` trägt `zustand: VORLAGE`.**
+   Die Bedingung ist nicht eingetreten. Der Ausschluss trägt.
+2. **Die sieben übrigen sind fertig.** `B5 B5N B6 B7 W-01N W-07N` stehen auf
+   `BETRIEBSBESTAETIGT`, `W-21L` auf `DECISION_BLOCKED` — **alle sieben mit Ball `—`**, Tafel und
+   Datensatz übereinstimmend. Ein Ball-Drift-Prüfer hat an einem Vorgang ohne Ball nichts zu
+   bewachen.
+
+**Damit steigt der Posten nicht.** Er bleibt, was er am 16.08. war und was ich damals selbst
+geschrieben habe: *„Die Lücke wirkt heute nicht."* Was sich geändert hat, ist nur die Qualität des
+Belegs — echte Kennungen statt erfundener.
+
+## Was als schmaler Rest bleibt, und ehrlich benannt
+
+Zwei Dinge, beide klein:
+
+- **`a26` ist enger als `a30`, ohne dass irgendwo steht warum.** `a30` nennt `W-01N`/`W-21L`
+  ausdrücklich als Ziele und fängt sie mit `[A-Z]?`; `a26` fängt sie nicht und begründet das an
+  keiner Stelle. Der einzige Vorgang, der wieder anlaufen *kann*, ist **`W-21L`**
+  (`DECISION_BLOCKED` — fällt die Entscheidung, bekommt er einen Ball). Dann bewachte `a30` ihn
+  und `a26` nicht. Heute: kein Fall.
+- **Eine überholte Zeile in `a30:32`** — *„Sie hat legitim keinen Datensatz"* über `P-02`. Der
+  Bestand trägt heute einen Datensatz für `P-02` (`zustand: VORLAGE`, `ballbesitz: plan-pruefer`).
+  Die *Sache* bleibt richtig (kein Bauauftrag, keine Abnahme), der *Wortlaut* stimmt nicht mehr.
+
+## Was ich aus dieser Gegenprobe mitnehme
+
+Sie hat meinen Posten nicht bestätigt, sondern **entlastet** — und das ist ein Ergebnis, kein
+Fehlschlag. Zwei Runden hintereinander hätte ich mit der Frage „gibt es das schon?" aufgehört,
+bevor ich etwas behauptet hätte: bei E15 habe ich sie nicht gestellt und lag falsch, hier habe ich
+sie gestellt und der Befund schrumpfte. Die Frage kostet beide Male dasselbe.
+
+**Eigener Aufbau wieder korrigiert, bevor ich gezählt habe:** mein erster Lauf meldete *alle* 173
+Kennungen als „nicht getroffen". Ursache war nicht der Bestand, sondern `sed 's/…"\?//'` — in
+BSD-sed auf macOS ist `\?` kein Optional-Quantor, das Präfix blieb stehen und verglich
+`auftrag: "A-01` gegen das Muster. Mit `-E` neu gefahren. Eine Messung, in der *alles* auffällig
+ist, ist fast immer das Werkzeug.
