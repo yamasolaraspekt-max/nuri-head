@@ -21907,3 +21907,86 @@ entlassener Mitarbeiter bleibt heute angemeldet, und das ist keine Rechte-, sond
 Zugangsfrage.
 
 **Nicht geprüft:** W0-10, W0-11, Gesamtauftrag Teststand.
+
+## §264 · DoR Z2-W0-10 — ERTEILT. Der Fehlbefund #116 ist wörtlich richtig und in der Folgerung falsch
+
+**Messstand.** Mein HEAD `0416bc8f`, Baum sauber. Integrationszweig `7c1f5897` (21.08. 20:34),
+4 neue Commits. Ballortung **42, unverändert**. Blätter **12**, Blöcke **9**. Basis-Stand der
+Prüfung: **`14dc15f3`**. Gemessen 21.08. 20:34–20:39.
+
+### 1 · Y-10 ist entschieden — mein Fund aus §260
+
+`7c1f5897`: *„Y-10 und Y-11 entschieden (Yama 21.08.) — **Token-Laufzeit 8h konfigurierbar**
+(W0-12 neu)."* §260 hatte Y-10 als offen gemeldet (`sanctum.expiration` NULL, Token unbegrenzt) —
+das Blatt W0-6 hatte ihn offengelegt, statt ihn still zu setzen. **Entschieden in rund 14 Minuten.**
+
+Drei Blätter ohne Block (W0-10, W0-11, W0-12) — fünftes Vorkommen, unverändert.
+
+### 2 · DoR Z2-W0-10 — die Belege
+
+| Beleg | frisch gemessen am Stand `14dc15f3` | |
+|---|---|---|
+| Basis-Stand `14dc15f3` | existiert: dirigent, 20:27, *„GESAMTAUFTRAG Teststand"* | **trifft** |
+| drei Routen `api/secure/master-sets`, `/{id}`, `-debug` | `routes/api.php:206` Prefix-Gruppe mit `:210` index und `:213` show, dazu `:218` debug | **trifft** |
+| Fehlbefund #116 in `docs/software-audit/fix-ledger.md:122` | `\| 116 \| security \| hoch \| routing \| routes/api.php:206-220 \| api/secure/master-sets fehlt Authentifizierungsmiddleware — nur Thrott…` | **trifft** |
+| `product-data/01-repository-inventory.md:430` und `:558` | `:430` *„der Pfadbestandteil ‚secure' ist **irreführend**"* · `:558` *„**Ungeschützte API-Endpunkte** (§11)"* | **trifft** |
+
+**Mein Pfad war falsch, nicht der des Blattes:** Ich suchte
+`docs/software-audit/product-data/…` und fand nichts; die Datei liegt unter `docs/product-data/…`.
+Das Blatt gibt den Pfad relativ und richtig an. **Vierter Pfad-Fehlgriff dieser Sitzung** (§252,
+§259, §262, jetzt) — und der erste, bei dem ich die Datei gesucht statt erneut geraten habe.
+
+### 3 · Der Kern: „keine Middleware" stimmt, „ungeschützt" nicht
+
+Das ist die Frage, an der W0-10s Kriterium E hängt, und sie ist scharf messbar.
+
+**Die Routen tragen wirklich keine Auth-Middleware:**
+
+    :208  ->middleware('throttle:60,1')      (Prefix-Gruppe index + show)
+    :219  ->middleware('throttle:60,1')      (debug)
+
+**Aber der Controller prüft:**
+
+    MasterSetApiController.php:28  $apiUser     = $request->header('X-API-USER')
+    MasterSetApiController.php:32  $apiPassword = $request->header('X-API-PASSWORD')
+    MasterSetApiController.php:59  ], 401),
+    MasterSetApiController.php:72  ], 401),
+
+**Damit ist beides wahr und beides verschieden:** Der Ledger-Eintrag #116 sagt *„fehlt
+Authentifizierungs**middleware** — nur Throttle"* — **wörtlich richtig**. Die Inventur bei
+`01-repository-inventory.md:558` nennt die Endpunkte *„**ungeschützt**"* — **das ist falsch**, denn
+`:28-72` verlangen zwei Header und antworten sonst mit 401.
+
+W0-10s Einordnung (*„Auth vorhanden, Konsument unbekannt"*) ist **bestätigt**, und Kriterium B
+(*„Schalter true: anonym 401, Header 200"*) beschreibt genau dieses Verhalten.
+
+**Der Fehlbefund ist also kein Irrtum über den Code, sondern über die Ebene:** Wer nur die
+Routendatei liest, sieht keine Auth. Das ist H-8 in Reinform — *„der Ort ist kein Beleg für die
+Wirkung"*, hier in der Umkehrung: **die Abwesenheit am einen Ort ist kein Beleg für die Abwesenheit
+überhaupt.**
+
+### 4 · Votum
+
+**DoR Z2-W0-10 — ERTEILT. Restpunkte: keine.**
+
+Ziel nach entschiedenem Weg B, Basis-SHA, Herkunft mit Y-11-Entscheidung, fünf Kriterien A–E,
+Rückweg über den Schalter. Zwei Dinge zeichnen das Blatt aus:
+
+**Erstens die Rückfall-Treue:** *„**Keine Löschung** (Rückfall-Regel; endgültige Entfernung ist ein
+eigener, späterer Posten nach Yamas gesonderter Freigabe)"* — und Kriterium D prüft es
+(*„Kein Code gelöscht (`git diff --numstat`)"*). Das ist die stehende Regel wörtlich angewandt.
+
+**Zweitens Kriterium E:** Der Auftrag berichtigt einen **fremden Fehlbefund an drei Stellen** mit,
+statt ihn stehen zu lassen. Ich habe alle drei Zeiger geprüft — sie treffen, und die Berichtigung
+ist sachlich richtig.
+
+### 5 · Ball
+
+**Generator**: W0-10 ist von meiner Seite frei.
+**Integrator**: W0-10, W0-11, W0-12 ohne Block.
+**Planner/Dirigent**: Bei Kriterium E empfehle ich, die Berichtigung **zu trennen** — `fix-ledger.md:122`
+ist wörtlich richtig und braucht nur den Zusatz „Auth im Controller"; falsch ist allein
+`01-repository-inventory.md:558` („ungeschützt"). Beides in einem Zug zu „berichtigen" würde einen
+korrekten Eintrag als falsch markieren.
+
+**Nicht geprüft:** W0-11, W0-12, Gesamtauftrag Teststand.
