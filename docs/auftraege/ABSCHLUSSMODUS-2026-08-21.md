@@ -245,8 +245,24 @@ Integration, Arbeitsbaum sauber). Wortlaut Yama, verbindlich:
 > Integrationscommit ausführen · nacktes `git commit` kann die Prüfung nicht umgehen.
 > Danach gilt weiterhin ausschließlich: A-42 → A-37 → Z0-I1.
 
-**Stopp-SHA:** *offen — wird erst nach Yamas bestätigtem Anhalten frisch gemessen und hier
-eingetragen; bis dahin gilt kein Stand als Stopp-Stand.* Die fünf Negativproben gehen als Kriterien
+**Anhalten vollzogen (Dirigent, 22:36:4x) — Weg (a), technisch statt manuell, weil Yama die Sitzung
+nicht sicher identifizieren konnte:** Identifikation über Transkript-Urheberschaft, nicht über Raten:
+Sitzung `7df19ed4` (Projekt `-Users-yamanuri-Documents-ticket`, geboren 19.08. 13:10:08) trägt die
+Commit-Botschaften `A-39 gebaut`, `Symbolebene gemessen`, `Zaehlaussagen in Kommentaren …` als
+**eigene Werkzeugaufrufe** (`tool_use`), setzt `TICKET_ROLLE=generator` (8×) und stand in 3290
+`cwd`-Feldern **ausschließlich** im gemeinsamen Checkout `ticket` bzw. `ticket/resources/planner/hausplaner`,
+nie in `ticket-rolle-generator`. Prozess: **PID 87659** (VS-Code-Claude, gestartet 19.08. 13:09:33,
+die einzige Sitzung dieses Starts **ohne** `--resume`; alle anderen fünf tragen fremde Sitzungs-IDs:
+87750→`303cefb6`, 87761→`4a2203cb` Release-Prüfer, 88049→`3870df7a` Plan-Prüfer, 88088→`aa0cddd3`,
+80335→`03737d75`). Maßnahme: `kill -STOP 87659` — **reversibel** (`kill -CONT 87659`), kein Kill,
+keine Datei verändert; nachher `ps` Status `T`, alle anderen `S`.
+**Stopp-SHA: `4e02c273`** (22:34:22, *ein sechster direkter Generator-Commit*: „M-3 der Maurer-Linse
+behoben"); `git status`: `auto/hausplaner-integration` **1 voraus** gegenüber `fork`, uncommittete
+Änderung `docs/FACHPRUEFUNG-DREI-LINSEN.md` (bleibt unangetastet — nicht gelöscht, nicht committet);
+Reflog-Spitze: `4e02c273` commit · `b92be043` ff rolle/plan-pruefer · `7f2e5cc6` merge · `6f89d060` commit
+· `a2501764` ff rolle/evaluator · `ada3b645` commit. Wiederaufnahme (`kill -CONT`) **nur** nach
+Yamas Freigabe und erst, wenn A-37 die `pre-commit`-Barriere mit belegter Negativprobe trägt.
+Die fünf Negativproben gehen als Kriterien
 in das erweiterte A-37-Blatt (Planner); der Integrator transportiert nichts aufgrund der seit 22:04
 entstandenen Generator-Bauten. Das V2-Konzept (`0d897b0e`) ist bereit für die spätere unabhängige
 Prüfung; **die technische Schreibsperre hat Vorrang vor jeder weiteren Konzept- oder Produktarbeit.**
