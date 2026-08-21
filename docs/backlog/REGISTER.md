@@ -46,6 +46,13 @@ in drei Monaten wieder auf und niemand weiß mehr, warum sie damals fiel.
 
 ---
 
+## Inventur-Läufe (dieses Fach, aktuell)
+
+| Blatt | Inhalt | Zustand |
+|---|---|---|
+| [`inventur-2026-08-20-z1.md`](inventur-2026-08-20-z1.md) | Rohbefunde Z1: 7 Befunde (4 Finder), Negativ-Ergebnis Fehler-Linse, Linsen-Übergabe | abgelegt |
+| [`fahrplan-2026-08-20.md`](fahrplan-2026-08-20.md) | Fahrplan in 3 Wellen + **5 Yama-Posten** (Y-1 Walmdach ist der teuerste) | **ENTWURF, Ball bei Yama** |
+
 ## Vorhandene Sammlungen (noch nicht migriert)
 
 | Sammlung | Zeilen | Bereich |
