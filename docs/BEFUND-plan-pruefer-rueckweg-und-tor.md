@@ -24822,3 +24822,91 @@ die Grundmenge ist geklärt. **Was ich dem Generator mitgebe, falls er weiterzä
 gehört.
 
 **Unverändert offen beim Planner:** die sechs Posten aus §293.
+
+## §295 · Berichtigung zu §294: `blatt-pruefen.py` liest sehr wohl den Bestand — und zwar den Arbeitsbaum samt unverfolgter Dateien
+
+**Messstand.** HEAD und Zweig beide `8d7b0a91`, Rückstand 0, Baum sauber. Nichts angekommen seit
+§294. Ballortung beidseitig **1** (P-02, VORLAGE) und **35** — nichts in meiner Bahn.
+Gemessen 21.08. 22:51–23:02.
+
+### 1 · Zuerst die Berichtigung
+
+§294 sagt über die ungeklärte Abweichung P3 22 gegen 21:
+
+> *„P3 arbeitet bei `:211-215` nur auf Kriterium und Umfeld und nicht auf dem Bestand."*
+
+**Das ist falsch.** Ich hatte den Ausschnitt gelesen, in dem der Fund erzeugt wird, und nicht den,
+in dem er **verhindert** wird. `scripts/blatt-pruefen.py:201`:
+
+    if os.path.exists(p) or p in bestand() or p.lstrip('./') in bestand():
+        continue
+
+Und `bestand()` bei `:172-175` fährt **`git ls-files` im Arbeitsverzeichnis**. **P3 liest den
+Bestand an zwei Stellen zugleich** — den verfolgten über git und den tatsächlichen über das
+Dateisystem. Mein Zitat war richtig abgeschrieben und an der falschen Stelle abgeschnitten: **die
+Bedingung, die einen Fund unterdrückt, steht vor der, die ihn erzeugt.**
+
+### 2 · Der Beweis am Bau-Stand, den ich in §294 nicht gefahren hatte
+
+Bau-Stand `824f8512` in einen **frischen, leeren Ordner** ausgelegt (258 Einträge, dasselbe
+Werkzeug), dort gelaufen:
+
+    im vollen Arbeitsbaum     257 geprueft · 1 uebersprungen · 158 Funde · P3 22
+    im leeren Ordner          257 geprueft · 1 uebersprungen · 202 Funde · P3 66
+    Bau berichtet             257          · 1               · 157       · P3 21
+
+**Gleiche Blätter, gleiches Werkzeug, dreimal eine andere Zahl.** Der Unterschied ist allein die
+Umgebung: Wo `resources/`, `app/` und `scripts/` fehlen, gilt jede verlangte Datei als abwesend, und
+P3 verdreifacht sich.
+
+### 3 · Und es zählt auch, was gar nicht versioniert ist
+
+Kontrollierte Probe, außerhalb des Repositoriums, mit einem eigens gebauten Blatt:
+
+    ohne die verlangte Datei          -> P3 feuert          (4 Funde)
+    dieselbe Lage, Datei UNVERFOLGT
+    danebengelegt                     -> P3 feuert NICHT    (2 Funde)
+
+Im Probeordner gibt es kein git, `bestand()` liefert also leer — **entschieden hat `os.path.exists`,
+und das sieht unverfolgte Dateien.**
+
+### 4 · Damit ist §294s offene Frage erklärt — der Art nach, nicht im Einzelfall
+
+Die Abweichung 21 gegen 22 ist **keine Übertragungsungenauigkeit**, sondern eine
+**Bestandsdifferenz**. Sie entsteht, wenn zwischen zwei Läufen eine verlangte Datei im Arbeitsbaum
+auftaucht oder verschwindet. Gemessen:
+
+    Loeschungen zwischen 824f8512 und HEAD                        keine
+    verlangte Pfade mit geaendertem Bestandsstatus (verfolgt)     keiner
+
+**Also blieb nur das Unverfolgte** — und der Arbeitsbaum des Generators um 22:16 ist eine flüchtige
+Größe, die ich nicht rekonstruieren kann und nicht rekonstruieren werde. **Ich sage, was die Klasse
+ist, und nicht, welche Datei es war.**
+
+### 5 · Was daraus folgt — und es ist mehr als eine Zahl
+
+**Eine Bestandszahl dieses Werkzeugs ist ohne ihren Laufort keine Zahl.** Und sie ist auch mit
+Commit-SHA nicht vollständig reproduzierbar, weil `os.path.exists` in den Arbeitsbaum greift. Die
+Zahl 157 ist damit richtig **für den Baum, in dem sie erhoben wurde** — sie ist nur nicht das, wofür
+eine Bestandszahl sonst gehalten wird.
+
+Das ist dieselbe Familie wie §280 und §289: **ein Beleg ist so haltbar wie das, woran er hängt.**
+Ein Zeilenzeiger hängt an einer Datei, eine Bestandszahl hängt an einem Arbeitsbaum — und der ist
+die flüchtigste Größe im Haus.
+
+### 6 · Ball
+
+**Generator** — kein Fehler im Bau, sondern eine Eigenschaft, die in die Meldung gehört. Zwei
+Vorschläge, beide klein:
+
+    (1) Die Bilanzzeile nennt den Laufort mit: "… , erhoben in <cwd> an <sha>".
+    (2) Der Kopf von blatt-pruefen.py sagt, dass :201 den ARBEITSBAUM prueft, nicht nur
+        die Versionsverwaltung — heute steht dort nur der Grund fuer die Bedingung,
+        nicht ihre Reichweite.
+
+**In eigener Sache:** §294s Satz über P3 ist mit diesem Abschnitt berichtigt. Der Fehler entstand,
+weil ich **den Erzeuger des Fundes gelesen habe und nicht seinen Unterdrücker** — und die
+Unterdrückung ist die interessantere Hälfte jeder Prüfung. Das nehme ich in meine Leseregel auf:
+**bei einer Prüfung immer beide Zweige lesen, den der meldet und den der schweigt.**
+
+**Unverändert offen beim Planner:** die sechs Posten aus §293.
