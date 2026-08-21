@@ -11258,3 +11258,62 @@ innen, und y ist immer negativ.* So steht die Ursache vor der Wirkung statt dane
 **Ball unveraendert beim Planner** (§107): Umstellung auf kaufmaennisches Runden **oder**
 Berichtigung der Grenzfall-Spalte in `W-01/3-FORMELN.md:9` — eine Fachentscheidung, keine Messfrage.
 Nach vier Tagen und neun Stunden liegt sie dort unbewegt.
+
+## §154 — Posten (a) an den aktiven Auftragsblättern: sechs gewanderte Zeiger, einer um 811 Zeilen
+
+*(Messstand 706cdb24, 21.08. 12:28. Nummer gegen den frischen HEAD gewaehlt: 91 Abschnitte, hoechste
+153 — 154 war frei.)*
+
+**Warum diese Zeigersorte.** §128/§134 massen Werkbank-Scheiben, §139/§140 die Prozessquelle, §149
+die Register. Die **aktiven Auftragsblaetter** waren nie dran — und dort fuehrt ein falscher Zeiger
+nicht einen Leser in die Irre, sondern einen **Bauenden**.
+
+**Grundmenge:** `docs/auftraege/aktiv/` mit **89** Blaettern, darin **121** Code-Zeiger der Form
+`datei.ext:zeile`, **94** verschiedene.
+
+### Erste Stufe: lösen sie auf?
+
+**90 von 94** treffen eine nichtleere Zeile, **0** eine Leerzeile. Die vier Ausnahmen sind
+aufgeklaert und **keine davon ist ein Mangel**:
+
+- **Zwei waren mein eigener Fehler.** `create_p_v_roofs_table.php:67` meldete ich als tot — ich hatte
+  `resources app scripts` abgesucht, die Datei liegt unter `database/migrations/`. Sie existiert und
+  `:67` traegt woertlich `$table->float('roof_azimuth')->nullable(); // 0=N, 90=E, 180=S, 270=W` —
+  genau die Fundstelle, die F-028 zitiert. **Grundmenge zu eng, nicht Bestand zu duenn.**
+- `datei.ts:44` ist **kein Zeiger**, sondern ein Beispiel im Fliesstext von
+  `B5N-belegzeilen-schreibweisen.md:50`.
+- `objekt.blade.php:141` ist mehrdeutig — den Namen tragen **drei** Dateien. Der Inhalt passt zu
+  `admin/hausplaner/objekt.blade.php:141`, und `W-33-start-und-projektwahl.md:90` nennt den vollen
+  Pfad. Nur die Kurzform in A-23 laesst offen, welche gemeint ist.
+
+### Zweite Stufe: „löst auf" ist der schwache Test
+
+§134 hat gezeigt, dass ein gewanderter Zeiger **immer** Inhalt traegt. Gezielt geprueft wurden
+deshalb die Zeiger in Dateien, die sich bewegt haben — **acht** Kandidaten, davon **sechs
+gewandert** und **zwei haltend**:
+
+| Zusage im Blatt | steht wirklich auf | Versatz | Blatt (Stand) |
+|---|---|---|---|
+| `dachAusschnitt.ts:72` = `istAchsenRechteck` | **:93** | +21 | A-01 (05.08.) |
+| `SzeneProjektionService.php:258` = `azimutRechteNormale` | **:271** | +13 | W-07N (12.08.) |
+| `enginePanels.ts:210` = `berechneSparren(…) as unknown` | **:227** | +17 | A-14 (12.08.) |
+| `commit-pruefen.sh:163` = der Doppelpfad `\|\| [ "$ALTER" -ge 120 ]` | **:510** | **+347** | A-08-N (08.08.) |
+| `commit-pruefen.sh:188` = `-- "$@"` | **:999** | **+811** | A-08-N (08.08.) |
+| `commit-pruefen.sh:503` = `node --check … 2>/dev/null` | **:773** | **+270** | A-08-N (08.08.) |
+| `studioDaten.ts:97` = `StudioModus` | **:97** ✓ | 0 | haelt |
+| `enginePanels.ts:176` = `keinGesamturteil: true,` | **:176** ✓ | 0 | haelt |
+
+**Drei der sechs stehen in EINEM Blatt** (`A-08-NACHTRAG-drei-nein.md`, Stand 08.08.) und zeigen
+alle in `scripts/commit-pruefen.sh` — eine Datei, die heute **1066 Zeilen** misst. In dreizehn Tagen
+ist sie so gewachsen, dass ein Zeiger um **811 Zeilen** danebenliegt. Was an `:188` steht, ist heute
+ein Kommentar; das gemeinte `-- "$@"` steht in der letzten Zehntelseite der Datei.
+
+**Und die zwei haltenden sind lehrreich.** `studioDaten.ts:97` traegt woertlich
+`export type StudioModus = 'start' | 'guided' | 'expert';` — obwohl §110 und §149 an **derselben
+Datei** einen Versatz von +10 belegt haben. Der Grund: `:97` liegt **oberhalb** der Einfuegestelle.
+**Eine Verschiebung hat eine Grenze**, und Zeiger darueber bleiben richtig. Wer eine gewanderte
+Datei sieht, darf nicht alle ihre Zeiger fuer falsch halten — genauso wenig wie fuer richtig.
+
+**Ball beim Planner**, mit benannten Zielen: `A-01`→`:93`, `W-07N`→`:271`, `A-14`→`:227`,
+`A-08-NACHTRAG` dreimal→`:510`, `:999`, `:773`. Fuenf Blaetter, sechs Zahlen. Alle sechs sind
+**aktive Auftraege**, keine Berichte.
