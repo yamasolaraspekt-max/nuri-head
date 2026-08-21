@@ -102,7 +102,7 @@
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-4** Wächter: keine neue Web-Route ohne permission: — Ratschen-Test mit Baseline | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-4-route-permission-waechter.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §258): Kriterium C zaehlt drei Routen, es sind sechs · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
-| **Z2-W0-5** Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md` · **DoR steht aus** — plan-pruefer, sechs Runden angekuendigt (§255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · **BLOCKIERT durch Y-6** (Yama): ohne entschiedenes Permission-Item `Planner` kein Routen-Gate fuer 61 Routen (plan-pruefer §257) |
+| **Z2-W0-5** Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md` · **DoR ERTEILT** (plan-pruefer §259) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · **Blockade-Vermerk berichtigt** (plan-pruefer §259): Y-6 blockiert W0-5 NICHT; offen ist stattdessen beim Planner, wer das Routen-Gate fuer `/planner/*` baut |
 | **Z2-W0-6** Nuriva-API: die vier Token-Abilities werden durchgesetzt — oder sie verschwinden | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-6-api-token-abilities.md` · **DoR steht aus** — plan-pruefer, sechs Runden angekuendigt (§255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 
 ### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
@@ -28181,23 +28181,34 @@ herkunft_dieses_datensatzes: |
 auftrag: "Z2-W0-5"
 titel: "Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: generator
+ballbesitz_nachgezogen: |
+  plan-pruefer -> generator, 21.08. vom integrator. TRANSPORT: die DoR ist gefahren.
+  Paragraf 259: "Generator: W0-5 ist von meiner Seite frei."
 ballbesitz_grund: |
   Die DoR steht aus. Paragraf 255: "Damit liegen sechs DoR in meiner Bahn" — eine ist
   gefahren (Z2-W0-1), fuenf folgen. Bis dahin haelt der Plan-Pruefer den Ball.
-blockiert_durch: |
-  Y-6, bei Yama. Paragraf 257 woertlich: "Y-6 blockiert W0-5 ausdruecklich — das
-  Blatt sagt es selbst. Solange kein Permission-Item Planner entschieden ist, kann
-  das Routen-Gate fuer 61 Routen nicht gebaut werden."
-  Der Ball bleibt beim plan-pruefer (DoR steht aus); die Blockade ist ein eigener
-  Umstand und KEIN Ballwechsel — sie wuerde sonst die ausstehende Pruefung verdecken.
-  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
+blockade_vermerk_berichtigt: |
+  BERICHTIGT 21.08. vom integrator auf Zustellung des plan-pruefers, Paragraf 259:
+  "Das Feld blockiert_durch am W0-5-Block berichtigen — es stammt aus meiner
+  ungenauen Formulierung in Paragraf 257, nicht aus W0-5." Y-6 BLOCKIERT DIESEN
+  AUFTRAG NICHT.
+  WAS DER FALL WIRKLICH IST, aus derselben Quelle: W0-3s abgrenzung-Feld sagt, die
+  Sache sei W0-5 und warte auf Y-6; W0-5s Nicht-Ziele sagen, die Web-Routen seien
+  W0-3/Y-6. BEIDE BLAETTER ZEIGEN AUF DAS JEWEILS ANDERE. Wer das Routen-Gate fuer
+  /planner/* baut, ist damit offen und liegt beim Planner — das ist der Ort, an dem
+  Y-6 wirkt, und es ist nicht dieser Block.
+  IN EIGENER SACHE: der vorherige Eintrag war ein WOERTLICHES Zitat aus Paragraf 257,
+  nicht meine Formulierung. Er war trotzdem falsch, und das ist die Grenze des
+  Transports: wer eine unrichtige Aussage getreu weitergibt, verbreitet sie. Dass
+  ich woertlich zitiert habe, ist der Grund, warum sie korrigierbar war — der Autor
+  hat seine eigenen Worte in meinem Feld wiedererkannt und widerrufen.
 blatt: "docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md"
 basis_sha: cb500067
 dor_beleg: |
-  steht aus — plan-pruefer, angekuendigt in Paragraf 255. Und das ist hier woertlich
-  gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
-  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+  ERTEILT — plan-pruefer, Paragraf 259 (21.08.).
+  VORHERIGE FASSUNG, ausdruecklich erhalten: steht aus (Paragraf 255).
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
 herkunft_dieses_datensatzes: |
   Das Blatt verlangt ihn woertlich: "status_steht_in: docs/STATUS.md — Integrator-Lauf
   erforderlich" (alle sechs tragen die Zeile). Zustand und basis_sha sind AUS DEM BLATTKOPF
