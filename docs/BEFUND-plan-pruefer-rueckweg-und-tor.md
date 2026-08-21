@@ -20764,3 +20764,82 @@ Das ist A-34 in seiner einfachsten Form, angewandt auf die Datei, die A-34s Rege
 **Nicht gemessen:** ob weitere Selbstverweise im Tor stehen. `:463` und `:844-846` nennen Zahlen
 (`59792`, `Z.217-268`), aber beide sind **Beispieltexte** für Meldungsformen, keine Verweise auf
 Stellen — ich habe sie geprüft und ausdrücklich nicht mitgezählt.
+
+## §251 · Der Transport ist offen, mein Rückstand ist durch — und S-1s Grundmenge ist zu eng
+
+**Messstand.** Mein HEAD `a44738be`, Baum sauber. **Der Integrationszweig hat sich bewegt:**
+`7a82ecfb` → **`90f2cfe3`** (21.08. 19:51:16), nach **320 Minuten** Stillstand. Gemessen
+21.08. 19:52–19:57.
+
+### 1 · Was angekommen ist
+
+**78 Commits** auf dem Integrationszweig, darunter drei, die mich unmittelbar betreffen:
+
+    da48c946  19:50  integrator: Rueckweg — rolle/plan-pruefer (74 Commit(s))
+    928680d6  19:49  generator: zustand: Z1-W1-1..5 · CODE_FERTIG · evaluator · bau 2bc0d2f2 60c04eef …
+    5fb066f4  19:49  integrator: Z1-W1-3 nachgezogen — DoR Fassung 2 erteilt
+    90f2cfe3  19:51  planner/dirigent: Inventur Z2 abgelegt — fuenf Routing-/Rechte-Befunde, drei LIVE
+
+**Mein gesamter Rückstand ist transportiert** — 74 Commits, §180 bis §250. Der in §234 gemessene
+Stillstand („alle sieben Rollen gleichzeitig seit 14:31") ist beendet; er hat **320 Minuten**
+gedauert, gegen eine längste Betriebslücke von 8,4 Minuten in den 24 Stunden davor.
+
+**Und §229 ist erledigt:** Die fünf Z1-W1 standen dort seit 250–292 Minuten auf `ENTWURF`, obwohl
+gebaut. Sie tragen jetzt `CODE_FERTIG` mit Ball beim Evaluator. Ballortung an `90f2cfe3`
+nachgemessen: `ballbesitz: plan-pruefer` **40 Treffer, unverändert** — nichts Neues in meiner Bahn.
+
+### 2 · Posten (b) am frisch angekommenen fremden Bericht
+
+Die Wache verlangt: *„JEDE Zahl frisch messen, auch die aus fremden Berichten."* Der Z2-Befund
+**S-1** (`docs/backlog/inventur-2026-08-21-z2.md:11`) trägt vier prüfbare Angaben. Ich prüfe die
+**Messgrundlage**, nicht den Befund — er gehört dem Planner/Dirigenten und wird zitiert, nicht
+nachgebaut (P-02).
+
+| Angabe in S-1 | frisch gemessen | |
+|---|---|---|
+| `routes/web.php:5314-5576`, `Route::prefix('planner')` | `:5314` trägt exakt `Route::prefix('planner')`, `:5576` das schließende `});` | **trifft** |
+| „**70 Routen**" | **61** `Route::`-Verben im Block (get 21, post 28, patch 5, delete 6, match 1) | **Differenz 9** |
+| „**fünf Controller** ohne Autorisierung" | Verzeichnis trägt **acht** | **Grundmenge zu eng** |
+| `DealMeasurementPolicy` als Vorbild | existiert | **trifft** |
+
+### 3 · Die Routenzahl: Differenz benannt, nicht als Fehler gemeldet
+
+61 gegen 70. **Ich melde das nicht als Fehler**, weil ich die Zählweise des Befunds nicht kenne:
+Eine `Route::`-Definition ist nicht dasselbe wie eine registrierte Route (`Route::match(['get','post'],…)`
+erzeugt zwei), und `php artisan route:list` zählt anders als ein `grep` über Quellzeilen. Was ich
+sagen kann: **Über die Quellzeilen sind es 61.** Wer die 70 nachvollziehen will, braucht die
+Zählweise dazu — und die steht nicht im Beleg.
+
+### 4 · Die Grundmenge ist zu eng — und die Erweiterung bestätigt den Befund
+
+S-1s Beleg nennt die fünf geprüften Controller namentlich:
+`PlannerPlan`, `PlannerItemState`, `PlannerMasterSet`, `PlannerAttendance`, `PlannerEmployeeApi`.
+Das Verzeichnis `app/Http/Controllers/Planner/` trägt **acht**. **Drei sind ungeprüft geblieben** —
+ich habe sie mit demselben Muster gemessen (vorher an einem bekannten Treffer verifiziert:
+`authorize` liefert im ganzen `app/` **141** Treffer, das Muster greift):
+
+    PlannerApiAuthController.php               929 Z.  authorize/Gate/Policy/can: 0   middleware(): 0
+    PlannerItemMaterialController.php          610 Z.  authorize/Gate/Policy/can: 0   middleware(): 0
+    PlannerMobileCustomerImageController.php   297 Z.  authorize/Gate/Policy/can: 0   middleware(): 0
+
+**Alle drei bestätigen den Befund.** Es sind nicht fünf Controller ohne Autorisierung, sondern
+**acht** — **1836 zusätzliche Zeilen**, die dieselbe Lücke tragen und in S-1s `erledigt_wenn` nicht
+vorkommen.
+
+Das ist kein Einwand gegen S-1, sondern seine **Erweiterung**: Wer die fünf absichert und die drei
+stehen lässt, hält `erledigt_wenn` für erfüllt und hat die Lücke nicht geschlossen. Besonders
+`PlannerApiAuthController` (929 Zeilen) und `PlannerMobileCustomerImageController` verdienen den
+Blick — Namen, die nach Authentifizierung und Kundenbildern klingen.
+
+### 5 · Ball
+
+**Planner/Dirigent** (S-1 gehört ihm): Die Controller-Grundmenge von fünf auf **acht** erweitern und
+`erledigt_wenn` entsprechend fassen. Die drei Nachträge sind oben gemessen und namentlich benannt.
+
+**Yama**: S-1 bis S-5 betreffen ein **LIVE-System** und tragen nach `CLAUDE.md` Sicherheits-,
+Rechte- und Datenschutzcharakter — sie werden nicht still automatisiert. Ich melde die Lage und
+messe sie nach; die Freigabe zur Behebung ist nicht meine.
+
+**Nicht gemessen:** S-2 bis S-5. Diese Runde hat einen Posten, und S-1 trug vier prüfbare Angaben —
+das war er. Die übrigen vier Befunde stehen für die nächsten Runden an, und ich sage es hier,
+damit „geprüft" nicht mit „S-1 geprüft" verwechselt wird.
