@@ -11765,3 +11765,66 @@ sie **nicht** geprueft und stelle das ausdruecklich fest, statt sie unter „hae
 **Ball beim Planner:** entweder `tanGrad` sagt bei α ≥ 90° ab (dann stimmt F-021), oder der
 Kommentar bei `…/dachformVorlagen.ts:268` hoert auf, „sicher" zu versprechen. Eine Fachentscheidung,
 keine Messfrage.
+
+## §161 — Posten (d) über alle 41 Scheiben: nicht das Alter sagt es voraus, sondern die Bewegung — und es trifft genau einen Zeiger
+
+*(Messstand f3e4da44, 21.08. 12:56. Nummer gegen den frischen HEAD gewaehlt: 98 Abschnitte, hoechste
+160 — 161 war frei.)*
+
+**Herkunft der Fragestellung:** §129 hat gezeigt, dass eine Scheibe nicht haelt, weil sie sorgfaeltig
+ist, sondern weil ihre Zieldatei stillsteht. Diese Runde prueft das ueber den **ganzen** Bestand
+statt an einem Beispiel.
+
+### Die Erhebung
+
+Von **41** Werkbank-Scheiben haben **23** eine Code-Zieldatei (`.ts`/`.tsx`, Testdateien
+ausgenommen). Fuer jede: Schnitt-Commit der Scheibe, Alter in Minuten, Commits auf die Zieldatei
+seither. **Sechs** haben ein bewegtes Ziel — jede um genau **einen** Commit:
+
+```
+W-14     9461 Min   toolRegistry.ts      1     <- neu in meinem Bestand
+W-20    12967 Min   holzMengen.ts        1     \
+W-21     6762 Min   auswechslung.ts      1      |  Herkunftsvermerk 78e4cc0e,
+W-25     7133 Min   holzBauteile.ts      1      |  bereits in §134 erfasst
+W-43     1374 Min   holzBauteile.ts      1     /
+W-31    10912 Min   enginePanels.ts      1     <- neu in meinem Bestand
+```
+
+**Das Alter sagt nichts voraus.** Die **aeltesten** Scheiben — W-01 (15 320 Min) und W-02
+(15 306 Min) — haben **null** Bewegung; die eine, bei der ein Zeiger faellt, ist juenger als beide.
+§129s Unterscheidung haelt ueber die ganze Grundmenge.
+
+### W-14 ist unberührt — und zeigt, warum die Grenze zählt
+
+`resources/planner/hausplaner/app/tools/toolRegistry.ts` wuchs mit `ec12e9b3` (15.08. 11:05) um
+**+27 Zeilen ab `:291`**. W-14s beide Zeiger lauten `toolRegistry.ts:249` und `:273` — **beide
+oberhalb der Einfuegestelle**, also beide unveraendert richtig. Dieselbe Lehre wie in §154 bei
+`studioDaten.ts:97`: **eine bewegte Datei macht nicht alle ihre Zeiger falsch.**
+
+### W-31 trifft es — an einer Stelle, dreimal zitiert
+
+`resources/planner/hausplaner/app/dashboard/enginePanels.ts` wuchs mit `62736115` (20.08. 13:12,
+*„STOPP-REGEL — die Schneelastzone kam nie in der Formel an"*) um netto **+20** Zeilen; die Hunks
+liegen bei `:189` (laengenneutral), `:411` (+14) und `:424`→`:438` (+6).
+
+W-31s vier Zeiger: `:32`, `:380`, `:403` liegen **oberhalb** von `:411` und halten. **`:509` nicht:**
+
+| | |
+|---|---|
+| W-31 behauptet | `enginePanels.ts:509` = `alsPvEingabe(...)`, *„der Adapter (W-37)"* |
+| vor `62736115` | `export function alsPvEingabe(werte: Record<string, string>): PvEingabe {` ✓ |
+| **heute an `:509`** | `...(feldZahl(werte, 'psiRandverbund') !== undefined ? { … }` |
+| **steht wirklich auf** | **`:529`** — genau +20 |
+
+**Und der Zeiger steht dreimal:**
+`docs/rollenkette/werkbank/02-WERKZEUGE/W-31-pv-schnellbelegung/4-BEDIENUNG.md:13`,
+`…/4-BEDIENUNG.md:35` und `…/2-FUNKTION.md:87`.
+
+### Was diese Runde beiträgt
+
+**Ein Ertrag von einem Zeiger aus 41 Scheiben ist ein gutes Ergebnis, kein duennes.** Die Erhebung
+sagt vor allem, wo **nicht** zu suchen ist: 17 Scheiben ohne Code-Ziel, 17 mit unbewegtem Ziel, vier
+bereits in §134 erfasst. Uebrig bleiben zwei ungeprueste Faelle, davon einer unberuehrt und einer
+mit genau einer falschen Zahl. **Das ist die Ausbeute, die eine gezielte Suche haben soll.**
+
+**Ball beim Planner**, klein und benannt: drei Zitate derselben Zahl auf `:529` nachziehen.
