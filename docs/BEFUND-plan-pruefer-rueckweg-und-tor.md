@@ -18010,3 +18010,88 @@ Planner und folgt NACH diesem Auftrag"*) — sie steht seit dem 12.08. offen.
 
 **Beim Integrator:** unverändert der Rückweg (45 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
 und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
+
+---
+
+## §223 — Posten (c): F-003 hält in allen sieben Angaben. Mein erster Rechenfall hätte sie widerlegt — er war der falsche
+
+**Messstand c915b15d, Baum sauber, 0 neue Commits. Integrationszweig lokal 7a82ecfb (14:31, Alter
+203 Min). Rückstand: ich 40 · planner 104. `docs/STATUS.md` und die 89 Blätter unbewegt, kein Ball in
+meiner Bahn. Erhebung 21.08. 17:55–17:57.**
+
+Gegenstand: **F-003 · Lotfußpunkt auf eine Strecke**, `FORMELSAMMLUNG.md:29-73`. Tragend, weil sie die
+Grundlage des Fangens ist — jede Zeichenoperation im Planer läuft über sie.
+
+### 1. Sieben Angaben, sieben Treffer
+
+Die Formel trägt einen eigenen Nachprüfungsabschnitt (*„Am Bestand nachgezogen (10.08.) — der Code
+weicht ZWEIMAL ab, beide Male mit Grund"*). Alle seine Angaben heute nachgemessen:
+
+    Angabe des Blattes                                  gemessen
+    fangKern.ts:96-105  lotAufGerade()                  :96 export function lotAufGerade(…)   TRIFFT
+    0 Treffer auf Math.max / Math.min / clamp           0                                     TRIFFT
+    return { x: a.x + t*dx, y: a.y + t*dy }  (t unbegrenzt)  :105 wörtlich                    TRIFFT
+    fangKern.ts:100   laenge2 < 1e-9  (Epsilon)         :100 if (laenge2 < 1e-9) {            TRIFFT
+    fangKern.ts:147   „Lot auf die VERLÄNGERTE Gerade"  :147 wörtlich                         TRIFFT
+    „zwei von sieben Fangarten"                         FangArt hat 7 Werte (:26-33);
+                                                        'achse' (:163) und 'verlaengerung'
+                                                        (:171) nutzen die unbegrenzte Fassung TRIFFT
+    „ein t in Millionenhöhe"                            5·10⁹ bei 1e-7 mm                     TRIFFT
+
+**Sieben von sieben.** Die beiden Abweichungen zwischen Formel und Code sind im Blatt begründet, und
+die Begründungen halten: die fehlende Begrenzung auf `[0,1]` ist Absicht (sonst fielen zwei Fangarten
+weg), und die Epsilon-Prüfung statt der exakten Null ist die sicherere Fassung.
+
+### 2. Zwei Beiträge, die im Blatt nicht stehen
+
+**Die Epsilon-Schwelle in einer Größe, die man sich vorstellen kann.** Das Blatt nennt `laenge2 < 1e-9`
+— das ist eine **quadrierte** Länge und lädt zur Verwechslung ein. Umgerechnet:
+
+    laenge2 < 1e-9   entspricht   Streckenlänge < 3,162·10⁻⁵ mm = 0,0316 Mikrometer
+
+Die Schwelle liegt drei Zehnerpotenzen unter einem Mikrometer und damit weit unter jeder
+Zeichengenauigkeit. **Sie kann keine echte Wand abweisen.**
+
+**Die Millionenhöhe hat eine Bedingung.** Das Blatt schreibt: *„Eine fast-entartete Strecke (zwei
+Punkte 10⁻⁷ mm auseinander) besteht den Test `= 0` und liefert dann ein `t` in Millionenhöhe."*
+Gerechnet, mit der Formelfassung (exakte Null):
+
+    P auf der Geraden      (0,1000) über Strecke (0,0)→(1e-7,0):   t = 0
+    P neben der Geraden  (500,1000) über dieselbe Strecke:         t = 5·10⁹
+
+**Der Fall tritt nur ein, wenn der Punkt nicht auf der Geraden liegt** — und das ist beim Fangen der
+Normalfall, weil der Mauszeiger ja gerade *nicht* auf der Wand steht. Die Zahl ist dabei nicht „in
+Millionenhöhe", sondern bei 10⁻⁷ mm in **Milliardenhöhe**; das Blatt untertreibt. Die Code-Fassung
+weist beide Fälle ab (`1e-14 < 1e-9`).
+
+### 3. Mein erster Rechenfall hätte die Behauptung widerlegt
+
+Meine erste Rechnung setzte den Punkt **auf** die Gerade und ergab `t = 0` für alle Streckenlängen.
+Damit stand da: *„die Millionenhöhe tritt nicht ein, das Blatt behauptet zu viel"* — ein Fehlbefund,
+der zwei Zeilen später fertig gewesen wäre. Erst die Gegenprobe mit einem Punkt **neben** der Geraden
+brachte die 5·10⁹.
+
+Das ist dieselbe Klasse wie in §222, nur in der Rechnung statt im Suchmuster: **die Grundmenge muss zur
+Frage passen, und bei einer Formel heißt Grundmenge: der Eingabefall.** Ein Lotfußpunkt-Test mit einem
+Punkt, der schon auf der Geraden liegt, prüft nichts — er ist der einzige Fall, in dem das Ergebnis
+unabhängig von der Streckenlänge ist.
+
+**Und wieder hat mich dasselbe gerettet wie in §222:** das Ergebnis widersprach dem Blatt zu deutlich.
+Ein Nachprüfungsabschnitt, der sechs andere Angaben exakt trifft, irrt selten in der siebten.
+
+### Ball
+
+**Kein Befund gegen F-003.** Sieben von sieben Angaben treffen, beide Code-Abweichungen sind begründet
+und die Begründungen halten. Das ist der siebte geprüfte Gegenstand dieser Reihe, der trägt — nach
+§210, §212, §217, §218, §221 und §222.
+
+**Zur Erwägung an den Planner, ohne Ball:** zwei Ergänzungen, die die Fassung schärfer machen würden,
+ohne sie zu ändern —
+
+1. `laenge2 < 1e-9` ist eine quadrierte Länge; die entsprechende Streckenlänge (0,0316 µm) danebenzu­
+   schreiben nimmt einer künftigen Prüfung die Verwechslung ab.
+2. Der Satz über die Millionenhöhe gilt nur für Punkte **neben** der Geraden. Liegt der Punkt darauf,
+   ist `t = 0` — und wer mit diesem Fall nachrechnet, hält die Angabe für falsch. Ich habe es getan.
+
+**Beim Integrator:** unverändert der Rückweg (45 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
+und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
