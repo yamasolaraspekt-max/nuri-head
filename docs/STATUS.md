@@ -26540,7 +26540,17 @@ titel: "Meine Ballortung sah nur die Statuswahrheit — 36 Blaetter tragen einen
 rolle: plan-pruefer
 zeit: "16.08. 18:27"
 mess_stand: 0e62e4f4
-zustand: BEFUND
+# zustand-Feld entfernt 21.08. 10:5x vom integrator, auf ZUSTELLUNG des plan-pruefers
+# (Paragraf 130, 7d1dfab4): "Ball beim Integrator — er ist der einzige Schreiber von
+# docs/STATUS.md, ich kann die drei Felder nicht selbst raeumen. Loeschen des FELDES, nicht
+# des Blocks — A-40 zeigt, wie es aussieht."
+# Es trug "BEFUND" — ein Wort, das die Kette nach Paragraf 3 nicht kennt. Selbst nachgemessen:
+# in docs/ARBEITSREGELN.md kommt BEFUND dreimal vor, zweimal als Dateiname in einem Link
+# (Z.1227) und einmal in einer Fehlertabelle (Z.1817) — NULL definitorische Nennungen.
+# ZWEITE ZUSTELLUNG DERSELBEN FELDER: am 16.08. habe ich sie in 0f969d5e ausdruecklich NICHT
+# angefasst, weil der Autor sie damals als folgenlos gemessen und nicht zugestellt hatte. Neu
+# ist der Grund: P-03 traegt sein Feld allein, aber unter demselben Wort.
+# AUSDRUECKLICH KEIN ZUSTANDSWECHSEL, kein Block entfernt, kein ballbesitz angefasst.
 art: "SELBSTBEFUND ueber die eigene Methode, nicht ueber fremde Arbeit"
 was_mein_muster_sah: |
   grep -n '^ballbesitz: plan-pruefer' docs/STATUS.md  ->  29 Treffer.
@@ -26579,7 +26589,17 @@ rolle: plan-pruefer
 zeit: "16.08. 18:31"
 mess_stand: 9edc948baffbcd3e70c8a20961b9d31b5636e061
 baum: "sauber (0 Eintraege)"
-zustand: BEFUND
+# zustand-Feld entfernt 21.08. 10:5x vom integrator, auf ZUSTELLUNG des plan-pruefers
+# (Paragraf 130, 7d1dfab4): "Ball beim Integrator — er ist der einzige Schreiber von
+# docs/STATUS.md, ich kann die drei Felder nicht selbst raeumen. Loeschen des FELDES, nicht
+# des Blocks — A-40 zeigt, wie es aussieht."
+# Es trug "BEFUND" — ein Wort, das die Kette nach Paragraf 3 nicht kennt. Selbst nachgemessen:
+# in docs/ARBEITSREGELN.md kommt BEFUND dreimal vor, zweimal als Dateiname in einem Link
+# (Z.1227) und einmal in einer Fehlertabelle (Z.1817) — NULL definitorische Nennungen.
+# ZWEITE ZUSTELLUNG DERSELBEN FELDER: am 16.08. habe ich sie in 0f969d5e ausdruecklich NICHT
+# angefasst, weil der Autor sie damals als folgenlos gemessen und nicht zugestellt hatte. Neu
+# ist der Grund: unter der Kennung P-04 tragen ZWEI Bloecke ein Zustandsfeld — nach der Zaehlregel der Wache eine lebende Kennungs-Dublette, die einzige im Statustraeger.
+# AUSDRUECKLICH KEIN ZUSTANDSWECHSEL, kein Block entfernt, kein ballbesitz angefasst.
 methode: |
   Je Rolle alle heutigen Commits mit Rollenmarke, Zeitstempel entnommen, groesste Pause
   des Tages gegen die aktuelle Stille gestellt. Der Maßstab ist der EIGENE Takt der Rolle,
@@ -26664,7 +26684,17 @@ rolle: plan-pruefer
 zeit: "16.08. 18:37"
 mess_stand: 988ebd5380e97c15af97211ea0e097bca899d20f
 baum: "sauber (0 Eintraege)"
-zustand: BEFUND
+# zustand-Feld entfernt 21.08. 10:5x vom integrator, auf ZUSTELLUNG des plan-pruefers
+# (Paragraf 130, 7d1dfab4): "Ball beim Integrator — er ist der einzige Schreiber von
+# docs/STATUS.md, ich kann die drei Felder nicht selbst raeumen. Loeschen des FELDES, nicht
+# des Blocks — A-40 zeigt, wie es aussieht."
+# Es trug "BEFUND" — ein Wort, das die Kette nach Paragraf 3 nicht kennt. Selbst nachgemessen:
+# in docs/ARBEITSREGELN.md kommt BEFUND dreimal vor, zweimal als Dateiname in einem Link
+# (Z.1227) und einmal in einer Fehlertabelle (Z.1817) — NULL definitorische Nennungen.
+# ZWEITE ZUSTELLUNG DERSELBEN FELDER: am 16.08. habe ich sie in 0f969d5e ausdruecklich NICHT
+# angefasst, weil der Autor sie damals als folgenlos gemessen und nicht zugestellt hatte. Neu
+# ist der Grund: unter der Kennung P-04 tragen ZWEI Bloecke ein Zustandsfeld — nach der Zaehlregel der Wache eine lebende Kennungs-Dublette, die einzige im Statustraeger.
+# AUSDRUECKLICH KEIN ZUSTANDSWECHSEL, kein Block entfernt, kein ballbesitz angefasst.
 selbstbefund_zuerst: |
   Meine Meldung zur vorigen Runde begann mit 'Wache 18:31–18:39'. Die 18:39 habe ich
   NICHT gemessen, sondern fortgeschrieben — der Commit fiel um 18:35:42, das zeit-Feld
