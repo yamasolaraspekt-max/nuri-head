@@ -25099,3 +25099,86 @@ nachgerechnet, alle sechs stimmen.**
 
 **Unverändert offen beim Planner:** die sechs Posten aus §293. **Beim Generator:** die zwei
 Vorschläge aus §295.
+
+## §298 · §297s offene Frage beantwortet: das leere Polygon ist nicht erreichbar — und damit stufe ich meinen eigenen Fund herab
+
+**Messstand.** HEAD `c10c25a7`, Baum sauber, Zweig `830774ba`, Rückstand 0, eine eigene noch nicht
+im Zweig. Nichts angekommen seit §297. Ballortung beidseitig **1** (P-02, VORLAGE) und **35** —
+nichts in meiner Bahn. Gemessen 21.08. 23:03–23:12.
+
+§297 hat gemeldet, dass zwei Schranken in `dachGeometrie.ts` ein leeres Polygon als NaN durchlassen,
+und ausdrücklich offen gelassen, **ob so ein Polygon im Betrieb entstehen kann**. Das entscheidet
+die Schwere, also messe ich es.
+
+### 1 · Drei Wege zu einem RoofNode — alle drei gemessen, alle drei dicht
+
+**Weg 1, Erzeugung** (`HausplanerApp.tsx:1006`):
+
+    polygon: ausKontur ? letzteKontur : gebaeudeUmriss()
+      ausKontur  verlangt letzteKontur.length >= KONTUR_MIN_PUNKTE, und
+                 kontur.ts:70 setzt KONTUR_MIN_PUNKTE = 3
+      gebaeudeUmriss()  gibt bei 0 Waenden ein festes 8x10-m-Rechteck (:755-757),
+                        sonst genau vier Eckpunkte der Bounding-Box (:762)
+
+**Nie leer, in keinem Zweig.**
+
+**Weg 2, Laden** (`main.tsx:62`): `sceneDocumentSchema.safeParse(migriereSzene(roh))` — und der
+Import allein hätte mir nicht gereicht, deshalb die Anwendungsstelle geöffnet: `:63-67` meldet
+Fehlschläge. Was das Schema verlangt:
+
+    domain/validation.ts:244            polygon: z.array(punkt2).min(3)
+    scene-document-v2.schema.json       /properties/roofs/items/properties/polygon
+                                        type=array  minItems=3   (dazu drei weitere Stellen)
+
+**Weg 3, Vervielfältigung** (`sammelBefehle.ts:130`): `{ type: 'ADD_ROOF', roof: dup.roof }` kopiert
+ein **vorhandenes** Dach — es erbt also die Zusage aus Weg 1 oder Weg 2.
+
+### 2 · Die Befehlsschicht selbst prüft nichts — und das bleibt richtig zu wissen
+
+`applyCommand.ts:247-258` prüft bei `ADD_ROOF` drei Dinge: dass das Level existiert, dass es noch
+kein Dach hat, und dass die Koordinaten ganzzahlig sind. **Die Polygonlänge prüft es nicht**, und
+im ganzen Befehlsweg gibt es **keine** Schemaprüfung (`safeParse` 0 Treffer unter `commands/` und
+`store/`).
+
+Besonders fein: `pruefeDachGanzzahlig` (`:61-64`) läuft **über** das Polygon —
+`roof.polygon.flatMap(...)` — und ist bei einem leeren Polygon trotzdem still, weil `[]` nichts zu
+prüfen liefert. **Eine Schleife über nichts ist kein Einspruch.**
+
+### 3 · Also: der Fund aus §297 ist latent, nicht lebend
+
+**Ich stufe ihn herab.** Ein leeres `roof.polygon` erreicht `dachFlaechen` heute auf keinem der drei
+Wege. Die NaN-Rechnung aus §297 bleibt richtig gerechnet — sie ist nur **nicht auslösbar**.
+
+**Was davon stehen bleibt, und es ist der eigentliche Satz:**
+
+    dachGeometrie.ts ist nicht VERTEIDIGT, sondern GEDECKT.
+
+Seine Sicherheit liegt in drei Zusagen, die alle **woanders** stehen — im Klick-Handler, im
+Ladeschema, im Erbgang der Vervielfältigung. In der Datei selbst steht **null** Längen- und **null**
+Endlichkeitsprüfung, während neun andere Stellen der Insel `polygon.length >= 3` mitführen
+(§297). **Und die Schicht dazwischen, die Befehle, prüft es auch nicht.** Ein künftiger Erzeuger —
+ein neuer Befehl, ein Importeur, ein Werkzeug, das ein Dach programmatisch baut — träfe auf keine
+einzige Schranke.
+
+### 4 · Ein eigener Beschriftungsfehler
+
+Meine Ausgabe druckte *„(leer = nicht im Bestand)"* unter ein Ergebnis, das **einen Treffer** hatte:
+Die Schema-Datei existiert. Die Messung war richtig, die Beschriftung stand fest im Skript und
+passte nicht zum Ergebnis. **Ein Etikett, das nicht mitmisst, wird bei jedem Lauf mitgedruckt** —
+dieselbe Klasse wie die Beschriftung *„(stillgelegt)"* in §294, dort bei einem fremden Werkzeug,
+hier bei meinem eigenen Einzeiler.
+
+### 5 · Ball
+
+**Planner** — der Posten aus §297 bleibt, aber **herabgestuft und mit neuer Begründung**:
+
+    nicht mehr:  "zwei Schranken lassen NaN durch"   (richtig, aber nicht auslösbar)
+    sondern:     Vorsorge nach eigenem Hausbrauch — neun Stellen fuehren
+                 polygon.length >= 3 mit; dachGeometrie.ts und die Befehlsschicht
+                 nicht, und beide liegen VOR jedem kuenftigen Erzeuger.
+
+Das ist kein Fehler und keine Dringlichkeit. **Es ist die Frage, ob eine Datei ihre Voraussetzung
+selbst prüft oder darauf vertraut, dass es drei Schichten weiter jemand tut.**
+
+**Unverändert offen:** die sechs Posten aus §293, die zwei aus §295, und der zweite Punkt aus §297
+(`:158` könnte die geschützte Fassung rufen).
