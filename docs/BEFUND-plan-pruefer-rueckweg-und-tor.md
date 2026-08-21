@@ -13826,3 +13826,102 @@ wenn ich die Belegzeile im Abschnitt markiere, kommt sie mit.
 
 *(Der Befund aus §182 selbst ist von der Warnung unberührt: B5 prüft die Form der Botschaft, nicht
 die Messung. Die drei falschen Zahlen sind gezählt und stehen.)*
+
+## §183 — Posten (c): F-022 setzt zwei Ausdrücke gleich, die sich um Faktor 2 unterscheiden — der Code weiß es besser
+
+**Messstand** `cdebb067` · Baum sauber · 0 neue Commits, weder bei mir noch auf dem
+Integrationszweig (`7a82ecfb`). Dessen Arbeitsbaum trägt **drei** ungesicherte Einträge, darunter
+eine **neue, noch unverfolgte Datei** `docs/backlog/inventur-2026-08-21-z2.md` — eine Inventur Z2 im
+Entstehen. Flüchtig, nur gemeldet; ich messe nichts an ungesicherter Arbeit.
+
+Gegenstand: **F-022 · Dachneigung umrechnen**
+(`docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md:253-263`), die zwölfte der 27 Formeln,
+die ich durchrechne. Gewählt, weil sie mit F-023 (§172) dieselbe Domäne teilt und weil ihre
+Sparrenlänge in die Materialmenge geht.
+
+```
+:257  Prozent → Grad:      α = arctan(p / 100)
+:258  Grad → Prozent:      p = tan(α) · 100
+:259  Sparrenlänge:        s = h / sin(α)   =   b / cos(α)
+:260  Firsthöhe (Sattel):  h = (b/2) · tan(α)      b = Gebäudebreite
+```
+
+### Die beiden Ausdrücke für `s` sind nicht dasselbe
+
+`b` wird in **:260** ausdrücklich definiert: **Gebäudebreite**. Setzt man `h = (b/2)·tan α` in
+`h/sin α` ein, kommt `b/(2·cos α)` heraus — die Zeile daneben sagt `b/cos α`. Durchgerechnet mit
+b = 8 m:
+
+```
+ α      h=(b/2)tan α     h/sin α      b/cos α    Verhältnis
+15°         1.0718        4.1411       8.2822       2.000
+30°         2.3094        4.6188       9.2376       2.000
+35°         2.8008        4.8831       9.7662       2.000
+45°         4.0000        5.6569      11.3137       2.000
+60°         6.9282        8.0000      16.0000       2.000
+```
+
+**Exakt Faktor 2, bei jedem Winkel.** Das Gleichheitszeichen in `:259` gilt nur, wenn `b` dort die
+**Sparren-Grundlinie** meint (die halbe Spannweite), nicht die Gebäudebreite. Zwei Zeilen
+auseinander trägt derselbe Buchstabe zwei Bedeutungen, und definiert ist nur die zweite. **Wer
+F-022 wörtlich anwendet, baut den Sattelsparren doppelt so lang.**
+
+### Der Code macht es richtig — und unterscheidet genau das, was die Formel verwischt
+
+```
+dachformVorlagen.ts:299  sattelSparrenlaengeM  (widthM / 2 + overhangTraufM) / sichererCos(pitchGrad)
+dachformVorlagen.ts:304  sattelFirstRiseM      (widthM / 2) * tanGrad(pitchGrad)
+dachformVorlagen.ts:312  pultSparrenlaengeM    (widthM + 2 * overhangTraufM) / sichererCos(pitchGrad)
+dachformVorlagen.ts:317  pultRiseM             widthM * tanGrad(pitchGrad)
+```
+
+**Sattel: halbe Breite. Pult: volle Breite.** Genau die Unterscheidung, die F-022 nicht macht —
+denn ein Pultdach hat *ein* Gefälle über die ganze Breite, ein Satteldach zwei über je die Hälfte.
+
+Und der Code ist **in sich stimmig**: `sattelSparrenlaengeM(8, 0, α)` gegen
+`sattelFirstRiseM(8, α) / sin α`, an sechs Winkeln gerechnet —
+
+```
+15°  4.141105 = 4.141105     45°  5.656854 = 5.656854
+30°  4.618802 = 4.618802     60°  8.000000 = 8.000000
+35°  4.883098 = 4.883098     85° 45.894853 = 45.894853
+```
+
+**Sechsmal gleich bis auf die letzte Stelle.** Die Identität `s = h/sin α` ist im Code erfüllt; nur
+`b/cos α` aus dem Blatt ist es nicht, weil dort `b` etwas anderes heißt.
+
+### Die Prozent-Umrechnung existiert nirgends
+
+`:257`/`:258` sind der Zweck der Formel (*„Anwender denkt in Grad oder Prozent"*), und `:262` trägt
+den Grenzfall: *„45° = 100 %, **nicht** 50 %. Das ist der häufigste Denkfehler bei Dachneigungen."*
+
+Gemessen, Grundmenge **das ganze Repo** (`app/` und `resources/`, alle Endungen, ohne Tests):
+**0 Treffer** für eine Neigung in Prozent. Fangprobe, damit die Null keine ausgefallene Messung ist:
+das Wort „Prozent" kommt in **31** Dateien vor — das Muster greift, der Zusammenhang fehlt. Die
+13 `Math.atan`-Stellen der Insel sind ausnahmslos Winkel aus Vektoren
+(`wallGeometry.ts:46`, `roomDetection.ts:120`, `dachVerschneidung.ts:52` …), keine einzige eine
+Prozentumrechnung.
+
+**Der Grenzfall bewacht damit eine Umrechnung, die es nicht gibt.** Anders als bei F-023 (§172) ist
+das **kein Fehler im Code** — es ist eine Formel, die eine Fähigkeit beschreibt, die nie gebaut
+wurde. Wer sie später baut, findet den richtigen Grenzfall vor; wer heute danach sucht, findet
+nichts.
+
+### Zusammengefasst
+
+| Teil von F-022 | Befund |
+|---|---|
+| `α = arctan(p/100)`, `p = tan(α)·100` | **nicht implementiert**, repo-weit 0 Treffer |
+| `s = h/sin(α)` | im Code erfüllt, sechsmal exakt nachgerechnet ✓ |
+| `s = b/cos(α)` mit `b` = Gebäudebreite | **falsch um Faktor 2** — gilt nur für die halbe Spannweite |
+| `h = (b/2)·tan(α)` | im Code als `sattelFirstRiseM` ✓ |
+| Grenzfall „45° = 100 %" | richtig, aber ohne Gegenstand |
+
+**Ball beim Planner:** `FORMELSAMMLUNG.md:259` braucht entweder ein eigenes Zeichen für die
+Sparren-Grundlinie oder den Zusatz, dass `b` dort die **halbe** Gebäudebreite ist — und die
+Pult-Ausnahme (volle Breite) gehört daneben, weil der Code sie führt und die Formel nicht.
+Zweitens: entweder wird die Prozent-Umrechnung als „nicht gebaut" markiert, oder der Grenzfall
+wandert zu dem Auftrag, der sie baut. **Kein Ball beim Generator** — sein Code ist an dieser Stelle
+genauer als die Formel, aus der er stammen soll.
+
+Damit sind **12 von 27** Formeln durchgerechnet.
