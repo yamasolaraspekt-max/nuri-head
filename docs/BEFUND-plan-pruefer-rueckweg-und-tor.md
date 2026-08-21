@@ -10791,3 +10791,76 @@ genau die Rueckfall-Regel.
 
 **Ball beim Generator** fuer den Bau, **Eintragen** beim **Integrator** (`docs/STATUS.md`: weder
 Tafelzeile noch Datensatz, §138). Naechste Runde: DoR fuer `Z1-W1-5` — die letzte der fuenf.
+
+## §147 — DoR Z1-W1-5 (insulationType ehrlich ausweisen): NICHT ERTEILT. Der Auftrag schreibt eine Messung in den Code, und die Messung ist um eins daneben
+
+*(Messstand 0ae808d8, 21.08. 12:00. Nummer gegen den frischen HEAD gewaehlt: 84 Abschnitte, hoechste
+146 — 147 war frei. Fuenfte und letzte DoR aus §142. Kennung aus der Kopfzeile.)*
+
+**Blatt:** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` (40 Z.),
+`zustand: ENTWURF`, `basis_sha: 11f7c4c3`.
+
+### Die tragende Behauptung hält — und ich habe sie schärfer geprüft als das Blatt
+
+*"keine Schreibstelle im ganzen Baum"*: mit einem Muster auf **Zuweisung** gemessen
+(`insulationType` gefolgt von `:` oder `=` mit Wert) gibt es in `resources/` **null** Treffer; der
+einzige Formtreffer ist die Zod-Deklaration selbst (`domain/validation.ts:46`). **Das Feld wird
+gelesen und nirgends gesetzt.**
+
+Ebenso bestaetigt, alles am Basis-Stand:
+
+| Zusage | gemessen |
+|---|---|
+| Lesestelle `raumProjektion.ts:91` | `bauteil_typ: wandVon.get(kante.wallId)?.construction?.insulationType ? 'aussenwand_gedaemmt' : …` ✓ |
+| Muster „ehrlich null" bei `:95-96` | `decke: null, // P0: ehrlich unbestimmt — kein erfundener Aufbau (Operanden-Gate)` / `boden: null,` ✓ |
+| `EigenschaftenPanel.tsx:324` schreibt nur `materialId` | `<select value={selectedWall.construction?.materialId ?? ''} …>` ✓ |
+| P1-A wirksam rot | `:91` traegt heute nur den Ternary, keinen Hinweis ✓ |
+| Konfliktpruefung | **0 Commits** auf `projection/raumProjektion.ts` seit der Basis ✓ |
+
+Das Nicht-Ziel ist sauber geschnitten: **Y-3 bleibt bei Yama**, weil der Operand fehlt — genau die
+Regel, dass fachliche Entscheidungen nicht still automatisiert werden.
+
+### Restpunkt (tragend) — die Zahl, die in den Code geschrieben werden soll, ist falsch
+
+Der Ist-Beleg sagt *"`grep -rn insulationType` → genau 3 Treffer"* und zaehlt Typ, Zod und
+Lesestelle. Am Basis-Stand in `resources/` gemessen sind es **vier**:
+
+```
+domain/scene-document-v2.schema.json:142   "insulationType": { "type": "string" }   <- FEHLT im Blatt
+domain/scene.types.ts:109                  insulationType?: string;
+domain/validation.ts:46                    insulationType: z.string().optional(),
+projection/raumProjektion.ts:91            Lesestelle
+```
+
+**Die fehlende ist eine dritte Deklarationsstelle**, nicht eine Nebensache: das Nicht-Ziel lautet
+*"Typ und Zod-Schema bleiben"* und deckt damit zwei von drei Orten, an denen das Feld erklaert wird.
+Und der Auftrag liefert als Arbeitsergebnis **eine Messung, die in den Code geschrieben wird**
+(Kriterium A: *"benennt am Code, dass das Feld heute nirgends gesetzt wird (Messung + Y-3-Verweis)"*).
+Eine Zahl, die dauerhaft im Quelltext steht, muss stimmen — sonst wird aus einem ehrlichen Ausweis
+ein neuer unbelegter Satz, und zwar an genau der Stelle, die Ehrlichkeit herstellen soll.
+
+*(Zur Vollstaendigkeit: im ganzen Baum sind es 20 Treffer, davon 15 in `docs/` und einer im gebauten
+Buendel `public/hausplaner/hausplaner.js`. Die Grundmenge `resources/` ist die richtige fuer die
+Frage — nur ist sie im Blatt nicht benannt, und mit ihr sind es vier.)*
+
+### Zwei Anmerkungen, ausserhalb des Auftrags
+
+1. **Das Zielmodul hat keinen Ladeweg.** `projection/raumProjektion.ts` gehoert zu den 33 (§133);
+   ausserhalb der Tests importiert es niemand. Der Kommentar ist trotzdem richtig — er richtet sich
+   an den Leser, nicht an die Laufzeit. Kriterium B (*"Projektion vorher = nachher"*) ist damit eine
+   Aussage auf Testebene; das sollte im Bericht so dastehen.
+2. **Das Nachbarfeld traegt zwei Einheiten.** `insulationThickness` ist in
+   `domain/scene.types.ts` **zweimal** deklariert: `:110` mit dem Kommentar `// m` und `:238` mit
+   `// mm`. Gleicher Name, zwei Einheiten — dieselbe Klasse wie §128. **Nicht Gegenstand dieses
+   Auftrags**, hier nur festgehalten, damit es nicht verlorengeht.
+
+### Votum
+
+**NICHT ERTEILT** — ein Restpunkt, und er ist tragend, weil die Zahl das Arbeitsergebnis ist.
+Behebung ist klein: Grundmenge benennen und **vier** zaehlen (oder die dritte Deklarationsstelle
+ausdruecklich ausklammern). Alles andere an diesem Blatt haelt, einschliesslich der zentralen
+Kausalitaets-Aussage und des sauber gezogenen Y-3-Gates.
+
+**Ball beim Planner** fuer die Zahl. **Eintragen** beim **Integrator**. Damit sind alle fuenf DoR aus
+§142 geliefert: **W1-2 und W1-4 ERTEILT, W1-1, W1-3 und W1-5 NICHT ERTEILT** — zwei Auftraege sind
+baubar, drei brauchen je eine kleine Nachbesserung am Blatt.
