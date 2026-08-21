@@ -23470,3 +23470,117 @@ macht den Befehl nicht wieder richtig; beim nächsten Umzug stimmt sie nicht meh
 
 **Unverändert offen:** der Zuschnitt-Befund des Release-Prüfers zum Schreibschutz der Zieldatei
 (§278), `…w0-11-ids-callback-csrf.md:22` (§276), die Rundungsfrage (§277).
+
+## §280 · Posten (a): ein Commit hat 23 Zeilenzeiger im Haus ungültig gemacht — 17 davon sind meine
+
+**Messstand.** Runde begonnen an `ff3d7043` / Zweig `97df7133`. **Vor dem Schreiben neu gemessen
+21:55: HEAD und Zweig beide `8511ca05`, Rückstand 0** — zurückgekommen ist allein mein eigenes
+§279. **`docs/STATUS.md` ist unverändert bei 19376 Zeilen**, die Zeigerprüfung unten gilt am
+neuen Stand. Ballortung **beidseitig** nach §279: `docs/STATUS.md` **1** (P-02, VORLAGE),
+`docs/BEFUNDNOTIZEN.md` **35** (Blöcke ohne Zustandsfeld). Nichts in meiner Bahn.
+Gemessen 21.08. 21:51–21:58. *Die Zahl 69 unten ist der Stand **vor** diesem Abschnitt; er
+selbst fügt weitere Zeiger hinzu.*
+
+### 1 · Der Anlass
+
+A-42s Umzug (`26c46f31`, 21:37) hat `docs/STATUS.md` von **28555 auf 19376 Zeilen** verkürzt. Jeder
+Zeilenzeiger dorthin, der vor 21:37 geschrieben wurde, ist damit verdächtig — nicht „zeigt ins
+Leere", sondern **„zeigt auf etwas anderes"**, was die schlechtere Sorte ist.
+
+### 2 · Der Hausstand, an den Dateiinhalten gemessen
+
+    Traegerdateien           23
+    Zeiger-Vorkommen        124
+      unveraendert          101
+      zeigt auf anderes      16
+      ueber das Dateiende     7
+    betroffen                23 von 124  =  19 Prozent
+
+**Und die Verteilung ist einseitig:**
+
+    docs/BEFUND-plan-pruefer-rueckweg-und-tor.md   69 Zeiger · anders 10 · ueber Ende 7   = 17
+    docs/backlog/fahrplan-2026-08-20.md             5 Zeiger · anders  2                  =  2
+    docs/BEFUNDNOTIZEN.md                           5 Zeiger · anders  1                  =  1
+    docs/auftraege/aktiv/A-30-die-halbe-…md          5 Zeiger · anders  1                  =  1
+    docs/BERICHT-A-19-h9-und-paragraf-3-muster.md    1 Zeiger · anders  1                  =  1
+    scripts/a30-datensatz-paar.sh                   2 Zeiger · anders  1                  =  1
+
+**17 der 23 Schäden stehen in meiner eigenen Befunddatei** — 74 Prozent. Sie trägt 69 der 124
+Zeiger im Haus. Das ist kein Zufall und keine Entschuldigung: Wer am meisten mit Zeilennummern
+belegt, verliert am meisten, wenn die Datei sich bewegt.
+
+**Je unterschiedlichem Zeiger** (nicht je Nennung) sieht es in meiner Datei so aus:
+
+    36 verschiedene Zeiger
+       2  nach dem Umzug geschrieben, also gegen den neuen Stand gueltig
+      21  vor dem Umzug, unveraendert
+       7  vor dem Umzug, zeigen auf etwas anderes
+       6  vor dem Umzug, zeigen ueber das Dateiende
+
+### 3 · Der schärfste Einzelfall ist meiner
+
+`docs/STATUS.md:18787` war in §272 die **Belegzeile, mit der ich committet habe** — sie wies A-38s
+Datensatz nach. Heute steht dort:
+
+    "DER BAU LIEGT GEGEN EIN VERWEIGERTES VOTUM. Der Plan-Pruefer hat die DoR in …"
+
+Ein anderer Satz, ein anderer Auftrag, dieselbe Zeilennummer. Die Belegzeile eines Commits ist
+damit vier Stunden nach ihrer Prüfung falsch — der Commit bleibt richtig, sein Beleg zeigt woanders
+hin.
+
+**Gegenprobe, damit daraus keine falsche Regel wird:** Der meistzitierte Zeiger meiner Datei ist
+`docs/STATUS.md:3220` mit **30 Nennungen** — und er ist **unverändert**. Der Schaden folgt nicht der
+Zitierhäufigkeit, sondern der Lage im Dokument: Was vor dem ersten umgezogenen Block steht, hält;
+was dahinter steht, wandert.
+
+### 4 · Wo die Ankerform schon gewirkt hat
+
+`scripts/a30-datensatz-paar.sh` steht in der Liste — aber **seine zwei Zeiger stehen in
+Kommentaren** (`:31`, `:34`). Der ausführende Teil arbeitet über Muster:
+
+    :83  grep -oE "^\| \*\*${MUSTER}\*\*"        Tafelzeile
+    :84  grep -oE "^auftrag: \"?${MUSTER}\"?"    Datensatz
+
+**Das ist A-34s Ankerform, und sie hat gehalten.** Ein Skript, das nach `auftrag: "A-40"` sucht,
+findet es heute in `docs/STATUS.md` und morgen anderswo; eines mit `sed -n '19867p'` fände heute
+etwas Falsches. **Keine Betriebsgefahr** — der einzige Schaden sind zwei überholte Kommentarzeilen.
+
+Das ist der Ertrag von A-34, an einem Fall gemessen, den A-34 nicht vorhergesehen hat: Es ging dort
+um wandernde **Formeln**, hier wandert eine ganze **Ablage**. Die Gegenmaßnahme trägt beides.
+
+### 5 · Zwei eigene Messfehler, beide vor der Meldung gefangen
+
+**Erstens** hat meine erste Klassifikation drei Zeiger als kaputt gemeldet, die ich **selbst heute**
+geschrieben hatte — `:18406` (§279), `:18592` (§278) und `:18614`. Sie sind gegen den *neuen* Stand
+erhoben und richtig; mein Vergleich „alt gegen neu" konnte das nicht wissen. Behoben, indem ich je
+Zeile über `git blame --line-porcelain` die Schreibzeit gegen `26c46f31` gestellt habe: **2 von 36
+sind nach dem Umzug entstanden.** Ohne diese Trennung hätte ich eigene, korrekte Arbeit als Schaden
+gemeldet.
+
+**Zweitens** zählte mein erster Hausstand **137** statt 124 Vorkommen. Ich hatte über die Ausgabe
+von `git grep -n` gemessen, und deren Zeilenpräfix lautet bei der Datei `docs/STATUS.md` selbst
+`docs/STATUS.md:1234:` — das Präfix sieht wie ein Zeiger aus. **Genau 13 Scheinzeiger, und
+137 − 124 = 13.** Die Differenz hat sich restlos erklärt, nachdem ich an den Dateiinhalten statt an
+der Trefferausgabe gemessen habe. *Wer Treffer zählt, zählt auch das Werkzeug mit.*
+
+### 6 · Ball
+
+**Kein Auftrag, sondern eine Feststellung mit einer Empfehlung.**
+
+Die 23 Stellen sind Dokumentation, kein Code; nichts läuft falsch, und ich beantrage keine
+Reparatur — eine Zeilennummer in einem Befund ist ein **Beleg an einem Stand**, und dieser Stand
+steht meist daneben. Was sich lohnt, ist die Form für **neue** Belege:
+
+    statt  docs/STATUS.md:18787
+    besser docs/STATUS.md · Block auftrag: "A-38" · Feld zustand   (A-34-Ankerform)
+    oder   docs/STATUS.md:18787 am Stand 34f6f5a9                  (Zeiger MIT Stand)
+
+**Ich selbst schreibe ab hier den Stand dazu, wo ich eine Zeile in `docs/STATUS.md` nenne** — es
+kostet acht Zeichen und macht den Beleg unverfallbar.
+
+**Planner:** Ob das eine Hausregel werden soll, ist Ihre Entscheidung; A-34 hat dieselbe Frage für
+Formeln schon einmal beantwortet, und `scripts/a30-datensatz-paar.sh` zeigt heute, dass die Antwort
+trägt.
+
+**Unverändert offen:** Schreibschutz der Zieldatei (§278), `…w0-11-ids-callback-csrf.md:22` (§276),
+die Rundungsfrage (§277), der zweite Pfad in der Wache-Anweisung (§279).
