@@ -20320,3 +20320,97 @@ Ein Hinweis ohne Auftrag, für den **Planner**: `ARBEITSREGELN.md:964` (**H-5**,
 nur urteilen, wenn es alle Bedingungen kennt") hat mit **3 Nennungen in 3 Trägern** die geringste
 Reichweite von allen neun. Ob das heißt, dass die Regel selten gebraucht wird oder selten erinnert,
 kann ich nicht messen — die Zahl unterscheidet beides nicht. Ich melde sie, ohne sie zu deuten.
+
+## §246 · Posten (c): N-001 und N-002 durchgerechnet — beide halten, und eine Begründung ist trotzdem falsch
+
+**Messstand.** HEAD `407cf5e2` (21.08. 19:32:54), Baum sauber, **0 neue Commits** — achtzehnte Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (302 Min). Gemessen 21.08. 19:33–19:37.
+
+Gewählt wurden die beiden **grünen Normformeln**, die in die Sparren-Bemessung N-003 eingehen und
+die ich noch nie geprüft hatte. Von neun Ampel-Formeln in der Sammlung sind sie die einzigen zwei
+mit 🟢 **ohne** einen bereits vermerkten Vorbehalt.
+
+### 1 · Der Code trifft die Beschreibung Zeile für Zeile
+
+`FORMELSAMMLUNG.md:718` nennt als Belegstelle `sparrenBerechnung.ts:33`,
+`bodenschneelast(zone, gelaendehoeheM)`. Frisch geöffnet:
+
+    :33  export function bodenschneelast(zone: Schneezone, gelaendehoeheM: number): number {
+    :34    const A = Math.max(0, gelaendehoeheM);
+    :35    const t = (A + 140) / 760;
+    :37    zone === 1 ? 0.19 + 0.91 * t * t :
+    :38    zone === 2 ? 0.25 + 1.91 * t * t :
+    :39                 0.31 + 2.91 * t * t;
+    :40    const min = zone === 1 ? 0.65 : zone === 2 ? 0.85 : 1.10;
+    :41    return Math.max(min, roh);
+
+**Jede Zeile der Sammlung steht so im Code** — Zonenformeln, Mindestwerte, Rückgabe als Maximum.
+Der Zeiger `:33` trifft. Das ist nach §231/§232/§242 bemerkenswert genug, es zu sagen.
+
+### 2 · N-001 durchgerechnet — die Schwelle, die nirgends steht
+
+Die Sammlung nennt Formel und Mindestwert, aber nicht, **wo beide sich schneiden**. Nachgerechnet:
+
+| Zone | Formel = Mindestwert ab | sₖ bei 0 m | sₖ bei 800 m |
+|---|---|---|---|
+| 1 | **400,3 m** | 0,650 (Mindestwert) | 1,582 (Formel) |
+| 2 | **286,0 m** | 0,850 (Mindestwert) | 3,172 (Formel) |
+| 3 | **256,0 m** | 1,100 (Mindestwert) | 4,762 (Formel) |
+
+Für den größten Teil des besiedelten Deutschlands trägt in Zone 1 also **der Mindestwert, nicht die
+Formel**. Das ist kein Mangel — es ist die Absicht der Norm —, aber es erklärt, warum der
+Geländehöhen-Grenzfall folgenlos bleibt (nächster Abschnitt).
+
+### 3 · N-002 gegen die Norm gehalten — acht Werte, acht Treffer
+
+`sparrenBerechnung.ts:45` `formbeiwertSchnee(neigungGrad)`, verglichen mit DIN EN 1991-1-3
+Tabelle 5.2 (μ₁ = 0,8 für α ≤ 30°, linear auf 0 bis 60°):
+
+    0°  0,8000 | 15°  0,8000 | 30°  0,8000 | 35°  0,6667
+    45°  0,4000 | 55°  0,1333 | 60°  0,0000 | 75°  0,0000
+
+**Acht von acht stimmen exakt**, einschließlich beider Knickpunkte. Der lineare Ast `:49` lautet
+`0.8 * (60 - a) / 30` — die Normformel unverändert.
+
+### 4 · Die Begründung des Grenzfalls ist sachlich falsch — und folgenlos
+
+`FORMELSAMMLUNG.md` schreibt zu `Math.max(0, …)`:
+
+> *„Negative Geländehöhe wird auf 0 gesetzt — kein Wurf, keine Meldung. **Das ist zulässig, weil
+> eine negative Höhe über NN in Deutschland kein Anwendungsfall ist**; wer sie übergibt, hat einen
+> Eingabefehler und bekommt still den Wert für 0 m."*
+
+**Der Halbsatz stimmt nicht.** Der tiefste bewohnte Punkt Deutschlands liegt bei etwa **−3,54 m NN**
+(Neuendorf-Sachsenbande, Wilstermarsch). Negative Geländehöhen sind in Deutschland ein
+Anwendungsfall — selten, aber real, und die Marsch ist bebaut.
+
+**Die Folge ist trotzdem exakt null**, und das habe ich gerechnet statt vermutet:
+
+    sk(-3,54 m, Zone 1) = 0,6500      sk(0 m, Zone 1) = 0,6500      Unterschied: 0,0000 kN/m²
+
+Weil der Mindestwert bis 400,3 m greift, liefert die Klemmung im gesamten negativen Bereich
+denselben Wert wie die ungeklemmte Rechnung. **Die Regel ist richtig, ihre Begründung ist falsch,
+und die Wirkung ist null.** Drei Aussagen, die man trennen muss — mit der falschen Begründung
+allein ließe sich die Klemmung an anderer Stelle rechtfertigen, wo sie sehr wohl wirkt.
+
+**Herkunft dieser Zahl, ausdrücklich:** Die −3,54 m sind **Fachwissen von außen**, nicht am Repo
+gemessen. Ich kenne im Repo keine Quelle dafür und behaupte keine. Prüfbar ist an ihr nur, was ich
+gerechnet habe: dass der Unterschied im Ergebnis 0,0000 beträgt.
+
+### 5 · Ball
+
+**Planner** — eine Textberichtigung, kein Bau:
+
+`FORMELSAMMLUNG.md` bei N-001s Grenzfall: Der Satz *„weil eine negative Höhe über NN in Deutschland
+kein Anwendungsfall ist"* trägt nicht. Die Klemmung bleibt richtig, aber die tragfähige Begründung
+ist eine andere und steht schon in der Messung: **weil unterhalb von 400,3 m (Zone 1) ohnehin der
+Mindestwert gilt, ist die Klemmung im gesamten möglichen Bereich ergebnisneutral.**
+
+Das ist mehr als Wortklauberei: Die falsche Begründung ist **übertragbar** („kein Anwendungsfall,
+also darf still geklemmt werden"), die richtige ist es **nicht** — sie gilt nur, solange der
+Mindestwert greift. Genau diese Unterscheidung fehlt an den zehn Fundstellen meiner Fehlerklasse.
+
+**Gutgeschrieben, mit derselben Deutlichkeit:** Beide Formeln rechnen normgerecht, beide Zeiger
+treffen, beide Ampeln sind verdient. Nach §233 (drei Schwellen für eine Frage) und §238 (F-031 nicht
+wie beschrieben gebaut) ist das die erste Formelprüfung dieser Sitzung **ohne einen einzigen
+Rechenfehler im Gegenstand**.
