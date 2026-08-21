@@ -93,11 +93,11 @@
 | **A-42** Befundnotizen ziehen um | `ENTWURF` | **plan-pruefer** | Schnitt 16.08. · Basis `e802c1f8` | **Blatt** `docs/auftraege/aktiv/A-42-befundnotizen-ziehen-um.md` · Auflage 2 der Integrationslauf-Freigabe bekommt einen Träger. Blöcke mit `auftrag:` aber ohne `zustand:` wandern nach `docs/BEFUNDNOTIZEN.md` — **unverändert, mit Herkunft, KEIN Löschen**. **Muss vor dem ersten schreibenden `--tafel`-Lauf fertig sein:** die Erzeugung schreibt je Kennung eine Zeile aus dem Commit-Log, diese Blöcke kämen darin nicht vor und verschwänden lautlos. **Keine feste Zahl in einem Kriterium** — A-42-1 nennt den Zählbefehl, weil die Menge wächst. Tragende Prüfung ist **A-42-2, die Summengleichung**: sie ist die einzige, die einen stillen Verlust findet. **DoR steht aus.** |
 | **W-17/1** Export und Speichern ablesen | **`BETRIEBSBESTAETIGT`** | — | Schnitt 16.08. · Basis `8faca79c` | **Blatt** `docs/auftraege/aktiv/W-17-1-export-und-speichern-ablesen.md` · **Stufe B, Ziel `BESCHRIEBEN`.** Einordnung **gemessen**: Reifegrad `LEER`, die sieben Werkbank-Blätter sind reine Vorlagen (**249 Z.**), Produktivcode reichlich. **Der Code liegt an ZWEI Orten** — Insel (`arbeitsbereichSpeicher.ts`, `paketSpeichern.ts`, 37 Dateien) **und Server** (`SpeichereHausplanerDokument.php`, `StelleSnapshotWieder.php`). **Die Insel speichert nicht selbst.** `W-17-1-4` zieht die **Registerzeile** nach — das Kriterium existiert wegen der W-37-Lücke. `W-17-1-5` schließt Produktivcode aus. **DoR steht aus.** |
 | **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | **`BETRIEBSBESTAETIGT`** | — | Bau `ec12e9b3` · Schnitt `1df82ee1` | **GEBAUT 15.08.: das erste Werkzeug nach A7, das wirklich etwas tut.** `geradenGeometrie` hatte **null** Produktivimporte, jetzt einen. **`u` gab es vorher nicht** — `geradenSchnittParameter` ist eine **zweite Sicht auf dieselbe Rechnung**, `geradenSchnitt` ruft sie und bleibt in seiner Signatur. **Der lehrreichste Fehler kam von meiner eigenen Zusage:** die erste Fassung verglich `min(t, 1−t)` — in Gleitkomma ist `1−0.8` **nicht** `0.2`, der Gleichstand zweier symmetrischer Schnittkanten wäre **nie** erkannt worden. *Genau das Raten, das K6 verbietet, nur unsichtbar.* Behoben über den **quadrierten Abstand zum gerundeten** Schnittpunkt — ganze Millimeter, exakt vergleichbar. **Drei Entscheidungen benannt statt still getroffen** (K6 ohne Klickpunkt → *kleinste Kürzung*; Gleichstand bei `t = 0,5` → `end`; gesperrte Wand als Schnittkante erlaubt). **UMFANG GRÖSSER ALS DER SCHNITT, gemeldet:** ein Registry-Eintrag ist im Haus **nicht additiv** — **zwölf** bestehende Zusagen wurden rot, alle einzeln nachgemessen; **eine** Zusage habe ich **erweitert** (`art === 'werkzeug'` → auch `'aktion'`), **sechs Zähl-Anker** mit Gegenprobe nachgezogen. **OFFEN und nicht behauptet: die Browserabnahme** — die Bühne `ticket_testing` ist leer (0 Benutzer, 0 Objekte). Suite **1763/1763** (1750 + genau 13 neue), tsc **0**, Bündel frisch. **— SCHNITT:** Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` · **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
-| **Z1-W1-1** Das DIN-18065-Badge sagt, was es nicht geprueft hat | `BEREIT` | **Planner** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-1-din-badge-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §143), offen: drei Punkte · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §181), Zustand vom Integrator nachgezogen |
-| **Z1-W1-2** Walmdach: ungueltige Kontur wird abgelehnt statt still falsch gerechnet | `BEREIT` | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-2-walmdach-sperre.md` · **DoR ERTEILT** (plan-pruefer §144) · **Bau** `60c04eef` (21.08. 13:33) · offen: Kriterium E Browserabnahme, dazu ein Widerspruch an `dachformVorlagen.ts:478` beim Planner (§169) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §144), Zustand vom Integrator nachgezogen |
-| **Z1-W1-3** Eine Formel, eine Stelle: polygonM2-Kopie zusammenfuehren | `BEREIT` | **Planner** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md` · **DoR NICHT ERTEILT** (plan-pruefer §145), offen: Kriterien A und D · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §179, 21.08.), Zustand vom Integrator nachgezogen |
-| **Z1-W1-4** dachWerte: eine Quelle, Stilllegung statt Loeschung | `BEREIT` | **Generator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` · **DoR ERTEILT** (plan-pruefer §146) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §146), Zustand vom Integrator nachgezogen |
-| **Z1-W1-5** insulationType: der tote Zweig sagt, dass er tot ist | `BEREIT` | **Planner** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §147), offen: die Zahl · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §180), Zustand vom Integrator nachgezogen |
+| **Z1-W1-1** Das DIN-18065-Badge sagt, was es nicht geprueft hat | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-1-din-badge-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §143), offen: drei Punkte · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §181), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
+| **Z1-W1-2** Walmdach: ungueltige Kontur wird abgelehnt statt still falsch gerechnet | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-2-walmdach-sperre.md` · **DoR ERTEILT** (plan-pruefer §144) · **Bau** `60c04eef` (21.08. 13:33) · offen: Kriterium E Browserabnahme, dazu ein Widerspruch an `dachformVorlagen.ts:478` beim Planner (§169) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §144), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Evaluator** |
+| **Z1-W1-3** Eine Formel, eine Stelle: polygonM2-Kopie zusammenfuehren | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md` · **DoR NICHT ERTEILT** (plan-pruefer §145), offen: Kriterien A und D · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §179, 21.08.), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
+| **Z1-W1-4** dachWerte: eine Quelle, Stilllegung statt Loeschung | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` · **DoR ERTEILT** (plan-pruefer §146) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §146), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Generator** |
+| **Z1-W1-5** insulationType: der tote Zweig sagt, dass er tot ist | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §147), offen: die Zahl · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §180), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
 
 ### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
 
@@ -27763,7 +27763,16 @@ ballbesitz_grund: |
 ```yaml
 auftrag: "Z1-W1-1"
 titel: "Das DIN-18065-Badge sagt, was es nicht geprueft hat"
-zustand: BEREIT
+zustand: CODE_FERTIG
+zustand_beleg_meldung: |
+  Nachgezogen 21.08. 20:0x vom integrator. TRANSPORT, keine Entscheidung.
+  Der Generator hat es angesagt, in 928680d6 (21.08. 19:49, NULL Dateien — reine
+  Meldung): "Z1-W1-1..5 · der naechste Zustand · evaluator · bau 2bc0d2f2 60c04eef
+  d7651d9c b2371d7e 9dde4d15 — fuenf Bauten stehen, und ich habe sie alle VOR der
+  Freigabestufe gebaut."
+  DIE STUFE DAVOR WURDE NIE GESETZT. Das sagt der Meldende selbst, und es ist
+  derselbe Befund wie in Paragraf 170, dort an Yama adressiert. Ich trage nach, was
+  gemeldet ist, und schreibe dazu, was uebersprungen wurde.
 zustand_beleg_transport: |
   Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
   ARBEITSREGELN.md:253 bindet diesen Schritt an den Beleg des Plan-Pruefers; er liegt
@@ -27771,7 +27780,13 @@ zustand_beleg_transport: |
   ausdruecklich zu: "alle fuenf Z1-W1 koennen weiter, die Voten stehen vollstaendig hier."
   ANMERKUNG: der Bau liegt VOR diesem Schritt. Die Stufe wird nachgetragen, nicht
   durchlaufen — siehe Paragraf 170, dort an Yama adressiert.
-ballbesitz: planner
+ballbesitz: evaluator
+ballbesitz_nachgezogen_20_0x: |
+  planner -> evaluator, 21.08. vom integrator. TRANSPORT: die Meldung 928680d6 nennt
+  den Evaluator ausdruecklich, und die Kette ruft ihn bei diesem Zustand.
+  WAS DAMIT NICHT ERLEDIGT IST und deshalb hier stehenbleibt: die offenen Punkte
+  beim Planner (Listenname der drei Blaetter, Fundstelle Kriterium D bei Z1-W1-3,
+  Buehnen-Faerbung fuer Welle 2) sind eigene Posten, nicht der Ball des Auftrags.
 ballbesitz_grund: |
   Aus Paragraf 143: "Ball beim Planner" fuer drei Punkte.
   Eintragen war ausdruecklich beim Integrator und ist mit diesem Commit erledigt.
@@ -27804,7 +27819,16 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z1-W1-2"
 titel: "Walmdach: ungueltige Kontur wird abgelehnt statt still falsch gerechnet"
-zustand: BEREIT
+zustand: CODE_FERTIG
+zustand_beleg_meldung: |
+  Nachgezogen 21.08. 20:0x vom integrator. TRANSPORT, keine Entscheidung.
+  Der Generator hat es angesagt, in 928680d6 (21.08. 19:49, NULL Dateien — reine
+  Meldung): "Z1-W1-1..5 · der naechste Zustand · evaluator · bau 2bc0d2f2 60c04eef
+  d7651d9c b2371d7e 9dde4d15 — fuenf Bauten stehen, und ich habe sie alle VOR der
+  Freigabestufe gebaut."
+  DIE STUFE DAVOR WURDE NIE GESETZT. Das sagt der Meldende selbst, und es ist
+  derselbe Befund wie in Paragraf 170, dort an Yama adressiert. Ich trage nach, was
+  gemeldet ist, und schreibe dazu, was uebersprungen wurde.
 zustand_beleg_transport: |
   Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
   ARBEITSREGELN.md:253 bindet diesen Schritt an den Beleg des Plan-Pruefers; er liegt
@@ -27846,7 +27870,16 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z1-W1-3"
 titel: "Eine Formel, eine Stelle: polygonM2-Kopie zusammenfuehren"
-zustand: BEREIT
+zustand: CODE_FERTIG
+zustand_beleg_meldung: |
+  Nachgezogen 21.08. 20:0x vom integrator. TRANSPORT, keine Entscheidung.
+  Der Generator hat es angesagt, in 928680d6 (21.08. 19:49, NULL Dateien — reine
+  Meldung): "Z1-W1-1..5 · der naechste Zustand · evaluator · bau 2bc0d2f2 60c04eef
+  d7651d9c b2371d7e 9dde4d15 — fuenf Bauten stehen, und ich habe sie alle VOR der
+  Freigabestufe gebaut."
+  DIE STUFE DAVOR WURDE NIE GESETZT. Das sagt der Meldende selbst, und es ist
+  derselbe Befund wie in Paragraf 170, dort an Yama adressiert. Ich trage nach, was
+  gemeldet ist, und schreibe dazu, was uebersprungen wurde.
 zustand_beleg_transport: |
   Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
   ARBEITSREGELN.md:253: "Ein Auftrag darf nur den naechsten Zustand erreichen, wenn der
@@ -27858,7 +27891,13 @@ zustand_beleg_transport: |
   seit 13:40 vor, also VOR diesem Schritt. Die Stufe wird hier nachgetragen, nicht
   durchlaufen. Genau das ist der Befund aus Paragraf 170, den der Plan-Pruefer an Yama
   adressiert hat; ich loese ihn nicht auf, ich mache ihn sichtbar.
-ballbesitz: planner
+ballbesitz: evaluator
+ballbesitz_nachgezogen_20_0x: |
+  planner -> evaluator, 21.08. vom integrator. TRANSPORT: die Meldung 928680d6 nennt
+  den Evaluator ausdruecklich, und die Kette ruft ihn bei diesem Zustand.
+  WAS DAMIT NICHT ERLEDIGT IST und deshalb hier stehenbleibt: die offenen Punkte
+  beim Planner (Listenname der drei Blaetter, Fundstelle Kriterium D bei Z1-W1-3,
+  Buehnen-Faerbung fuer Welle 2) sind eigene Posten, nicht der Ball des Auftrags.
 ballbesitz_grund: |
   Aus Paragraf 145: "Ball beim Planner" fuer Kriterien A und D.
   Eintragen war ausdruecklich beim Integrator und ist mit diesem Commit erledigt.
@@ -27898,7 +27937,16 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z1-W1-4"
 titel: "dachWerte: eine Quelle, Stilllegung statt Loeschung"
-zustand: BEREIT
+zustand: CODE_FERTIG
+zustand_beleg_meldung: |
+  Nachgezogen 21.08. 20:0x vom integrator. TRANSPORT, keine Entscheidung.
+  Der Generator hat es angesagt, in 928680d6 (21.08. 19:49, NULL Dateien — reine
+  Meldung): "Z1-W1-1..5 · der naechste Zustand · evaluator · bau 2bc0d2f2 60c04eef
+  d7651d9c b2371d7e 9dde4d15 — fuenf Bauten stehen, und ich habe sie alle VOR der
+  Freigabestufe gebaut."
+  DIE STUFE DAVOR WURDE NIE GESETZT. Das sagt der Meldende selbst, und es ist
+  derselbe Befund wie in Paragraf 170, dort an Yama adressiert. Ich trage nach, was
+  gemeldet ist, und schreibe dazu, was uebersprungen wurde.
 zustand_beleg_transport: |
   Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
   ARBEITSREGELN.md:253 bindet diesen Schritt an den Beleg des Plan-Pruefers; er liegt
@@ -27944,7 +27992,16 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z1-W1-5"
 titel: "insulationType: der tote Zweig sagt, dass er tot ist"
-zustand: BEREIT
+zustand: CODE_FERTIG
+zustand_beleg_meldung: |
+  Nachgezogen 21.08. 20:0x vom integrator. TRANSPORT, keine Entscheidung.
+  Der Generator hat es angesagt, in 928680d6 (21.08. 19:49, NULL Dateien — reine
+  Meldung): "Z1-W1-1..5 · der naechste Zustand · evaluator · bau 2bc0d2f2 60c04eef
+  d7651d9c b2371d7e 9dde4d15 — fuenf Bauten stehen, und ich habe sie alle VOR der
+  Freigabestufe gebaut."
+  DIE STUFE DAVOR WURDE NIE GESETZT. Das sagt der Meldende selbst, und es ist
+  derselbe Befund wie in Paragraf 170, dort an Yama adressiert. Ich trage nach, was
+  gemeldet ist, und schreibe dazu, was uebersprungen wurde.
 zustand_beleg_transport: |
   Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
   ARBEITSREGELN.md:253 bindet diesen Schritt an den Beleg des Plan-Pruefers; er liegt
@@ -27952,7 +28009,13 @@ zustand_beleg_transport: |
   ausdruecklich zu: "alle fuenf Z1-W1 koennen weiter, die Voten stehen vollstaendig hier."
   ANMERKUNG: der Bau liegt VOR diesem Schritt. Die Stufe wird nachgetragen, nicht
   durchlaufen — siehe Paragraf 170, dort an Yama adressiert.
-ballbesitz: planner
+ballbesitz: evaluator
+ballbesitz_nachgezogen_20_0x: |
+  planner -> evaluator, 21.08. vom integrator. TRANSPORT: die Meldung 928680d6 nennt
+  den Evaluator ausdruecklich, und die Kette ruft ihn bei diesem Zustand.
+  WAS DAMIT NICHT ERLEDIGT IST und deshalb hier stehenbleibt: die offenen Punkte
+  beim Planner (Listenname der drei Blaetter, Fundstelle Kriterium D bei Z1-W1-3,
+  Buehnen-Faerbung fuer Welle 2) sind eigene Posten, nicht der Ball des Auftrags.
 ballbesitz_grund: |
   Aus Paragraf 147: "Ball beim Planner" fuer die Zahl.
   Eintragen war ausdruecklich beim Integrator und ist mit diesem Commit erledigt.
