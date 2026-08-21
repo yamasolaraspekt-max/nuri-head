@@ -17646,6 +17646,8 @@ ballbesitz_befund: yama   # Umzugsbasis der vier Rollenzweige — Entscheidung l
 
 ## BEFUND — DIE EINE STATUSWAHRHEIT HAT GERADE ZWEI FASSUNGEN (Plan-Pruefer, 14.08. 08:23)
 
+> Block umgezogen nach docs/BEFUNDNOTIZEN.md (A-42, Bau 26c46f31) — Anker: auftrag: "statuswahrheit_in_zwei_fassungen"
+
 ### Gegenprüfung: liegt ein Planner-Ball unbemerkt? — Ergebnis NEIN (eigener Zaun nach A-25)
 
 ```yaml
@@ -18624,6 +18626,8 @@ regelgrundlage: "Auflage 2 der Integrationslauf-Freigabe (a774e549, d91f1dca)."
 ```
 
 ## BERICHTIGUNG DER CODE-ZEIGER AUS DER STATUSWAHRHEIT — Integrator, 21.08.2026
+
+> Block umgezogen nach docs/BEFUNDNOTIZEN.md (A-42, Bau 26c46f31) — Anker: auftrag: "P-05"
 
 ## Z1-W1 — die fuenf Auftraege der Inventur Z1, Datensaetze vom Integrator angelegt 21.08.2026
 
