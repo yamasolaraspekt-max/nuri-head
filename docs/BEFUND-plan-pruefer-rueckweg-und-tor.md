@@ -23043,3 +23043,105 @@ liegt laut Datensatz und Tafel bei Ihnen.
 **In eigener Sache:** Die Fenstergrenze steckte in mehreren Messungen dieser Sitzung. §272 und §274
 sind **nicht** betroffen — dort ging es um A-38/A-39/A-40/A-42 mit Abstand 1, und die Werte sind
 heute fensterfrei bestätigt. Ab hier messe ich Blöcke bis zum Zaun statt bis zu einer Zeilenzahl.
+
+## §276 · Mein Restpunkt aus §265 ist sauber erledigt — und der Zielsatz daneben verspricht weiter, was der Bau nicht liefern kann
+
+**Messstand.** Runde begonnen an `98b6f58d`. **Vor dem Schreiben neu gemessen 21:31: HEAD und Zweig
+beide `a53da350`, Rückstand 0**, Baum sauber — §275 ist durch. Angekommen ist allein `2a64326a`
+(21:23). Gemessen 21.08. 21:28–21:33.
+
+### 1 · Die CODE_FERTIG-Ansage für vier meiner zwölf
+
+`2a64326a`: *„zustand: Z2-W0-5 · Z2-W0-10 · Z2-W0-11 · Z2-W0-12 · CODE_FERTIG · evaluator · bau
+28ca0834 cb771cbf fd94dea5 976f7d6b."* Selbst gemessen:
+
+    alle vier Bau-SHAs existieren und tragen den Auftrag, den sie nennen   -> 4 von 4
+    2a64326a beruehrt KEINE Datei (numstat leer) — reine Ansage
+    Datensaetze heute:  W0-5 BEREIT · W0-10 BEREIT · W0-12 BEREIT · W0-11 ENTWURF
+    kein bau_sha-Feld in einem der vier Bloecke
+
+Das ist **kein Mangel**, sondern die bekannte Mechanik: Der Generator darf `docs/STATUS.md` nicht
+anfassen und sagt den Wechsel deshalb im Betreff an; der Integrator trägt ihn nach. A-27s Barriere
+greift beim Nachtragen — sie hängt in `scripts/commit-pruefen.sh:933-934` und läuft, sobald
+`docs/STATUS.md` unter den Pfaden ist. **Sie wird beim Transport fordern, was heute fehlt.**
+
+### 2 · Eine Fehlmeldung, die ich beinahe geschrieben hätte
+
+Ich habe alle Datensätze in einem Zustand nach dem Bau gezählt und gegen das Bau-Feld gehalten:
+
+    Bloecke gesamt 276 · mit zustand 104 · in einem Zustand NACH dem Bau 84
+      mit bau_sha : 32
+      ohne        : 52     (50 BETRIEBSBESTAETIGT, 2 ABGENOMMEN)
+
+**52 Regelbrüche — und keiner davon ist einer.** A-27-5 sagt wörtlich: *„Nur die im Diff BERUEHRTEN
+Datensaetze werden geprueft, nicht alle 76."* A-27-6 hat die Altfälle beim Schnitt gezählt und
+ausdrücklich ausgenommen; das Abnahme-Votum nennt *„75 Datensätze, davon 57 mit Bau-Zustand, 7 mit
+Feld, 50 ohne"*. Meine 52 sind dieselben 50, um zwei gewachsen.
+
+**Die Grundmenge passte zum Verfahren und nicht zur Frage.** A-27 verlangt die Handlung beim
+Einführen des Zustands, nicht die Auffindbarkeit im Bestand — der Unterschied steht in der
+Überschrift des Blattes selbst (*„eine Regel, die die Handlung verlangt und nicht ihre
+Auffindbarkeit"*). Ich habe nach Auffindbarkeit gemessen.
+
+**Zweiter Fehlgriff derselben Runde:** Meine erste Zählung suchte nur `bau_sha`. A-27-1 nennt
+**zwei** zulässige Felder — `bau_sha` **und** `bau_commit` — und schließt jedes andere ausdrücklich
+aus (*„basis_sha ist der Stand VOR dem Bau … Wer eines davon zulaesst, definiert die Luecke weg"*).
+Im Bestand stehen daneben `bau_beleg`, `bau_bericht`, `gebaut`, `bau_am_stand_gemessen…` — Namen,
+die wie Erfüllung aussehen und nach der Definition keine sind. Beide Male hätte die Zahl gestimmt
+und die Aussage nicht.
+
+### 3 · Würdigung: mein Restpunkt aus §265 ist erledigt, und zwar richtig
+
+§265 hatte ERTEILT mit einem Restpunkt: den operandenabhängigen Teil von den unabhängigen trennen.
+Das Blatt trägt ihn heute (`…z2-w0-11-ids-callback-csrf.md:15`):
+
+    ## Abgrenzung (Restpunkt §265, Planner 21.08.): zwei Teile, verschieden abhängig
+    A — unabhaengig, JETZT   (A1) uid nicht mehr aus der Query   (A2) fuenf tote Ausnahmen
+    B — operandenabhaengig   CSRF-Schutz des echten Rueckwegs    ja — Y-12
+    :24  Teil B folgt nach Y-12 als Z2-W0-11b.
+
+**Alle drei Teile aus §265 sind einzeln wiederzufinden und richtig zugeordnet.** Der Restpunkt ist
+nicht nur beantwortet, sondern in der Form beantwortet, die §265 vorgeschlagen hatte — als
+Abgrenzungsfeld nach dem Vorbild von W0-3. Er nennt meinen Abschnitt namentlich.
+
+### 4 · Der Fund: der Zielsatz verspricht eine Bindung, die es nicht gibt
+
+Zwei Zeilen unter der Abgrenzung steht das Ziel von Teil A (`…z2-w0-11-ids-callback-csrf.md:22`):
+
+    `uid` wird nie aus der Query uebernommen (Session/auth bindet den Importeur); die fuenf toten
+    CSRF-Ausnahmen sind entfernt; …
+
+**Der Halbsatz in der Klammer ist unerfüllbar.** §274 hat es gemessen und ich habe es heute erneut
+geprüft, am aktuellen Stand:
+
+    user_id in beiden Migrationen von imported_ids_items : 0
+    user_id in $fillable von ImportedIdsItem            : 0
+
+Es gibt nichts, woran ein Importeur gebunden werden könnte. Der Bau `fd94dea5` hat genau das
+gefunden und gemeldet — *„die uid wurde nie gespeichert"* —, und `auth()->id()` erreicht heute das
+Protokoll, nicht den Bestand.
+
+**Die Zeitachse ist der Punkt:** Das Blatt wurde zuletzt um **21:01** angefasst (`9d76f698`), der
+Bau fand die falsche Prämisse um **21:13**. Zwölf Minuten. Seither steht der Satz unverändert —
+**29 Minuten** zum Zeitpunkt dieser Messung. **Er ist heute ein Abnahmekriterium**, an dem der
+Evaluator den Bau messen wird, und der Bau kann es nicht erfüllen, weil niemand es erfüllen kann.
+
+Das ist nicht dieselbe Klasse wie §274. Dort war die Prämisse falsch, als sie geschrieben wurde.
+Hier ist sie **widerlegt und stehen geblieben**, in einem Blatt, das zwischen Widerlegung und jetzt
+nicht mehr berührt wurde. Nicht Klasse 4 (durch Bau überholt), sondern der Fall davor: der Bau
+meldet den Widerspruch und das Blatt nimmt ihn nicht an.
+
+### 5 · Ball
+
+**Planner** — eine Klammer, `docs/auftraege/generator-auftrag-z2-w0-11-ids-callback-csrf.md:22`:
+
+    ist:  (Session/auth bindet den Importeur)
+    soll: die Bindung ist NICHT Gegenstand von Teil A — es gibt keine Spalte dafuer.
+          Teil A leistet: die Kennung im Protokoll kommt aus auth() statt aus der Query.
+          Die fehlende Urheberspalte ist ein eigener Posten (Schema-Gate, Yama).
+
+**Integrator** — beim Nachtragen der vier CODE_FERTIG gehören die vier Bau-SHAs in `bau_sha` oder
+`bau_commit`; jedes andere Feld erfüllt A-27-1 nicht. Dazu unverändert A-37 aus §275.
+
+**Nicht geprüft:** der Scope-Diff der vier Bauten. Er ist nach der Wache meine Pflicht, sobald der
+Zustand im Feld steht — heute steht er im Betreff, und ich messe den Datensatz, nicht die Ansage.
