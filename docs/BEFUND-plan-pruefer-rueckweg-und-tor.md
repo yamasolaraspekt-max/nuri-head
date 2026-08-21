@@ -10416,3 +10416,57 @@ ohne Ladeweg (§133). Kein Schaden heute.
 Messfrage. Bleibt der `|| 1`-Wächter, waere die kleine Ergaenzung am Test die ehrlichere Fassung:
 die bekannten falschen Werte festschreiben, damit der Preis sichtbar bleibt statt bei der naechsten
 Wiederverwendung neu entdeckt zu werden.
+
+## §142 — Posten (d): vier Rollen sind binnen drei Minuten verstummt, die Warteschlange ist leer, und das Tor davor bin ich
+
+*(Messstand 95945409, 21.08. 11:42. Nummer gegen den frischen HEAD gewaehlt: 79 Abschnitte, hoechste
+141 — 142 war frei. Klasse nach §132: der Aktivitaets-Teil ist FLUECHTIG und traegt deshalb den
+Zeitstempel; die Regel- und Zustandsbelege sind SHA-verankert.)*
+
+**Fluechtige Messung, Zeitstempel 21.08.2026 11:40:31** — letzter EIGENER Commit je Rolle, ueber die
+Rollenmarke gesucht, nicht ueber die Zweigspitze:
+
+| Rolle | letzter eigener Commit | Alter | eigene Commits heute |
+|---|---|---|---|
+| **plan-pruefer** (ich) | 11:39 | **0 Min** | **24** |
+| integrator | 10:46 | 54 Min | — |
+| generator | 10:07 | **93 Min** | 3 |
+| release-pruefer | 10:04 | **95 Min** | 7 |
+| evaluator | 10:04 | **96 Min** | 1 |
+| planner | 10:04 | **96 Min** | 4 |
+
+**Vier Rollen haben binnen drei Minuten aufgehoert** (10:04 bis 10:07) und sich seither nicht
+geruehrt. Drei Zweige — `rolle/evaluator`, `rolle/planner`, `rolle/release-pruefer` — stehen sogar
+auf **demselben** SHA `03e9ac41`, einem Transport-Merge des Release-Pruefers.
+
+**Die Warteschlange erklaert es, und sie ist leer:** `BEREIT` **0**, `IN_ARBEIT` **0**. Es gibt
+nichts zu bauen. Nicht-terminal sind nur vier `ENTWURF`, ein `CODE_FERTIG` (Ball Evaluator) — und
+die fuenf `Z1-W1`, die in der Statuswahrheit gar nicht vorkommen (§138).
+
+**Die Kette bis zum Ursprung gemessen, und sie endet bei mir.**
+`docs/ARBEITSREGELN.md:253` sagt woertlich: *"Ein Auftrag darf nur `BEREIT` werden, wenn **der
+Plan-Pruefer** alle folgenden Punkte belegt hat."* Die fuenf Welle-1-Blaetter tragen alle
+`baut: generator` und `nimmt_ab: evaluator`. **Das Schweigen des Generators ist also kein
+Leerlauf, sondern eine leere Warteschlange — und die Weiche davor ist meine.**
+
+**Und sie ist nicht durch §123 verschlossen.** Das habe ich geprueft, statt es anzunehmen:
+
+- Die DoR-Kriterien (`docs/ARBEITSREGELN.md:255-262`) nennen Basis-SHA, Ziel, Ist-Beleg, Scope,
+  Nicht-Ziele, Konfliktpruefung, Abhaengigkeitskette, Akzeptanzfaelle — **keines** verlangt einen
+  Datensatz in `docs/STATUS.md`.
+- `docs/ARBEITSREGELN.md:247-249`: *"Tafelzeile, `zustand` und `dor_beleg` sind EIN Handgriff … die
+  Regel oben sagt nur, **wer** ihn zuerst ausfuehrt."* Sie regelt die **Reihenfolge**, nicht die
+  Moeglichkeit.
+- Und §123 selbst handelt ausweislich seiner Ueberschrift vom **Datensatz** und der Sperre — ich
+  habe dort nie behauptet, die DoR sei blockiert. Sie ist es nicht.
+
+**Was blockiert ist, ist das EINTRAGEN**, nicht das Pruefen: `dor_beleg` und `zustand: BEREIT`
+gehoeren in `docs/STATUS.md`, und dorthin schreibt nur der Integrator
+(`scripts/rollen-tor.sh:344`, Vollzug `:403-407` mit `exit 1`). Genau denselben Weg bin ich bei
+A-38/A-39/A-40/A-42 gegangen: **Votum geliefert und in dieser Datei belegt, Eintragen beim
+Integrator** (§108).
+
+**Ball bei mir, und ich benenne ihn als offene Arbeit statt als Befund:** fuenf DoR-Pruefungen fuer
+`Z1-W1-1` bis `Z1-W1-5`, jede am Basis-Stand `11f7c4c3` und mit durchgerechneten Formeln, wie §5 es
+verlangt. Das ist mehr als eine Runde; ich fange in der naechsten damit an und liefere je Blatt ein
+eigenes Votum. **Solange steht der Stillstand nicht bei den anderen vier Rollen, sondern hier.**
