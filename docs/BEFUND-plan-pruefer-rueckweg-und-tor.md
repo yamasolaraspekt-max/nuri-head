@@ -12535,3 +12535,115 @@ und Bau-SHA in ein **Feld**, für alle fünf `Z1-W1`-Kennungen.
 `dachGeometrie.ts:150` es seit `60c04eef` erlaubt — entweder zieht `:478` nach, oder die Ausnahme
 fällt; der Schalter heißt `benoetigtLaengerGleichBreite` und meint offenbar `≥`.
 **Ball beim Evaluator:** Kriterium E, die Browserabnahme.
+
+## §170 — Drei Aufträge gebaut, keiner je BEREIT geworden — und einer trägt mein NICHT ERTEILT
+
+**Messstand** `c4fc07e0` · Baum sauber · 0 neue Commits in meinem Zweig.
+**Integrationszweig:** `7e28d051` → **`5ccc707f`**, 8 Commits. Drei fallen in meine Bahn:
+`d7651d9c` 13:40 *Z1-W1-3 gebaut*, `b2371d7e` 13:42 *Z1-W1-4 gebaut*, `5ccc707f` 13:45
+*vier DoR-Voten in die Felder transportiert*.
+
+### Zuerst das Erledigte: §108 ist geschlossen
+
+Die vier `ENTWURF`-Blöcke **A-38, A-39, A-40, A-42** tragen jetzt alle ein mehrzeiliges `dor_beleg`
+mit meinem Votum. Der Integrator hat **additiv** gearbeitet — der vorherige Wert steht ausdrücklich
+erhalten daneben (`dor_votum_runde_2` im selben Block). Das war der älteste meiner offenen Posten
+(*„meine vier DoR-Voten stehen in keinem Feld"*, §108). **Erledigt, sauber und mit Rückweg.**
+
+### Und jetzt der Befund: drei Bauten, kein einziger Zustand
+
+| | Bau | mein DoR-Votum | Blattzustand | in `docs/STATUS.md` |
+|---|---|---|---|---|
+| Z1-W1-2 | `60c04eef` 13:33 | **ERTEILT** (§144) | `ENTWURF` | **0 Treffer** |
+| Z1-W1-3 | `d7651d9c` 13:40 | **NICHT ERTEILT** (§145) | `ENTWURF` | **0 Treffer** |
+| Z1-W1-4 | `b2371d7e` 13:42 | **ERTEILT** (§146) | `ENTWURF` | **0 Treffer** |
+
+`grep -c 'Z1-W1' docs/STATUS.md` = **0**. Die drei Bau-SHAs: je **0 Treffer**. Alle fünf Blätter
+stehen unverändert auf `zustand: ENTWURF`. **Kein einziger dieser Aufträge ist je `BEREIT`
+geworden** — `docs/ARBEITSREGELN.md` §5 macht `BEREIT` aber davon abhängig, dass der Plan-Prüfer
+belegt hat; das ist der Übergang, der hier dreimal übersprungen wurde.
+
+**Fair getrennt, weil die drei Fälle nicht gleich sind:** Bei **Z1-W1-2** und **Z1-W1-4** ist die
+*Sache* da — mein Votum liegt vor, erteilt, gemessen. Fehlt nur die *Form*, und die Form kann ich
+nach §123 nicht selbst eintragen; `docs/STATUS.md` gehört dem Integrator
+(`scripts/rollen-tor.sh:344`). Das ist ein Transportrückstand, kein Regelbruch des Generators.
+
+**Bei Z1-W1-3 fehlt auch die Sache.**
+
+### Z1-W1-3: gebaut gegen ein verweigertes Votum
+
+§145 lautete: *„NICHT ERTEILT. Zwei tragende Restpunkte (A unerfüllbar **und** falsch gemessen) und
+eine Entscheidung."* Restpunkt 1 hieß: **Kriterium A kann nie grün werden.**
+
+Das Blatt hat sich seither **nicht bewegt**: `docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md`
+trägt genau **einen** Commit, `f350befc` 21.08. 10:00, den Schnitt selbst. Kein Nachtrag, keine
+Berichtigung an Kriterium A.
+
+Und der Generator schreibt in seiner eigenen Baubotschaft:
+
+> **„KRITERIUM A IST SO NICHT ERREICHBAR, und das melde ich statt es zu umgehen"**
+
+Er ist also unabhängig auf meinen Restpunkt 1 gekommen — **und hat trotzdem gebaut**. Das ist keine
+Nachlässigkeit und keine Täuschung; er meldet es im Klartext. Es ist eine **Lücke in der Kette**: es
+gibt keine Stelle, an der ein verweigertes Votum den Bau anhält, weil das Votum nie in ein Feld kam
+und das Blatt nie den Zustand wechselte. **Ein NICHT ERTEILT, das nirgends steht, hält nichts auf.**
+
+### Seine Zahlen, nachgemessen statt geglaubt
+
+**Sechs Shoelace-Fassungen** — alle sechs genannten Stellen einzeln geöffnet, jede trägt die Formel
+wörtlich:
+
+```
+geometry/dachAusschnitt.ts:107   a += p.x * q.y - q.x * p.y;
+geometry/roomDetection.ts:75     summe += p.x * q.y - q.x * p.y;
+geometry/polygonFlaeche.ts:44    summe += a.x * b.y - b.x * a.y;
+geometry/dachTopologie.ts:109    return acc + p.x * n.y - n.x * p.y;
+geometry/grundriss.ts:98         a += p.x * q.y - q.x * p.y;
+renderers/three-d/dachMesh.ts:104 const a = poly[i], b = poly[(i+1)%n]; ...
+```
+
+Eigene Zählung mit einem an `polygonFlaeche.ts:44` verifizierten Muster: **dieselben sechs**, dazu
+eine siebte Nennung in `geometry/kontur.ts:27`, die aber sein berichtigter Kommentartext ist, kein
+Rechencode. **Seine Zahl hält.** Ebenso *„drei erreichbar"*: `roomDetection`, `polygonFlaeche`,
+`dachMesh` erreichbar — `dachAusschnitt`, `dachTopologie`, `grundriss` nicht. **Exakt.**
+
+### Die Totenliste: 33 → 28, und alles ging auf den ERSTEN Bau
+
+Meine Erreichbarkeitsmessung neu gefahren, Grundmenge unverändert 160 Module:
+
+```
+vor den Bauten (85be41e4):  erreichbar 127 · NICHT erreichbar 33
+heute        (5ccc707f):    erreichbar 132 · NICHT erreichbar 28
+verlassen: aufbauPlatzierung · dachWerte · dachformVorlagen · linienBauteile · polygonFlaeche
+neu darauf: keiner
+```
+
+Je Bau zugeordnet, indem ich den Baum an jedem der drei SHAs ausgepackt und einzeln gemessen habe:
+
+```
+durch 60c04eef (Z1-W1-2):  alle fünf
+durch d7651d9c (Z1-W1-3):  keiner
+durch b2371d7e (Z1-W1-4):  keiner
+```
+
+**Der Generator von Z1-W1-2 hat es exakt vorhergesagt:** *„der neue WERT-Import auf dachformVorlagen
+schafft eine Laufzeitkante … (S-1/8, 2402 Zeilen **plus vier Folgemodule**)"*. Nachgemessen an
+`dachformVorlagen.ts:33-36`: genau vier Laufzeit-Importe — `polygonFlaeche`, `dachWerte`,
+`aufbauPlatzierung`, `linienBauteile`. **Vier. Auf die Zahl.**
+
+**Der Generator von Z1-W1-3 hat sich dagegen um genau ein Modul geirrt:** *„polygonFlaeche.ts war in
+S-1/9 als tot geführt … durch diesen Import ist es erreichbar. Die Totenliste ist um ein Modul
+kürzer."* Gemessen: polygonFlaeche war **sieben Minuten vorher** durch `60c04eef` erreichbar
+geworden; sein Bau hat die Liste um **null** verkürzt. Keine Falschaussage, sondern eine Messung
+gegen einen veralteten Ausgangsstand — dieselbe Klasse wie §166 und §167, nur diesmal bei einem
+anderen.
+
+**Änderung an einem stehenden Posten bei Yama:** die Zahl aus §119/§120 lautet nicht mehr 33.
+**28 Module ohne Ladeweg**, Grundmenge 160.
+
+**Ball beim Integrator:** fünf `Z1-W1`-Datensätze und drei Bau-SHAs in **Felder** — die
+Statuswahrheit kennt weder die Aufträge noch die Bauten.
+**Ball beim Planner:** Kriterium A und D von Z1-W1-3 stehen seit dem Schnitt unverändert offen, und
+der Bau ist bereits erfolgt; entweder wird A berichtigt oder ausdrücklich gestrichen.
+**Ball bei Yama:** die Kettenlücke — ein verweigertes DoR-Votum, das in keinem Feld steht, hält
+keinen Bau auf. Drei Bauten aus `zustand: ENTWURF` heraus sind der Beleg.
