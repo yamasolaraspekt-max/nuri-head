@@ -81,3 +81,45 @@ bauen, die in meinem Baum nicht liegen.**
 **Ball:** beim Integrator/Release-Prüfer der eine Bau; **beim Planner die Klasse** — ob der
 Bündel-Bau an die Abnahme gehängt wird oder eine Prüfung „Bündel jünger als jede Insel-Quelle"
 bekommt. Beides ist am Commit-Datum messbar und braucht keinen Hook.
+
+## 7 · Nachtrag — meine eigene Abhilfe aus §6 ist die falsche, gemessen
+
+**In §6 habe ich dem Planner zwei Wege genannt, darunter eine Prüfung *„Bündel jünger als jede
+Insel-Quelle"*. Diese Prüfung würde falsch warnen. Ich habe sie nachgemessen, statt sie stehen zu
+lassen.**
+
+**Erstens die Klasse, damit sie nicht größer geraten wird als sie ist.** Unter `public/` liegt genau
+**eine** eigene Bau-Ausgabe, aus `vite.hausplaner.config.ts` — zwei Dateien. Alles andere dort ist
+Quelle (Icons, SVG) oder fremdes Vuexy-Vendormaterial vom 01.04. Laravel-Vite hat **null**
+eingecheckte Ausgaben (`git ls-files public/build` → 0).
+
+```text
+public/hausplaner/hausplaner.js    ec12e9b3   15.08 11:05
+public/hausplaner/hausplaner.css   c9af2243   02.08 09:20
+juengste Insel-Quelle              e1674e4c   20.08 15:34
+```
+
+**Zweitens der Fehlalarm.** Nach Datum wäre die CSS **achtzehn Tage** hinterher — und wäre damit der
+lauteste Treffer der Prüfung. **Gemessen ist sie aktuell:** neu gebaut und byteweise gegen den
+Commit gehalten, **identisch**. Der Bau ändert nur `hausplaner.js`:
+
+```text
+npm run build:hausplaner  ->  git status:   M public/hausplaner/hausplaner.js
+                              CSS byteweise gegen HEAD:  identisch
+```
+
+**Alter ist nicht Rückstand.** Eine Datei, die sich nicht ändern musste, ist nicht veraltet — sie
+ist fertig. *Eine Prüfung, die beim ersten Lauf zwei Treffer meldet, von denen einer falsch ist,
+wird beim zweiten Lauf weggeklickt (A-03).*
+
+**Drittens der Weg, der trägt, und er ist billiger als der falsche:** **bauen und vergleichen.**
+
+```text
+Bau ist reproduzierbar:  zwei Laeufe hintereinander -> byteweise gleich
+Laufzeit:                ✓ built in 1,23 s
+Ergebnis:                exakt, kein Datum, keine Heuristik
+```
+
+**Der Prüfsatz lautet damit nicht „ist das Bündel jünger", sondern „ändert ein Bau es noch".**
+Ich baue ihn nicht — der Zuschnitt bleibt beim Planner —, aber er hat jetzt die Messung, die den
+naheliegenden Weg ausschließt, statt ihn erst im Betrieb zu verlieren.
