@@ -671,13 +671,85 @@ ausnahmslos eine **ausgelöste** Negativprobe mit Rohausgabe und `echo $?`, nich
   *Ein Tor, das nur sperrt, ist von einem kaputten nicht zu unterscheiden — dieselbe Begründung wie
   bei `A-37-2`.*
 
-  **Sitzungsidentität — Befund `79285cf2`, in ein Kriterium überführt:** wo der Hook eine Sitzung
-  identifiziert, besteht die Kennung aus **Sitzungs-ID + PID des Sitzungsprozesses + Prozess-
-  Startkennung**, **nie** aus der Shell-PID einer Werkzeugrunde. **Gemessen:** von vier `pid`-Feldern
-  im Steuerungssystem trugen **drei** eine Zahl, zu der kein Prozess mehr existierte; die Shell-PID
-  einer einzigen Sitzung wechselte in vier aufeinanderfolgenden Aufrufen `76231 → 80694 → 80830`,
-  während der Sitzungsprozess konstant blieb. *Ein Tor, das Lebendigkeit über die Shell-PID prüft,
-  prüft bei drei von vier Rollen eine tote Zahl.*
+  **⚠ SITZUNGSIDENTITÄT — BERICHTIGT am 22.08. nach DoR-Restpunkt 1 (`plan-pruefer-NICHT_ERTEILT.yaml`,
+  Votum `1568610f`/`c74a9141`). Meine erste Fassung war gegen den alten Fehler richtig und gegen den
+  neuen falsch, und sie hätte gebaut Schaden angerichtet.**
+
+  *(Die überholte Fassung bleibt als Beleg stehen — A-20-4:)*
+
+  > ~~Sitzungsidentität — Befund `79285cf2`, in ein Kriterium überführt: wo der Hook eine Sitzung
+  > identifiziert, besteht die Kennung aus **Sitzungs-ID + PID des Sitzungsprozesses +
+  > Prozess-Startkennung**, nie aus der Shell-PID einer Werkzeugrunde.~~
+  > **Der Satz wehrt die Shell-PID ab — das war der Befund aus Sitzung `79285cf2…`, und er bleibt
+  > richtig.** *(Die durchgestrichene Zeile darüber zitiert die alte Schreibweise wörtlich und bleibt
+  > deshalb unverändert — sie ist der Beleg, nicht die Aussage.)* Er macht
+  > dabei aber **PID und Startkennung zu Bestandteilen der Identität**, und genau daraus folgt der
+  > Schaden: `agentenarchitektur-v2.md` §8 (`0d897b0e:154-158`) entfernt eine Sperre automatisch,
+  > *„wenn PID + Startkennung nicht mehr übereinstimmen"*. **Wörtlich umgesetzt hätte das Tor der
+  > arbeitenden Planner-Sitzung die Lease entzogen — mitten im Schreiben dieses Blattes.** Die dort
+  > genannte Alternative `flock` (`:159-161`) deckt den Fall **nicht** ab: sie gibt die Sperre beim
+  > Prozessende frei, bei einem `--resume` also ebenfalls, nur automatisch.
+  > *Der Begründungssatz „während der Sitzungsprozess konstant blieb" traf auf die messende Sitzung
+  > zu und auf die Planner-Sitzung nicht.*
+
+  **DIE ZIELREGEL — Yamas Wortlaut vom 22.08., sechs Punkte, einzeln abzunehmen:**
+
+  | # | Regel | wo abgenommen |
+  |---|---|---|
+  | 1 | **Stabile Identität ist allein die Sitzungs-ID.** Sie überlebt den Prozess. | **A-37-25** |
+  | 2 | **`pid` und `prozess_start` gelten je LAUF**, nicht je Sitzung. | **A-37-25** |
+  | 3 | Während Schreibarbeit wird der **Heartbeat** regelmäßig erneuert (atomar, tmp + `mv`). | **Z0-I2** |
+  | 4 | **Übernahme nur bei abgelaufenem Heartbeat UND fehlendem aktuellem Lauf** — beides. | **Z0-I2** |
+  | 5 | Das **Fencing-Token** bleibt maßgeblich. | **Z0-I2** |
+  | 6 | **Eine alte PID allein erklärt eine Lease NIEMALS für verwaist.** | **A-37-25** |
+
+  **⚠ ZUR ZUSCHNITTGRENZE, weil der Plan-Prüfer sie ausdrücklich offengelassen hat** *(„Wo die Grenze
+  liegt, entscheidet der Planner")*: **Alle sechs Punkte stehen hier zusammen, weil sie eine Regel
+  sind und getrennt ihren Sinn verlieren** — abgenommen werden sie an zwei Orten. **`A-37-25` baut
+  ein `pre-commit`-Tor, keine Lease-Verwaltung.** Das Tor muss wissen, **woran es eine Sitzung
+  erkennt** (1, 2) und **was es daraus nicht schließen darf** (6). **Heartbeat-Erneuerung, Übernahme
+  und Fencing (3–5) sind Mechanik der Claim-Sperre und gehören nach `Z0-I2`** — sie hier abzunehmen
+  hieße, Lease-Verwaltung in einen Commit-Hook zu bauen. *`README.md:66` weist die Barriere beiden
+  Aufträgen zu; diese Tabelle sagt, welcher Punkt bei welchem liegt, damit keiner zwischen ihnen
+  verschwindet.*
+
+  **GEMESSEN AM LAUFENDEN SYSTEM — die Sitzung `ef8ec540` lief binnen 40 Minuten unter VIER Prozessen:**
+  ```
+  88928  Start 00:00:48  (--session-id)   Läufe 1-3     ps-exit 1   tot
+  97092  Start 00:16:24  (--resume)       Messung P-P   ps-exit 1   tot
+  12334  Start 00:32:38  (--resume)       Lauf 4        ps-exit 1   tot
+  16345  Start 00:40:08  (--resume)       Lauf 5        ps-exit 0   lebt
+  ```
+  **Erhebung:** `ps -o pid=,lstart= -p <PID>`, Exit-Code **direkt** gelesen — nicht hinter einer Pipe
+  *(der Plan-Prüfer hat seinen ersten Versuch genau daran verworfen)*. **Verfahren an beiden Enden
+  verifiziert:** lebende PID → exit `0` mit Startzeit, `999999` → exit `1` leer.
+  **Der Lebensnachweis ist der laufende Lauf:** `ps -axo command=` findet genau **einen** Prozess,
+  dessen Kommandozeile die Sitzungs-ID trägt (`claude -p --resume <sitzungs-id>`).
+  **Der Realfall ist protokolliert, nicht konstruiert:** um **00:17:18** wurde die Planner-Lease mit
+  `owner.pid 88928` erteilt — **dieser Prozess war da bereits tot**, während die Sitzung durchgehend
+  arbeitete und um 00:21:57 dieses Blatt schrieb.
+
+  **Warum das ein eigener Absatz bleibt:** *jede* der vier PIDs war zum Zeitpunkt ihres Eintrags
+  richtig. **Die Registrierung war nie falsch — sie ist abgelaufen**, dieselbe Klasse wie die feste
+  Zahl in `A-37-11`, die Zeilennummer in `A-37-19`, die „sechs Bäume" in `A-37-18` und das Nicht-Ziel
+  „Kein Hook". **Ein Tor, das Lebendigkeit an einer gespeicherten PID misst, prüft eine Aussage mit
+  Verfallsdatum, ohne das Datum zu kennen.**
+
+  **Negativprobe, ausgelöst:** Eintrag mit **toter** `owner.pid`, aber gültigem Heartbeat und
+  laufendem `--resume`-Prozess derselben Sitzungs-ID → **die Sitzung gilt als lebend**, eine
+  Übernahme wird abgewiesen. **Gegenprobe:** kein laufender Prozess mit dieser Sitzungs-ID **und**
+  abgelaufener Heartbeat → Übernahme erlaubt.
+  **Absage-Regel:** Ein Bau, der eine Sitzung oder Lease **allein wegen abweichender PID** für tot
+  erklärt, erfüllt dieses Kriterium **nicht** — auch dann nicht, wenn alle fünf Negativproben oben
+  grün sind.
+
+  **Zum Beleg `79285cf2` — Restpunkt 2 der DoR, berichtigt:** die Zeichenfolge steht in diesem Blatt
+  neben echten Commit-SHAs (`26c46f31`, `e5aa5af7`, `e9e6ee5b`) und liest sich wie einer.
+  **Sie ist keiner:** `git cat-file -e 79285cf2^{commit}` → **exit 128**. Es ist die **Sitzungs-ID**
+  `79285cf2-4231-4f71-8dfc-3306e3371109` (Sitzungsprozess-PID 70499), Quelle
+  `ereignisse/SITZUNG-70499-ROLLENWECHSEL/sitzung-70499-meldung.yaml`. **Ab hier im Blatt immer als
+  „Sitzung `79285cf2…`" geschrieben.** *Eine gekürzte UUID und ein gekürzter SHA sehen gleich aus —
+  und ein Beleg, den man nicht öffnen kann, ist die stille Variante eines toten Verweises.*
 
   **⚠ `--no-verify` IST DIE GRENZE UND WIRD ALS SOLCHE DOKUMENTIERT, NICHT ÜBERSPIELT.**
   Ein Git-Hook ist mit `git commit --no-verify` umgehbar; **das ist technisch nicht verhinderbar.**
