@@ -30,10 +30,10 @@ W-1 „reine Reuse", Zielort ausdrücklich nur `geometry/`).
 ## Nachvollzugs-Matrix (Fassung 1.7, §5)
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
-| A: `grep -rn "utils/dachWerte" resources/` → 0 produktive Treffer | Import | *n.U.* | grep-Rohausgabe |
-| B: utils-Kopie existiert weiter, Kopf trägt Stilllegungsvermerk | Vermerk | *n.U.* | Zitat |
-| C: md5 der Datei VOR der Kopfergänzung im Bericht (Beleg für spätere Y-Löschentscheidung) | Beleg | *n.U.* | md5-Rohausgabe |
-| D: Suite grün, `tsc:hausplaner` exit 0 | Schutz | *n.U.* | Zähler |
+| A: `grep -rn "utils/dachWerte" resources/` → 0 produktive Treffer | Import | `b2371d7e` | 0 **Import**-Treffer; 2 Texttreffer einzeln geöffnet = Kommentare |
+| B: utils-Kopie existiert weiter, Kopf trägt Stilllegungsvermerk | Vermerk | `b2371d7e` | Datei existiert, 4188 → 6176 B, Kopf trägt Stilllegungsvermerk |
+| C: md5 der Datei VOR der Kopfergänzung im Bericht (Beleg für spätere Y-Löschentscheidung) | Beleg | `b2371d7e` | md5 `b5738234bebca5a3599f65c3f797c06f`, 103 Z./4188 B — **vor** der Ergänzung |
+| D: Suite grün, `tsc:hausplaner` exit 0 | Schutz | `b2371d7e` | `tsc` exit 0 · 1770 grün |
 
 **P1-Kriterium A ist vor dem Bau wirksam rot** (heute 1 produktiver Treffer: `dachGeometrie.ts:13`).
 

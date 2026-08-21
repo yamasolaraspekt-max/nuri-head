@@ -39,11 +39,11 @@ Formeltausch hinaus.
 ## Nachvollzugs-Matrix (Fassung 1.7, §5)
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
-| A: `grep -c "polygonM2" geometry/dachGeometrie.ts` → 0 UND `grep -c "from './polygonFlaeche'" geometry/dachGeometrie.ts` → 1 | Zusammenführung | `d7651d9c` | grep-Rohausgaben (Evaluator) |
-| B: NaN-Verhalten von `pruefeRechteckigeKontur` VORHER (Basis) und NACHHER gemessen und gegenübergestellt — Fallrichtung wird nicht angenommen | Messpflicht | `d7651d9c` | Rohausgaben im Baubericht/Abnahme |
-| C: Umrechnung mm→m erkennbar am Aufrufort (`:89`), `polygonFlaeche.ts` unverändert (`git diff --numstat` = 0) | Vertrag | `d7651d9c` | diff-Rohausgabe |
-| D: `kontur.ts:22-23` nennt die tatsächliche Lage (mehrere Fassungen), behauptet keine „genau eine Stelle" mehr | Doku | `d7651d9c` | Zitat |
-| E: Suite grün, `tsc:hausplaner` exit 0 | Schutz | `d7651d9c` | Zähler |
+| A: `grep -c "polygonM2" geometry/dachGeometrie.ts` → 0 UND `grep -c "from './polygonFlaeche'" geometry/dachGeometrie.ts` → 1 | Zusammenführung | `d7651d9c` | **NICHT erfüllt** — 6 Fassungen bleiben, 3 erreichbar; im Commit benannt |
+| B: NaN-Verhalten von `pruefeRechteckigeKontur` VORHER (Basis) und NACHHER gemessen und gegenübergestellt — Fallrichtung wird nicht angenommen | Messpflicht | `d7651d9c` | `Z1-W1-3 B` + Gegenprobe — vorher/nachher am echten Modul gemessen |
+| C: Umrechnung mm→m erkennbar am Aufrufort (`:89`), `polygonFlaeche.ts` unverändert (`git diff --numstat` = 0) | Vertrag | `d7651d9c` | Umrechnung an der **Eingabe**, Vertrag von `polygonFlaeche` unberührt |
+| D: `kontur.ts:22-23` nennt die tatsächliche Lage (mehrere Fassungen), behauptet keine „genau eine Stelle" mehr | Doku | `d7651d9c` | `kontur.ts:22` durch die Messung ersetzt (6 Fundstellen benannt) |
+| E: Suite grün, `tsc:hausplaner` exit 0 | Schutz | `d7651d9c` | `tsc` exit 0 · 1770 grün |
 
 **P1-Kriterium A war vor dem Bau wirksam rot** (`polygonM2` in `:39-48` vorhanden).
 

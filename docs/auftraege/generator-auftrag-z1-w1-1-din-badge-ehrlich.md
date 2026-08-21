@@ -43,10 +43,10 @@ Der Hinweis benennt GENAU das eine offene Kriterium und stellt die übrigen nich
 ## Nachvollzugs-Matrix (Fassung 1.7, §5)
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
-| A: Aufruf OHNE `durchgangshoehe` → Hinweis vorhanden, Text als Quelltext-Zusage geprüft | Hinweis | `2bc0d2f2` | `__tests__/eigenschaftenPanel.test.ts` |
-| B (**Schutz**, gegen die Engine direkt gemessen): ohne Übergabe keine `durchgangshoehe`-Prüfung im Ergebnis; mit 1900 mm ist sie drin, verletzt, kippt `bestanden` | Schutz | `2bc0d2f2` | `__tests__/treppenBerechnung.test.ts` |
-| C: Browserabnahme — Screenshot einer platzierten Treppe mit Hinweis | Abnahme | — | **offen, Evaluator** |
-| D: `git diff 2bc0d2f2^ 2bc0d2f2 --numstat -- geometry/treppenBerechnung.ts` → 0 geänderte Zeilen | Schutz | `2bc0d2f2` | Rohausgabe im Baubericht (Kriterium D belegt) |
+| A: Aufruf OHNE `durchgangshoehe` → Hinweis vorhanden, Text als Quelltext-Zusage geprüft | Hinweis | `2bc0d2f2` | `Z1-W1-1: der Vorbehalt …` (Quelltext) — Rot-Probe gefahren |
+| B (**Schutz**, gegen die Engine direkt gemessen): ohne Übergabe keine `durchgangshoehe`-Prüfung im Ergebnis; mit 1900 mm ist sie drin, verletzt, kippt `bestanden` | Schutz | `2bc0d2f2` | `Z1-W1-1: ohne Durchgangshöhe …` + `(Gegenprobe)` in `treppenBerechnung.test.ts` |
+| C: Browserabnahme — Screenshot einer platzierten Treppe mit Hinweis | Abnahme | — | **offen — Abnahme (Evaluator)** |
+| D: `git diff 2bc0d2f2^ 2bc0d2f2 --numstat -- geometry/treppenBerechnung.ts` → 0 geänderte Zeilen | Schutz | `2bc0d2f2` | `git diff` an `treppenBerechnung.ts`: **0 Zeilen** |
 
 **P1-Kriterium A war vor dem Bau wirksam rot** (Badge-Zeile trug keinen Hinweis — §143 bestätigt).
 Rot-Probe laut Baubericht gefahren (Hinweis ausgehängt → Zusage fällt; zurück → 1773 grün).

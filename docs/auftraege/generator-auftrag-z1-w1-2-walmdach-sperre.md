@@ -39,11 +39,11 @@ Teilwalm/Kantentypen (STATUS-Treffer `prevIsTraufe`) sind NICHT Gegenstand.
 ## Nachvollzugs-Matrix (Fassung 1.7, §5)
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
-| A: Fall 6×8 m/30° wirft `DachGeometrieUngueltig` | Sperre | *n.U.* | Testname |
-| B: Fall 4×10 m/30° wirft `DachGeometrieUngueltig` | Sperre | *n.U.* | Testname |
-| C: Bestandstest `:61-68` (8×12 m) bleibt grün und **unverändert** | Schutz | *n.U.* | diff + Suite |
-| D: `walmIstKonsistent` ist die einzige Fassung der Regel (grep-Beleg: kein neuer Prüfcode gleichen Inhalts) | Reuse | *n.U.* | grep-Rohausgabe |
-| E: Browserabnahme — Walmdach mit B > L erzeugt sichtbare Absage, kein stilles Ergebnis | Abnahme | — | Screenshot |
+| A: Fall 6×8 m/30° wirft `DachGeometrieUngueltig` | Sperre | `60c04eef` | `Z1-W1-2 A: Walm 6×8 m, 30°` — Rot-Probe gefahren |
+| B: Fall 4×10 m/30° wirft `DachGeometrieUngueltig` | Sperre | `60c04eef` | `Z1-W1-2 B: Walm 4×10 m, 30°` — Rot-Probe gefahren |
+| C: Bestandstest `:61-68` (8×12 m) bleibt grün und **unverändert** | Schutz | `60c04eef` | `git diff` 39 Anfügungen, **0 Löschungen**; Suite 1768 grün |
+| D: `walmIstKonsistent` ist die einzige Fassung der Regel (grep-Beleg: kein neuer Prüfcode gleichen Inhalts) | Reuse | `60c04eef` | grep: Regel nur `dachformVorlagen.ts:415`; 2 weitere Treffer = Kommentar |
+| E: Browserabnahme — Walmdach mit B > L erzeugt sichtbare Absage, kein stilles Ergebnis | Abnahme | — | **offen — Abnahme (Evaluator)** |
 
 **P1-Kriterien A/B sind vor dem Bau wirksam rot** (heutige Rückgabe: 64,66 bzw. 80,83 m², kein Wurf).
 

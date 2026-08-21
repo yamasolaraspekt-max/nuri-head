@@ -38,10 +38,10 @@ entfernt, Haltung wie bei `decke`/`boden`).
 ## Nachvollzugs-Matrix (Fassung 1.7, §5)
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
-| A: Die Lesestelle benennt am Code, dass das Feld nirgends gesetzt wird — **mit den vier Fundstellen, Grundmenge und Messdatum**, Verweis Y-3 | Ausweis | `9dde4d15` + Nachbesserungs-SHA | Zitat + grep-Rohausgabe |
+| A: Die Lesestelle benennt am Code, dass das Feld nirgends gesetzt wird — **mit den vier Fundstellen, Grundmenge und Messdatum**, Verweis Y-3 | Ausweis | `9dde4d15` | Ausweis an `:91` mit 3-Fundstellen-Messung + Y-3-Verweis |
 | A2 (neu, aus §147): die im Code genannte Zahl stimmt mit `grep -rln insulationType resources/ \| grep -v __tests__ \| wc -l` überein | Richtigkeit | Nachbesserungs-SHA | grep-Rohausgabe |
-| B: Projektion liefert vorher = nachher (Testebene, kein Ladeweg) | Schutz | `9dde4d15` | `__tests__/raumProjektion.test.ts` (2 Zusagen) |
-| C: Kein neues Feld, kein Regler, Typ/Zod/JSON-Schema unverändert | Grenze | `9dde4d15` | diff-Rohausgabe (nur Kommentar + unveränderte Zeile) |
+| B: Projektion liefert vorher = nachher (Testebene, kein Ladeweg) | Schutz | `9dde4d15` | `Z1-W1-5 A` (heute konstant `wand`) + `B` (Zweig feuert bei gesetztem Feld) |
+| C: Kein neues Feld, kein Regler, Typ/Zod/JSON-Schema unverändert | Grenze | `9dde4d15` | Diff der Produktivdatei: nur Kommentarzeilen + unveränderte `bauteil_typ`-Zeile |
 
 **P1-Kriterium A war vor dem Bau wirksam rot.** **A2 ist heute rot** (Code sagt drei, gemessen vier).
 
