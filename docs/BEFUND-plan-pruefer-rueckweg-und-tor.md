@@ -20053,3 +20053,97 @@ und sie wächst nur noch.
 Ich schlage vor, die Wache-Liste entsprechend zu kürzen — das ist Yamas Entscheidung, nicht meine,
 und ich führe sie bis dahin unverändert weiter, damit meine Meldung und der Auftrag nicht
 auseinanderlaufen.
+
+## §243 · Posten (e): die sechs angeschlossenen Module — und §230 war zu stark
+
+**Messstand.** HEAD `49f7a923` (21.08. 19:22:39), Baum sauber, **0 neue Commits** — fünfzehnte Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (291 Min), STATUS-Blob `810f37d9e560`. Gemessen
+21.08. 19:23–19:28.
+
+§242 hat gemessen, dass aus 33 Modulen ohne Ladeweg 27 geworden sind. Diese Runde beantwortet:
+**welche sechs, durch wen, und was folgt daraus für meine eigenen Befunde.**
+
+### 1 · Die sechs, namentlich
+
+Beide Stände mit demselben Programm gemessen — der §119-Schnitt `d4ee1555` (20.08. 13:52) und der
+gültige Stand —, dann die Listen verglichen:
+
+| Stand | Grundmenge | erreichbar | ohne Ladeweg |
+|---|---|---|---|
+| `d4ee1555` 20.08. 13:52 | 160 | 127 | **33** |
+| `7a82ecfb` 21.08. 14:31 | 160 | 133 | **27** |
+
+    ANGESCHLOSSEN   geometry/aufbauPlatzierung.ts
+                    geometry/dachWerte.ts
+                    geometry/dachformVorlagen.ts
+                    geometry/linienBauteile.ts
+                    geometry/polygonFlaeche.ts
+                    renderers/three-d/deckenMesh.ts
+
+    NEU OHNE LADEWEG  (keine)
+
+127 + 6 = 133 und 33 − 6 = 27 — die Rechnung geht ohne Rest auf, und die Bewegung ist **einseitig**:
+sechs Anschlüsse, kein einziger Abgang. Die Grundmenge blieb bei 160, es kam also kein Modul dazu.
+
+### 2 · Wer sie angeschlossen hat — und es sind alte Bekannte
+
+    60c04eef  21.08. 13:33  generator: Z1-W1-2 gebaut — Walmdach … wird abgelehnt statt …
+              -> dachGeometrie.ts:17  import { walmIstKonsistent } from './dachformVorlagen'
+              -> schließt geometry/dachformVorlagen.ts an
+
+    d7651d9c  21.08. 13:40  generator: Z1-W1-3 gebaut — die private Shoelace-Kopie ist entfallen
+              -> dachGeometrie.ts:18  import { polygonFlaecheM2 } from './polygonFlaeche'
+              -> schließt geometry/polygonFlaeche.ts an
+
+Das sind **exakt die Bau-SHAs, die ich in §229 gemessen habe** (Z1-W1-2 `60c04eef` 13:33, Z1-W1-3
+`d7651d9c` 13:40) — eine unabhängige Bestätigung jener Messung über einen ganz anderen Weg.
+
+**Und daraus folgt etwas für §229:** Der dort gemeldete L=B-Widerspruch zwischen
+`dachformVorlagen.ts:478` und `dachGeometrie.ts:150` **existiert erst seit 13:33**. Vorher gab es
+die Kante zwischen beiden Dateien nicht. Der Befund ist damit nicht schwächer, sondern **jünger und
+dringlicher**: Er beschreibt Code, der seit knapp sechs Stunden auf dem Ladeweg liegt.
+
+Ein eigener älterer Satz ist damit überholt: Ein früherer Abschnitt hielt fest, `polygonFlaeche.ts`
+gehöre *„selbst zu den 33 ohne Ladeweg"*. **Das gilt seit `d7651d9c` nicht mehr.**
+
+### 3 · Und jetzt die Berichtigung an §230
+
+§230 hat geschrieben, `hauptflaecheInfo` habe **zwei Produktivverbraucher** (`:1030`, `:1277`), und
+daraus die Ballreihenfolge abgeleitet: `:1310` sei „der einzige Träger mit Wirkung", `:349`
+„nachrangig". **Der Satz ist zu stark, und der Fehler ist einer, den ich selbst schon benannt habe.**
+
+Ein Modul ist erreichbar, sobald **eine** Funktion importiert wird — das sagt nichts über die
+übrigen. Nachgemessen, welche Funktionen von außerhalb der Datei gerufen werden:
+
+| Funktion | Nennungen außerhalb der Definition | davon echte Aufrufe von außerhalb der Datei |
+|---|---|---|
+| `walmIstKonsistent` | 4 | **1** (`dachGeometrie.ts:150`) — der einzige Ladeweg des Moduls |
+| `applyVorlage` (trägt `:1277`) | 1 | **0** — die eine Nennung ist ein **Kommentar** (`:951`) |
+| `schneefangWirdGesetzt` (trägt `:1030`) | 1 | **0** — Aufruf steht innerhalb derselben Datei (`:1042`) |
+
+**Beide Verbraucher von `hauptflaecheInfo` werden ihrerseits von niemandem außerhalb gerufen.** Die
+Kette endet innerhalb des Moduls. Das ist genau die Unterscheidung, die ein früherer eigener
+Abschnitt schon formuliert hat — *„ein Verbraucher **im Quelltext**, kein Verbraucher **zur
+Laufzeit**"* —, und ich habe meinen eigenen Lehrsatz eine Runde später nicht angewendet.
+
+**Was das an §230 ändert:** Die Ballreihenfolge dort stimmt nicht. `:1310` ist **nicht** „der
+einzige Träger mit Wirkung"; heute trägt **keiner** der drei eine gemessene Laufzeitwirkung. Der
+Befund selbst bleibt — drei Träger derselben Formel mit unterschiedlichem Verhalten sind eine
+Inkonsistenz, ob erreicht oder nicht —, aber seine **Dringlichkeit** ist geringer als gemeldet.
+
+**Grenze dieser Messung, ausdrücklich:** Ich habe direkte Namensnennungen gemessen. Ein Aufruf über
+eine Registry, einen dynamischen Index oder eine Re-Export-Kette würde mir entgehen. Ich sage
+deshalb „kein gemessener Aufrufer", nicht „kein Aufrufer".
+
+### 4 · Ball
+
+**Planner** — mit berichtigter Reihenfolge gegenüber §230:
+
+1. `dachGeometrie.ts:150` bleibt der dringliche Punkt: Diese Kante **ist** erreichbar (der einzige
+   Ladeweg des Moduls führt genau durch sie) und trägt den L=B-Widerspruch aus §229.
+2. `dachformVorlagen.ts:1310` und `:349` sind **beide nachrangig**, nicht nur eine von beiden —
+   für keine ist heute ein Laufzeitweg messbar.
+3. `applyVorlage` hat keinen gemessenen Aufrufer, obwohl es die zentrale Anwendungsfunktion der
+   Vorlagen ist. **Das ist eine eigene Frage**, die ich hier nur aufwerfe und nicht beantworte: Ist
+   der Vorlagenweg gebaut, aber nicht angeschlossen? Das gehört zum §119/§120-Komplex und ist der
+   nächste (e)-Posten.
