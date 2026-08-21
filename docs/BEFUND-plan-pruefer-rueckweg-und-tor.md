@@ -23145,3 +23145,117 @@ meldet den Widerspruch und das Blatt nimmt ihn nicht an.
 
 **Nicht geprüft:** der Scope-Diff der vier Bauten. Er ist nach der Wache meine Pflicht, sobald der
 Zustand im Feld steht — heute steht er im Betreff, und ich messe den Datensatz, nicht die Ansage.
+
+## §277 · Posten (c): F-003 hält vollständig — und der Wandmittelpunkt bricht Gleichstände zur Null hin, gespiegelte Wände fangen unsymmetrisch
+
+**Messstand.** HEAD und Zweig beide `34f6f5a9`, Rückstand 0, Baum sauber. Nichts angekommen seit
+§276. Gemessen 21.08. 21:33–21:44.
+
+### 1 · F-003 Lotfußpunkt — vier Zusagen, vier gehalten
+
+`W-01/3-FORMELN.md` erklärt F-003 als **abweichend** von der Formelsammlung: *„F-003 wird OHNE die
+Begrenzung auf [0,1] gerechnet … Das ist Absicht, kein Fehler."* Durchgerechnet, nicht angesehen:
+
+| Zusage | gemessen | |
+|---|---|---|
+| `lotAufGerade()` bei `fangKern.ts:96`, angewandt `:152` (achse) und `:169` (verlaengerung) | genau dort | **trifft** |
+| kein `Math.max`/`Math.min`/`clamp` | **0 Treffer in der ganzen Datei** | **trifft** |
+| Grenzfall `laenge2 < 1e-9` → `null` | `:99-102`, Epsilon statt „exakt null" | **trifft** |
+| Rangfolge `128 → 143 → 163 → 171 → 182/185 → 192 → 195`, dazu `114` davor | acht Ausgänge, alle dort | **trifft** |
+
+**Gerechnet** (Formel wörtlich aus `:96-106` entnommen):
+
+    p(5,10)   auf (0,0)-(10,0)   t =  0.5   Fuss (5,0)      senkrecht d = 10
+    p(-40,10) auf (0,0)-(10,0)   t = -4     Fuss (-40,0)    senkrecht d = 10
+    p(250,10) auf (0,0)-(10,0)   t = 25     Fuss (250,0)    senkrecht d = 10
+    laenge2 = 9.61e-10 -> null                        (b = 3.1e-5 mm)
+    laenge2 = 1.02e-9  -> t = 31250000, Fuss (1000,0), senkrecht d = 5   (b = 3.2e-5 mm)
+
+`t = -4` und `t = 25` landen exakt auf der Verlängerung — **die Abweichung ist gebaut wie
+beschrieben**, und die Senkrecht-Distanz bleibt auch bei `t = 31 250 000` korrekt.
+
+**Die Folgerung eigens geprüft** (Lehre aus §274): Die fehlende Begrenzung könnte auf beliebig weit
+entfernte Punkte fangen. Sie kann es nicht — `:156-157` und `:170` prüfen den **Senkrecht**-Abstand
+gegen `toleranzMm`, bevor der Fuß zurückgegeben wird. Kette geschlossen, Zusage trägt.
+
+### 2 · Der Fund: `wandFangpunkte:253` rundet den Mittelpunkt mit `Math.round`
+
+    253|  pts.push({ x: Math.round((w.start.x + w.end.x) / 2),
+    253|             y: Math.round((w.start.y + w.end.y) / 2) });
+
+`Math.round` bricht Gleichstände nach **+unendlich**, nicht von der Null weg — derselbe Befund wie
+§107 an `fangKern.ts:192`. **Der Mittelpunkt zweier ganzzahliger Modellpunkte mit ungeradem Abstand
+ist exakt `.5`**, also ohne Zeigerposition, ohne Zoom, allein aus dem Modell:
+
+    Wand (0,-1000)-(0,-1001)          Mitte (0,-1000.5)       -> (0,-1000)      kaufm. (0,-1001)
+    Wand (-3000,-2000)-(-3001,-2001)  Mitte (-3000.5,-2000.5) -> (-3000,-2000)  kaufm. (-3001,-2001)
+    Wand ( 3000, 2000)-( 3001, 2001)  Mitte ( 3000.5, 2000.5) -> ( 3001, 2001)  kaufm. ( 3001, 2001)
+
+**Und die Zeichenfläche liegt im negativen y**: `HausplanerApp.tsx:774` setzt
+`y = -((zeiger.y - stage.y()) / zoom)` — derselbe Träger wie in §107. In y wird der Gleichstand
+also **zur Null hin** gebrochen, in positivem x **von ihr weg**.
+
+**Das Spiegelpaar ist der Kern:**
+
+    (-1,-1)-(-2,-2)   ->  Mitte-Fangpunkt (-1,-1)
+    ( 1, 1)-( 2, 2)   ->  Mitte-Fangpunkt ( 2, 2)
+
+Zwei deckungsgleiche, am Ursprung gespiegelte Wände liefern Fangpunkte, **die keine Spiegelbilder
+sind.** Nicht ein Millimeter Ungenauigkeit, sondern der Verlust einer Symmetrie — und der
+Hausplaner bietet das Spiegeln als eigene Handlung an (`HausplanerApp.tsx:729`, A-31).
+
+### 3 · Warum der Ort nicht `runde()` ist — meine erste Zuordnung war falsch
+
+Ich hatte zuerst `runde()` bei `fangKern.ts:76` beschuldigt, das auf **sieben der acht Ausgänge**
+liegt (`:114 :128 :143 :163 :171 :182 :185 :195`; nur der Raster-Ausgang `:192` rundet selbst). Das
+ist der Ort, an dem man die Rundung **vermutet** — und er ist hier folgenlos: Der Mittelpunkt kommt
+bei `:143` bereits als ganze Zahl an, weil `:253` ihn schon gerundet hat. `runde()` tut daran nichts
+mehr.
+
+Ich habe das gefunden, weil ich die Zeile *„Nicht geprüft: ob `wandFangpunkte()` selbst rundet"*
+geschrieben hatte und sie vor dem Commit noch abgearbeitet habe. **Die Zahlen waren richtig, der
+Zeiger war falsch** — genau der Fehler, den ich in §110 und §272 bei anderen gemessen habe.
+
+Bei den übrigen Ausgängen ist der Gleichstand **nicht systematisch erreichbar**: `:163`/`:171`
+runden den Lotfuß und `:114`/`:195` den Rohzeiger, beides stetige Größen. Über den Zoom kommt
+ebenfalls kein systematischer `.5`-Wert — fünf Setzer, alle geklemmt:
+
+    Kopfrahmen.tsx:296  Math.min(1, z*1.2)     Buehne.tsx:122   Math.min(1, Math.max(0.02, z*f))
+    Kopfrahmen.tsx:297  Math.max(0.02, z/1.2)  einpassen.ts:106 begrenze(roh, ZOOM_MIN, ZOOM_MAX)
+    Kopfrahmen.tsx:298  setZoom(0.12)                           ZOOM_MAX = 1 bei einpassen.ts:29
+
+**Ein Ort, systematisch erreichbar, aus reinen Modelldaten — das ist die ganze Reichweite und sie
+ist genau benannt.**
+
+### 4 · Kein Test deckt es
+
+`__tests__/fangKern.test.ts`: **18 Zusagen**, **keine einzige negative Koordinate**. Der
+Mittelpunkt-Test `:65-71` nimmt eine Wand von `(0,0)` nach `(1000,0)` — gerader Abstand, Mitte 500,
+kein Gleichstand. Die Suite kann den Fall nicht finden.
+
+### 5 · Drei eigene Fehlgriffe, alle vor dem Commit gefangen
+
+1. **Falscher Ort**, s. Abschnitt 3 — `runde()` statt `wandFangpunkte:253`. Gefunden, weil ich meine
+   eigene „nicht geprüft"-Zeile noch abgearbeitet habe, statt sie stehen zu lassen.
+2. **Falscher Testpfad**: Ich suchte unter `geometry/__tests__/` und bekam null Treffer; die Tests
+   liegen unter `resources/planner/hausplaner/__tests__/`. Existenz geprüft, statt „keine Tests" zu
+   melden.
+3. **Teilstring**: Meine Zählung meldete *„7 Zeilen mit negativer Zahl"* in der Testdatei. Die sieben
+   sind `Z-04` und `Z-03` **in Testnamen** — der Bindestrich, nicht ein Vorzeichen. Rohtreffer
+   angesehen, aus „7" wurde „null". Dieselbe Falle wie `P2H-1x` (§245) und `kg` in „Rüc·kg·abe"
+   (§213).
+
+### 6 · Ball
+
+**Planner/Dirigent** — dieselbe Fachentscheidung wie in §107, jetzt mit einem zweiten Fundort und
+einem Weg dorthin, der ohne Zeiger und Zoom auskommt:
+
+    Orte:  fangKern.ts:253  Math.round auf dem Wandmittelpunkt   (systematisch erreichbar)
+           fangKern.ts:192  Math.round am Raster                 (§107)
+    Frage: kaufmaennisch runden (von der Null weg) oder Math.round behalten?
+    Grund: y ist negiert (HausplanerApp.tsx:774) — x bricht Gleichstaende nach aussen,
+           y nach innen, auf derselben Flaeche. Gespiegelte Waende fangen unsymmetrisch.
+
+Ich empfehle keine Umstellung, sondern die **Entscheidung** — eine Rundungsregel ist eine
+Fachfestlegung. Die Ratsche wäre ein Test mit einer Wand ungerader Länge und negativen Koordinaten;
+heute hat die Suite beides nicht.
