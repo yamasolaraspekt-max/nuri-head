@@ -418,7 +418,7 @@ Der Python-Microservice (`import-service/`) ist die einzige Stelle außerhalb PH
 | Fusion-Webhook (receive) | `fusion.token` (`VerifyFusionToken`) | `POST /fusion/webhook` | 85-87 |
 | Mobile-Login | `throttle:20,1` | `POST /mobile/login` | 99-105 |
 | **Mobile-App** | `auth:sanctum` | `/mobile/me`, `/logout`, `/profile`, `/tasks`, `/tasks/sync`, `/attendance/{action,location,sync,history,log}`, `/calendar` (GET/POST/{id}), `/employees`, `/customers` | 113-186 |
-| **Master-Sets** | **nur `throttle:60,1`** | `GET /secure/master-sets`, `/secure/master-sets/{id}`, `GET /secure/master-sets-debug` | 195-212 |
+| **Master-Sets** | **nur `throttle:60,1`** — *berichtigt 21.08.: Auth sitzt im Controller; seit Z2-W0-10 stillgelegt (404). Siehe Berichtigung bei §11.* | `GET /secure/master-sets`, `/secure/master-sets/{id}`, `GET /secure/master-sets-debug` | 195-212 |
 | Planner-Auth | `throttle:10,1` | `POST /planner/auth/token` | 232-234 |
 | **Planner/Nuriva** | `auth:sanctum` | `/planner/auth/{me,logout,logout-all}`, `/my-work`, `/my-day-report`, `/employees/{id}/work`, `/employees/{id}/day-report`, `PATCH /items/{item}/complete-report`, `POST /customer-images/upload`, `GET /customer-images`, `/master-sets*` (6 Routen), `/items/{item}/materials` (GET/POST) | 240-353 |
 
@@ -428,6 +428,13 @@ Sanctum: `laravel/sanctum` ^4.0 (`composer.json:18`), `config/sanctum.php`, `per
 Die API ist **zweigeteilt**: ein sauberer, durchgängig Sanctum-geschützter Teil (Mobile-App + Planner/Nuriva, ~35 Routen) und drei ungeschützte Ausreißer.
 Konkret ungeschützt und aus dem Netz erreichbar:
 - `/api/secure/master-sets*` — der Pfadbestandteil „secure" ist **irreführend**: die Gruppe hat nur `throttle:60,1`, keine Auth (`:195-212`). Ein `…-debug`-Endpunkt liegt daneben ebenfalls offen (`:210-212`).
+  > **BERICHTIGUNG 21.08.2026 (Z2-W0-10).** Der Satz „keine Auth" ist falsch. Die Prüfung sitzt
+  > im Controller (`Api/MasterSetApiController::authApi()`, Header `X-API-USER`/`X-API-PASSWORD`
+  > gegen `.env`); nachgemessen: anonym **401**, mit Zugangsdaten **200**. Die Routenzeile allein
+  > trägt den Schutz nicht — sie trägt ihn nur nicht *sichtbar*. Was an der Beobachtung stimmt:
+  > „secure" im Pfad ist irreführend, und `…-debug` liegt ausserhalb der Gruppe. Seit Y-11
+  > (Yama, 21.08.) sind alle drei Routen über `MASTER_SET_API_AKTIV` (Vorgabe `false`)
+  > **stillgelegt** — 404 unabhängig von Zugangsdaten, Code erhalten.
 - `/api/fusion-form/webhook/entries` — `POST`, nur Throttle, während der Schwester-Endpunkt `/api/fusion/webhook` korrekt `fusion.token` trägt (`:80-87`). Asymmetrie im selben Abschnitt.
 - `/api/lead-name-suggestions`, `/api/lead-lastname-suggestions` — offene Autovervollständigung über Kundennamen; erlaubt Enumeration des Kundenbestands.
 
@@ -555,7 +562,7 @@ Bemerkenswert positiv: KI läuft über **lokales Ollama**, nicht über eine Clou
 
 ## Zusammenfassung — was ich als die fünf schwersten Punkte sehe (BEWERTUNG)
 
-1. **Ungeschützte API-Endpunkte** (§11): `/api/secure/master-sets*` inkl. `-debug` und `/api/fusion-form/webhook/entries` tragen nur Throttling; die offenen Lead-Namensvorschläge erlauben Bestandsenumeration. Belegt, nicht interpretiert.
+1. **Ungeschützte API-Endpunkte** (§11): ~~`/api/secure/master-sets*` inkl. `-debug`~~ *(berichtigt 21.08.: Auth lag im Controller, nicht in der Route — nie offen; seit Z2-W0-10 stillgelegt)* und `/api/fusion-form/webhook/entries` trägt nur Throttling; die offenen Lead-Namensvorschläge erlauben Bestandsenumeration. Belegt, nicht interpretiert.
 2. **Rechtemodell faktisch binär** (§8): 18 von 2382 Routen mit `permission:`, zwei Rechte-Items, alle Ownership-Härtungen per Flag auf „weich". Das Haus weiß es (`docs/backlog-rbac.md`), aber der Zustand ist der Zustand.
 3. **Suche = 1447× `LIKE`** (§6): keine Volltextinfrastruktur, keine Indexnutzbarkeit. Größter, billigster Performance-Hebel.
 4. **Audit fünffach gebaut** (§9) bei gleichzeitigem DATEV-Anschluss (§10) — GoBD-taugliche, übergreifende Nachvollziehbarkeit ist auf dieser Basis nicht belegbar.

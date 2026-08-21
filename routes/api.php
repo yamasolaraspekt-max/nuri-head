@@ -203,9 +203,12 @@ Route::prefix('mobile')
 |--------------------------------------------------------------------------
 */
 
+// Z2-W0-10 (Y-11, 21.08.): stillgelegt per Schalter — inaktiv antworten alle drei Routen 404,
+// unabhaengig von mitgeschickten Zugangsdaten. Code und Routen bleiben erhalten; Rueckweg ist
+// MASTER_SET_API_AKTIV=true.
 Route::prefix('secure/master-sets')
     ->name('api.secure.master-sets.')
-    ->middleware('throttle:60,1')
+    ->middleware(['throttle:60,1', \App\Http\Middleware\EnsureMasterSetApiAktiv::class])
     ->group(function () {
         Route::get('/', [MasterSetApiController::class, 'index'])
             ->name('index');
@@ -216,7 +219,7 @@ Route::prefix('secure/master-sets')
     });
 
 Route::get('/secure/master-sets-debug', [MasterSetApiController::class, 'debug'])
-    ->middleware('throttle:60,1')
+    ->middleware(['throttle:60,1', \App\Http\Middleware\EnsureMasterSetApiAktiv::class])
     ->name('api.secure.master-sets.debug');
 
 /*

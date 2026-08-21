@@ -31,6 +31,17 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    /*
+    | Z2-W0-10 / Y-11 (Yama, 21.08.2026): die Master-Set-Schnittstelle ist STILLGELEGT.
+    | Sie liefert Einkaufspreise, Margen, Skonto, Haendlerpreise, Stundensaetze und Klarnamen,
+    | und es liess sich kein Konsument finden. Vorgabe `false` => alle drei Routen antworten 404.
+    | Rueckweg: `MASTER_SET_API_AKTIV=true` — Controller und Routen sind vollstaendig erhalten.
+    | Siehe docs/auftraege/generator-auftrag-z2-w0-10-master-set-api-haertung.md (Weg B).
+    */
+    'master_set_api' => [
+        'aktiv' => (bool) env('MASTER_SET_API_AKTIV', false),
+    ],
+
     'fusion_forms' => [
         'token' => env('FUSION_WEBHOOK_TOKEN'),
     ],

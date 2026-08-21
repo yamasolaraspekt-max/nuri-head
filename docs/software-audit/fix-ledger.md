@@ -119,7 +119,7 @@ Status: ⬜ offen · ✅ behoben · ⏸️ zurückgestellt · ❓ Entscheidung n
 | 113 | security | hoch | routing | `routes/web.php:728,751,758,765` | DELETE-Operationen über GET-Verben (CSRF-Bypass) | ⬜ |
 | 114 | security | hoch | routing | `routes/web.php:2182, 2190, 2199, 684` | Destruktive User- und Branch-Aktionen über GET-Routen (CSRF-Bypass, Bo | ⬜ |
 | 115 | security | hoch | routing | `routes/web.php:602 und routes/web.php:3969` | Doppelter Auth::routes()-Aufruf erzeugt mehrfach registrierte Login-/A | ⬜ |
-| 116 | security | hoch | routing | `routes/api.php:206-220` | api/secure/master-sets fehlt Authentifizierungsmiddleware — nur Thrott | ⬜ |
+| 116 | security | hoch | routing | `routes/api.php:206-220` | api/secure/master-sets fehlt Authentifizierungsmiddleware — nur Thrott | ✅¹ |
 | 117 | security | hoch | routing | `routes/api.php:54-58` | GET /api/lead-name-suggestions und /api/lead-lastname-suggestions ohne | ⬜ |
 | 118 | routing-other | hoch | routing | `routes/web.php:666-667` | Kollidierende Route-Namen: 'fusion.webhook.ajax' zweimal mit verschied | ⬜ |
 | 119 | routing-other | hoch | routing | `routes/web.php:691 und routes/web.php:703` | Kollidierende Route-Namen: 'branch.address.update' für zwei verschiede | ⬜ |
@@ -135,3 +135,30 @@ Status: ⬜ offen · ✅ behoben · ⏸️ zurückgestellt · ❓ Entscheidung n
 | 129 | refactor | hoch | workflow | `app/Http/Controllers/Report/OverdueCenterController.php:37-41,872-899` | Bis zu 4.100 Zeilen pro Request in PHP-Memory geladen und in-memory so | ⬜ |
 | 130 | refactor | hoch | workflow | `app/Http/Controllers/Customer/Deal/DealMeasurementController.php:34-93, resources/views/admin/deal_measurements/index.blade.php:2870-3353` | Alle Messungen ohne Pagination in PHP geladen und als JSON in die Blad | ⬜ |
 | 131 | refactor | hoch | workflow | `app/Http/Controllers/Customer/NewLeadsController.php:90-92,191-193,223-225` | Employee::all(), Product::all(), ArticleGroup::all() ohne Einschränkun | ⬜ |
+
+---
+
+## Fussnoten
+
+**¹ Nr. 116 — der Befundtext ist falsch, das Ergebnis stimmt trotzdem (berichtigt 21.08.2026, Z2-W0-10).**
+
+Der Satz „fehlt Authentifizierungsmiddleware — nur Throttle“ ist ein **Fehlalarm**: er misst die
+Routenzeile und schliesst daraus auf den Schutz. Der Schutz sitzt aber im Controller —
+`Api/MasterSetApiController::authApi()` prueft `X-API-USER`/`X-API-PASSWORD` gegen
+`MASTER_SET_API_USER`/`MASTER_SET_API_PASSWORD` und antwortet ohne gueltige Daten mit 401.
+Nachgemessen am laufenden System: anonym 401, mit Zugangsdaten 200. Es war also nie offen.
+Der urspruengliche Text bleibt hier unveraendert stehen — ein Fehlbefund wird berichtigt,
+nicht getilgt; wer die alte Liste in der Hand hat, muss die Zeile wiederfinden koennen.
+
+Die Lehre ist die aus P7: **Ort ist nicht Wirkung.** Eine leere `middleware()`-Liste beweist
+nicht die Abwesenheit einer Pruefung, sie beweist nur die Abwesenheit einer Pruefung *an dieser
+Stelle*. Wer Auth misst, muss den Weg der Anfrage messen, nicht eine Zeile davon.
+
+Der **wirkliche** Befund liegt woanders und ist nicht der aufgeschriebene: die Schnittstelle
+liefert Einkaufspreise, Margen, Skonto, Haendlerpreise, Stundensaetze, Klarnamen und Foto-URLs
+hinter einem einzigen statischen Passwortpaar aus der `.env`, und es liess sich **kein Konsument
+finden**. Y-11 (Yama, 21.08.) hat daraufhin nicht Haertung, sondern **reversible Stilllegung**
+entschieden: `MASTER_SET_API_AKTIV` (Vorgabe `false`), alle drei Routen antworten 404,
+Controller und Routen bleiben erhalten. Waechter:
+`tests/Feature/Api/MasterSetApiSchalterTest.php`. Auftrag:
+`docs/auftraege/generator-auftrag-z2-w0-10-master-set-api-haertung.md`.
