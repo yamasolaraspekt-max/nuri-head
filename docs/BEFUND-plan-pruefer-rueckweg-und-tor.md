@@ -16978,3 +16978,109 @@ Reihe, der seine eigene Prüfung mitgeliefert hat und dessen Prüfung heute noch
 
 **Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
 und `:7881`, dazu der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
+
+---
+
+## §213 — Posten (c): F-050 durchgerechnet. Die Warnung hält, die Zahlen halten — aber die Tabelle prüft nur eine von zwei gekoppelten Spalten, und ein Prozentwert nennt die falsche Richtung
+
+**Messstand 4a3c388c, Baum sauber, 0 neue Commits. Integrationszweig unverändert 7a82ecfb (live).
+Hinweg zu: 40 fehlen mir, 36 von mir fehlen dort. `docs/STATUS.md` und die 89 Blätter an beiden
+Ständen unbewegt, kein Ball in meiner Bahn. Erhebung 21.08. 17:10–17:13.**
+
+Gegenstand: **F-050 · Materialkennwerte je Deckung**, `FORMELSAMMLUNG.md:885-900`, Ampel **🟡 NUR
+NÄHERUNG** mit dem Zusatz *„Nicht für Angebote — 12 Stück/m² ist modellabhängig"*.
+
+### 1. Die Q2-Prüfung des Blattes hält exakt
+
+`FORMELSAMMLUNG.md:896-899` sagt: *„Gegenquelle nennt Tonziegel 2,9–3,7 kg/Stück, Betondachstein
+3,4–4,35 kg/Stück. Bei 12 Stück/m² ergibt das 35–52 kg/m² — 45 liegt im Bereich, ist also plausibel."*
+Nachgerechnet:
+
+    Tonziegel        2,9-3,7  kg/Stk  x 12 = 34,8-44,4 kg/m2
+    Betondachstein   3,4-4,35 kg/Stk  x 12 = 40,8-52,2 kg/m2
+    Gesamtbereich                            34,8-52,2      (Blatt: 35-52)
+    liegt 45 darin?  JA
+
+Beide Grenzen und die Einordnung stimmen.
+
+### 2. Der eigentliche Fund: die beiden Spalten sind gekoppelt, geprüft wird nur eine
+
+Das Blatt sagt selbst, `12 Stück/m²` sei modellabhängig — *„Frankfurter Pfanne eher 10"* — und zieht
+daraus den Schluss, die Formel sei „als Näherung nutzbar". Rechnet man den eigenen Einwand zu Ende:
+
+    mit 10 Stueck/m2 (Frankfurter Pfanne):  10 x 2,9-4,35 = 29,0-43,5 kg/m2
+    der Tabellenwert 45 kg/m2               LIEGT DRAUSSEN
+
+Die Tabelle führt `kg/m²` und `Stück/m²` als **zwei Spalten**, aber sie sind über
+`kg/m² = Stück/m² × kg/Stück` eine einzige Größe in zwei Darstellungen. Die Q2-Prüfung hat nur die
+Stückzahl als modellabhängig markiert; **mit der vom Blatt selbst genannten Alternative fällt auch der
+Gewichtswert aus dem plausiblen Bereich.** Der Vorbehalt gehört an beide Spalten, nicht an eine.
+
+Für die Fachfolge heißt das: die Warnung *„nicht für Angebote"* ist richtig, aber sie ist **milder
+formuliert als der eigene Beleg trägt** — bei einem verbreiteten Modell ist der Gewichtswert nicht eine
+Näherung, sondern außerhalb der von der Gegenquelle gestützten Spanne.
+
+### 3. Ein Prozentwert nennt die falsche Richtung
+
+`FORMELSAMMLUNG.md:894-895` schreibt: *„Gilt für die wahre Dachfläche, nicht die Grundfläche. Wer die
+Grundfläche einsetzt, **unterschätzt bei 45° um 41 %**."* Gerechnet, 100 m² Grundfläche, 45°:
+
+    wahre Flaeche  = 100 / cos 45°  = 141,42 m2
+    die wahre Flaeche ist um  41,4 % GROESSER als die Grundflaeche
+    die Grundflaeche ist um   29,3 % KLEINER als die wahre Flaeche
+
+**Die Zahl 41 ist richtig — für den Aufschlag.** Der Satz behauptet aber eine *Unterschätzung*, und
+eine Unterschätzung misst man am richtigen Wert: sie beträgt **29,3 %**. Wer 100 m² statt 141,42 m²
+ansetzt, bestellt 29,3 % zu wenig Material, nicht 41 %. Beide Zahlen beschreiben dieselbe Geometrie;
+der Satz verwendet die eine mit dem Wort der anderen. Richtig wäre entweder *„die wahre Fläche ist um
+41 % größer"* oder *„wer die Grundfläche einsetzt, unterschätzt um 29 %"*.
+
+Das ist keine Rechenungenauigkeit, sondern eine Bezugsgrößen-Verwechslung — dieselbe Klasse wie der
+Zählfehler, den A-15 an sich selbst gemeldet hat (§212: *„Dateien erhoben, Engines gemeint"*).
+
+### 4. Die Warnung hält: F-050 hat im ticket-Code keinen Verbraucher
+
+Über **Bezeichner** gemessen, nicht über Werte:
+
+    RoofCovering  definiert in geometry/dachformVorlagen.ts:50
+                  'ziegel' | 'schiefer' | 'trapezblech' | 'bitumen' | …   <- die vier Deckungen
+                  benutzt in :418 PITCHED_COVER, :419 FLAT_COVER, :422 eindeckungPasstZuKategorie
+                  -> reine KATEGORIE-Pruefung
+
+    in dachformVorlagen.ts:  gewicht 0 · Gewicht 0 · masse 0 · stueck 0 · Stueck 0
+
+Die Deckungsarten existieren im Code, die **Materialkennwerte nicht**. Die einzige Fundstelle mit
+Zahlen daneben ist `database/seeders/DemoPartnersArticlesSeeder.php:121`
+(`'Dach' => ['Dachziegel', 'm²', 22, 60, ['Braas']]`), und im Muster der Nachbarzeilen sind 22 und 60
+**Preisspannen in Euro** (Fliese 18–70, Sanitärobjekt 150–1800), nicht kg/m². **Die 🟡-Warnung „nicht
+für Angebote" ist eingehalten, weil die Zahlen den Code gar nicht erreicht haben** — wie bei F-051
+(§208), nur ohne dass es dafür einen Sperrvermerk gebraucht hätte.
+
+### 5. Drei eigene Messfehler, alle gefangen
+
+1. **`\|` ist in `git grep` ohne `-E` keine Alternation.** Meine Suche zählte 6 bzw. 8 Dateien und
+   listete dann **null**. Der Selbstwiderspruch im selben Lauf hat es aufgedeckt — dieselbe Diagnose
+   wie in §205. Mit `-E` kamen 14 Dateien zum Vorschein.
+2. **`kg` als Teilstring trifft „Rüc·kg·abe".** Das einzige `kg`-Vorkommen in `dachformVorlagen.ts`
+   steht in Zeile 337 mitten im Wort *Rückgabe* und ist kein Kennwert. Wäre es unbemerkt geblieben,
+   hätte ich einen Verbraucher gemeldet, den es nicht gibt.
+3. **Wert-Suchmuster verworfen statt verwendet.** `45.*kg` und `kg.*45` lieferten 14 und 87 Treffer —
+   Zahlen, die nach etwas aussehen und nichts belegen, weil `kg` überall im Wortinneren steckt. Ich
+   habe sie **nicht** in den Befund genommen; die Aussage in Abschnitt 4 stützt sich allein auf
+   Bezeichner (`gewicht`, `masse`, `stueck`), die eindeutig sind.
+
+### Ball
+
+**Beim Planner**, zwei Punkte an `docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md`:
+
+1. `:894-895` — *„unterschätzt bei 45° um 41 %"*: die Zahl gehört zur Gegenrichtung. Entweder „die
+   wahre Fläche ist 41 % größer" oder „unterschätzt um 29 %".
+2. `:896-899` — der Modellabhängigkeits-Vorbehalt steht nur an `Stück/m²`, gilt aber rechnerisch auch
+   für `kg/m²`: mit den 10 Stück/m² der Frankfurter Pfanne liegt der Tabellenwert 45 außerhalb der
+   Spanne, die die Gegenquelle selbst aufspannt.
+
+**Kein Befund gegen die Ampel:** 🟡 mit „nicht für Angebote" ist gerechtfertigt und wird eingehalten —
+die Kennwerte haben den Produktivcode nie erreicht.
+
+**Beim Integrator:** unverändert der Hinweg und die zwei offenen Fences in `docs/STATUS.md:3220`
+und `:7881`, dazu der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
