@@ -9613,3 +9613,63 @@ Bitte.**
 Beim **Planner**, zum Bündel der Einheiten-Sache (`Z1-W1-3` läuft ohnehin auf diese Datei zu).
 Kein neuer Auftrag nötig — nur der Hinweis, dass der Kopf beim Zusammenführen mitentschieden werden
 muss, weil er heute etwas zusagt, was der Rumpf nicht prüft.
+
+## §129 — Posten (b) an W-40: jede Zahl haelt, und der Grund dafuer ist nicht Sorgfalt, sondern Stillstand
+
+*(Messstand 3879ee3c, 21.08. 10:38. Nummer gegen den frischen HEAD gewaehlt: 24 Abschnitte mit
+Paragraphenzeichen, keine Dublette, Spanne §5..§128 — §129 war frei.)*
+
+W-40 (Gueltigkeitsstatus) traegt vier verschiedene Zahlen fuer "Stufen" — vier, drei, sieben, acht.
+Das sah nach Unstimmigkeit aus und ist keine: die Zahlen zaehlen verschiedene Gegenstaende, und
+jede haelt.
+
+**Die Zaehlung, einzeln nachgezaehlt:**
+
+| Behauptung | Fundstelle | gemessen |
+|---|---|---|
+| Zielbild 3.6 fuehrt **ACHT** Stufen | Quelle `:117` | **8** — einzeln aufgezaehlt aus `:118-125` |
+| `SchrittStatus` traegt **VIER** | `2-FUNKTION.md:57` | **4** (`ok · prog · warn · open`) |
+| **drei der vier** W-40-Stufen sind gebaut | `1-ZWECK.md:3-5` | **3** (`checked · approved · outdated`) |
+| eine Liste aus **sieben**, die zwei Dinge mischt | `2-FUNKTION.md:62` | 4+3=7, als Gegenbeispiel richtig gerechnet |
+
+Die Quelle ist `docs/BERICHT-PROZESSEBENE-DREI-FRAGEN.md`, benannt in `1-ZWECK.md:21`. Beide nackten
+Zeiger treffen woertlich: `:117` traegt `| Stufen | **acht** | **vier** |`, `:121` traegt
+`| | review-required | — |` — mit dem Gedankenstrich, den das Blatt ihm zuschreibt.
+
+**Die tragende Tabelle** (`2-FUNKTION.md:8-13`) haelt in allen vier Zeilen, jede Fundstelle einzeln
+geoeffnet: `configuratorPackage.ts:26` traegt die Union mit `checked`/`approved`/`outdated`, `:107`
+den Uebergang `checked: ['draft','approved','generated']`, `:120` `kannIntegrieren`, `:125-126`
+`markiereVeraltet` — und dort steht woertlich, was die Belegspalte verspricht: es setzt **nur**
+`approved` und `integrated` auf veraltet, ein Entwurf bleibt unberuehrt.
+
+**Der Beleg-Befehl in Zeile 13 ist nachgefuehrt, nicht geglaubt.** Muster zuerst an bekannten
+Treffern verifiziert (`'checked'` 10, `'approved'` 14), dann die Frage: `'blocked'` gibt **0** ueber
+338 ts/tsx-Dateien der Insel, auch ohne Anfuehrungszeichen 0. Die einzige Erweiterung ist als
+einzige ungebaut — genau wie angesagt.
+
+**Das Blatt traegt seinen eigenen Zaehlfehler mitsamt Widerlegung.** Es stand dort: "das Zielbild
+fuehrt acht Stufen, vier sind gebaut, drei sind als fehlend benannt. 4 + 3 = 7. Die achte faellt aus
+der Rechnung." Zurueckgezogen (`3-FORMELN.md:32-39`), nicht geloescht, mit dem Grund: die vier und
+die drei liegen nicht auf derselben Achse, Fortschritt gegen Gueltigkeit. Und die Aufloesung steht
+dazu — die achte fehlt nicht, sie heisst anders: `review-required` **ist** `checked`
+(`3-FORMELN.md:41`, `7-GRENZEN.md:181`). Ich bin dieser Spur nachgegangen in der Erwartung, eine
+unverbuchte achte Stufe zu finden; sie loest sich am Material des Blattes selbst auf.
+
+**Der eigentliche Fund ist der Grund.** Seit dem Schnitt des Blattes (`53142fc2`, 12.08. 22:09) hat
+`configuratorPackage.ts` **0 Commits** und die Quelle **0 Commits**. Die Zeiger halten nicht, weil
+hier sorgfaeltiger gezielt wurde, sondern weil sich unter ihnen nichts bewegt hat. Das ist die
+Gegenprobe zu §109/§110/§111: dort machte **ein** Commit fuenf Zahlen ungueltig. Der Unterschied
+zwischen einer haltenden und einer gewanderten Scheibe liegt bisher nicht in der Scheibe, sondern in
+der Ruhe ihrer Zieldatei. Eine Scheibe ist kein Beleg fuer eine Regel — aber die Frage, die man an
+die naechste haltende Scheibe stellen muss, ist ab jetzt: hat sie gehalten, oder hat sich nichts
+bewegt?
+
+**Zwei eigene Fehler, beide vor dem Melden gefangen.** (1) Ich habe `:117` und `:121` zuerst gegen
+`configuratorPackage.ts` gemessen und dort eine schliessende Klammer und ein `return` gefunden — der
+Zeiger ist nackt, die Traegerdatei steht im Satz (`1-ZWECK.md:21`), nicht im Thema. Dieselbe Klasse
+wie §110, und beinahe derselbe Fehlfund. (2) Meine Dublettenpruefung meldete "§19 viermal"; das sind
+Uhrzeit-Ueberschriften (`## 19:42`), mein Muster zaehlte Ziffern statt Nummern. Grundmenge gegen die
+Frage geprueft, Zaehlung wiederholt: 24 Abschnitte, keine Dublette.
+
+**Kein Ball.** W-40 verlangt nichts: die Ablesung stimmt, die Erweiterung ist als Erweiterung
+ausgewiesen und ihr Fehlen belegt. Zweite vollstaendig haltende Scheibe nach W-10 (§128).
