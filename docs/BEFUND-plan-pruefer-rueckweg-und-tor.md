@@ -22237,3 +22237,93 @@ Folge — er blockiert die TESTBEREIT-Feststellung. Das ist neu und ändert sein
 **Integrator**: die Zustände der drei gebauten W0-Aufträge.
 
 **Nicht geprüft:** Konzept Dachschichten-Modell (`53cf8b75`), die Verweistabelle des Fahrplans.
+
+## §268 · Posten (c): die PV-Belegungsformel hält vollständig — und steht in keiner Sammlung
+
+**Messstand.** Mein HEAD `389340c4`, Baum sauber. Integrationszweig `2a667d92` (21.08. 20:45),
+4 neue Commits. Ballortung **41 → 40**, **kein Welle-0-Ball mehr bei mir**. Gemessen
+21.08. 20:46–20:53.
+
+### 1 · Vierter Bau, und die Welle ist geführt
+
+`29eb791c`: *„Z2-W0-8 gebaut — Kundenbilder liegen hinter `permission:Customer,read`."* Vierter Bau
+aus meinen zwölf Voten (nach W0-1, W0-3, W0-7). Und `2a667d92`: *„Z2-W0-12 nachgezogen — die Welle 0
+ist **vollständig begutachtet und vollständig geführt**."*
+
+### 2 · Warum ich außerhalb der Sammlung gemessen habe
+
+Für Posten (c) habe ich zuerst geprüft, was noch offen ist: **Alle 30 Kennungen der
+`FORMELSAMMLUNG.md` sind bereits geprüft** — die beiden, die ich für ungeprüft hielt, waren es
+nicht: **F-024** in §131 (*„die Formel hält, ihre Grenzfall-Klausel nennt den falschen Wert"*) und
+**N-003** in §81 (*„die Rechnung hält auf elf Werte genau"*). Nichts nachgebaut (P-02).
+
+Die Wache sagt *„tragende Formeln durchrechnen"* — nicht „Formeln der Sammlung". Also habe ich eine
+gesucht, die **trägt und keine Kennung hat**.
+
+### 3 · Die Formel
+
+`geometry/pvBelegung.ts` (75 Zeilen), `:37-41`:
+
+    const spalten = Math.max(0, Math.floor((nutzL + gap) / (mW + gap)));
+    const reihen  = Math.max(0, Math.floor((nutzB + gap) / (mH + gap)));
+
+**Mathematisch nachgeprüft**, nicht nur nachgelesen: `n` Module brauchen `n·mW + (n−1)·gap ≤ nutzL`,
+umgeformt `n ≤ (nutzL + gap)/(mW + gap)`. Die Formel ist die exakte Umformung — und jeder Fall
+wurde mit **zwei** Gegenproben belegt (passt sie, und passt eines mehr nicht mehr?):
+
+| Dach | nutzbar | hoch | quer | gewählt | Breitenprobe | eines mehr |
+|---|---|---|---|---|---|---|
+| 10000×6000 | 9400×5400 | 8×3 = **24** | 5×4 = 20 | 24 | 9212 ≤ 9400 ✓ | 10366 > 9400 ✓ |
+| 8000×5000 | 7400×4400 | 6×2 = **12** | 4×3 = 12 | 12 | 6904 ≤ 7400 ✓ | 8058 > 7400 ✓ |
+| 4000×3000 | 3400×2400 | 2×1 = **2** | 1×2 = 2 | 2 | 2288 ≤ 3400 ✓ | 3442 > 3400 ✓ |
+
+**Die Zahl ist jedes Mal maximal.** Grenzfälle:
+
+    Modul groesser als die Flaeche   ->  0
+    Rand frisst die Flaeche (500 mm) ->  0   (nutzL = 0)
+    rand = 0                         -> 25   (eines mehr als mit 300 mm Rand)
+    dachFlaeche = 0                  ->  flaechennutzung 0, keine Division durch null (:73)
+
+**Das ist die Gegenform zu meiner Fehlerklasse**: `Math.max(0, …)` liefert hier **0 Module** — und
+das ist die *richtige* Antwort, kein plausibler Ersatzwert. Wo kein Modul passt, passt keines.
+
+Und die Vereinfachung ist benannt, nicht verschwiegen: Die Funktion heißt **`pvSchnellBelegung`**,
+und `:45` sagt *„Belegt die Fläche in **beiden** Modul-Orientierungen und liefert die mit mehr
+Modulen"* — sie behauptet nicht, optimal zu sein. Eine gemischte Belegung könnte mehr ergeben; das
+zu prüfen ist nicht ihr Anspruch.
+
+### 4 · Der Befund: sie trägt kWp und steht in keiner Sammlung
+
+    :70  kWp: r2((n * e.modulLeistung) / 1000),
+
+**Aus der Modulzahl wird unmittelbar kWp** — die Größe, aus der Ertrag, Wirtschaftlichkeit und
+Angebot folgen. Und sie ist **erreichbar und produktiv gerufen**, anders als der Vorlagenweg aus
+§248:
+
+    app/dashboard/enginePanels.ts:32   import { pvSchnellBelegung, … } from '../../geometry/pvBelegung';
+    app/dashboard/enginePanels.ts:403  berechne: (werte) => pvSchnellBelegung(alsPvEingabe(werte))
+    app/tools/faehigkeiten.ts:80       { id: 'engine-pv', label: 'PV-Schnellbelegung', … }
+
+**In `FORMELSAMMLUNG.md` kommt sie nicht vor** — 0 Treffer für `pvBelegung`, `Schnellbelegung`,
+`Modulbelegung`. Die Sammlung führt **30 Kennungen** mit Zweck, Eingabe, Formel, Grenzfall und
+teilweise Ampel; diese Rechnung hat **nichts davon**.
+
+**Der Vergleich macht es scharf:** F-051 (Zeitwerte) steht auf 🔴 **GESPERRT**, weil ihre Zahlen keine
+Herkunft haben — und sie wird nachweislich **nicht ausgeliefert** (§247). Die PV-Belegung dagegen
+**wird gerufen**, erzeugt eine Geldgröße und hat **keinen Eintrag**, also auch keine Ampel, keinen
+Geltungsbereich, keinen Vorbehalt.
+
+**Das ist kein Vorwurf an den Code** — er rechnet richtig und benennt seine Grenze im eigenen Namen.
+Es ist eine Lücke in der **Sammlung**: Sie führt Formeln, die nicht laufen, und nicht die, die läuft.
+
+### 5 · Ball
+
+**Planner** — eine Aufnahme, keine Korrektur:
+
+`pvSchnellBelegung` gehört in `FORMELSAMMLUNG.md` mit Zweck, Eingabe, Formel, Grenzfall
+(*„0 Module ist ein gültiges Ergebnis"*) und **Geltungsbereich**: zwei Orientierungen, keine
+gemischte Belegung, keine Verschattung, keine Dachaufbauten. Ob sie eine Ampel braucht, ist eine
+Fachentscheidung — sie erzeugt kWp, und N-003 trägt aus genau diesem Grund ein Fach-Gate.
+
+**Nicht gemessen:** ob weitere tragende Rechnungen ohne Kennung im Bestand stehen. Ich habe **eine**
+gesucht und **eine** gefunden; das ist kein Bild der Menge (B6). Der nächste (c)-Posten.
