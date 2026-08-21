@@ -65,7 +65,10 @@ class MobileAuthController extends Controller
             ], 403);
         }
 
-        if (Schema::hasColumn('users', 'is_active') && isset($user->is_active) && !$user->is_active) {
+        // Z2-W0-9: geprueft wird der KONTOSTATUS, nicht das Online-Flag. Vorher sperrte ein
+        // gewoehnliches Web-Abmelden den Mobile-Login, weil LogUserLogout `is_active` auf 0 setzt —
+        // eine Fehlsperre gegen einen voellig regulaeren Vorgang.
+        if (Schema::hasColumn('users', 'disabled_at') && $user->disabled_at !== null) {
             return response()->json([
                 'ok' => false,
                 'message' => 'Benutzer ist nicht aktiv.',

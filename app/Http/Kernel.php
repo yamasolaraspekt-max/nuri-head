@@ -40,6 +40,8 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\RefreshSession::class,
+            // Z2-W0-9: ein deaktiviertes Konto verliert seine laufende Sitzung beim naechsten Request.
+            \App\Http\Middleware\EnsureUserNotDisabled::class,
         ],
 
       'api' => [

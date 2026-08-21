@@ -58,6 +58,19 @@ class PlannerApiAuthController extends Controller
             ]);
         }
 
+        // Z2-W0-9: ein deaktiviertes Konto bekommt keinen Token — und verliert die vorhandenen.
+        // Ohne diese Zeile haette ein gesperrter Nutzer sich per Mobile-Token weiter angemeldet,
+        // waehrend ihn die Weboberflaeche bereits als „Deactivated" fuehrt.
+        if (\Illuminate\Support\Facades\Schema::hasColumn('users', 'disabled_at') && $user->disabled_at !== null) {
+            if (method_exists($user, 'tokens')) {
+                $user->tokens()->delete();
+            }
+
+            throw ValidationException::withMessages([
+                'login' => ['Dieses Konto ist deaktiviert.'],
+            ]);
+        }
+
         if (!method_exists($user, 'createToken')) {
             return response()->json([
                 'ok' => false,

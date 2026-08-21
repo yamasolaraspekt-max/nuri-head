@@ -446,15 +446,21 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'You cannot log off yourself from here.');
         }
 
-        $user->update(['is_active' => 0]);
+        // Z2-W0-9 — **ehrlich beschriftet, statt eine Wirkung vorzutaeuschen.** Der alte Weg las
+        // `session('user_session_<id>')` (ein Schluessel, den niemand setzt) und loeschte in einer
+        // `sessions`-Tabelle, die es in dieser Installation nicht gibt: er war wirkungslos. Die
+        // Sitzung endet jetzt ueber die Middleware `EnsureUserNotDisabled` beim NAECHSTEN Request
+        // des Nutzers — nicht in derselben Sekunde, aber verlaesslich und unabhaengig vom
+        // Session-Treiber. Die Meldung sagt genau das.
+        $user->is_active = 0;
+        $user->disabled_at = now();
+        $user->save();
 
-        $sessionId = session('user_session_' . $userId);
-
-        if ($sessionId) {
-            DB::table('sessions')->where('id', $sessionId)->delete();
+        if (method_exists($user, 'tokens')) {
+            $user->tokens()->delete();
         }
 
-        return redirect()->back()->with('success', 'User has been logged off.');
+        return redirect()->back()->with('success', 'Konto deaktiviert — die Sitzung endet beim naechsten Aufruf des Nutzers, vorhandene Token sind widerrufen.');
     }
 
     /* =========================================================================
@@ -523,8 +529,17 @@ class UserController extends Controller
             return redirect()->back()->with('not_save', 'You can not deactivate yourself!');
         }
 
+        // Z2-W0-9: der Kontostatus steht in `disabled_at`, nicht in `is_active` — letzteres ist ein
+        // Online-Flag und wird beim naechsten Login zurueckgesetzt. `is_active` wird hier weiterhin
+        // mitgesetzt, damit die Online-Anzeige stimmt; die SPERRE haengt allein an `disabled_at`.
         $user->is_active = 0;
+        $user->disabled_at = now();
         $user->save();
+
+        // Vorhandene Tokens werden widerrufen — sonst bliebe der Mobile-Zugang offen.
+        if (method_exists($user, 'tokens')) {
+            $user->tokens()->delete();
+        }
 
         return redirect()->back()->with('update_msg', 'The account is deactivated');
     }
@@ -533,7 +548,10 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
+        // Z2-W0-9: die Gegenrichtung hebt den Kontostatus auf. Ohne diese Zeile bliebe ein
+        // reaktivierter Nutzer gesperrt — die Sperre haengt an `disabled_at`, nicht an `is_active`.
         $user->is_active = 1;
+        $user->disabled_at = null;
         $user->save();
 
         return redirect()->back()->with('update_msg', 'The User is Activated');
@@ -739,8 +757,16 @@ public function adminUsersPage()
             ], 422);
         }
 
-        $user->is_active = $user->is_active ? 0 : 1;
+        // Z2-W0-9: der Schalter fuehrt jetzt den Kontostatus. `is_active` laeuft mit, damit die
+        // Online-Anzeige nicht springt; gesperrt wird ueber `disabled_at`.
+        $deaktivieren = (bool) $user->is_active;
+        $user->is_active = $deaktivieren ? 0 : 1;
+        $user->disabled_at = $deaktivieren ? now() : null;
         $user->save();
+
+        if ($deaktivieren && method_exists($user, 'tokens')) {
+            $user->tokens()->delete();
+        }
 
         return response()->json([
             'ok'        => true,
