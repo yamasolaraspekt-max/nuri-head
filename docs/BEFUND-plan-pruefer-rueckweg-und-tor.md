@@ -10470,3 +10470,79 @@ Integrator** (§108).
 `Z1-W1-1` bis `Z1-W1-5`, jede am Basis-Stand `11f7c4c3` und mit durchgerechneten Formeln, wie §5 es
 verlangt. Das ist mehr als eine Runde; ich fange in der naechsten damit an und liefere je Blatt ein
 eigenes Votum. **Solange steht der Stillstand nicht bei den anderen vier Rollen, sondern hier.**
+
+## §143 — DoR Z1-W1-1 (DIN-Badge): NICHT ERTEILT. Der Ist-Beleg trifft zeichengenau, aber zwei der vier Abnahmekriterien sind im eigenen Scope nicht prüfbar
+
+*(Messstand d4514f52, 21.08. 11:45. Nummer gegen den frischen HEAD gewaehlt: 80 Abschnitte, hoechste
+142 — 143 war frei. Erste der fuenf DoR aus §142. Kennung aus der Kopfzeile, das Blatt hat kein
+`auftrag:`-Feld — §138.)*
+
+**Blatt:** `docs/auftraege/generator-auftrag-z1-w1-1-din-badge-ehrlich.md` (44 Z.), `zustand: ENTWURF`,
+`basis_sha: 11f7c4c3`. Alles unten ist **am Basis-Stand** gemessen, nicht am HEAD.
+
+### Was haelt — und es haelt zeichengenau
+
+| §5-Punkt | Ergebnis |
+|---|---|
+| exakter Basis-SHA | `11f7c4c3` existiert, 21.08. 09:54 (`planner: Inventur Z1 abgeschlossen`) ✓ |
+| Ist-Beleg aus aktuellem Code | **alle vier Zeiger treffen woertlich** ✓ |
+| kleinster sinnvoller Scope | eine Datei + Test; das Badge existiert nur dort ✓ |
+| ausdrueckliche Nicht-Ziele | drei, benannt ✓ |
+| Konfliktpruefung | **selbst gemessen: 0 Commits** auf `app/rahmen/EigenschaftenPanel.tsx` seit der Basis ✓ |
+| Rot-Lage vor dem Bau | **wirksam rot** ✓ — die Badge-Zeile lautet am Basis-Stand `{erg.bestanden ? 'DIN 18065 erfüllt' : 'DIN 18065 verletzt'}`, kein Lueckenhinweis |
+
+Die vier Ist-Belege einzeln geoeffnet, am Basis-Stand:
+`resources/planner/hausplaner/geometry/treppenBerechnung.ts:58` traegt
+`const DURCHGANG_MIN = 2000; // mm, DIN 18065 lichte Höhe`; `:97` traegt
+`if (e.durchgangshoehe !== undefined) {`;
+`resources/planner/hausplaner/app/rahmen/EigenschaftenPanel.tsx:494` den Aufruf und `:499` den
+Badge-Text. **Vier von vier.**
+
+### Restpunkt 1 (tragend) — Kriterium A ist im eigenen Scope nicht prüfbar
+
+Kriterium A verlangt, die neue Anzeige **„im Test am Text festgehalten"**. Der Badge-Text ist am
+Basis-Stand ein **inline-JSX-Ternaer** in einer Zeile (`app/rahmen/EigenschaftenPanel.tsx:499`) —
+es gibt keine Funktion, die ein Test aufrufen koennte. Gemessen: die Insel hat **fuenf**
+`__domtests__`-Dateien, **keine** davon fuer dieses Panel. Der Scope nennt *"Badge-Text + zugehoeriger
+Test"* und laesst damit offen, welcher der beiden einzig moeglichen Wege gilt: **neuer DOM-Test** oder
+**Textableitung in eine Funktion herausziehen**. Der zweite Weg aendert mehr als den Text — er
+gehoert in den Scope geschrieben, wenn er gemeint ist.
+
+### Restpunkt 2 (tragend) — Kriterium B ist über das geänderte Bauteil nicht erreichbar
+
+B verlangt: *"Aufruf MIT `durchgangshoehe` < 2000 → weiterhin »verletzt«"*. **Das Panel uebergibt
+dieses Feld nie.** Gegenprobe ueber den Feldnamen am Basis-Stand: `durchgangshoehe` kommt in
+`EigenschaftenPanel.tsx` **null Mal** vor. `erg.bestanden` kann die Kopfhoehen-Pruefung dort also
+gar nicht tragen. B ist nur gegen `berechneTreppe` **selbst** pruefbar — und
+`geometry/treppenBerechnung.ts` ist ausdrueckliches **Nicht-Ziel**. So wie B dasteht, prueft es ein
+Verhalten, das im Scope nicht entstehen kann.
+
+### Restpunkt 3 (klein) — der Ist-Beleg zählt zwei, gemessen sind fünf
+
+Das Blatt nennt *"reale Aufrufe ohne das Feld"* und listet zwei. Ueber den **Funktionsnamen**
+gemessen (nicht ueber Dateinamen), am Basis-Stand, ohne Tests:
+
+```
+berechneTreppe — Nicht-Test-Aufrufer                       durchgangshoehe?   Ladeweg
+  app/rahmen/EigenschaftenPanel.tsx:494                    nein               ja
+  geometry/treppe2D.ts:54                                  nein               ja
+  geometry/treppe3D.ts:44                                  nein               ja
+  geometry/treppenTypen.ts:48                              nein               NEIN (33er-Liste)
+  app/dashboard/enginePanels.ts:164 (ueber :113)           nur wenn eingegeben ja
+```
+
+**Fuenf statt zwei, vier davon erreichbar.** Dazu eine Praezisierung: das genannte
+`renderers/three-d/szene.ts:406-412` ruft nicht `berechneTreppe`, sondern `treppe3DKoerper` — es ist
+ein **mittelbarer** Aufrufer ueber `geometry/treppe3D.ts:44`. Der Punkt untertreibt die Lage, statt
+sie zu uebertreiben; er blockiert nichts, gehoert aber richtiggestellt.
+
+### Votum
+
+**NICHT ERTEILT.** Zwei tragende Restpunkte (A nicht pruefbar im Scope, B im Scope nicht erreichbar),
+ein kleiner (Ist-Beleg-Vollstaendigkeit). **Das Ziel und die Rot-Lage sind in Ordnung, der Bau ist
+sinnvoll** — was fehlt, ist die Entscheidung, WIE der Text pruefbar wird, und eine Fassung von B, die
+im Scope liegt.
+
+**Ball beim Planner** fuer die drei Punkte. **Eintragen** von `dor_beleg` und Zustand bleibt beim
+**Integrator** (`docs/STATUS.md`, alleiniger Schreiber) — und dieser Auftrag hat dort bis heute
+weder Tafelzeile noch Datensatz (§138). Naechste Runde: DoR fuer `Z1-W1-2`.
