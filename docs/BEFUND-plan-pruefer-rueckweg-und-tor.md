@@ -10648,3 +10648,83 @@ und erkannt werden sind zwei Dinge.
 **Kleiner Ball beim Planner** — nicht am Tor, das gehoert mir nicht: entweder `Verbraucher` in
 `scripts/commit-pruefen.sh:906` aufnehmen, oder die Rollen-Anweisung auf `Aufrufer` vereinheitlichen.
 Eines von beiden, sonst faellt der naechste Pruefer in dieselbe Kerbe.
+
+## §145 — DoR Z1-W1-3 (Shoelace zusammenführen): NICHT ERTEILT. Kriterium A misst in beide Richtungen falsch
+
+*(Messstand 4a642d3a, 21.08. 11:54. Nummer gegen den frischen HEAD gewaehlt: 82 Abschnitte, hoechste
+144 — 145 war frei. Dritte der fuenf DoR aus §142. Kennung aus der Kopfzeile.)*
+
+**Blatt:** `docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md` (45 Z.),
+`zustand: ENTWURF`, `basis_sha: 11f7c4c3`.
+
+### Was hält
+
+Alle Ist-Belege treffen am Basis-Stand: `geometry/dachGeometrie.ts:39-45` ist die private Kopie
+(`:44` `s += a.x * b.y - b.x * a.y;`), `geometry/polygonFlaeche.ts:11-13` verpflichtet den Eingang
+auf **Meter**, `:29` verspricht *"Niemals NaN oder Infinity."*, und `geometry/kontur.ts:21-23` traegt
+den Satz ueber *"genau einer Stelle"*. Ziel, Scope (mit ausdruecklichem Entweder-Oder beim
+Einheiten-Vertrag), Nicht-Ziele, Rueckweg und die Kopplung nach W1-2 (in §144 bestaetigt) sind in
+Ordnung. Die Einheiten-Falle ist real und deckt sich mit meinem eigenen Befund §128 — dort gemessen:
+drei Stellen im Baum nennen drei verschiedene Einheiten fuer `polygonFlaecheM2`, waehrend der Rumpf
+**keine** Umrechnung ausfuehrt.
+
+### Restpunkt 1 (tragend) — Kriterium A kann nie grün werden
+
+A verlangt: *"Formelmuster `a.x * b.y` existiert in `geometry/` nur noch in `polygonFlaeche.ts`"*,
+und der P1-Satz sagt *"heute 2 Fundstellen"*. Mit **genau diesem Muster** am Basis-Stand gezaehlt
+sind es **vier Dateien**:
+
+```
+geometry/dachGeometrie.ts:44       s += a.x * b.y - b.x * a.y;        Schuhband  (Ziel der Zusammenfuehrung)
+geometry/polygonFlaeche.ts:44      summe += a.x * b.y - b.x * a.y;    Schuhband  (das Ziel-Modul)
+geometry/aufbauOrientierung.ts:32  function cross(a: Vec3, b: Vec3)   3D-KREUZPRODUKT
+geometry/gaubeGeometrie.ts:59      function cross(a: Vec3, b: Vec3)   3D-KREUZPRODUKT
+```
+
+Die beiden `cross`-Funktionen tragen in ihrer z-Komponente `a.x * b.y - a.y * b.x` — **dieselbe
+Zeichenfolge, eine andere Rechnung**. Nach der Zusammenfuehrung blieben **drei** Treffer stehen. Das
+Kriterium ist so, wie es dasteht, **unerfuellbar**.
+
+### Restpunkt 2 (tragend) — dasselbe Muster übersieht drei echte Schuhband-Fassungen
+
+`signierteFlaeche` existiert am Basis-Stand **dreimal**, jede mit derselben Rechnung:
+
+```
+geometry/roomDetection.ts:70    export function signierteFlaeche(...)   summe += p.x * q.y - q.x * p.y;
+geometry/dachAusschnitt.ts:103  function signierteFlaeche(...)          a     += p.x * q.y - q.x * p.y;
+geometry/grundriss.ts:94        function signierteFlaeche(...)          a     += p.x * q.y - q.x * p.y;
+```
+
+Die Bezeichner heissen dort `p` und `q` — **das Muster `a.x * b.y` findet keine einzige davon.** A
+faengt also zwei Stellen, die nicht gemeint sind, und verfehlt drei, die es sind. Das deckt sich mit
+meinem §122 (*"sieben Umsetzungen"*), hier auf die vom Blatt gewaehlte Grundmenge `geometry/`
+heruntergerechnet.
+
+### Restpunkt 3 (Entscheidung nötig) — Kriterium D hat zwei Lesarten, und nur eine liegt im Scope
+
+Der Satz in `geometry/kontur.ts:21-23` handelt von **`signierteFlaeche`**, nicht von
+`polygonFlaecheM2`: *"Wiederverwendet wird dagegen `signierteFlaeche` aus `roomDetection.ts` — die
+Flaechenformel steht damit weiterhin an genau einer Stelle."* Gemessen sind es **drei** Fassungen —
+der Satz ist heute schon unwahr, und zwar aus einem Grund, den dieser Auftrag ausdruecklich **nicht**
+anfasst (Nicht-Ziel: *"die anderen Shoelace-Vorkommen sind NICHT Gegenstand"*). Der Scope bietet
+*"Satz wahr machen **oder** berichtigen"* — **wahr machen liegt ausserhalb**, berichtigen liegt
+drin. D sagt *"stimmt wieder mit dem Bestand ueberein"* und laesst beides offen; der Auftrag muss
+sich festlegen.
+
+### Anmerkung, kein Restpunkt
+
+Das Ziel-Modul `geometry/polygonFlaeche.ts` gehoert selbst zu den **33 ohne Ladeweg** (§119, heute
+erneut gemessen). Die Zusammenfuehrung macht es zum ersten Mal lebendig — erwuenscht, und dieselbe
+Lage wie bei W1-2 (§144). Gehoert benannt, damit die naechste Reichweitenmessung die Aenderung
+erklaert findet.
+
+### Votum
+
+**NICHT ERTEILT.** Zwei tragende Restpunkte (A unerfuellbar **und** falsch gemessen) und eine
+noetige Entscheidung (D). **Die Sache selbst ist richtig und ueberfaellig** — eine ungeschuetzte
+Kopie neben einer geschuetzten Fassung, dazu die Einheiten-Falle; was fehlt, ist ein Kriterium, das
+die Schuhband-Formel an ihrer **Rechnung** erkennt statt an einer Zeichenfolge, die zwei
+Kreuzprodukte mitnimmt und drei Fassungen uebersieht.
+
+**Ball beim Planner** fuer A und D. **Eintragen** beim **Integrator** (`docs/STATUS.md`: weder
+Tafelzeile noch Datensatz, §138). Naechste Runde: DoR fuer `Z1-W1-4`.
