@@ -7901,6 +7901,8 @@ alternative: "Ein Waechter nach A-04-Muster (Ausgabewege ohne Vorbehalt melden) 
 was_von_dir_gebraucht_wird: "nichts. Die Entscheidung liegt, die Auflage ist erfuellt.
                              Der Vorschlag oben ist eine Zeile fuer den Planner."
 status_korrektur: "der Eintrag 'FACH-GATE N-003 offen bei Yama' ist ueberholt und wird geschlossen"
+```
+
 
 ## A-18 — `wandaufbau`: der U-Wert trägt seinen Vorbehalt (Datensatz, einziger Zustandsort neben der Tafelzeile)
 
