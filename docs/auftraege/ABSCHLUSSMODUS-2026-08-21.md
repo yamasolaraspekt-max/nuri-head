@@ -195,3 +195,36 @@ noch nicht.
 unabhängiges Votum · Browserstatus · offene Abweichung · nächster Ball. **Ein Commit ohne Diff ist
 kein Zustandsfortschritt.** Belege dauerhaft als `Commit-SHA + Dateipfad + stabiler Anker`, kein
 nackter Zeilenzeiger (Beleg `e1298913`: 23 von 124 STATUS-Zeigern nach A-42 ungültig).
+
+### Abweichungsprotokoll — WIP-Stopp ausgegeben 22:04, nicht wirksam (Dirigent, gemessen 22:2x)
+Yama 21.08.: *„Ab jetzt nichts erneut senden, sondern diese Abweichungen als fehlende Bestätigung
+protokollieren."* Gemessen mit `git log --since='22:04'` und `git branch -a --contains <sha>` am
+Integrationsstand `7eaab966`:
+
+| Zeit | SHA | Rolle | Was | Abweichung von Reihenfolge 1–7 | liegt auf |
+|---|---|---|---|---|---|
+| 22:05 | `a4144ff4` | Evaluator | Votum Z1-W1-5 NACHBESSERN | Z1 statt A-42 (lief vermutlich schon) | `rolle/evaluator` → integriert `82dc8d47` |
+| 22:08–22:18 | `909af6cb` `37a001e0` `07ee0a38` `4254aa8a` | Plan-Prüfer | Posten 283–286 (Yamas Altposten) | Altposten statt A-37-DoR-Bereitschaft/V2 | `rolle/plan-pruefer` → integriert |
+| 22:09 | `d78a2211` | Generator | Z1-W1-5-1 „mein Zweig ist eingefroren" | — (Stopp verstanden, positiv) | `auto/hausplaner-integration` |
+| 22:15 | `27143f96` | Evaluator | Votum Z1-W1-2 (E ENV_BLOCKED) | Z1 statt A-42 — **nach** Evaluator-Stopp | `rolle/evaluator` → integriert `237da4cd` |
+| 22:15 | `844ae872` | Release-Prüfer | Einfrierung gelockert („zu weit gefasst") | hebt die Sperre, die den Generator gehalten hatte | — |
+| 22:16 | `824f8512` | Generator | **A-39 neu gebaut** | Neubau trotz WIP-Stopp | **direkt `auto/hausplaner-integration`, NICHT `rolle/generator`** |
+| 22:17 | `8529c63b` | Generator | A-39 CODE_FERTIG gemeldet | Zustandsmeldung eines gesperrten Baus | **direkt `auto/hausplaner-integration`** |
+| 22:19 | `7eaab966` | Generator | **Z1-W1-5-1 gebaut** | Neubau trotz WIP-Stopp | **direkt `auto/hausplaner-integration`**, noch nicht gepusht |
+| 22:07–22:19 | `82dc8d47` `a5b77ecc` `35ae00fe` `237da4cd` `b1974918` `d3053f56` | Integrator | sechs Rückwege | transportiert außerhalb der Folge Gebautes | Integrationszweig |
+
+**Befund, der schwerer wiegt als die Reihenfolge:** drei Generator-Commits (`824f8512`, `8529c63b`,
+`7eaab966`) sind **nicht** auf `rolle/generator` — sie entstanden **im gemeinsamen
+Integrations-Checkout** (dieselbe Klasse wie `28ca0834` beim W0-5-Doppelbau). Das ist der Fall, den
+der Maßstab „sehr gut" als **klares Ausschlusskriterium** nennt, und der Beweis, dass die
+Schreibbarriere A-37 für den Generator im gemeinsamen Checkout heute **nicht wirkt**. Keine
+Bestätigung „EVALUATOR: geparkt", keine Rollenmeldung eingegangen (Stand dieses Protokolls).
+**Folgen:** A-39 und Z1-W1-5-1 bleiben **geparkt** — keine Abnahme, kein Transport aufgrund dieser
+Bauten; A-38 bleibt geparkt; der Befund „Generator committet im Integrations-Checkout" geht als
+Kriterium in A-37 (technisch: Tor muss `generator` ohne `TICKET_ROLLE`/im falschen Baum mit Exit ≠ 0
+abweisen — **und zwar auch bei nacktem `git commit`**, nicht nur über `commit-pruefen.sh`). **Gemessen
+(Dirigent, Integrations-Checkout):** `core.hooksPath = .githooks`; dort liegen nur `commit-msg` und
+`post-commit`, **kein `pre-commit`**, und keiner der beiden ruft `rollen-tor` oder liest
+`TICKET_ROLLE` — das Tor wirkt heute ausschließlich innerhalb von `scripts/commit-pruefen.sh`; ein
+direktes `git commit` umgeht es vollständig. Das ist die Lücke, die A-37 (Tor im `pre-commit`-Hook)
+und die Claim-Sperre Z0-I2 schließen müssen.
