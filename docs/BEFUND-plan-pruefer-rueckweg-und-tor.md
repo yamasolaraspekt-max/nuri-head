@@ -14251,3 +14251,90 @@ statt Zahl, oder gar nicht**; dazu `SKILL-formel-pruefen.md:39` und `1-AUFTRAG.m
 **Ball beim Integrator, unverändert seit §168:** `5-WAS-ICH-NICHT-DARF.md:23`.
 **Kein Nachziehen der übrigen 58** — sie stehen in datierten Messungen, und dafür gilt die
 Begründung, die ich in §175 angenommen habe.
+
+## §187 — Posten (b): drei Zahlen für dieselbe Menge, alle drei einmal wahr — und der Agent, der beide brach, ist der Dirigent
+
+**Messstand** `b4c8334c` · Baum sauber · 0 neue Commits; Integrationszweig die **fünfte** Runde auf
+`7a82ecfb`, unverändert drei ungesicherte Einträge.
+
+Gegenstand: **`CLAUDE.md`** — die oberste Projektdatei, die ich in dieser ganzen Reihe nie geprüft
+habe. Sie trägt genau **eine** Zahl.
+
+### Die Zahl
+
+`CLAUDE.md:19` sagt: *„`.claude/agents/` — **15 Agenten-Definitionen**; Roster in
+`docs/regelwerk/AGENTEN-UND-SKILLS.md`"*.
+
+```
+gezählt in .claude/agents/   23 Dateien, alle .md
+CLAUDE.md sagt               15
+Roster (:25) sagt            „Die 22 Agenten"   — und listet 22 Namen in Backticks
+```
+
+**Drei Zahlen für dieselbe Menge.** Und beide Angaben waren **wahr, als sie geschrieben wurden**:
+
+```
+20.08. 13:17   1c06f9ba   Agenten im Baum: 15   ← Commit, der „15 Agenten-Definitionen" schreibt
+20.08. 13:52   ee19f314   Agenten im Baum: 22   ← Commit, der „Die 22 Agenten" schreibt
+20.08. 16:04   0f554dd9   Agenten im Baum: 23   ← legt dirigent.md an
+heute                     Agenten im Baum: 23
+```
+
+**CLAUDE.md war 35 Minuten haltbar, das Roster 2 Stunden 12 Minuten.** Kein Fehler beim Schreiben —
+ein Nachzieh-Ausfall, dieselbe Klasse wie §166 (A-38s „feste Erhebung") und §182 (die Zahl aus der
+Inventur), nur an der Datei, die alle anderen einrahmt.
+
+### Der Agent, der beide Zahlen brach, steht in keinem Roster
+
+Die achte Zugabe ist **`dirigent.md`**, angelegt in `0f554dd9`. Gemessen:
+
+```
+'dirigent' in docs/regelwerk/AGENTEN-UND-SKILLS.md   0 Treffer
+'dirigent' in CLAUDE.md                              0 Treffer
+Fangprobe: 'statiker' im Roster                       4 Treffer
+```
+
+Und `dirigent.md:3` beschreibt sich selbst so:
+
+> *„Orchestrierungs-Rolle … Nimmt Aufträge entgegen, **wählt Agenten fähigkeitsbasiert nach dem
+> Roster**"* — und `:11` nennt den Pfad dieses Rosters.
+
+**Die Rolle, die Agenten nach dem Roster auswählt, steht selbst nicht darin.** Ein Orchestrator, der
+sich in seiner eigenen Besetzungsliste nicht findet.
+
+**Gegenprobe auf Absicht:** Das Roster kennt **keine** Ausnahmeklausel — die Überschrift ist eine
+reine Zählung, und der Vorspann sagt *„Jeder Agent trägt seine Modell-Stufe als `model:` im
+Frontmatter"*, also einen Anspruch auf Vollständigkeit. Die zwei Treffer für „orchestr" betreffen
+den **Skill** `planner-slice-orchestrator`, nicht den Dirigenten. **Er ist nicht ausgenommen, er
+fehlt.**
+
+### Was dagegen hält — und das gehört dazu
+
+Die zweite Zahl derselben Datei stimmt **auf den Punkt**:
+
+```
+Roster :72  „Die 19 Skills" = 16 im Repo + 3 nutzerweit
+gezählt      .claude/skills/    16      ~/.claude/skills/   3      Summe 19   ✓
+Abgleich Ordner gegen Namensliste: 16 zu 16, keine Abweichung in beide Richtungen
+```
+
+Auch `CLAUDE.md:25` trifft: *„(ARBEITSREGELN §16)"* — `docs/ARBEITSREGELN.md:728` trägt
+`## 16. Statusführung`. Und alle sieben genannten Ablage-Pfade existieren.
+
+**Es ist also nicht so, dass diese Dateien schludrig wären.** Von vier prüfbaren Aussagen in
+`CLAUDE.md` und dem Roster halten drei; die eine, die nicht hält, ist die, die **eine wachsende
+Menge zählt**. Genau wie in §184 („33er-Liste") und §182: **Zahlen über Mengen altern, Zahlen über
+Strukturen nicht.**
+
+### Eigener Fehlverdacht, gefangen
+
+Meine erste Zählung der Skill-Namen ergab **18** statt 16 und ich hätte fast eine Abweichung
+gemeldet. Ursache: mein Muster `` `[a-z-]+` `` schließt Ziffern aus und übersieht damit
+`bauplaner-3d`, dafür fing es die drei nutzerweiten mit ein. Mit `[a-z0-9-]+` und auf den richtigen
+Zeilenbereich begrenzt: **16 zu 16, deckungsgleich**. *Ein Muster, das den Bindestrich kennt und die
+Ziffer nicht, ist kein Muster für Namen.*
+
+**Ball beim Planner** (`CLAUDE.md` und das Roster sind seine): die **15** in `CLAUDE.md:19` und die
+**22** im Roster `:25` sind heute **23** — und `dirigent` fehlt in beiden. Mein Vorschlag ohne
+Entscheidungsanspruch, aus §184 fortgeschrieben: **an dieser Stelle gar keine Zahl**, sondern der
+Pfad; die Zahl gehört in eine Messung, nicht in eine Landkarte.
