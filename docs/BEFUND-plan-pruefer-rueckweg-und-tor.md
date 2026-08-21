@@ -20235,3 +20235,88 @@ weil die Ablage von Skills eine Werkzeugentscheidung ist und nicht meine.
 Nicht gemessen: ob `governance-zyklus` — der dritte Benutzer-Skill, den ich beim Prüfen sah — von
 einer Agenten-Definition verlangt wird. In den 23 Dateien kommt er **nicht** vor; ob ihn etwas
 anderes lädt, habe ich nicht erhoben.
+
+## §245 · Posten (b): die neun Hausregeln sind vollständig — und die jüngste ist die meistzitierte
+
+**Messstand.** HEAD `a2b2d749` (21.08. 19:29:15), Baum sauber, **0 neue Commits** — siebzehnte Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (298 Min), STATUS-Blob `810f37d9e560`. Gemessen
+21.08. 19:30–19:34.
+
+### 1 · Der Bestand hält
+
+`ARBEITSREGELN.md` Abschnitt 18a führt die Hausregeln. Nachgezählt über die Überschriftenebene:
+
+    Z.930  H-1 · Eine Notiz über eine Lücke ist kein Plan für die Lücke
+    Z.940  H-2 · Ein Bericht, der ein Fachurteil wie eine Messung aussehen lässt …
+    Z.945  H-3 · Ein Reifegrad ist eine Ablesung, keine Bewertung
+    Z.954  H-4 · §3 sperrt die Dateien im Scope des laufenden Auftrags — nicht das Repo
+    Z.964  H-5 · Ein Werkzeug darf nur urteilen, wenn es alle Bedingungen kennt …
+    Z.973  H-6 · Ein Wort ist kein Beleg; erst die Stelle ist einer
+    Z.981  H-7 · Ein Ist-Wert ist kein Soll-Wert
+    Z.990  H-8 · Mehrfachvorkommen ist kein Beleg — und der Ort ist kein Beleg für die Wirkung
+    Z.1020 H-9 · Ein Muster misst, woran es ansetzt
+
+**Neun Überschriften, H-1 bis H-9, jede genau einmal — keine Lücke, keine Dublette.** Die einzige
+abweichende Zahl in der Datei ist `:1167` *„Fassung 1.3 — 12.08.2026, **sieben** Hausregeln"*, und
+das ist ein **Fassungsvermerk**: damals sieben, heute neun. Richtig als Historie, kein Befund.
+
+### 2 · Zwei Zahlen, die ich zurückziehen musste
+
+Erste Messung, mit `\b` als Wortgrenze: **null Träger** für alle neun — obwohl meine eigene Datei
+H-9 dreimal nennt. Ausgefallene Messung, kein Ergebnis (§210-Klasse: `\b` trägt hier nicht).
+
+Zweite Messung ohne Grenzen: H-1 **82** Nennungen, H-2 **14**. Die Rohtreffer angesehen, wie es
+Pflicht ist:
+
+    | P2H-19 | …      | P2H-18 | …      | P2H-17 | …      | P2H-16 | …      | P2H-15 | …
+
+**`H-1` traf die fremde Kennungsserie `P2H-1x`.** Das ist wörtlich der Fehler, den §222 schon
+einmal an mir gemessen hat (*„`P2H-09` als Teilstring"*) — **ich habe ihn wiederholt.** Mit
+Zeichenklassen-Grenzen statt `\b` neu gemessen und das Muster an einem bekannten Treffer verifiziert
+(H-9 in meiner Datei: 3, erwartet 3; `P2H-19` fällt korrekt heraus).
+
+### 3 · Die bereinigte Verteilung, mit Herkunft
+
+Grundmenge `docs/` und `.claude/` **ohne** die Regeldatei selbst — sonst zählte ich die Definition
+als ihre eigene Verwendung:
+
+| Regel | Nennungen | **Träger** | Thema |
+|---|---|---|---|
+| **H-9** | **185** | **62** | Ein Muster misst, woran es ansetzt |
+| H-8 | 90 | 28 | Mehrfachvorkommen ist kein Beleg |
+| H-6 | 64 | 35 | Ein Wort ist kein Beleg |
+| H-1 | 40 | 15 | Notiz ist kein Plan |
+| H-7 | 33 | 11 | Ist-Wert ist kein Soll-Wert |
+| H-4 | 25 | 16 | §3 sperrt den Scope, nicht das Repo |
+| H-3 | 7 | 7 | Reifegrad ist eine Ablesung |
+| H-2 | 6 | 6 | Fachurteil als Messung getarnt |
+| **H-5** | **3** | **3** | Werkzeug darf nur urteilen, wenn es alle Bedingungen kennt |
+
+**Keine der neun ist tot** — jede wird von mindestens drei Trägern zitiert. Aber die Spanne beträgt
+**Faktor 62** zwischen H-9 (185) und H-5 (3).
+
+### 4 · Der Befund liegt in der Reihenfolge
+
+**Die jüngste Regel ist die meistzitierte.** H-9 wurde durch A-19 gebaut und steht als letzte in der
+Liste; sie hat mehr Nennungen als H-1 bis H-5 zusammen (185 gegen 81) und mehr Träger als jede
+andere (62 gegen höchstens 35).
+
+Das ist kein Zufall des Alters, sondern eine Aussage über die häufigste Fehlerquelle: H-9 betrifft
+das **Messhandwerk selbst** — ob ein Muster dort ansetzt, wo die gesuchte Sache steht. Die drei
+meistzitierten (H-9, H-8, H-6) sagen alle dasselbe in drei Schärfen: *ein Fund ist noch kein Beleg.*
+
+**Und die Runde belegt es an mir selbst.** Ich habe in genau dieser Erhebung H-9 zweimal verletzt —
+einmal mit einem `\b`, das nicht trägt, einmal mit einem Muster, das an `P2H-1x` ansetzt statt an
+`H-1`. Die Regel, deren Zitierungen ich zähle, beschreibt den Fehler, den ich beim Zählen mache.
+Fünfmal in dieser Sitzung war meine Grundmenge falsch (§232, §233, §235, §236, §244), und dies ist
+das sechste Mal. **Das ist kein Argument gegen die Messungen, sondern für die Regel.**
+
+### 5 · Ball
+
+**Niemand** — dies ist ein Bestandsbefund ohne Mangel: Die Hausregeln sind vollständig, lückenlos
+nummeriert, historisch korrekt vermerkt und alle in Gebrauch.
+
+Ein Hinweis ohne Auftrag, für den **Planner**: `ARBEITSREGELN.md:964` (**H-5**, „ein Werkzeug darf
+nur urteilen, wenn es alle Bedingungen kennt") hat mit **3 Nennungen in 3 Trägern** die geringste
+Reichweite von allen neun. Ob das heißt, dass die Regel selten gebraucht wird oder selten erinnert,
+kann ich nicht messen — die Zahl unterscheidet beides nicht. Ich melde sie, ohne sie zu deuten.
