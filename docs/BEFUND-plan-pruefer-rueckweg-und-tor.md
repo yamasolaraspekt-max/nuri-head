@@ -14716,3 +14716,91 @@ Rolle ihr Verfahren nimmt, und der Zeiger nennt heute einen Shoelace-Kommentar s
 `1-AUFTRAG.md:376` zeigt auf eine Leerzeile. **Ball beim Integrator, unverändert seit §168:**
 `5-WAS-ICH-NICHT-DARF.md:23` — dort ist zusätzlich die Aussage repariert.
 **Kein Ball bei mir** — die Gegenprobe zu §190 ist gefahren und hat die neue Klasse begrenzt.
+
+## §192 — Posten (b): die „Wegweiser" neu gezählt — 21 sind 29 geworden, und 32 davon habe ich selbst geschrieben
+
+**Messstand** `c282d4e7` · Baum sauber · 0 neue Commits; Integrationszweig unverändert, letzter
+Commit vor **44 Minuten**.
+
+Gegenstand: **rote Karte 5** des Planners (`docs/ARBEITSREGELN.md:1818`): *„3 Wegweiser von 38 —
+4 von 16 Dateien geprüft"*. Der Gegenbefund dazu steht in dieser Datei vom 16.08.:
+*„Statt drei Wegweisern sind es zehn"*, und meine eigene Erhebung damals lautete:
+
+```
+                          meine Messung 16.08.   seine Angabe
+Verweise gesamt                    84                 36
+davon außerhalb Codeblöcken        21                 10
+betroffene Dateien                  6                 16 geprüft
+```
+
+**Muster wie damals:** `ARBEITSREGELN.md:NNN` oder `FORMELSAMMLUNG.md:NNN`, ganzer `docs`-Baum,
+getrennt nach innerhalb/außerhalb Codeblock.
+
+### Heute gemessen
+
+```
+                              gesamt   in Blöcken   außerhalb   Dateien
+ganzer docs-Baum                131         70          61         25
+   ohne meine Befunddatei        95         66          29         24
+   NUR meine Befunddatei         36          4          32          –
+```
+
+**Der Fremdbestand ist von 21 auf 29 gewachsen** — acht mehr in fünf Tagen, gemäßigt. **Und ich
+selbst habe in derselben Zeit 32 erzeugt.** Von den 61 Verweisen außerhalb von Codeblöcken sind
+**mehr als die Hälfte meine eigenen.**
+
+*Ich bin damit der größte Einzelerzeuger genau der Sorte Verweis, die ich seit §176 und §186 als
+unzuverlässig melde.* Das ist keine Koketterie, sondern die Grundmengen-Frage: wer die Zahl „61
+Wegweiser" ohne diese Trennung liest, hält einen Bestand für gewachsen, den zur Hälfte der Prüfer
+selbst geschrieben hat.
+
+### Und wie gut halte ich meine eigene §175-Regel ein?
+
+§175 lautete: **Zeiger in bewegte Dateien tragen Feldname oder Überschrift, die Zeilennummer nur als
+Beiwerk.** Meine 32 Vorkommen liegen auf **29 Zeilen** *(Einheiten getrennt: eine Zeile kann zwei
+Verweise tragen)*. Klassifiziert:
+
+```
+mit Abschnittsnamen (§, Hausregel, Haltbarkeit, F-0xx …)    10
+mit wörtlichem Zitat des Ziels                               6
+NUR die nackte Zahl                                         13
+```
+
+**Sechzehn von 29 tragen einen Anker, dreizehn nicht.** Beispiele für die nackten:
+`FORMELSAMMLUNG.md:278-279` (zweimal), `ARBEITSREGELN.md:1327-1329`,
+`docs/ARBEITSREGELN.md:255-262`, `FORMELSAMMLUNG.md:423-438`.
+
+**Meine eigene Regel gilt bei mir also in 55 Prozent der Fälle.** Das ist besser als vor §175 und
+schlechter als die Regel.
+
+### Wo der Fremdbestand wirklich sitzt
+
+```
+docs/STATUS.md                                              45   von 95
+A-34-zeilennummern-zeigen-auf-die-falsche-formel.md          6
+A-19-h9-und-die-paragraf-3-musterberichtigung.md             6
+A-32-geradenschnitt-und-parallelversatz.md                   5
+BERICHT-A-12-f026.md                                         5
+```
+
+**Fast die Hälfte des Fremdbestands steht in der Statuswahrheit** — und die ist nach §176 der Ort,
+an dem Zeilenzeiger am schnellsten sterben. Bemerkenswert die Nummer zwei:
+`A-34-zeilennummern-zeigen-auf-die-falsche-formel.md` — **das Blatt, dessen Gegenstand genau dieses
+Problem ist, trägt sechs solcher Verweise.**
+
+### Zwei Messfehler, beide vor der Meldung berichtigt
+
+1. **Einheiten vermischt.** Meine erste Auszählung meldete „32" (Vorkommen) und meine zweite „29"
+   (Zeilen) für dieselbe Menge. Beide stimmen — sie zählen Verschiedenes. Oben stehen beide mit
+   ihrer Einheit.
+2. **Zu enges Ankermuster.** Meine erste Klassifikation gab „10 mit Namen, 19 ohne" und hätte damit
+   sechs Verweise als ankerlos gemeldet, die das Ziel **wörtlich zitieren** — ein Zitat ist ein
+   Anker, sogar ein besserer als eine Überschrift. Erst mit der Zitatprüfung kommen 10 + 6 + 13
+   heraus.
+
+**Ball beim Planner:** rote Karte 5 nennt „3 von 38"; die Erhebung ergibt heute **95 im
+Fremdbestand, 29 davon außerhalb von Codeblöcken**. Die Karte ist damit nicht falsch, aber ihre
+Zahl ist überholt — und sie steht als **Messpunkt** in der Prozessquelle, also an einer Stelle, an
+der eine überholte Zahl weitergereicht wird. **Ball bei mir:** dreizehn meiner eigenen Verweise
+tragen keinen Anker; ich ziehe sie nicht nach (B6, zitierte Datei), aber ab hier gilt die Regel
+ohne Ausnahme.
