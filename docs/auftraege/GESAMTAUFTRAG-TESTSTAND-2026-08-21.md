@@ -57,11 +57,13 @@ Kontostatus einführen — Login darf einen deaktivierten Benutzer nicht automat
 `api/secure/master-sets*` vollständig untersuchen und ggf. eigenen P0/P1-Auftrag erstellen ·
 Upload-Größenbegrenzung bewerten · Token-Widerruf, Bereinigung und Ablaufzeit ergänzen.
 
-## Noch benötigte Yama-Entscheidung
-**Nuriva-Token-Laufzeit:** `NURIVA_TOKEN_LAUFZEIT_STUNDEN = ___` — Empfehlung: **8 Stunden**,
-konfigurierbar, mit serverseitigem Widerruf und regelmäßigem Entfernen abgelaufener Tokens.
-*(Dirigent: solange Yama keine Zahl nennt, wird die Empfehlung 8 h als konfigurierbarer Default
-eingeplant — rückstellbar per Config, also keine stille Festlegung.)*
+## Yama-Entscheidungen (21.08.2026, erteilt)
+**Y-10 Nuriva-Token-Laufzeit:** `NURIVA_TOKEN_LAUFZEIT_STUNDEN = 8` — als konfigurierbarer,
+jederzeit rückstellbarer Default (→ Z2-W0-12: Ablauf, serverseitiger Widerruf, Bereinigung).
+**Y-11 `api/secure/master-sets*`:** kein externer Konsument bekannt → **reversible Stilllegung**
+freigegeben, **keine Löschung**; erst deaktivieren und durch Tests absichern, endgültige Entfernung
+später gesondert (→ Z2-W0-10, Weg B).
+*Alle übrigen Arbeiten und Phase-1-Abnahmen laufen ohne weiteren Stopp.*
 
 ## Abnahmekriterien für den Gesamtstand
 Der Stand ist erst testbereit, wenn: alle fünf Z1-Aufträge `ABGENOMMEN` sind · W0-7 abgenommen ist ·
