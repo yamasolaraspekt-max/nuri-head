@@ -127,8 +127,20 @@ ticket-leases/<auftrag>/
 └── active/          # existiert genau dann, wenn ein Lease aktiv ist; mkdir = Vergabe (atomar)
     └── lease.yaml   # Inhaber, Rolle, Worktree, Zweig, Basis-SHA, fencing_token, heartbeat_bis
 ```
-Vergabe: `mkdir active/` (POSIX-atomar, scheitert bei Existenz — kein Read-then-Write) → unter
-`mkdir counter.lock/` den `counter` lesen, +1 schreiben, Sperre lösen → Token in `lease.yaml`.
+**Vergabe — robuste Reihenfolge (Crash-Kante Yama 21.08., dritte Runde; Z0-I2-Implementierungsregel,
+vom Plan-Prüfer mitzuprüfen):** *Naiv* wäre `mkdir active/` → dann `lease.yaml` schreiben; stürzt der
+Prozess dazwischen ab, existiert `active/` **ohne** `heartbeat_bis`, und keine Ablaufprüfung kann
+entscheiden, wann eine Übernahme erlaubt ist. Deshalb:
+1. Fencing Token unter `counter.lock/` erhöhen (Token ist damit verbraucht, ob die Vergabe gelingt
+   oder nicht);
+2. `active.tmp.<token>/lease.yaml` **vollständig** schreiben (inkl. `heartbeat_bis`, `fsync`);
+3. Verzeichnis **atomar** zu `active/` umbenennen (`rename(2)`, scheitert, wenn `active/` existiert);
+4. existiert `active/` bereits → Übernahme ablehnen; der verbrauchte Token verfällt einfach
+   (Monotonie bleibt, Lücken sind erlaubt);
+5. **Recovery-Regel:** `active.tmp.<token>/`-Verzeichnisse ohne erfolgreiches Rename sind
+   Abbruchreste — jeder Hook darf sie entfernen, wenn ihr Token kleiner als der aktuelle `counter`
+   ist **und** keine `lease.yaml` mit gültigem `heartbeat_bis` darin liegt; sie repräsentieren nie
+   ein Lease, `active/` ist die einzige Wahrheit.
 Übernahme nach Ablauf: `active/` darf nur entfernt werden, wenn `heartbeat_bis` verstrichen ist; der
 neue Bewerber erhält aus dem **dauerhaften** `counter` zwingend einen höheren Token — ein Token kann
 nach Löschung von `active/` nie wiederverwendet werden. **Ablehnung veralteter Token durch drei Hooks**: (1) `scripts/commit-pruefen.sh` vor jedem Commit (Lease
