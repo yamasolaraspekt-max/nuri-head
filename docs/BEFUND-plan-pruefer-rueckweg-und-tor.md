@@ -22327,3 +22327,102 @@ Fachentscheidung — sie erzeugt kWp, und N-003 trägt aus genau diesem Grund ei
 
 **Nicht gemessen:** ob weitere tragende Rechnungen ohne Kennung im Bestand stehen. Ich habe **eine**
 gesucht und **eine** gefunden; das ist kein Bild der Menge (B6). Der nächste (c)-Posten.
+
+## §269 · Der Zweig-Vorgang aufgeklärt — und mein Messverfahren ist gegen den A-18-Fehler robust
+
+**Messstand.** Mein HEAD `787d8b44` (§268), Zweig `rolle/plan-pruefer`, Baum sauber.
+Integrationszweig **`8c4d06e9`** (21.08. 20:49). Gemessen 21.08. 20:50–20:56.
+
+### 1 · Die Bewegung aus §268 war kein Fehler
+
+§268 meldete, mein Commit trage Eltern `c072872f` statt des fixierten Messstands `389340c4`.
+Nachgemessen:
+
+    ist c072872f Vorfahre meines HEAD?                    JA
+    Commits, die nur ich habe (nicht im Integrationszweig)  1   (= §268 selbst)
+
+**Mein Rollenzweig folgt dem Integrationsstand nach**, statt parallel zu laufen — das ist der
+Rückweg-Mechanismus, kein Eingriff. `8c113b24` hat §267 transportiert, dabei ist mein Zweig
+nachgezogen worden. **Rückstand: ein Commit** — der kleinste dieser Sitzung; in §234 waren es 54,
+davor 414. Die Meldung aus §268 ist damit geschlossen: **kein Schaden, kein Datenverlust.**
+
+Ballortung am neuen Stand: **40, unverändert**; **kein Welle-0-Ball mehr bei mir**. Blätter 12,
+Blöcke 12, keine Kennungs-Dublette.
+
+### 2 · Der Befund des Release-Prüfers — zitiert, nicht nachgebaut
+
+`8c4d06e9` meldet A-18 als zweiten Fall der A-08-Klasse (P-02: gehört ihm, ich prüfe nur, was mich
+betrifft):
+
+> *„A-18 trägt `zustand BETRIEBSBESTAETIGT` und `ballbesitz 'Kette vollständig'` in seinem Datensatz —
+> **das Feld ist da, kein Werkzeug sieht es, weil der Block nicht parst.**"*
+
+Die genannte Stelle nachgemessen:
+
+    :7893  ```yaml                                        <- Öffner
+    :7905  ## A-18 — `wandaufbau`: der U-Wert trägt …      <- Überschrift INNERHALB des Blocks
+    :7907  ```yaml                                        <- zweiter Öffner
+    :7908  auftrag: "A-18"
+
+**Bestätigt.** Und die Zaunbilanz: `^```` ` liefert **1193** — **ungerade**, also unpaarige Zäune.
+*(Der Release-Prüfer nennt 1195; er misst an seinem Lauf, ich an `8c4d06e9`. Die Differenz habe ich
+nicht aufgelöst und melde sie als solche, statt eine der beiden Zahlen zu übernehmen.)*
+
+### 3 · Was das für meine eigene Messgrundlage heißt — die Prüfung, die ich schuldig war
+
+Der Satz *„kein Werkzeug sieht es"* trifft **mein Verfahren nicht**, und das habe ich gemessen
+statt angenommen:
+
+    mein grep '^ballbesitz: plan-pruefer'   ->  40   (zeilenweise, kennt keine Blockgrenzen)
+    meine awk-Zuordnung an A-18             ->  auftrag Z.7908 · zustand BETRIEBSBESTAETIGT
+                                                · ballbesitz: — # Kette vollständig
+
+**Mein Verfahren parst nicht — es liest Zeilen.** Deshalb sieht es genau das Feld, das parsende
+Werkzeuge verschlucken. Alle Ballortungen dieser Sitzung sind davon **unberührt**.
+
+**Und das erklärt rückwirkend eine Beobachtung:** Ich habe A-18 in 269 Abschnitten nie als fehlend
+gemeldet — nicht weil ich ihn übersehen hätte, sondern weil er für mich **immer sichtbar war**. Der
+Release-Prüfer schreibt dasselbe über seine Grundlinie: *„ich führe seit vierzig Takten ‚D2
+verschluckt 1' und hielt es für eine Eigenart des Werkzeugs; es war nie eine."*
+
+### 4 · Die Kehrseite meines Verfahrens, und sie gehört benannt
+
+Robustheit gegen Fences ist nicht Robustheit überhaupt. **Mein `awk` ordnet `ballbesitz:` dem
+zuletzt gelesenen `auftrag:` zu, über Blockgrenzen hinweg.** Trüge ein Block *keinen* `ballbesitz`,
+nähme meine Zuordnung den **nächsten fremden** — und meldete ihn als Ball des falschen Auftrags.
+
+Bei den zwölf Z2-W0-Blöcken ist das nicht eingetreten (jeder trägt beide Felder, die Zahlen gingen
+in jeder Runde ohne Rest auf: 40+5=45, 45−1=44, …). **Aber die Schwäche besteht**, und sie ist das
+genaue Gegenstück zum A-18-Fehler: Ein parsendes Werkzeug verliert Felder in kaputten Blöcken; ein
+zeilenweises verwechselt sie über Blockgrenzen. **Keines der beiden Verfahren ist für sich
+vollständig** — deshalb schreibt die Wache die Ballortung *zweiseitig* vor.
+
+### 5 · Ball
+
+**Kein Ball bei mir.** A-18 liegt beim Integrator (ein Schließzaun vor `docs/STATUS.md:7905`), und
+der Release-Prüfer hat die Stelle bereits hingelegt, ohne `docs/STATUS.md` anzufassen — dieselbe
+Disziplin, die ich führe: *„ein Schreiber, und das ist der Integrator; ich messe und lege die Stelle
+hin."*
+
+**Zu meiner eigenen Grundlage:** Die 40 steht, und ich habe jetzt gemessen **warum** sie steht. Was
+ich nicht gemessen habe: ob es weitere Blöcke ohne `ballbesitz`-Feld gibt, bei denen meine
+Zuordnung überspringen würde. Das ist der nächste (e)-Posten und keine Vermutung für diesen.
+
+### Nachtrag, beim Neumessen vor dem Schreiben
+
+Die Wache verlangt, den Messstand **vor** dem Schreiben neu zu messen. Genau das hat den Vorgang aus
+Abschnitt 1 ein zweites Mal gezeigt, live:
+
+    beim Fixieren  (20:50)   HEAD 787d8b44 · Integrationszweig 8c4d06e9
+    vor dem Schreiben (20:52) HEAD 8d910672 · Integrationszweig 8d910672  — identisch
+
+Mein §268 ist in diesen zwei Minuten transportiert worden, und mein Zweig wurde erneut nachgezogen;
+HEAD und Integrationszweig stehen jetzt auf **derselben** SHA. **Rückstand: null Commits.**
+
+Das ist die Bestätigung von Abschnitt 1 aus einer zweiten, unabhängigen Beobachtung — und der Grund,
+warum die Regel „vor dem Schreiben neu messen" hier nicht Förmlichkeit ist: Ohne sie hätte dieser
+Abschnitt einen Messstand behauptet, den es beim Schreiben nicht mehr gab.
+
+**Die Zahlen des Abschnitts bleiben gültig**, weil sie ausdrücklich gegen `8c4d06e9` erhoben sind und
+dieser Stand unveränderlich ist (Zwei-Haltbarkeiten-Regel: Commits sind unveränderlich, Arbeitsbäume
+flüchtig).
