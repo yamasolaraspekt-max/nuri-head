@@ -12718,3 +12718,121 @@ und §167. Die Fangprobe hat beide gefangen, bevor etwas gemeldet wurde. Für al
 steht in **keinem Feld**. Ein Bau, an dem neun von neun Zahlen halten, ist in der Statuswahrheit
 nicht vorhanden. **Ball beim Evaluator** für die Abnahme. **Kein Ball beim Generator** — hier ist
 nichts zu berichtigen.
+
+## §172 — Posten (c): F-023 verlangt eine Absage über 85°. Die Zahl 85 steht im Code — nur nicht auf dem Weg.
+
+**Messstand** `adc11c58` · Baum sauber · 0 neue Commits · Zweigprobe live: `auto/hausplaner-integration`
+unverändert `4d37a3ef`, `origin/main 4ed11218`, `origin/rolle/plan-pruefer b43d26a7`. Nichts angekommen,
+also Vorratsprüfung, Posten **(c)**.
+
+Gewählt: **F-023 · Wahre Dachfläche aus Grundfläche** (`FORMELSAMMLUNG.md:265-269`), die elfte der
+27 Formeln, die ich durchrechne. Gewählt, weil sie der **Erhaltungssatz** ist, an dem der Generator
+in §169 seinen ganzen Z1-W1-2-Befund gemessen hat — und ich hatte sie selbst nie geprüft.
+
+```
+Formel:     A_Dach = A_Grundriss / cos(α)
+Grenzfall:  α → 90° → cos → 0 → Fläche → unendlich. ÜBER 85° ABSAGEN.
+```
+
+### Die gelebte Fassung
+
+`dachGeometrie.ts:114` — `const cos = sichererCos(roof.neigungGrad);` — und `sichererCos`
+(`dachWerte.ts:99-103`) lautet vollständig:
+
+```ts
+const rad = istGrad ? (v * Math.PI) / 180 : v;
+return Math.max(1e-3, Math.cos(rad));
+```
+
+Durchgerechnet, Grundriss 100 m²:
+
+```
+  Grad    cos          Faktor      A_Dach      geklemmt?
+    30    8.66e-1         1.2         115      nein
+    60    5.00e-1         2.0         200      nein
+    85    8.72e-2        11.5        1147      nein      <- ab hier verlangt F-023 eine ABSAGE
+    86    6.98e-2        14.3        1434      nein
+    89    1.75e-2        57.3        5730      nein
+  89.9    1.75e-3       573.0       57296      nein
+ 89.99    1.75e-4      1000.0      100000      JA
+    90    6.12e-17      1000.0      100000      JA
+```
+
+**Die Absage gibt es nicht.** Und der Schutz, den es gibt, greift erst bei **89,9427°** —
+`arccos(1e-3)` —, also **fast fünf Grad hinter der Linie**, die das Blatt zieht.
+
+Dazu ein zweiter Befund an derselben Stelle: oberhalb 89,9427° ist das Ergebnis kein Fehler mehr,
+sondern ein **Plateau**. 89,99° und 90° liefern **dieselbe** Zahl, 100 000 m². Das ist heikler als
+der Fall aus §160, wo F-021 mit `endlich()` auf 1,63·10¹⁷ m sprang: eine absurde Zahl fällt auf,
+**100 000 m² fallen nicht auf.** Ein Wert, der eine Plausibilitätsprüfung besteht und trotzdem
+falsch ist.
+
+### Und jetzt das Eigentliche: die Grenze ist gebaut, sie steht nur woanders
+
+`dachformVorlagen.ts:402-406`:
+
+```ts
+export function clampPitchGrad(pitchGrad: number, min = 1, max = 85)
+```
+
+**Die 85 ist da** — die exakte Zahl aus F-023, unter dem richtigen Namen, mit einem eigenen Wächter
+(`dachformVorlagen.test.ts:228`: `clampPitchGrad(90) === {wert: 85, geklemmt: true}`). Sie hilft nur
+nichts:
+
+1. **Sie klemmt, sie sagt nicht ab.** Aus 90° wird still 85°, das Ergebnis wird geliefert.
+2. **Ihr einziger Aufrufer ist `validateVorlage`** (`:497`), und der erzeugt daraus
+   `code: 'PITCH_GEKLEMMT', schwere: 'warnung'`. Die Rückgabe ist
+   `ok: !warnungen.some(w => w.schwere === 'fehler')` — **eine Warnung lässt `ok` auf `true`.**
+3. **Sie berührt die Flächenrechnung nicht.** `validateVorlage` prüft Vorlagen; die Fläche entsteht
+   in `dachGeometrie`.
+4. Über den ganzen Hausplaner ohne Tests gemessen kommt die Zahl `85` in Neigungs-Zusammenhang an
+   **genau zwei** Stellen vor: `dachformVorlagen.ts:405` (die Vorgabe) und `:497` (der eine Aufruf).
+   Sonst nirgends.
+
+### Der Nachschlag: die Funktion, die F-023 heißt, läuft nicht
+
+`dachformVorlagen.ts:357-360` trägt den Formelnamen wörtlich im Kommentar
+(*„Geneigte Fläche aus Grundrissprojektion rechteckiger Flächen: A_grundriss/cos(alpha)"*):
+
+```ts
+export function geneigteFlaecheAusGrundrissM2(grundrissProjM2: number, pitchGrad: number): number {
+  if (!Number.isFinite(grundrissProjM2)) return 0;
+  return endlich(grundrissProjM2 / sichererCos(pitchGrad));
+}
+```
+
+Sie reicht `pitchGrad` **roh** an `sichererCos` — obwohl `clampPitchGrad` **in derselben Datei**,
+45 Zeilen weiter, steht. Und über den Funktionsnamen gemessen hat sie **NULL produktive
+Verbraucher**; der einzige Import kommt aus `dachformVorlagen.test.ts:20`.
+
+**Damit steht F-023 zweimal im Code und keinmal richtig:** einmal als benannte Funktion, die die
+Grenze nicht anwendet und die niemand ruft, und einmal als gelebte Rechnung in `dachGeometrie`, die
+die Grenze nicht kennt. Alle drei beteiligten Module — `dachGeometrie`, `dachformVorlagen`,
+`dachWerte` — sind **erreichbar**; das ist kein latenter Fall.
+
+### Was NICHT betroffen ist
+
+`domain/validation.ts:240-249` begrenzt `neigungGrad` auf `[0, 89]`. Wenn diese Prüfung auf dem
+Live-Weg greift — **das habe ich nicht verfolgt und behaupte es nicht** —, ist 90° unerreichbar und
+das Plateau bleibt theoretisch. Das Band, das dann bleibt, ist genau **85° bis 89°**: vier Grad, in
+denen F-023 eine Absage verlangt und der Code bis zum **57,3-fachen** der Grundfläche rechnet. Die
+Schemagrenze steht auf 89, nicht auf 85.
+
+Und ausdrücklich: **der Befund aus §169 bleibt unberührt.** Der Generator hat den Erhaltungssatz bei
+30°, 35° und 45° angewandt — weit vor der Grenze —, und alle seine Zahlen habe ich dort auf die
+Stelle bestätigt. Diese Formel trägt in ihrem normalen Bereich einwandfrei.
+
+### Die Klasse
+
+Dieselbe wie §136 (entartete Wand → sichere Himmelsrichtung), §141 (`|| 1` → 90°), §160 (F-021 →
+1,63·10¹⁷ m) und §165 (500-m-Gaube besteht die Prüfung): **ein Schutz, der einen plausiblen Wert
+liefert statt zu verweigern.** Neu ist hier die Verschärfung — der richtige Wert für die
+Verweigerung ist bereits programmiert, getestet und benannt. Er liegt nur nicht auf dem Weg, den
+die Rechnung nimmt.
+
+**Ball beim Planner:** Entweder wird die Absage über 85° gebaut — der Baustein `clampPitchGrad`
+existiert und müsste nur an `dachGeometrie.ts:114` bzw. in `sichererCos` gezogen werden —, oder
+F-023s Grenzfall wird gestrichen und durch das ersetzt, was der Code tut (Klemme bei 89,94°,
+Plateau darüber). Dazu die Frage, was mit `geneigteFlaecheAusGrundrissM2` geschehen soll: eine
+Funktion mit dem Namen der Formel und ohne Verbraucher ist eine zweite Wahrheit, die nur darauf
+wartet, benutzt zu werden.
