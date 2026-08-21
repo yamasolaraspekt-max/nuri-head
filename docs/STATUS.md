@@ -101,7 +101,7 @@
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | `ENTWURF` | **Generator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
-| **Z2-W0-4** Wächter: keine neue Web-Route ohne permission: — Ratschen-Test mit Baseline | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-4-route-permission-waechter.md` · **DoR steht aus** — plan-pruefer, sechs Runden angekuendigt (§255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
+| **Z2-W0-4** Wächter: keine neue Web-Route ohne permission: — Ratschen-Test mit Baseline | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-4-route-permission-waechter.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §258): Kriterium C zaehlt drei Routen, es sind sechs · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-5** Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md` · **DoR steht aus** — plan-pruefer, sechs Runden angekuendigt (§255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · **BLOCKIERT durch Y-6** (Yama): ohne entschiedenes Permission-Item `Planner` kein Routen-Gate fuer 61 Routen (plan-pruefer §257) |
 | **Z2-W0-6** Nuriva-API: die vier Token-Abilities werden durchgesetzt — oder sie verschwinden | `ENTWURF` | **Plan-Pruefer** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-6-api-token-abilities.md` · **DoR steht aus** — plan-pruefer, sechs Runden angekuendigt (§255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 
@@ -28147,16 +28147,26 @@ herkunft_dieses_datensatzes: |
 auftrag: "Z2-W0-4"
 titel: "Wächter: keine neue Web-Route ohne permission: — Ratschen-Test mit Baseline"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: planner
+ballbesitz_nachgezogen: |
+  plan-pruefer -> planner, 21.08. vom integrator. TRANSPORT: die DoR ist gefahren,
+  damit endet der Grund des Pruefers. Paragraf 258: "Planner/Dirigent: Restpunkt 1
+  (Zahl in Kriterium C) — und er ist an den Paragraf-256-Restpunkt gebunden, also in
+  einem Zug entscheidbar." Derselbe Halter wie Z2-W0-2, und aus demselben Grund.
 ballbesitz_grund: |
   Die DoR steht aus. Paragraf 255: "Damit liegen sechs DoR in meiner Bahn" — eine ist
   gefahren (Z2-W0-1), fuenf folgen. Bis dahin haelt der Plan-Pruefer den Ball.
 blatt: "docs/auftraege/generator-auftrag-z2-w0-4-route-permission-waechter.md"
 basis_sha: 7a82ecfb
 dor_beleg: |
-  steht aus — plan-pruefer, angekuendigt in Paragraf 255. Und das ist hier woertlich
-  gemeint: es liegt KEIN Votum vor, weder erteilt noch verweigert.
-  NACHGETRAGEN 21.08. vom integrator — TRANSPORT.
+  ERTEILT MIT EINEM RESTPUNKT — plan-pruefer, Paragraf 258 (21.08.).
+  Restpunkt 1: Kriterium C zaehlt DREI Routen, es sind SECHS. Der Plan-Pruefer:
+  "gegen drei Eintraege geprueft, kann es gruen werden, waehrend drei weitere Routen"
+  ungeprueft bleiben. Dieselbe Klasse wie der Restpunkt bei Z2-W0-2 (Paragraf 256)
+  und wie Paragraf 251 bei S-1: die Grundmenge des Auftrags ist zu klein, und er
+  wuerde als erfuellt gelten, ohne es zu sein. Zum dritten Mal dieselbe Klasse.
+  VORHERIGE FASSUNG, ausdruecklich erhalten: steht aus (Paragraf 255).
+  NACHGETRAGEN 21.08. vom integrator — TRANSPORT, keine Bewertung.
 herkunft_dieses_datensatzes: |
   Das Blatt verlangt ihn woertlich: "status_steht_in: docs/STATUS.md — Integrator-Lauf
   erforderlich" (alle sechs tragen die Zeile). Zustand und basis_sha sind AUS DEM BLATTKOPF
