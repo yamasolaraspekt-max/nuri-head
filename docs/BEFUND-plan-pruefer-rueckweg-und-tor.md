@@ -9002,3 +9002,40 @@ geprüft. Ein Bündlerpfad außerhalb dieser Formen wäre nicht sichtbar; Hinwei
 `in_entwicklung`-Engines brauchen nichts. **Hinweis an Yama:** 23 von 55 Geometrie-Modulen laufen
 nicht, davon fünf mit 73 Exporten hinter einer Typkante — ob angeschlossen, stillgelegt oder bewusst
 belassen wird, ist eine Fachentscheidung mit Rechenwirkung.
+
+### Nachtrag zu §120 — der Generator war achtzehn Stunden vor mir, und meine Zahl war falsch
+
+*(Ohne eigene Nummer, weil es eine Berichtigung ist und kein neuer Befund.)*
+
+**Erstmessung gehört ihm.** `cfd5959e` „S-1/8", **20.08. 16:10** — mein §120 ist vom **21.08. 09:57**.
+Sein Befund ist meiner, Punkt für Punkt: `import type` fälschlich als Kante gezählt, korrigiert auf
+Wertkanten, drei reine Typdateien ausdrücklich **kein** Befund, `dachformVorlagen` mit 51
+Laufzeit-Exporten als der schwerste Fall. Sein Satz dazu, den ich nicht besser sagen kann: *„Gefunden
+nicht durch Nachdenken über die Methode, sondern beim Verfolgen einer einzelnen Kette."* Und `6506c713`
+„S-1/9" vom **21.08. 09:52** — fünf Minuten vor meinem Commit — hat die 33 bereits klassifiziert und
+die `in_entwicklung`-Fälle herausgerechnet.
+
+**Damit habe ich einen fremden Befund nachgebaut statt ihn zu zitieren.** Das ist Punkt 4 aus P-02
+(*„VERLINKEN STATT NACHBAUEN"*) — genau der Punkt, den ich in §116 selbst geprüft und für tragfähig
+erklärt habe. Vier Tage später breche ich ihn. Die Ursache ist dieselbe wie bei der
+Nummernkollision: ich habe den Stand zu Beginn gemessen und nicht mehr, bevor ich schrieb.
+
+**Und meine Zahl war falsch.** §120 nennt 165 Module und 38 unerreichbare; richtig sind **160 und 33**.
+
+```
+  Grundmenge MIT  Testdateien   165   erreichbar 127   nicht 38   <- meine Fassung, falsch
+  Grundmenge OHNE Testdateien   160   erreichbar 127   nicht 33   <- richtig, deckt sich mit S-1/8
+```
+
+Ursache: fünf DOM-Tests liegen in `__domtests__/`, nicht in `__tests__/` — mein Filter kannte nur den
+zweiten Ordnernamen. Fünf Testdateien sind natürlich unerreichbar, und sie haben meine Fundzahl um
+genau fünf aufgebläht. **Das Messverfahren hat die Grundmenge bestimmt statt der Frage** — dieselbe
+Klasse, die der Release-Prüfer bei sich „4 von 74" genannt hat.
+
+**Was von §120 bleibt, ist eine Gegenprobe und nicht mehr:** eine unabhängige Umsetzung, anderer
+Autor, anderes Programm, kommt bei angeglichener Grundmenge auf **exakt dieselben 127 erreichbaren
+und 33 unerreichbaren Module**. Das ist etwas wert — aber es ist Bestätigung, nicht Entdeckung, und
+§120 liest sich an mehreren Stellen wie Entdeckung. Es gilt der Nachtrag.
+
+**§119 bleibt davon unberührt**: die `polygonFlaeche`-Kette habe ich am 20.08. gemessen, bevor S-1/8
+transportiert war, und sie ist in seiner Aufstellung als eigener Fall geführt.
