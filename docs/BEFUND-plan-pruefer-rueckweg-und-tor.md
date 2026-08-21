@@ -9734,3 +9734,72 @@ gehoert trotzdem gemeldet, bevor es einmal etwas verdeckt.
 Loeschen des Feldes, nicht des Blocks — A-40 zeigt, wie es aussieht. **An Yama** geht die
 Ausschlussliste des Filters: `VERWORFEN` und `ABGELOEST` streichen oder definieren, und
 `ZURUECKGEZOGEN` einordnen.
+
+## §131 — Posten (c): F-024 durchgerechnet. Die Formel haelt, ihre Grenzfall-Klausel nennt den falschen Wert, und die Umsetzung hat kein Netz — aber zwei Waechter davor
+
+*(Messstand 7d1dfab4, 21.08. 10:53. Nummer gegen den frischen HEAD gewaehlt: 26 Abschnitte, keine
+Dublette, hoechste §130 — §131 war frei.)*
+
+**Wie ich hierher kam.** Von 41 Werkbank-Scheiben sind genau zwei in dieser Datei nie genannt: W-19
+und W-42. W-42 sagt ehrlich "keine Formel" (*ein Schreibpfad rechnet nicht*), W-19 ist zu 100 Prozent
+Vorlage — gegen `_VORLAGE/` gemessen traegt es ueber sechs Blaetter **6 eigene Zeilen**, und alle
+sechs sind Titel; die naechstniedrigste Scheibe hat **116**. Das ist kein Fund: `REGISTER.md:77`
+fuehrt W-19 als **GEGENSTANDSLOS**, `WERKBANK-ANSCHLUSS.md:81` als *"kein Modul gefunden"*, und
+[`BEFUND-FORMELSAMMLUNG-GEGEN-INSEL.md:182-186`](BEFUND-FORMELSAMMLUNG-GEGEN-INSEL.md) hat es bereits
+als **Zustaendigkeitsfrage, nicht Bau** eingeordnet. Dessen Zeiger habe ich geprueft statt
+nachgebaut: `pvBelegung.ts:6-7` traegt die zitierte Grenze woertlich (*"Ertrag/Verschattung/Strings
+bleiben der Fach-Engine (wberechnung) vorbehalten"*). Was dort haengt, ist die Formel **F-024**, und
+die habe ich gerechnet.
+
+**F-024 · Ausrichtung einer Dachflaeche** (`FORMELSAMMLUNG.md:270-279`, eine von 27 F-Formeln):
+
+| gerechnet | Ergebnis |
+|---|---|
+| `atan2(nx,ny)` fuer N/O/S/W | **0° · 90° · 180° · 270°** — die Zusage "0=Nord, 90=Ost, 180=Sued" haelt exakt |
+| `arccos(nz/\|n\|)` Flachdach · 45°-Dach · Wand | **0° · 45° · 90°** — haelt |
+| dieselbe Formel, Normale nach UNTEN `(0,0,-1)` | **180°** statt 0° — kein Schutz im Eintrag |
+| Grenzfall `atan2(0,0)` | **0°** — die Warnung des Eintrags ist berechtigt |
+| fast flach, `nx=±1e-9, ny=0` | **90° bzw. 270°** — nicht 0° |
+
+**Zwei Luecken im Eintrag, beide gerechnet, nicht vermutet.** (1) Die Neigungsformel liefert fuer
+eine nach unten zeigende Normale 180°; da F-010 festhaelt, dass *das Vorzeichen die Orientierung
+ist* (siehe §111), ist die Umlaufrichtung des Polygons genau der Weg dorthin. (2) Die
+Grenzfall-Klausel verlangt *"nicht 0° melden, sondern »keine Ausrichtung«"* — **0° entsteht aber nur
+bei exakt `nx=ny=0`.** Fuer ein real fast flaches Dach dominiert das Rauschen: bei `ny=0` und
+`nx=±1e-9` kommen **90° und 270°** heraus, und eine Aenderung von 2e-9 in der Normalen dreht die
+gemeldete Ausrichtung um 180°. Der Eintrag warnt vor dem einen Wert, den die Formel im realistischen
+Fall gerade nicht liefert, und nennt **kein ε** — der Umsetzer hat keine Schwelle.
+
+**Die Umsetzung, am echten Modul gerechnet** (esbuild-Bundle von `wallGeometry.ts`, nicht an einer
+Abschrift): `azimutDerNormalen` (`:37`) benutzt woertlich F-024s Azimut-Formel. Beide Beispiele des
+Kopfkommentars (`:34-35`) treffen — West→Ost/links = **0° Nord**, Sued→Nord/links = **270° West**;
+alle vier Laufrichtungen mal beide Seiten sind stimmig (links/rechts genau 180° auseinander). Dass
+es **nur die Wand-Variante** ist (kein `nz`, keine Neigung), steht bereits in
+`FAHRPLAN-KLASSE-A.md:98-100` — zitiert, nicht nachgebaut.
+
+**Was ich geprueft habe und was haelt:** die 360-Naht. `359` erscheint korrekt (roh −0,600 → 359),
+und `Math.round` kann nie 360 erzeugen, weil `atan2` hoechstens 180 liefert; `((grad%360)+360)%360`
+ist sauber, auch fuer −180. Kein Mangel.
+
+**Was kein Netz hat:** die entartete Wand. `start === end` gibt **0° (Nord)** fuer `links` und **180°
+(Sued)** fuer `rechts` — eine zuversichtliche Himmelsrichtung fuer eine Wand ohne Richtung, also
+genau das, was F-024 fuer seinen eigenen Grenzfall verbietet. Kein Schutz in der Funktion, und **kein
+Test**: die fuenf Zusicherungen in `wallGeometry.test.ts:19-32` benutzen alle 4000-mm-Waende.
+
+**Und warum es trotzdem kein Live-Fehler ist.** Der einzige Laufzeit-Verbraucher ist
+`raumProjektion.ts:90` (`azimut_grad` je Aussenkante). Davor liegen **zwei** Waechter in
+`roomDetection.ts`: `:89` `if (laenge === 0) continue;` ueberspringt Waende der Laenge null, und
+`:102` `if (key(pa) !== key(pb))` laesst nur Kanten mit verschiedenen Endpunkten durch. Der entartete
+Fall ist auf diesem Weg **nicht erreichbar**. Latente Luecke, kein Schaden — und sie wird zum Schaden
+in dem Moment, in dem ein zweiter Aufrufer die Funktion ohne diese Vorpruefung benutzt.
+
+**Eigener Fehlgriff dokumentiert:** meine erste 360-Naht-Probe war fehlkonstruiert — sie traf den
+Ostsektor statt die Naht und lieferte 90°. Sie hat eine Zahl erzeugt, aber nicht die zur Frage; neu
+gebaut mit `dx` gross und `dy` klein positiv. Ausserdem hatte ich zwischendurch behauptet, nur W-19s
+Formelblatt sei Vorlage — das war aus Zeilenzahlen geschlossen statt gemessen; gegen `_VORLAGE/`
+gemessen sind es alle sechs Blaetter.
+
+**Ball beim Planner** fuer die zwei Luecken in `FORMELSAMMLUNG.md:278-279`: das fehlende ε und der
+Grenzfallwert, der im realistischen Fall 90°/270° statt 0° ist. Die entartete Wand ist eine
+Bau-Entscheidung (Schutz in der Funktion oder Verlass auf die Aufrufer) und gehoert an denselben
+Tisch.
