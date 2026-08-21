@@ -10256,3 +10256,65 @@ sondern eine Momentaufnahme.
 `A-19-h9-und-die-paragraf-3-musterberichtigung.md:122-124` nennt `125`, richtig ist heute `132`; die
 zweite Angabe `:145` gehoert auf `152`. Beide um +7 durch `0f554dd9`. Das allgemeine Problem ist
 nicht neu und liegt schon in der Prozessquelle selbst.
+
+## §140 — Posten (b): der Abschnitt, der vor toten Zeilenverweisen warnt, trägt sechs davon — seine eigenen
+
+*(Messstand 6f151610, 21.08. 11:33. Nummer gegen den frischen HEAD gewaehlt, beide Schreibweisen
+geprueft: 77 Abschnitte, hoechste 139, 140 frei.)*
+
+**Gegenstand.** Der Abschnitt **"⚠ ZEILENVERWEISE AUF DIESE DATEI SIND UNZUVERLAESSIG — gemessen
+16.08. abends"** in `docs/ARBEITSREGELN.md` (ueber die Ueberschrift zu finden, nach der Praxis aus
+§139). Er nennt drei Zahlen, und die Wache verlangt, jede fremde Zahl frisch zu messen.
+
+**Am Stand von damals stimmten sie exakt.** Gemessen an `fd7f30bf` (16.08. 19:56, dem Commit, der
+den Abschnitt anlegte):
+
+| Zusage | an `fd7f30bf` | heute | Versatz |
+|---|---|---|---|
+| Abschnitt 18a steht bei **900** | `## 18a.` bei **900** ✓ | **917** | **+17** |
+| Hausregel H-8 steht bei **973** | `### H-8 ·` bei **973** ✓ | **990** | **+17** |
+| Versatz **+161** | richtig | **+178** (917−739 und 990−812) | **+17** |
+
+**Und was heute an den zugesagten Zeilen steht, ist genau das, wovor der Abschnitt warnt:**
+
+- `:900` traegt heute **`## 18. Verbotene Abkuerzungen`** — der **Nachbarabschnitt**.
+- `:973` traegt heute **`### H-6 · Ein Wort ist kein Beleg; erst die Stelle ist einer`** — die
+  **Nachbar-Hausregel**.
+
+Wer die Zahl `973` prueft, findet dort eine Hausregel. Nicht die genannte, aber eine — und genau
+darum geht es in dem Satz, den derselbe Abschnitt schreibt: *"Ein toter Zeilenverweis ist schlimmer
+als ein fehlender. Ein fehlender zwingt zum Suchen; ein toter fuehrt an eine falsche Stelle, **die
+plausibel aussieht**."*
+
+**Gezaehlt, mit dem genannten Muster:** `900` steht **zweimal** als Zusage (`:1600`, `:1640`), `973`
+**dreimal** (`:1601`, `:1630`, `:1641`), dazu der Versatz `+161` — **sechs veraltete Angaben**, alle
+um denselben Betrag.
+
+**Was NICHT veraltet ist, und das ist der Punkt.** Derselbe Abschnitt gibt zwei Zeilen weiter das
+Gegenmittel:
+
+```
+NICHT   ARBEITSREGELN.md:739
+SONDERN Abschnitt 18a  (ueber die Ueberschrift zu finden)
+        Hausregel H-8  (ueber die Kennung zu finden)
+```
+
+**Diese beiden Verweise treffen heute noch** — ich habe genau so gesucht und beide gefunden. Auf
+einer Seite stehen die Diagnose, die veraltet ist, und das Rezept, das haelt. Haette der Abschnitt
+sein eigenes Rezept auf sich selbst angewandt, waere er immun.
+
+**Kein Vorwurf, und die Einordnung gehoert dazu.** Die Ueberschrift traegt *"gemessen 16.08.
+abends"* — die Zahlen sind **datiert und waren richtig**. Nach der Haltbarkeitsregel (Abschnitt
+"Zwei Haltbarkeiten einer Messung") liegt der Fall in der Luecke zwischen den Klassen: er beschreibt
+**versionierten** Inhalt (waere mit einem SHA fuer immer haltbar), ist aber nur mit einem **Datum**
+belegt. Ein Datum macht eine fluechtige Messung haltbar; eine SHA-faehige Messung wird davon nicht
+haltbar, sondern nur ehrlich.
+
+**Eigener Fehler, dokumentiert:** ich hatte den Versatz auf **+7** vorhergesagt — abgeleitet aus
+`0f554dd9`, dem Verursacher aus §139. Gemessen sind es **+17**. Ich hatte von einem bekannten
+Einschub auf die Gesamtverschiebung geschlossen, statt an beiden Staenden nachzusehen. Eine
+Herleitung ist keine Messung, auch wenn sie von einer Messung ausgeht.
+
+**Ball beim Planner**, klein: sechs Zahlen im Warnabschnitt nachziehen (900→917, 973→990,
++161→+178) — oder, im Sinn des Abschnitts selbst, durch Ueberschrift und Kennung ersetzen und damit
+dauerhaft erledigen.
