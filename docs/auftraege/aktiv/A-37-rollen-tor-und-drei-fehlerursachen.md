@@ -726,9 +726,22 @@ ausnahmslos eine **ausgelöste** Negativprobe mit Rohausgabe und `echo $?`, nich
   Vergabesperre richtig.* **Auch `fail closed` (`:157-159`) greift hier nicht:** es gilt, wenn die
   Lebendigkeit *„nicht eindeutig messbar"* ist, und §8 nennt dafür zwei Fälle — **fremder Host,
   fehlende Startkennung**. Bei einer lokal zurückgebliebenen Sperre mit eingetragener Kennung
-  antwortet `ps` eindeutig (**exit 1** = nachweislich nicht mehr existent, an vier beendeten Läufen
-  dieser Sitzung geprüft, Verfahren an beiden Enden verifiziert) — **das ist genau die Bedingung, unter
-  der `:155-156` die Entfernung erlaubt.** Kein Entzug und kein Stillstand.
+  antwortet `ps` eindeutig (**exit 1** = nachweislich nicht mehr existent, **an allen beendeten Läufen
+  dieser Sitzung geprüft** — Stand der Erhebung siehe Tabelle unten, Verfahren an beiden Enden
+  verifiziert) — **das ist genau die Bedingung, unter der `:155-156` die Entfernung erlaubt.**
+  Kein Entzug und kein Stillstand.
+
+  > **⚠ BELEGBERICHTIGUNG (22.08., Anmerkung aus `2b9cedc4`):** hier stand *„an **vier** beendeten
+  > Läufen"*. **Richtig waren zum Zeitpunkt jener Messung fünf** — `16345` fehlte in meiner
+  > Aufzählung, obwohl dieselbe Datei ihn zwölf Zeilen weiter unten als „Lauf 5" führt.
+  > **Das ist der zweite Zählfehler derselben Bauart innerhalb einer Stunde:** zuvor hieß es *„alle
+  > sechs standen bei 0×"*, richtig waren fünf (*„Sitzungs-ID"* stand bereits 1×). **Beide Male um
+  > eins daneben, beide Male durch Überspringen eines Elements, das an anderer Stelle desselben
+  > Dokuments vollständig aufgeführt ist.** *Die Aussage trägt in beiden Fällen unverändert — die
+  > Regel gilt, ob vier oder fünf Läufe beendet sind. Falsch war jeweils nur der **Beleg**, und ein
+  > Beleg, der um eins danebenliegt, ist als Beleg wertlos.*
+  > **Abhilfe im Text, nicht im Kopf:** die Zahl steht nicht mehr im Satz, sondern **nur noch in der
+  > Tabelle**, die sie ohnehin führt. *Eine Zahl, die an zwei Stellen steht, driftet an einer davon.*
 
   **Was hier bleibt, ist deshalb kein Mangel an §8, sondern eine Ergänzung:** **Yamas Zielregel fügt
   für die Lease hinzu, was §8 dort schon trägt, und macht es zur Abnahmebedingung** — mit dem
@@ -758,11 +771,21 @@ ausnahmslos eine **ausgelöste** Negativprobe mit Rohausgabe und `echo $?`, nich
 
   **GEMESSEN AM LAUFENDEN SYSTEM — die Sitzung `ef8ec540` lief binnen 40 Minuten unter VIER Prozessen:**
   ```
-  88928  Start 00:00:48  (--session-id)   Läufe 1-3     ps-exit 1   tot
-  97092  Start 00:16:24  (--resume)       Messung P-P   ps-exit 1   tot
-  12334  Start 00:32:38  (--resume)       Lauf 4        ps-exit 1   tot
-  16345  Start 00:40:08  (--resume)       Lauf 5        ps-exit 0   lebt
+  ERHEBUNGSSTAND 01:05 — eine Momentaufnahme, keine Dauerauskunft (siehe Hinweis unter der Tabelle)
+
+  88928  Start 00:00:48  (--session-id)   Läufe 1-3     ps-exit 1   beendet
+  97092  Start 00:16:24  (--resume)       Messung P-P   ps-exit 1   beendet
+  12334  Start 00:32:38  (--resume)       Lauf 4        ps-exit 1   beendet
+  16345  Start 00:40:08  (--resume)       Lauf 5        ps-exit 1   beendet   (um 00:44 noch lebend)
+  21343  Start 00:48:47  (--resume)       Lauf 6        ps-exit 1   beendet
+  25914  Start 00:56:50  (--resume)       Lauf 7        ps-exit 1   beendet
+  30651  Start 01:04:51  (--resume)       Lauf 8        ps-exit 0   LEBT
   ```
+  **⚠ Diese Tabelle ist selbst der beste Beleg des Kriteriums, und zwar gerade weil sie altert.**
+  In der Fassung von 00:59 stand `16345` hier als *„lebt"* — **richtig zum Zeitpunkt der Messung,
+  fünfzehn Minuten später überholt.** *Wer eine solche Zeile als Dauerauskunft liest, hält einen
+  beendeten Prozess für lebend; wer sie als Momentaufnahme liest, liest sie richtig.* **Genau diesen
+  Unterschied muss das Tor treffen** — deshalb steht der Erhebungsstand jetzt in der Tabelle selbst.
   **Erhebung:** `ps -o pid=,lstart= -p <PID>`, Exit-Code **direkt** gelesen — nicht hinter einer Pipe
   *(der Plan-Prüfer hat seinen ersten Versuch genau daran verworfen)*. **Verfahren an beiden Enden
   verifiziert:** lebende PID → exit `0` mit Startzeit, `999999` → exit `1` leer.
