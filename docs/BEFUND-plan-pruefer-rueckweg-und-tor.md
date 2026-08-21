@@ -10546,3 +10546,77 @@ im Scope liegt.
 **Ball beim Planner** fuer die drei Punkte. **Eintragen** von `dor_beleg` und Zustand bleibt beim
 **Integrator** (`docs/STATUS.md`, alleiniger Schreiber) — und dieser Auftrag hat dort bis heute
 weder Tafelzeile noch Datensatz (§138). Naechste Runde: DoR fuer `Z1-W1-2`.
+
+## §144 — DoR Z1-W1-2 (Walm-Sperre): ERTEILT. Beide gerechneten Zahlen treffen auf die Stelle, und die Rot-Lage ist echt
+
+*(Messstand 7ab0917e, 21.08. 11:50. Nummer gegen den frischen HEAD gewaehlt: 81 Abschnitte, hoechste
+143 — 144 war frei. Zweite der fuenf DoR aus §142. Kennung aus der Kopfzeile.)*
+
+**Blatt:** `docs/auftraege/generator-auftrag-z1-w1-2-walmdach-sperre.md` (52 Z.), `zustand: ENTWURF`,
+`basis_sha: 11f7c4c3`. Alle drei beteiligten Dateien haben **0 Commits seit der Basis** — HEAD und
+Basis sind hier deckungsgleich, gemessen und nicht angenommen.
+
+### Die tragende Rechnung — durchgerechnet, nicht angesehen
+
+Am echten Modul (esbuild-Bundle von `geometry/dachGeometrie.ts`), und **zuerst am bekannten
+Bestandstest kalibriert**:
+
+| Fall | Rueckgabe | Blatt | korrekt (`L·B/cos`) | Blatt | Abweichung | Firstlaenge |
+|---|---|---|---|---|---|---|
+| Kalibrierung 8×12 m | 110,85 | *(gruen)* | 110,85 | — | **+0,0 %** | **4000 mm** ✓ |
+| A: 6×8 m, 30° | **64,66** | 64,66 ✓ | **55,43** | 55,43 ✓ | +16,7 % | **0 mm** |
+| B: 4×10 m, 30° | **80,83** | 80,83 ✓ | **46,19** | 46,19 ✓ | **+75,0 %** ✓ | **0 mm** |
+
+**Alle vier absoluten Zahlen treffen auf die zweite Stelle.** Die Ursache ist sichtbar: `firstLenM`
+wird bei `geometry/dachGeometrie.ts:136` auf 0 geklemmt, und die Firstlaenge **0 mm** in beiden
+Faellen ist der Fingerabdruck davon.
+
+**Rot-Lage A/B: echt.** Beide Faelle liefern heute stumm eine Zahl, kein Wurf — genau wie das Blatt
+sagt.
+
+### Was ich sonst nachgemessen habe
+
+- **Ist-Belege, fuenf von fuenf am Basis-Stand:** `dachGeometrie.ts:136` traegt den Klemmer;
+  `app/HausplanerApp.tsx:1024` `dachFlaechen(dach);`; `projection/dachProjektion.ts:29`
+  `for (const flaeche of dachFlaechen(roof))`; `app/rahmen/EigenschaftenPanel.tsx:249`
+  `<option value="walm">Walmdach</option>`; `geometry/dachformVorlagen.ts:414`
+  `export function walmIstKonsistent(...)`.
+- **Die Auflage traegt.** `walmIstKonsistent` ist woertlich die gebrauchte Regel
+  (`lengthM > widthM`), hat **drei** Testzusicherungen (`__tests__/dachformVorlagen.test.ts:177-179`)
+  und **einen** Produktivverbraucher (`geometry/dachformVorlagen.ts:478`). Fuer Fall A liefert sie
+  `false`, fuer den Bestandstest `true`.
+- **Kriterium D ist pruefbar und heute gruen:** genau **eine** Definition der Regel, keine zweite
+  Fassung.
+- **Der Ausnahmeweg existiert:** `DachGeometrieUngueltig` ist eine Klasse in
+  `geometry/dachGeometrie.ts:22`; das Nicht-Ziel *"die Meldung reist ueber den vorhandenen
+  Fehlerweg"* ist damit erfuellbar.
+- **Kanten gemessen:** der gutmuetige Fall (L > B) bleibt exakt — +0,0 % und Firstlaenge 4000 mm.
+- **Konfliktpruefung:** 0 Commits auf `dachGeometrie.ts`, `utils/dachWerte.ts` und
+  `dachformVorlagen.ts` seit der Basis.
+- **Kopplung bestaetigt:** Z1-W1-3 nennt in seinem Scope dieselbe Datei
+  (`geometry/dachGeometrie.ts`) — die Reihenfolge W1-2 **vor** W1-3 ist begruendet.
+
+### Zwei Anmerkungen, keine Restpunkte
+
+1. **„+16,6 %" ist abgeschnitten, nicht gerundet.** Gerechnet sind **16,666… → +16,7 %**. Die zweite
+   Prozentzahl (+75 %) ist exakt. Kein Sachfehler, aber die Zahl steht als Beleg.
+2. **Der auferlegte Import legt die erste Laufzeitkante nach `geometry/dachformVorlagen.ts`.** Dieses
+   Modul gehoert heute zu den **33 ohne Ladeweg** (§133), erreichbar nur ueber eine `import type`-Kante
+   (§135); `geometry/dachGeometrie.ts` dagegen ist erreichbar. Der Import ist richtig und die Folge
+   erwuenscht — sie gehoert nur benannt, damit die naechste Reichweitenmessung die Aenderung erklaert
+   findet statt sie zu melden.
+
+### Votum
+
+**ERTEILT.** Ziel, Ist-Beleg, Scope, Nicht-Ziele, Kanten, Rueckweg, Konfliktpruefung und
+Abhaengigkeitskette sind vollstaendig; die beiden P1-Kriterien sind **wirksam rot** und nach dem Bau
+messbar gruen; die Auflage benennt eine vorhandene, getestete Regel statt einer dritten Fassung.
+
+**Eigener Fehlgriff, dokumentiert:** meine erste Rechnung vertauschte `laengeM` und `spannM` und gab
+die Ergebnisse **umgekehrt** aus. `laengeM` ist die Ausdehnung **parallel zum First**
+(`geometry/dachGeometrie.ts:82-83`, gedrehtes Bezugssystem), nicht die x-Achse. Gefangen hat es die
+Kalibrierprobe am Bestandstest, die eine bekannte Firstlaenge von 4000 mm verlangt — **eine Rechnung
+ohne bekannten Bezugsfall ist keine Messung.**
+
+**Ball beim Generator** fuer den Bau, **Eintragen** beim **Integrator** (`docs/STATUS.md`, weder
+Tafelzeile noch Datensatz — §138). Naechste Runde: DoR fuer `Z1-W1-3`.
