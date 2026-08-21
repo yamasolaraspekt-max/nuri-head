@@ -90,10 +90,26 @@ export function projiziereRaum(
         azimut_grad: aussen ? azimutDerNormalen(kante.von, kante.bis, ccw ? 'rechts' : 'links') : null,
         // **Z1-W1-1..5 / K-1 · ehrlicher Ausweis 21.08.:** dieser Ternary liefert heute für JEDE
         // Wand konstant `'wand'` — der Zweig `'aussenwand_gedaemmt'` ist tot. Gemessen über
-        // `resources/`: `insulationType` hat **genau drei** Fundstellen, und keine davon schreibt —
-        // `domain/scene.types.ts:109` (Typ), `domain/validation.ts:46` (Zod), und diese Zeile
-        // (Lesestelle). Der einzige `construction`-Regler im Panel (`EigenschaftenPanel.tsx:324`)
-        // schreibt ausschließlich `materialId`.
+        // `resources/`: `insulationType` hat **genau vier** Fundstellen, und keine davon schreibt —
+        // `domain/scene.types.ts:109` (Typ), `domain/validation.ts:46` (Zod),
+        // `domain/scene-document-v2.schema.json:142` (das aus dem Zod erzeugte Server-Schema),
+        // und diese Zeile (Lesestelle). Der einzige `construction`-Regler im Panel
+        // (`EigenschaftenPanel.tsx:324`) schreibt ausschließlich `materialId`.
+        //
+        // **Nachbesserung Z1-W1-5-1 (21.08.), und der Grund gehört dazu:** hier stand **drei**,
+        // die vierte Fundstelle fehlte. Ein Ausweis, dessen Zweck die Ehrlichkeit über eine
+        // Messung ist, lädt mit falscher Zahl dazu ein, sich auf ihn zu verlassen — der Fehler
+        // wiegt hier schwerer als anderswo, gerade weil die Sache stimmt. Ausgerechnet das
+        // Server-Schema fehlte, also die Stelle, an der das Feld die Insel verlässt.
+        //
+        // **Damit die Zahl nicht wieder still abläuft, steht die Messvorschrift dabei** statt
+        // nur ihr Ergebnis — sie ist jederzeit nachfahrbar und nennt ihren Stand:
+        //
+        //     grep -rln insulationType resources/ | grep -v __tests__
+        //
+        // Gemessen 21.08.2026: **4** Dateien (die vier oben). `__tests__` bleibt ausgeschlossen,
+        // weil ein Test das Feld benutzen darf, ohne dass es damit verdrahtet wäre — die Frage
+        // lautet, wer es im Produktivweg schreibt, und die Antwort ist weiterhin: niemand.
         //
         // **Der Zweig wird trotzdem NICHT entfernt.** Das Feld ist nicht falsch, nur unverdrahtet;
         // ob ein Dämmungs-Regler kommt und was „gedämmt" fachlich für den Bauteiltyp jenseits der
