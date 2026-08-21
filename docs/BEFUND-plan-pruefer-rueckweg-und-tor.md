@@ -22498,3 +22498,85 @@ Ein Hinweis für **Yama**, weil er die Reihenfolge betrifft: Die vier gebauten A
 noch `zustand: ENTWURF` (§267). Die Durchlaufzeit **bis zum Code** ist 23 Minuten; die Durchlaufzeit
 **bis zum Zustand** ist offen. Solange das so bleibt, misst jede Statusabfrage einen Bestand, den
 der Code längst überholt hat — und die TESTBEREIT-Kriterien 2 und 3 bleiben unerfüllbar.
+
+## §271 · Posten (e): meine eigene Ballzahl trennt nicht, was die Wache getrennt verlangt — 40 sind 5
+
+**Messstand.** Mein HEAD `af6f1403`, Baum sauber. Integrationszweig `424d7263` (21.08. 20:56),
+**8 neue Commits**, Rückstand **0**. Ballortung **40, unverändert**. Gemessen 21.08. 20:57–21:00.
+
+### 1 · Zwei eigene Befunde sind behoben
+
+**§269 / A-18:** `8ca3e444` *„A-18s Zaun geschlossen — zweiter Fall derselben Klasse"*. Nachgemessen:
+`docs/STATUS.md:7904` trägt jetzt den Schließer, die Überschrift steht bei `:7907` **außerhalb**, der
+Block beginnt neu bei `:7909`. **Zaunbilanz 1193 → 1194, gerade.** Der Release-Prüfer hatte die Stelle
+hingelegt, ohne die Datei anzufassen; der Integrator hat sie geschlossen.
+
+**§267 / Zustände:** `96d59689` meldet *„zustand: Z2-W0-1 · Z2-W0-3 · Z2-W0-7 · Z2-W0-8 · Z2-W0-9 ·
+CODE_FERTIG"*. **Gemessen tragen alle zwölf Blöcke weiter `ENTWURF`** — der Generator hat gemeldet,
+der Eintrag steht aus. Das ist Laufzeit (3 Minuten zwischen Meldung und meiner Messung), kein
+Befund; ich sage es, weil ich in §251 denselben Commit-Titel schon einmal für einen Feldwert
+gehalten habe. **Fünfter Bau aus meinen Voten:** `f595d654`, Z2-W0-9.
+
+### 2 · Der vorgemerkte Posten — und er trifft mich
+
+§269 hatte gefragt, ob es Blöcke ohne `ballbesitz`-Feld gibt, bei denen meine Zuordnung überspringt.
+**Antwort: zwei** (`A-17` bei Z.7511, `w37_ballwechsel_runde2` bei Z.17559). Das ist wenig und
+harmlos.
+
+**Die Zählung nebenbei ist das Eigentliche:**
+
+    auftrag-Felder      276
+    zustand-Felder      104
+    ballbesitz-Felder   310
+
+**Mehr Ballfelder als Aufträge, und nur 104 Zustände auf 276 Aufträge.** Also habe ich meine eigene
+Zahl aufgeteilt, wie es die Wache verlangt (*„Dazu die Bälle in Blöcken OHNE zustand-Feld"*):
+
+    meine 40 'ballbesitz: plan-pruefer'
+      davon in Blöcken MIT zustand-Feld:    5      (4 × ENTWURF, 1 × VORLAGE)
+      davon in Blöcken OHNE zustand-Feld:  35      (87,5 %)
+
+Die 35 sind Zwischenblöcke — Berichtigungen und Verlaufseinträge, die ein `ballbesitz:` tragen, aber
+keinen Zustand: `A-41` allein fünfmal (Z.23756, 23806, 23912, 23965, 24009),
+`BERICHTIGUNG-W-17-1-TAFEL` (Z.23447) und weitere.
+
+### 3 · Was daran mein Fehler ist
+
+Die Wache schreibt drei Dinge vor: den `grep` auf `^ballbesitz: plan-pruefer`, **zusätzlich** die
+Bälle in Blöcken **ohne** `zustand`-Feld, und einen **negativen Zustandsfilter**.
+
+**Ich habe den ersten Teil in rund zwanzig Runden ausgeführt und die beiden anderen nicht.** Die
+Zahl „40", die ich jede Runde gemeldet habe, ist der rohe Feldzähler. **Der Zustandsfilter kann auf
+35 dieser 40 gar nicht greifen**, weil dort kein Zustand steht — und die fünf, auf die er greift,
+tragen ENTWURF und VORLAGE, fallen also nicht heraus.
+
+**Nach der Vorschrift gelesen sind es fünf Bälle, nicht vierzig.** Die 40 ist nicht falsch gemessen,
+aber sie beantwortet eine andere Frage als die, die die Wache stellt: Sie zählt **Nennungen**, nicht
+**offene Vorgänge**.
+
+**Das ist dieselbe Klasse wie H-8** (*Mehrfachvorkommen ist kein Beleg*) — und ich habe sie in
+§245 an fremden Zahlen gemessen, während meine eigene sie trug. Neunter Fall falscher oder zu
+grober Grundmenge in dieser Sitzung, und der erste, der **jede** meiner Runden betrifft.
+
+### 4 · Was sich dadurch nicht ändert
+
+**Keine meiner Ballmeldungen war inhaltlich falsch.** Die Bewegungen, die ich gemeldet habe
+(40 → 45 → 44 → 43 → 42 → 41 → 40), waren durchweg die Z2-W0-Blöcke — und die tragen **alle** ein
+`zustand`-Feld, gehören also zu den filterbaren fünf. Die 35 Zwischenblöcke lagen die ganze Zeit
+still darunter und haben nie eine Bewegung vorgetäuscht.
+
+**Und die inhaltliche Arbeit ist unberührt:** Zwölf DoR, fünf Bauten, kein Ball übersehen.
+
+### 5 · Ball
+
+**Bei mir.** Ab sofort melde ich die Ballortung getrennt, wie es die Wache verlangt:
+
+    Bälle in Blöcken mit zustand-Feld, nach negativem Filter   ->  die eigentliche Zahl
+    Bälle in Blöcken ohne zustand-Feld                          ->  eigene Zeile
+    Feldzähler gesamt                                           ->  nur als Kontrollsumme
+
+**Kein Ball bei einer anderen Rolle.** Die 35 zustandslosen Blöcke sind kein Mangel der
+Statuswahrheit — Berichtigungen und Verlaufseinträge *sollen* keinen Zustand tragen, sonst
+entstünden Kennungs-Dubletten (die Warnung des Integrators aus §269: *„wer bei unlesbarem Block ein
+Zustandsfeld ERGÄNZT, baut die Kennungs-Dublette"*). **Der Fehler lag in meiner Auswertung, nicht in
+ihrer Ablage.**
