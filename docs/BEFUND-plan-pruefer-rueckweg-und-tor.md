@@ -19619,3 +19619,92 @@ eine Annahme über three.js ersetzt.
 Offen bleibt aus dieser Runde nur **F-026** — sie verweist auf Fremdcode außerhalb des Repos
 (`~/Desktop/Gemini-Code-Ideen-…`) und ist am gültigen Stand nicht messbar. Das ist keine Lücke in
 der Prüfung, sondern eine im Gegenstand.
+
+## §239 · Posten (d): die neun Yama-Posten sind 4 Tage 19 Stunden alt — und zwei vergleichbare wurden in sechs Minuten entschieden
+
+**Messstand.** HEAD `32be9f82` (21.08. 19:08:12), Baum sauber, **0 neue Commits** — elfte Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (277 Min), STATUS-Blob `810f37d9e560`. Gemessen
+21.08. 19:08–19:10.
+
+Ich nenne die neun offenen Posten in **jeder** Runde und habe nie gemessen, wie alt sie sind — der
+gleiche blinde Fleck wie in §234 („wie alt" gemeldet, „ob das viel ist" nie gefragt). Alle neun
+Muster zuerst an der eigenen Datei verifiziert (37 / 12 / 12 / 42 / 8 / 8 / 15 / 15 / 8 Treffer),
+dann die **Erstnennung** über die Dateihistorie (259 Commits berühren sie):
+
+| Posten | erstmals | Alter |
+|---|---|---|
+| Fach-Gate N-003 | `7b8dec42` 16.08. 20:14 | **7135 Min** = 4 T 22 h |
+| W-21L | `dc6abbd1` 16.08. 21:08 | 7081 Min = 4 T 22 h |
+| driftender Zeiger `raumAuswahl.ts` | `94c98ad0` 16.08. 21:46 | 7042 Min = 4 T 21 h |
+| Regelkollision §3/E1/Beifang | `eb713631` 16.08. 22:54 | 6975 Min = 4 T 20 h |
+| A-13-Veröffentlichungsbedingung | `82c3e33b` 16.08. 23:10 | 6959 Min = 4 T 19 h |
+| Tragwerk an die Zeichenfläche | `82c3e33b` 16.08. 23:10 | 6959 Min = 4 T 19 h |
+| versatz-Quittung | `82c3e33b` 16.08. 23:10 | 6959 Min = 4 T 19 h |
+| Seed-Weg der Prüfbühne | `82c3e33b` 16.08. 23:10 | 6959 Min = 4 T 19 h |
+| §119/§120 (33 Module ohne Ladeweg) | `73b6443d` 21.08. 11:16 | 472 Min = 7 h |
+
+**Acht der neun entstanden am 16.08. innerhalb von 2 Stunden 56 Minuten** (20:14 bis 23:10). Meine
+Befunddatei beginnt mit `b00c0c14` am 16.08. 19:40 — **34 Minuten** vor dem ersten Posten. Sie
+stehen also praktisch die gesamte Lebenszeit der Datei (4 T 23 h), in der 173 Abschnitte entstanden.
+
+### 1 · Das Vergleichsmaß — und es ist vernichtend deutlich
+
+Es gibt entschiedene Yama-Posten, also gibt es ein Maß:
+
+    11f7c4c3  21.08. 09:54  planner: Inventur Z1 abgeschlossen — Fahrplan-ENTWURF in 3 Wellen,
+                            5 Yama-Posten, 1 Meta-Befund
+    f350befc  21.08. 10:00  planner: Y-1/Y-2 entschieden dokumentiert + fuenf Welle-1-Auftraege
+
+**Sechs Minuten.** Und die Entscheidungen sind nicht nur notiert, sondern **gebaut** — frisch
+gemessen statt erinnert: `dachGeometrie.ts:137` trägt
+`// Z1-W1-2 (Y-1 ENTSCHIEDEN 21.08.: ABLEHNEN, keine stille Dreh-Korrektur)`, und
+`generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md:7` trägt Y-2 im Feld `entscheidung:`.
+
+Verhältnis: **6 Minuten gegen 6959 Minuten** — Faktor rund **1160**.
+
+### 2 · Der Unterschied ist die Form, nicht die Wichtigkeit
+
+Y-1 und Y-2 kamen nicht als Befund, sondern als **Vorlage**. Der Commit beschreibt sie selbst:
+
+> *„SYNTHESE … 7 Befunde dedupliziert … gegen Backlog UND STATUS.md abgeglichen … gewichtet
+> Wirkung × Aufwand … FAHRPLAN-ENTWURF: Welle 1 (alles S, Wirkung hoch/mittel)"*
+
+Dedupliziert, abgeglichen, gewichtet, in Wellen sortiert, mit benannter Wirkung und benanntem
+Aufwand. **Entscheidbar vorgelegt.** Meine neun stehen verstreut in einer Datei von 19 621 Zeilen,
+in der Reihenfolge ihres Auffindens, ohne Gewichtung — und sie stehen dort **korrekt**: Ich habe
+sie gemessen, belegt und gemeldet.
+
+**Gemeldet ist nicht vorgelegt.** Das ist derselbe Befund wie §235 auf der nächsten Ebene: Dort
+wirkte §169, weil es eine *mechanische Eintragung* verlangte, und die sieben Fachbefunde wirkten
+nicht. Hier wirken zwei Fachposten in sechs Minuten, weil sie *entscheidbar aufbereitet* waren.
+Nicht die Rolle des Adressaten unterscheidet die Fälle, sondern die **Form der Übergabe**.
+
+### 3 · Was daraus für mich folgt — und was nicht
+
+**Nicht** folgt daraus, dass ich Fachentscheidungen treffe oder vorschlage; das bleibt nach
+`CLAUDE.md` bei Yama, und meine Rolle bleibt messen und melden.
+
+**Wohl** folgt: Eine Aufzählung von neun Stichworten am Ende jeder Runde ist keine Vorlage. Was
+Y-1/Y-2 hatten und meinen neun fehlt, ist pro Posten: die **eine zu entscheidende Frage**, die
+**Belegstelle**, die **Folge beider Antworten** und eine **Wirkungs-/Aufwandsmarke**. Das ist
+Aufbereitung, keine Entscheidung — und es ist innerhalb meiner Rolle.
+
+Ich baue diese Vorlage **nicht in dieser Runde aus dem Gedächtnis**. Jeder der neun Posten braucht
+seine frische Messung am gültigen Stand (die stehende Regel „Postenlisten an Yama nur aus frischer
+Messung"), und das sind neun Erhebungen — mehr als ein Rundenposten. Sie ist der nächste
+Vorratsposten, und ich sage das hier, damit es nicht als Ankündigung ohne Termin stehenbleibt.
+
+### 4 · Ball
+
+**Yama** — mit einer Einschränkung, die ich selbst zu verantworten habe:
+
+Die neun Posten sind seit 4 Tagen 19 Stunden offen, und der Vergleich zeigt, dass das **nicht** an
+fehlender Entscheidungsbereitschaft liegt — sechs Minuten für zwei vergleichbare Fragen sind der
+Gegenbeweis. Es liegt an der Form, in der ich sie übergebe. **Der erste Griff liegt deshalb bei
+mir**, nicht bei Yama: Die Posten gehören entscheidbar aufbereitet, bevor ihr Alter jemandem
+vorgehalten wird.
+
+Was davon unabhängig bei Yama bleibt: Solange der Betrieb steht (§234, seit 14:31), erreicht ihn
+auch eine gute Vorlage nicht — die Datei ist bis §179 angekommen, und diese Posten stehen in
+Abschnitten davor, also **angekommen und trotzdem unentschieden**. Beides zugleich wahr, und
+deshalb nenne ich beides.
