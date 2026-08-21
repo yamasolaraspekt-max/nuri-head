@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Planner;
 
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use App\Support\Planner\PlannerZustaendigkeit;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Schema;
 
 class PlannerEmployeeApiController extends Controller
 {
+    use PlannerZustaendigkeit;
+
     /**
      * GET /planner/api/my-work
      * Returns the same planning context used by the planner index, but scoped to the authenticated employee.
@@ -36,6 +39,10 @@ class PlannerEmployeeApiController extends Controller
      */
     public function employeeWork(Request $request, int $employee): JsonResponse
     {
+        // Z2-W0-5 / A-1: {employee} war ungeprueft — die Antwort traegt `latest_location`,
+        // also GPS-Daten eines beliebigen Kollegen an jeden, der die Zahl hochzaehlt.
+        $this->verlangeMitarbeiterSicht($employee);
+
         return $this->employeeWorkResponse($request, $employee);
     }
 
@@ -61,6 +68,9 @@ class PlannerEmployeeApiController extends Controller
      */
     public function employeeDayReport(Request $request, int $employee): JsonResponse
     {
+        // Z2-W0-5 / A-1: siehe employeeWork(). Derselbe Baustein, keine zweite Regel.
+        $this->verlangeMitarbeiterSicht($employee);
+
         return $this->employeeDayReportResponse($request, $employee);
     }
 

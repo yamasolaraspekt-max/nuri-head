@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 
 use App\Models\MasterSet;
+use App\Support\Planner\PlannerZustaendigkeit;
 use App\Models\PlannerItem;
 use App\Models\PlannerPlan;
 use Illuminate\Http\Request;
@@ -13,6 +14,8 @@ use Illuminate\Support\Str;
 use App\Models\PlannerItemMasterSet;  
 class PlannerMasterSetController extends Controller
 {
+    use PlannerZustaendigkeit;
+
     public function index(Request $request)
     {
         $q = trim((string) $request->get('q', ''));
@@ -174,6 +177,10 @@ class PlannerMasterSetController extends Controller
 
     public function link(PlannerItem $item, MasterSet $masterSet)
     {
+        // Z2-W0-5 / A-3: Route-Model-Binding ohne Scope — das Modell wird geladen, aber
+        // niemand fragt, ob es mich etwas angeht.
+        $this->verlangeZustaendigkeitFuerItem((int) $item->id);
+
         DB::table('planner_item_master_sets')->updateOrInsert(
             ['planner_item_id' => $item->id, 'master_set_id' => $masterSet->id],
             ['updated_at' => now(), 'created_at' => now()]
@@ -184,6 +191,9 @@ class PlannerMasterSetController extends Controller
 
     public function unlink(PlannerItem $item, MasterSet $masterSet)
     {
+        // Z2-W0-5 / A-3: loeschender Pfad, dieselbe Bindung.
+        $this->verlangeZustaendigkeitFuerItem((int) $item->id);
+
         DB::table('planner_item_master_sets')
             ->where('planner_item_id', $item->id)
             ->where('master_set_id', $masterSet->id)
@@ -194,6 +204,10 @@ class PlannerMasterSetController extends Controller
 
     public function addToPlan(Request $request, PlannerPlan $plan, MasterSet $masterSet)
     {
+        // Z2-W0-5 / A-3, der schwerste der drei: hier entstehen Auftragspunkte in einem
+        // fremden Plan. Bindung an den Plan, nicht an den Punkt — der Punkt entsteht erst.
+        $this->verlangeZustaendigkeitFuerPlan((int) $plan->id);
+
         // reuse your existing approach (soft delete restore safe)
         $item = PlannerItem::withTrashed()
             ->where('plan_id', $plan->id)

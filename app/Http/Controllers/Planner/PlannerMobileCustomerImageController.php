@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Planner;
 
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use App\Support\Planner\PlannerZustaendigkeit;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -17,6 +18,8 @@ use Illuminate\Support\Str;
 
 class PlannerMobileCustomerImageController extends Controller
 {
+    use PlannerZustaendigkeit;
+
     /**
      * POST /api/planner/customer-images/upload
      *
@@ -67,6 +70,11 @@ class PlannerMobileCustomerImageController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         }
+
+        // Z2-W0-5 / A-2: `customer_id` war nur `exists` — jede Kennung existiert, also ging
+        // jedes Foto in jede Kundenakte. Schreibpfad, deshalb an der Zuordnung gebunden und
+        // NICHT am Rechte-Schalter: der deckt Sehen, nicht Schreiben in fremde Akten.
+        $this->verlangeZustaendigkeitFuerKunde((int) $request->input('customer_id'));
 
         $files = $this->uploadedImageFiles($request);
 
@@ -173,6 +181,10 @@ class PlannerMobileCustomerImageController extends Controller
             'planner_item_id' => ['nullable', 'integer'],
             'limit' => ['nullable', 'integer', 'min:1', 'max:200'],
         ]);
+
+        // Z2-W0-5 / A-2: dieselbe Bindung fuer den Lesepfad — sonst blaettert man fremde
+        // Kundengalerien durch, indem man die Kennung hochzaehlt.
+        $this->verlangeZustaendigkeitFuerKunde((int) $request->input('customer_id'));
 
         $q = DB::table('images')
             ->where('customer_id', (int) $request->input('customer_id'))

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Planner;
 use App\Events\PlannerRealtimeEvent;
 use App\Http\Controllers\Controller;
 use App\Models\PlannerItem;
+use App\Support\Planner\PlannerZustaendigkeit;
 use App\Notifications\PlannerToastNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,6 +17,8 @@ use Illuminate\Support\Str;
 
 class PlannerItemMaterialController extends Controller
 {
+    use PlannerZustaendigkeit;
+
     private string $requestTable = 'planner_item_material_requests';
 
     /**
@@ -25,6 +28,9 @@ class PlannerItemMaterialController extends Controller
      */
     public function index(Request $request, PlannerItem $item): JsonResponse
     {
+        // Z2-W0-5 / A-4: kein Ownership — Materialanforderungen fremder Auftragspunkte lagen offen.
+        $this->verlangeZustaendigkeitFuerItem((int) $item->id);
+
         $rows = $this->materialRequestRowsForItem((int) $item->id);
 
         return response()->json([
@@ -60,6 +66,10 @@ class PlannerItemMaterialController extends Controller
      */
     public function store(Request $request, PlannerItem $item): JsonResponse
     {
+        // Z2-W0-5 / A-4: der schreibende Zwilling zu index(). Ohne dieses Tor legt jeder
+        // angemeldete Nutzer Materialanforderungen an fremden Auftragspunkten an.
+        $this->verlangeZustaendigkeitFuerItem((int) $item->id);
+
         if (!Schema::hasTable($this->requestTable)) {
             return response()->json([
                 'ok' => false,
@@ -92,7 +102,11 @@ class PlannerItemMaterialController extends Controller
             'master_set_id' => ['nullable', 'integer'],
             'requested_master_set_id' => ['nullable', 'integer'],
 
-            'requested_by_employee_id' => ['nullable', 'integer'],
+            // Z2-W0-5 / A-4: `requested_by_employee_id` wird NICHT mehr entgegengenommen.
+            // Die Regel stand hier und der Wert wurde dem eigenen vorgezogen — das ist der
+            // Melder-Spoofing-Pfad. Der Melder kommt jetzt aus der Sitzung (siehe store()).
+            // Ein mitgeschickter Wert wird stillschweigend verworfen, nicht mit 422 quittiert:
+            // die Nuriva-App schickt ihn heute mit, und ein Vertragsbruch ist Nicht-Ziel.
             'customer_id' => ['nullable', 'integer'],
             'alternative_id' => ['nullable', 'integer'],
             'product_id' => ['nullable', 'integer'],
@@ -127,8 +141,14 @@ class PlannerItemMaterialController extends Controller
 
         $context = $this->resolveItemContext($item);
 
-        $requestedBy = $this->normalizeNullableInt($data['requested_by_employee_id'] ?? null)
-            ?? $this->authEmployeeId();
+        // Z2-W0-5 / A-4 — Melder-Spoofing. Vorher stand hier der CLIENT-Wert ZUERST und der
+        // eigene nur als Rueckfall: wer die Anforderung stellte, durfte bestimmen, wer sie
+        // gestellt hat. `requested_by_employee_id` ist aus der Validierung entfernt; der Melder
+        // kommt hart aus der Sitzung.
+        //
+        // Diese Festlegung haengt an KEINEM Schalter. Der Rechte-Schalter aus W0-7 deckt
+        // „Sehen"; eine Zuschreibung zu faelschen ist kein Sehen.
+        $requestedBy = $this->pzMitarbeiterId();
 
         $quantity = (float) ($data['quantity'] ?? $data['qty'] ?? 1);
         if ($quantity <= 0) {
