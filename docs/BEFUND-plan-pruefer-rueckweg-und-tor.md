@@ -24494,3 +24494,84 @@ für erledigt.
 **Nicht geprüft:** ob `validateVorlage`s übrige Warncodes (`EINDECKUNG_KATEGORIE`, `PULT_GEFAELLE`,
 `NEIGUNG_UNTER_RDN`, `NEIGUNG_UNTER_MINDEST`) dieselbe Lage haben — sie hängen an derselben
 Funktion, also vermutlich ja; gemessen habe ich es nicht und melde es deshalb nicht.
+
+## §291 · Drei Warnkanäle in der Insel — der einzige, der den Nutzer erreicht, ist der, der selbst Oberfläche ist
+
+**Messstand.** Runde begonnen an `b92be043` (HEAD = Zweig). **Vor dem Schreiben neu gemessen 22:37:
+Zweig `4e02c273`, Rückstand 1** — angekommen ist `4e02c273` (M-3 der Maurer-Linse behoben).
+**Die Insel hat sich dabei geändert** (`geometry/wandFlaeche.ts` 16+/1−), **meine fünf
+Messgegenstände jedoch nicht** — `dachformVorlagen.ts`, `configuratorPackage.ts`,
+`integrationAbgleich.ts`, `MindestbreiteHinweis.tsx` und `HausplanerApp.tsx` sind einzeln
+gegengeprüft und unverändert. Alle Zahlen unten gelten am neuen Stand. Baum sauber. Ballortung beidseitig **1**
+(P-02, VORLAGE) und **35** — nichts in meiner Bahn. Gemessen 21.08. 22:34–22:39.
+
+§290 ließ eine Frage offen (*„ob validateVorlages übrige Warncodes dieselbe Lage haben"*). Statt
+nur die vier zu prüfen, habe ich die Frage verbreitert: **wie viele Warnkanäle gibt es, und welcher
+erreicht den Nutzer?**
+
+### 1 · Zwei eigene Grundmengen, beide falsch, bevor die dritte stimmte
+
+    Versuch 1  "code: '...'" gesucht        ->  5 Codes   (nur AUSGESENDETE, nicht deklarierte)
+    Versuch 2  alle GROSS_MIT_UNTERSTRICH   -> 44 Treffer (ADD_CEILING, GIEBEL, RC1N, POST …
+                                                 Befehls- und Produktnamen, keine Warncodes)
+    Versuch 3  ueber den TYPNAMEN            ->  VorlagenWarnungCode, 6 Codes
+
+**Erst der dritte misst die Frage.** Das ist dieselbe Regel wie *„Verbraucher über Funktionsnamen"*,
+nur eine Ebene höher: **eine Kategorie misst man über ihren Typ, nicht über ihre Schreibweise.**
+
+### 2 · Die drei Kanäle, gemessen
+
+| Träger | Form | erreicht die Oberfläche? |
+|---|---|---|
+| `VorlagenWarnung` — 6 Codes, 5 ausgesendet | Datenstruktur | **nein** |
+| `ConfiguratorWarning` | Datenstruktur | **nein** |
+| `MindestbreiteHinweis` | React-Komponente | **ja** |
+
+**Kanal 1** — alle fünf Aussendungen liegen in `dachformVorlagen.ts` (`:439`, `:446`, `:480`,
+`:490`, `:500`) und hängen an `validateVorlage`. §290 hat die Kette gemessen: dessen einziger
+Aufrufer `applyVorlage` hat **nur Testverbraucher**, und in die Datei führt genau **eine**
+Laufzeitkante (`walmIstKonsistent`).
+
+**Kanal 2** — `configuratorPackage.ts:52` deklariert den Typ, `:87` führt das Feld,
+`:158` legt es als `warnings: []` an. **Im ganzen Baum gibt es kein einziges `warnings.push`,
+`warnings.concat` oder eine nichtleere Zuweisung.** Das Feld wird angelegt und nie gefüllt. Der
+einzige Sachverbraucher von `ConfiguratorPackage` außerhalb der Tests ist
+`geometry/integrationAbgleich.ts` — und der hat **keinen Ladeweg ab `main.tsx`**.
+
+**Kanal 3** — `MindestbreiteHinweis.tsx:66`, importiert bei `HausplanerApp.tsx:69`, **gerendert bei
+`:1508`** (`<MindestbreiteHinweis sichtbar={istSchmal} />`). Erreichbar, verdrahtet, sichtbar.
+
+### 3 · Ein vorbildlicher Fall, den ich fast als Lücke gemeldet hätte
+
+Von den sechs deklarierten Codes wird **einer nie ausgesendet**: `EINDECKUNG_KATEGORIE`. Das sah
+nach totem Code aus. Gemessen ist es das Gegenteil — `__tests__/dachformVorlagen.test.ts:561-565`:
+
+    test("Deckungsneutral: validateVorlage erzeugt KEINE EINDECKUNG_KATEGORIE-Warnung mehr", …)
+      assert.ok(!val.warnungen.some((w) => w.code === "EINDECKUNG_KATEGORIE"), …)
+
+**Der Code ist stillgelegt, im Typ belassen und durch einen NEGATIV-Test festgenagelt.** Das Wort
+*„mehr"* sagt, dass er einmal gesendet wurde. Wer ihn wieder einbaut, macht den Test rot. **Das ist
+die richtige Behandlung einer zurückgezogenen Zusage** — und die Gegenform zu allem, was ich sonst
+in dieser Datei gefunden habe.
+
+### 4 · Was daraus folgt
+
+**Die beiden Kanäle, die Daten sind, tragen nichts oder erreichen niemanden; der eine, der
+Oberfläche ist, wirkt.** Nach der Linse aus §289 sind Kanal 1 und 2 die Klasse *„nur Tests"* —
+Ordnung, kein Mangel, solange niemand sich auf sie beruft.
+
+**Der Unterschied zu §290 ist die Reichweite:** Dort war es ein Satz über eine Funktion. Hier ist es
+die Bauart. Ein Warnkanal aus Daten braucht **zwei** Bauteile — den Erzeuger und den Anzeiger —, und
+im Haus ist bisher nur der Erzeuger gebaut. Ein Warnkanal aus einer Komponente ist beides in einem
+und deshalb nie halb fertig. **Das ist kein Fehler, sondern die Erklärung dafür, warum die
+Datenkanäle unfertig sind und der Komponentenkanal nicht.**
+
+### 5 · Ball
+
+**Kein neuer Ball.** Die Lage ist gemessen, nichts davon ist Mangel im Sinne eines Befundes. Was
+bleibt, ist der Halbsatz aus §290 (`dachformVorlagen.ts:399-400`), und er gilt jetzt breiter: **wer
+einen der beiden Datenkanäle verdrahtet, baut den Anzeiger mit — sonst meldet der Erzeuger weiter
+ins Leere.**
+
+**Nicht geprüft:** ob `ConfiguratorWarning` je gefüllt werden *soll* — das steht in W-35
+(Konfigurator-Dialog) und ist Auftragsfrage, nicht Messfrage.
