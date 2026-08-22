@@ -23,6 +23,8 @@
  *    **Seit 22.08. 23:12 ist bei ERDBERÜHRTEN Platten daraus ein Mangel geworden**, kein
  *    hinnehmbarer Zustand: der Aufbau ist Pflicht, und der Command lässt eine solche Platte gar
  *    nicht erst entstehen. Bei nicht erdberührten Platten bleibt „nicht erfasst" zulässig.
+ *    **Die Regel selbst wohnt im Command** (`pruefeBodenplatteAufbau`), nicht hier — dieses
+ *    Panel zeigt nur, was daraus folgt.
  *
  * **Bewehrung kommt hier nicht vor** — kein Feld, kein Platzhalter, keine Zeile „folgt später".
  * *Ein leeres Bewehrungsfeld ist eine Einladung, es auszufüllen, und was jemand hineinschreibt,
@@ -111,7 +113,7 @@ export function BodenplattenPanel({ platte, aendere }: BodenplattenPanelEigensch
           // *Frueher stand hier „nicht erfasst" als hinnehmbarer Zustand. Posten 25.6 ist
           // aufgehoben: „Wer den Aufbau nicht kennt, setzt die Platte erst, wenn er ihn kennt."*
           <span className="hp-feld-wert hp-feld-wert--mangel" data-zustand="pflicht-fehlt">
-            Fußbodenaufbau fehlt — Pflichtangabe, die Höhenlage ist unbestimmt
+            Fußbodenaufbau fehlt — Pflichtfeld, die Höhenlage ist unbestimmt
           </span>
         ) : (
           // Nicht erdberuehrt: hier ist ein fehlender Aufbau zulaessig. Eine Platte ueber einer

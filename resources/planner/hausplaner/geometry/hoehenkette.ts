@@ -121,10 +121,21 @@ export function fussbodenaufbauErfasst(schichten: readonly Aufbauschicht[] | und
  *                    ↑ dickeMm der Platte
  * ```
  *
- * **Ist der Aufbau nicht erfasst, ist der Rückgabewert 0** — und 0 ist hier keine Messung, sondern
- * das Fehlen einer. *Deshalb steht daneben `fussbodenaufbauErfasst`, und deshalb schreibt das
- * Panel „Aufbau nicht erfasst" statt einer Höhe.* Eine erfundene Aufbaudicke wäre schlimmer als
- * keine — sie sähe aus wie eine Angabe.
+ * **Ohne erfassten Aufbau darf diese Funktion bei einer ERDBERÜHRTEN Platte gar nicht erst zum
+ * Zuge kommen.** *Dirigent, 22.08. 23:12:40, in Yamas Namen — Posten 25.6 ist **aufgehoben**:*
+ * der frühere Weg („Aufbau nicht erfasst → Rückgabewert 0, daneben ein Vermerk") erzeugte genau
+ * die Null, die Yamas Bezugshöhe ausschließt. **Der Aufbau ist beim Setzen Pflichtfeld**, und
+ * `pruefeBodenplatteAufbau` (`commands/applyCommand.ts`) lehnt die Platte ohne ihn ab.
+ *
+ * **Die Funktion selbst bleibt trotzdem total** und liefert für eine leere Liste die Bezugshöhe
+ * zurück. *Das ist kein stiller Default, sondern die Weigerung, hier eine zweite Wache zu bauen:*
+ * eine Regel, die an zwei Stellen lebt, wird an einer davon vergessen. Die Wache steht im Command,
+ * geprüft und mit lesbarem Grund — **nicht in einer Rechenfunktion, die niemand beim Namen ruft.**
+ *
+ * `fussbodenaufbauErfasst` steht weiterhin daneben, denn die Frage bleibt gültig: bei einer NICHT
+ * erdberührten Platte (Tiefgarage, Stelzen) ist ein fehlender Aufbau zulässig, und das Panel
+ * unterscheidet dort „nicht erfasst" von einem Mangel. *Eine erfundene Aufbaudicke wäre nach wie
+ * vor schlimmer als keine — sie sähe aus wie eine Angabe.*
  *
  * @param bezugshoeheMm Elevation des Geschosses, auf dem die Platte liegt. Für das EG ist das 0
  *        (±0,00 selbst); ein Keller mit eigener Sohle reicht seine eigene, negative Elevation

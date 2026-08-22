@@ -113,7 +113,7 @@ export function FussUndUeberlagerungen({
         `letzteAblehnung`; diese Zeile erklaert nur, wo man den Wert eintraegt. */}
     {werkzeug === 'bodenplatte' && (
       <label className="hp-fu-aufbau" data-feld="bodenplatte-aufbau">
-        Fußbodenaufbau
+        Fußbodenaufbau <abbr title="Pflichtfeld — ohne den Aufbau ist die Höhenlage der Platte unbekannt">*</abbr>
         <input
           type="number" min={1} step={10}
           value={bodenplatteAufbauMm ?? ''}

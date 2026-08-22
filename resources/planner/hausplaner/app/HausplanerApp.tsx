@@ -1083,9 +1083,10 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           createdAt: jetzt, updatedAt: jetzt,
           polygon: ausKontur ? letzteKontur : gebaeudeUmriss(),
           dickeMm: level.floorThickness,
-          // **Ohne erfassten Aufbau ist die Oberkante die Bezugshöhe selbst** — und genau deshalb
-          // schreibt das Panel dort „Aufbau nicht erfasst" statt einer Tiefe. Sobald Schichten
-          // gepflegt sind, wandert der Wert ins Negative (Yama 22.08. 22:08).
+            // **Mit erfasstem Aufbau ist die Oberkante negativ** (Yama 22.08. 22:08). Fehlt der
+            // Aufbau, bleibt hier die Bezugshöhe stehen — und genau daran lehnt der Command ab:
+            // `pruefeBodenplatteAufbau` verlangt ihn bei erdberührten Platten und nennt den Grund.
+            // *Dieser Handler entscheidet das NICHT selbst;* die Regel wohnt an einer Stelle.
           oberkanteMm: bodenplatteOberkanteMm(schichten, level.elevation),
           erdberuehrt,
           ...(schichten ? { schichten } : {}),

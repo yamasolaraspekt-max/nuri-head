@@ -60,7 +60,7 @@ test('Z1-E4-1: fehlt der Aufbau bei ERDBERUEHRTER Platte, steht dort ein MANGEL 
   // (Altbestand, Import), muss dastehen, dass die Hoehenlage unbestimmt ist.
   const { el, wurzel } = rendere(platte({ schichten: undefined }));
   const text = el.textContent ?? '';
-  assert.match(text, /Pflichtangabe/);
+  assert.match(text, /Pflichtfeld/);
   assert.match(text, /Höhenlage ist unbestimmt/);
   assert.ok(el.querySelector('[data-zustand="pflicht-fehlt"]'), 'der Mangel ist nicht ausgezeichnet');
   assert.equal(el.querySelector('[data-zustand="nicht-erfasst"]'), null, 'der alte, hinnehmbare Zustand steht noch da');
