@@ -31126,3 +31126,52 @@ verging innerhalb von zwölf Minuten** (10). **Die übrigen liegen zu Recht bei 
 Entscheidungen, keine Messfragen, und keine Messung kann sie ersetzen.
 
 Ball: **niemand.** Kein Auftrag berührt.
+
+## §388 — Der Zeiger aus §366 ist in 74 Minuten ein zweites Mal weitergewandert
+
+Messstand: HEAD `0dcf91d1`, Baum 0, gemessen 16:36–16:40. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §388'` → 0). Vorratsprüfung (a) + (e): gewanderte Verweise, eigenen Befund
+verfolgen.
+
+### Die Regel aus §366 hält — gemessen, nicht angenommen
+
+    'STATUS Z.' / 'STATUS.md:<Zahl>' in den 21 Abschnitten NACH §366:   0
+    Gegenprobe, ganze Befunddatei:                                    102
+
+**Null neue Zeilenzeiger in 21 Abschnitten.** Die Regel *„Belege in `docs/STATUS.md` über
+Inhaltsmuster, nie über Zeilennummern"* wird eingehalten.
+
+### Der Befund: die Drift ist stündlich, nicht täglich
+
+§366 maß um **15:22**: `STATUS Z.3037` zeigt auf `mein_anteil: "Ich habe geraeumt…"`, der Beschluss
+liegt bei **3058**. Heute um **16:38**, also **74 Minuten später**:
+
+    Z.3037 heute:            "mein php artisan test im Grundtor fuer A-31/A-32, unmittelbar vor 3661"
+    'WEG C entschieden' bei:  3059            (15:22 war es 3058)
+    STATUS.md Zeilen:        19664            (15:22 waren es 19640)
+
+**Derselbe Zeiger zeigt binnen 74 Minuten auf einen dritten Inhalt.** Und das Ziel selbst ist um eine
+Zeile weitergerutscht. Ich hatte in §366 geschrieben, ein Zeiger in eine erzeugte Datei sei „ein
+Zeiger auf einen wandernden Baum" — **gemessen wandert er schneller, als eine Wache-Runde dauert.**
+
+### Was ich über die Grundmenge NICHT behaupte
+
+Mein Suchmuster fand **45 eindeutige Zeilennummern**, davon **9 außerhalb der heutigen Datei**
+(> 19664). **Diese Zahlen melde ich mit Vorbehalt:** das Muster `STATUS(\.md)? ?Z?\.?:?[0-9]{3,5}`
+fängt auch Zahlen, die keine Zeiger sind — etwa eine Zeilenzahl-Angabe im Fließtext. **Ich habe die
+45 nicht einzeln geprüft, und deshalb ist „9 zeigen ins Leere" keine belastbare Aussage, sondern eine
+Obergrenze.**
+
+**Belastbar sind die drei direkt gemessenen Werte oben** — der dreifach gewanderte Zeiger, das um
+eine Zeile verschobene Ziel, die 24 neuen Zeilen. Sie genügen: **wenn ein Zeiger in 74 Minuten zweimal
+falsch wird, ist die Frage nach der genauen Zahl der übrigen zweitrangig.**
+
+### Warum ich die 102 Altfälle nicht nachziehe
+
+Sie stehen in Abschnitten, die einen Messstand dokumentieren, zu dem sie **richtig waren**. Ein
+Befund, dessen Zeiger ich nachträglich korrigiere, ist kein Befund mehr, sondern eine
+Rekonstruktion — dieselbe Linie wie bei §367/§372: **berichtigen ja, überschreiben nein, die alten
+Zahlen sind Teil des Belegs.** Wer einen Altabschnitt nachschlägt, findet über das Inhaltsmuster
+hin, was der Zeiger nicht mehr trifft.
+
+Ball: **niemand.** Kein Auftrag berührt, keine fremde Datei angefasst.
