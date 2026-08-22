@@ -208,9 +208,13 @@ case "$STAMM" in
   generator)       SOLL_VERZ="ticket-rolle-generator";    SOLL_ZWEIG="rolle/generator" ;;
   evaluator)       SOLL_VERZ="ticket-rolle-evaluator";    SOLL_ZWEIG="rolle/evaluator" ;;
   release-pruefer) SOLL_VERZ="ticket-rolle-release";      SOLL_ZWEIG="rolle/release-pruefer" ;;
+  # dirigent: siebter Eintrag, 21.08. (Gesamtauftrag v2 Phase 0/2 — nur der Integrator schreibt im
+  # Integrationscheckout; der Dirigent verlaesst ihn in einen eigenen Worktree). Additiv, dieselbe
+  # Zuordnungsform wie die sechs davor; Vollmacht docs/regelwerk/VOLLMACHT-DIRIGENT.md.
+  dirigent)        SOLL_VERZ="ticket-rolle-dirigent";     SOLL_ZWEIG="rolle/dirigent" ;;
   *)
     echo "ROLLEN-TOR  unbekannte Rolle '$ROLLE' (Stamm '$STAMM') — die Tabelle kennt sie nicht." >&2
-    echo "            Bekannt: integrator planner plan-pruefer generator evaluator release-pruefer" >&2
+    echo "            Bekannt: integrator planner plan-pruefer generator evaluator release-pruefer dirigent" >&2
     [ "$NUR_MELDEN" = "1" ] && exit 0
     exit 1 ;;
 esac
@@ -413,6 +417,61 @@ if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]; then
     echo "ROLLEN-TOR  HINWEIS  '$ROLLE' aendert docs/STATUS.md — noch KEIN Integrator gestartet." >&2
     echo "            Durchgelassen: die Sperre zuendet erst, wenn ein Schreiber existiert." >&2
     echo "            Bis dahin divergiert die Statuswahrheit je Zweig." >&2
+  fi
+fi
+
+# ── A-37-23 — DER DIRIGENT BEKOMMT EINEN BEREICH, KEINEN SCHLUESSEL ────────────────
+#
+# **Eine Rolle bekannt zu machen, ohne ihren Bereich zu begrenzen, tauscht eine Sperre gegen ein
+# Loch.** Vor diesem Bau wies das Tor `dirigent` mit „unbekannte Rolle" ab — *der Dirigent konnte
+# in seinem eigenen Baum nicht committen*, ein Schutz-Rot. Die K2-Zeile oben behebt das.
+# **Haette der Bau dort geendet, haette derselbe Handgriff ihm `docs/STATUS.md` geoeffnet** — die
+# Datei, die Teil 2 dieses Tores gegen alle uebrigen Rollen verteidigt.
+#
+# **Erlaubt ist eine Positivliste**, nicht eine Verbotsliste: `docs/konzept/`, `docs/regelwerk/`
+# und die Steuerungsblaetter unter `docs/auftraege/`. **Alles uebrige wird abgewiesen** —
+# Produktcode unter `app/` und `resources/` ebenso wie `docs/STATUS.md` und
+# `docs/BEFUNDNOTIZEN.md`. *Eine Verbotsliste haette jede kuenftige Datei stillschweigend
+# erlaubt; sie waechst nicht mit dem Bestand mit, die Positivliste schon.*
+#
+# **Das Tor kannte bis hierher keine Pfade** — Teil 2 bekam nur die Ja/Nein-Auskunft
+# `TOR_STATUS_PFAD`. Fuer eine Bereichsgrenze reicht das nicht, deshalb reicht `commit-pruefen.sh`
+# die Liste jetzt zeilenweise als `TOR_PFADE` herein. *Zeilenweise und nicht per Wortzerlegung:
+# ein Pfad mit Leerzeichen zerfaellt sonst in zwei, und beide Haelften waeren unerlaubt.*
+# **Fuer die sechs uebrigen Rollen aendert sich nichts** — sie lesen die Variable nicht.
+#
+# ## ⚠ GEMESSEN UND HIER BENANNT: diese Grenze haette `5c9afbc7` abgewiesen
+#
+# ```text
+#   git show --name-only --format='' 5c9afbc7
+#     docs/auftraege/GESAMTAUFTRAG-V2-FORTSCHRITTSWAHRHEIT-2026-08-21.md   erlaubt
+#     docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md    erlaubt
+#     scripts/rollen-tor.sh                                                ABGEWIESEN
+# ```
+#
+# **`5c9afbc7` ist der Vorgriff, den dasselbe Kriterium mir woertlich zu uebernehmen auftraegt**
+# — und sein dritter Pfad faellt durch die Grenze, die dasselbe Kriterium mich bauen heisst.
+# *Das ist kein Widerspruch im Bau, sondern einer im Auftrag:* die Positivliste nennt kein
+# `scripts/`, und der Dirigent hat genau dort gebaut. **Ich setze den Wortlaut um und ersetze ihn
+# nicht still** — ob `scripts/` in die Liste gehoert, ist eine Entscheidung ueber den Bereich
+# einer Rolle und liegt beim Evaluator, nicht beim Bauenden.
+if [ "$STAMM" = "dirigent" ] && [ -n "${TOR_PFADE:-}" ]; then
+  TOR_UNERLAUBT=""
+  while IFS= read -r _p; do
+    [ -z "$_p" ] && continue
+    case "$_p" in
+      docs/konzept/*|docs/regelwerk/*|docs/auftraege/*) ;;
+      *) TOR_UNERLAUBT="$TOR_UNERLAUBT$_p"$'\n' ;;
+    esac
+  done <<< "$TOR_PFADE"
+  if [ -n "$TOR_UNERLAUBT" ]; then
+    echo "ROLLEN-TOR  VERSTOSS  Rolle '$ROLLE' schreibt ausserhalb ihres Bereichs." >&2
+    echo "            Erlaubt sind nur: docs/konzept/  docs/regelwerk/  docs/auftraege/" >&2
+    while IFS= read -r _p; do
+      [ -n "$_p" ] && echo "            abgewiesen: $_p" >&2
+    done <<< "$TOR_UNERLAUBT"
+    [ "$NUR_MELDEN" = "1" ] && exit 0
+    exit 1
   fi
 fi
 

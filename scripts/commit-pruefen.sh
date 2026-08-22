@@ -131,7 +131,12 @@ if [ -f scripts/rollen-tor.sh ]; then
   for _p in "$@"; do
     case "$_p" in docs/STATUS.md) TOR_STATUS_PFAD=1 ;; esac
   done
-  TICKET_ROLLE="$ROLLE" TOR_STATUS_PFAD="$TOR_STATUS_PFAD" bash scripts/rollen-tor.sh
+  # A-37-23: der dirigent hat einen technisch begrenzten Schreibbereich. Durchsetzen kann das
+  # Tor ihn nur, wenn es die Pfade SIEHT — die Ja/Nein-Auskunft oben reicht dafuer nicht. Die
+  # Liste geht zeilenweise hinueber, damit ein Pfad mit Leerzeichen nicht in zwei zerfaellt.
+  # Das Tor entscheidet, was es damit anfaengt; hier wird nichts bewertet.
+  TOR_PFADE="$(printf '%s\n' "$@")"
+  TICKET_ROLLE="$ROLLE" TOR_STATUS_PFAD="$TOR_STATUS_PFAD" TOR_PFADE="$TOR_PFADE" bash scripts/rollen-tor.sh
   TOR_RC=$?
   if [ "$TOR_RC" -ne 0 ]; then
     echo "" >&2
