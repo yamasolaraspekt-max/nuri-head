@@ -12,12 +12,14 @@ Eigene Risikoklasse: Fachlogik getestet und unberuehrt, neu ist nur der WEG. **F
 
 | Nr | Kriterium |
 |---|---|
-| V-1 | Aufrufer im Produktivpfad 0 → ≥ 1; Komponente/Aufrufstelle mit Pfad benannt |
+| V-1 | Aufrufer im Produktivpfad 0 → ≥ 1; Komponente/Aufrufstelle mit Pfad benannt. *Gezählt wird die Aufrufstelle MIT Klammer im Produktivpfad — nicht das Vorkommen des Namens (Kommentare!) und nicht der Import.* |
 | V-2 | Wirkung im Browser ausgeloest; Eingabewert und Ergebnis woertlich genannt |
 | V-3 | Rot-Probe: derselbe Bedienweg gegen den Stand OHNE das Modul → Wirkung fehlt; Ortsbeleg |
-| V-4 | Fachlogik unberuehrt: `git diff` auf das Modul → leer |
+| V-4 | Fachlogik unberuehrt: `git diff <basis_sha>..<endstand_sha> -- <modulpfad>` → leer. *Ohne beide SHA ist das Kriterium nicht erfüllt* (ein `git diff` ohne Referenz ist nach dem Commit immer leer). |
 | V-5 | Insel-Suite gruen, `tsc` 0, Buendel gebaut und mitcommittet |
-| V-6 | Kein Produktcode ausserhalb `resources/planner/hausplaner` |
+| V-6 | Kein Produktcode ausserhalb `resources/planner/hausplaner`, *ausgenommen das nach V-5 mitgelieferte Bündel `public/hausplaner/hausplaner.js`* |
+
+DoR auf den Kriterientext **ERTEILT** (Plan-Prüfer gen 10, `plan-pruefer-DOR-SPUR-V-KRITERIENTEXT.yaml`, endstand `f443f057`) — die drei Halbsätze sind oben kursiv eingearbeitet und Teil des Textes.
 
 Der Plan-Pruefer erteilt die DoR **einmal auf den Kriterientext** (nicht je Blatt); je Blatt prueft er nur Vollstaendigkeit der Belege (Modul, Aufrufer, Bedienweg N4, Registerzeile). Faellt V-4 (Fachlogik muss angefasst werden) → kein Spur V, sondern Spur A/W mit eigenem Blatt.
 
