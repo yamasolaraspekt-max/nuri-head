@@ -107,7 +107,7 @@
 | **Z2-W0-6** Nuriva-API: die vier Token-Abilities werden durchgesetzt — oder sie verschwinden | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-6-api-token-abilities.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §260): Dateiname im Ist-Beleg berichtigen · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-7** Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.) | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-7-rechte-schalter-planner-item.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §261) · **VORRANG vor Z2-W0-1** (plan-pruefer §260) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-8** secure.image und Geschwister: Recht + Bindung statt bloßem auth | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-8-secure-image-gate.md` · **DoR ERTEILT** (plan-pruefer §262) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
-| **Z2-W0-9** „Deaktiviert' deaktiviert: echter Kontostatus statt Online-Flag | `BEREIT` | **Generator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-9-kontostatus-echt.md` · **DoR ERTEILT** (plan-pruefer §263) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
+| **Z2-W0-9** „Deaktiviert' deaktiviert: echter Kontostatus statt Online-Flag | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-9-kontostatus-echt.md` · **DoR ERTEILT** (plan-pruefer §263) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-10** api/secure/master-sets*: reversible Stilllegung per Schalter (Y-11 entschieden) | `BEREIT` | **Generator** | Schnitt 21.08. · Basis `14dc15f3` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-10-master-set-api-haertung.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §264) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §262/§263 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-11** POST ids/callback: CSRF-Ausnahme mit Auto-Produktanlage schließen, tote Ausnahmen aufräumen | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `ae7cee9d` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-11-ids-callback-csrf.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §265): der Auftrag mischt operandenabhaengig und -unabhaengig · Datensatz vom Integrator angelegt 21.08. auf Zustellung §262/§263 |
 | **Z2-W0-12** Nuriva-Token: Laufzeit 8 h (konfigurierbar), Widerruf, Bereinigung (Y-10 entschieden) | `BEREIT` | **Generator** | Schnitt 21.08. · Basis `14dc15f3` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-12-token-laufzeit-widerruf.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §266) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §264 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -19373,7 +19373,7 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z2-W0-9"
 titel: "„Deaktiviert' deaktiviert: echter Kontostatus statt Online-Flag"
-zustand: BEREIT
+zustand: CODE_FERTIG
 zustand_beleg_272: |
   Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
   Das Votum steht im Feld dor_beleg (Paragraf 263, ERTEILT, kein Restpunkt),
@@ -19386,7 +19386,17 @@ zustand_beleg_272: |
   NICHT NACHGEZOGEN wurden die vier mit Restpunkt (W0-2, W0-4, W0-6, W0-11): dort
   liegt der Ball beim Planner, der Punkt ist offen, und ein Zustandswechsel wuerde
   eine Bereitschaft behaupten, die der Pruefer eingeschraenkt hat.
-ballbesitz: generator
+ballbesitz: evaluator
+bau_sha: f595d654
+bau_beleg: |
+  generator: Z2-W0-9 gebaut; in der Weisung gen 10 nicht genannt, ueber den Betreff gemessen.
+  ABNAHME STEHT AUS: fuer diesen Auftrag existiert KEIN Votum (ueber alle Zweige gemessen).
+  Der Zustand steht nach Beleglage, nicht nach einem Votum.
+zustand_beleg: |
+  Gesetzt vom integrator auf Weisung gen 10. TRANSPORT, keine Bewertung.
+  Der Sammel-Zustandscommit 96d59689 vom 21.08. 20:53 meldete diesen Wechsel bereits, war aber
+  LEER (ein Elter, Baum-Hash identisch mit dem Elter, 0 Dateien) — deshalb stand der Zustand
+  seit ueber 17 Stunden auf dem alten Wert, waehrend der Bau existierte.
 ballbesitz_nachgezogen: |
   plan-pruefer -> generator, 21.08. vom integrator. TRANSPORT: Paragraf 263 —
   "Generator: W0-9 ist von meiner Seite frei."
