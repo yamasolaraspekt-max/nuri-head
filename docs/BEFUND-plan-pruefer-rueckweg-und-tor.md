@@ -31631,3 +31631,73 @@ Dazu zwei eigene Fehler, darunter *„ICH HABE DIE SPALTE `lead_name` GERATEN"* 
 
 Ball: **Generator** (Rot-Probe zu -11) · bei mir nichts. **Posten 6 verlässt meine Yama-Liste nicht
 durch eine Entscheidung, sondern durch einen Bau.**
+
+## §396 — Z0-I1 Stufe 1 ist fertig, und Z0-I1-12 ist mit drei Zeilen eingelöst. Zwei eigene Fehlgriffe in einer Prüfung
+
+Messstand: HEAD `265d2573`, Baum 0, gemessen 16:59–17:03. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §396'` → 0). `BAU-generator-Z2-W0-5b/generator-CODE_FERTIG-Z0-I1.yaml`,
+16:58:55 — das Blatt, dessen DoR ich in §370 erteilt und dessen zwölftes Kriterium ich in §378 in
+einem Zug mitbestätigt habe.
+
+### Meldepflichten und Scope, selbst gemessen
+
+    SHAs        7791920f · 161868e9 · 04949151      alle: commit
+    04949151 gegen seinen Elternteil 9ec5b540:      scripts/pruefstand-saeen.sh  +98
+                                                    1 Datei, KEIN Beifang
+    Buendel in diesem Commit                        0 Dateien   <- regelkonform
+
+**Ballwechsel bestätigt:** Ball beim Evaluator.
+
+### Z0-I1-12 — mein Zusatzkriterium, eingelöst
+
+In §378 habe ich gemessen, dass `phpunit.xml` `DB_HOST` und `DB_PORT` **nicht** setzt, und das
+Kriterium in einem Zug erteilt, weil ohne (12) das Kriterium (9) nicht belegbar ist. Heute:
+
+    DB_HOST        0 -> 1     <env name="DB_HOST" value="127.0.0.1" force="true"/>
+    DB_PORT        0 -> 1     <env name="DB_PORT" value="3307"      force="true"/>
+    APP_TIMEZONE   0 -> 1     Europe/Berlin                         (aus der AP-3-Nachbesserung)
+    DB_SOCKET      0 -> 0     \  Zugangsdaten bleiben draussen —
+    DB_USERNAME    0 -> 0     /  die Absage-Regel verlangt den WEG, nicht das Kennwort
+
+**Drei Zeilen.** Meine Entscheidung aus §378 — *„kein neues Ziel, sondern eine Voraussetzung der
+bestehenden"* — ist damit belegt: das Kriterium kostete den Bau drei Zeilen und macht (9) und (10)
+erst nachfahrbar.
+
+### Zwei eigene Fehlgriffe, beide in dieser einen Prüfung
+
+**Erstens:** Ich las den Bericht mit `head -52` und stellte fest, **Z0-I1-12 fehle in der
+Kriterienliste** — neun statt zehn. Es steht bei **Zeile 53**, eine Zeile hinter meinem Schnitt.
+**Siebte zu enge Lesart heute.**
+
+**Zweitens:** Der Scope-Diff `161868e9..04949151` zeigte `public/hausplaner/hausplaner.js` mit **360
+geänderten Zeilen** — scheinbar ein Verstoß gegen Bündel-Regel Punkt 1 (*„Werkzeug-Commits enthalten
+das Bündel NICHT"*). **Die Spanne enthält sieben Commits**, darunter `be4f637c` „Bündel gebaut für
+Z1-W2-1" — **den eigenen Bündel-Commit, genau wie die Regel ihn vorschreibt.** Gegen den Elternteil
+gemessen ändert `04949151` **eine** Datei.
+
+**Achte falsche Grundmenge heute — und diesmal zu weit statt zu eng.** Die sieben davor meldeten zu
+wenig (eine Null, die man glaubt), diese meldete zu viel (ein Verstoß, den es nicht gibt). **Beide
+Richtungen haben dieselbe Wurzel: Ich habe gemessen, was der Befehl hergab, statt was die Frage
+verlangte.** Der Wacheauftrag nennt es wörtlich: *„Grundmenge gegen die Frage prüfen statt gegen das
+Verfahren."*
+
+### Was den Bericht trägt
+
+**Die Wirkungsprobe im Betrieb**, vier Riegel hintereinander am selben Stand — mit der Begründung,
+warum sie diesmal überhaupt gefahren wurde: *„DAS IST DER TEIL, DEN ICH BEIM VORIGEN MAL ÜBERSPRUNGEN
+HABE und der mich einen fehlerhaften Commit gekostet hat."* Kein Riegel einzeln gemeldet und dann
+zusammengezählt.
+
+**Die ehrliche Einschränkung bei der Rot-Probe:** *„die Abnahme fällt NICHT STUMM — RC 1, zwei
+benannte Fehlschritte — aber sie nennt den Grund nicht beim Namen (‚Prüfnutzer fehlt'). Das Kriterium
+verlangt ‚klare Meldung'; ich melde, was gemessen ist, und überlasse die Bewertung dem Evaluator."*
+**Das ist die richtige Rollengrenze** — er misst, der Evaluator wertet.
+
+**Die benannte Reichweitengrenze:** *„Der Guard sitzt in `tests/CreatesApplication.php` und schützt
+TESTLÄUFE. Ein beliebiger `php artisan tinker` ohne `APP_ENV=testing` geht daran vorbei — ich habe es
+heute selbst getan … wer die Grenze nicht kennt, hält sich für geschützt, wo er es nicht ist."*
+
+Und der Satz, der die Lieferung einordnet: *„mein Testlauf hat um 16:00:33 dem Evaluator mitten in
+der Browserabnahme den Anmeldenutzer gelöscht … **DIESE LIEFERUNG IST DIE ANTWORT DARAUF.**"*
+
+Ball: **Evaluator** (Abnahme Z0-I1 Stufe 1) · bei mir nichts.
