@@ -18,7 +18,7 @@
  * **Keine dieser Funktionen fasst den Store an.** Sie bekommen Knoten und geben Befehle zurück.
  */
 import type { HausplanerCommand } from '../domain/commands.types';
-import type { Level, OpeningNode, RoofNode, SceneNode, WallNode } from '../domain/scene.types';
+import type { Level, OpeningNode, RoofNode, SceneNode, WallNode, CeilingNode } from '../domain/scene.types';
 import { istOeffnung } from './reineHelfer';
 import { versetzteWand, spiegelteWand, bbox as punkteBbox, achsenMitte, type Achse } from '../geometry/editierGeometrie';
 import { wandLaenge } from '../geometry/wallGeometry';
@@ -120,7 +120,7 @@ export function befehleSpiegeln(waende: readonly WallNode[], achse: Achse): Haus
  * neue Geschoss zeigen.*
  */
 export function befehleGeschossDuplizieren(
-  dup: { level: Level; nodes: SceneNode[]; roof: RoofNode | null },
+  dup: { level: Level; nodes: SceneNode[]; roof: RoofNode | null; ceiling?: CeilingNode | null },
 ): HausplanerCommand[] {
   const befehle: HausplanerCommand[] = [{ type: 'ADD_LEVEL', level: dup.level }];
   for (const n of dup.nodes) {
@@ -128,6 +128,11 @@ export function befehleGeschossDuplizieren(
   }
   if (dup.roof) {
     befehle.push({ type: 'ADD_ROOF', roof: dup.roof });
+  }
+  // Z1-E2-1: die Decke reist mit — NACH dem Level, aus demselben Grund wie das Dach: der
+  // ADD_CEILING-Reducer prueft `levelId`, und das Level muss vorher da sein.
+  if (dup.ceiling) {
+    befehle.push({ type: 'ADD_CEILING', ceiling: dup.ceiling });
   }
 
   return befehle;

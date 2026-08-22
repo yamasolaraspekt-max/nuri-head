@@ -745,6 +745,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       // Z1-E0-1: die Decke dieses Geschosses geht in die Hoehenkette ein. Ohne sie rechnete
       // das Duplizieren mit `floorThickness` weiter — dieselbe Luecke wie im Kopfrahmen.
       scene?.ceilings?.find((c) => c.levelId === level.id),
+      // Z1-E2-1: dieselbe Decke wird MITKOPIERT — neue Id, neue levelId, wie das Dach.
+      scene?.ceilings?.find((c) => c.levelId === level.id),
     );
     // A-31: vorher N+2 Undo-Schritte für EIN Geschoss — Geschoss, jede Wand einzeln, Dach.
     const st = store.getState();

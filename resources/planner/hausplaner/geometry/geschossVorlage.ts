@@ -30,10 +30,24 @@ interface RoofBasis {
   levelId: string;
 }
 
-export interface GeschossDuplikat<N extends NodeBasis, R extends RoofBasis> {
+/**
+ * Z1-E2-1 — was ein Bauteil mitbringen muss, damit es beim Duplizieren mitwandern kann:
+ * eine Id, die neu vergeben wird, und eine `levelId`, die umgehängt wird.
+ *
+ * **Eigener Name, obwohl die Felder dieselben sind wie in `RoofBasis`.** Eine Decke über
+ * `RoofBasis` zu binden würde übersetzen und wäre gelogen — der Typ hieße Dach und meinte Decke.
+ */
+interface EbenenBauteil {
+  id: string;
+  levelId: string;
+}
+
+export interface GeschossDuplikat<N extends NodeBasis, R extends RoofBasis, C extends EbenenBauteil = EbenenBauteil> {
   level: LevelVorlage;
   nodes: N[];
   roof: R | null;
+  /** Z1-E2-1: die mitkopierte Decke, oder `null` wenn das Quellgeschoss keine hatte. */
+  ceiling: C | null;
 }
 
 /**
@@ -43,7 +57,7 @@ export interface GeschossDuplikat<N extends NodeBasis, R extends RoofBasis> {
  * übergeben, geht ihre Dicke ein; ohne sie bleibt es bei `floorThickness` — bitgleich zum
  * bisherigen Verhalten.
  */
-export function dupliziereGeschoss<N extends NodeBasis, R extends RoofBasis>(
+export function dupliziereGeschoss<N extends NodeBasis, R extends RoofBasis, C extends EbenenBauteil = EbenenBauteil>(
   quelle: LevelVorlage,
   nodes: ReadonlyArray<N>,
   roof: R | null,
@@ -51,7 +65,9 @@ export function dupliziereGeschoss<N extends NodeBasis, R extends RoofBasis>(
   neuerName: string,
   /** Z1-E0-1, additiv: die Decke des Quellgeschosses. Fehlt sie, gilt `floorThickness`. */
   decke?: { dickeMm: number },
-): GeschossDuplikat<N, R> {
+  /** Z1-E2-1, additiv: dieselbe Decke als Knoten — sie wird mitkopiert wie das Dach. */
+  decke2?: C,
+): GeschossDuplikat<N, R, C> {
   const neuesLevelId = neueId();
   const level: LevelVorlage = {
     id: neuesLevelId,
@@ -78,6 +94,9 @@ export function dupliziereGeschoss<N extends NodeBasis, R extends RoofBasis>(
   });
 
   const neuesDach = roof ? ({ ...roof, id: neueId(), levelId: neuesLevelId } as R) : null;
+  // Z1-E2-1: die Decke geht denselben Weg wie das Dach — neue Id, neue levelId. Bis hierher
+  // kannte diese Funktion nur `roof`, und das duplizierte Geschoss stand ohne Decke da.
+  const neueDecke = decke2 ? ({ ...decke2, id: neueId(), levelId: neuesLevelId } as C) : null;
 
-  return { level, nodes: neueNodes, roof: neuesDach };
+  return { level, nodes: neueNodes, roof: neuesDach, ceiling: neueDecke };
 }

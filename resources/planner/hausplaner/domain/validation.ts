@@ -363,9 +363,26 @@ export function migriereSzene(roh: unknown): unknown {
 export function validateSceneIntegrity(doc: {
   levels: Array<{ id: string }>;
   nodes: Array<Record<string, unknown>>;
+  /** Z1-E2-1, additiv und optional: Altaufrufer ohne diese Felder bleiben gueltig. */
+  ceilings?: Array<Record<string, unknown>>;
+  roofs?: Array<Record<string, unknown>>;
 }): string[] {
   const fehler: string[] = [];
   const levelIds = new Set(doc.levels.map((l) => l.id));
+
+  // Z1-E2-1: der Fremdschluessel `levelId` galt bisher NUR fuer `nodes`. Eine verwaiste Decke
+  // — etwa nach dem Loeschen ihrer Etage — fiel beim Laden nicht auf. Sie wird BENANNT, nicht
+  // still ausgeschlossen: ein Dokument, das leise repariert wird, verliert seinen Befund.
+  for (const c of doc.ceilings ?? []) {
+    if (!levelIds.has(String(c.levelId))) {
+      fehler.push(`Decke ${c.id}: unbekanntes Level ${c.levelId}.`);
+    }
+  }
+  for (const r of doc.roofs ?? []) {
+    if (!levelIds.has(String(r.levelId))) {
+      fehler.push(`Dach ${r.id}: unbekanntes Level ${r.levelId}.`);
+    }
+  }
   const walls = new Map<string, { sx: number; sy: number; ex: number; ey: number; levelId: string }>();
 
   for (const n of doc.nodes) {

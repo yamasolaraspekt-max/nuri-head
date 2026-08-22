@@ -404,9 +404,17 @@ export function applyCommand(draft: SceneDocument, command: HausplanerCommand, j
       // Kein stilles Löschen von Fach-Daten: belegte Geschosse werden abgelehnt.
       const hatNodes = draft.nodes.some((n) => n.levelId === command.levelId);
       const hatDach = Array.isArray(draft.roofs) && draft.roofs.some((r) => r.levelId === command.levelId);
-      if (hatNodes || hatDach) {
+      // Z1-E2-1: Decken zaehlen genauso. Bis hierher prueften nodes und roofs — eine Etage MIT
+      // Decke liess sich loeschen, und die CeilingNode blieb verwaist im Dokument zurueck.
+      // Keine neue Wache: dieselbe, um einen Bauteiltyp erweitert.
+      const hatDecke = Array.isArray(draft.ceilings) && draft.ceilings.some((c) => c.levelId === command.levelId);
+      if (hatNodes || hatDach || hatDecke) {
+        // Der Grund wird BENANNT, nicht nur der Umstand: wer „enthält noch Elemente" liest und
+        // eine leere Etage vor sich sieht, drueckt zweimal und haelt es fuer einen Fehler.
+        const was = [hatNodes ? 'Bauteile' : null, hatDach ? 'ein Dach' : null, hatDecke ? 'eine Decke' : null]
+          .filter(Boolean).join(' und ');
         throw new CommandAbgelehnt(
-          `Geschoss ${level.name} enthält noch Elemente — erst leeren, dann löschen.`,
+          `Geschoss ${level.name} enthält noch ${was} — erst leeren, dann löschen.`,
           'level_nicht_leer',
         );
       }

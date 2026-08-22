@@ -81,3 +81,35 @@ test('Zod plus Integritaet verwirft Nullwand und ungueltige Oeffnungen', () => {
   });
   assert.equal(parseUndPruefe(ueberstehend), false);
 });
+
+// ── Z1-E2-1-c — eine verwaiste Decke wird BENANNT, nicht still hingenommen ──────────────────
+//
+// Der Fremdschluessel `levelId` galt bisher nur fuer `nodes`. Eine Decke, deren Etage geloescht
+// wurde, fiel beim Laden nicht auf. Die Absage-Regel des Blattes ist scharf: ein stiller
+// Ausschluss erfuellt (c) NICHT — *ein Dokument, das leise repariert wird, verliert seinen Befund.*
+
+test('Z1-E2-1: verwaiste Decke nennt Decke UND unbekanntes Level', () => {
+  const fehler = validateSceneIntegrity({
+    levels: [{ id: 'lvl-eg' }],
+    nodes: [],
+    ceilings: [{ id: 'c-verwaist', levelId: 'lvl-weg' }],
+  });
+  assert.equal(fehler.length, 1, `erwartet genau eine Meldung, bekam: ${JSON.stringify(fehler)}`);
+  assert.match(fehler[0]!, /c-verwaist/);
+  assert.match(fehler[0]!, /lvl-weg/);
+});
+
+test('Z1-E2-1: verwaistes Dach ebenso — dieselbe Luecke, derselbe Griff', () => {
+  const fehler = validateSceneIntegrity({
+    levels: [{ id: 'lvl-eg' }],
+    nodes: [],
+    roofs: [{ id: 'r-verwaist', levelId: 'lvl-weg' }],
+  });
+  assert.equal(fehler.length, 1);
+  assert.match(fehler[0]!, /r-verwaist/);
+});
+
+test('Z1-E2-1-d: Bestandsdokumente ohne die neuen Felder bleiben fehlerfrei', () => {
+  // Eine schaerfere Pruefung, die Altbestand ablehnt, ist keine Haertung, sondern ein Ausfall.
+  assert.deepEqual(validateSceneIntegrity({ levels: [{ id: 'lvl-eg' }], nodes: [] }), []);
+});
