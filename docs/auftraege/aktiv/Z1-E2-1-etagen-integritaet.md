@@ -13,10 +13,13 @@ heimat_code: resources/planner/hausplaner
 mess_sha: fd2575ce
 konzept: "docs/konzept/etagenweiser-aufbau.md @ 8e4bb918 — Scheibe E2, Luecke L4"
 kennung_geprueft: "Z1-E2-1: docs/ 0 Treffer, git log --all --grep 0. Kennungsraum Z1-E* neu."
-dor_beleg: "steht aus — plan-pruefer"
+dor_beleg: "ERTEILT — plan-pruefer 2026-08-22T19:30:30, Beleg 3ddf6a3e
+            (plan-pruefer-DOR-Z1-E0-1-und-Z1-E2-1-ERTEILT.yaml, §436), OHNE Halbsaetze.
+            Geprueft gegen mess_sha = basis_sha = fd2575ce, Blob identisch auf HEAD und
+            rolle/planner — kein Drift. (Kopf hing bis 19:5x auf 'steht aus'.)"
 basis_sha: fd2575ce
 prioritaet: P0
-ballbesitz: "plan-pruefer (DoR)"
+ballbesitz: "generator (DoR erteilt — baubar; laut Dirigent 19:11:46 VOR Z1-W2-6 und Z1-W2-4)"
 zielreifegrad: "ABGENOMMEN (BROWSER)"
 ```
 

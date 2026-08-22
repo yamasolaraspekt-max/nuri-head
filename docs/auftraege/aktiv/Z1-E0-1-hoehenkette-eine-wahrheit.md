@@ -13,10 +13,13 @@ heimat_code: resources/planner/hausplaner
 mess_sha: fd2575ce
 konzept: "docs/konzept/etagenweiser-aufbau.md @ 8e4bb918 (Dirigent, 19:1x) — Scheibe E0, Luecke L1"
 kennung_geprueft: "Z1-E0-1: docs/ 0 Treffer, git log --all --grep 0. Kennungsraum Z1-E* neu."
-dor_beleg: "steht aus — plan-pruefer"
+dor_beleg: "ERTEILT — plan-pruefer 2026-08-22T19:30:30, Beleg 3ddf6a3e
+            (plan-pruefer-DOR-Z1-E0-1-und-Z1-E2-1-ERTEILT.yaml, §436), OHNE Halbsaetze.
+            Geprueft gegen mess_sha = basis_sha = fd2575ce, Blob identisch auf HEAD und
+            rolle/planner — kein Drift. (Kopf hing bis 19:5x auf 'steht aus'.)"
 basis_sha: fd2575ce
 prioritaet: P0
-ballbesitz: "plan-pruefer (DoR)"
+ballbesitz: "generator (DoR erteilt — baubar; laut Dirigent 19:11:46 VOR Z1-W2-6 und Z1-W2-4)"
 zielreifegrad: "ABGENOMMEN (BROWSER)"
 ```
 
@@ -131,7 +134,11 @@ Rechenquelle weniger.
 ```yaml
 anlass: "yama-lesesitzung-BEFUNDE-maurer-oeffnung-und-deckenanschluss.yaml (19:32:05), Befund 2 —
          am Code gegengeprueft, nicht uebernommen."
-art: "NICHT-ZIEL ergaenzt. Die Kriterien a..e sind seit der DoR (19:30:48) UNVERAENDERT."
+art: "NICHT-ZIEL ergaenzt. Die Kriterien a..e sind seit der DoR (19:30:30) UNVERAENDERT."
+zeitangabe_berichtigt: "Ich hatte hier zweimal 19:30:48 geschrieben. Das Votum traegt zweimal
+                        19:30:30 (zeit und gelesen_bis), der Hinweis des Plan-Pruefers vom
+                        19:49:40 nennt es zweimal ebenso. VIER Nennungen gegen meine zwei —
+                        19:30:30 gilt. Meine Zahl hatte keine Quelle, nur eine Erinnerung."
 ```
 
 **Die Höhenkette hat zwei Hälften. E0 vereinheitlicht nur die eine.**
@@ -154,10 +161,67 @@ GEMESSEN AN DIESEM BLATT:  'defaultWallHeight' 4x  ·  'wand.height'/'node.heigh
 > schneidet hinein** — und E0 ändert daran nichts. *Das ist kein Mangel dieses Blattes, sondern
 > seine Grenze; sie steht hier, damit niemand nach der Abnahme glaubt, die Höhenkette sei ganz.*
 
-**Warum ich die Kriterien NICHT erweitere:** die DoR ist seit 19:30:48 erteilt und der
+**Warum ich die Kriterien NICHT erweitere:** die DoR ist seit **19:30:30** (~~19:30:48~~) erteilt und der
 Kriterienstand eingefroren; eine Erweiterung wäre eine neue Runde, und der Generator baut bereits.
 **Ein Nicht-Ziel zu benennen ist keine Kriterienänderung** — es sagt, was das Blatt nicht zusagt.
 
 **Ob die zweite Hälfte in E0 gehört oder ein eigenes Blatt wird, entscheidet der Dirigent.**
 *Der Vorrat steht heute bei 7 bei einem Deckel von 6 — ein achtes Blatt schneide ich nicht von
 selbst.*
+
+---
+
+## ⚠ NACHTRAG 22.08. 20:1x — zwei Mängel in Kriterium (a), beide meine
+
+```yaml
+anlass: "generator-CODE_FERTIG-Z1-E0-1.yaml (20:09:51, ergebnis_sha ad2ac724) meldet ZWEI
+         Zahlenabweichungen gegen (a). Ich habe beide selbst am Stand d2890e85 nachgemessen."
+art: "MANGELANZEIGE gegen das eigene Blatt. KEINE Kriterienaenderung: a..e bleiben fuenf,
+      und ich setze KEINE neue Zielzahl — das waere ein nachtraegliches Verschieben des Ziels
+      auf die gelieferte Zahl."
+entscheidung_liegt_bei: "evaluator (Abnahme), plan-pruefer (ob der Kriterienstand traegt)."
+```
+
+### Mangel 1 — (a) und (e) sind zusammen nicht erfüllbar
+
+Der Messbefehl von (a) verlangt **0**, schließt aber nur `__tests__` und `hoehenkette.ts` aus.
+**Gemessen am Stand `d2890e85` trifft das Muster auch reine Kommentare:**
+
+```
+domain/scene.types.ts:327   traufhoeheMm: number;   // Default: level.elevation + defaultWallHeight
+renderers/three-d/szene.ts:453                      // (level.elevation + defaultWallHeight). …
+geometry/geschossVorlage.ts:41                      // Neue Höhenlage = elevation + defaultWallHeight …
+```
+
+> **Der Treffer in `domain/` ist ein Kommentar hinter einem Feld — keine Rechnung.** *Und (e)
+> verlangt `git diff -- domain/` **LEER**.* **Wer (a) wörtlich erfüllt, verletzt (e); wer (e) hält,
+> kann (a) nicht auf 0 bringen.** Mein Muster unterscheidet Code nicht von Kommentar — **das ist
+> der Mangel, nicht die Lieferung.**
+
+### Mangel 2 — (a) nennt einen Aufrufer, der zur anderen Funktion gehört
+
+(a) verlangt, dass `Kopfrahmen.tsx:172`, `geschossVorlage.ts:54` **und `HausplanerApp.tsx:1008`**
+aus `naechsteEtageElevationMm` lesen — Zielzahl **3**. **Gemessen:**
+
+```
+app/HausplanerApp.tsx:1008   ueberstandMm: 500, traufhoeheMm: deckenOberkanteMm(level),
+                                                            ^^^^^^^^^^^^^^^^^^
+deckenOberkanteMm(       Aufrufer: szene.ts:456 · szene.ts:483 · HausplanerApp.tsx:1008
+naechsteEtageElevationMm( Aufrufer: KEINE (nur die Definition deckenMesh.ts:32)
+```
+
+> **Zeile 1008 setzt die Traufhöhe — das ist `deckenOberkanteMm`, nicht die nächste Etage.**
+> *Und mein eigener Lücken-Block sagt es oben auf Zeile 42 korrekt:* „`deckenOberkanteMm` … 3
+> Aufrufstellen: `szene.ts:456`, `:483`, `HausplanerApp.tsx:1008`". **Mein Kriterium hat den
+> dritten Aufrufer der einen Funktion der anderen zugeschrieben.** *Dasselbe Blatt, zwei Aussagen,
+> und das Kriterium hat die falsche genommen.*
+
+### Was ich ausdrücklich NICHT tue
+
+**Ich setze keine neue Zielzahl.** *Ob „1 statt 0" und „2 statt 3" die Zusage erfüllen, entscheidet
+der Evaluator* — hätte ich die Zahlen jetzt auf die gelieferten geändert, wäre jede Lieferung
+nachträglich richtig. **Was ich liefere, ist die Messung, die zeigt, woher die Abweichung kommt:
+aus meinem Text, nicht aus dem Bau.**
+
+**Lehre:** ein Messbefehl über Quelltext muss sagen, ob Kommentare zählen — und ein Kriterium darf
+keinen Aufrufer nennen, ohne die Funktion mitzumessen, zu der er gehört.
