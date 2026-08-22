@@ -35211,3 +35211,79 @@ lieber ein benannter Rest als eine stille Erweiterung.**
 Ball: **Evaluator** (10 und 12 nachprüfen, der Klon-Weg steht im Beleg) · **Integrator**
 (`ba6fc673` transportieren — der vierte Posten im Stau) · **Planner** (Messbefehl `:433`, mein
 §439-Befund bleibt offen).
+
+## §442 — Der Dirigent übernimmt meinen dritten Halbsatz vollständig. Und E0/E2 stehen als „DoR steht aus", 14 Minuten nach meinem Votum — die Datei lag daneben
+
+Messstand: HEAD `3170a5ed`, Baum 0, gemessen 19:47–19:48. **Messzeit des Ereignisbefehls dieser
+Runde: 19:47:15.** Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §442'` → 0).
+**Ereignis dieses Abschnitts:** `ereignisse/SPEZ-planner-etagen-1/plan-pruefer-HINWEIS-e0-e2-dor-beleg-steht-aus.yaml`
+
+### §434 ist entschieden — Weg A, mein Halbsatz wörtlich übernommen
+
+`dirigent-entscheidung-Z1-W2-8-weg-A-pfadgrenze.yaml`, 19:44:38:
+
+> *„**WEG A.** Kriterium (f) wird um `app/tools/toolPresentation.ts` (`TOOL_PRESENTATION_RULES
+> ordnung`, :72-81) und `app/tools/werkzeugThemen.ts` (Thema 07-architektur, :130-151) **ERWEITERT**
+> — die Reihenfolge wird dort geändert, wo sie **tatsächlich entsteht**; `toolRegistry.ts` zieht
+> gleich, `werkzeugGruppen.ts` bleibt unberührt (Ableitung). … **(a) bindet, (f) nennt die Orte —
+> die Pfadgrenze war nie als Mittel gedacht, (a) zu verfehlen.**"*
+
+**Das ist mein dritter Halbsatz aus §434, wörtlich, mit denselben Zeilenangaben.** Und für mich:
+*„plan_pruefer: Kenntnisnahme; **kein zweiter DoR-Durchgang** (Kriterium unverändert, nur Ort)."*
+**Meine DoR `8a4ffd58` bleibt gültig.**
+
+**Die Lehre formuliert er als stehende Regel** — und das ist mehr, als der Einzelfall verlangte:
+
+> *„Lehre für künftige Blätter: **Pfadgrenze am gemessenen ERZEUGUNGSORT der Wirkung festmachen**
+> (`zoneToolsIn`/`TOOL_PRESENTATION_RULES`, `WERKZEUG_THEMEN`), **nicht an der benannten
+> Sammlung**."*
+
+**Und die Auslegungsfrage beantwortet er, ohne dass jemand sie stellen musste:** die sieben in
+Soll-Folge nach vorn, *„die übrigen neun des Themas … **UNVERÄNDERT** in ihrer heutigen relativen
+Folge dahinter. **Nichts stillschweigend umsortieren, nichts entfernen.**"*
+
+### Der Transportstau ist aufgelöst
+
+    a7d1e9a6 (Z1-W2-6)          im Checkout: JA
+    ba6fc673 (Z0-I1-Nachbess.)  im Checkout: JA
+    97277281 (E0-Nachtrag)      im Checkout: JA
+
+`integrator-TRANSPORT-frei-fuer-beide-abnahmen.yaml`, 19:46:25: *„Beide Stände sind drüben — du
+kannst sofort loslaufen."* **Alle drei Posten aus §440/§441 sind durch.**
+
+### Aber: E0 und E2 stehen als „DoR steht aus"
+
+    STATUS.md, Datensatz Z1-E0-1 (:19523) und Z1-E2-1 (:19547):
+      zustand:    ENTWURF
+      ballbesitz: plan-pruefer
+      dor_beleg:  "steht aus — planner-CODE_FERTIG-Z1-E0-1-und-Z1-E2-1.yaml nennt ball: [plan-pruefer]"
+
+    Zeitachse:
+      19:30:30  mein Votum: plan-pruefer-DOR-Z1-E0-1-und-Z1-E2-1-ERTEILT.yaml
+      19:44:42  Statusplaetze angelegt (3a7b90f5, 2275ce9a)     <- 14 MINUTEN spaeter
+
+**Und diesmal liegt es nicht am Ablageort.** Mein Votum liegt in **demselben Ordner** wie die
+Planner-Meldung, die er zitiert — und alphabetisch **davor**:
+
+    SPEZ-planner-etagen-1/
+      plan-pruefer-DOR-Z1-E0-1-und-Z1-E2-1-ERTEILT.yaml     <- meins, 19:30:30
+      planner-CODE_FERTIG-Z1-E0-1-und-Z1-E2-1.yaml          <- das, was er zitiert
+
+**Es trägt sogar `dieser_pfad`** — die Regel, die ich in §427 genau für diesen Fall eingeführt habe.
+**Er hat die Datei daneben nicht gesehen.**
+
+**Das ist der dritte Fall dieser Klasse heute** (§425 Z1-V1-1, §427 Ablageort, jetzt E0/E2) — und
+der mit der einfachsten Ursache: **kein struktureller Mangel, ein Übersehen.**
+
+**Die Wirkung ist konkret:** Der Dirigent hat den Generator angewiesen, E0 und E2 **vor** Z1-W2-6 und
+Z1-W2-4 zu bauen. Wer jetzt in `docs/STATUS.md` nachsieht — dem **einzigen Statusträger nach §16** —
+findet dort „DoR steht aus" und wartet auf ein Votum, das seit 14 Minuten vorliegt.
+
+**Was ich NICHT sage:** Kein Vorwurf zur Sorgfalt. Der Integrator hat heute mehrfach eigene Annahmen
+offengelegt und berichtigt (§425, §427, §432) und den Stau in Minuten abgearbeitet. **Ein
+Statusplatz, der die falsche Quelle zitiert, ist kein Muster — es ist ein Griff daneben, und er
+kostet hier vierzehn Minuten Wartezeit beim Generator.**
+
+Ball: **Integrator** (`dor_beleg` und Zustand von Z1-E0-1/Z1-E2-1 auf mein Votum von 19:30:30
+stellen — `plan-pruefer-DOR-Z1-E0-1-und-Z1-E2-1-ERTEILT.yaml`, endstand `3ddf6a3e`, Beleg §436) ·
+**Generator** (bauen — die DoR liegt vor, unabhängig davon, was die Tafel sagt).
