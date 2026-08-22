@@ -15,8 +15,11 @@ zwei_posten: "Posten 1 Kennungsmuster (Dirigent gen 13, Weg A) · Posten 2 Aktio
               Bauform haben: eine Aufzaehlung im Tor, die die Wirklichkeit nicht abbildet."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer (NACH der A-37-Nachpruefung, so der Dirigent)."
-dor_schnitt_sha: "c11f97ac"
+dor_beleg: "Runde 1 NICHT ERTEILT (plan-pruefer 12:30:11, Blatt 352900f3, drei Restpunkte,
+            Votum docs/DOR-A-43-plan-pruefer.md). Restpunkt 1 (Posten 2 fehlt) mit 86c407e5
+            behoben, Restpunkte 2 und 3 (Messbefehl und Stand bei A-43-4) mit diesem Stand.
+            Runde 2 steht aus."
+dor_schnitt_sha: "352900f3 (Runde 1) — Runde 2 gegen den Stand dieses Commits"
 status_steht_in: docs/STATUS.md
 basis_sha: c11f97ac
 prioritaet: P1
@@ -111,28 +114,40 @@ damit A-37-26 vollständig wirkungslos machen, ohne dass ein Test rot wird.**
 ## Die Grundmenge — und warum „100 %" so nicht messbar ist
 
 Der Auftrag nennt als Grundmenge *„alle Betreffs mit `zustand:` im Integrationslog (gemessen:
-`zustand: Z` 6, `zustand: A-` 21)"*. **Diese Zahlen sind ungeankert gemessen.** Selbst nachgefahren:
+`zustand: Z` 6, `zustand: A-` 21)"*. **Diese Zahlen sind ungeankert gemessen** — und wie eng man
+ankert, entscheidet über das Ergebnis. **Drei Zählweisen, je mit dem Befehl, der sie erzeugt,
+alle am Stand `86c407e5` (Planner-Baum, `git log --all`) gefahren:**
 
 ```
-ohne Anker   git log --all --format=%s | grep -c 'zustand: Z'       -> 6
-             git log --all --format=%s | grep -c 'zustand: A-'      -> 21
-mit Anker    ... | grep -cE '^([a-z-]+(-[0-9]+)?: )?zustand: Z'     -> 3
-             ... | grep -cE '^([a-z-]+(-[0-9]+)?: )?zustand: A-'    -> 13
-             ... | grep -cE '^([a-z-]+(-[0-9]+)?: )?zustand: '      -> 22   (Summe der Grundmenge)
+A  ungeankert     git log --all --format=%s | grep -c 'zustand: '                     -> 71
+B  halb geankert  ... | grep -cE '(^|: )zustand:'                                     -> 30
+C  geankert       ... | grep -cE '^([a-z-]+(-[0-9]+)?: )?zustand: '                   -> 23
 ```
 
-**Die Hälfte der Z-Treffer sind Zitate** — Berichte *über* eine Zustandsmeldung, mitten im Betreff,
-keine Zustandsmeldung. *Wer Zitate mitzählt, zählt Belege als Fälle.* Das Skript beschreibt diese
-Unterscheidung zwei Zeilen unter seinem eigenen `BEINAHE`-Muster selbst.
+**C ist die Grundmenge.** A zählt jede Erwähnung irgendwo im Betreff — überwiegend Berichte *über*
+Zustandsmeldungen. B fängt zwar den Zeilenanfang, lässt aber jedes `…: zustand:` mitten im Satz
+durch. *Wer Zitate mitzählt, zählt Belege als Fälle.* Das Skript beschreibt diese Unterscheidung
+zwei Zeilen unter seinem eigenen `BEINAHE`-Muster selbst.
 
-**Die geankerte Grundmenge, vollständig aufgelöst (22 Zeilen, einzeln aufgelistet):**
+> **Berichtigung, Plan-Prüfer-Restpunkt 2 (12:30):** eine frühere Fassung dieses Blattes nannte
+> *„ungeankert 29"*. **Das war die halb geankerte Zahl B, nicht A** — mit dem Wort „ungeankert"
+> war sie nicht reproduzierbar; sein Lauf gab folgerichtig 71. *Ein Beleg, dessen Wort nicht zu
+> seinem Befehl passt, ist kein Beleg.* Alle drei Zahlen stehen jetzt mit ihrem Befehl da.
+
+**Die geankerte Grundmenge, Stand `86c407e5`** — Kennung **isoliert extrahiert** (erstes Feld nach
+`zustand: `), nicht über einen Grep auf die ganze Zeile:
 
 | Kennungsform | Anzahl | heute erkannt |
 |---|---|---|
-| `A-NN` (A-37, A-38, A-39, A-41, A-42) | 13 | ja |
+| `A-NN` (A-37, A-38, A-39, A-41, A-42) | 14 | ja |
 | `W-17/1` | 6 | ja |
 | `Z…` (mehrgliedrig) | 3 | **nein** |
-| **Summe** | **22** | |
+| **Summe** | **23** | **20 ja / 3 nein** |
+
+> **Warum die Kennung isoliert werden muss — zum zweiten Mal dieselbe Falle:** `grep -c 'zustand: A-'`
+> auf die ganze Zeile gibt **15**, und dann geht die Summenprobe nicht auf (15+6+3 = 24 ≠ 23). Eine
+> Zeile trägt `zustand: A-` zusätzlich im **Belegteil**. Erst die isolierte Extraktion gibt 14 und
+> schließt die Summe. **Dieselbe Bauart hatte zuvor W-17/1 mit 5 statt 6 getroffen.**
 
 ### Und hier liegt der Widerspruch, den das Kriterium auflösen muss
 
@@ -214,22 +229,35 @@ commits nachgeholt (Folgeposten unten). *Der Bau repariert das Muster, nicht die
 
 - **A-43-4** · **DIE GRUNDMENGE WIRD GEANKERT GEMESSEN.**
 
-  **Verlangt:** Der Nachweis nennt die Grundmenge **geankert** (`^([a-z-]+(-[0-9]+)?: )?zustand: `)
-  und benennt die Differenz zur ungeankerten Zählung. Alle Kennungen der geankerten Grundmenge, die
-  **genau eine** Kennung tragen, werden nach dem Bau zu **100 %** erkannt.
+  **Verlangt:** Der Nachweis nennt die Grundmenge **geankert**, **mit dem Stand, an dem er sie
+  erhoben hat**, und benennt die Differenz zu den beiden weiteren Zählweisen. Alle Kennungen der
+  geankerten Grundmenge, die **genau eine** Kennung tragen, werden nach dem Bau zu **100 %** erkannt.
 
-  **Messbefehl:**
+  **Messbefehl** — alle drei Zählungen, je mit ihrem Befehl, und der Stand wird genannt:
   ```
-  git log --all --format=%s | grep -cE '^([a-z-]+(-[0-9]+)?: )?zustand: '        -> Grundmenge
-  ... je Betreff gegen WORTLAUT; gezaehlt wird mit wc -l, nicht mit den Augen
+  STAND=$(git rev-parse --short HEAD)          # gehoert in den Nachweis, die Menge waechst
+  git log --all --format=%s | grep -c 'zustand: '                        -> A ungeankert
+  git log --all --format=%s | grep -cE '(^|: )zustand:'                  -> B halb geankert
+  git log --all --format=%s | grep -cE '^([a-z-]+(-[0-9]+)?: )?zustand: ' -> C Grundmenge
+  # Aufteilung: Kennung ISOLIERT extrahieren (erstes Feld nach 'zustand: '), nicht die Zeile greppen
+  ... | sed -E 's/^([a-z-]+(-[0-9]+)?: )?zustand: //' | awk '{print $1}' | sort | uniq -c
+  # je Betreff gegen WORTLAUT; gezaehlt mit wc -l, nicht mit den Augen; Summenprobe gegen C
   ```
 
-  **Heutiges (rotes) Ergebnis:** Grundmenge **22** (A- 13 · W-17/1 6 · Z 3); ungeankert **29**.
-  Von den 22 werden heute **19** erkannt, **3 nicht** — und genau diese 3 tragen Mehrfach- bzw.
-  Bereichskennungen und bleiben auch nach dem Bau abgewiesen (siehe A-43-5).
+  **Heutiges (rotes) Ergebnis, Stand `86c407e5`:** A **71** · B **30** · **C 23**
+  (A- 14 · W-17/1 6 · Z 3, Summenprobe 14+6+3 = 23 ✓). Von den 23 werden heute **20** erkannt,
+  **3 nicht** — und genau diese 3 tragen Mehrfach- bzw. Bereichskennungen und bleiben auch nach
+  dem Bau abgewiesen (siehe A-43-5).
 
-  **Absage-Regel:** Eine Zählung mit `grep -c 'zustand: Z'` **ohne** Anker erfüllt A-43-4 nicht —
-  sie zählt Zitate als Fälle. *Selbst belegt: 6 statt 3, also die Hälfte zu viel.*
+  **Absage-Regel, zweiteilig:**
+  **(a)** Eine Zählung **ohne** Anker erfüllt A-43-4 nicht — sie zählt Zitate als Fälle
+  (**71 statt 23**, das Dreifache).
+  **(b)** Eine Zahl **ohne Standangabe** erfüllt A-43-4 ebenfalls nicht. *Selbst belegt: die
+  Grundmenge war um 12:2x noch **22** und ist um 12:20:02 durch `aec713a6`
+  (`integrator: zustand: A-37 · ABGENOMMEN · release-pruefer`) auf **23** gewachsen — während
+  dieses Blatt geschrieben wurde.* **Diese Menge wächst mit jedem Zustandscommit;** eine Zahl,
+  die nicht sagt, wann sie erhoben wurde, ist beim Nachmessen falsch, ohne dass jemand einen
+  Fehler gemacht hat.
 
 - **A-43-5** · **MEHRFACHKENNUNG BLEIBT ABGEWIESEN — AUCH BEI Z.**
 
@@ -583,15 +611,29 @@ Kriterienpräfixe. Der gemessene Inhalt bleibt unberührt.*
 
 ## Messwarnung für jeden, der diese Zahlen nachfährt
 
-**Beim Erstellen dieses Blattes ist mir der vierte Zählfehler derselben Bauart in dieser Sitzung
-unterlaufen** — und die Summenprobe hat ihn gefangen, nicht die Aufmerksamkeit:
+**Beim Erstellen dieses Blattes ist mir derselbe Zählfehler ZWEIMAL unterlaufen** — beide Male hat
+die Summenprobe ihn gefangen, nicht die Aufmerksamkeit:
 
 ```
-grep 'W-17/1' | sort | uniq -c   ->  5     FALSCH: zaehlt auch Zeilen, in denen
-                                            W-17/1 im BELEG-Teil steht
-grep -c 'zustand: W-17/1'        ->  6     richtig
-Summenprobe: 13 + 6 + 3 = 22 = Grundmenge  ✓
+1. Runde  grep 'W-17/1' | sort | uniq -c    ->  5    FALSCH — zaehlt auch Zeilen, in denen
+          grep -c 'zustand: W-17/1'         ->  6    W-17/1 im BELEG-Teil steht
+2. Runde  grep -c 'zustand: A-'             -> 15    FALSCH — dieselbe Ursache, andere Kennung
+          Kennung isoliert extrahiert       -> 14    richtig
+Summenprobe Stand 86c407e5:  14 + 6 + 3 = 23 = Grundmenge  ✓
 ```
 
-**Wer eine Teilmenge zählt, zählt die Summe gegen.** Ohne die Gegenprobe wäre eine falsche Zahl in
-ein Kriterium gewandert — und ein Beleg, der um eins danebenliegt, ist als Beleg wertlos.
+**Beim zweiten Mal habe ich den Fehler nicht vermieden, obwohl ich ihn eine Stunde zuvor selbst
+aufgeschrieben hatte.** *Eine Warnung im Text verhindert nichts; der geänderte Messweg tut es.*
+Deshalb steht die isolierte Extraktion jetzt **im Messbefehl von A-43-4** und nicht nur hier.
+
+**Wer eine Teilmenge zählt, zählt die Summe gegen.** Ohne die Gegenprobe wäre beide Male eine
+falsche Zahl in ein Kriterium gewandert — und ein Beleg, der um eins danebenliegt, ist als Beleg
+wertlos.
+
+### Und die zweite Lehre: eine Zahl ohne Stand altert
+
+Die Grundmenge war **22**, als ich sie erhob, und **23**, als der Plan-Prüfer nachmaß — dazwischen
+lag ein einziger Zustandscommit (`aec713a6`, 12:20:02). **Niemand hat einen Fehler gemacht.**
+Dasselbe traf meine Zählung der offenen Regelbauten: A-42 war in *meinem* Baum `BEREIT` und in der
+Integration längst `ABGENOMMEN`. **Zweimal an einem Vormittag hat ein fehlender Standbezug eine
+richtige Messung falsch aussehen lassen.** Jede Zahl in diesem Blatt trägt deshalb ihren Stand.
