@@ -26392,3 +26392,78 @@ außerhalb haben eine. Das ist ein Regelentscheid, kein Prüfergebnis.
 `__tests__`/`__domtests__`.
 
 **Ball:** Yama — neun Posten plus die Regelfrage. Von der Kette ist keiner davon zu lösen.
+
+## §315 — Posten (e): §299 verfolgt. Kein neuer toter Zeiger in 15 Abschnitten — und die scheinbaren zwei neuen sind die des Befundes selbst
+
+**Messstand** `c2d4eca4` · Baum sauber · 0 neue Commits seit §314 · Integrationszweig `9c9f2655` →
+`c148303e`. Ballortung dreiseitig **1 · 6 · 14**, keine neuen Bälle, nichts angekommen. Die
+Evaluator-Lease ist weiter aktiv.
+
+### Der Stand von §299, heute nachgemessen
+
+```
+heute:      60 von 364 Zeigern liegen über der Länge von docs/STATUS.md (19397)
+bei §299:   58 von 362
+meine Befunddatei:  32 von 169   (in §299 gemeldet: 30 von 167)
+```
+
+**Die Differenz sind nicht zwei neue Fehler — es sind die zwei Zeiger, die §299 selbst geschrieben
+hat.** Der Nachweis:
+
+```
+git show 1ecafe28:<meine Befunddatei> | grep -c 'Z.NNNNN'   ->  169
+heute                                                        ->  169
+comm über beide Listen: neu hinzugekommen 0 · weggefallen 0
+```
+
+`1ecafe28` **enthält** §299; die Messung *in* §299 lief gegen den Stand **davor**. Der Befund zählt
+sich selbst mit, sobald man ihn geschrieben hat. **Genau die Trennung, die ich in §310 an den kaputten
+Zeitstempeln verlangt habe** — *„wer Zitate mitzählt, zählt Belege als Fälle"* —, hier an meiner
+eigenen Verlaufszahl.
+
+**Zwei meiner Messungen widersprachen sich zuerst:** die Datei zeigte +2, mein Diff-Griff über den
+Zuwachs zeigte 0. Nicht gemeldet, sondern aufgelöst — der Diff hatte recht.
+
+### Die Lehre aus §299 hat gewirkt, und das ist belegbar
+
+```
+Zuwachs seit §299: 1124 Zeilen, 15 Abschnitte
+  Zeilenzeiger Z.NNNNN            0
+  SHA-Verweise                  135
+  Paragraf-Verweise (§NNN)       79
+  Kennungs-Verweise (A-37-NN)    25
+  Datei:Zeile-Anker               7   +  9 bloße :NNN-Anker
+```
+
+**Kein einziger freistehender Zeilenzeiger in fünfzehn Abschnitten.** Statt der Nummer steht der
+Anker: 135-mal ein SHA, 79-mal ein Paragraf, 25-mal eine Kennung. Das war die Forderung aus §299
+(*„ein Zeiger, der Wochen überdauern soll, gehört an einen Anker"*), und sie ist an meinem eigenen
+Schreiben messbar geworden.
+
+### Aber nur zur Hälfte
+
+**16 dateigebundene Zeilennummern sind trotzdem darunter** — und die altern genauso, nur sichtbarer.
+Stichprobe, alle drei halten heute:
+
+```
+ARBEITSREGELN.md:280      "jedes Abnahmekriterium steht in einer Zeile der Nachvollzugs-Matrix"   ✓
+c11f97ac:742              "grep -cw 'aktion'   0   0"                                            ✓
+c11f97ac:566              "TICKET_ROLLE == integrator und Arbeitsverzeichnis = …"                ✓
+```
+
+**Der Unterschied liegt nicht im Halten, sondern im Grund:** Zwei nennen einen **Stand**
+(`c11f97ac`) — die halten, solange es diesen Commit gibt, also für immer. Der dritte nennt nur die
+Datei; er hält **heute**, weil auf `docs/ARBEITSREGELN.md` seit heute früh **0** Commits gefallen
+sind. Das ist kein Anker, das ist Glück mit Ablaufdatum.
+
+**Die vollständige Form ist `<sha>:<datei>:<zeile>`** — sie ist so präzise wie eine Zeilennummer und
+so haltbar wie ein SHA. Zweimal habe ich sie benutzt, siebenmal nicht.
+
+### Was sich an der Sache nicht bewegt hat
+
+Die 58 (heute 60) toten Zeiger sind **unverändert** — keiner nachgezogen, keiner verschlimmert. Sie
+warten auf die Entscheidung aus §299, ob daraus ein eigener Auftrag wird. `docs/STATUS.md` steht
+weiterhin bei 19397 Zeilen; solange das so bleibt, wächst der Schaden nicht.
+
+**Ball:** Yama, unverändert — ob die Zeiger-Klasse ein Auftrag wird. Bei mir ändert sich das
+Schreiben: dateigebundene Zeilennummern bekommen ab hier den Stand davor.
