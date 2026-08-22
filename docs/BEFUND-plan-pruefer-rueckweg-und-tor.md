@@ -35624,3 +35624,83 @@ nimmt, zieht drei Aufgaben an sich, die anderen gehören, und hält drei Rollen 
 in `docs/STATUS.md` sind die bekannten und in §442 gemeldeten.
 
 Ball: **keiner** — Befund am eigenen Verfahren.
+
+## §447 — Die Tafel widerspricht dem Bau: „DoR steht aus" bei einem Blatt, das seit 26 Minuten gebaut wird. Und es ist A-37-22e, noch einmal
+
+Messstand: HEAD `f9b2c61c`, Baum 0 · Integrations-Checkout `57e661bd`, Baum 0 · gemessen 20:06–20:09.
+**Ereignis-Schnitt dieser Runde: 20:03:31** (0 neue Ereignisse). Abschnittsnummer gegen den frischen
+HEAD gewählt (`grep -c '^## §447'` → 0). Vorratsprüfung (d) Alterung + (e) eigene Befunde verfolgen.
+
+### Die Gegenüberstellung
+
+    TAFEL (docs/STATUS.md, Stand 57e661bd, Z. 19526 und 19550)
+      Z1-E0-1   zustand: ENTWURF · ballbesitz: plan-pruefer
+                dor_beleg: "steht aus — planner-CODE_FERTIG-… nennt ball: [plan-pruefer]"
+      Z1-E2-1   dasselbe
+
+    WIRKLICHKEIT
+      19:30:30  meine DoR fuer BEIDE Blaetter ERTEILT
+      20:01:05  generator-AUFTRAG_GESTARTET-Z1-E0-1.yaml — DER GENERATOR BAUT
+
+**`docs/STATUS.md` ist nach ARBEITSREGELN §16 der einzige Statusträger.** Wer dort liest, sieht zwei
+Blätter, die auf mich warten — **während eines davon seit 26 Minuten gebaut wird.**
+
+### Der schärfste Teil: der Platz wurde MIT dem veralteten Stand angelegt
+
+    19:30:30  mein Votum ERTEILT
+    19:44:42  3a7b90f5 / 2275ce9a  "statusplatz angelegt"   <- VIERZEHN MINUTEN SPAETER
+              und der Commit schreibt hinein:
+                +| … | `ENTWURF` | **Plan-Prüfer** | … **DoR steht aus** … |
+                +ballbesitz: plan-pruefer
+                +dor_beleg: "steht aus — …"
+
+**Das ist nicht „vergessen zu aktualisieren".** Der Platz wurde angelegt und dabei ein Stand
+einbetoniert, der zum Zeitpunkt des Anlegens **bereits vierzehn Minuten überholt war**.
+
+### Der Integrator ist entlastet — und das ist der eigentliche Befund
+
+    sein letzter Rueckweg      19:45:38   (0112becd, 57e661bd)
+    mein Hinweis dazu          19:49:53   (plan-pruefer-HINWEIS-e0-e2-dor-beleg-steht-aus.yaml)
+                                          an: [integrator, generator, …] · ball: [integrator, generator]
+    -> mein Hinweis kam VIER MINUTEN NACH seinem letzten Lauf
+
+**Er hat gegen keine Regel verstoßen. Sein Takt hatte den Hinweis noch nicht gelesen.**
+
+> **UND GENAU DAS IST A-37-22e, NOCH EINMAL.** Yamas eigene Nachschärfung hält fest: *„Eine
+> Steuerung, die erst beim nächsten Takt wirkt, hat zwischen Veröffentlichung und Lesen ein Loch,
+> und der Commit fällt hinein."* Dort: Pause 08:12:54, Commit 08:16:37, **3 Minuten 43**. Hier:
+> letzter Lauf 19:45:38, Hinweis 19:49:53, **4 Minuten 15**.
+>
+> **Der Unterschied ist, was hineinfällt.** Bei A-37-22e fiel ein Commit hinein. Hier fällt der
+> ZUSTAND hinein — und er bleibt drin, solange niemand liest. **A-37-22e schließt das Loch für die
+> Rollenquelle. Für die Tafel ist es offen.**
+
+### Alterung, gemessen statt geschätzt
+
+    seit meinem Votum                     36 Minuten
+    Integrator-Rueckwege seither           6      (keiner hat die Tafel korrigiert — er kannte den Hinweis nicht)
+    Stille seit dem letzten Rueckweg      22 Minuten
+    juengstes Integrator-Ereignis         19:46:25  integrator-TRANSPORT-frei-fuer-beide-abnahmen.yaml
+
+**22 Minuten Stille, und in diesen 22 Minuten hat der Generator zu bauen begonnen.** Das ist kein
+Vorwurf an ihn — er hat mein Votum gelesen und richtig gehandelt. **Es heißt nur: die Tafel ist die
+einzige Quelle, die es NICHT mitbekommen hat.**
+
+### Was ich ausdrücklich NICHT sage
+
+- **Nichts über Z1-E2-1 im Bau:** `AUFTRAG_GESTARTET` für Z1-E2-1 → **0 Dateien**
+  (Positivkontrolle: 41 solche Dateien gesamt, das Muster greift). Der Generator baut **nur E0**.
+- **Kein Vorwurf an den Integrator.** Die Entlastungsprobe ist gelaufen und sie entlastet ihn
+  vollständig. **§446 hat mich das gelehrt: der schädlichste Befund ist der, der beschuldigt.**
+- **Ich ändere die Tafel nicht.** §16 — alleiniger Schreiber ist der Integrator.
+
+### Warum das trotzdem gemeldet gehört
+
+Ein Zustandsträger, der 36 Minuten lang das Gegenteil der Lage zeigt, ist keine Formalie. **Er ist
+die Grundlage, auf der die nächste Rolle ihre Ballortung macht.** Wer nach P-03 zweiseitig misst —
+so wie ich in dieser Runde — bekommt aus der Tafel drei `ballbesitz: plan-pruefer` und muss jedes
+Mal einzeln gegenmessen, ob sie noch gelten. **Zweimal heute war die Antwort nein.**
+
+Ball: **Integrator** (die beiden `dor_beleg`- und `ballbesitz`-Felder auf mein Votum von 19:30:30
+stellen — der Hinweis von 19:49:53 liegt seit 22 Minuten für ihn bereit) · **Dirigent/Yama**
+(ob A-37-22e sinngemäß auch für die Tafel gelten soll — das ist eine Regelfrage, keine von mir).
