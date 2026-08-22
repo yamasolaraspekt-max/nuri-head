@@ -41049,3 +41049,81 @@ mit ins Kriterium.
 **Selbstbindung, dritte in dieser Nacht** (nach §494 „Stand nennen" und §496 „messen, was die Zahl
 bezeichnet"): Bei jedem Kriterium, das eine **Reihenfolge, einen Platz oder eine Rangfolge** setzt,
 messe ich, **was heute dort steht und wohin es rückt**.
+
+## §515 — §512 ist vollzogen, die Grenzfrage aus §480 beantwortet, die Leiste nachgebessert. Und ich habe eine neue Pflicht
+
+Stand: HEAD `a6bc4156`, Baum 0, gen 11, Digest gleich. Zeit 00:14. Aus meinem Worktree gemessen.
+
+Drei Antworten auf drei eigene Befunde, alle innerhalb von zwölf Minuten.
+
+### 1. §512 ist vollzogen — vollständig
+
+> „Umstellung auf **ALLE** Arbeitsbäume des Repositories außer dem Integrationscheckout […]
+> zusätzlich umgestellt: ps-a37-1637, ps-z1w1, ticket-a01, ticket-g1b-0, ticket-main,
+> ticket-strang-C/-accounting/-energie/-formulare […] **19 Bäume gemessen, 0 Arbeitsbäume mit
+> Produktiv-DB**."
+
+Neun weitere umgestellt, drei waren schon, sechs haben keine `.env`, der Integrations-Checkout
+bleibt bewusst `ticket` (Yamas lokale App). Meine Zahl aus §512 — 19 Bäume, 4 erfasst — ist damit
+beantwortet: jetzt sind es 19 gemessen und 0 offen.
+
+### 2. Die Grenzfrage aus §480/§481 ist beantwortet
+
+Seit 22:0x offen, jetzt entschieden:
+
+> „`grep -c` auf fremde `.env` ist für ROLLEN weiterhin **nicht erlaubt** (fremder Arbeitsbaum); die
+> Probe gilt je Rolle für den **eigenen** Baum. Hausweite Messung macht der Dirigent."
+
+Damit ist ein Posten geschlossen, den ich zweimal vorgelegt und nicht selbst beantwortet habe. Die
+Antwort deckt sich mit meiner §510-Selbstbindung — sie ist jetzt Regel, nicht nur meine Praxis.
+
+### 3. Neue Pflicht für mich, und ich habe sie sofort gefahren
+
+> „**STARTPROBE IN JEDEM AUFTRAG**: jede Rolle meldet in der Startmeldung
+> `grep -c '^DB_DATABASE=ticket_testing$' .env` (1) — bei 0 STOPP. […] **Plan-Prüfer: in die
+> Meldepflicht-Prüfung aufnehmen.**"
+
+An meinem eigenen Baum gemessen: **keine `.env` vorhanden.** Der Vollzug nennt ihn ausdrücklich
+(„Keine .env: … rolle-plan-pruefer").
+
+**Meine Zahl ist 0 — aber aus einem anderen Grund als beim Release-Prüfer:**
+
+| Rolle | Lage | Bedeutung |
+|---|---|---|
+| Release-Prüfer | `.env` vorhanden, Wert `ticket` | **echte Gefahr** — Suite/Bühne wären gegen Produktivdaten gelaufen |
+| Plan-Prüfer | **keine `.env`** | keine DB-Verbindung möglich |
+
+Ich fahre keinen Test, kein `artisan`, keine Bühne, keinen Seed. Ohne `.env` gibt es nichts, womit
+ich mich verbinden könnte. **Ein STOPP wäre hier sinnlos** — die Probe ist für Rollen gedacht, die
+eine Datenbank brauchen. Ich melde die Lage, damit die Regel sie kennt; entscheiden tut es der
+Dirigent.
+
+**Ab sofort gehört die Startprobe in meine Meldepflicht-Prüfung**, wie angeordnet: Bei jedem
+`CODE_FERTIG` prüfe ich künftig auch, ob die meldende Rolle sie gefahren hat.
+
+### 4. Die Leiste ist nachgebessert — und der §514-Punkt ist beantwortet
+
+```
+auswahl      1     ← Markieren, ganz oben
+bodenplatte  2
+wand 3 · fenster 4 · tuer 5 · treppe 6 · decke 7 · kontur 8 · dach 9
+```
+
+**Alle neun stimmen** mit der Anordnung überein. Scope-Diff 8 Dateien (3 Produktiv, 4 Tests,
+1 Bündel), `aff3173d` und `5597c023` beide existent.
+
+Der Generator benennt den Kern schärfer, als ich es in §514 konnte:
+
+> „`auswahl` ist kein Bauteil, sondern **der Griff, mit dem man alles andere anfasst**. DER
+> UNTERSCHIED IST AM QUELLTEXT NICHT ZU SEHEN UND AN DER OBERFLÄCHE SOFORT. Yama hat ihn in dem
+> Moment gesehen, in dem er die Leiste angeschaut hat."
+
+Das ist die Antwort auf meine eigene Frage aus §514, warum ich es nicht gefunden habe: Ich habe
+`ordnung: 1` gegen `ordnung: 1` gehalten — zwei Zahlen. Am Bildschirm steht kein Zahlenpaar, sondern
+eine Liste, in der ein Werkzeug an der falschen Stelle sofort auffällt. **Meine Prüfung liest
+Quelltext; dieser Mangel war keiner im Quelltext.**
+
+Das ist kein Argument gegen meine Rolle — sondern für den Browserbeleg, den jedes Kriterium mit
+Oberflächenwirkung ohnehin verlangt. Kriterium (a) hatte ihn („Bildbeleg 2D und 3D"), und das Votum
+führte ihn. **Der Bildbeleg zeigte die falsche Reihenfolge und wurde als Erfüllung gelesen** — weil
+niemand die Liste als Liste ansah, sondern als Beleg für „Bodenplatte ist drin".
