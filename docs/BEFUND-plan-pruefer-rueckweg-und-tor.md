@@ -29530,3 +29530,59 @@ darüber hinaus produktiv umgesetzt.** *Er muss dort nichts mehr lesen.*
 
 **Ball: niemand.** Keine Forderung. In der abgelegten Postenliste nachgetragen; der Posten wandert
 von *„entschieden"* nach **„entschieden und umgesetzt"**.
+
+## §364 — Alterungsprüfung „A-13-Veröffentlichungsbedingung": zu Recht offen — und meine eigene Tabelle verkürzt sie
+
+Gewählt gegen HEAD `668f7dc1` (Baum sauber, 15:16, Hinweg gefahren: 12 Commits, Konfliktprobe
+vorher 0). §364 als Überschrift 0 Treffer. Rollenquelle gen 9, Dateizeit 13:58:44, Digest ok.
+
+**Sechste Alterungsprüfung** — der zweite als *„entschieden"* geführte Posten. Nach dem Befund zu
+N-003 (§363: entschieden **und** umgesetzt) lag die Vermutung nahe, hier dasselbe zu finden.
+**Sie trifft nicht zu, und das ist der Befund.**
+
+**Der Zeiger ist gewandert, der Inhalt steht.** Meine Tabelle nennt *„STATUS Z.7038-7047"*; die
+Datei hat heute 19.640 Zeilen, dort steht nichts. Über den Inhalt gefunden (`p_v_roofs`) — Z.2854 ff.
+
+**Der Auftrag ist fertig, die Bedingung ist es nicht.** Beides steht im selben Block:
+
+    A-13   zustand: BETRIEBSBESTAETIGT · ballbesitz: —  # Kette vollstaendig
+           was_yama_vor_der_veroeffentlichung_tun_muss:
+             "DIE MESSUNG GEGEN ticket, die keine Rolle fahren darf (§15 verbietet uns das ...)"
+
+**Meine Tabelle sagt dazu: *„entschieden — die Bedingung wurde gemessen und war leer"*. Das ist
+verkürzt.** Gemessen und leer war die **lokale** Menge; die Zahl, um die es geht, ist die
+**Produktionszahl**, und der Datensatz sagt dazu wörtlich: *„Die SELECT-Zahl auf Hetzner kann und
+darf ich nicht messen: **Produktion bleibt bei Yama**."* **Der Posten ist also nicht erledigt,
+sondern korrekt bei Yama — im Unterschied zu N-003.**
+
+**Die fünf lokalen Voraussetzungen, frisch nachgemessen:**
+
+    (1) DB::table('p_v_roofs')            4 Stellen in 3 Dateien — 2x NewLeadsController,
+                                          1x ProfitabilityCalculationController, 1x roof_info.blade.php
+                                          -> exakt wie behauptet ("drei Controller plus die Blade-View")
+    (2) Waechter static::saving           PVRoof.php:163 — im behaupteten Bereich 161-165
+    (3) catch in PVRoof.php               0
+    (4) roof_azimuth in app/Http/Requests/ 0
+    (5) lokale DB-Zahl                    NICHT GEMESSEN — DB-Laeufe sind in dieser Sitzung bis
+                                          Z0-I1 gesperrt
+    Gegenprobe: 'roof_azimuth' im ganzen app/ 2 Dateien · erfundener Name 0
+
+**Vier von fünf bestätigt, die fünfte kann ich nicht messen — und ich sage das, statt sie
+auszulassen.** *Ein Nullbefund, den ich nicht selbst erhoben habe, ist kein Beleg; die Sperre gilt
+für mich wie für jede Rolle.*
+
+**Was die Messung von damals bemerkenswert macht — und was ich daraus übernehme.** Der Datensatz
+hält einen eigenen Zählfehler fest: *„meine erste Zählung fand nur drei, weil ich die **Blade-View
+außerhalb von `app/`** nicht durchsucht hatte, die Vorlage hatte recht."* **Genau diese Falle hätte
+mich heute auch getroffen** — mein erster Griff ging ebenfalls nur auf `app/`. Ich habe `resources/`
+mitgenommen, weil die Zeile es sagte. *Ein festgehaltener Fehler hat hier eine Wiederholung
+verhindert; das ist der Zweck der Belegkette.*
+
+**Ergebnis der Prüfung.** Der Posten bleibt **offen bei Yama, und zwar zu Recht** — §15 verbietet
+jeder Rolle die Produktionsmessung. **Was sich ändert, ist meine Beschreibung:** nicht *„entschieden,
+Bedingung war leer"*, sondern **„Auftrag betriebsbestätigt · lokale Voraussetzungen geprüft und
+gültig · die eine Messung, die zählt, darf nur Yama fahren"**.
+
+**Ball: niemand.** Keine Forderung — im Gegenteil: **von den drei als „entschieden" geführten Posten
+ist einer (N-003) erledigt, einer (dieser) zu Recht offen.** In der abgelegten Postenliste
+berichtigt.
