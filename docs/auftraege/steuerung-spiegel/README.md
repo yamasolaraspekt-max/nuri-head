@@ -47,7 +47,10 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
 6. Jede Meldung in der Berichtsform: Ausgangs-SHA · Ergebnis-SHA · geänderte Pfade · Votum · Browser · Abweichung · nächster Ball.
 6a. **Auslöser sind Muster, keine exakten Dateinamen** (Befund Planner 22.08. 10:2x: `generator-CODE_FERTIG-nachtrag.yaml` fiel
     durch einen Exakt-Filter): `*-CODE_FERTIG*.yaml`, `*-ERTEILT*.yaml`, `*-BESTAETIGT*.yaml`, `*-ABGENOMMEN*.yaml`,
-    `*-NACHBESSERN*.yaml`. Ein `<ereignis>-nachtrag*.yaml` ist die **Fortschreibung desselben Ereignisses** und ersetzt dessen
+    `*-NACHBESSERN*.yaml`; **additiv seit 22.08. 12:47 (B-007):** `*-SPEZIFIZIERT*.yaml`, `*-TRANSPORTIERT*.yaml`,
+    `*-ZUSTAND_NACHGEZOGEN*.yaml`, `*-RELEASE_FREI*.yaml`, `*-WIRKSAM*.yaml` — Dateinamen dürfen den Abschlussbegriff tragen, müssen aber
+    nicht; bestehende Namen (z. B. `planner-CODE_FERTIG*.yaml` mit `abschlussbegriff: SPEZIFIZIERT`) bleiben gültig und werden nicht
+    umbenannt. Ein `<ereignis>-nachtrag*.yaml` ist die **Fortschreibung desselben Ereignisses** und ersetzt dessen
     Ergebnis-SHA; wer ein Ereignis zitiert, zitiert den jüngsten Stand (per SHA, nicht per Wort). Nachträge nennen ausdrücklich,
     welchen SHA sie ablösen.
 6b. **Antworten des Dirigenten** stehen unter `ereignisse/<auftrag_id>/dirigent-*.yaml` — bei jedem Pull mitlesen.
