@@ -91,6 +91,14 @@ verdrahten, nicht bauen.*
   Konflikt der Schwere `blocker` liefert. **Die Meldung erscheint.** Derselbe Lauf mit einer
   konfliktfreien Öffnung: **keine Meldung.**
 
+  **Wizard-Weg — Entscheidung des Dirigenten in Yamas Namen (14:53:40), auf Fachfrage des
+  Generators:** Ein mit **„Übernehmen"** gebildetes Paket gilt für den Integrationsabgleich als
+  **freigegeben (`approved`)**. Der Statuskonflikt zielt auf Pakete **fremder Herkunft** und greift
+  dort, wo ein Zuweisungsweg existiert — **heute gibt es keinen.**
+  *Begründung: die Nutzerhandlung „Übernehmen" **ist** die Freigabe dieses Entwurfs; ein
+  `draft`-Blocker auf dem einzigen Weg wäre eine Meldung ohne Handlungsmöglichkeit.*
+  **Kosten offen benannt:** auf dem Wizard-Weg findet **keine** Statusprüfung statt.
+
   **Messbefehl:** zwei Browserläufe, je mit Bildbeleg und dem gesetzten Eingabewert.
 
   **Heutiges (rotes) Ergebnis:** nicht durchführbar — das Modul wird nicht aufgerufen (siehe a).
@@ -160,6 +168,16 @@ verdrahten, nicht bauen.*
 - **Keine neue Konfliktart.** Die vier Typen aus `KonfliktTyp` bleiben, wie sie sind.
 - **Keine Änderung an W-40** als Werkzeug — dieses Blatt hängt die Prüfung an, es baut das
   Werkzeug nicht um.
+- **Kein Zuweisungsweg für Pakete fremder Herkunft.** Er existiert heute nicht, und dieses Blatt
+  baut ihn nicht.
+
+## Folgeposten (benannt, NICHT Teil dieses Auftrags)
+
+**Zuweisungsweg und Statusprüfung** — sobald Pakete *fremder Herkunft* zugewiesen werden können,
+greift der Statuskonflikt des Moduls und braucht eine eigene Prüfung. **Eigenes Blatt, im
+Werkzeug-Register zu führen, nicht jetzt.** *Der Kostenpunkt aus der Entscheidung von 14:53:40 —
+„keine Statusprüfung auf dem Wizard-Weg" — bleibt damit sichtbar, statt in einem Nebensatz zu
+verschwinden.*
 
 ## Nachvollzugs-Matrix (ARBEITSREGELN §5 / N3)
 

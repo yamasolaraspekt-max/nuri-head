@@ -103,13 +103,13 @@
 | **Z1-W2-1** Integrationsabgleich anschliessen | `ENTWURF` | **Plan-Prüfer** | Schnitt 22.08. 14:2x · Basis `767fb730` | **Blatt** `docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR steht aus** |
 | **Z1-W2-2** Aufbautenstatus anschliessen | `BEREIT` | **generator** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-2-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae |
 | **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | `BEREIT` | **generator** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae |
-| **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
+| **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
-| **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
+| **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-4** Wächter: keine neue Web-Route ohne permission: — Ratschen-Test mit Baseline | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-4-route-permission-waechter.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §258): Kriterium C zaehlt drei Routen, es sind sechs · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-5** Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md` · **DoR ERTEILT** (plan-pruefer §259) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · **Blockade-Vermerk berichtigt** (plan-pruefer §259): Y-6 blockiert W0-5 NICHT; offen ist stattdessen beim Planner, wer das Routen-Gate fuer `/planner/*` baut · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-6** Nuriva-API: die vier Token-Abilities werden durchgesetzt — oder sie verschwinden | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-6-api-token-abilities.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §260): Dateiname im Ist-Beleg berichtigen · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
-| **Z2-W0-7** Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.) | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-7-rechte-schalter-planner-item.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §261) · **VORRANG vor Z2-W0-1** (plan-pruefer §260) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
+| **Z2-W0-7** Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.) | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-7-rechte-schalter-planner-item.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §261) · **VORRANG vor Z2-W0-1** (plan-pruefer §260) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-8** secure.image und Geschwister: Recht + Bindung statt bloßem auth | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-8-secure-image-gate.md` · **DoR ERTEILT** (plan-pruefer §262) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-9** „Deaktiviert' deaktiviert: echter Kontostatus statt Online-Flag | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-9-kontostatus-echt.md` · **DoR ERTEILT** (plan-pruefer §263) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-10** api/secure/master-sets*: reversible Stilllegung per Schalter (Y-11 entschieden) | `BEREIT` | **Generator** | Schnitt 21.08. · Basis `14dc15f3` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-10-master-set-api-haertung.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §264) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §262/§263 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -19115,7 +19115,7 @@ herkunft_dieses_blocks: |
 ```yaml
 auftrag: "Z2-W0-1"
 titel: "Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht"
-zustand: CODE_FERTIG
+zustand: ABGENOMMEN
 zustand_beleg_272: |
   Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
   Das Votum steht im Feld dor_beleg (Paragraf 255, ERTEILT, kein Restpunkt),
@@ -19128,7 +19128,11 @@ zustand_beleg_272: |
   NICHT NACHGEZOGEN wurden die vier mit Restpunkt (W0-2, W0-4, W0-6, W0-11): dort
   liegt der Ball beim Planner, der Punkt ist offen, und ein Zustandswechsel wuerde
   eine Bereitschaft behaupten, die der Pruefer eingeschraenkt hat.
-ballbesitz: evaluator
+ballbesitz: release-pruefer
+abnahme_beleg: |
+  Evaluator, Votum 88289251 — A, B und C erfuellt, Kriterium D begruendet. Bau-Inhalt in 314ea991, einem Commit des Integrators (Index-Vorfall 20.08.), Begruendung des Generators in 10c05d8b.
+  Der Vermerk "ABNAHME STEHT AUS — kein Votum" aus meinem Commit von 13:5x war zu dem
+  Zeitpunkt richtig gemessen und ist mit diesem Votum ueberholt.
 bau_sha: 314ea991
 bau_beleg: |
   Inhalt in 314ea991, einem Commit des INTEGRATORS vom 21.08. 20:17, nicht des Generators; Begruendung des Generators in 10c05d8b.
@@ -19194,7 +19198,7 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z2-W0-3"
 titel: "Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request"
-zustand: CODE_FERTIG
+zustand: ABGENOMMEN
 zustand_beleg_272: |
   Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
   Das Votum steht im Feld dor_beleg (Paragraf 257, ERTEILT, kein Restpunkt),
@@ -19207,7 +19211,11 @@ zustand_beleg_272: |
   NICHT NACHGEZOGEN wurden die vier mit Restpunkt (W0-2, W0-4, W0-6, W0-11): dort
   liegt der Ball beim Planner, der Punkt ist offen, und ein Zustandswechsel wuerde
   eine Bereitschaft behaupten, die der Pruefer eingeschraenkt hat.
-ballbesitz: evaluator
+ballbesitz: release-pruefer
+abnahme_beleg: |
+  Evaluator, Votum 6853e1a1 — vier von vier Kriterien, Bau 69c85d01.
+  Der Vermerk "ABNAHME STEHT AUS — kein Votum" aus meinem Commit von 13:5x war zu dem
+  Zeitpunkt richtig gemessen und ist mit diesem Votum ueberholt.
 bau_sha: 69c85d01
 bau_beleg: |
   generator: Z2-W0-3 gebaut.
@@ -19373,7 +19381,7 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z2-W0-7"
 titel: "Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.)"
-zustand: CODE_FERTIG
+zustand: ABGENOMMEN
 zustand_beleg_272: |
   Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
   Das Votum steht im Feld dor_beleg (Paragraf 261, ERTEILT, kein Restpunkt),
@@ -19386,7 +19394,11 @@ zustand_beleg_272: |
   NICHT NACHGEZOGEN wurden die vier mit Restpunkt (W0-2, W0-4, W0-6, W0-11): dort
   liegt der Ball beim Planner, der Punkt ist offen, und ein Zustandswechsel wuerde
   eine Bereitschaft behaupten, die der Pruefer eingeschraenkt hat.
-ballbesitz: evaluator
+ballbesitz: release-pruefer
+abnahme_beleg: |
+  Evaluator, Votum 5f19d9c7 — fuenf von fuenf Kriterien, Bau 5831c06a.
+  Der Vermerk "ABNAHME STEHT AUS — kein Votum" aus meinem Commit von 13:5x war zu dem
+  Zeitpunkt richtig gemessen und ist mit diesem Votum ueberholt.
 bau_sha: 5831c06a
 bau_beleg: |
   generator: Z2-W0-7 gebaut.
