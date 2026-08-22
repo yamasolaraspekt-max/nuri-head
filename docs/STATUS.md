@@ -109,6 +109,7 @@
 | **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 · Bau `1c6b7601` · CODE_FERTIG 19:14:05 · **Buendel im Bau-Commit** (V-5) |
 | **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `BEREIT` | **Generator** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht · **DoR ERTEILT** 19:06:40 mit zwei Halbsaetzen (§429) — Bau kann sofort beginnen |
 | **Z1-E0-1** Hoehenkette — eine Wahrheit statt drei Rechnungen | `ENTWURF` | **Plan-Prüfer** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E0-1-hoehenkette-eine-wahrheit.md` @ `4746d9c5` · **Spur A** · **DoR steht aus** · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) |
+| **Z1-E2-1** Etagen-Integritaet — Wachen und Mitnahme | `ENTWURF` | **Plan-Prüfer** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E2-1-etagen-integritaet.md` @ `4746d9c5` · **Spur A** · **DoR steht aus** · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) |
 | **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `NACHBESSERN` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` · **NACHBESSERN** 19:04:28, 8 von 10 Kriterien, Reifegrad `code-geprueft mit Ausloesung` — zwei Zusagen nennen das Vorhandene statt das Wirkende |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
@@ -19536,6 +19537,30 @@ herkunft_dieses_blocks: |
   getrennte Statusplaetze an — zwei Kennungen altern getrennt, auch wenn sie zusammen
   geschnitten wurden. Dasselbe habe ich bei Z1-W2-5 und Z1-W2-6 gehalten.
   ART LAUT BLATTKOPF, Zeile 10: "SSOT — drei Rechnungen werden eine. KEIN Modell, KEIN Schema, KEINE Bedienaenderung."
+  SPUR A, Zeile 9 — also Transport erst NACH ABGENOMMEN, nicht wie bei den W-Blaettern vorher.
+  Das gehoert schon jetzt in den Datensatz, damit es beim Bau nicht neu entschieden wird.
+  ZUSTAND ENTWURF UND BALL PLAN-PRUEFER sind der belegte Anfangswert, kein Urteil.
+  TRANSPORT UND EINTRAG, KEINE BEWERTUNG.
+```
+
+```yaml
+auftrag: "Z1-E2-1"
+titel: "Etagen-Integritaet — Wachen und Mitnahme"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+blatt: "docs/auftraege/aktiv/Z1-E2-1-etagen-integritaet.md"
+blatt_sha: 4746d9c5
+basis_sha: fd2575ce
+dor_beleg: "steht aus — planner-CODE_FERTIG-Z1-E0-1-und-Z1-E2-1.yaml nennt ball: [plan-pruefer]"
+bau_sha: "noch offen"
+herkunft_dieses_blocks: |
+  Statusplatz vom integrator im selben Lauf wie der Transport angelegt (Dauerregel gen 9 Punkt 2).
+  Geschnitten 19:24:44, gemeldet 19:25:24, transportiert und eingetragen unmittelbar danach.
+  EIN SCHNITT, ZWEI KENNUNGEN: planner-CODE_FERTIG-Z1-E0-1-und-Z1-E2-1.yaml fuehrt
+  kennungen: [Z1-E0-1, Z1-E2-1] mit demselben blatt_sha 4746d9c5. Ich lege trotzdem zwei
+  getrennte Statusplaetze an — zwei Kennungen altern getrennt, auch wenn sie zusammen
+  geschnitten wurden. Dasselbe habe ich bei Z1-W2-5 und Z1-W2-6 gehalten.
+  ART LAUT BLATTKOPF, Zeile 10: "INTEGRITAET — Wachen und Mitnahme. KEIN Modell, KEIN Schema, KEINE neue Bedienung."
   SPUR A, Zeile 9 — also Transport erst NACH ABGENOMMEN, nicht wie bei den W-Blaettern vorher.
   Das gehoert schon jetzt in den Datensatz, damit es beim Bau nicht neu entschieden wird.
   ZUSTAND ENTWURF UND BALL PLAN-PRUEFER sind der belegte Anfangswert, kein Urteil.
