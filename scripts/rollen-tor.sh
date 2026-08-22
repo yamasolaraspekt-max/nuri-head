@@ -789,13 +789,27 @@ if [ "$STAMM" = "dirigent" ] && [ -n "${TOR_PFADE:-}" ]; then
   while IFS= read -r _p; do
     [ -z "$_p" ] && continue
     case "$_p" in
-      docs/konzept/*|docs/regelwerk/*|docs/auftraege/*) ;;
+      # A-43-13: der Bereich waechst um docs/backlog/ und docs/fortschritt/ — er wird nicht zum
+      # Schluessel. scripts/, .githooks/, docs/STATUS.md, docs/BEFUNDNOTIZEN.md und Produktcode
+      # bleiben abgewiesen; die Positivliste nennt sie nicht, und was sie nicht nennt, faellt durch.
+      docs/konzept/*|docs/regelwerk/*|docs/auftraege/*|docs/backlog/*|docs/fortschritt/*) ;;
       *) TOR_UNERLAUBT="$TOR_UNERLAUBT$_p"$'\n' ;;
     esac
   done <<< "$TOR_PFADE"
   if [ -n "$TOR_UNERLAUBT" ]; then
     echo "ROLLEN-TOR  VERSTOSS  Rolle '$ROLLE' schreibt ausserhalb ihres Bereichs." >&2
-    echo "            Erlaubt sind nur: docs/konzept/  docs/regelwerk/  docs/auftraege/" >&2
+    # A-43-13, Absage-Regel: hier stand die Liste ein ZWEITES Mal als Text. Wer nur die case-Zeile
+    # erweitert, laesst die Auskunft falsch stehen — der Dirigent duerfte nach docs/backlog/
+    # schreiben, waehrend die Fehlermeldung ihm das Gegenteil sagt. Die Meldung LIEST die Liste
+    # jetzt aus derselben case-Anweisung, wie es bei den Aktionswoertern schon gebaut ist:
+    # eine Quelle, eine Ableitung. Faellt das Lesen aus, sagt sie das und erfindet keine Liste.
+    _BEREICH="$(sed -n 's|^      \(docs/[a-z/*|]*\)) ;;$|\1|p' "$TOR_DATEI" 2>/dev/null | head -1 | sed 's/\*//g' | tr '|' ' ')"
+    if [ -n "$_BEREICH" ]; then
+      echo "            Erlaubt sind nur: $_BEREICH" >&2
+    else
+      echo "            Die Positivliste steht in der case-Anweisung von $TOR_DATEI;" >&2
+      echo "            sie liess sich von dort nicht lesen und wird hier NICHT geraten." >&2
+    fi
     while IFS= read -r _p; do
       [ -n "$_p" ] && echo "            abgewiesen: $_p" >&2
     done <<< "$TOR_UNERLAUBT"
