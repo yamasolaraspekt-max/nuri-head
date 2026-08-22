@@ -107,7 +107,7 @@
 | **Z1-W2-5** Wandflaeche anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` · Bau `5617dc4c` · CODE_FERTIG 18:52:39 · **die Wandflaeche erreicht den Benutzer** |
 | **Z1-W2-6** Auswechslung anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` |
 | **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | `BEREIT` | **Generator** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 |
-| **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `ENTWURF` | **Plan-Prüfer** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht |
+| **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `BEREIT` | **Generator** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht · **DoR ERTEILT** 19:06:40 mit zwei Halbsaetzen (§429) — Bau kann sofort beginnen |
 | **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `NACHBESSERN` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` · **NACHBESSERN** 19:04:28, 8 von 10 Kriterien, Reifegrad `code-geprueft mit Ausloesung` — zwei Zusagen nennen das Vorhandene statt das Wirkende |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
@@ -19384,12 +19384,20 @@ berichtigung_dor: |
 ```yaml
 auftrag: "Z1-W2-8"
 titel: "Werkzeugleiste in Baureihenfolge"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 blatt: "docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md"
 blatt_sha: dbaa6b4d
 basis_sha: 06956916
-dor_beleg: "steht aus — der Plan-Pruefer prueft in EINEM Durchgang direkt nach Z1-V1-1"
+dor_beleg: |
+  ERTEILT — plan-pruefer, 19:06:40, plan-pruefer-DOR-Z1-W2-8-ERTEILT.yaml, endstand 8a4ffd58,
+  Belegabschnitt Paragraf 429. VOTUM im Wortlaut: "ERTEILT mit ZWEI HALBSAETZEN. Nach Nachtrag
+  1.5 Teil des Textes, keine Auflagen-Schleife — der Bau kann sofort beginnen."
+  ball: [generator, planner] — in der Tafel steht Generator, weil dort die naechste Handlung
+  liegt; der Planner ist mitadressiert.
+  GEPRUEFT WURDE GEGEN dbaa6b4d, also gegen den Stand MIT der Streichung von Kriterium b.
+  Sein Betreff nennt es: "das Blatt widerspricht sich"— die Halbsaetze gehoeren dazu und sind
+  im Befund nachzulesen, nicht hier: ich gebe Voten wieder und lege sie nicht aus.
 bau_sha: "noch offen"
 herkunft_dieses_blocks: |
   Statusplatz vom integrator angelegt aus dirigent-auftrag-Z1-W2-8-leiste-baureihenfolge.yaml,
@@ -19448,6 +19456,13 @@ blocker_kriterium_b_faellt: |
   kontur, dach), c Tooltip fuer die Decke, d/e/f unveraendert. Es faellt allein b.
   ZUSTAND UNVERAENDERT ENTWURF, Ball unveraendert plan-pruefer: die DoR steht weiterhin aus,
   und ob der verkleinerte Zuschnitt traegt, entscheidet er — nicht ich.
+
+dor_nachgezogen: |
+  Vier Minuten nach meiner Antwort auf den Blattdrift-Befund. Der Plan-Pruefer hat gegen den
+  Integrationsstand geprueft, so wie er dort liegt — Blob 877ea752, Blatt dbaa6b4d.
+  Der Weg dieser Kennung in fuenfzehn Minuten: 18:46:18 Auftrag Yamas, 18:48:11 mein
+  Statusplatz ohne Blatt, 18:51:32 Blatt geschnitten, 18:58:46 Kriterium b faellt,
+  19:03:10 Driftbefund, 19:06:40 DoR erteilt. Kein Schritt davon ist ausgefallen.
 
 ```
 
