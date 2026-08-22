@@ -26751,3 +26751,68 @@ gemeldet, bevor ich gemerkt habe, dass meine Belege selbst darin liegen.
 
 **Ball:** keiner. Der Posten `versatz-Quittung` steht unverändert bei Yama; nur seine Belegstelle ist
 berichtigt.
+
+## §320 — Von vier Belegstellen meiner Yama-Vorlage trägt genau eine: die in die Datei, die sich nicht bewegt hat
+
+**Messstand** `ca285405` · Baum sauber · 0 neue Commits seit §319 · Integrationszweig `0b4accd1`.
+Ballortung dreiseitig **1 · 6 · 14**, nichts angekommen. Evaluator-Lease weiter aktiv (bis 11:55).
+
+### Alle vier Belegstellen geprüft, nicht nur die zwei aus §319
+
+Meine Vorlage an Yama nennt für vier der neun Posten eine Fundstelle mit Zeilennummer. §319 hat zwei
+davon gemessen; hier die beiden übrigen — und damit die vollständige Bilanz:
+
+```
+Posten                    Belegstelle              heute dort                            Urteil
+Fach-Gate N-003           FORMELSAMMLUNG Z.784     "### N-003 · Geltungsbereich —
+                                                    von Yama festgelegt 12.08."          TRÄGT, exakt
+A-13-Veröffentlichung     STATUS Z.7038-7047       "…JEDE Zeile trägt eine BEGRÜNDUNG
+                                                    mit Fundstelle…"                     falsch
+versatz-Quittung          STATUS Z.3042 / Z.16843  Seed-Weg-Text / W-43-Registertabelle  beide falsch (§319)
+Seed-Weg der Prüfbühne    STATUS Z.3037            "…der nächste Suite-Lauf räumt
+                                                    beides wieder weg…"                  daneben
+```
+
+`WEG C` steht in Wahrheit bei **`:3053`** (*„ERLEDIGT 13.08.: Yama hat WEG C entschieden, mit drei
+Auflagen"*), die A-13-Messung bei **`:2849`** (`DB::table('p_v_roofs')`). **Eine von vier trägt.**
+
+### Und der Grund ist nicht die Verweisform
+
+```
+FORMELSAMMLUNG.md   1187 Zeilen damals · 1187 heute ·  0 Commits seit 82c3e33b
+docs/STATUS.md     27543 Zeilen damals · 19397 heute · 34 Commits seit 82c3e33b
+```
+
+**Der eine Zeiger, der trägt, zeigt in die Datei, die sich seit fünf Tagen nicht bewegt hat.** Die
+drei, die danebenzeigen, zeigen alle in dieselbe bewegte Datei — dieselbe, die A-42 um 8146 Zeilen
+verkürzt hat. Es ist nicht so, dass Zeilenzeiger grundsätzlich brechen; **sie brechen, wenn das Ziel
+sich bewegt.**
+
+### Damit wird die Regel aus §315/§316/§319 brauchbarer
+
+Bisher stand da: *„ein Zeiger, der Wochen überdauern soll, gehört an einen Anker."* Das stimmt, ist
+aber pauschal — und pauschale Regeln werden umgangen, sobald sie lästig sind. Genauer:
+
+> **Ein Zeilenzeiger ist so haltbar, wie seine Zieldatei ruhig ist.** In eine Fachreferenz, die seit
+> Tagen unverändert steht, trägt er punktgenau. In den Statusträger, der täglich wächst und schrumpft,
+> ist er schon beim Schreiben auf Abruf. **Und man weiß beim Schreiben nicht, welche Sorte man vor
+> sich hat** — deshalb bleibt der Anker die sichere Wahl, aber aus einem nachvollziehbaren Grund statt
+> aus Prinzip.
+
+Das erklärt auch, warum mir die Sache fünf Tage lang nicht aufgefallen ist: **Die Zeiger waren richtig,
+als ich sie schrieb.** Kaputt gemacht hat sie nicht ein Fehler, sondern ein abgenommener Umzug.
+
+### Die Belegstellen, berichtigt
+
+```
+Fach-Gate N-003        FORMELSAMMLUNG.md, Abschnitt "### N-003 · Geltungsbereich"   (Z.784 trägt weiter)
+A-13-Veröffentlichung  docs/STATUS.md, Fundstelle DB::table('p_v_roofs') — vier Stellen, alle rein lesend
+versatz-Quittung       docs/STATUS.md, Abschnitt "## VERTRETUNGSENTSCHEID versatz"   (§319)
+Seed-Weg der Prüfbühne docs/STATUS.md, Feld ballbesitz mit "ERLEDIGT 13.08.: Yama hat WEG C entschieden"
+```
+
+**An den Posten selbst ändert sich nichts** — sie stehen unverändert bei Yama, mit demselben Inhalt
+und derselben Alterung (§314). Berichtigt ist nur, wie man sie findet. **Vier Runden zu derselben
+Klasse, und erst diese erklärt, warum sie auftritt.**
+
+**Ball:** keiner. Die Vorlage an Yama trägt ab hier Anker statt Zeilennummern.
