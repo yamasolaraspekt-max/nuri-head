@@ -32735,3 +32735,111 @@ Datei, deren Zeit ich nicht lesen kann, ist kein „alt" und kein „neu" — si
 
 Ball: **Evaluator** (seinen Befund quittiere ich, der Ball geht zurück) · **Dirigent** (26 eigene
 Dateien mit unlesbarem Zeitfeld — seine Sache, nicht meine; ich melde, ich ordne nicht an).
+
+## §413 — Vorratsprüfung (a), gewanderte Verweise: 450 von 481 sitzen. Aber eine „Berichtigung" ging von einer falschen auf eine falsche Stelle, und ein Blattfeld zeigt 33-fach auf Arbeit, die getan ist
+
+Messstand: HEAD `0f1c05eb`, Baum 0, gemessen 17:54–17:58. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §413'` → 0). Vorratsprüfung **(a)**: nicht „zeigt ins Leere", sondern
+**„zeigt auf etwas anderes"**.
+
+### Die Grundmenge, nach drei fehlerhaften Anläufen
+
+    95 aktive Blaetter · 882 Datei:Zeile-Verweise · 481 eindeutige (Datei,Zeile)-Paare
+
+      aufloesbar, Zeile existiert     450   (93,6 %)
+      Zeile JENSEITS des Dateiendes     0
+      Datei nicht im Bestand            9
+      Dateiname mehrdeutig             22   (7 Namen)
+      Summenprobe 450+0+9+22 = 481
+
+**Die Verweisdisziplin in den Blättern ist gut, und das ist das Hauptergebnis.** Von den 9 „nicht im
+Bestand" sind mindestens vier **Beispieltexte, keine Verweise** — `datei.ts:44` steht in einem Blatt
+über Schreibweisen, `geometry/treppe.ts:42` in einer erfundenen Trefferzeile
+(`gegenprobe_2: "'drei Treffer gemessen, Trefferzeilen: …'"`), `test.ts:68/96/111` ebenso. Mein
+Muster fängt sie, weil sie wie Verweise aussehen. **Das ist ein Fehler meiner Messung, kein Mangel
+am Bestand**, und ich zähle sie nicht als Befund.
+
+**Drei meiner Anläufe waren falsch, jeder anders:**
+
+1. `docs/_playground-archiv/` im Dateiindex — `routes/web.php:5690` wurde auf eine **127-Zeilen-**
+   Archivdatei aufgelöst und als „jenseits des Dateiendes" gemeldet. Das echte `routes/web.php` hat
+   **5720** Zeilen. Drei Falschtreffer.
+2. Der Ausschluss `not d.startswith('_')` sollte das Archiv treffen und **killte alle
+   `__tests__`-Verzeichnisse** — 55 Dateien galten als „nicht im Bestand", darunter
+   `__tests__/decke.test.ts`, das es gibt.
+3. Meine Positivkontrolle war `werkzeugRegistry.ts:13` — das steht im **Ereignis** des Planners,
+   nicht im Blatt. Kontrolle am falschen Gegenstand.
+
+Erst der vierte Lauf hat Positivkontrolle **und** Summenprobe. Die Regel steht seit §412 und hat hier
+zum ersten Mal aktiv gegriffen: **eine ausgefallene Messung ist kein Ergebnis.**
+
+### DER FUND: eine Berichtigung, die von falsch auf falsch ging
+
+`docs/auftraege/aktiv/W-12-1-ansicht-und-kamera-ablesen.md` behauptet an **drei** Stellen (Z. 24, 52,
+82), `HausplanerApp.tsx:1261-1269` erzeuge die Rasterlinien, mit dem Vermerk
+**`[BERICHTIGT 14.08., war :1274-1281]`**. `docs/STATUS.md:75` führt noch die **alte** Fassung
+`:1274-1281`.
+
+    HEUTE auf :1261-1269   Kommentarblock ueber Knopf-Darstellung (AUF-70/AUF-59) plus
+                           ":1267 */" und drei "AUF-48 … ist umgezogen"-Vermerke
+    14.08. auf :1261-1269  DERSELBE Kommentarblock, um eine Zeile verschoben
+    14.08. auf :1274-1281  Style-Code: display:'flex', borderRadius: 9, background: aktiv ? …
+
+**Die Datei ist seit dem 14.08. um genau EINE Zeile gewachsen** (1534 → 1535, 2 Commits). Der Verweis
+kann also gar nicht gewandert sein — **er war beim Berichtigen schon falsch.** Die Berichtigung hat
+von *Style-Code* auf *Kommentar* verschoben; keine der beiden Stellen erzeugt Linien.
+
+**Wo sie wirklich entstehen — über den Funktionsnamen gemessen, nicht über die Zeile:**
+
+    HausplanerApp.tsx:1297   const rasterLinien: React.ReactElement[] = [];
+    HausplanerApp.tsx:1301   rasterLinien.push(<Line key={`vx${x}`} … stroke={FARBEN.rasterGrob} …/>);
+    HausplanerApp.tsx:1304   rasterLinien.push(<Line key={`hy${y}`} … />);
+    HausplanerApp.tsx:1446   rasterLinien={rasterLinien}          <- Durchreichung an die Buehne
+    HausplanerApp.tsx:12     Kopfkommentar: "rasterLinien und massElemente werden HIER gebaut"
+
+**Richtig ist `:1297-1304`.** Beide dokumentierten Fassungen liegen daneben — die eine um 13, die
+andere um 23 Zeilen. Der Kopfkommentar der Datei sagt es sogar im Klartext, seit jeher.
+
+**Warum das trotz `BETRIEBSBESTAETIGT` zählt:** W-12/1 ist abgeschlossen, hier bricht nichts. Aber
+die Zeile in STATUS.md ist der **Beleg**, den die nächste Arbeit am Raster zitieren wird — und
+`H-8 wie beim Raster in W-12/1` wird in W-14/1 bereits als Muster weitergereicht. Ein Beleg, der auf
+einen Kommentar zeigt, trägt beim zweiten Zitieren nicht mehr.
+
+### DER ZWEITE FUND: ein Blattfeld, das 33-fach auf erledigte Arbeit zeigt
+
+Bei der Prüfung stieß ich auf ein Feld, das **meine zweiseitige Ballortung (P-03) gar nicht misst**:
+
+    dor_beleg: "steht aus — plan-pruefer."     36×
+    dor_beleg: "steht aus — plan-pruefer"       5×   (ohne Punkt)
+    dor_beleg: "steht aus" / "steht aus."       3×
+    ------------------------------------------------
+    Blaetter mit "steht aus"                   44
+
+Gegenprobe gegen `docs/STATUS.md`, je Kennung aus dem Feld `auftrag:`:
+
+    in STATUS.md abgeschlossen   33      <- das Feld ist TOT
+    in STATUS.md noch offen       6      (A-37, A-42, A-40, Z1-W2-0, Z1-W2-1, Z2-W0-5b)
+    in STATUS.md nicht gefunden   5      (A-36, A-38, A-39, Z1-W2-2, Z1-W2-3)
+    Summenprobe 33+6+5 = 44
+
+**Positivkontrolle:** W-12/1 trägt `dor_beleg: "steht aus — plan-pruefer."`, während STATUS.md dort
+`BETRIEBSBESTAETIGT` führt **und** „DoR RUNDE 2 ERTEILT 13.08. (plan-pruefer)" dokumentiert. Das Feld
+wurde beim Erteilen nie nachgezogen.
+
+Und von den **6 „noch offenen"** sind Z1-W2-0 (15:00:30), Z1-W2-1 (14:25:45) und Z2-W0-5b von mir
+**heute erteilt** — dort hinkt nur STATUS.md (seit 15:56:52 unverändert). **Real offen aus dieser
+Liste: nichts, was ich nicht schon bearbeitet hätte.**
+
+**Das ist entlastend und beunruhigend zugleich.** Entlastend: es liegt keine übersehene Arbeit
+herum. Beunruhigend: **44 Blätter behaupten im eigenen Kopf, mein Votum stehe aus.** Wer ein Blatt
+öffnet und dieses Feld liest, hält das Votum für offen — auch dort, wo es seit neun Tagen erteilt
+ist.
+
+**Regel an mich:** Die Ballortung hat eine **dritte** Seite. `dor_beleg:` im Blattkopf zeigt auf mich,
+ohne in STATUS.md oder im `ball:`-Feld aufzutauchen. Ich messe sie ab sofort mit — und weiß jetzt,
+dass sie **als Arbeitsliste unbrauchbar** ist: 33 von 44 sind tot. Ein Feld, das zu 75 % falsch
+steht, ist kein Signal, sondern Rauschen.
+
+Ball: **Planner** (die drei Verweisstellen in W-12-1 und das tote `dor_beleg`-Feld — beides seine
+Blätter) · **Integrator** (`docs/STATUS.md:75` führt `:1274-1281`). Beides ohne Eile: W-12/1 ist
+betriebsbestätigt, nichts blockiert.
