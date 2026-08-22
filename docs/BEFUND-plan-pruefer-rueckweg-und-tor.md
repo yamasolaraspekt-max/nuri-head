@@ -29732,3 +29732,591 @@ anlegt** und dass **kein Auftrag** den Bau trägt.
 Ball: **niemand von mir aus.** Ich melde den Posten als fehladressiert und liefere die Messung; die
 Umbuchung von Yamas Liste auf einen Planner-Auftrag ist Sache des Dirigenten. Kein Blatt berührt,
 kein Votum geändert.
+
+## §367 — Acht Scheinbälle, null echte: fünf Blätter und drei Blöcke nennen mich, und die Schnittmenge ist leer
+
+Messstand: HEAD `b0b11a36`, Baum 0, gemessen 15:25:17–15:29. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §367'` → 0). Nichts Neues angekommen seit 15:24:37, `Z2-W0-5b` weiter ohne
+Auslöser. Diese Runde galt der **zweiseitigen Ballortung (P-03)** — und sie hat sich gelohnt.
+
+### Die Zahl
+
+    STATUS-Bloecke mit ball plan-pruefer (Zustandsfilter negativ):   3
+    Blaetter in aktiv/ mit ballbesitz: plan-pruefer:                 5
+    SCHNITTMENGE:                                                    0
+
+**Acht Vorgänge nennen mich, und kein einziger steht auf beiden Listen.** Wer nur eine Seite liest,
+sieht drei Bälle oder fünf — nie die acht, und nie dieselben.
+
+### Alle acht einzeln nachgemessen — keiner liegt bei mir
+
+    Vorgang        STATUS sagt                  Blatt sagt                  wirklich
+    P-02           VORLAGE / plan-pruefer       —                           votiert, Dirigent ANGENOMMEN
+    Z1-W2-0        ENTWURF / plan-pruefer       —                           ERTEILT 15:02:26
+    Z1-W2-1        ENTWURF / plan-pruefer       —                           ERTEILT (Paket 3)
+    A-09           BETRIEBSBESTAETIGT / —       ball plan-pruefer           erledigt
+    A-11           BETRIEBSBESTAETIGT / —       ball plan-pruefer           erledigt
+    A-37           ABGENOMMEN / release-pruefer ENTWURF, "plan-pruefer(DoR)" dreifach votiert
+    A-38           BEREIT / generator           ENTWURF, "plan-pruefer(DoR)" ERTEILT Runde 2, §156
+    A-08-NACHTRAG  kein Block                   ball plan-pruefer           kein Auftrag
+
+A-37 belegt durch meine eigenen Ereignisse: `ERTEILT` 00:49:39, Nachschärfung `ERTEILT` 09:05:12 mit
+`AUFTRAG_ABGESCHLOSSEN` 09:30:38, Errata `BESTAETIGT` 10:12:46 nebst sieben Nachträgen bis 12:18.
+
+### Der Punkt: die Fehlerquelle wechselt die Seite
+
+    P-02, Z1-W2-0, Z1-W2-1   ->  STATUS ist veraltet, das Blatt hat recht
+    A-09, A-11, A-37, A-38   ->  das BLATT ist veraltet, STATUS hat recht
+
+**Es gibt keine verlässliche Seite.** Hätte ich mich auf STATUS verlassen — §16 macht sie zum einzigen
+Statusträger —, hätte ich A-37 und A-38 nie angesehen und die fünf Blattbälle nie bemerkt. Hätte ich
+mich auf die Blätter verlassen, hätte ich für A-38 eine vierte DoR-Runde gefahren, die niemand
+braucht. Genau das ist die Lage, die der Tor-Kommentar vom 16.08. vorhergesagt hat und die ich in
+§333/§337/§341/§355 vier Mal einzeln gemessen habe — hier steht sie erstmals **als Verteilung**:
+sieben von acht Fällen sind Nachzieh-Rückstände, und sie liegen auf **beiden** Seiten.
+
+### A-38 — der Fall, der mich fast eine Runde gekostet hätte
+
+Das Blatt (unverändert seit 16.08. 20:57, sechs Tage) trägt:
+
+    dor_beleg: "NICHT ERTEILT — 3. Runde, siehe docs/STATUS.md. Restpunkte 16.08. behoben."
+    ballbesitz: "plan-pruefer (DoR)"
+
+Gelesen wie es dasteht, liegt bei mir eine vierte DoR-Runde. **Der Datensatz sagt das Gegenteil**, und
+zwar ausführlich: `dor_beleg: ERTEILT — plan-pruefer, Runde 2, bestaetigt und verstaerkt in §156
+(21.08. 12:36, Messstand 1349e992)`, Rot-Lage auf fünf festen SHAs statt auf einer Quote, dazu
+`ballbesitz_nachgezogen_272: plan-pruefer -> generator, 21.08.`. Meine eigene Befunddatei führt A-38
+seit Zeile 22831 als `BEREIT / generator`.
+
+**Auflösung der Chronologie:** Runde 2 ERTEILT (15.08.) → Runde 3 mit Restpunkten (16.08., Blattstand)
+→ Restpunkte behoben, Votum in §156 bestätigt (21.08.). Der Blatteintrag beschreibt selbst einen
+**behobenen** Zustand („Restpunkte 16.08. behoben") und zieht das Votum trotzdem nicht nach. **Ein
+Feld, das seine eigene Erledigung protokolliert und den Status daneben stehenlässt, ist schlimmer als
+ein leeres Feld** — es liest sich wie eine bewusste Aussage.
+
+### Nebenbefund: ein Nachtrag, der kein Auftrag ist, hält einen Ball
+
+`A-08-NACHTRAG-drei-nein.md` hat kein `auftrag:`-Feld; der Rückfall auf die Kopfzeile führt auf A-08
+(BETRIEBSBESTAETIGT). Das Blatt sagt über sich selbst `art: NACHTRAG — kein eigener Auftrag` — und
+trägt trotzdem `ballbesitz: plan-pruefer`. Ein Dokument, das ausdrücklich kein Auftrag sein will, hält
+einen Ball. Harmlos, solange man die Kennung aus dem Feld liest und nicht aus dem Dateinamen; genau
+deshalb steht diese Regel im Wacheauftrag.
+
+### Ausgefallene Messung, nicht als Ergebnis verbucht
+
+Meine Kontextprobe der beiden A-38-Ereignisse (`grep -o '.\{0,58\}A-38.\{0,58\}'`) brach mit
+`ugrep: error … exceeds complexity limits` ab. Ich habe die Aussage **nicht** auf die leere Ausgabe
+gestützt, sondern über den Ereignisordner und den vollständigen Block neu erhoben. Eine ausgefallene
+Messung ist kein Ergebnis — und eine leere Ausgabe aus einem Fehler sieht aus wie eine gemessene Null.
+
+Ball: **niemand von mir aus.** Sieben Nachzieh-Rückstände auf beiden Seiten sind Transport
+(ARBEITSREGELN §272), nicht Votum. Kein Blatt berührt, kein Votum geändert, keine DoR eröffnet.
+
+## §368 — DoR Z2-W0-5b: ERTEILT. Zwei Halbsätze im Votum, keiner davon ein Ball zurück
+
+Messstand: HEAD `cfaa391b`, Baum 0, gemessen 15:30–15:41. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §368'` → 0). Auftrag gen 9 (`DOR-plan-pruefer-w0-5b`) ist damit erfüllt.
+
+**Auslöser:** `SPEZ-planner-anschlusswelle-1/planner-CODE_FERTIG-Z2-W0-5b.yaml`, 15:26:51, gen 19,
+`blatt_sha ec239609`, `mess_sha 97843380`. Alles Folgende ist **selbst am Basis-Stand** erhoben
+(`git show "${SHA}:${PFAD}"`), nicht aus dem Ereignis übernommen.
+
+### Die tragenden Zahlen — selbst nachgemessen, alle bestätigt
+
+    Behauptung des Planners                      meine Messung am Stand 97843380
+    ...FuerItem im MasterSetController = 2       2  (:182 link, :195 unlink)          BESTAETIGT
+    linked ohne jede Wache                       :162-175, KEINE Zeile vor der Query  BESTAETIGT
+    zwei Bausteine, nicht einer                  ...FuerPlan :209 (addToPlan)         BESTAETIGT
+    GET-Routen unter /items/{ in api.php = 2     :339 linked, :359 materials/index    BESTAETIGT
+    5 Kriterien / 5 Matrixzeilen                 5 / 5, jede Kennung genau 2x         BESTAETIGT
+
+`linked` nimmt `int $plannerItemId`, die Geschwister nehmen Model-Binding — der Befund des Planners,
+dass die Lücke **strukturell** ist („wo kein Modell gebunden wird, fällt auch nicht auf, dass niemand
+es prüft"), hält meiner Nachmessung stand: Route `:339` heißt `{plannerItem}`, `:343`/`:348` heißen
+`{item}`.
+
+### Zwei eigene Fehlgriffe, die ich hier ausweise, weil sie sonst als Befund durchgingen
+
+**Erstens** — ich zählte `Route::get.*items/\{` zusätzlich in `routes/web.php` und fand **2**, also
+scheinbar eine Grundmenge von 4. Nachgesehen: es sind
+`/plans/{plan}/items/{item}/materials/sources` und `…/products` — anderer Präfix, anderer Controller,
+**nicht der Gegenstand**. Und der Messbefehl des Blattes nennt `routes/api.php` **ausdrücklich**; ich
+hatte die verkürzte Fassung aus dem Ereignis gelesen statt die aus dem Blatt. **Das Blatt ist
+genauer als seine eigene Zusammenfassung** — und ich hätte um ein Haar dem Blatt vorgeworfen, was nur
+in der Zusammenfassung fehlte.
+
+**Zweitens** — `grep -ci 'rueckweg'` gab **0**, und einen Moment lang sah es aus, als fehle der
+Rückweg. Der Abschnitt heißt **„Rückweg"**, mit Umlaut. Er ist da und lautet „Revert dieses einen
+Commits". Dieselbe Klasse wie meine Teilstring-Fallen, nur andersherum: **nicht zu weit, sondern am
+falschen Zeichen zu eng.**
+
+### Die zwei Halbsätze — Ort statt Rückfrage
+
+Nachtrag 1.5 verlangt, Halbsätze **im Votum mitzuliefern** statt eine Auflagen-Schleife zu drehen.
+Beide betreffen N3 (Messbefehl mit ORT), und ich liefere jeweils die **Antwort**, nicht die Frage:
+
+**(1) Kriterium c nennt „der vorhandene Vertragstest" ohne Datei — und es gibt zwei Kandidaten.**
+Gemessen, welcher gemeint ist:
+
+    tests/Feature/Planner/PlannerApiZustaendigkeitTest.php   394 Z · 14 Faelle
+        link 6 · unlink 3 · linked 0      <- die Geschwister sind drin, linked fehlt: DIESER
+    tests/Feature/Api/MasterSetApiSchalterTest.php           113 Z · 4 Faelle
+        Kopfzeile: "Z2-W0-10 — Waechter fuer die reversible Stilllegung"   <- anderer Gegenstand
+
+Das ist kein Schönheitsfehler: Die Absage-Regel zu (c) verwirft ausdrücklich „einen zweiten, eigenen
+Test daneben". **Wer den falschen der beiden erweitert, verletzt genau die Regel, die ihn schützen
+soll** — und merkt es nicht, weil auch der falsche `master-sets` enthält (6 Treffer).
+
+**(2) Kriterium b verlangt vier Läufe über beide Schalterstellungen, ohne zu sagen, wo der Schalter
+sitzt.** Gemessen: `config/rechte.php` (15 Treffer im Baum, davon einer die Konfiguration selbst,
+dazu `.env.example` und `app/Models/User.php`). Damit ist der Messbefehl ausführbar.
+
+### Votum
+
+**ERTEILT.** Fünf Kriterien, fünf Matrixzeilen, deckungsgleich; jedes Kriterium mit Messbefehl,
+rotem Ist-Ergebnis und Absage-Regel. Rot-Lage steht auf einem **fremden, belegten** Fund (Evaluator-
+Votum `639a7a32`: fremdes Item → 200 mit Daten), nicht auf einer Quote. N4 ist erfüllt — „Bedienweg:
+keiner, API-Wache; die Zusage ist der HTTP-Code" ist eine zulässige Bedienweg-Zeile, denn N4 verlangt
+die **Angabe**, nicht das Vorhandensein einer Oberfläche. Rückweg ist Revert eines Commits, ohne
+Zustand. Ein Entdeckungssignal fehlt und ist hier auch nicht verlangt: kein Schema, keine Migration,
+keine Datenänderung (Kriterium e nagelt die Nutzlast fest).
+
+Die Nicht-Ziele halte ich für den stärksten Teil des Blattes: der Umbau auf Route-Model-Binding wäre
+die naheliegende „Verbesserung nebenbei" — **das Blatt benennt ihn und lehnt ihn im selben Satz ab**,
+weil er eine Signaturänderung neben die Wache setzen würde.
+
+Ball: **niemand von mir aus.** Das Votum ist nach Nachtrag 1.5 Teil des Blatts; die zwei Halbsätze
+sind mitgeliefert und brauchen keine zweite Runde. Nächster ist der Generator.
+
+## §369 — Ich habe einen Ort quittiert, den es nicht gibt: Z1-W2-0-h nennt Vitest, und Vitest existiert in diesem Repo nicht
+
+Messstand: HEAD `14563070`, Baum 0, gemessen 15:36–15:38. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §369'` → 0).
+
+**Fremder Befund, zitiert und verlinkt, nicht nachgebaut** (P-02 Punkt 4):
+`BAU-generator-paket-3/generator-messbefehl-defekt-Z1-W2-0-h.yaml`, 15:35:07, `blatt_stand adf03d32`.
+Der Generator meldet, dass `Z1-W2-0-h` **Vitest** als Ort nennt, dass es Vitest hier nicht gibt, und
+**baut es nicht nach**: *„Vitest einzuführen wäre … ein zweites Testwerkzeug neben dem vorhandenen:
+eine zweite Wahrheit darüber, wie DOM-Proben in diesem Repo laufen."*
+
+### Selbst nachgemessen — der Befund hält, und er ist breiter als gemeldet
+
+    package.json (Wurzel) 'vitest'          0
+    'vitest' in ALLEN package.json          0 Dateien
+    vitest.config* im Baum                  0
+    Gegenprobe: 'test:hausplaner'           2   <- das Muster greift
+    Was wirklich laeuft: npm run test:hausplaner:dom
+      = ./scripts/node-runtime.sh --experimental-strip-types
+        --import ./resources/planner/hausplaner/dom-register.mjs --test "…/__domtests__/*.test.ts"
+
+**Breiter als gemeldet, erstens:** Das Blatt nennt Vitest an **drei** Stellen, nicht an einer — `:69`
+(Auslöser), `:102` (Messbefehl zu einem anderen Kriterium), `:196` (der gemeldete Ort in h).
+
+**Breiter als gemeldet, zweitens — und das ist der eigentliche Fund:** Kriterium h **widerlegt sich
+selbst**. Sein Wortlaut verlangt:
+
+    Z1-W2-0-h · DIE PROBE IST EIN BEFEHL, KEIN HANDGRIFF.
+    Verlangt: Der Aufruf steht mit Ort im Blatt und im Bericht, sodass jede Rolle ihn
+              UNVERAENDERT FAHREN kann.
+    Absage-Regel: "laeuft bei mir" erfuellt (h) nicht.
+
+Ein Kriterium, dessen Zweck die **unveränderte Fahrbarkeit** ist, nennt einen Ort, den **niemand**
+fahren kann. Die Absage-Regel trifft das Kriterium selbst.
+
+**Drittens — der Bestand kannte den Irrtum bereits.** `A-32-geradenschnitt-und-parallelversatz.md`
+(BETRIEBSBESTAETIGT) trägt bei `:428` wörtlich: *„FANGPROBE MIT DEM FALSCHEN WERKZEUG. Drei
+Mutationen mit `npx vitest` gefahren — die Insel läuft [nicht darüber]."* **Derselbe Irrtum ist im
+Bestand dokumentiert, abgeschlossen — und im neuen Blatt wiederholt worden.**
+
+### Mein eigener Anteil, und er ist der unangenehmste Teil
+
+**Ich habe Z1-W2-0 um 15:02:26 ERTEILT.** Mein Votum trägt ein eigenes Feld dafür:
+
+    ort_in_den_messbefehlen: "Verlangt von meinem Auftrag gen 9. Vorhanden: …"
+
+**Ich habe die richtige Frage gestellt und die falsche Prüfung dazu gefahren.** Gefragt war „steht ein
+Ort in den Messbefehlen?" — geprüft habe ich die **Anwesenheit** der Ortsangabe, nicht ihre
+**Existenz**. Schlimmer: mein Votum schreibt das Wort selbst zweimal hin (*„Auslöser: Vitest-Lauf"*),
+ohne dass ich ein einziges Mal `grep -c vitest package.json` gefahren hätte. Ein Zeichen mehr Aufwand.
+Und das Votum schließt mit `kein_halbsatz: "Das erste Blatt heute, bei dem ich nichts mitzuliefern
+habe."` — ausgerechnet dieses.
+
+**Das ist P7 an mir selbst: Ort ≠ Wirkung.** Ich habe die Regel für den Generator formuliert
+(Dateikopf ist kein Beleg, Verbraucher über Funktionsnamen messen) und bin an ihrer eigenen Klasse
+gescheitert: **eine Ortsangabe ist erst dann ein Ort, wenn das Genannte existiert.**
+
+**Regel an mich, ab sofort:** Jede Ortsangabe in einem Messbefehl wird **ausgeführt oder aufgelöst**,
+bevor ich sie quittiere — Datei existiert, Skript existiert, Werkzeug ist eine Abhängigkeit. „Ein Ort
+ist genannt" ist kein Prüfergebnis, sondern die Wiederholung des Blattes.
+
+### Was ich am Votum ändere: nichts
+
+Das Votum bleibt **ERTEILT**. Der Mangel betrifft **einen Ort in einem von acht Kriterien**, nicht die
+Baubarkeit: der Generator baut bereits gegen den vorhandenen Läufer, mit derselben Bauform wie die
+fünf bestehenden `__domtests__`, die das Blatt selbst als Vorlage nennt. **Ein Votum zurückzuziehen,
+weil ein Halbsatz fehlt, wäre genau die Auflagen-Schleife, die Nachtrag 1.5 abgeschafft hat.** Was
+fehlte, war mein Halbsatz — und den liefere ich hier nach, verspätet statt gar nicht:
+
+> **Z1-W2-0-h:** „Vitest im Repo-Wurzelverzeichnis" ist zu ersetzen durch
+> **`npm run test:hausplaner:dom`**; dieselbe Ersetzung gilt an `:69` und `:102`.
+
+Ball: **Planner** — derselbe Halbsatz, den der Generator um 15:35:07 bereits gemeldet hat; ich setze
+keinen zweiten Ball daneben, sondern bestätige seinen und erweitere ihn um die zwei weiteren Stellen.
+
+## §370 — DoR Z0-I1 Stufe 1: ERTEILT. Ein Halbsatz, ein Yama-Operand, und eine Grenze meiner eigenen Prüfung
+
+Messstand: HEAD `ecc180f7`, Baum 0, gemessen 15:39–15:50. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §370'` → 0). Auslöser
+`SPEZ-planner-anschlusswelle-1/planner-CODE_FERTIG-Z0-I1-stufe1.yaml`, 15:36:41, gen 19,
+`blatt_sha 57b864b9`, `mess_sha ec239609`. Alles am Basis-Stand erhoben.
+
+### Selbst gezählt — die Zahlen halten
+
+    Kriterien Z0-I1-1..11        11        Planner: 11   BESTAETIGT
+    Matrixzeilen Stufe 1          9        Planner:  9   BESTAETIGT
+    Differenz belegt              Z0-I1-7 (:290 "Folgeposten Stufe 2, braucht root")
+                                  Z0-I1-8 (:410 "gehoeren zu Stufe 2, und das ist Absicht")
+    Blatt feldlos                 kein auftrag:-Feld -> Rueckfall auf die Kopfzeile: "Z0-I1"
+    N4                            :417 "Bedienweg: keiner. Dies ist die Pruefbuehne, kein Werkzeug"
+
+Das Blatt liegt **nicht** in `docs/auftraege/aktiv/`, sondern direkt in `docs/auftraege/` — deshalb
+taucht es in meiner Blattseite der Ballortung nie auf. Kein Mangel des Blattes; eine Lücke **meiner**
+Erhebung, die ich hier festhalte.
+
+### Ein Verdacht von mir, den das Blatt selbst schon aufgelöst hatte
+
+Ich maß, dass `ticket_g1b1_testing` **nicht** auf das Muster `^ticket_testing(_[a-z]+)?$` passt (`:23`),
+und hielt einen Guard für gefunden, der die eigene Datenbank abweist. **Das Blatt behandelt es bei
+`:84`** („Der Musterkonflikt — und warum der Bestand ihn schon richtig löst") und schneidet `Z0-I1-3`
+ausdrücklich um: *„Stufe 1 kennt **eine** DB … Das Muster prüft **diesen einen Namen exakt**,
+`ticket_testing_kopie` und jeder andere bleiben abgewiesen."* Das Muster von `:23` gehört zur
+Vorarbeit für Stufe 2, hinter dem Trennstrich `:256` gilt es nicht.
+
+**Zum zweiten Mal heute** hätte ich einem Blatt vorgeworfen, was nur in dem Teil steht, den es selbst
+als überholt führt. Die Lehre aus §368 gilt verschärft: **erst den Geltungsbereich bestimmen, dann
+messen** — der Trennstrich ist Teil des Messbefehls.
+
+### Der eine Halbsatz — und er hat genau die Klasse, die der Planner sonst selbst schließt
+
+`## Rückweg` steht bei `:251`, also **vor** dem Trennstrich `:256`. Ab `:256` nennt der Stufe-1-Teil
+**keinen** Rückweg (0 Treffer auf `Rückweg|Revert|zurückdreh`). Der Planner hat die Buchstaben-Matrix
+danebengelegt und ausdrücklich als **ÜBERHOLT** gekennzeichnet — *„die Doppelung ist damit nicht
+entstanden"*. **Beim Rückweg fehlt genau diese Kennzeichnung.** Wer den Trennstrich ernst nimmt — und
+das Blatt verlangt es —, liest den Rückweg als Teil der überholten Vorarbeit.
+
+> **Halbsatz:** `## Rückweg` (`:251`) als **für Stufe 1 fortgeltend** kennzeichnen, wie die
+> Buchstaben-Matrix als überholt gekennzeichnet ist. Inhaltlich trägt er erst recht: Stufe 1 legt
+> **keine** neue Datenbank an, es bleibt bei „Config/Guard per Commit zurückdrehbar".
+
+### Was ich NICHT erteile, weil es mir nicht zusteht — ein zehnter Yama-Posten
+
+Yamas Auflage 1 vom 13.08. lautet wörtlich *„nur gegen `ticket_testing`"*; Stufe 1 arbeitet gegen
+`ticket_g1b1_testing`. Der Planner legt die Abweichung **offen** und löst sie über den Zweck auf:
+*„Gemeint war ‚die Test-DB, niemals Produktion'. Ich habe sie NICHT aufgeweicht und NICHT still
+angepasst, sondern die Abweichung benannt."*
+
+**Das Verfahren ist richtig** — CLAUDE.md verlangt, dass Datenbankentscheidungen nicht still
+automatisiert werden, und still war hier nichts. **Die Auslegung selbst steht weder ihm noch mir zu.**
+Sie blockiert den Bau nicht (es ist ein String, und Baubarkeit wie Messbarkeit sind davon unberührt),
+aber sie blockiert die **Abnahme** von Z0-I1-11, wenn Yama den Namen anders will.
+
+> **Yama-Posten 10:** Gilt Auflage 1 („nur gegen `ticket_testing`", exakt oder Abbruch) mit dem
+> heutigen Namen `ticket_g1b1_testing` als erfüllt? Eine Zeile Antwort genügt.
+
+### Die Grenze meiner eigenen Prüfung, ausdrücklich
+
+Die tragende Lage des Umschnitts — *„`ticket_user@localhost` über den SOCKET: ALL PRIVILEGES auf
+`ticket_g1b1_testing` (446 Tabellen), über TCP nur `ticket.*`"* — habe ich **nicht nachgemessen**.
+**DB-Läufe sind bis Z0-I1 gesperrt**, und diese Messung ist einer. Ich habe sie nicht als bestätigt
+verbucht und stütze das Votum nicht darauf: Sie ist der **Grund** des Umschnitts, nicht sein
+Kriterium. Fällt sie anders aus, fällt der Umschnitt — das ist dann ein Befund des Bauenden am
+`grant_beleg`, den das Blatt als **ersten** Messschritt vorschreibt.
+
+Kein Zirkel bei der Sperre: Z0-I1 ist laut Kopf *„der EINE zulässige Sicherheitsbau, bis er
+abgenommen ist"* (Yama, 21.08.).
+
+### Votum
+
+**ERTEILT.** Elf Kriterien mit Messbefehl, rotem Ist und Absage-Regel; neun Matrixzeilen mit belegter
+Differenz; N4 vorhanden; drei neue Kriterien mit Begründung statt Behauptung. `Z0-I1-11` übernimmt
+meinen Befund aus §366 (`a24` 2× verwendet, 0× angelegt) — **zitiert, nicht nachgebaut**, und der
+Dirigent hat den Posten 15:25:28 umgebucht. Damit ist der neun Tage alte Beschluss zum ersten Mal in
+einem Auftrag angekommen.
+
+Ball: **Planner** (ein Halbsatz) · **Yama** (Posten 10, der Name) · **Generator** (bauen; beides
+hindert ihn nicht). Bei mir nichts.
+
+## §371 — Ballwechsel Z1-W2-0 bestätigt, und die Grundmenge meiner eigenen Ballortung: 94 gegen 140
+
+Messstand: HEAD `49030100`, Baum 0, gemessen 15:45–15:49. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §371'` → 0).
+
+### Teil 1 — der Halbsatz aus §369 ist umgesetzt, selbst nachgemessen
+
+`planner-CODE_FERTIG-Z1-W2-0-laeufer.yaml`, 15:43:53, `blatt_sha c2c8abe2`, ersetzt `adf03d32`. Der
+Planner behauptet: *„Kein Kriterium berührt, nur der Ort im Messbefehl. Die DoR für Z1-W2-0 bleibt."*
+**Gemessen statt geglaubt:**
+
+    Beifang (c2c8abe2 gegen Elternteil 57b864b9)     1 Datei, 17+/4-        KEIN BEIFANG
+    Kriterien vorher / nachher                       8 / 8                  UNVERAENDERT
+    Matrixzeilen vorher / nachher                    8 / 8                  UNVERAENDERT
+    'test:hausplaner:dom' vorher / nachher           0 / 3                  drei Stellen
+    'vitest' vorher / nachher                        3 / 4                  <- gestiegen!
+      davon in einer ANWEISUNG                       0
+      davon im Zitatblock der Berichtigung           4                      :204 :205 :206 :210
+
+**Die Vitest-Zahl ist gestiegen, und das ist richtig so** — sie steht jetzt vollständig in der
+Berichtigung, keine einzige Nennung mehr in einer Anweisung. Wer nur die Zahl gezählt hätte, hätte
+eine Verschlechterung gemeldet. **Die Zahl allein trägt die Antwort nicht; erst die Frage, *wo* sie
+steht.**
+
+Die Behauptung hält vollständig. **Ballwechsel bestätigt:** kein neues DoR nötig, mein Votum zu
+Z1-W2-0 bleibt unberührt, der Ball liegt beim Generator. Der volle Läufer steht jetzt in (h), sodass
+das Kriterium seine eigene Zusage („jede Rolle kann ihn unverändert fahren") zum ersten Mal einlöst.
+
+Der Planner ordnet den Fall selbst ein — dritter Messbefehl heute, den niemand ausführen konnte
+(`$`-Anker · fehlendes `-E` · Vitest), *„dreimal dieselbe Wurzel: ich habe den Befehl GESCHRIEBEN
+statt ihn zu FAHREN"* — und benennt die Lücke seiner eigenen Gegenprobe: sie deckt Metazeichen ab,
+**nicht die Existenz des genannten Werkzeugs.** Das ist genau die Lücke, an der ich in §369 selbst
+gescheitert bin.
+
+### Teil 2 — die Lücke aus §370, jetzt gezählt
+
+In §370 fiel auf, dass das Z0-I1-Blatt in `docs/auftraege/` liegt und meine Ballortung nur
+`docs/auftraege/aktiv/` liest. Die Grundmenge dazu:
+
+    Blaetter in docs/auftraege/aktiv/       94
+    Blaetter in docs/auftraege/ (flach)    140
+    davon mit ball plan-pruefer              0
+
+**Sechzig Prozent aller Blätter liegen außerhalb des Ortes, den meine Ballortung prüft** — und die
+Ballortung heißt „zweiseitig", weil sie beide *Wahrheiten* vergleicht, nicht beide *Orte*. Heute ist
+die Lücke **folgenlos**: keines der 140 trägt meinen Ball. Das ist der ehrliche Befund und nicht
+mehr — ich habe eine Lücke belegt, keinen übersehenen Ball. **Ein Loch, durch das heute nichts fällt,
+ist trotzdem ein Loch**; Z0-I1 wäre gestern hindurchgefallen, wenn der Ball nicht über das Ereignis
+gekommen wäre.
+
+**Ab sofort messe ich beide Orte.** Die Prüfung kostet einen Befehl.
+
+Ball: **niemand von mir aus.** Kein Votum geändert, kein Blatt berührt.
+
+## §372 — BERICHTIGUNG zu §367: es sind nicht fünf Blätter, es sind 80. Mein Suchmuster kannte die Anführungszeichen nicht
+
+Messstand: HEAD `0b5ace3f`, Baum 0, gemessen 15:47–15:49. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §372'` → 0).
+
+### Der Fehler
+
+    grep -lE '^ballbesitz: plan-pruefer'      docs/auftraege/aktiv/*.md   ->   5 Dateien
+    grep -lE '^ballbesitz: *"?plan-pruefer'   docs/auftraege/aktiv/*.md   ->  80 Dateien
+
+**Die Blätter schreiben `ballbesitz: "plan-pruefer (DoR)"` — mit Anführungszeichen.** Mein Muster
+verlangt hinter dem Leerzeichen ein `p` und findet ein `"`. Die fünf Treffer waren die Ausnahme, nicht
+die Regel: die Blätter **ohne** Quotes.
+
+**Die Wurzel ist präzise benennbar.** Der Wacheauftrag nennt wörtlich
+`grep -n '^ballbesitz: plan-pruefer' docs/STATUS.md` — und **für STATUS.md ist das Muster richtig**,
+dort steht der Wert unquoted. Ich habe es auf einen **anderen Ort** übertragen, wo eine andere
+Schreibweise gilt, und dort nie an einem bekannten Treffer verifiziert. Der Auftrag verlangt genau
+das: *„Suchmuster an einem bekannten Treffer verifizieren."* **Ein Muster ist nicht portabel, nur weil
+es an seinem Ursprungsort stimmt** — und ein Muster, das aus einer Anweisung stammt, ist deshalb
+nicht geprüft, sondern nur zitiert.
+
+### Was an §367 falsch war
+
+    §367 sagte                      richtig ist
+    Blattseite   5                  80          Faktor 16
+    Schnittmenge 0                   2          Z1-W2-0 und Z1-W2-1 stehen auf BEIDEN Listen
+
+Der Satz *„Acht Vorgänge nennen mich, und kein einziger steht auf beiden Listen"* ist damit in beiden
+Hälften unrichtig. Es sind 83 Nennungen, und zwei stehen auf beiden Listen.
+
+### Was hält — und stärker wird
+
+**Die Schlussfolgerung von §367 hält, und sie ruht jetzt auf 80 statt auf 5.** Alle 80 einzeln geprüft
+(Kennung aus dem Feld, Zustand aus dem Datensatz, Filter negativ):
+
+    erledigt (BETRIEBSBESTAETIGT/ERLEDIGT/VERWORFEN/ABGELOEST)   67
+    offen, aber anderswo                                         12
+    ohne Block (A-08-NACHTRAG, "kein eigener Auftrag")            1
+    ECHTE Baelle bei mir                                          0
+
+Von den zwölf sind vier ABGENOMMEN (A-12, A-37, A-42, A-43), vier BEREIT (A-38, A-39, Z1-W2-2,
+Z1-W2-3), zwei von mir erteilt (Z1-W2-0, Z1-W2-1), eines ZURUECKGEZOGEN (A-36). Bleibt **A-40** auf
+`ENTWURF` — und dort ist der Datensatz eindeutig: `ballbesitz: planner`. Das Blatt (zuletzt 16.08.
+22:11) sagt `"plan-pruefer (DoR)"`. **Kein übersehener Ball.**
+
+**Und der eigentliche Befund wird durch die Berichtigung erst sichtbar:** **67 von 80 Blättern tragen
+einen Ball an mich für Vorgänge, die längst erledigt sind.** Das ist keine Handvoll Nachzieh-
+Rückstände mehr, sondern der Normalfall der Blattseite — 84 % veraltet. §367 hat daraus „sieben von
+acht" gemacht, weil es nur die fünf Ausnahmen sah.
+
+### Was ich daraus für die Wache ändere
+
+1. **Muster am Zielort verifizieren, nicht am Ursprungsort.** Vor jeder Zählung ein bekannter Treffer.
+2. **Quotes in YAML-Werten sind die Regel, nicht die Ausnahme** — `*"?` gehört in jedes Feldmuster.
+3. **Eine Zahl, die über Runden konstant bleibt, ist verdächtig, nicht beruhigend.** „5" stand in vier
+   Runden unverändert da und sah dadurch bestätigt aus. **Stabilität ist kein Beleg für Richtigkeit;
+   ein festgefrorener Messfehler wiederholt sich exakt.**
+
+Ball: **niemand.** §367 bleibt stehen und wird hier berichtigt, nicht überschrieben — die falschen
+Zahlen sind Teil des Belegs.
+
+## §373 — Die Prämisse meiner DoR ist fünf Minuten später gefallen. Und das Errata, das sie ersetzt, nennt einen Ort, den zwei von fünf Rollenbäumen nicht haben
+
+Messstand: HEAD `fc854518`, Baum 0, gemessen 15:51–15:56. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §373'` → 0).
+
+### Was angekommen ist
+
+Zwei fremde Befunde, **zitiert und verlinkt, nicht nachgebaut** — und ich darf sie ohnehin nicht
+nachbauen, denn beide beruhen auf DB-Läufen, die für mich gesperrt sind:
+
+- `STEUERUNG-dirigent/yama-lesesitzung-BEFUND-db-praemisse-weicht-ab.yaml`, **15:48:01**. Eine zweite,
+  unabhängige Messung: *„Die Rechteliste nennt `ticket_testing` NICHT, und der Lesezugriff darauf
+  GELINGT … Zwei Verfahren, zwei Antworten: nach der Hausregel gilt damit KEINE von beiden."*
+- `STEUERUNG-dirigent/dirigent-berichtigung-db-praemisse.yaml`, **15:49:53**. Dritte Messung, beide
+  Wege: *„Mein Satz ‚die Sperre lag am Weg' war FALSCH — eine Rechteliste als Zugriffsaussage
+  gelesen … Was fehlt, ist NICHT Zugriff, sondern ISOLATION."*
+
+### Meine DoR aus §370 hält — und zwar aus dem Grund, den sie selbst benannt hat
+
+Ich hatte fünf Minuten zuvor geschrieben:
+
+> *„Die tragende Lage des Umschnitts … habe ich **nicht nachgemessen**. DB-Läufe sind bis Z0-I1
+> gesperrt … Ich habe sie nicht als bestätigt verbucht und stütze das Votum nicht darauf: Sie ist der
+> **Grund** des Umschnitts, nicht sein Kriterium. **Fällt sie anders aus, fällt der Umschnitt** — das
+> ist dann ein Befund des Bauenden am `grant_beleg`."*
+
+**Sie ist anders ausgefallen.** Das Votum fällt nicht mit, weil es nie darauf ruhte. Das ist keine
+Vorsicht, die sich ausgezahlt hat, sondern der Normalfall einer benannten Prüfgrenze: **wer die Naht
+ausweist, an der er aufgehört hat zu messen, macht den Bruch dort billig statt teuer.** Die
+Folgerung „Stufe 1 ohne `root` baubar" bleibt laut Dirigent bestehen — getragen jetzt vom dreifach
+gemessenen Zugriff statt vom Kausalsatz.
+
+### Yama-Posten 10 ist nach sechs Minuten gegenstandslos — und mehr als das
+
+Ich hatte 15:43 gefragt, ob Auflage 1 („nur gegen `ticket_testing`") mit `ticket_g1b1_testing` als
+erfüllt gilt. Der Dirigent: *„Die Frage an Yama ist damit gegenstandslos: keine Änderung an Konten
+nötig."* **Selbst nachgemessen, statisch und ohne DB-Lauf:**
+
+    phpunit.xml (VERSIONIERT) :28   <env name="DB_DATABASE" value="ticket_testing" force="true"/>
+
+Der versionierte Ort trägt **genau Yamas Namen**. Der Posten ist damit nicht nur gegenstandslos,
+sondern **positiv erfüllt**. Ich streiche ihn; die Yama-Liste steht wieder bei neun.
+
+### Der neue Befund: `.env.testing` ist nicht versioniert und fehlt in zwei von fünf Rollenbäumen
+
+Der Dirigent schreibt dem Planner ins Errata: *„DB-Ziel = `ticket_testing` über den **in
+`.env.testing` konfigurierten Weg** (TCP)."* **Gemessen, welche Bäume diese Datei überhaupt haben:**
+
+    ticket (Hauptbaum)           .env.testing DA    DB_DATABASE=ticket_testing
+    ticket-rolle-generator       .env.testing DA    DB_DATABASE=ticket_testing
+    ticket-rolle-evaluator       .env.testing DA    DB_DATABASE=ticket_testing
+    ticket-rolle-planner         .env.testing FEHLT
+    ticket-rolle-plan-pruefer    .env.testing FEHLT   (meiner)
+
+    versioniert?  git ls-tree -> 0        .gitignore:13 -> .env.testing
+
+**Das ist die Vitest-Klasse zum vierten Mal heute** (`$`-Anker · fehlendes `-E` · Vitest · jetzt
+`.env.testing`): **ein Ort in einem Messbefehl, den nicht jede Rolle fahren kann.** Diesmal aber
+schärfer, denn die Datei ist bewusst **nicht versioniert** — sie kann gar nicht mitwandern, und sie
+kann in zwei Bäumen andere Werte tragen, ohne dass es auffällt.
+
+**Zwei Folgerungen, beide belegt und keine davon eine Weisung:**
+
+1. **Für das Errata:** Der verbindliche Ort ist `phpunit.xml` (versioniert, `force="true"`), nicht
+   `.env.testing` (ignoriert, in 2 von 5 Bäumen abwesend). Wer `.env.testing` als *Beleg* zitiert,
+   zitiert eine Datei, die der Leser womöglich nicht hat.
+2. **Für die Prämissengeschichte selbst:** Der Satz *„`.env.testing` zeigt auf den TCP-Weg"* stammt
+   aus dem Planner-Baum — **und dort gibt es die Datei nicht.** Er kann sie nur im Hauptbaum gemessen
+   haben. Das ist zulässig, aber es ist **eine Messung an einem fremden Baum ohne Standangabe** — und
+   genau diese Klasse hat der Planner am 22.08. selbst als Lehre notiert: *„Ein Beleg ohne
+   Standangabe ist kein Beleg."*
+
+### Mein Ball
+
+Der Dirigent setzt `ball: planner (Errata), plan-pruefer (Bestätigung)`. **Das Errata liegt noch nicht
+vor** — kein Ereignis, kein Blattstand. Ich bestätige nichts, was ich nicht gelesen habe. Sobald es
+kommt, prüfe ich die vier Punkte (a) Kausalsatz gestrichen, (b) DB-Ziel, (c) Isolationskriterien
+unverändert, (d) Belegzeile — **ohne neue Runde**, wie angeordnet, und mit dem Punkt aus diesem
+Abschnitt als mitgeliefertem Halbsatz.
+
+Ball: **Planner** (Errata) · bei mir **wartend**, nicht offen.
+
+## §374 — `gelesen_bis` ist in 101 von 104 Ereignissen mit `zeit` identisch: das Feld misst nicht, wann gelesen wurde, sondern wann abgelegt wurde
+
+Messstand: HEAD `b56b3baa`, Baum 0, gemessen 15:54–15:59. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §374'` → 0).
+
+### Zuerst mein wartender Ball: die DoR bleibt, selbst nachgemessen
+
+`planner-CODE_FERTIG-Z0-I1-praemisse-strittig.yaml`, 15:51:36, `blatt_sha 8e65762e`, ersetzt
+`57b864b9`. Der Planner kennzeichnet die Prämisse als strittig, statt sie zu verteidigen oder still
+zu streichen: *„Nach der Hausregel gilt KEINE der beiden Messungen, bis der Unterschied aufgelöst
+ist … als Kasten mit BEIDEN Messungen, über dem alten Satz, der durchgestrichen als Beleg
+stehenbleibt."* Seine Behauptung „kein Kriterium berührt" — **gemessen:**
+
+    57b864b9   Kriterien 11 · Matrixzeilen 9 · 421 Zeilen
+    8e65762e   Kriterien 11 · Matrixzeilen 9 · 457 Zeilen   (+36 = der Kasten)
+    Beifang gegen den Elternteil: 1 Datei
+
+**Bestätigt. Meine DoR aus §370 bleibt in Kraft**, keine neue Runde.
+
+### Der Befund: er verlangt zwei Dinge, die 1:43 vorher erledigt wurden
+
+    15:48:12   Planner-Prozess startet
+    15:48:01   Lesesitzung meldet den Widerspruch          <- er kennt sie, bezug nennt sie
+    15:49:53   Dirigent misst DRITTFACH und berichtigt      <- er kennt sie NICHT
+    15:51:36   Planner legt ab, gelesen_bis: 15:51:36
+
+Sein `naechster_schritt` lautet: *„Dirigent: dritte Messung veranlassen … und die Namensfrage
+`ticket_testing` gegen `ticket_g1b1_testing` entscheiden."* **Beides liegt seit 15:49:53 vor:** die
+dritte Messung ist gefahren (beide Wege, lesen und temporär schreiben), und die Namensfrage ist
+entschieden — *„damit gegenstandslos: keine Änderung an Konten nötig."*
+
+**Sein `bezug`-Feld nennt nur die Lesesitzung.** Er hat den Stand von 15:48:01 verarbeitet und um
+15:51:36 abgelegt — und dazwischen hat sich die Lage geändert.
+
+### Die Wurzel — und sie ist ein Feld, das etwas behauptet, das es nicht misst
+
+    Ereignisse mit gelesen_bis:       104
+      gelesen_bis == zeit             101      97 %
+      gelesen_bis != zeit               3
+      ohne zeit-Feld                    0
+
+**`gelesen_bis` trägt in 97 % der Fälle exakt den Ablagezeitpunkt.** Es wird beim Schreiben auf
+`zeit` gesetzt, nicht auf den Moment, in dem tatsächlich gelesen wurde. Damit sagt es genau nichts
+über den Kenntnisstand aus — es sieht nur so aus.
+
+**Das ist dieselbe Klasse wie das `erstellt`-Feld**, das die externe Prüfung um 12:31:19 gemeldet hat
+(*„Ein Feld, das Aktualität vorgibt und sie nicht hat, hat hier eine ganze DoR-Runde gekostet"*).
+Dort war es **ein** Aussetzer von sieben, und die Prüfung schloss ausdrücklich: *„Es ist KEIN
+systematisches Problem."* **Hier ist es 101 von 104 — nicht der Aussetzer, sondern die Regel.**
+
+Der Unterschied ist wichtig: `erstellt` war einmal falsch **befüllt**. `gelesen_bis` ist richtig
+befüllt und trotzdem wertlos, weil **der Name eine andere Frage beantwortet als der Wert.** Ein
+falsch befülltes Feld repariert man; ein falsch benanntes Feld täuscht weiter, auch wenn jeder es
+korrekt ausfüllt.
+
+### Und es ist genau der Fehler, den ich heute selbst hatte
+
+In §368 fiel mir auf, dass mein Wach-Anker das **Rundenende** war statt der **Ereignismessung** — und
+dass der Z2-W0-5b-Auslöser dadurch 94 Sekunden lang unsichtbar blieb. Dieselbe Lücke, andere Stelle:
+**zwischen Lesen und Ablegen ändert sich die Welt, und wer den Ablagezeitpunkt notiert, behauptet
+Kenntnis, die er nicht hat.** Ich habe meinen Anker umgestellt; das Feld `gelesen_bis` kann das nicht
+von selbst.
+
+**Den Planner trifft dabei kein Vorwurf:** sein Prozess lief seit 15:48:12, die Berichtigung kam
+1:41 später. Er hat korrekt gearbeitet und korrekt abgelegt. **Das Feld hat ihn nicht gewarnt, weil
+es dafür nicht gebaut ist.**
+
+### Folgen, benannt statt angewiesen
+
+1. **Für den Dirigenten:** die dritte Messung **nicht zweimal fahren.** Der Planner fordert sie an,
+   ohne zu wissen, dass sie vorliegt.
+2. **Für die Auslegung von `gelesen_bis`:** Es taugt als *Ablagestempel*, nicht als
+   Kenntnisnachweis. Wer prüfen will, ob jemand X kannte, vergleicht `prozess_start` mit der Zeit von
+   X — nicht `gelesen_bis`. In diesem Fall entscheidet `prozess_start: 15:48:12`.
+
+Ball: **Dirigent** (die doppelte Messung abwenden) · bei mir **nichts**; die DoR ist bestätigt.
