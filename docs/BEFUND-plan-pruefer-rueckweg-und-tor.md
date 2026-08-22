@@ -27183,3 +27183,126 @@ schreiben, wo eine Messung etwas Neues zeigt.
 
 **Ball:** unverändert — Evaluator (Nachprüfung), Dirigent (A/B/C, N3), Integrator (fünf Zustände),
 Yama (neun Posten). Bei mir nichts.
+
+## §327 — A-37 ist ABGENOMMEN, 31 von 31. Und die neue Aktionsliste weist drei von fünf Rollen ab — darunter die Aktion, die der Dirigent vor vier Minuten vergeben hat
+
+**Messstand** `3e31b2e9` · Baum sauber · 0 neue Commits seit §326 · Integrationszweig `2dd76e38`.
+Ballortung dreiseitig **1 · 6 · 14**.
+
+### Das Votum liegt: ABGENOMMEN
+
+```
+0a18446a  12:03:18  Elter e39cbccc · Scope 126/0, EIN Pfad (Votumsblatt)
+Felder: basis_der_pruefung c0dd4f83 · endstand_sha c82df498 · ergebnis_sha 0a18446a   (3 SHAs, alle existent)
+Lease freigegeben · AUFTRAG_ABGESCHLOSSEN liegt vor · ball: dirigent
+Ergebnis: "A-37-20 behoben; Gegenprobe hält; A-37 vollständig (31 von 31)"
+```
+
+**Meldepflichten erfüllt, Ballwechsel bestätigt.** Drei Dinge daran verdienen es, genannt zu werden:
+Er hat die Gegenprobe *„die übrigen 30 unberührt"* **an sich selbst** gemessen — es war seine eigene
+Formulierung aus dem Erstvotum. Er hat Teil (a) bewertet, **ohne ein Kriterium nachzuschreiben**
+(*„Die 3er-Kollision … verlangt eine Änderung der CODETABELLE — das gehört dem Planner"*). Und er legt
+offen, dass **sein eigener Votum-Commit durch das ALTE Tor lief**, damit niemand daraus schließt, das
+neue Gate habe seine Aktion durchgelassen — *„es hätte sie nach Befund 1 mit 7 abgewiesen."*
+
+### WEG A ist entschieden
+
+`dirigent-entscheidung-kennungsmuster.yaml` (12:03:49): **Muster erweitern**, nicht 89 Blätter (B),
+nicht Z-Aufträge ohne Zustand (C). Begründung: *„C macht STATUS.md für alle Z-Aufträge blind … das ist
+die zweite Wahrheit, die wir verhindern wollen."* **A-37 bleibt eingefroren, A-37-26 bleibt erfüllt** —
+*„das Kriterium ist richtig, das Muster darunter ist lückenhaft."* Und der Kleinauftrag verlangt
+ausdrücklich ein Blatt **„mit Nachvollzugs-Matrix nach N3"** — mein §308 ist aufgegriffen.
+
+### Befund 1 des Evaluators: unabhängig bestätigt und verschärft
+
+Der neue Stand `c82df498:scripts/rollen-tor.sh:360-375`:
+
+```
+Arbeit:  bauen | nachbessern
+Pause:   pausieren | angehalten | angehalten_eingefroren | parken | warten
+sonst:   "unbekannte aktion '$AKTION' — weder Arbeit noch Pause"   -> 7
+```
+
+Gegen die **jetzigen** Aktionen aller fünf Rollen gemessen:
+
+```
+planner          spezifizieren                  -> unbekannt -> 7
+generator        nachbessern                    -> Arbeit
+evaluator        warten_dann_nachpruefen        -> unbekannt -> 7
+release-pruefer  parken                         -> Pause (gewollt)
+plan-pruefer     warten_dann_errata_bestaetigen -> unbekannt -> 7
+```
+
+**Drei von fünf.** Der Evaluator hat es gemeldet; ich bestätige es unabhängig **und ergänze den Fall,
+den er nicht kennen konnte:** `spezifizieren` ist die Aktion, die der Dirigent dem Planner **um 12:03:49**
+für den Kennungsmuster-Kleinauftrag zugeteilt hat — **vier Minuten nach dem Votum**. Sie fällt ebenfalls
+durch. Der Auftrag, der die Musterlücke schließen soll, trägt eine Aktion, die das nachgebesserte Tor
+abweist.
+
+**Keine Regression** — am Rot-Stand kam nur `bauen` durch, die Nachbesserung lässt **eine** Aktion mehr
+zu. Und es ist **kein Baumangel**: das Tor tut, was A-37-22e verlangt. **Es ist eine Frage der
+Aktionsbenennung in der Steuerung**, und sie wird scharf, sobald A-37 transportiert ist — dann kann
+weder der Planner spezifizieren noch ich ein Votum committen.
+
+**Ball:** Dirigent — er hält beide Enden: die Aktionsnamen in den Rollenquellen und den Zeitpunkt des
+Transports. Bei mir nichts; ich melde, weil es mich und den Planner ab dem Transport arbeitsunfähig
+machen würde.
+
+## §328 — Der Evaluator misst die Wirkung, wo wir das Muster gemessen haben — und seine Zahl vervollständigt die Kollisionsbilanz aus §312
+
+**Messstand** `b314ddf2` · Baum sauber · 0 neue Commits seit §327 · Integrationszweig `296bd91c`.
+Ballortung dreiseitig **1 · 6 · 14**. **A-37 steht im Datensatz weiter auf `CODE_FERTIG / evaluator`**,
+während das Votum seit 12:04 `ABGENOMMEN` lautet — das Votum ist drei Minuten alt, das ist kein
+Rückstand, sondern ausstehender Transport. Festgehalten, nicht beanstandet.
+
+### Der dritte Anteil, und er ist der bestbelegte
+
+`evaluator-eigener-anteil-a37-26-kennungsformen.yaml` (12:06:50). Er hat **nicht übernommen, sondern
+gemessen** — am Endstand, im Wegwerf-Root, mit laufendem Tor:
+
+```
+generator: zustand: A-42    · CODE_FERTIG · generator · bau c82df498   -> exit 0   ANGENOMMEN
+generator: zustand: Z0-I1   · …                                        -> exit 1   A-37-26 VERSTOSS
+generator: zustand: Z1-W1-3 · …                                        -> exit 1   VERSTOSS
+generator: zustand: Z2-W0-5 · …                                        -> exit 1   VERSTOSS
+```
+
+**Das ist der stärkere Beleg als unserer.** Der Planner und ich haben den **Regex** geprüft — er hat
+das **Tor laufen lassen**. Wirkung statt Wortlaut, genau das, was wir voneinander verlangen. Sein
+eigener Anteil: *„Ich habe geprüft, ob die Sperre auslöst, nicht ob sie nur das Falsche sperrt."*
+Damit haben nun **alle drei** Rollen ihren Anteil gemeldet — der Planner die Proben entworfen, ich sie
+abgenommen, er sie zweimal abgenommen. **Und keiner widerruft**, alle mit derselben Begründung: das
+Kriterium ist richtig, das Muster darunter lückenhaft.
+
+### Seine Zahl vervollständigt §312
+
+`exit 1` — die Codetabelle vergibt 1 an *„Rolle und Baum passen nicht zusammen"* (`rollen-tor.sh`).
+Hier vergibt `commit-pruefen.sh` dieselbe 1 für einen A-37-26-Verstoß. **Kein Widerspruch zum
+Kriterium:** A-37-26 nennt **keinen** Rückgabewert (`exit`/`Rückgabe` → **0** Treffer im Abschnitt),
+es verlangt nur *„wird abgewiesen"*. Der Ausstieg steht bei `commit-pruefen.sh` als
+`KEIN COMMIT. Der Zustandsbetreff wird von der Erzeugung nicht erkannt.` → `exit 1`.
+
+**Damit ist die Bilanz vollständig:**
+
+```
+Code 1   Tabelle: "Rolle/Baum, rollen-tor.sh"  ·  faktisch auch: Sammelabbruch,
+         A-37-26, LEER, UNVERAENDERT, VERSCHWUNDEN, FEHLT, SYNTAX      nicht in der Tabelle
+Code 2   YAML-Syntax + vier Aufruffehler                                IM BLATT benannt
+Code 3   MODUL + ENV_BLOCKED (sechs Stellen)                            nicht im Blatt (Evaluator)
+Code 7   22e-Verstöße, sechs Stellen                                    nicht in der Tabelle (§312)
+```
+
+**Vier von acht Codes tragen mehr als eine Bedeutung; genau einer davon ist im Blatt benannt.** Das
+ist kein Baumangel — A-37-20 verlangte eigene Codes nur für die **drei** Ursachen aus A-37-8, und die
+sind seit `c82df498` unterscheidbar (2/3/4, vom Evaluator ausgelöst). Es ist die **Codetabelle**, die
+der Wirklichkeit nachhinkt, und der Evaluator ordnet sie richtig zu: *„Ihre Auflösung verlangt eine
+Änderung der CODETABELLE — das gehört dem Planner, nicht dem Generator."*
+
+### Was ich daraus nicht mache
+
+**Keinen Restpunkt, keine Nachschärfung.** A-37 ist abgenommen, die Kriterien sind eingefroren, und
+drei Rollen haben denselben Punkt unabhängig gemeldet und gleich eingeordnet. Die Codetabelle wandert
+in denselben Vorrat wie Code 7 aus §312 — sie gehört ins Blatt, wenn es nach A-37 wieder angefasst wird.
+
+**Ball:** Planner (Codetabelle, zusammen mit §312) · Integrator (A-37-Zustand nachziehen, sobald der
+Transport läuft) · Dirigent (Aktionsnamen aus §327).
