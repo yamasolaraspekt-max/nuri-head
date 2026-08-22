@@ -29138,3 +29138,47 @@ Fehler, den ich anderen melde. **Die Messung folgt Posten für Posten in den nä
 einer als Vorratsposten.
 
 **Ball: niemand.** Keine Forderung. Der Mangel war meiner, die Ablage behebt ihn; die Zahlen folgen.
+
+## §357 — Yama-Posten 1 von 7 frisch gemessen: der Zeiger in `raumAuswahl.ts` driftet nicht, er steht still
+
+Gewählt gegen HEAD `8ff8ce56` (Baum sauber, 14:51). §357 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok.
+
+**Erste Einlösung der Ankündigung aus §356**: je Runde einen der sieben unbelegten Posten frisch
+messen. Gewählt: *„driftender Zeiger `raumAuswahl.ts`"* — der konkreteste, weil er einen Dateinamen
+und eine Zeilennummer nennt.
+
+**Zuerst eine Berichtigung an §356.** Ich hatte den Posten als *„Stand nicht gemessen"* geführt.
+**Er war gemessen** — am **16.08. gegen `fcd007a1`**, in meiner eigenen Befunddatei (Z.2382 ff.),
+mit dem Ergebnis *„unverändert, stabil"*. **Nicht die Messung fehlte, nur die Ablage.** §356 bleibt
+in der Sache richtig (nirgends als Frage abgelegt), in diesem Detail war es zu pauschal.
+
+**Frisch gemessen, heute:**
+
+    raumAuswahl.ts:7   behauptet:  "Ihre heutige Identitaet ist der Index in der Liste (`Buehne.tsx:147`,"
+    Buehne.tsx:147     traegt heute:  {massElemente}
+    Buehne.tsx:162     traegt heute:  <Group key={`raum${i}`} listening={werkzeug === 'auswahl'}>
+    der Zeiger steht also auf :162 — Drift 15 Zeilen
+    Buehne.tsx: 4 Commits gesamt, letzter 13.08. 00:56, seit 16.08. NULL
+    Baum-Hash Buehne.tsx in meinem Baum und in der Integration: identisch
+
+**Der Befund vom 16.08. trägt unverändert.** Die Drift beträgt weiterhin **fünfzehn Zeilen**, und
+sie ist **stabil** — nicht weil jemand sie gepflegt hätte, sondern weil die Datei seit dem 13.08.
+nicht angefasst wurde. *Das ist die brauchbare Auskunft für eine Vorlage: ein offener Posten, der
+nicht schlimmer wird, solange er offen ist.*
+
+**Und er ist das Musterbeispiel für Vorratsposten (a).** Mein Wache-Prompt unterscheidet: *„gewanderte
+Verweise — nicht ‚zeigt ins Leere', sondern ‚zeigt auf etwas anderes'."* Genau das liegt hier vor:
+`Buehne.tsx:147` **existiert** und trägt Code — nur eben `{massElemente}` statt des Zeigers. **Ein
+Verweis, der ins Leere zeigt, fällt auf; einer, der auf etwas anderes zeigt, wird gelesen und
+geglaubt.**
+
+**Was das für die Behebung heißt, ohne dass ich sie fordere.** Die Zeilennummer im Kommentar ist der
+Fehler, nicht die Zeile. Ein Verweis auf den **Inhalt** (`key={\`raum${i}\`}`) statt auf die Nummer
+wäre driftfest — dieselbe Lehre wie in A-34 (*„Zeilennummern zeigen auf die falsche Formel"*) und
+wie in meiner eigenen Messung von heute (§349: Positivliste über den Inhalt gesucht, nicht über
+`:754`). **Die Entscheidung bleibt bei Yama; der Posten ist eine Kommentarzeile in einer Datei, die
+niemand anfasst.**
+
+**Ball: niemand.** Der Posten bleibt offen bei Yama, jetzt aber **belegt und abgelegt** statt nur
+weitergereicht. **Sechs von sieben stehen noch aus; je Runde einer.**
