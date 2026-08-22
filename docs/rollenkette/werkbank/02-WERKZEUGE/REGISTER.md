@@ -1,7 +1,7 @@
 # REGISTER DER WERKZEUGE
 
 > Eine Zeile je Werkzeug. **Hier steht, was es gibt und woran es hängt** —
-> nicht, wie weit es ist. Der Auftragszustand steht in `docs/STATUS.md`. **Wer den Reifegrad zieht, steht am DATEIENDE** unter „WER DEN REIFEGRAD ZIEHT" — dort und nicht hier, weil ein Einschub im Kopf jede Zeilennummer darunter verschiebt und **45 Verweise `REGISTER.md:<zeile>`** auf diese Datei zeigen; `grep -n 'WER DEN REIFEGRAD ZIEHT'` findet es.
+> nicht, wie weit es ist. Der Auftragszustand steht in `docs/STATUS.md`. **Wer den Reifegrad zieht, steht am DATEIENDE** unter „WER DEN REIFEGRAD ZIEHT" — dort und nicht hier, weil ein Einschub im Kopf jede Zeilennummer darunter verschiebt und **119 Verweise `REGISTER.md:<zeile>`** (gemessen 22.08.; die frühere Zahl 45 war veraltet) auf diese Datei zeigen; `grep -n 'WER DEN REIFEGRAD ZIEHT'` findet es.
 >
 > Reifegrad: `LEER` (nur Ordner) · **`GEGENSTANDSLOS`** (geklärt, es gibt nichts zu bauen — die Entscheidung steht IN der Zeile; **nicht dasselbe wie LEER**) · **`n/7 BLÄTTER`** (Zwischenstufe: teilweise gefüllt — zählt
 > **NICHT** als `BESCHRIEBEN`; die Zahl nennt, wie viele stehen) · `BESCHRIEBEN` (**alle sieben**
@@ -578,3 +578,71 @@ beides sieht in der Einzelzahl gleich aus.*
 
 **Verbindlich: wer den Reifegrad zählt, nennt die Summe und die Zeilenzahl dazu.**
 
+
+---
+
+## `registry_id` JE REGISTERZEILE — Planner, 22.08., Posten 6 (a) aus `gen 18`
+
+> **Warum hier unten und nicht als Tabellenspalte:** dieselbe Begründung wie beim Reifegrad-Absatz.
+> Ein Einschub verschiebt Zeilennummern, und darauf zeigen Verweise. **Gemessen am 22.08.:
+> `grep -rho 'REGISTER\.md:[0-9]\+' docs/` → 119** — der Kopf nannte bisher 45; die Zahl war
+> veraltet und ist dort berichtigt. *Das Risiko ist mehr als doppelt so groß wie dokumentiert.*
+
+**Zweck:** die Brücke zwischen Registerzeile und `toolRegistry`. Daraus wird der **Anschlussvorrat**
+messbar — die Messgröße für „wie weit sind wir".
+
+### Die 13 Kennungen aus `TOOL_DEFINITIONS`, zugeordnet
+
+| `registry_id` | Registerzeile | Zuordnung über |
+|---|---|---|
+| `auswahl` | **W-13** Auswahl und Griffe | Name, eindeutig |
+| `wand` | **W-02** Wand zeichnen | Name, eindeutig |
+| `fenster` | **W-04** Öffnung (Tür/Fenster) | Name, eindeutig |
+| `tuer` | **W-04** Öffnung (Tür/Fenster) | Name, eindeutig — *zwei Kennungen, eine Zeile* |
+| `dach` | **W-07** Dach aus Kontur | Name + Blattnennung |
+| `kontur` | **W-07** Dach aus Kontur | Name + Blattnennung — *zwei Kennungen, eine Zeile* |
+| `decke` | **W-10** Decke und Boden | Name + Blattnennung |
+| `treppe` | **W-09** Treppe | Name, eindeutig |
+| `bemassen` | **W-11** Maß und Bemaßung | Name, eindeutig |
+| `flaeche-messen` | **W-08** Dachfläche messen | Name, eindeutig |
+| `duplizieren` | **W-14** Kopieren/Spiegeln/Drehen | Name; `art: 'aktion'` |
+| `loeschen` | **keine Registerzeile** | `art: 'aktion'`, kein Werkzeugblatt |
+| `trimmen` | **keine Registerzeile** | `art: 'aktion'`, gebaut über **A-35** statt über ein W-Blatt |
+
+**Zwei Befunde, die aus dieser Zuordnung fallen:**
+
+1. **Zwei Zeilen tragen je zwei Kennungen** (W-04: `fenster`+`tuer`, W-07: `dach`+`kontur`).
+   *`registry_id` ist also nicht eins-zu-eins — wer den Vorrat zählt, zählt Kennungen, nicht Zeilen.*
+2. **Drei Kennungen haben keine Registerzeile** (`loeschen`, `trimmen`, teils `duplizieren`).
+   Alle drei sind `art: 'aktion'`. **`trimmen` ist gebaut und bedienbar, steht aber in keinem
+   Werkzeugregister** — es entstand über A-35. *Eine Lücke in der anderen Richtung als die, die
+   dieses Register sonst misst.*
+
+### `kein_werkzeug` — Zeilen, die ausdrücklich keine Kennung brauchen
+
+| Registerzeile | Grund |
+|---|---|
+| **W-01** Raster und Fang | *bereits im Register belegt:* „KEIN Werkzeug in der Registry, und es braucht auch keins" — der Fang liegt **unter** anderen Werkzeugen (`geometry/fangKern.ts`), Infrastruktur wird nicht bedient, sie wirkt |
+
+*Diese Form existierte bereits als Fließtext in der W-01-Zeile; sie ist hier aufgenommen, nicht
+neu erfunden.*
+
+### Der Zählbefehl — Anschlussvorrat
+
+```
+ANSCHLUSSVORRAT = Registerzeilen, die ein Leistenwerkzeug beschreiben
+                  und KEINE registry_id tragen
+```
+
+**Stand 22.08.:** von 43 Registerzeilen sind **10** einer Kennung zugeordnet, **1** ausdrücklich
+`kein_werkzeug` (W-01). **Die übrigen 32 sind noch nicht eingeordnet** — für jede ist zu
+entscheiden, ob sie ein Leistenwerkzeug beschreibt (→ Anschlussvorrat) oder nicht
+(→ `kein_werkzeug` mit Grund).
+
+> **Diese Einordnung ist je Zeile eine Entscheidung, keine Messung** — dieselbe Lage wie bei
+> `grundriss.ts` in Z1-W2-3. **Ich trage hier nur ein, was gemessen ist**, und benenne die 32
+> offenen als offen, statt sie zu schätzen. *Eine Vorratszahl, die auf 32 Vermutungen ruht, ist
+> keine Messgröße.*
+
+**Belastbar ist damit heute:** 13 Kennungen · 10 zugeordnete Zeilen · 1 `kein_werkzeug` ·
+**3 Kennungen ohne Registerzeile** · 32 Zeilen offen.
