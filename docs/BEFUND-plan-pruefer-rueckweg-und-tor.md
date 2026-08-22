@@ -30099,3 +30099,65 @@ gekommen wäre.
 **Ab sofort messe ich beide Orte.** Die Prüfung kostet einen Befehl.
 
 Ball: **niemand von mir aus.** Kein Votum geändert, kein Blatt berührt.
+
+## §372 — BERICHTIGUNG zu §367: es sind nicht fünf Blätter, es sind 80. Mein Suchmuster kannte die Anführungszeichen nicht
+
+Messstand: HEAD `0b5ace3f`, Baum 0, gemessen 15:47–15:49. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §372'` → 0).
+
+### Der Fehler
+
+    grep -lE '^ballbesitz: plan-pruefer'      docs/auftraege/aktiv/*.md   ->   5 Dateien
+    grep -lE '^ballbesitz: *"?plan-pruefer'   docs/auftraege/aktiv/*.md   ->  80 Dateien
+
+**Die Blätter schreiben `ballbesitz: "plan-pruefer (DoR)"` — mit Anführungszeichen.** Mein Muster
+verlangt hinter dem Leerzeichen ein `p` und findet ein `"`. Die fünf Treffer waren die Ausnahme, nicht
+die Regel: die Blätter **ohne** Quotes.
+
+**Die Wurzel ist präzise benennbar.** Der Wacheauftrag nennt wörtlich
+`grep -n '^ballbesitz: plan-pruefer' docs/STATUS.md` — und **für STATUS.md ist das Muster richtig**,
+dort steht der Wert unquoted. Ich habe es auf einen **anderen Ort** übertragen, wo eine andere
+Schreibweise gilt, und dort nie an einem bekannten Treffer verifiziert. Der Auftrag verlangt genau
+das: *„Suchmuster an einem bekannten Treffer verifizieren."* **Ein Muster ist nicht portabel, nur weil
+es an seinem Ursprungsort stimmt** — und ein Muster, das aus einer Anweisung stammt, ist deshalb
+nicht geprüft, sondern nur zitiert.
+
+### Was an §367 falsch war
+
+    §367 sagte                      richtig ist
+    Blattseite   5                  80          Faktor 16
+    Schnittmenge 0                   2          Z1-W2-0 und Z1-W2-1 stehen auf BEIDEN Listen
+
+Der Satz *„Acht Vorgänge nennen mich, und kein einziger steht auf beiden Listen"* ist damit in beiden
+Hälften unrichtig. Es sind 83 Nennungen, und zwei stehen auf beiden Listen.
+
+### Was hält — und stärker wird
+
+**Die Schlussfolgerung von §367 hält, und sie ruht jetzt auf 80 statt auf 5.** Alle 80 einzeln geprüft
+(Kennung aus dem Feld, Zustand aus dem Datensatz, Filter negativ):
+
+    erledigt (BETRIEBSBESTAETIGT/ERLEDIGT/VERWORFEN/ABGELOEST)   67
+    offen, aber anderswo                                         12
+    ohne Block (A-08-NACHTRAG, "kein eigener Auftrag")            1
+    ECHTE Baelle bei mir                                          0
+
+Von den zwölf sind vier ABGENOMMEN (A-12, A-37, A-42, A-43), vier BEREIT (A-38, A-39, Z1-W2-2,
+Z1-W2-3), zwei von mir erteilt (Z1-W2-0, Z1-W2-1), eines ZURUECKGEZOGEN (A-36). Bleibt **A-40** auf
+`ENTWURF` — und dort ist der Datensatz eindeutig: `ballbesitz: planner`. Das Blatt (zuletzt 16.08.
+22:11) sagt `"plan-pruefer (DoR)"`. **Kein übersehener Ball.**
+
+**Und der eigentliche Befund wird durch die Berichtigung erst sichtbar:** **67 von 80 Blättern tragen
+einen Ball an mich für Vorgänge, die längst erledigt sind.** Das ist keine Handvoll Nachzieh-
+Rückstände mehr, sondern der Normalfall der Blattseite — 84 % veraltet. §367 hat daraus „sieben von
+acht" gemacht, weil es nur die fünf Ausnahmen sah.
+
+### Was ich daraus für die Wache ändere
+
+1. **Muster am Zielort verifizieren, nicht am Ursprungsort.** Vor jeder Zählung ein bekannter Treffer.
+2. **Quotes in YAML-Werten sind die Regel, nicht die Ausnahme** — `*"?` gehört in jedes Feldmuster.
+3. **Eine Zahl, die über Runden konstant bleibt, ist verdächtig, nicht beruhigend.** „5" stand in vier
+   Runden unverändert da und sah dadurch bestätigt aus. **Stabilität ist kein Beleg für Richtigkeit;
+   ein festgefrorener Messfehler wiederholt sich exakt.**
+
+Ball: **niemand.** §367 bleibt stehen und wird hier berichtigt, nicht überschrieben — die falschen
+Zahlen sind Teil des Belegs.
