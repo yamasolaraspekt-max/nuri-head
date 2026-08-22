@@ -40036,3 +40036,81 @@ Der `CODE_FERTIG` liegt noch nicht vor. Dies ist eine **vorgezogene** Prüfung, 
 Meldepflichten (SHA in einem Feld, Scope-Diff, Ballwechsel) prüfe ich, wenn er meldet. Offen bleibt
 für die dann fällige Prüfung: die vier PHP-Schleifen aus d2, die Tests je Sammlung, und ob
 `SceneDocumentValidator.php` (34 Zeilen im Diff) den Kommentar `:51-52` wahr macht oder streicht.
+
+## §500 — Meldepflicht Z1-E0-1b: alles bestätigt. Und mein Werkzeug hat zweimal gelogen, bevor es stimmte
+
+Stand: HEAD `c27e7867`, Baum 0, gen 11, Digest gleich. Zeit 23:29. Messstand `81156b49`.
+
+Der Dirigent hatte mir für die Umbenennung ausdrücklich **keine DoR** aufgetragen, sondern
+„Meldepflicht-Prüfung wie üblich". Hier ist sie. Der Auslöser war mein eigener Vorratsbefund §460 —
+`deckenOberkanteMm` lieferte die Wand-Oberkante, also die Decken-**Unterkante**.
+
+### Meldepflichten: erfüllt
+
+| Pflicht | gemessen |
+|---|---|
+| SHA existent | `d5e88f15` **commit**, `3b4e8f6b` **commit** |
+| SHA in einem Feld | `endstand_sha`, `ergebnis_sha`, `ausgangs_sha` — alle drei **gequotet** |
+| Scope-Diff | **5 Pfade**, deckungsgleich mit der Meldung |
+| Ballwechsel | `ball: [evaluator]` — passt zur Bauplatz-Verfügung |
+
+### Alle vier Kriterien selbst nachgemessen
+
+```
+a   deckenOberkanteMm (Produktiv UND Tests)   0   ✓ (gemeldet 0)
+    const oberkante                            0   ✓
+    wandOberkanteMm                           16   ✓ (gemeldet 16)
+    Positivkontrolle naechsteEtageElevationMm 11   ← der Griff greift
+b   Code-Zeilen                            14 / 14 ✓ (gemeldet 14/14)
+    Zahlen in Code-Zeilen                  11 / 11 IDENTISCH  ✓ (gemeldet 11)
+```
+
+**Kriterium b ist erfüllt.** Die Datei `hoehenkette.ts` zeigt **+24 / −6** — die 18 zusätzlichen
+Zeilen sind der neue Kommentar, keine Rechenlogik. Alle anderen Dateien sind symmetrisch
+(6/6, 2/2, 1/1, 6/6).
+
+### Mein Werkzeug hat zweimal gelogen, bevor es stimmte
+
+**Erstens** maß ich **21 / 39 Codezeilen** gegen seine gemeldeten 14/14 und hielt das für eine
+erhebliche Abweichung. Sie kam aus der **Grundmenge**: Ich zählte Kommentarzeilen mit. Ohne sie:
+14/14. Genau der Fehler aus §494 (35 gegen 35 über verschiedene Mengen) — nur habe ich diesmal
+**gefragt statt gemeldet**, und die Frage hat ihn aufgelöst.
+
+**Zweitens** meldete mein Vergleich zwei „Abweichungen":
+
+```
+< const aussen = bodenPunkteThree(decke.polygon, oberkante);
+> const aussen = bodenPunkteThree(decke.polygon, wandOberkante);
+```
+
+Das sind **keine** Abweichungen — es ist genau die Umbenennung. Mein `sed`-Muster
+`s/\boberkante\b/wandOberkante/g` hat nicht gegriffen, weil **macOS-`sed` `\b` nicht kennt**. Das
+ist §476 in neuer Kleidung: dort war es `git grep` mit `\b`, hier `sed`. Die Wortgrenze ist auf
+diesem System dreimal ein anderes Zeichen.
+
+Beide Male hätte ich einen Befund gegen einen sauberen Bau gemeldet. Beide Male hat das
+Weitermessen es aufgelöst — nicht das Nachdenken.
+
+### Zwei Dinge, die ich am Generator würdige
+
+**Das bitgleiche Bündel.** Er hat gemessen, dass `public/hausplaner/hausplaner.js` nach dem Bau
+**0 Einträge** in `git status` zeigt: *„Der Minifier benennt Bezeichner ohnehin um; ändert sich am
+Ausgelieferten nichts, hat sich an der Wirkung nichts geändert."* Und er sagt ausdrücklich, warum
+dem Commit kein Bündel beiliegt — *„weil ein Commit ohne Bündeldatei sonst wie ein vergessener
+Schritt aussieht"*. Ein Nullbeleg, der als Beleg benannt wird.
+
+**Sein Hinweis an mich, den er ohne Änderungswunsch stellt:**
+
+> „Ein Kriterium, das eine Zeichenkette auf 0 zählt, verbietet auch das **Erzählen** über sie. […]
+> Es ist derselbe Mechanismus wie bei H-9 (ein Muster misst die Schreibweise, nicht die Sache), und
+> beim nächsten Mal kann es teurer sein."
+
+Er hat es an sich selbst erlebt: Sein erster Funktionskommentar erklärte die Umbenennung und nannte
+dabei den alten Namen — damit stand Kriterium a auf 2 statt 0. Er hat **den Kommentar umgeschrieben,
+nicht das Kriterium**, und die Spannung gemeldet statt sie zu glätten.
+
+Der Hinweis trifft, und ich nehme ihn auf: Ein Nullzähler auf eine Zeichenkette macht die Sache
+unsagbar. Wo das zählt — etwa bei einem Verbot, das seine eigene Begründung nicht mehr nennen darf
+— ist es dieselbe Frage wie in §491/Posten 29 (**verbinden gegen nennen**). Dort wurde sie durch
+Trennung gelöst; hier war sie durch Umformulieren billiger zu haben. Beim nächsten Mal ist sie es
+vielleicht nicht.
