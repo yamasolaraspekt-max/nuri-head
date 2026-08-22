@@ -1,18 +1,23 @@
-auftrag_id: NACHPRUEFUNG-evaluator-A-43-posten3
-generation: 12           # 2026-08-22T13:58:44+0200 — gen 11 abgeschlossen (Z1-W1-5 ABGENOMMEN cf49113b). Tor-Wort zurueckgenommen: aktion = nachpruefen. Generator-Nachlieferung Posten 3 CODE_FERTIG (08e4901a).
+auftrag_id: ABNAHME-evaluator-Z2-W0-7
+generation: 13           # 2026-08-22T14:14:01+0200 — gen 12 abgeschlossen (A-43 Posten 3 ABGENOMMEN 71a75985). Abnahmerueckstand Posten 2. Sobald ein Paket-3-Anschlussblatt CODE_FERTIG ist, hat dessen Browserabnahme Vorrang (eigene Generation).
 rolle: evaluator
 sitzung_erwartet: 303cefb6-35fd-4c36-9aca-ed10515f59b3
 worktree: /Users/yamanuri/Documents/ticket-rolle-evaluator
 branch: rolle/evaluator
-basis_sha: cf49113b
+basis_sha: 71a75985
 prioritaet: P0
-aktion: nachpruefen
-taetigkeit: "nachpruefen (Evaluator): A-43 Posten 3 (A-43-13 Dirigent-Bereich) — danach Abnahmerueckstand Posten 2 (Z2-W0-7) als gen 13"
-hinweg_zuerst: "ZUERST Hinweg: git merge --no-edit -m "<rolle>: Hinweg — A-43-Stand" auto/hausplaner-integration im EIGENEN Worktree (kein Rebase/Force; Konflikt -> BASE_BLOCKED melden). Erst danach ist das Rollenverb in deinem Tor bekannt; <rolle>-BASIS_NACHGEZOGEN.yaml mit HEAD."
-gegenstand: "A-43-13 am Generator-Endstand 08e4901a (Basis 8a08d625): Positiv-/Negativprobe NUR im Wegwerf-Repo unter TMPDIR (A-37-22d; Ortsangabe jetzt im Blatt 3aa7c730): dirigent + docs/backlog/ -> 0, docs/fortschritt/ -> 0, docs/STATUS.md -> !=0, scripts/ -> !=0; Gegenprobe: uebrige 12 unberuehrt (git diff --stat 8a08d625..Endstand nur rollen-tor.sh + Matrix), Produktcode leer. Votum ABGENOMMEN/NACHBESSERN mit endstand_sha, ergebnis_sha, gelesen_bis."
-lease: "leases/NACHPRUEFUNG-evaluator-A-43-posten3/"
-verboten: [Produktcode, Reparaturen, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd im Bestand, --no-verify]
+aktion: abnehmen
+taetigkeit: "abnehmen (Evaluator): Z2-W0-7 — S-1: /planner/* 61 Routen + Rechte-Schalter + Item Planner (Bau 5831c06a; STATUS-Block Z2-W0-7 CODE_FERTIG b0374d35)"
+gegenstand: |
+  Blatt docs/auftraege/generator-auftrag-z2-w0-7-rechte-schalter-planner-item.md am Integrationsstand (SHA im Startereignis); Kriterien woertlich, Messbefehle
+  zitieren. Votum: beide Schalterstellungen (RECHTE_ALLE_FUER_ALLE true/false), Fremder -> 403 bei false, eigener -> 200; Grundmenge ALLE
+  /planner/*-Routen (61 laut Befund S-1) mit STAND-SHA — keine Route ohne Messung; Rot (vor 5831c06a) -> Gruen. DB-Laeufe NUR gegen Test-DB;
+  ohne Isolation (Y-13 offen) betroffene Kriterien ENV_BLOCKED mit Befehl+Ausgabe, Rest voll messen. Kein Produktcode, keine Reparatur.
+meldepflicht: "AUFTRAG_GESTARTET mit endstand_sha + gelesen_bis; Abschluss ABGENOMMEN/NACHBESSERN (ggf. 'unter ENV_BLOCKED-Liste') + AUFTRAG_ABGESCHLOSSEN mit endstand_sha, ergebnis_sha, gelesen_bis"
+lease: "leases/ABNAHME-evaluator-Z2-W0-7/"
+danach: "Posten 3 (Z2-W0-3) als gen 14 — oder Browserabnahme des ersten Paket-3-Blatts, je nachdem was vorliegt."
+verboten: [Produktcode, Reparaturen, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Commit ausserhalb des eigenen Worktrees, Produktiv-DB]
 steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/NACHPRUEFUNG-evaluator-A-43-posten3/evaluator-ack.yaml
-erstellt: "2026-08-22T13:58:44+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/ABNAHME-evaluator-Z2-W0-7/evaluator-ack.yaml
+erstellt: "2026-08-22T14:14:01+0200 Dirigent (atomar; Uhr: date)"
