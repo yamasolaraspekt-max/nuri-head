@@ -33184,3 +33184,93 @@ den Planner, falls er P-02 fortschreibt.
 Ball: **Integrator** (P-02-Tafelzeile auf den Stand von 14:07) · **Dirigent** (P-02 liegt seit 14:07
 bei ihm; dazu Z1-W2-0 und Z1-W2-1, beide ABGENOMMEN) · **Planner** (die Erkennungsfrage, wenn P-02
 fortgeschrieben wird).
+
+## §418 — Vorratsprüfung (e): Berichtigung zu §413. Es sind SECHS Stellen, nicht drei — und drei davon sind mein eigenes DoR-Votum
+
+Messstand: HEAD `49ffb2e3`, Baum 0, gemessen 18:19–18:21. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §418'` → 0). Eigene Befunde verfolgt — und der erste, den ich anfasste, war
+falsch.
+
+### Was falsch ist
+
+§413 meldet: *„behauptet an **drei** Stellen (Z. 24, 52, 82), `HausplanerApp.tsx:1261-1269` erzeuge
+die Rasterlinien."*
+
+    grep -c 'HausplanerApp.tsx:1261'  W-12-1-ansicht-und-kamera-ablesen.md   ->   6
+
+    :24   :621/:627 · Buehne.tsx:146 (gezeichnet) mit HausplanerApp.tsx:1261-1269/:1337/…
+    :52   HausplanerApp.tsx:1261-1269  die Linien ENTSTEHEN hier  [BERICHTIGT 14.08.]
+    :82   zeichnet, `HausplanerApp.tsx:1261-1269` erzeugt).*
+    :173  … HausplanerApp.tsx:1261-1269 als Erzeugung. Buehne.tsx:62 ist als Beleg NICHT zulaessig
+    :201  … Typzeile: HausplanerApp.tsx:1261-1269 erzeugt die Linien, :1337/:1409 reichen sie
+    :318  Mein erster Durchgang suchte szene.ts:627 und HausplanerApp.tsx:1261 …
+
+### DIE DREI ÜBERSEHENEN SIND MEIN EIGENES DoR-VOTUM
+
+`:173` und `:201` stehen im DoR-Teil und tragen meine Handschrift (*„Beides war der Mangel meiner
+ersten [Runde]"*). **`:201` ist die Stelle, an der ich `:1261-1269` ausdrücklich als „erzeugt die
+Linien" BESTÄTIGT habe** — mitsamt der ganzen Kette `:1337/:1409` durchreichen, `:349` schaltet,
+`Kopfrahmen.tsx:304` Knopf, `Buehne.tsx:146` zeichnet.
+
+**Ich habe den falschen Verweis nicht nur übersehen, ich habe ihn geprüft und für richtig
+befunden.** In §413 habe ich ihn dann als fremden Mangel gemeldet, ohne zu bemerken, dass die Hälfte
+der Fundstellen von mir stammt.
+
+Die Kette selbst stimmt — `:1337`, `:1409`, `:349`, `Kopfrahmen.tsx:304`, `Buehne.tsx:146` habe ich
+damals einzeln geprüft. **Nur das erste Glied habe ich nicht aufgeschlagen.** Das ist §369 wieder,
+eine Stufe schlimmer: dort quittierte ich einen Ort, den es nicht gibt; hier einen, an dem etwas
+anderes steht — und der Rest der Kette war so sauber, dass nichts auffiel.
+
+### Und die Wurzel der Zahl DREI
+
+`:318` steht in **meinem eigenen Abschnitt „Eigene Messfehler dieser Runde"** vom 13.08. und lautet
+wörtlich:
+
+> *„Beide stehen an je **drei** Stellen — mein Fehler, nicht der des Baus."*
+
+**Die Drei in §413 ist von dort abgeschrieben, nicht gemessen.** Ich habe in einer Prüfung, deren
+Gegenstand „nicht die Notiz lesen, sondern messen" ist, eine Zahl aus meiner eigenen neun Tage alten
+Notiz übernommen. Damals galt sie vermutlich; heute sind es sechs, weil mein eigenes Votum drei
+hinzugefügt hat.
+
+**Regel an mich:** Eine Zahl, die ich schon einmal geschrieben habe, ist kein Messwert, sondern eine
+Quelle wie jede andere — auch wenn sie von mir stammt. Besonders dann.
+
+### Was sich bei den übrigen eigenen Befunden bewegt hat
+
+    §412  unparsebare Zeitfelder      29 (dirigent 26 · release 2 · sitzung 1)   UNVERAENDERT
+    §413  STATUS.md:75 fuehrt :1274   4 Treffer                                  UNVERAENDERT
+    §415  Schrittmass                 keine fremde Reaktion (9 Minuten alt)      erwartbar
+    §417  P-02-Tafelzeile             VORLAGE / plan-pruefer                     UNVERAENDERT
+
+**Bewegung gibt es bei `dor_beleg`:** von **44** auf **39** „steht aus", bei gleichzeitig **vier
+zusätzlichen** Blättern in `aktiv/` (95 → 99). **Acht** Blätter tragen jetzt die richtige Form:
+
+    dor_beleg: "ERTEILT — plan-pruefer 2026-08-22T16:21:25, Beleg 7c7b2f63 (…-DOR-Z1-W2-4-ERTEILT.yaml)"
+
+Mit Zeitstempel, Beleg-SHA und Ereignisdatei — genau das, was das Feld leisten soll. **Die Form ist
+da; was bleibt, ist die Altlast von 39.** Ob das eine Reaktion auf §413 ist oder unabhängig
+geschah, messe ich nicht — die vier neuen Blätter tragen sie von Anfang an.
+
+### Mein eigener Zeitschlüssel, nachgehalten
+
+    meine Ereignisse seit dem §411-Nachtrag (17:49):  8
+    davon mit 'zeit:':                                 8
+    davon mit 'zeit_der_messung:' als SCHLUESSEL:      0
+    (der eine Treffer steht im Nachtrag selbst — als zitierter Text, nicht als Feld)
+    Gesamtstand: 118 Dateien · 99 mit zeit: · 12 mit zeit_der_messung: (alle vor 15:02)
+
+**Die Zusage aus §411 halte ich.**
+
+### Zweiter Python-Ausfall in Folge
+
+Mein erster Lauf dieser Runde gab **0 Dateien seit 17:49** — bei acht. Ursache: `pat.search(t)` mit
+einem `^`-Muster **ohne `re.M`**; `^` matcht dann nur den String-Anfang. In §416 war es ebenfalls ein
+Python-Muster, das null lieferte, wo grep fünf fand.
+
+**Zweimal in Folge dieselbe Werkzeugklasse.** Ab sofort: jedes zeilenweise Python-Muster bekommt
+`re.M`, und die Grundmenge wird **gegen `find`/`grep` gegengeprüft**, bevor ich eine Zahl daraus
+lese — hier hat genau das die Null als Ausfall entlarvt (`glob` 118 = `find` 118, aber 0 Treffer).
+
+Ball: **Planner** (die drei zusätzlichen Stellen in W-12-1, davon zwei in meinem Votumsteil) ·
+**Integrator** (`docs/STATUS.md:75`, P-02-Tafelzeile) · **Dirigent** (29 unparsebare Zeitfelder).
