@@ -159,12 +159,12 @@ verdrahten, nicht bauen.*
 
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
-| Z1-W2-1-a Meldung sichtbar | AP-1 Anzeigekomponente | ERGEBNIS_SHA | `app/rahmen/IntegrationsKonflikte.tsx`; Aufrufer im Produktivpfad **0 → 2**; Bild `z1w21-gruen2-2-blocker.png` |
-| Z1-W2-1-b Bearbeiten erzeugt sie | AP-2 Aufruf im Bearbeitungsweg | ERGEBNIS_SHA | Browser, zwei Läufe: 1040 gegen Öffnung 1010 → `blocker`; 1010 gegen 1010 → keine Konfliktmeldung |
-| Z1-W2-1-c Rot-Probe | AP-3 Vorher/Nachher-Lauf | ERGEBNIS_SHA | derselbe Weg, Bündel **ohne** den Anschluss: nur die drei Attrappen, `[data-pruefung]` **0×** |
-| Z1-W2-1-d Inselgrenze | AP-4 Diff-Beleg | ERGEBNIS_SHA | `git diff --name-only -- ':!resources/planner/hausplaner'` → **leer** |
-| Z1-W2-1-e Browserabnahme | AP-3 (Bühne, headful) | ERGEBNIS_SHA | Puppeteer **headful**, Chrome, `?fixture=decke-treppe`, Port 8098; **6 von 6 Schritten belegt** |
-| Z1-W2-1-f Fachlogik unberührt | AP-4 (Diff + Suite) | ERGEBNIS_SHA | `git diff --stat -- geometry/integrationAbgleich.ts` → **leer**; Suite **1778/1778**, `tsc` 0 |
+| Z1-W2-1-a Meldung sichtbar | AP-1 Anzeigekomponente | `1c80a1d8` | `app/rahmen/IntegrationsKonflikte.tsx`; Aufrufer im Produktivpfad **0 → 2**; Bild `z1w21-gruen2-2-blocker.png` |
+| Z1-W2-1-b Bearbeiten erzeugt sie | AP-2 Aufruf im Bearbeitungsweg | `1c80a1d8` | Browser, zwei Läufe: 1040 gegen Öffnung 1010 → `blocker`; 1010 gegen 1010 → keine Konfliktmeldung |
+| Z1-W2-1-c Rot-Probe | AP-3 Vorher/Nachher-Lauf | `1c80a1d8` | derselbe Weg, Bündel **ohne** den Anschluss: nur die drei Attrappen, `[data-pruefung]` **0×** |
+| Z1-W2-1-d Inselgrenze | AP-4 Diff-Beleg | `1c80a1d8` | `git diff --name-only -- ':!resources/planner/hausplaner'` → **leer** |
+| Z1-W2-1-e Browserabnahme | AP-3 (Bühne, headful) | `1c80a1d8` | Puppeteer **headful**, Chrome, `?fixture=decke-treppe`, Port 8098; **6 von 6 Schritten belegt** |
+| Z1-W2-1-f Fachlogik unberührt | AP-4 (Diff + Suite) | `1c80a1d8` | `git diff --stat -- geometry/integrationAbgleich.ts` → **leer**; Suite **1778/1778**, `tsc` 0 |
 
 ## Rückweg
 
