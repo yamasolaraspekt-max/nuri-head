@@ -186,22 +186,37 @@ DIE VORLAGEN, die kopiert werden:
 
 - **Z1-E4-1-e** · **DIE HÖHENKETTE KENNT DIE PLATTE ALS UNTERES ENDE.**
 
+  > *(Halbsatz zu (e), Dirigent 23:12:40. **Posten 25.6 ist AUFGEHOBEN** — „Aufbau nicht erfasst
+  > → 0 mit Vermerk" erzeugte genau die Null, die Yamas Operand ausschließt.)*
+
   **Verlangt:** OK Platte = **±0,00 − Fußbodenaufbau**; `oberkanteMm` bei `erdberuehrt=true`
-  **negativ**. Ist der Aufbau nicht erfasst, steht der Vermerk **„Aufbau nicht erfasst"** sichtbar.
-  Naht: `geometry/hoehenkette.ts` (E0, gebaut).
+  **negativ**. **Der Fußbodenaufbau (mm) ist beim Setzen der Platte PFLICHTFELD** — kein Default,
+  kein erfundener Wert; Plausibilitätsbereich nur als Hinweis, kein Zwang. **Fehlt er, wird die
+  Platte mit Grund abgelehnt.** *Wer den Aufbau nicht kennt, setzt die Platte erst, wenn er ihn
+  kennt — ehrlich statt Null.* Naht: `geometry/hoehenkette.ts` (E0, gebaut).
+
+  > **`Level.floorThickness` ist NICHT der Fußbodenaufbau.** *Gemessen: `scene.types.ts:352`
+  > „Deckendicke in mm (Default = level.floorThickness)", `hoehenkette.ts:53`
+  > `decke ? decke.dickeMm : level.floorThickness` — es ist der Rückfallwert für die
+  > **Geschossdecke**, eine Größe **über** dem Geschoss.* **Ein Feld für den Fußbodenaufbau gibt
+  > es im Bestand nicht** (`fussbodenaufbau`, `aufbauMm`: je 0 Treffer). **Die Fixture nennt beide
+  > Werte getrennt.**
 
   **Messbefehl:**
   ```
-  Referenzhaus-Fixture: oberkanteMm der Platte < 0 bei erdberuehrt=true
-  Panel zeigt "Aufbau nicht erfasst", solange schichten leer ist
+  Referenzhaus-Fixture: Fussbodenaufbau 180 (eigener Wert) -> oberkanteMm -180,
+                        dickeMm 250 -> UK -430; floorThickness steht GETRENNT daneben
+  Panel: Aufbau ist PFLICHTFELD -> fehlt er, Ablehnung mit Grund (kein stiller Default)
   git diff <basis_sha>..<endstand_sha> -- geometry/hoehenkette.ts  -> nur ADDITIV, keine Aenderung
                                                                       der zwei bestehenden Exporte
   ```
 
   **Heutiges (rotes) Ergebnis:** `oberkanteMm` → 0 Treffer; die Höhenkette kennt kein unteres Ende.
 
-  **Absage-Regel:** Eine **positive** `oberkanteMm` bei `erdberuehrt=true` erfüllt (e) **nicht** —
-  *sie widerspricht Yamas Bezugshöhe und der Bauzeichnungs-Konvention.*
+  **Absage-Regel:** `oberkanteMm` **≥ 0** bei `erdberuehrt=true` erfüllt (e) **nicht — die Null
+  eingeschlossen.** *Sie widerspricht Yamas Bezugshöhe und der Bauzeichnungs-Konvention; und ein
+  Default von 0 wäre genau die Lücke, die Posten 25.6 gerissen hätte.* **Ein stiller Default für
+  den Aufbau erfüllt (e) ebenfalls nicht** — er erzeugt dieselbe Null unter anderem Namen.
 
 - **Z1-E4-1-f** · **DIE HEIZLAST-PROJEKTION LIEFERT DIE GRENZFLÄCHE ERDREICH.**
 

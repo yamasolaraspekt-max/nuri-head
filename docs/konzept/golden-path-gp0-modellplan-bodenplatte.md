@@ -217,7 +217,10 @@ Level EG:  elevation 0, defaultWallHeight 2.500, floorThickness 180  (Muster EG,
            ^^^ AUFLAGE 4: war 200 und damit GLEICH der Zwischendecke (200). naechsteEtageElevationMm
                waehlt genau zwischen beiden (hoehenkette.ts:49-56) — bei gleichem Wert liefern BEIDE
                Zweige 2700, die Fixture kann den richtigen nicht nachweisen. 180 macht sie unterscheidbar.
-Bodenplatte: dickeMm 250, oberkanteMm 0 (= Bezugshöhe, Fachfrage 8 offen), erdberuehrt true
+Bodenplatte: dickeMm 250, Fussbodenaufbau 180 (PFLICHTFELD, eigener Wert — NICHT floorThickness!),
+             oberkanteMm -180 (= 0 minus Aufbau), UK -430, erdberuehrt true
+             ^^^ Dirigent 23:12:40: Posten 25.6 "nicht erfasst -> 0 mit Vermerk" ist AUFGEHOBEN.
+                 Eine 0 waere genau der Wert, den Yamas Operand ausschliesst.
 Treppe:      Lauflinie (2.000,2.000)→(5.000,2.000), Laufbreite 1.000 (Muster :68, treppeZuParametern)
 Zwischendecke EG→OG: dickeMm 200, Treppenauge automatisch (treppenDurchbrueche)
 Level OG:  elevation = naechsteEtageElevationMm(level, decke)   (Auflage 2: berechneHoehenkette gibt es nicht)
@@ -257,7 +260,8 @@ Fixture-Datei: neuer Eintrag `'referenzhaus-golden-path'` in `STUDIO_FIXTURES` (
 
 ## (8) Risiken / offene Fachfragen für Yama
 
-1. **Bezugshöhe ±0,00**: OK-Fertigfußboden EG oder OK-Bodenplatte? Bestimmt, ob `oberkanteMm` der Bodenplatte bei `erdberuehrt=true` standardmäßig `Level.elevation - dickeMm` (Unterseite an ±0) oder `Level.elevation` selbst (Oberseite an ±0) ist. **Nicht im Code entschieden**, direkt Auswirkung auf `berechneHoehenkette`.
+1. ~~**Bezugshöhe ±0,00**~~ **BEANTWORTET (Yama 22:08): OK-FERTIGFUSSBODEN EG.**
+   *Damit ist `oberkanteMm` bei `erdberuehrt=true` negativ.* Ursprüngliche Frage: Bestimmt, ob `oberkanteMm` der Bodenplatte bei `erdberuehrt=true` standardmäßig `Level.elevation - dickeMm` (Unterseite an ±0) oder `Level.elevation` selbst (Oberseite an ±0) ist. **Nicht im Code entschieden**, direkt Auswirkung auf `berechneHoehenkette`.
 2. **Erdberührungs-Standard**: EG-Bodenplatte defaultet auf `erdberuehrt: true`? Kellergeschoss-Fall (falls später relevant) auf `false`? Keine Vorgabe im Bestand.
 3. **Durchbrüche-Modell**: Auftrag verlangt "nur ausdrücklich" (keine Automatik wie bei Treppen-Öffnung der Decke) — bewusster Unterschied zur Decke bestätigt, aber ist das Yamas Wunsch oder nur Auftragswortlaut? Rückfrage sinnvoll, da es inkonsistent zur Decken-UX wirkt (Anwender gewöhnt an Automatik).
 4. **Namenskollision `herkunft`** (Abschnitt 2): Feldname umbenennen (Option A, empfohlen) oder `GeometrieHerkunft`-Enum erweitern (Option B)?
