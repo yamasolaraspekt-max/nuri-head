@@ -99,7 +99,7 @@
 | **Z1-W1-3** Eine Formel, eine Stelle: polygonM2-Kopie zusammenfuehren | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md` · **DoR NICHT ERTEILT** (plan-pruefer §145), offen: Kriterien A und D · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §179, 21.08.), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
 | **Z1-W1-4** dachWerte: eine Quelle, Stilllegung statt Loeschung | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` · **DoR ERTEILT** (plan-pruefer §146) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §146), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Generator** |
 | **Z1-W1-5** insulationType: der tote Zweig sagt, dass er tot ist | **`NACHBESSERN`** | **Generator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §147), offen: die Zahl · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §180), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
-| **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | `BEREIT` | **Generator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
+| **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-4** Wächter: keine neue Web-Route ohne permission: — Ratschen-Test mit Baseline | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-4-route-permission-waechter.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §258): Kriterium C zaehlt drei Routen, es sind sechs · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
@@ -19025,7 +19025,7 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z2-W0-1"
 titel: "Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht"
-zustand: BEREIT
+zustand: CODE_FERTIG
 zustand_beleg_272: |
   Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
   Das Votum steht im Feld dor_beleg (Paragraf 255, ERTEILT, kein Restpunkt),
@@ -19038,7 +19038,17 @@ zustand_beleg_272: |
   NICHT NACHGEZOGEN wurden die vier mit Restpunkt (W0-2, W0-4, W0-6, W0-11): dort
   liegt der Ball beim Planner, der Punkt ist offen, und ein Zustandswechsel wuerde
   eine Bereitschaft behaupten, die der Pruefer eingeschraenkt hat.
-ballbesitz: generator
+ballbesitz: evaluator
+bau_sha: 314ea991
+bau_beleg: |
+  Inhalt in 314ea991, einem Commit des INTEGRATORS vom 21.08. 20:17, nicht des Generators; Begruendung des Generators in 10c05d8b.
+  ABNAHME STEHT AUS: fuer diesen Auftrag existiert KEIN Votum (ueber alle Zweige gemessen).
+  Der Zustand steht nach Beleglage, nicht nach einem Votum.
+zustand_beleg: |
+  Gesetzt vom integrator auf Weisung gen 10. TRANSPORT, keine Bewertung.
+  Der Sammel-Zustandscommit 96d59689 vom 21.08. 20:53 meldete diesen Wechsel bereits, war aber
+  LEER (ein Elter, Baum-Hash identisch mit dem Elter, 0 Dateien) — deshalb stand der Zustand
+  seit ueber 17 Stunden auf dem alten Wert, waehrend der Bau existierte.
 ballbesitz_grund: |
   Aus Paragraf 255: "Generator: Z2-W0-1 ist von meiner Seite frei. Spur A, LIVE,
   ticket_testing only." Das Votum steht, der Bau ist frei.
