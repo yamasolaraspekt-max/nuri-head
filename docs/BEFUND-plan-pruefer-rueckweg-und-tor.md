@@ -34878,3 +34878,75 @@ muss oder auf den Integrator wartet.
 
 Ball: **Evaluator** (Abnahme, Reifegrad höchstens `ABGENOMMEN (CODE, Fixture)`) · **Integrator**
 (Transport).
+
+## §438 — Z1-V1-1 ist ABGENOMMEN (BROWSER). 65 Minuten von Yamas Satz bis zum angeschlossenen Modul — und der „Deckel 6 steht bei 7" hat sich in 126 Sekunden selbst aufgelöst
+
+Messstand: HEAD `1527dfcc`, Baum 0, gemessen 19:34–19:35. **Messzeit des Ereignisbefehls dieser
+Runde: 19:34:37.** Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §438'` → 0).
+**Ereignis dieses Abschnitts:** `ereignisse/SPEZ-planner-etagen-1/plan-pruefer-DECKEL-AUFGELOEST-und-z1-v1-1-gewuerdigt.yaml`
+
+### Das erste Spur-V-Sammelblatt ist durch
+
+    evaluator-ABGENOMMEN-z1-v1-1.yaml, 19:33:20
+      ergebnis:   "ABGENOMMEN (BROWSER) — vier von vier gelieferten Modulen, V-1 bis V-6 je Modul"
+      reifegrad:  browserabgenommen
+      bau_sha:    1c6b7601
+      ball:       integrator
+
+**Vier von vier gelieferten Modulen** — das fünfte (`dachTopologie`) hatte der Generator mit
+Blocker-Begründung herausgenommen (§433), und der Evaluator hat genau die vier geprüft, die
+geliefert wurden. **Keine stille Erweiterung, keine stille Kürzung.**
+
+### Die Kette, gemessen
+
+    18:27:43  Yama: "ja ich will das" (Spur V gilt)
+    18:37:20  plan-pruefer: DoR Kriterientext (§421, drei Halbsaetze)      +9 min
+    18:43:10  planner: Sammelblatt Z1-V1-1 geschnitten                     +5 min
+    18:49:10  plan-pruefer: DoR Z1-V1-1 (§424)                             +6 min
+    19:14:05  generator: CODE_FERTIG, 4 von 5 Modulen                     +24 min
+    19:33:20  evaluator: ABGENOMMEN (BROWSER)                             +19 min
+    ────────────────────────────────────────────────────────────────────────────
+    GESAMT                                                                65 min
+
+**Von Yamas Satz bis zum angeschlossenen Modul: 65 Minuten.** Zum Vergleich die Zahl, auf der seine
+Entscheidung beruhte (§420): *„erste Produktänderung 15:24:49 — nach rund sieben Stunden."*
+
+**Mein Anteil: 15 der 65 Minuten (23 %)** — neun für die Kriterientext-DoR, sechs für die
+Blatt-DoR. Das ist keine Entlastung und kein Vorwurf, sondern das Maß, das ich in §437 selbst
+benannt habe: **wer zwischen zwei Bauten steht, ist der Engpass.**
+
+### Der Planner-Befund „Deckel 6 steht bei 7" — aufgelöst, ohne dass jemand entscheiden musste
+
+    19:31:14  planner: SPANNUNG_IM_AUFTRAG_GEMELDET_NICHT_SELBST_ENTSCHIEDEN
+              "gen 21 Posten 4: Deckel 6 … im Vorrat Z1-V1-1, Z1-W2-8, Z1-W2-4/6, Z2-W0-11b = 5
+               gen 21 Posten 1: E0 und E2 … HEUTE
+               5 + 2 = 7.  DER DECKEL IST 6."
+
+**Mit SEINEM Messmuster nachgezählt** (*„geschnitten und kein `evaluator-*ABGENOMMEN*`-Ereignis"*):
+
+    Z1-V1-1     ABGENOMMEN-Ereignis: 1     <- seit 19:33:20
+    Z1-W2-8 · Z1-W2-4 · Z1-W2-6 · Z2-W0-11b · Z1-E0-1 · Z1-E2-1:  je 0
+    ───────────────────────────────────────────────────────────────────
+    im Vorrat:  6                          DER DECKEL IST 6.
+
+**Die Spannung hat sich 126 Sekunden nach seinem Befund selbst aufgelöst.** Sein Befund war zum
+Zeitpunkt der Messung richtig; die Abnahme kam zwei Minuten später.
+
+**Gegenprobe zum Muster:** 12 `evaluator-*ABGENOMMEN*`-Dateien im Bestand, genau eine für Z1-V1-1.
+**Und eine Falle vermieden:** Ein loses `grep` auf die Kennung meldet für Z1-W2-8 und Z1-W2-6 je
+einen Treffer — beides Teilstring-Fundstellen in fremden Abnahmen. **Exakt gemessen
+(`kennung: X$` bzw. `auftrag: "X"`) sind es null.** Die Teilstring-Falle zum sechsten Mal heute,
+wieder vorbeugend gefangen.
+
+### Was der Planner richtig gemacht hat
+
+Sein `art:`-Feld ist die ganze Leistung:
+**`SPANNUNG_IM_AUFTRAG_GEMELDET_NICHT_SELBST_ENTSCHIEDEN`**
+
+Er hätte den Deckel dehnen oder ein Blatt weglassen können — beides wäre unbemerkt geblieben.
+**Stattdessen hat er die Rechnung offengelegt und den Ball an den Dirigenten gegeben.** Dass sich
+die Spannung danach von selbst auflöste, ändert daran nichts: **die Meldung war zum Zeitpunkt der
+Messung richtig, und ohne sie hätte niemand gewusst, dass der Deckel überhaupt gerechnet wurde.**
+
+Ball: **niemand** für die Deckel-Frage — sie ist gegenstandslos, und das ist gemessen. **Integrator**
+(Transport `1c6b7601` nach der Abnahme) · **Dirigent** (nachrichtlich: Posten 4 ist eingehalten).
