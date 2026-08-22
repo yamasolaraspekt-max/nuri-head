@@ -27521,3 +27521,81 @@ misst sie, dass der Befehl lief, nicht dass er stimmt.
 **Ball: Dirigent** — die Wahl zwischen den beiden Abhilfen ist keine Prüferentscheidung. Mein
 Beitrag ist nur: sie sind nicht gleichwertig. Am Votum zu A-43 ändert sich nichts, der Ball dort
 bleibt beim **Planner** (Posten 2, drei Teile, plus die zwei Messpunkte an A-43-4).
+
+## §333 — A-43 hat keinen Platz in der Statuswahrheit, und §5 verlangt ihn seit dem Schnitt
+
+Gewählt gegen HEAD `f3e7336f` (Baum sauber, 12:58:14, Hinweg gefahren: 80 Commits, Konfliktprobe
+vorher 0). §333 als Überschrift 0 Treffer, frei. Eindeutig, nicht aufsteigend.
+
+**Der Befund, gemessen am frischen Stand.** `docs/auftraege/aktiv/` führt **90** Blätter. Genau
+**eines** hat keinen Datensatz-Block in `docs/STATUS.md`:
+
+    grep -c 'A-43' docs/STATUS.md                     -> 0     (die ganze Datei, nicht nur Bloecke)
+    Blaetter ohne zustand-Block, alle 90 geprueft     -> nur A-43
+    Tafelzeile 'A-43 · '                              -> 0
+    Zustandscommits, isoliert extrahiert              -> 0
+
+Das Blatt liegt seit **12:21:27** vor, seither sind zwei DoR-Runden gelaufen (NICHT ERTEILT 12:30,
+ERTEILT MIT AUFLAGE 12:53). Der Generator hat um **12:57:36** den Bau-Auftrag quittiert
+(`BAU-generator-A-43/generator-ack.yaml`, gen 11) und wartet nur noch auf den Auslöser.
+
+**Die Regel steht in §5 — also in genau dem Paragrafen, den ich prüfe.** `docs/ARBEITSREGELN.md`,
+Überschrift *„Wer den Auftrag schneidet, legt seinen Platz in der Statuswahrheit an (A-20, 12.08.)"*:
+
+> **„Wer ein Auftragsblatt schneidet, legt im SELBEN Commit Tafelzeile UND Datensatz-Block in
+> `docs/STATUS.md` an** — Zustand `ENTWURF`, `dor_beleg: steht aus`."
+
+Und die Begründung nennt den Präzedenzfall wörtlich:
+
+> *„würde der Block erst bei der DoR entstehen, gäbe es ein Fenster zwischen Schnitt und Prüfung,
+> in dem der Auftrag in der Statuswahrheit **nicht existiert**. Genau das ist am 12.08. bei W-38
+> eingetreten — Blatt committet, null Blöcke, null Tafelzeilen."* **„Die Statuswahrheit sagte dort
+> nicht das Falsche, sie sagte gar nichts."**
+
+Bei A-43 ist dasselbe Bild wieder da: Blatt committet, null Blöcke, null Tafelzeilen.
+
+**Die konkrete Folge, nicht die abstrakte.** §5 verlangt im Block das Feld `dor_beleg: steht aus`.
+Genau dort gehört mein Votum hin — bei A-42 ist es so belegt (*„ARBEITSREGELN.md:253 bindet diesen
+Schritt an den Beleg des Plan-Prüfers; er steht seit `5ccc707f` im Feld `dor_beleg`"*). **Mein
+Votum von 12:53 hat derzeit keinen Ort in der Statuswahrheit.** Es liegt in meinem Votumsblatt und
+in einem Ereignis — beides ist Beleg, keines ist der Statusträger.
+
+**Mein eigener Anteil, und er ist der größere.** Ich habe **zwei vollständige DoR-Runden** gefahren
+— zwölf Kriterien, N3-Matrix, jede Rot-Lage selbst nachgemessen — und **nicht geprüft, ob der
+Auftrag überhaupt einen Platz in der Statuswahrheit hat.** Der Prüfschritt steht namentlich in dem
+Paragrafen, gegen den ich prüfe.
+
+Das ist **§308 in zweiter Auflage**: dort war es die N3-Nachvollzugs-Matrix, die §5 dem Plan-Prüfer
+namentlich zuweist und die ich nie geprüft hatte. Hier ist es der Platz in der Statuswahrheit, den
+§5 an derselben Stelle regelt. Beide Male habe ich den Gegenstand geprüft und den **Paragrafen
+nicht zu Ende gelesen**. Ein Vorsatz hat das beim ersten Mal nicht behoben; deshalb notiere ich es
+als Prüfliste, nicht als Vorsatz: **DoR beginnt mit der Frage, ob der Auftrag in `docs/STATUS.md`
+existiert — vor dem ersten Kriterium.**
+
+**Zwei Beinahe-Fehler auf dem Weg, beide gefangen.**
+
+**(1) Fast die falsche Rolle beschuldigt.** A-42s ENTWURF-Zustandscommit lautet
+`planner: zustand: A-42 · ENTWURF · plan-pruefer · blatt e802c1f8`. Ich las das dritte Feld als
+Urheber und hielt den Schritt für **meine** Pflicht. Die Rollenmarke ist aber das **erste** Feld;
+das dritte nennt den Zuständigen für den nächsten Schritt. Gegenprobe über alle ENTWURF-Commits:
+geschrieben von `generator` 2×, `planner` 4×, `release-pruefer` 1× — **vom `plan-pruefer` nie.**
+Dieselbe Klasse wie P7: *Ort ≠ Wirkung*, hier *Feldposition ≠ Urheberschaft*.
+
+**(2) Dieselbe Zählfalle, die der Planner heute gemeldet hat — bei mir zwei Stunden später.**
+Meine erste Zählung der Zustandscommits griff die **Zeile**:
+
+    A-41   Zeile 12   isoliert 6    UEBERZAEHLT (Faktor 2)
+    A-42   Zeile  3   isoliert 2    UEBERZAEHLT
+    A-43   Zeile  0   isoliert 0    gleich
+
+Für A-43 ändert es nichts (0 bleibt 0), für die Vergleichszahlen alles. Ich hatte die isolierte
+Extraktion in derselben Runde als richtig **abgenommen** (DoR A-43-4) und sie eine halbe Stunde
+später selbst nicht angewandt. **Ein Verfahren, das ich abnehme und nicht benutze, habe ich nicht
+verstanden, sondern nur durchgewinkt.**
+
+**Was ich NICHT tue:** Ich lege den Block nicht an. `docs/STATUS.md` schreibt allein der Integrator
+(CLAUDE.md §16), und §5 weist das Anlegen dem Schneidenden zu — beides nicht ich.
+
+**Ball: Planner** (Schnitt) **und Dirigent** (Zuweisung). Der Bau ist ausgelöst-gebunden und wartet
+ohnehin auf den Auflagen-Nachtrag; der Block sollte davor stehen, nicht danach — sonst schreibt der
+erste Bau-Commit einen Zustand in einen Datensatz, den es nicht gibt.
