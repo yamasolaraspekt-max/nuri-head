@@ -32404,3 +32404,58 @@ sind davon unberührt — sie ist dort ohnehin nicht enthalten, weil sie erreich
 
 Ball: **niemand.** §119 bleibt stehen und ist hier als überholt gekennzeichnet, nicht berichtigt —
 die Zahlen von damals waren richtig.
+
+## §408 — 1106 Zeilen, sieben Module, eine Kante: alles exakt. Und ich habe die Modulliste geraten, obwohl sie im Blatt steht
+
+Messstand: HEAD `cc7357fb`, Baum 0, gemessen 17:33–17:37. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §408'` → 0). Vorratsprüfung (b): eine tragende Zahl aus fremdem Bericht
+nachzählen.
+
+### Die Zahlen des Paket-2-Zuschnitts, einzeln nachgemessen
+
+    Modul                              Blatt   gemessen
+    geometry/dachAusschnitt.ts          531      531
+    geometry/dachTopologie.ts           183      183
+    geometry/schifterListe.ts           152      152
+    geometry/dachOeffnung.ts             96       96
+    geometry/sparrenTrennung.ts          67       67
+    projection/dachProjektion.ts         43       43
+    geometry/dachVorlage.ts              34       34
+    Summe                              1106     1106     EXAKT
+
+    Interne Kante: dachAusschnitt -> dachOeffnung   — und sonst keine.  BESTAETIGT
+
+**Sieben von sieben Zeilenzahlen stimmen, die Summe stimmt, die Kantenaussage stimmt.**
+
+### Mein Fehlgriff: geraten statt gelesen
+
+Mein erster Lauf ergab **3501 Zeilen** statt 1106 — eine Abweichung um mehr als das Dreifache. Ich
+hatte die Modulliste **geraten** (`dachformVorlagen`, `dachWerte`) statt sie aus der Tabelle im Blatt
+zu nehmen. `dachformVorlagen.ts` allein hat **2402 Zeilen** und gehört gar nicht zum Paket.
+
+**Und das siebte Modul hätte ich auch mit besserem Raten nicht gefunden:**
+`projection/dachProjektion.ts` liegt **außerhalb von `geometry/`** — mein Suchpfad hätte es
+strukturell verfehlt.
+
+**Dreizehnter Grundmengen-Fall heute, und der klarste:** Die richtige Liste stand die ganze Zeit im
+Blatt, in einer Tabelle mit Spaltenüberschriften. **Ich habe sie nicht gelesen, sondern aus dem
+Thema erschlossen.** Dieselbe Wurzel wie die geratenen Pfade in §382 (`app/tools/` statt `geometry/`)
+und §393 (`app/Http/Controllers/` statt `.../Product/IDS/gconline/`).
+
+> **Wenn eine Aussage eine Liste hat, ist die Liste die Grundmenge — nicht meine Vorstellung davon,
+> was auf der Liste stehen müsste.** Das Raten fühlt sich schneller an und kostet jedes Mal einen
+> zweiten Lauf.
+
+### Was die geprüfte Zahl trägt
+
+Der Zuschnitt baut darauf seinen Befund: *„Sieben Module … **genau eine** interne Kante … Die übrigen
+sechs sind untereinander unabhängig"* — und daraus folgt seine Reihenfolge-Kritik (*„die
+Anschluss-Entscheidung sagt: `dachVorlage` und `dachOeffnung` zuerst, `dachAusschnitt` zuletzt.
+`dachOeffnung`s EINZIGER Verbraucher IST `dachAusschnitt`"*). **Die Zahl trägt, also trägt der
+Befund.**
+
+Er ist **an mich mitadressiert, aber kein Ball** — Entscheidungsbedarf liegt beim Dirigenten. Ich
+habe die Grundlage geprüft, damit sie nicht ungeprüft in eine Entscheidung eingeht.
+
+Ball: **niemand von mir aus.** Der Stau unverändert: Integrator 95, Dirigent 90, Evaluator 67 Minuten
+still; Vorlage an Yama seit 17:29 offen.
