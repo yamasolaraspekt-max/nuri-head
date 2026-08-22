@@ -28900,3 +28900,67 @@ Definitionsdatei `geometry/aufbautenStatus.ts`), nicht 0.
 Planner (P-02 Punkt 3), damit er es vor der Meldung anfassen kann statt danach. **Ein Hinweis vor
 der Meldung spart die Runde, die eine Auflage kosten würde** — und genau das verlangt mein Auftrag
 gen 9 mit *„keine Auflagen-Schleife"*.
+
+## §353 — DoR Z1-W2-2 und Z1-W2-3: ERTEILT, ein Zeichen als Halbsatz
+
+Gewählt gegen HEAD `69b8f443` (Baum sauber, 14:35:41). §353 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok. **Prüfstand: Blatt `59c82dae`** (= Planner-HEAD).
+
+**Ball:** `planner-CODE_FERTIG-Z1-W2-2-und-3.yaml` (14:34:02), `ball: [plan-pruefer, planner]`,
+*„Plan-Prüfer: DoR für Z1-W2-2 und Z1-W2-3 (strukturgleich mit dem erteilten Z1-W2-1)."* Damit ist
+Paket 3 vollständig spezifiziert.
+
+**Beide Blätter, selbst gemessen:**
+
+    Z1-W2-2  174 Zeilen · 7 Kriterien · 7 N3-Matrixzeilen · N4-Abschnitt (8 Zeilen) · 7 Messbefehle
+             5 Absage-Regeln · Rueckweg · basis_sha 4611267e · Zielreifegrad BROWSERABGENOMMEN
+    Z1-W2-3  196 Zeilen · 7 Kriterien · 7 N3-Matrixzeilen · N4-Abschnitt (7 Zeilen) · 7 Messbefehle
+             5 Absage-Regeln · Rueckweg · basis_sha 4611267e · Zielreifegrad BROWSERABGENOMMEN
+
+Kriterien und Matrixzeilen sind in beiden **deckungsgleich**; N4 ist in beiden vorhanden — das ist
+der zweite und dritte Testfall der neuen Regel, beide bestanden.
+
+**Mein §350-Halbsatz ist bereits eingearbeitet.** Beide Rot-Lagen tragen ihn wörtlich:
+*„ohne `__tests__`/`__domtests__` **und die Datei selbst** → 0"*. **Die Erwartungsfrage aus Z1-W2-1
+stellt sich hier nicht mehr** — er hat sie mitgenommen, ohne dass es eine zweite Runde gekostet hat.
+*Das ist genau, wofür die Vorgabe „keine Auflagen-Schleife" da ist.*
+
+**Der eine verbliebene Mangel ist ein Zeichen — und er steht in beiden Blättern.** Selbst gefahren:
+
+    Blatt      wie im Blatt (grep -rl)   mit -E   mit -E ohne Definitionsdatei
+    Z1-W2-2            0                    1                 0
+    Z1-W2-3            0                    1                 0
+    Gegenprobe: bekannter Name mit -E -> 9 Dateien · erfundener -> 0
+
+**Ohne `-E` ist `|` in `grep` kein Alternativ-Zeichen.** Der Befehl sucht die Zeichenfolge *samt
+Pipes* und findet sie nie. **Er gibt 0 — und zwar auch nach dem Bau, wenn Verbraucher existieren.**
+Die Rot-Lage sähe dann unverändert aus, und die Abnahme müsste den Bau für wirkungslos halten.
+**Mit `-E` und dem bereits vorhandenen Ausschluss trifft die Erwartung `0` dagegen exakt** — die
+Zahl bleibt gleich, aber sie misst dann etwas.
+
+> **Halbsatz für beide Blätter:** `grep -rl` → **`grep -rlE`**. *(Alternativ `\|` statt `|`, wie es
+> Z1-W2-1 macht.)* Sonst nichts.
+
+## Votum: ERTEILT für Z1-W2-2 und Z1-W2-3
+
+Sieben Kriterien je Blatt, Matrix deckungsgleich, N4 vollständig, Rot-Lagen von mir an der tragenden
+Stelle nachgemessen, Rückweg und `basis_sha` vorhanden. **Der Mangel ist ein Zeichen und steht
+oben** — keine zweite Runde.
+
+**Was ich mir selbst zuschreibe: mein Hinweis kam zu spät.** Ich habe den Pipe-Fehler um **14:33:56**
+als frühen Hinweis abgelegt (§352, ausdrücklich ohne Votum, weil das Blatt damals ungetrackt war).
+Seine Meldung fiel um **14:34:02** — **sechs Sekunden später**, und sein Lauf hatte um 14:27:52
+begonnen. **Der Hinweis konnte nicht mehr wirken.** *Das ist derselbe Zustellabstand, den ich heute
+viermal bei anderen gemessen habe (B-008, Lesesitzung, §341, N4-Regel) — jetzt an mir, und in der
+Richtung, die ich nicht bedacht hatte: nicht zu spät gelesen, sondern zu spät geschrieben.*
+**Ein früher Hinweis nützt nur, wenn er vor dem Prozessstart des anderen liegt, nicht vor seiner
+Meldung.**
+
+**Was er aufgenommen hat, und das gehört gewürdigt.** Meinen §349-Befund hat er nachgemessen und
+die Registerlücke geschlossen — mit eigener Tabelle *„Typmodul — kein Anschluss, kein Rückstand"*.
+Und er benennt die Ursache der Zahlendifferenz selbst: *„er maß 0 über den vollen Pfad, ich 1 über
+den bloßen Namen. Eine Nennung im Fließtext ist keine Registerzeile. Ort ist nicht Wirkung."*
+**Das ist P7 in seinen Worten, an seiner eigenen Zahl.**
+
+**Ball: Planner** (ein Zeichen in zwei Blättern) · Paket 3 ist damit aus meiner Sicht vollständig
+spezifiziert und baureif.
