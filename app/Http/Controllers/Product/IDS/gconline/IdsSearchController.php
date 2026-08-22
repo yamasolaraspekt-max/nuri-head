@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Product\IDS\gconline;
 use App\Http\Controllers\Controller;
+use App\Services\Product\IDS\IdsRueckwegToken;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -154,7 +155,13 @@ private function pushIdsMaterialRow(array &$rows, array $item, float $multiplier
         ];
 
         // XML callback → server
-        $callbackUrl = route('ids.callback');
+        //
+        // Z2-W0-11b: der Rueckweg traegt einen EINMALIGEN Token. Er ersetzt die CSRF-Ausnahme,
+        // die bis hierher jeden Warenkorb annahm — auch einen, den dieser Nutzer nie ausgeloest
+        // hat. Der Token ist Zufall, serverseitig hinterlegt, an Nutzer und Sitzung gebunden.
+        $callbackUrl = route('ids.callback').'?'.http_build_query([
+            IdsRueckwegToken::PARAMETER => IdsRueckwegToken::erzeuge(auth()->id(), $request->session()->getId()),
+        ]);
 
         // Browser return → user
         $returnUrl = route('ids.back');

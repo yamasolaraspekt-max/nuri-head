@@ -18,6 +18,7 @@ use App\Models\Measure;
 use App\Services\Product\Identity\IdentityMatch;
 use App\Services\Product\Identity\ProductIdentity;
 use App\Services\Product\Identity\ProductIdentityService;
+use App\Services\Product\IDS\IdsRueckwegToken;
 
 class IdsController extends Controller
 {
@@ -33,6 +34,25 @@ class IdsController extends Controller
     public function callback(Request $request)
     {
         Log::info("🟦 IDS CALLBACK HIT", ['query' => $request->query()]);
+
+        // ── Z2-W0-11b — DIE WACHE, VOR ALLEM ANDEREN ────────────────────────────────────────
+        //
+        // **Hier und nicht weiter unten.** Das Blatt laesst eine Pruefung nach dem Parsen zu,
+        // aber nicht nach dem ersten `create` — *ein zurueckgerollter Import ist kein
+        // verhinderter Import; `autoPromoteItem` fasst Produkt, Lieferant und Preis an.*
+        // Vor der Schleife zu pruefen genuegte; vor dem Parsen ist es unmissverstaendlich.
+        //
+        // `$auto` wird ERST WEITER UNTEN gelesen (Kriterium c): ein Aufruf mit `?auto=1` und
+        // ungueltigem Token kommt gar nicht bis dorthin.
+        $rueckweg = IdsRueckwegToken::verbrauche($request->query(IdsRueckwegToken::PARAMETER), auth()->id());
+        if ($rueckweg === null) {
+            Log::warning("❌ IDS CALLBACK ABGEWIESEN — kein gueltiger State-Token", [
+                'hat_parameter' => $request->query(IdsRueckwegToken::PARAMETER) !== null,
+                'user_id'       => auth()->id(),
+            ]);
+
+            return response('IDS-Rueckweg ohne gueltigen State-Token.', 403);
+        }
 
         $xml = $request->input('warenkorb');
         Log::info("🟦 IDS XML RECEIVED", ['xml' => $xml]);
@@ -66,7 +86,10 @@ class IdsController extends Controller
         //
         // Eine `uid` in der Query wird bewusst NICHT mehr gelesen, auch nicht als Rueckfall.
         // Ein Rueckfall waere genau das Loch: wer ihn ausloest, bestimmt wieder frei.
-        $userId = auth()->id();
+        // Z2-W0-11b: der Importeur kommt aus dem VERBRAUCHTEN Token — dem serverseitigen
+        // Eintrag des Absprungs. `auth()->id()` bleibt der Rueckfall fuer den Browser-Weg.
+        // Aus der Query kommt er weiterhin NICHT (Teil A).
+        $userId = $rueckweg['user_id'] ?? auth()->id();
         $auto   = $request->query('auto') == '1';
 
         Log::info("🟦 IDS meta", ['batch_id' => $batchId, 'user_id' => $userId, 'auto' => $auto]);

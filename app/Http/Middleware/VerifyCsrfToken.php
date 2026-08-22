@@ -14,10 +14,6 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         'fusion/webhook/ajax',
         'ai/chats/*/message',
-        // Z2-W0-11 Teil B (nach Y-12): der IDS-Rueckweg soll statt dieser Ausnahme einen
-        // signierten State tragen. Bis dahin bleibt sie stehen — mit Teil A ist die
-        // Fremdzuschreibung bereits weg (uid kommt aus der Sitzung, nicht aus der Query).
-        'ids/callback',
         'offers/document/presence/leave',
         'admin/supplier-connectors/*/return',
         'admin/offers/folders/*/supplier/*/return',
