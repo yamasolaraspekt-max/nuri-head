@@ -66,7 +66,7 @@ Zieldatei werkzeugBedienbar.dom.test.ts               EXISTIERT NICHT
 | | |
 |---|---|
 | **Bedienweg** | **keiner.** Dies ist ein Messgerät, kein Werkzeug. |
-| **Auslöser** | der Vitest-Lauf, und ab Erteilung **jede** Browser-/Bedienbarkeitsabnahme |
+| **Auslöser** | der Lauf von `npm run test:hausplaner:dom`, und ab Erteilung **jede** Browser-/Bedienbarkeitsabnahme |
 | **Ort** | `__domtests__/werkzeugBedienbar.dom.test.ts` |
 | **tragendes Werkzeug** | **keines** — das Blatt trägt alle |
 | **Zielreifegrad** | entfällt (es wird nicht bedient, es misst) |
@@ -99,7 +99,7 @@ Zieldatei werkzeugBedienbar.dom.test.ts               EXISTIERT NICHT
   **aktivieren → Leiste zeigt aktiv → eine Aktion → Szene messbar geändert → `Escape` stellt zurück.**
   Jeder Schritt ist eine eigene Zusage; ein Schritt, der nicht messbar ist, macht den Fall rot.
 
-  **Messbefehl:** Vitest-Lauf der Datei; im Bericht je Werkzeug die fünf Teilzusagen mit ihrem
+  **Messbefehl:** `npm run test:hausplaner:dom`; im Bericht je Werkzeug die fünf Teilzusagen mit ihrem
   Ergebnis.
 
   **Heutiges (rotes) Ergebnis:** keine Probe vorhanden → **0 von 10** belegt.
@@ -193,10 +193,23 @@ Zieldatei werkzeugBedienbar.dom.test.ts               EXISTIERT NICHT
 
   **Messbefehl:**
   ```
-  ORT: Vitest im Repo-Wurzelverzeichnis, Zieldatei
-       __domtests__/werkzeugBedienbar.dom.test.ts
+  ORT: npm run test:hausplaner:dom   (der im Repo VORHANDENE Laeufer)
+       = ./scripts/node-runtime.sh --experimental-strip-types
+         --import ./resources/planner/hausplaner/dom-register.mjs
+         --test "resources/planner/hausplaner/__domtests__/*.test.ts"
+       Zieldatei: __domtests__/werkzeugBedienbar.dom.test.ts
   Bericht nennt: Befehl · Fallzahl · Exit · Stand-SHA
   ```
+
+  > **Berichtigung (Generator-Befund 15:35:07, selbst nachgemessen):** hier stand **„Vitest"**.
+  > **Vitest gibt es in diesem Repo nicht** — `grep -c vitest package.json` → **0**,
+  > `node_modules/vitest` fehlt. Die fünf vorhandenen DOM-Proben laufen über `node --test` mit
+  > Typen-Strip und einem DOM-Register.
+  > *Ich habe ein Werkzeug benannt, ohne zu messen, ob es existiert* — dieselbe Klasse wie der
+  > `$`-Anker und das fehlende `-E`: **ein Messbefehl, den niemand ausführen kann.**
+  > **Der Generator hat richtig gehandelt:** gemeldet statt nachgebaut. *Vitest einzuführen wäre
+  > eine Abhängigkeit im Wurzel-`package.json` gewesen — Code außerhalb der Insel (gegen `-g`) und
+  > ein zweites Testwerkzeug neben dem vorhandenen.*
 
   **Heutiges (rotes) Ergebnis:** kein Befehl vorhanden.
 
@@ -219,14 +232,14 @@ Zieldatei werkzeugBedienbar.dom.test.ts               EXISTIERT NICHT
 
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
-| Z1-W2-0-a über TOOL_DEFINITIONS | AP-1 Probengerüst | n.U. | n.U. |
-| Z1-W2-0-b fünfteilige Kette | AP-2 Teilzusagen | n.U. | n.U. |
-| Z1-W2-0-c ohne Kürzel über die Leiste | AP-2 (Wegwahl aus dem Feld) | n.U. | n.U. |
-| Z1-W2-0-d 13 von 13 erfasst | AP-3 Vollzähligkeit + Ausnahmen | n.U. | n.U. |
-| Z1-W2-0-e Rot-Probe ausgelöst | AP-4 Wegwerf-Aufbau | n.U. | n.U. |
-| Z1-W2-0-f neuer Eintrag wird erfasst | AP-4 (14. Eintrag) | n.U. | n.U. |
-| Z1-W2-0-g kein Produktcode | AP-5 Diff-Beleg | n.U. | n.U. |
-| Z1-W2-0-h Befehl mit Ort | AP-5 (Bericht) | n.U. | n.U. |
+| Z1-W2-0-a über TOOL_DEFINITIONS | AP-1 Probengerüst | `ee6ce517` | Fallzahl **folgt** der Registry; Reihenfolge zeichengleich. Kein Werkzeugname im Testcode außer den zwei erfundenen Prüf-Einträgen |
+| Z1-W2-0-b fünfteilige Kette | AP-2 Teilzusagen | `ee6ce517` | je Werkzeug: Weg trägt · aktiv · Wirkung zugesagt · Escape stellt auf `auswahl` zurück |
+| Z1-W2-0-c ohne Kürzel über die Leiste | AP-2 (Wegwahl aus dem Feld) | `ee6ce517` | `bemassen · flaeche-messen · trimmen` → alle drei über **anheften**, keiner über die Taste, keiner übersprungen |
+| Z1-W2-0-d 13 von 13 erfasst | AP-3 Vollzähligkeit + Ausnahmen | `ee6ce517` | **12 grün + 1 benannter Bauvorrat** (`bemassen`, Landkarte `fehlt`); 3 Aktionen einzeln begründet ausgenommen |
+| Z1-W2-0-e Rot-Probe ausgelöst | AP-4 (Parameter statt Dateibaum) | `ee6ce517` | erfundener Eintrag ohne Weg → `weg='keiner'`, Fall **nicht grün**, Meldung nennt seine id; Gegenprobe ohne ihn → 0 Fehler |
+| Z1-W2-0-f neuer Eintrag wird erfasst | AP-4 (14. Eintrag) | `ee6ce517` | **13 → 14 Fälle**, der neue über freies Kürzel `Q` aktivierbar und grün |
+| Z1-W2-0-g kein Produktcode | AP-5 Diff-Beleg | `ee6ce517` | Diff = **eine** Datei unter `__domtests__/`; `toolRegistry.ts` unberührt |
+| Z1-W2-0-h Befehl mit Ort | AP-5 (Bericht) | `ee6ce517` | `npm run test:hausplaner:dom` → **36/36**, Exit 0. ⚠ Blatt nennt Vitest; das gibt es hier nicht (gemeldet) |
 
 ## Rückweg
 

@@ -56,6 +56,10 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
 6h. **`sitzung_erwartet` / `sitzung_gesperrt` sind VERMERKE** (externe Prüfung 22.08. 14:23): das Tor erzwingt sie nicht; den Riegel
     tragen heute ACK + Generation/Digest/Aktion (A-37-22e) — eine nicht registrierte Sitzung hat keine gültige ACK. Die technische Bindung
     Sitzung ↔ Lease ↔ Commit kommt mit Z0-I3 (Backlog 17). Bis dahin ergänzt die Dirigenten-Prozess-Sperre (Dauersperre) den Vermerk.
+6i. **Transport vor Browserabnahme (Spur W, Dirigent 22.08. 15:32):** Spur-W-Bauten (Hausplaner-Insel, Revert als Rückweg) werden nach
+    CODE_FERTIG **vor** der Abnahme in die Integration transportiert, weil `http://ticket.test` den Integrations-Checkout bedient; Zustand
+    bleibt CODE_FERTIG bis zum Votum; NACHBESSERN = vorwärts nachbauen, NICHT bedienbar + Rückweg = Revert des Transports. Spur A (Rechte/
+    DB/Auth): Transport erst nach ABGENOMMEN.
 6b. **Antworten des Dirigenten** stehen unter `ereignisse/<auftrag_id>/dirigent-*.yaml` — bei jedem Pull mitlesen.
 6f. **AUFGEHOBEN 22.08. 14:11 — Tor-Wörter zurückgenommen:** A-43 Posten 2 (Aktionsvokabular) ist abgenommen und transportiert; alle sieben
     Rollenquellen tragen wieder Rollenverben (steuern · spezifizieren · pruefen · abnehmen/nachpruefen · bauen/warten · parken ·
