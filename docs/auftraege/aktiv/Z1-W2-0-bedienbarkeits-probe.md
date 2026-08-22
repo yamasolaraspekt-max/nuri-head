@@ -66,7 +66,7 @@ Zieldatei werkzeugBedienbar.dom.test.ts               EXISTIERT NICHT
 | | |
 |---|---|
 | **Bedienweg** | **keiner.** Dies ist ein Messgerät, kein Werkzeug. |
-| **Auslöser** | der Vitest-Lauf, und ab Erteilung **jede** Browser-/Bedienbarkeitsabnahme |
+| **Auslöser** | der Lauf von `npm run test:hausplaner:dom`, und ab Erteilung **jede** Browser-/Bedienbarkeitsabnahme |
 | **Ort** | `__domtests__/werkzeugBedienbar.dom.test.ts` |
 | **tragendes Werkzeug** | **keines** — das Blatt trägt alle |
 | **Zielreifegrad** | entfällt (es wird nicht bedient, es misst) |
@@ -99,7 +99,7 @@ Zieldatei werkzeugBedienbar.dom.test.ts               EXISTIERT NICHT
   **aktivieren → Leiste zeigt aktiv → eine Aktion → Szene messbar geändert → `Escape` stellt zurück.**
   Jeder Schritt ist eine eigene Zusage; ein Schritt, der nicht messbar ist, macht den Fall rot.
 
-  **Messbefehl:** Vitest-Lauf der Datei; im Bericht je Werkzeug die fünf Teilzusagen mit ihrem
+  **Messbefehl:** `npm run test:hausplaner:dom`; im Bericht je Werkzeug die fünf Teilzusagen mit ihrem
   Ergebnis.
 
   **Heutiges (rotes) Ergebnis:** keine Probe vorhanden → **0 von 10** belegt.
@@ -193,10 +193,23 @@ Zieldatei werkzeugBedienbar.dom.test.ts               EXISTIERT NICHT
 
   **Messbefehl:**
   ```
-  ORT: Vitest im Repo-Wurzelverzeichnis, Zieldatei
-       __domtests__/werkzeugBedienbar.dom.test.ts
+  ORT: npm run test:hausplaner:dom   (der im Repo VORHANDENE Laeufer)
+       = ./scripts/node-runtime.sh --experimental-strip-types
+         --import ./resources/planner/hausplaner/dom-register.mjs
+         --test "resources/planner/hausplaner/__domtests__/*.test.ts"
+       Zieldatei: __domtests__/werkzeugBedienbar.dom.test.ts
   Bericht nennt: Befehl · Fallzahl · Exit · Stand-SHA
   ```
+
+  > **Berichtigung (Generator-Befund 15:35:07, selbst nachgemessen):** hier stand **„Vitest"**.
+  > **Vitest gibt es in diesem Repo nicht** — `grep -c vitest package.json` → **0**,
+  > `node_modules/vitest` fehlt. Die fünf vorhandenen DOM-Proben laufen über `node --test` mit
+  > Typen-Strip und einem DOM-Register.
+  > *Ich habe ein Werkzeug benannt, ohne zu messen, ob es existiert* — dieselbe Klasse wie der
+  > `$`-Anker und das fehlende `-E`: **ein Messbefehl, den niemand ausführen kann.**
+  > **Der Generator hat richtig gehandelt:** gemeldet statt nachgebaut. *Vitest einzuführen wäre
+  > eine Abhängigkeit im Wurzel-`package.json` gewesen — Code außerhalb der Insel (gegen `-g`) und
+  > ein zweites Testwerkzeug neben dem vorhandenen.*
 
   **Heutiges (rotes) Ergebnis:** kein Befehl vorhanden.
 
