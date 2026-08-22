@@ -33859,3 +33859,83 @@ für einen Federstrich hält, plant dieses Fenster nicht ein.
 Ball: **Integrator** (den Vollständigkeitsbeleg im `dor_beleg`-Feld ergänzen; P-02-Tafelzeile) ·
 **Dirigent** (die Trennung Kriterien-DoR / Vollständigkeitsprüfung, damit sie beim nächsten
 Sammelblatt nicht wieder zusammenfällt).
+
+## §426 — Meldepflichten Z1-W2-5: vollständig erfüllt. Mein Prüfmuster ist trotzdem gescheitert — die Meldung führt zwei Feldnamen, die es je einmal gibt
+
+Messstand: HEAD `3cd05d5e`, Baum 0, gemessen 18:52–18:56. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §426'` → 0). Punkt 3 der Wache: **CODE_FERTIG → Meldepflichten, Scope-Diff
+selbst gemessen, Ballwechsel bestätigen.** Z1-W2-5 ist ein Blatt, für das ich um 16:42:40 DoR
+erteilt habe.
+
+### Die Meldepflichten sind erfüllt — selbst gemessen
+
+    ausgangs_sha  171284e9   commit   existent
+    endstand_sha  171284e9   commit   existent
+    ergebnis_sha  5617dc4c   commit   existent      alle drei IN EINEM FELD
+
+    Scope-Diff, von mir am Commit gemessen (nicht aus der Meldung uebernommen):
+      resources/planner/hausplaner/app/rahmen/EigenschaftenPanel.tsx
+      resources/planner/hausplaner/app/rahmen/WandflaechenAnzeige.tsx
+      ausserhalb resources/planner/hausplaner:  0
+
+    Ballwechsel  [evaluator, dirigent]   korrekt fuer CODE_FERTIG
+
+**Und die `pfade:`-Liste der Meldung deckt sich exakt mit meinem Diff.** Zwei Dateien, keine
+Überraschung.
+
+### Mein Prüfmuster ist gescheitert, und das ist der eigentliche Befund
+
+Ich habe nach `kennung:` und `blattpfad:` gesucht — beide gaben nichts, meine erste Ausgabe legte
+„FEHLT" nahe. **Beide Angaben sind da, unter anderen Namen:**
+
+    auftrag: "Z1-W2-5"
+    blatt:   "docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md @ rolle/planner 3daf4f1e"
+
+Über alle **54** CODE_FERTIG-Meldungen gemessen:
+
+    Kennungsfeld   kennung    27   ·  auftrag_id  54  ·  auftrag   1
+    Blattbezug     blattpfad  25   ·  blatt_sha   27  ·  blatt     1  ·  mess_sha  8
+
+**`auftrag:` und `blatt:` kommen je genau EINMAL vor — in dieser Meldung von 18:52:39.**
+
+### Und die neue Form ist BESSER, nicht schlechter
+
+    bisher:  blattpfad: docs/auftraege/aktiv/Z1-W2-5-….md
+             blatt_sha: 3daf4f1e                        (zwei Felder, Zweig ungenannt)
+
+    hier:    blatt: "docs/auftraege/aktiv/Z1-W2-5-….md @ rolle/planner 3daf4f1e"
+                                                        (Pfad UND Zweigstand in einem)
+
+**Der Zweig steht dabei** — genau die Angabe, deren Fehlen ich in §414 als Blattdrift gemeldet habe
+und die in §424 die verschobenen Zeilennummern erklärte. **Inhaltlich ist das ein Fortschritt.**
+
+**Das ist das Unangenehme daran:** Eine Verbesserung, die den Feldnamen ändert, bricht jedes
+Prüfmuster, das auf den alten Namen zielt. Hätte ich nicht den Kopf im Ganzen gelesen, hätte ich
+zwei fehlende Pflichtangaben gemeldet — bei einer Meldung, die **mehr** liefert als verlangt.
+
+> **Dieselbe Klasse wie §411 an mir selbst:** dort führte ich `zeit_der_messung` neben `zeit`, und
+> wer `zeit` las, fand 91 von 110. Hier ist es umgekehrt — ich bin diesmal der Leser, der das Feld
+> nicht findet.
+
+**Regel an mich, verschärft:** Ein Pflichtfeld wird über die **Frage** gesucht (*„ist der Blattbezug
+belegt?"*), nicht über den **Namen** (*„gibt es `blattpfad:`?"*). Bei einer Fehlanzeige wird der Kopf
+gelesen, bevor „fehlt" gemeldet wird. Genau das ist die Wache-Regel *„Grundmenge gegen die Frage
+prüfen statt gegen das Verfahren"* — angewandt auf Feldnamen.
+
+### Eine Klärung, die ich zuerst für einen Widerspruch hielt
+
+Die Meldung liegt unter `auftrag_id: BAU-generator-spur-V-1`, aber Z1-W2-5 ist ein **Spur-W-Blatt**
+mit **eigenen** Kriterien (`Z1-W2-5-a`, `-b`, …), nicht V-1..V-6. Ich hielt das für eine Vermischung
+— **es ist keine.** Das Feld `herkunft:` erklärt es:
+
+> *„Beauftragt unter gen 19 (`BAU-generator-welle-1b`), geliefert unter gen 20 Posten 0."*
+
+Die Auftrags-ID ist der **Ablageordner der Generation**, nicht die Spur des Blattes. **Deshalb fehlt
+das Bündel im Commit zu Recht** — die Bündel-Regel von 16:02 gilt hier, nicht V-5.
+
+**Ohne das `herkunft:`-Feld wäre das eine Rückfrage gewesen.** Es ist die zweite Meldung heute, die
+durch eine offengelegte Herkunft eine Runde spart — die erste war der Integrator in §425.
+
+Ball: **niemand von mir** — Meldepflichten erfüllt, Ballwechsel an Evaluator und Dirigent bestätigt.
+Der Feldnamen-Befund ist eine Notiz, keine Forderung: **die neue Form ist die bessere**, und wenn sie
+sich durchsetzt, ziehen die Prüfmuster nach, nicht umgekehrt.
