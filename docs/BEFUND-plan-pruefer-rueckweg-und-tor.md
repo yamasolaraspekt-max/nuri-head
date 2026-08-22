@@ -36082,3 +36082,73 @@ Ball: **Evaluator** (die Bewertung, wie der Planner sie zuweist) · **bei mir** 
 benannt. Der offene Ball aus §447 (**Integrator**) steht unverändert; Stille dort **40 Minuten**,
 und der Rückstau ist auf **vier** Zweigstände gewachsen: `ad2ac724`, `51b0ddfb`, `1567f9f9`,
 `0d10461d` — keiner in der Integration.
+
+## §452 — BERICHTIGUNG meiner §439-Zahl: es sind DREI Stellen, nicht zwei. Und die dritte ist ausgerechnet das Kriterium des Tests aus §443
+
+Messstand: HEAD `ca59b59a`, Baum 0 · gemessen 20:30–20:32. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §452'` → 0). **Stopp-Regel: eigene Zahl berichtigt, bevor etwas anderes
+geschieht.** Anlass: `planner-frage-z0i1-gegenprobe-nennt-produktiv-db.yaml` (20:08:15) — **zitiert,
+nicht nachgebaut**; die dritte Stelle ist sein Fund, die Gegenprobe ist meine.
+
+### Meine Aussage in §439 war unvollständig
+
+> §439: *„**Zwei Stellen**, zwei verschiedene Handlungen unter derselben Sache."*
+
+**Selbst gemessen am Stand `d2890e85`** (`docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md`,
+592 Zeilen, Positivkontrolle bestanden):
+
+    :179  Z0-I1-2   „Lauf gegen `ticket` (per Env SIMULIERT) bricht ab"
+    :433  Z0-I1-10  „Gegenprobe: ein Lauf gegen 'ticket' (per Env ERZWUNGEN) -> fail closed"
+    :467  (Beleg)   „Lauf gegen 'ticket' (per Env SIMULIERT) -> Abbruch, Rueckgabe != 0"
+
+    Zahl der Stellen: 3      davon „simuliert" 2  ·  „erzwungen" 1
+
+**Es sind drei, nicht zwei.** Ich hatte `:179` nicht — und das ist keine Kleinigkeit, sondern die
+Stelle, auf die es ankommt.
+
+### Warum die dritte Stelle die wichtigste ist — sie schließt die Kette zu §443
+
+`:179` ist **Z0-I1-2**. Und der Test aus meinem Sicherheitsbefund §443 heißt:
+
+    tests/Unit/TestDatenbankGuardTest.php
+      :74  public function test_z0i1_2_die_produktionsdatenbank_wird_abgewiesen(): void
+      :76      $this->verbindeMit('ticket');        <- ECHTE Verbindung (DB::purge/reconnect)
+
+> **Das Kriterium, das dieser Test umsetzt, sagt „SIMULIERT".** Nicht „erzwungen". **Der Test hat
+> die scharfe Lesart aus einem ANDEREN Kriterium genommen — aus `:433`, das gar nicht seines ist.**
+>
+> Damit steht die Ursachenkette vollständig, und sie ist eine andere als in §443 vermutet:
+>
+>     :179  Z0-I1-2  „simuliert"   <- das Kriterium DIESES Tests. Verlangt KEINE echte Verbindung.
+>     :433  Z0-I1-10 „erzwungen"   <- ein anderes Kriterium. Verlangt sie.
+>     Test  verbindet ECHT                     -> folgt :433, obwohl er :179 umsetzt
+
+**Das entlastet den Testautor teilweise und verschärft den Blattmangel.** Wer ein Blatt liest, in dem
+dieselbe Handlung dreimal steht und einmal anders heißt, nimmt irgendeine der drei — und hier war es
+die schärfste. **Der Widerspruch hat nicht nur zwei Lesarten erlaubt, er hat die verbotene
+nahegelegt.**
+
+### Was der Planner richtig macht
+
+    Sein Blatt liegt unter  docs/auftraege/generator-auftrag-z0-i1-…md
+    Seine erlaubten Pfade   docs/auftraege/AKTIV/ , docs/konzept/ , werkzeug-register.md , REGISTER.md
+    -> AUSSERHALB. „Ich melde und aendere nicht. Ich brauche entweder eine Pfaderweiterung oder
+       eine ausdrueckliche Zuweisung."
+
+Und er übernimmt die Verantwortung ohne Umweg: *„Die Mehrdeutigkeit ist MEIN Mangel, nicht seiner"*
+und *„Ein Kriterium darf nicht die Handlung verlangen, die die Hausregel verbietet."* **Er hätte den
+Pfad überschreiten und es still beheben können — beides wäre unbemerkt geblieben.**
+
+### Die Lehre an mich, und sie ist dieselbe wie in §451
+
+**In §451 habe ich gerade geschrieben:** *„Ein Kriterium, das eine ZAHL nennt, ist eine Behauptung
+über den Bestand."* **In §439 war ICH derjenige, der eine Zahl behauptet hat — „zwei Stellen" —
+ohne die Grundmenge auszuzählen.** Ich habe die zwei genommen, die den Widerspruch bildeten, und
+nicht gefragt, ob es weitere gibt.
+
+> **Grundmenge gegen die Frage prüfen statt gegen das Verfahren.** Meine Frage war *„wo widerspricht
+> sich das Blatt?"* — dafür reichten zwei. Die richtige Frage war *„wo verlangt das Blatt einen Lauf
+> gegen `ticket`?"* — und darauf sind es drei. **Dieselbe Datei, dieselbe Minute, andere Zahl.**
+
+Ball: **unverändert Dirigent/Yama** (§443/§444 Regelfrage · jetzt zusätzlich die Pfadfrage des
+Planners: wer darf das Z0-I1-Blatt ändern) · **Planner** hat gemeldet und wartet auf Zuweisung.
