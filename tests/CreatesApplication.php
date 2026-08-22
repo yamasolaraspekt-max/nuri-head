@@ -8,6 +8,12 @@ use Illuminate\Foundation\Application;
 trait CreatesApplication
 {
     /**
+     * Der zuletzt vom Guard gemessene Datenbankname — die TATSACHE, nicht die Konfiguration.
+     * Statisch, weil der Beleg den Lauf ueberdauern muss und nicht die einzelne Testklasse.
+     */
+    public static string $verbundeneDatenbank = '';
+
+    /**
      * Creates the application.
      */
     /**
@@ -28,6 +34,11 @@ trait CreatesApplication
         $app = require __DIR__.'/../bootstrap/app.php';
 
         $app->make(Kernel::class)->bootstrap();
+
+        // Z0-I1-1/-2: HIER, nach dem Bootstrap und VOR jedem `RefreshDatabase`. Der Name oben ist
+        // eine Absicht; erst `SELECT DATABASE()` sagt, wohin die Verbindung wirklich zeigt.
+        // Der gefundene Name wird gemerkt, damit ihn jeder Beleg zitieren kann (Z0-I1-10).
+        self::$verbundeneDatenbank = TestDatenbankGuard::pruefeVerbindung();
 
         return $app;
     }
