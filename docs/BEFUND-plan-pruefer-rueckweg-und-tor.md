@@ -27014,3 +27014,61 @@ dessen Abdeckung mit ihm entsteht.
 89 Blätter) oder C (Z-Aufträge ohne maschinellen Zustandswechsel, im Blatt gesagt). Von uns beiden ist
 der Anteil gemeldet; die Entscheidung gehört nicht dem, der die Lücke übersehen hat, und nicht dem,
 der sie geschrieben hat.
+
+## §324 — Der Realfall zu §322, sechzehn Sekunden alt: die Evaluator-Lease ist abgelaufen, der Inhaber arbeitet, und es gibt keinen Weg, den Heartbeat zu erneuern
+
+**Messstand** `575d4402` · Baum sauber · 0 neue Commits seit §323 · Integrationszweig `63452c63` →
+`d5e9e405`. Ballortung dreiseitig **1 · 6 · 14**, nichts angekommen.
+
+### Die Lage, live gemessen
+
+```
+Lease NACHPRUEFUNG-evaluator-A-37/active/   erteilt 11:15:50 · heartbeat_bis 11:55:50 (40 min)
+jetzt 11:56:06                              -> ABGELAUFEN, active/ steht noch
+Inhaber: sitzungs_id 303cefb6… = PID 87995, STAT S, läuft seit 08:43  -> LEBT
+sein Baum: HEAD e39cbccc unverändert · 0 Commits seit Lease-Beginn · letzte Reflog-Bewegung 10:50:57
+Heartbeat-Erneuerung in scripts/: 0 Treffer
+```
+
+**§8 der Agentenarchitektur sagt:** *„`active/` darf nur entfernt werden, wenn `heartbeat_bis`
+verstrichen ist."* Es **ist** verstrichen. Nach der Regel dürfte jetzt jede andere Rolle die Lease
+übernehmen — **während der Inhaber lebt.**
+
+### Warum das kein Vorwurf ist
+
+Der Evaluator hat nichts falsch gemacht. Er hat beim Ziehen eine Frist von 40 Minuten geschrieben,
+die Arbeit dauert länger — beim **ersten** Votum lagen zwischen Lease und Votum-Commit **32 Minuten**,
+diesmal sind es bisher **40**. Eine Abnahme misst, sie committet erst am Ende; kein Commit heißt nicht
+kein Fortschritt. *(Ich messe seinen Baum, weil das der einzige von außen sichtbare Fortschritt ist —
+er ist ausdrücklich **kein** Beleg dafür, dass nichts geschieht.)*
+
+**Das Entscheidende ist der letzte Messwert:** `heartbeat_bis` wird in **keinem** Skript erneuert.
+Wer eine Lease zieht, setzt die Frist **einmal** — und wenn sie zu kurz war, gibt es keinen Weg, sie
+zu verlängern. Es bleibt nur, die Lease freizugeben und neu zu ziehen, was den `fencing_token`
+hochzählt und wie ein Neustart aussieht.
+
+### Das ist §322 als Realfall
+
+Dort schrieb ich: *„Die Sperrdauer bestimmt der Gesperrte selbst."* Der Fall zeigt die andere Hälfte
+derselben Sache: **er bestimmt sie einmal und dann nie wieder.** Beides zusammen:
+
+```
+Frist frei wählbar (§322)        20 · 30 · 33 · 37 · 40 · 45 · 56 · 151 min, keine Regel
+Frist nicht verlängerbar (hier)  0 Skripte erneuern heartbeat_bis
+Folge                            zu kurz gewählt -> Lease läuft unter laufender Arbeit ab
+                                 zu lang gewählt -> Übernahme blockiert (bis 151 min)
+```
+
+**Es gibt keine Wahl, die beides vermeidet** — und genau deshalb ist die Frist ohne
+Erneuerungsmechanismus keine gute Sperre. Yamas Zielregel Punkt 4 (*Übernahme nur bei abgelaufenem
+Heartbeat*) hängt an einem Wert, der weder einheitlich noch nachführbar ist.
+
+### Was ich NICHT tue
+
+**Ich übernehme nichts, räume nichts auf und fordere nichts.** Die Lease gehört dem Evaluator, sein
+Prozess lebt, und §8 erlaubt die Übernahme — sie ist damit nicht geboten. *„Das Tor meldet und lässt
+durch; die Übernahme verlangt zusätzlich einen abgelaufenen Heartbeat und gehört der Claim-Sperre
+(Z0-I2), nicht einem Commit-Haken"* — so steht es im Bau des Generators, und so halte ich es.
+
+**Ball:** Vorrat Z0-I2 (Planner), zusammen mit §322 und dem Zeitformat-Befund · nachrichtlich Dirigent
+und Evaluator, damit niemand die abgelaufene Lease für verwaist hält, während der Inhaber misst.
