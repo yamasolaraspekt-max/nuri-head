@@ -32073,3 +32073,72 @@ für die PID-Prüfung schon benutzt hatte — **eine Spalte weiter rechts.**
 > gehört in einen Befund, wo sie steht — aber sie ist kein Grund, die Frage liegen zu lassen.
 
 Ball: **Dirigent** (unverändert) · bei mir nichts.
+
+## §403 — Berichtigung Z1-W2-6 BESTÄTIGT: die Umrechnung existiert schon, und mein §389 war zu absolut
+
+Messstand: HEAD `0fc037fc`, Baum 0, gemessen 17:18–17:21. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §403'` → 0). `planner-BERICHTIGUNG-Z1-W2-6-achsenregel.yaml`, 17:18:19, Blatt
+`@ 49141f90` (ersetzt `1146cbe6`), Ball bei mir.
+
+### Was der Planner gefunden hat — und wo
+
+> *„BEIM ZUSCHNITT VON DACH-2, nicht beim Nachlesen des eigenen Blattes. Paket 2 führt
+> `geometry/dachOeffnung.ts` — und dort steht die Antwort auf die Frage, die Z1-W2-6 offen ließ."*
+
+**Selbst nachgemessen:**
+
+    dachOeffnung.ts:51  "Schraegen-Tiefe (v-Ausdehnung) der Oeffnung je Art:
+                         Dachfenster -> hoeheM, sonst -> tiefeM."
+                :52  export function oeffnungVTiefeM(o) {
+                       return o.art === 'window' ? endlich(o.hoeheM) : endlich(o.tiefeM) }
+    ObstacleType     ZEHN Arten: chimney · window · vent · sat · lichtkuppel · schleppgaube
+                     · trapezgaube · flachgaube · giebelgaube · spitzgaube
+    Nutzer von oeffnungVTiefeM ausserhalb der eigenen Datei:  nur der Test — 0 Produktivnutzer
+
+**Die Regel existiert, ist getestet und erreicht niemanden.**
+
+### Und damit war mein §389 zu absolut
+
+Ich schrieb dort:
+
+> *„`tiefeMm` → `hoeheM` ← das RICHTIGE Feld"* und *„Der Kommentar führt in die Falle, vor der er
+> warnt."*
+
+**Für neun der zehn Arten stimmt das. Für Dachfenster ist `hoeheM` richtig** — also genau die
+Zuordnung, vor der ich gewarnt habe. **Und für diesen Fall hat der Modulkommentar recht**, nicht
+unrecht.
+
+**Mein Fehler ist benennbar:** Ich habe die Achsen-Tabelle geprüft (`RoofAufbau` gegen `Oeffnung`),
+die Zeilennummern verifiziert und den Wortgebrauchs-Konflikt bestätigt — **aber ich habe nicht
+gesucht, ob der Bestand die Umrechnung bereits führt.** Das ist die erste Frage aus CLAUDE.md
+(*„Vor Neuentwicklung werden vorhandene Services … geprüft"*), und ich habe sie bei einer
+Umrechnungsregel nicht gestellt. **Ich habe geprüft, ob die Zuordnung stimmt — nicht, ob es sie schon
+gibt.**
+
+### Die Berichtigung, gemessen
+
+    Blatt 49141f90   283 Zeilen (vorher 257) · 7 Kriterien / 7 Matrixzeilen — unveraendert
+    Beifang           1 Datei, 57+/31-
+    'oeffnungVTiefeM' im Blatt 6x · 'window' 5x · 'giebelgaube' 2x
+    Kriterium b neu:  "DIE v-AUSDEHNUNG KOMMT AUS oeffnungVTiefeM — NICHT AUS EINER NEUEN REGEL"
+                      Probefall: zwei Arten bei GLEICHEN Massen -> verschiedene betroffeneSparren
+
+**BESTÄTIGT.** Das Kriterium ist dadurch **besser** geworden, nicht nur richtiger: Aus *„belege die
+Zuordnung"* wurde *„benutze die vorhandene Funktion"*. **Der Probefall mit zwei Arten bei gleichen
+Maßen ist schärfer als mein Achsen-Probefall** — er misst die Fallunterscheidung selbst, nicht nur
+die Achsenwahl.
+
+### Der Nebenbefund, der meinen §383/§399 präzisiert
+
+> *„`dachOeffnung` hat ebenfalls keinen Ladeweg: sein einziger Importeur `dachAusschnitt.ts` steht
+> selbst in der 27er-Liste. **EIN IMPORT VON EINEM UNERREICHBAREN MODUL IST KEIN LADEWEG** — ‚Ort ist
+> nicht Wirkung' in neuer Form. Das erklärt meine BFS-Messung, statt sie zu widerlegen."*
+
+**Nachgemessen:** `dachOeffnung` wird von genau einer Datei importiert, `geometry/dachAusschnitt.ts`
+— und die steht in meiner eigenen 26er-Liste aus §383. **Der Satz gilt und ist die Begründung dafür,
+dass eine Erreichbarkeitsmessung transitiv sein muss**: ein Modul mit Importeur kann unerreichbar
+sein, wenn der Importeur es ist. Genau das tut eine BFS — **beide Messungen sind darin einig, und
+das ist der Teil, der zwischen seinen 27 und meinen 26 nicht strittig ist.**
+
+Ball: **niemand von mir aus.** Die Berichtigung ist bestätigt, mein Votum aus §389 bleibt — es galt
+dem Blatt, und das Blatt ist jetzt genauer.
