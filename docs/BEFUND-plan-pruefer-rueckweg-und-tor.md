@@ -30946,3 +30946,69 @@ Gegenprobe gefahren hat.**
 
 Ball: **Dirigent** (Z1-W2-1 browserabgenommen), dann **Generator** (Bündel-Commit nach der Regel) ·
 bei mir nichts.
+
+## §385 — Die Operandenfrage an Yama ist falsch gestellt: den Materialkatalog gibt es, samt U-Wert-Rechenweg
+
+Messstand: HEAD `817aef0f`, Baum 0, gemessen 16:28–16:32. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §385'` → 0). Nichts in meiner Bahn — **aber eine Vorlage an Yama liegt vor,
+und dafür gilt meine Dauerregel: jede Zahl frisch messen, auch die aus fremden Berichten.**
+
+`SPEZ-planner-anschlusswelle-1/planner-frage-paket-1-operanden.yaml`, 16:26:28, `entscheider: yama`.
+Der Planner legt drei Module als Operandenfrage vor. Frage 1 lautet:
+
+> *„`lambda` im GANZEN Bestand — nur in `geometry/wandaufbau.ts` — **es gibt KEINEN
+> Materialkatalog**. … Woher kommt `lambda` je Material? Ein Materialkatalog mit
+> Wärmeleitfähigkeiten ist eine Fachdatenquelle — **anlegen (und woraus?)**, oder je Schicht vom
+> Nutzer eingeben lassen, oder den U-Wert-Anschluss zurückstellen?"*
+
+### Gemessen — und der Bestand sagt etwas anderes
+
+    'lambda' in der Insel        3 Dateien (wandaufbau.ts · wandaufbau.test.ts · scene.types.ts)
+    'lambda' im GANZEN Bestand  35 Dateien
+    Gegenprobe 'dickeMm'        17 Dateien in der Insel — das Muster greift
+
+Die tragenden vier:
+
+    app/Models/Material.php:22            'lambda_w_mk' => 'float'      <- Waermeleitfaehigkeit W/(m·K)
+    database/migrations/2026_07_05_170001_create_materials_table.php    <- die Tabelle existiert
+    database/data/b2a_referenz.php:17,26,35,44  lambda_w_mk 0.68 · 0.4 · 0.99 · 0.13
+                                                                        <- KONKRETE Referenzwerte
+    app/Services/Heizlast/UWertService.php:51  "Strategie B – Schichtaufbau"
+                                          :54  @param array{materialId ...}
+                                          :72  $lambda = $m->lambda...
+
+**Es gibt nicht nur einen Materialkatalog — es gibt einen fertigen U-Wert-Rechenweg, der genau die
+Schichtberechnung über `materialId` und `lambda_w_mk` fährt.** Und `scene.types.ts:133` führt
+`schichten?: Array<{ materialId?: string; dickeMm: number }>` — **dasselbe Feld, auf das
+`UWertService` Strategie B ausgelegt ist.**
+
+### Was das an der Frage ändert
+
+Die Frage lautet heute *„anlegen (und woraus?)"*. **Richtig gestellt lautet sie: anbinden oder
+nicht.** Das ist eine andere Entscheidung, mit anderem Aufwand und anderem Risiko — und CLAUDE.md
+gibt die Richtung vor: *„Vor Neuentwicklung werden vorhandene Services, Modelle, Komponenten,
+Routen, Tests und das Designsystem geprüft und möglichst wiederverwendet."*
+
+**Ich entscheide nichts davon.** Die Anbindung Insel → CRM-Service ist eine Architekturfrage
+(React-Insel gegen Laravel-Backend, eigene Schutzgrenze in CLAUDE.md), und die Fachfrage, ob
+Heizlast-Referenzwerte für die Wandaufbau-Anzeige taugen, ist Yamas. **Ich stelle nur fest, dass die
+Vorlage von einer leeren Fläche ausgeht, wo etwas steht.**
+
+### Wo der Planner recht behält, und warum ich es dazusage
+
+**Für die Insel ist seine Aussage richtig:** dort gibt es keinen Katalog, und die drei Treffer sind
+der Rechentyp, sein Test und ein Kommentar. Sein Kontext ist durchgehend die Insel. **Der Fehler ist
+das Wort „im GANZEN Bestand"** — eine Reichweitenangabe, die er nicht gemessen hat, in einem Satz,
+der sonst stimmt.
+
+**Das ist die Klasse, die heute vier Rollen getroffen hat**: nicht die Messung ist falsch, sondern
+ihre **Grundmenge**. Bei mir war es `'stair'` mit Quotes (§382) und der Importgraph mit falschen
+Anführungszeichen (§383), beim Evaluator „Räume: 0", beim Dirigenten die Rechteliste als
+Zugriffsaussage. **Fünfmal derselbe Schnitt: gemessen wurde sauber, nur woanders als behauptet.**
+
+Und seine Vorsicht trägt unabhängig davon: *„Ein U-Wert aus geratenen Lambdas sähe aus wie eine
+Angabe"* — mit einem echten Katalog gilt das erst recht, denn dann sieht die Zahl nicht nur aus wie
+eine Angabe, **sie hätte eine Quelle, die für einen anderen Zweck erhoben wurde.**
+
+Ball: **Yama** (die Frage, jetzt anders gestellt) · **Dirigent** (ob die Vorlage vor der Antwort
+berichtigt wird) · bei mir nichts.
