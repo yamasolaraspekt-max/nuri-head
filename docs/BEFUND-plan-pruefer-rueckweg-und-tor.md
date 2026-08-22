@@ -41127,3 +41127,68 @@ Das ist kein Argument gegen meine Rolle — sondern für den Browserbeleg, den j
 Oberflächenwirkung ohnehin verlangt. Kriterium (a) hatte ihn („Bildbeleg 2D und 3D"), und das Votum
 führte ihn. **Der Bildbeleg zeigte die falsche Reihenfolge und wurde als Erfüllung gelesen** — weil
 niemand die Liste als Liste ansah, sondern als Beleg für „Bodenplatte ist drin".
+
+## §516 — Erste Anwendung der neuen Startproben-Pflicht: sie fehlt, aber die Regel wurde nie zugestellt
+
+Stand: HEAD `2fda2428`, Baum 0, gen 11, Digest gleich. Zeit 00:19. Aus meinem Worktree gemessen.
+
+Posten 34 (00:09:34) nimmt mich in die Pflicht: *„Plan-Prüfer: in die Meldepflicht-Prüfung
+aufnehmen."* Der erste Fall kam 121 Sekunden später — `generator-AUFTRAG_GESTARTET-Z1-E1-1.yaml`
+(00:11:35).
+
+### Die Messung
+
+```
+ticket_testing in der Startmeldung:  0
+DB_DATABASE:                         0
+```
+
+**Die Startprobe fehlt.** Nach dem Wortlaut der Regel wäre das ein Mangel.
+
+### Aber die Regel wurde nie zugestellt
+
+```
+Posten 34, an-Feld:  [plan-pruefer, release-pruefer, generator, evaluator,
+                      planner, integrator, yama]        ← sieben Rollen
+Datei liegt in:      STEUERUNG-dirigent/                ← EIN Ordner
+```
+
+Zum Vergleich, wie Regeln sonst verteilt werden:
+
+| Ereignis | Ordner |
+|---|---|
+| `dirigent-ENTSCHEIDUNG-leiste-markieren-vor-bodenplatte` | **5** |
+| `dirigent-PRAEZISIERUNG-ball-regel-geschlossene-ausgenommen` | **2** |
+| `dirigent-VOLLZUG-env-alle-arbeitsbaeume` (Posten 34) | **1** |
+
+Im Generator-Ordner: **0 Treffer** auf die Datei. **Er konnte die Regel nicht kennen** — nicht weil
+er nicht gelesen hätte, sondern weil sie in seinem Ordner nicht liegt.
+
+**Ich habe sie nur gesehen, weil ich `STEUERUNG-dirigent/` mitlese.** Das ist Gewohnheit, keine
+Zustellung.
+
+### Das ist §492 in neuer Gestalt — und diesmal betrifft es eine Schutzregel
+
+In §492 hatte ich gemeldet, Posten 28 stehe in keinem Blatt und niemand habe den Ball. Hier steht
+eine **Regel** in keinem Rollenordner. Der Unterschied zählt: Posten 28 war eine Kriterienänderung,
+Posten 34 ist die Bauform, **die heute Nacht einen Zugriff auf die Produktivdatenbank verhindert
+hat** (Release-Prüfer, 00:00:30).
+
+Eine Regel, die an sieben Rollen adressiert ist und in einem Ordner liegt, erreicht sechs davon nur
+zufällig. Bei einer Schutzregel ist „zufällig" zu wenig.
+
+### Was ich dem Generator nicht vorwerfe
+
+Seine Startmeldung ist im Übrigen vollständig: `blattstand` mit **Blob** (`71b16748` — die Form aus
+meiner §484/§486-Anmerkung, jetzt auch in der Startmeldung), `basis_sha`, DoR-Zeitpunkt,
+`fencing_token`, Worktree, Zweig, Rot-Lage selbst nachgemessen, Arbeitspakete, Nicht-Ziele.
+
+**Ein Feld fehlt allerdings unabhängig von Posten 34:** `gelesen_bis`. Es ist in seinen
+`CODE_FERTIG`-Meldungen durchgehend gesetzt, in dieser Startmeldung nicht. Ohne dieses Feld kann ich
+bei künftigen Zeitachsen-Fragen nicht mehr entscheiden, ob er etwas kennen konnte — genau die Frage,
+die heute Nacht fünfmal gestellt werden musste (§503, §514).
+
+### Meine Rolle hier
+
+Ich melde die Zustellungslücke, nicht den fehlenden Wert. Der Wert ist eine Folge, nicht die
+Ursache. Und ich stelle die Regel niemandem zu — das ist der Pfad des Dirigenten, nicht meiner.
