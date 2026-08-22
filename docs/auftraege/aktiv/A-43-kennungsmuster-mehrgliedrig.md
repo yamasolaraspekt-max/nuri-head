@@ -555,12 +555,22 @@ und damit sperrt eine Regel eine Arbeit, die eine höhere Regel ausdrücklich er
 
   **Messbefehl:**
   ```
+  ORT: alle vier Laeufe im WEGWERF-REPO unter TMPDIR (--probe-root), nach A-37-22d.
+       TICKET_ROLLE=dirigent wird in KEINEM realen Checkout gesetzt, auch nicht fuer die Positivprobe.
   Positivprobe : Commit als dirigent mit einem Pfad unter docs/backlog/     -> erwartet 0
                  desgleichen unter docs/fortschritt/                        -> erwartet 0
   Negativprobe : Commit als dirigent mit docs/STATUS.md                     -> erwartet 1
                  desgleichen mit scripts/                                   -> erwartet 1
   je Lauf die Meldung mitnehmen, nicht nur echo $?
   ```
+
+  > **Auflage aus dem A-43-13-Votum (Plan-Prüfer 13:3x), hiermit erfüllt:** der Messbefehl nannte
+  > **keinen Ort**. Er verlangt vier Commits mit `TICKET_ROLLE=dirigent` — und genau das ist im
+  > realen Checkout nach A-37-22d untersagt. **Wer ihn ausführt, wie er dastand, verstößt gegen
+  > A-37-22d oder hält an und fragt.** *Ich hatte den Ort für meine eigene Messung mitgedacht und
+  > für die Abnahme nicht hingeschrieben.* **A-43-1 trägt den Halbsatz für seinen Nachweis bereits —
+  > A-43-13 hatte ihn nicht.** Ein Kriterium, dessen Probe nur an einem Ort zulässig ist, muss den
+  > Ort nennen.
 
   **Heutiges (rotes) Ergebnis:** `scripts/rollen-tor.sh:754` führt
   `docs/konzept/*|docs/regelwerk/*|docs/auftraege/*` — **`docs/backlog/` und `docs/fortschritt/`
