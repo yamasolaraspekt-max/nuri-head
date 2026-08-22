@@ -37858,3 +37858,85 @@ wären hohl, wenn ich sie in derselben Stunde bräche, in der ich sie melde.**
 
 Ball: **Yama** (die drei SELECTs — nur er kann sie fahren) · **Dirigent** (siebte Postenmessung,
 `entscheidungsreif: ja`). **Geht sofort als Ereignis** (§463).
+
+## §473 — Postenmessung 8/9: das Operanden-Gate steht, und das Modell hat es selbst modelliert. Nebenbei: die „Neun-Posten"-Antwort ordnet sieben ein
+
+Messstand: HEAD `8762b53a`, Baum 0 · Integration `57e661bd`, Baum 0 · **Rückstand `HEAD..auto` = 153**
+· gemessen 21:40–21:47. **Ereignis-Schnitt dieser Runde: 21:38:44** (0 neue Ereignisse).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §473'` → 0).
+**Achter Posten für den Dirigenten-Auftrag von 14:48:57.**
+
+### Nebenbefund zuerst, weil er die ganze Serie betrifft
+
+    dirigent-antwort-neun-posten.yaml (18 Zeilen), Posten einzeln nachgezaehlt:
+      N-003 1 · A-13 1 · Tragwerk 1 · versatz 1 · Seed-Weg 1 · raumAuswahl 1 · §3/E1 1
+      W-21L  0   >>> NICHT EINGEORDNET
+      §119   0   >>> NICHT EINGEORDNET
+
+> **Die Datei heißt „neun-posten" und ordnet sieben ein.** Ihr eigener Satz lautet: *„Vorab die
+> Einordnung, **damit kein Posten den Fahrplan sperrt**"* — er beansprucht Vollständigkeit für genau
+> den Zweck, für den zwei fehlen. **Wer sie liest, hält alle neun für eingeordnet.**
+>
+> **Und ich habe es sieben Runden lang nicht bemerkt** — ich habe die Antwort in §466 zitiert und
+> die Posten seither nacheinander gemessen, **ohne die Liste gegen die Antwort zu zählen.** Das ist
+> Vorratsprüfung (b) an einer Stelle, an der ich sie nicht angesetzt hatte.
+
+**Auf dem Weg dorthin: dritter geratener Pfad heute.** Meine erste Zählung gab **neunmal „NICHT
+EINGEORDNET"** — die Datei liegt unter `OFFENE-POSTEN-plan-pruefer/`, nicht unter
+`STEUERUNG-dirigent/`, wo ich sie vermutet hatte. **Neun plausible Nullen aus einem falschen Pfad**
+(§436, §467, hier).
+
+### Der Posten selbst: W-21L
+
+    STATUS.md   zustand: DECISION_BLOCKED
+                ballbesitz: —  # bis Yama die Fachdaten liefert ODER W-23 sie erzeugt
+                titel: „Niemand leitet den Lattenabstand aus der Deckungsart ab.
+                        Und die Daten dafuer fehlen."
+    Blatt:13    blockiert_durch: „OPERANDEN-GATE — keine Deckungsart/Lattweiten-Daten im Repo, gemessen"
+    Blatt:16    ballbesitz: „YAMA — der Auftrag kann ohne Fachdaten nicht in DoR gehen"
+    Blatt:101   zitiert CLAUDE.md woertlich: „Fehlende Operanden fuehren zu Rueckfrage"
+
+**Die Bedingung aus STATUS.md ist prüfbar — „oder W-23 sie erzeugt". W-23 ist inzwischen
+`BETRIEBSBESTAETIGT`.** Also gemessen, ob es die Daten gebracht hat:
+
+    Schreibweise-Pruefung: Lattweite 0 · lattweite 0 · Lattabstand 0 · Lattenabstand 3 · lattmass 2
+    Positivkontrolle „Deckung" in resources/: 72 Dateien
+
+    Was der Bestand HAT:
+      dachformVorlagen.ts:118   lattmassAbhaengigVonProdukt: boolean  // Deckmass/Lattung ist produktabhaengig
+      dachformVorlagen.ts:…     battenDistCm: number
+      dachWerte.ts:20           battenDist: 0.05  // Lattenabstand  min 5 cm   <- PLAUSIBILITAETSGRENZE
+    Was der Bestand NICHT hat:
+      ein Millimeter-Feld fuer ein konkretes Lattmass  ->  0 Treffer
+
+> **W-23 hat die STRUKTUR geschaffen, nicht die DATEN.** Das Modell trägt ein Feld für den
+> Lattenabstand **und ein Boolean daneben, das sagt: „hängt vom Produkt ab".** Die Nachbarfelder
+> sind genauso gebaut — `rdnGrad: number // RICHTWERT (produktabhängig zu prüfen)`.
+>
+> **Das Operanden-Gate ist damit nicht behauptet, sondern im Datenmodell abgebildet.** Der Bestand
+> sagt selbst, dass er die Werte nicht kennt. **Der einzige Zahlenwert, den er führt, ist eine
+> Untergrenze von 5 cm — eine Plausibilitätsschranke, kein Fachwert.**
+
+    entscheidungsreif: JA
+    Die Frage an Yama ist praezise: welche Lattmasse gelten je Deckungsart bzw. je Produkt?
+    Das Modell ist vorbereitet (battenDistCm existiert), die Werte fehlen, und der Bestand
+    kennzeichnet sie ausdruecklich als produktabhaengig.
+    DER POSTEN LIEGT ZU RECHT BEI YAMA und ist offen — mit dem Unterschied zu Posten 6:
+    hier ist die Zuweisung an ihn RICHTIG, dort war sie zehn Tage lang falsch.
+
+### Was ich nicht tue
+
+**Ich schlage keine Lattmaße vor.** CLAUDE.md: *„Fach-, Rechts-, Geld-… Entscheidungen werden nicht
+still automatisiert."* Ein Prüfer, der den fehlenden Operanden mit einem Richtwert füllt, hat das
+Gate nicht geschlossen, sondern umgangen.
+
+### Lage, jetzt gemessen (21:40:10)
+
+    Commits NICHT in der Integration      45
+    Integrator-Stille                    114 Minuten
+    §447 „steht aus" bei E0/E2             2
+    Baelle beim Integrator (ganzes Haus)  21
+    Rueckstand mein Baum -> Integration   153
+
+Ball: **Yama** (die Fachdaten) · **Dirigent** (achte Postenmessung; **und die Einordnung von 14:48
+ist unvollständig — W-21L und §119/§120 fehlen darin**). **Geht sofort als Ereignis** (§463).
