@@ -273,9 +273,45 @@ ticket_testing                     existiert (451 Tabellen)
 ticket_user@127.0.0.1              hat dort NUR ticket.*        <- DAS ist die ENV_BLOCKED-Ursache
 ```
 
-**Die Sperre lag nie an fehlenden Rechten, sondern am Weg:** über den **Socket** hat der Nutzer
-alles, über **TCP** nichts. *Der Guard meldete `ENV_BLOCKED` und hatte recht — nur nicht aus dem
-Grund, den alle vermutet haben.*
+> ## ⚠ DIESE PRÄMISSE IST STRITTIG — nicht als gemessen führen
+>
+> **Der Satz „die Sperre lag am Weg" stand hier als Messung. Er ist es derzeit nicht.**
+>
+> Eine **zweite, unabhängige Messung** (lesende Sitzung in Yamas Auftrag, 15:48:01) kommt über
+> **dieselbe TCP-Verbindung** zu einem anderen Ergebnis:
+>
+> ```
+> SHOW GRANTS (TCP, 127.0.0.1:3307)   -> USAGE ON *.*  +  ALL ON `ticket`.*
+>                                        ticket_testing wird NICHT genannt
+> SELECT COUNT(*) FROM ticket_testing.migrations   -> 616      <- der Zugriff GELINGT
+> ```
+>
+> **Die Rechteliste deckt sich zeichengleich mit meiner** — der Widerspruch liegt nicht in den
+> Grants, sondern zwischen **Rechteliste** und **tatsächlichem Zugriff**. *Meine Aussage ist als
+> Rechteliste richtig und als Zugriffsaussage nicht haltbar.*
+>
+> **Nach der Hausregel gilt damit KEINE der beiden Messungen**, bis der Unterschied aufgelöst ist.
+> **Aufzulösen durch eine dritte Messung** mit Leserecht auf `mysql.user`: welche `ticket_user`-
+> Konten existieren und welche Grants jedes trägt. *Ich kann sie nicht fahren — der Zugriff auf die
+> Zugangsdaten ist mir verwehrt, und ich habe ihn nicht umgangen.*
+>
+> **Was das für dieses Blatt bedeutet — und was nicht:**
+> **Die Kriterien sind unberührt.** `Z0-I1-1` (Guard fragt die Verbindung), `-9` (Serialisierung),
+> `-10` (`SELECT DATABASE()` im Beleg) und `-11` (Seed) stehen unabhängig davon, *warum* die Sperre
+> entstand. **Betroffen ist die Begründung, nicht die Sache.**
+> **Offen bleibt aber:** ob Stufe 1 die Sperre wirklich auflöst. *Der Bau kann richtig sein — der
+> Beleg dafür wäre es nicht.*
+>
+> **Nebenbefund derselben Messung, der die Auflagen-Frage entspannen könnte:** `.env.testing` trägt
+> `DB_DATABASE=ticket_testing` — genau den Namen aus Yamas Auflage 1 —, und über den Socket hat
+> `ticket_user@localhost` auch auf `ticket_testing` volle Rechte. **Arbeitet Stufe 1 gegen
+> `ticket_testing`, wird meine Auflagen-Klarstellung bei `Z0-I1-11` gegenstandslos.** *Das ist eine
+> Frage an Yama, nicht meine Entscheidung — aber sie gehört hierher, bevor jemand den Namen
+> festschreibt.*
+
+~~**Die Sperre lag nie an fehlenden Rechten, sondern am Weg:** über den **Socket** hat der Nutzer
+alles, über **TCP** nichts.~~ *(Fassung vom 15:36, siehe Kasten oben — als Beleg stehengelassen,
+nicht gelöscht.)*
 
 ## Was von den acht Kriterien gilt, und was Folgeposten wird
 
