@@ -28127,3 +28127,71 @@ Dirigenten; der heutige Fall ist damit erledigt.
 
 **Ball: niemand bei mir.** A-43 ist gebaut (13:24) und mit 13 Kriterien vollständig spezifiziert;
 die Abnahme liegt beim Evaluator.
+
+## §341 — Mein Messfenster hat eine strukturelle Lücke, und die A-43-Abnahme ist hineingefallen
+
+Gewählt gegen HEAD `29415edc` (Baum sauber, 13:46:12). §341 als Überschrift 0 Treffer, frei.
+
+**A-43 ist ABGENOMMEN.** Der Evaluator hat um **13:36:22** entschieden
+(`ABNAHME-evaluator-A-43/evaluator-ABGENOMMEN.yaml`, Votum `fbb8a73a`, Ball **dirigent**):
+*„12 von 12 Kriterien erfüllt. Posten 3 ausdrücklich nicht Teil dieser Lieferung."* Die acht Formen
+über den **echten** Ausleseweg, rot 4/8 → grün 8/8, und dieselben acht gegen `BEINAHE`
+deckungsgleich. **Ich habe in meiner letzten Runde geschrieben, „die Abnahme liegt beim
+Evaluator" — sie lag da schon sieben Minuten zurück.**
+
+**Die Ursache ist mein eigenes Verfahren, nicht ein Versehen.** Ich setze den Fensterbeginn auf den
+Zeitstempel **meiner letzten Ablage**, führe die Messung aber am **Rundenbeginn** durch — und
+zwischen beiden liegt die Arbeitszeit der Runde:
+
+    Runde 13:29–13:38   gemessen ~13:34 mit "seit 13:28:51"   -> Datei existierte noch nicht
+    Runde 13:38–13:43   gemessen 13:38:46 mit "seit 13:38:08"  -> 13:36:22 liegt DAVOR, faellt durch
+    Runde 13:43–...     gemessen 13:43:40 mit "seit 13:43:06"  -> faellt wieder durch
+
+**Alles, was zwischen meiner letzten Messung und meiner letzten Ablage entsteht, fällt strukturell
+durch** — und je länger eine Runde dauert, desto größer wird das Loch. Gemessen für das Fenster
+13:34–13:38:08: **vier Dateien**, darunter beide Abnahme-Meldungen zu A-43 und zwei
+Integrator-Meldungen (`dirigent-hinweis-w0-5-doppelbau-aufraeumen`,
+`integrator-bedingung-erfuellt-elf-posten`).
+
+**Das ist dieselbe Bauart wie A-37-22e**, die ich selbst geprüft habe: *„eine Steuerung, die erst
+beim nächsten Takt wirkt, hat zwischen Veröffentlichung und Lesen ein Loch, und der Commit fällt
+hinein."* Bei mir ist es kein Commit, sondern eine Abnahme — **und ich habe das Loch selbst
+gebaut, indem ich den bequemen Anker gewählt habe.** Der Zeitstempel meiner Ablage war leicht zu
+bekommen; richtig wäre der Zeitpunkt meiner letzten **Messung** gewesen.
+
+**Abhilfe als Prüfliste, nicht als Vorsatz** — ein Vorsatz hat bei §301 schon einmal nicht
+getragen:
+
+    Fensterbeginn = Zeitpunkt der LETZTEN MESSUNG, nicht der letzten Ablage.
+    Im Zweifel ueberlappen: lieber zweimal dasselbe lesen als einmal nichts.
+    Beim Rundenabschluss den Messzeitpunkt notieren — er ist der Anker der naechsten Runde.
+
+## Nebenbefund — A-43 ist abgenommen, und die Tafel weiß nichts davon
+
+    Zustandscommits fuer A-43 : 0
+    Datensatz                 : zustand: BEREIT · ballbesitz: generator
+    Tafelzeile Z.94           : `BEREIT` · **Generator**
+
+**Ein Auftrag, der gebaut (13:24) und abgenommen (13:36) ist, steht in der Statuswahrheit als
+`BEREIT` mit dem Ball beim Generator.** Das ist die **dritte Variante** derselben Klasse an einem
+Tag: §333 — kein Platz in der Statuswahrheit (behoben); §337 — Zustandscommit vorhanden, Block nicht
+nachgezogen (A-39, offen); **jetzt — Meldungen vorhanden, aber kein Zustandscommit, also kann der
+Block gar nicht nachziehen.**
+
+Der Generator hat seine Meldepflicht als Ereignis erfüllt (`generator-CODE_FERTIG.yaml`, 13:24:11,
+`ball: evaluator`, mit vollständigen Belegen zu allen zwölf Kriterien), der Evaluator ebenso. **Was
+fehlt, ist der Betreff** — bei A-39 hat der Generator ihn geschrieben
+(`generator: zustand: A-39 · CODE_FERTIG · evaluator · bau 824f8512`), hier nicht.
+
+*Bemerkenswert daran:* A-43 ist der Auftrag, der **genau diesen Mechanismus** repariert — und sein
+eigener Zustandswechsel ist nie als Betreff gemeldet worden. Nicht wegen des Musters, das der
+Evaluator soeben grün gemessen hat, sondern weil der Betreff fehlt. **Ein repariertes Muster nützt
+nichts, wenn niemand den Satz schreibt, den es lesen soll.**
+
+**Eigener Messfehler auf dem Weg.** Meine Übersichtstabelle meldete für A-37 *„(kein Block)"*.
+Falsch: `grep -c '^auftrag: "A-37"'` gibt **1**. Ursache war mein `grep -A3 … | grep -m1 '^zustand:'`
+— bei A-42 folgt `zustand:` direkt auf `auftrag:`, bei A-37 nicht, und drei Zeilen Fenster waren zu
+eng. **Ein Fensterfehler in der Zeile, während ich einen Fensterfehler in der Zeit untersuche.**
+
+**Ball: Dirigent** (A-43-Abnahme liegt dort; Zustandscommit und Tafel sind nicht meine Schreibhoheit)
+· **Integrator** (§337, A-39 unverändert `UNGEKLAERT`). Bei mir nichts offen.
