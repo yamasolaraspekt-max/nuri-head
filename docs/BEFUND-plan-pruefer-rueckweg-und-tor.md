@@ -33457,3 +33457,98 @@ Wirkung"*), und es ist heute zweimal schiefgegangen.
 
 Ball: **Dirigent** (Umsetzung, Sammelblatt schneiden) · bei mir: **bereit für die einmalige DoR auf
 den Kriterientext**, sobald er als Blatt vorliegt.
+
+## §421 — DoR auf den Kriterientext Spur V: ERTEILT mit drei Halbsätzen. V-4 ist so formuliert, dass es immer erfüllt ist, und V-5 widerspricht V-6
+
+Messstand: HEAD `d46f0136`, Baum 0, gemessen 18:34–18:36. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §421'` → 0). **Auftrag gen 10, Posten 1 — EIN Durchgang.**
+
+Gegenstand: `docs/regelwerk/ARBEITSREGELN-NACHTRAG-1-6-SPUR-V.md`, Blob `3ad5e4cc`, 31 Zeilen —
+**identisch auf `rolle/dirigent`, `HEAD` und `auto/hausplaner-integration`**, also kein Blattdrift
+wie bei Z0-I1 (§414).
+
+### VOTUM: ERTEILT, mit drei Halbsätzen
+
+Die Halbsätze gelten nach Nachtrag 1.5 als **Teil des Textes**, nicht als Auflage — keine Schleife,
+der Bau kann sofort beginnen.
+
+### Halbsatz 1 zu V-4 — DAS KRITERIUM IST SO FORMULIERT, DASS ES IMMER ERFÜLLT IST
+
+    V-4 heute:  "Fachlogik unberuehrt: `git diff` auf das Modul → leer"
+
+    GEMESSEN:
+      git diff -- geometry/wandFlaeche.ts            bei sauberem Baum:   0 Zeilen
+      git diff <vorcommit>..<commit> -- derselbe Pfad, wo es WIRKLICH
+        geaendert wurde (4e02c273):                                      28 Zeilen
+
+**`git diff` ohne Referenz vergleicht Arbeitsbaum gegen Index. Nach dem Commit ist er immer leer**
+— auch dann, wenn der Commit die Fachlogik umgeschrieben hat. Ein Generator, der V-4 wörtlich
+befolgt, misst „leer" und hat **nichts** belegt.
+
+> **Das ist dieselbe Klasse wie die Schrittmaß-Prüfung aus §415:** eine Prüfung, die ihre eigene
+> Voraussetzung misst. Dort war es Algebra, hier ist es die fehlende Referenz.
+
+**Halbsatz:** *„V-4: `git diff <basis_sha>..<endstand_sha> -- <modulpfad>` → leer. Ohne beide SHA
+ist das Kriterium nicht erfüllt, weil `git diff` ohne Referenz nach jedem Commit leer ist."*
+
+### Halbsatz 2 zu V-6 — V-5 UND V-6 WIDERSPRECHEN SICH
+
+    V-5:  "Insel-Suite gruen, tsc 0, Buendel gebaut UND MITCOMMITTET"
+    V-6:  "Kein Produktcode AUSSERHALB resources/planner/hausplaner"
+
+    GEMESSEN:  public/hausplaner/hausplaner.js   1 520 902 Bytes, Stand 18:11
+               unter resources/planner/hausplaner?  NEIN
+               letzter Buendel-Commit: be4f637c "Buendel gebaut fuer Z1-W2-1 @ c4ddc02b"
+
+**Ein Blatt kann nicht beide erfüllen.** Wer das Bündel mitcommittet, verletzt V-6; wer V-6 einhält,
+verletzt V-5. Der Nachtrag ersetzt ausdrücklich die Bündel-Regel von 16:02 („V-5: Bündel ist Teil
+der Lieferung") — genau dadurch entsteht der Widerspruch, den die alte Regel nicht hatte.
+
+**Halbsatz:** *„V-6: kein Produktcode außerhalb `resources/planner/hausplaner`, **ausgenommen das
+nach V-5 mitgelieferte Bündel** `public/hausplaner/hausplaner.js`."*
+
+### Halbsatz 3 zu V-1 — „Aufrufer" ist dreideutig, und zwei Lesarten messen das Falsche
+
+    V-1 heute:  "Aufrufer im Produktivpfad 0 → ≥ 1"
+
+    GEMESSEN an einem angeschlossenen Modul (integrationAbgleich, Z1-W2-1):
+      Vorkommen des Funktionsnamens 'pruefeOeffnungsIntegration'   5   davon 4 KOMMENTARE
+      Importe des Moduls (from '…integrationAbgleich')             2
+      ECHTE Aufrufstellen (Name + Klammer)                         1   ConfigWizard.tsx:99
+
+**Drei Messwege, drei Zahlen: 5, 2, 1.** Über den Dateinamen gemessen zählt man Importe, nicht
+Wirkung (P7: *Ort ≠ Wirkung*); über den bloßen Namen zählt man Kommentare mit. **Nur der Aufruf mit
+Klammer ist der Anschluss.**
+
+**Halbsatz:** *„V-1: gezählt wird die Aufrufstelle mit Klammer im Produktivpfad — nicht das
+Vorkommen des Namens (Kommentare!) und nicht der Import."*
+
+### Was ich geprüft habe und was trägt
+
+    V-2  Wirkung im Browser, Eingabe und Ergebnis woertlich   TRAEGT — Z1-W2-3 hat es geliefert
+                                                              (data-ergebnis, Wortlaut der Meldung)
+    V-3  Rot-Probe + Ortsbeleg                                TRAEGT und ist fahrbar — belegt durch
+                                                              "Zweites Buendel OHNE die beiden
+                                                              Dateien gebaut" (Z1-W2-3)
+    V-5  Werkzeuge existieren                                 "tsc:hausplaner", "test:hausplaner",
+                                                              ":dom", "build:hausplaner" in package.json
+
+**V-2 und V-3 bleiben unverkürzt, und ich stimme der Begründung des Nachtrags aus eigener Messung
+zu:** Der Ortsbeleg in V-3 ist der Riegel gegen „an der falschen Stelle gemessen" — genau daran ist
+heute die Rot-Probe zu Z1-W2-3 belastbar geworden.
+
+**Die Grenze in V-4 ist inhaltlich scharf** („Fällt V-4 → kein Spur V, sondern Spur A/W mit eigenem
+Blatt"). Nur ihr **Messbefehl** war es nicht; Halbsatz 1 schließt das.
+
+### Warum ERTEILT und nicht NICHT ERTEILT
+
+Alle drei Mängel sind **Wortlautlücken, keine Denkfehler**: die Absicht jedes Kriteriums ist klar
+und richtig, nur der Messbefehl trägt nicht. Ein NICHT ERTEILT kostete einen vollen Rollenpass —
+genau das, was Yamas Entscheidung beseitigen soll. Nachtrag 1.5 sieht für diesen Fall den Halbsatz
+vor, und er passt hier exakt.
+
+Ereignis: `plan-pruefer-DOR-SPUR-V-KRITERIENTEXT.yaml`. **Zweite DoR auf denselben Kriterientext ist
+mir verboten** (gen 10) — dies ist der eine Durchgang.
+
+Ball: **Dirigent** (die drei Halbsätze in den Nachtrag übernehmen) · **Planner** (Sammelblatt
+Z1-V1-1 gegen den ergänzten Text schneiden) · bei mir: bereit für Posten 2, nur Vollständigkeit.
