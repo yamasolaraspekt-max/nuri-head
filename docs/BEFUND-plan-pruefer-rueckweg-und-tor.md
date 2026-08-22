@@ -38186,3 +38186,80 @@ und niemand nachsieht.**
 Ball: **keiner** — aber **dies geht sofort als Ereignis**, nicht in die Sammelmeldung: der Befund
 trägt `dringlichkeit: hoch`, betrifft das Messwerkzeug dreier Rollen, und eine **unabhängige
 Bestätigung ist für die anderen mehr wert als eine späte.**
+
+## §477 — Wache-Punkt 2 zum ersten Mal in dieser Serie gefahren: vier von fünf Prüfungen sauber, und der fünfte Block ist nicht einlesbar
+
+Messstand: HEAD `10601a53`, Baum 0 · Integration `57e661bd`, Baum 0 · **Rückstand `HEAD..auto` = 153**
+· gemessen 21:53–22:01. **Ereignis-Schnitt dieser Runde: 21:50:26** (0 neue Ereignisse).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §477'` → 0).
+
+### Der Anlass ist ein eigenes Versäumnis
+
+**Wache-Punkt 2 („Blätter gegen Blöcke") habe ich in dieser ganzen Serie — §441 bis §476 — kein
+einziges Mal gefahren.** Punkt 1, 3, 6 und 7 laufen in jeder Runde; **Punkt 2 ist durchgefallen.**
+Das ist dieselbe Klasse wie §466 (der übersehene Dirigenten-Ball): **ein Auftragsteil, der nicht
+durch einen Ball erinnert wird, verschwindet aus der Routine.**
+
+### Die fünf Prüfungen von Punkt 2, jetzt gefahren
+
+    a) KENNUNGS-DUBLETTEN (Bloecke MIT zustand-Feld zaehlen, nicht auftrag-Zeilen)
+       119 Kennungen · 119 auftrag-Zeilen · 119 zustand-Zeilen   ->  DUBLETTEN: 0
+    b) BLAETTER GEGEN BLOECKE (Kennung aus dem Feld auftrag:, nie aus dem Dateinamen)
+       119 Bloecke · 100 Blaetter mit auftrag-Feld · 3 feldlos   ->  OHNE BLOCK: 0
+       Die drei feldlosen sind Nachtrags-/Umleitungsblaetter (A-08-NACHTRAG, A-33-STILLGELEGT,
+       W-05/1) — der Rueckfall auf die Kopfzeile, den der Auftrag ausdruecklich nennt, greift.
+    c) ZUSTAND TAFELZEILE GEGEN DATENSATZ
+       118 vergleichbar  ->  ABWEICHUNGEN: 0
+    d) DOPPELTE SCHLUESSEL JE BLOCK
+       304 YAML-Bloecke  ->  1 Block betroffen: A-09, release_vermerk 2x
+    e) BAELLE IN BLOECKEN OHNE zustand-Feld — in Punkt 3 laufend mitgemessen
+
+### Und mein erster Messwert für (d) war falsch — 49 statt 1
+
+    grober Schnitt (auftrag: bis auftrag:)   ->  49 Bloecke mit „doppelten" Schluesseln
+                                                 z.B. A-04 ballbesitz 25x
+    echter Fence-Schnitt (```yaml bis ```)   ->   1 Block
+    Positivkontrolle des Verfahrens: kuenstlicher Block mit doppeltem „a" -> erkannt
+
+> **Die 25 `ballbesitz` bei A-04 sind 25 YAML-Blöcke der Historie, nicht ein Block mit 25
+> Schlüsseln.** Mein Schnitt hat die Grundmenge falsch gebildet — **dieselbe Klasse wie §475 (ein
+> Zweig für die ganze Funktion), nur eine Ebene höher: eine Blockgrenze, die keine ist.**
+
+### Der eine echte Fund — und er ist schärfer als vermutet
+
+    docs/STATUS.md, Block A-09 (ab Zeile 3292, 30 Zeilen):
+      release_vermerk: "release-pruefer (Stamm-Instanz) 10.08.: §10 an der Abnahme af8f2054 …"
+      release_vermerk: "release-pruefer 10.08.: RELEASE_FREI an af8f2054 …"
+
+    js-yaml.load(block)  ->  Parse-Fehler: „duplicated mapping key (29:1)"
+
+> **Ich hatte vermutet, der erste Wert gehe still verloren. Gemessen: der Block ist gar nicht
+> einlesbar.** `js-yaml` ist strikt und wirft. **Wer `docs/STATUS.md` maschinell auswertet und diesen
+> Block parst, bekommt einen Fehler — keine stille Übernahme.**
+>
+> **Und die Konvention gegen genau diesen Fall existiert im Nachbarblock:** A-10 schreibt
+> `release_vermerk_1:` — nummeriert. **Die Lösung stand eine Bildschirmseite weiter unten und wurde
+> nicht angewandt.**
+
+**Das ist derselbe Fall, den ich heute an mir selbst hatte:** In §444 war mein Ereignis wegen einer
+Einrückung nicht einlesbar; gefangen hat es die Rückleseprobe. **Hier steht er seit dem 10.08. in
+der Tafel — zwölf Tage, ohne dass jemand den Block geparst hätte.**
+
+### Was das über die Tafel sagt
+
+**Vier von fünf Prüfungen sind sauber**, und das ist das eigentliche Ergebnis: 119 Kennungen ohne
+Dublette, 0 Blätter ohne Block, 0 Zustandsabweichungen zwischen Tafelzeile und Datensatz.
+**Die Tafel ist in ihrer Struktur belastbar.** Der eine Fund ist ein Einzelfall von vor zwölf Tagen,
+und er blockiert nichts — **er zeigt nur, dass niemand die Tafel maschinell liest.**
+
+### Lage, jetzt gemessen (21:53:32)
+
+    Commits NICHT in der Integration      49
+    Integrator-Stille                    127 Minuten
+    §447 „steht aus" bei E0/E2             2
+    Baelle beim Integrator (ganzes Haus)  22
+    Rueckstand mein Baum -> Integration   153
+
+Ball: **Integrator** (`docs/STATUS.md` schreibt er allein, §16 — der doppelte Schlüssel bei A-09
+gehört zu seinen Feldern). **Geht in die nächste Sammelmeldung**, nicht sofort: kein Blocker,
+zwölf Tage alt, und er liest seit 127 Minuten nicht.
