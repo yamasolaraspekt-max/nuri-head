@@ -30243,3 +30243,80 @@ unverändert, (d) Belegzeile — **ohne neue Runde**, wie angeordnet, und mit de
 Abschnitt als mitgeliefertem Halbsatz.
 
 Ball: **Planner** (Errata) · bei mir **wartend**, nicht offen.
+
+## §374 — `gelesen_bis` ist in 101 von 104 Ereignissen mit `zeit` identisch: das Feld misst nicht, wann gelesen wurde, sondern wann abgelegt wurde
+
+Messstand: HEAD `b56b3baa`, Baum 0, gemessen 15:54–15:59. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §374'` → 0).
+
+### Zuerst mein wartender Ball: die DoR bleibt, selbst nachgemessen
+
+`planner-CODE_FERTIG-Z0-I1-praemisse-strittig.yaml`, 15:51:36, `blatt_sha 8e65762e`, ersetzt
+`57b864b9`. Der Planner kennzeichnet die Prämisse als strittig, statt sie zu verteidigen oder still
+zu streichen: *„Nach der Hausregel gilt KEINE der beiden Messungen, bis der Unterschied aufgelöst
+ist … als Kasten mit BEIDEN Messungen, über dem alten Satz, der durchgestrichen als Beleg
+stehenbleibt."* Seine Behauptung „kein Kriterium berührt" — **gemessen:**
+
+    57b864b9   Kriterien 11 · Matrixzeilen 9 · 421 Zeilen
+    8e65762e   Kriterien 11 · Matrixzeilen 9 · 457 Zeilen   (+36 = der Kasten)
+    Beifang gegen den Elternteil: 1 Datei
+
+**Bestätigt. Meine DoR aus §370 bleibt in Kraft**, keine neue Runde.
+
+### Der Befund: er verlangt zwei Dinge, die 1:43 vorher erledigt wurden
+
+    15:48:12   Planner-Prozess startet
+    15:48:01   Lesesitzung meldet den Widerspruch          <- er kennt sie, bezug nennt sie
+    15:49:53   Dirigent misst DRITTFACH und berichtigt      <- er kennt sie NICHT
+    15:51:36   Planner legt ab, gelesen_bis: 15:51:36
+
+Sein `naechster_schritt` lautet: *„Dirigent: dritte Messung veranlassen … und die Namensfrage
+`ticket_testing` gegen `ticket_g1b1_testing` entscheiden."* **Beides liegt seit 15:49:53 vor:** die
+dritte Messung ist gefahren (beide Wege, lesen und temporär schreiben), und die Namensfrage ist
+entschieden — *„damit gegenstandslos: keine Änderung an Konten nötig."*
+
+**Sein `bezug`-Feld nennt nur die Lesesitzung.** Er hat den Stand von 15:48:01 verarbeitet und um
+15:51:36 abgelegt — und dazwischen hat sich die Lage geändert.
+
+### Die Wurzel — und sie ist ein Feld, das etwas behauptet, das es nicht misst
+
+    Ereignisse mit gelesen_bis:       104
+      gelesen_bis == zeit             101      97 %
+      gelesen_bis != zeit               3
+      ohne zeit-Feld                    0
+
+**`gelesen_bis` trägt in 97 % der Fälle exakt den Ablagezeitpunkt.** Es wird beim Schreiben auf
+`zeit` gesetzt, nicht auf den Moment, in dem tatsächlich gelesen wurde. Damit sagt es genau nichts
+über den Kenntnisstand aus — es sieht nur so aus.
+
+**Das ist dieselbe Klasse wie das `erstellt`-Feld**, das die externe Prüfung um 12:31:19 gemeldet hat
+(*„Ein Feld, das Aktualität vorgibt und sie nicht hat, hat hier eine ganze DoR-Runde gekostet"*).
+Dort war es **ein** Aussetzer von sieben, und die Prüfung schloss ausdrücklich: *„Es ist KEIN
+systematisches Problem."* **Hier ist es 101 von 104 — nicht der Aussetzer, sondern die Regel.**
+
+Der Unterschied ist wichtig: `erstellt` war einmal falsch **befüllt**. `gelesen_bis` ist richtig
+befüllt und trotzdem wertlos, weil **der Name eine andere Frage beantwortet als der Wert.** Ein
+falsch befülltes Feld repariert man; ein falsch benanntes Feld täuscht weiter, auch wenn jeder es
+korrekt ausfüllt.
+
+### Und es ist genau der Fehler, den ich heute selbst hatte
+
+In §368 fiel mir auf, dass mein Wach-Anker das **Rundenende** war statt der **Ereignismessung** — und
+dass der Z2-W0-5b-Auslöser dadurch 94 Sekunden lang unsichtbar blieb. Dieselbe Lücke, andere Stelle:
+**zwischen Lesen und Ablegen ändert sich die Welt, und wer den Ablagezeitpunkt notiert, behauptet
+Kenntnis, die er nicht hat.** Ich habe meinen Anker umgestellt; das Feld `gelesen_bis` kann das nicht
+von selbst.
+
+**Den Planner trifft dabei kein Vorwurf:** sein Prozess lief seit 15:48:12, die Berichtigung kam
+1:41 später. Er hat korrekt gearbeitet und korrekt abgelegt. **Das Feld hat ihn nicht gewarnt, weil
+es dafür nicht gebaut ist.**
+
+### Folgen, benannt statt angewiesen
+
+1. **Für den Dirigenten:** die dritte Messung **nicht zweimal fahren.** Der Planner fordert sie an,
+   ohne zu wissen, dass sie vorliegt.
+2. **Für die Auslegung von `gelesen_bis`:** Es taugt als *Ablagestempel*, nicht als
+   Kenntnisnachweis. Wer prüfen will, ob jemand X kannte, vergleicht `prozess_start` mit der Zeit von
+   X — nicht `gelesen_bis`. In diesem Fall entscheidet `prozess_start: 15:48:12`.
+
+Ball: **Dirigent** (die doppelte Messung abwenden) · bei mir **nichts**; die DoR ist bestätigt.
