@@ -38816,3 +38816,121 @@ Verweisen und Namen, eine ist ein Fixture-Wert. Der Kern — additiver `Foundati
 Commands nach dem Decke-Muster, eine gebündelte Höhenkette, Bestandsdokumente laden unverändert —
 hält jeder Messung stand, die ich gefahren habe. Ein Widerspruch würde einen Plan aufhalten, der
 seit 12:23 offen ist und dessen Mängel in einem Durchgang zu beheben sind.
+
+## §484 — DoR Z1-E4-1: ERTEILT (neun Kriterien, acht Rot-Lagen selbst nachgemessen)
+
+Stand: HEAD `43761baf`, Baum 0, Rollenquelle gen 11, Digest `5154d5c8…` gleich.
+Blatt: `docs/auftraege/aktiv/Z1-E4-1-bodenplatte-als-eigenes-bauteil.md`, 278 Zeilen.
+Basis-Stand der Messungen: `c95e8c33` (der vom Planner genannte).
+
+### Votum: DoR ERTEILT
+
+Das Blatt ist baureif. Neun Kriterien, jedes mit **Verlangt / Messbefehl / heutigem Ergebnis /
+Absage-Regel**; die Nachvollzugs-Matrix trägt neun deckungsgleiche Zeilen. Yamas drei Operanden
+sind eingearbeitet und heben zwei ältere Setzungen ausdrücklich auf, statt sie stillschweigend zu
+übergehen.
+
+**vier Pflichtfelder:**
+- **blatt_sha**: `24bbc90f` — **nicht** die vom Planner gemeldete `54163b25`, siehe Anmerkung 1.
+- **zahlen_nachgerechnet**: acht Rot-Lagen je einzeln am Basis-Stand gemessen, **alle acht = 0**
+  (Positivkontrolle `ceilings` 19 Dateien, `pruefeDeckeProLevel` 1 — die Griffe greifen).
+  Zählstand 9/9/9/9 selbst gezählt. Die „18 schichten-Treffer" nachgezählt: **20 minus 2** in der
+  JSON-Schema-Datei = 18 im TypeScript-Produktivcode. **Die Zahl stimmt.**
+- **streichung_abwaerts**: keine.
+- **streichung_aufwaerts**: keine.
+
+### Anmerkung 1 — `blatt_sha` ist ein Commit, nicht der Blob
+
+Der Planner meldet `blatt_sha: "54163b25"` und denselben Wert auch als `endstand_sha` und
+`ergebnis_sha`. `54163b25` ist ein **Commit**; der Blob des Blattes ist **`24bbc90f`**.
+
+Das ist derselbe Mangel, den ich in §451 an **mir selbst** gefunden habe und seither als Pflichtfeld
+führe. Er ist hier folgenlos — das Blatt ist eindeutig auflösbar. Aber ein Commit-SHA wandert beim
+Transport, ein Blob nicht: wer später den Stand rekonstruieren will, hat mit dem Blob die härtere
+Angabe. Form, kein Inhalt.
+
+### Anmerkung 2 — die Kommutativitäts-Begründung belegt an der falschen Domäne
+
+Das Blatt (Z. 50) begründet, warum Operand 2 (Schichtfolge außen→innen) nichts kostet:
+
+> „von 18 `schichten`-Treffern verarbeiten **zwei** die Reihenfolge (`wandaufbau.ts:75` und `:79`),
+> und **beide sind Summen**."
+
+**Das Ergebnis hält. Die Belegstelle trägt es nicht.** Selbst gemessen am Basis-Stand:
+
+Es gibt **zwei getrennte Schicht-Typen** mit **verschiedenen Feldnamen**:
+
+| | Typ | Feld | Treffer |
+|---|---|---|---|
+| Szenen-Domäne | `scene.types.ts:133`, `:357` | `dickeMm` | 36 |
+| Rechen-Domäne | `wandaufbau.ts:9-12` `interface Schicht` | `dicke` | 12 |
+
+`wandaufbau.ts:75/:79` verarbeitet **`Schicht.dicke`** — den Rechen-Typ. Operand 2 spricht aber von
+den **Szenen-Feldern** („für ALLE feldgleichen `schichten`-Felder"), und die tragen `dickeMm`.
+**Einen Konverter zwischen beiden gibt es nicht** (Suche nach `dicke:`-Zuweisungen außerhalb der
+Typdefinition: 0).
+
+Die **einzige** Produktivstelle, die die Szenen-`schichten` rechnerisch verarbeitet, ist
+
+```
+geometry/wandFlaeche.ts:169
+  const schichtSumme = (wand.schichten ?? []).reduce((n, s) => n + s.dickeMm, 0);
+```
+
+— und das Blatt nennt sie **nicht** (`wandFlaeche` im Blatt: 0 Treffer).
+
+**Warum das Ergebnis trotzdem hält:** auch `wandFlaeche.ts:169` ist eine Summe, also kommutativ.
+Und breiter gemessen, über **sieben** Zugriffsmuster (`schichten[`, `.at`, `.reverse`, `.slice`,
+`.findIndex`, `.indexOf`, `[0]`): **je 0 im Produktivcode**. Es existiert heute überhaupt kein
+reihenfolgeabhängiger Zugriff. Operand 2 kostet tatsächlich nichts — **stärker belegt, als das
+Blatt es behauptet, nur an einer anderen Stelle.**
+
+Das ist P7 in Reinform („Ort ≠ Wirkung"): Wer die Begründung nachprüft, öffnet `wandaufbau.ts` und
+findet dort keine Szenen-Schichten. Bitte die Belegstelle auf `wandFlaeche.ts:169` umstellen und die
+Zwei-Typen-Lage benennen — sonst führt das neue `schichten`-Feld der Bodenplatte eine dritte
+Namensvariante ein, ohne dass jemand die Frage gestellt hat.
+
+### Anmerkung 3 — Überholt-Zuordnung 1 ist zu scharf
+
+Die drei Zuordnungen selbst geprüft:
+
+| GP-0-Stelle | Zuordnung | Meine Messung |
+|---|---|---|
+| §7-2 „im selben **Gebäude**" | überholt durch Yama | **zu scharf** — s. u. |
+| §7-3 `berechneHoehenkette` | überholt durch E0 | **trägt** (0 Treffer) |
+| Nicht-Ziel „kein 2D zwingend" | überholt, 2D ist Gegenstand | **trägt** |
+
+Zu §7-2: Der Plan schreibt „im selben Gebäude abgelehnt (`'bodenplatte_pro_level_vorhanden'`
+**oder gebäudeweite Variante, je nach Fachantwort (8)**)". Er hat die Frage also **ausdrücklich
+offengelassen** und auf seine eigene Fachfrage 8 verwiesen. Yamas Operand 3 **beantwortet** sie —
+er überholt sie nicht. Der Unterschied zählt: „überholt" heißt, der Plan lag falsch; „beantwortet"
+heißt, er hat die Entscheidung korrekt Yama überlassen. Das Zweite ist hier der Fall, und es ist
+das Verhalten, das CLAUDE.md verlangt.
+
+Zum 2D-Nicht-Ziel habe ich die **Präzedenz** nachgemessen, auf die der GP-0-Plan sich stützt
+(„Decke ist heute auch nur 3D"): `renderers/two-d` mit Decke/ceiling **0 Dateien**,
+`renderers/three-d` **3** (`deckenMesh.ts`, `platzierung.ts`, `szene.ts`). **Die Präzedenz stimmt**,
+und Kriterium (a) hebt sie auf Yamas Anweisung bewusst auf.
+
+### Anmerkung 4 — Nebenbefund am Schema-Tor aus Kriterium (i)
+
+Das Blatt hält fest, `package.json:7` und `:10` fahren `schema:hausplaner:check` **vor** Build und
+Suite. Beides selbst gemessen und **bestätigt** (je 1 Treffer). Ein nicht nachgezogenes Schema
+fällt wirklich an diesem Tor.
+
+**Aber `test:hausplaner:dom` (Z. 11) trägt das Tor nicht** (0 Treffer). Wer nur den DOM-Lauf fährt,
+kommt an einem veralteten Schema vorbei. Für Kriterium (i) ohne Belang — es verlangt alle vier
+Läufe. Als Lücke im Schutznetz aber benannt.
+
+### Was ich ausdrücklich anerkenne
+
+Der Planner meldet eine **eigene Lücke vor dem Commit**: Kriterium (i) trug kein heutiges Ergebnis,
+weil ein `awk` das falsche Zeichen als Schlüssel nahm und neun Kriterien zu einer Zeile verschmolz
+— „eine plausibel aussehende Einzelzeile statt neun". Das ist genau die Falle, an der ich in §477
+selbst hängengeblieben bin (Blockmessung zu grob, 49 statt 1). Er hat sie gefunden, bevor sie
+jemand anders fand, und das Ergebnis nachgetragen.
+
+Und die technische Entscheidung, die Yama ihm zugewiesen hat (Namenskollision `herkunft`), ist mit
+Begründung entschieden — `polygonQuelle`, additiv, lässt `GeometrieHerkunft` unberührt, „Option B
+hätte ein Enum erweitert, das andere Verbraucher hat". Das ist die richtige Wahl aus dem richtigen
+Grund.
