@@ -521,3 +521,86 @@ Ich hatte „letzte Handlung je Rolle" nach Uhrzeit-**Strings** sortiert, wo `23
 steht; in Epoch neu gemessen kippte das Bild — der Takt läuft, nur der Dirigent steht.
 
 **Das ERTEILT-Votum ist damit vollständig abgearbeitet.** Ball: **Generator**.
+
+---
+
+# DoR Nachschärfung — `99ea9183` · `fdc8d7d5` · `96b24ca3` — **ERTEILT**
+
+| Feld | Wert |
+|---|---|
+| Auftrag | `DOR-plan-pruefer-A-37-nachschaerfung`, generation 6, Lease `fencing_token: 3` |
+| Prüfgegenstand | drei Planner-SHAs, Kette `99ea9183` → `fdc8d7d5` → `96b24ca3` |
+| **Votum** | **ERTEILT** — eine Anmerkung, kein Restpunkt |
+
+## Meldepflichten, alle drei Stände
+
+| SHA | Elter | Scope | Z0-I1 im Commit |
+|---|---|---|---|
+| `99ea9183` | `762243b9` ✔ | 89 / 0, ein Pfad | 0 |
+| `fdc8d7d5` | `99ea9183` ✔ | 90 / 1, ein Pfad | 0 |
+| `96b24ca3` | `fdc8d7d5` ✔ | 37 / 9, ein Pfad | 0 |
+
+Hauptkriterien durchgehend **27, lückenlos 1…27**; Unterkriterien **22b/c/d/e = 4**. Die 198 geparkten
+Z0-I1-Zeilen sind in keinem der drei Commits — das Parken hält.
+
+## Die vier Kriterien, selbst nachgemessen
+
+**A-37-22b.** Die Rot-Lage habe ich gegen **alle drei** Codestände geprüft, nicht nur gegen den, den
+er vorfand: `TICKET_ROLLE` / `integrator` / `berechtigt` / `erlaubt` je **0** in `762243b9`,
+`49972884` und `1155709d`. Sein neuer **Wirkungs-Messbefehl** trifft ebenfalls 0/0/0, mit je eigener
+Ausgabedatei gemessen; `cmp` bestätigt, dass `rueckweg.py` in `1155709d` unverändert ist (`git log`
+über den Pfad: 0 Commits). Gegenprobe, dass der Griff greifen *kann*: `TICKET_ROLLE` trifft in
+**vier** anderen Dateien unter `scripts/` — die Datei ist leer, nicht der grep blind.
+
+*Damit ist der Befund von 08:27 geschlossen:* Der alte Beleg zählte ein **Wort** und hätte nach dem
+Vorab-Bau 2 Treffer gefunden, beide reiner Text. Der neue misst die **Wirkung**.
+
+**A-37-22c.** Zwei Bäume mit Präfix `ticket-rolle-generator` (gezählt: 2), `rueckweg.py:128` wörtlich
+`pfad = f'{WURZEL}/{name}'`, Ähnlichkeitsprüfung 0. Und die Entscheidung, die das Kriterium prägt,
+steht drin: der Belegbaum ist **Absicht**, verlangt ist ihn zu *erkennen und zu melden*, nicht ihn zu
+beseitigen — mit der Absage-Regel gegen stillen Ausschluss.
+
+**A-37-22d.** Der Widerspruch zu 22b ist in **vier Stücke** aufgelöst (`:622-625`):
+`preflight_authorisierung()` ohne jede Änderung im echten Checkout · Transportkern mit temporärem
+Root nur im Wegwerf-Repo · Produktiv-Einstieg erst nach echtem Preflight · **Probe-Modus lehnt reale
+Rollen-Worktrees aktiv ab**. Die Absage-Regel `:631-633` trifft den Kern: ein Transportkern ohne
+Root-Parameter kann im Probe-Modus doch auf echte Bäume zeigen. **Widerspruchsfrei.**
+
+**A-37-22e.** Die Rot-Lage hatte ich um 08:29 unabhängig vorgemessen: `generation` 0, `digest`/`sha256`
+0, Aktionsstatus 0, `ticket-steuerung`/`rollen/` 0 — in `commit-pruefen.sh` **und** in `.githooks/`,
+wo es zudem **keinen `pre-commit`** gibt. Seine Zahlen decken sich. Und er benennt die
+**Teilstring-Falle** im Blatt selbst (`grep -ci 'ack'` → 5, alle in `package`/`getrackt`).
+
+## Anmerkung — die dritte Zahl derselben Bauart
+
+`:703` sagt: `grep -n 'mkdtempSync' scripts/__tests__/*.mjs` → **15 Treffer** in drei Dateien.
+Sein Befehl wörtlich gefahren gibt **16** (2 + 12 + 2). Die Dateizahl stimmt, die Trefferzahl ist um
+eins zu niedrig.
+
+**Und ich präzisiere meine eigene frühere Anmerkung:** Ich hatte „18 in 4 Dateien" gemeldet — das ist
+eine **andere Grundmenge** (`scripts/` rekursiv, plus `scripts/zeile-ersetzen.mjs` mit 2). 16 + 2 = 18.
+Beide Zahlen sind für ihren jeweiligen Befehl richtig; falsch ist nur 15 gegen 16.
+
+*Damit ist es die dritte Zahl dieser Art in dieser Kette* — „alle sechs" statt fünf, „vier beendete
+Läufe" statt fünf, jetzt „15" statt 16. **Immer um eins, immer beim Zählen aus dem Gedächtnis neben
+einer Liste, die danebensteht.** Seine strukturelle Abhilfe von vorhin — die Zahl nur noch dort
+führen, wo sie ohnehin steht — greift hier noch nicht.
+
+## Warum ERTEILT
+
+Nach der Linie, die ich in Runde 2 hingeschrieben habe: **Ein Restpunkt betrifft ein Kriterium, eine
+Anmerkung die Selbstbeschreibung.** Die Zahl 15/16 steht in einer *Berichtigung über die Messung*,
+nicht in einer Kriterienzeile. Alle vier Kriterien sind messbar, gegen den heutigen Stand rot, mit
+gefahrenen Messbefehlen, auslösbaren Negativproben und Absage-Regeln versehen; 22b und 22d sind
+widerspruchsfrei; die Kriterien 1…27 sind unverändert; beide Vorab-Commits (`49972884`, `1155709d`)
+sind mit SHA, Zeit und Lage gekennzeichnet und ausdrücklich als **nicht abnahmefähig** benannt.
+
+**Zu würdigen ist ein eigener Fund von ihm**, den niemand verlangt hatte: Beim Nachmessen lieferten
+ihm zwei Schleifen falsche Zahlen, weil sie für mehrere Stände *dieselbe* Zwischendatei beschrieben.
+Aufgefallen ist es an einem Widerspruch in der Ausgabe selbst — eine Zeile 177 in einer angeblich
+105 Zeilen langen Datei. *„Das war knapp: ich stand kurz davor, die Messung des Plan-Prüfers für
+falsch zu erklären. Richtig war seine, falsch meine."* Die Lehre steht jetzt als Warnung im Blatt,
+nicht als Vorsatz im Bericht — **je Stand eine eigene Datei, `cmp`-Gegenprobe, und: zwei Verfahren,
+zwei Antworten, dann gilt keine von beiden.**
+
+**Ball: Generator** (`aa0cddd3`) für den ergänzenden Bau nach 22b/c/d/e und den Rest 24…27.
