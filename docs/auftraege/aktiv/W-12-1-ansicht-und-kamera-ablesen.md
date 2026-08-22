@@ -21,7 +21,7 @@ einwand_erledigt: "W-02:206 und W-13:239 fuehren beide 'W-12 zurueckgehalten, Ei
 anlass: "Yamas Regel fuer Klasse B, 13.08.: erst die Messung, dann die Einordnung. W-18 war die erste
          Zeile, das ist die zweite — und damit sind beide, die er genannt hat, gemessen."
 grundlage: "store/hausplanerStore.ts:20/:28/:45/:100 (war :72) · renderers/three-d/szene.ts:100/:101/:170/:212-215/
-            :621/:627 · app/rahmen/Buehne.tsx:146 (gezeichnet) mit app/HausplanerApp.tsx:1261-1269/:1337/:1409/:349
+            :621/:627 · app/rahmen/Buehne.tsx:146 (gezeichnet) mit app/HausplanerApp.tsx:1297-1304/:1337/:1409/:349
             und app/dashboard/Kopfrahmen.tsx:304 · app/state/uiState.ts:5/:10/:11 · FORMELSAMMLUNG:253 (F-032, war :218)"
 ```
 
@@ -49,7 +49,7 @@ grundlage: "store/hausplanerStore.ts:20/:28/:45/:100 (war :72) · renderers/thre
              :213-214  transparent, opacity 0.5
              :215  this.szene.add(raster)
     2D-BUEHNE (Konva), die ganze Kette — selbst nachgemessen:
-      HausplanerApp.tsx:1261-1269  die Linien ENTSTEHEN hier   [BERICHTIGT 14.08., war :1274-1281]
+      HausplanerApp.tsx:1297-1304  die Linien ENTSTEHEN hier   [BERICHTIGT 14.08., war :1274-1281]
                                    (const rasterLinien … for-Schleife ueber
                                    weltBreite/weltHoehe mit rasterSchritt)
                             :1337 und :1409  durchgereicht   [BERICHTIGT 14.08., war :1423 — es sind ZWEI Stellen]
@@ -79,7 +79,7 @@ grundlage: "store/hausplanerStore.ts:20/:28/:45/:100 (war :72) · renderers/thre
 **Die Frage aus W-01 ist mitbeantwortet:** *`W-01-fang-beschreiben.md:94` schließt aus: „Ob ein sichtbares
 Raster gezeichnet wird, ist eine Renderer-Frage und steht in W-12/Schicht 4, nicht hier." **Gemessen: es
 wird gezeichnet — 3D als `GridHelper` (`szene.ts:212-215`), 2D über die Konva-Bühne** (`Buehne.tsx:146`
-zeichnet, `HausplanerApp.tsx:1261-1269` erzeugt).*
+zeichnet, `HausplanerApp.tsx:1297-1304` erzeugt).*
 
 > *Und **die Renderer-Frage selbst hat eine andere Antwort als W-01 vermutet:** es gibt nur **einen**
 > Renderer-Ordner, `renderers/three-d/`. Der 2D-Weg liegt in der App-Schicht. **Meine erste Fassung
@@ -170,7 +170,7 @@ W-12-1-2 (P1) Die VIER Gegenstaende mit Fundstelle: Ansichtszustand, Kamera samt
          szene.ts:621 und :627. Am Bau-Stand erheben, keine Zahl aus diesem Blatt.
          BEIM RASTER GILT DIE SCHICHT, NICHT DER RENDERER: 3D szene.ts:212-215,
          2D die Konva-Buehne mit Buehne.tsx:146 als Zeichenstelle und
-         HausplanerApp.tsx:1261-1269 als Erzeugung. Buehne.tsx:62 ist als Beleg
+         HausplanerApp.tsx:1297-1304 als Erzeugung. Buehne.tsx:62 ist als Beleg
          NICHT zulaessig (Props-Typzeile), und 'beide Renderer' ist falsch, weil
          renderers/ nur three-d/ enthaelt. Beides war der Mangel meiner ersten
          Fassung (800a6075).
@@ -198,7 +198,7 @@ W-12-1-3 (P1) BERICHTIGT nach 800a6075, UND DER WIDERSPRUCH WAR IM SELBEN BLATT:
 W-12-1-4 Die Frage aus W-01-fang-beschreiben.md:94 ist im Blatt beantwortet: das
          sichtbare Raster WIRD gezeichnet — 3D als GridHelper (szene.ts:212-215),
          2D ueber die Konva-Buehne, und zwar mit der GANZEN Kette statt mit einer
-         Typzeile: HausplanerApp.tsx:1261-1269 erzeugt die Linien, :1337/:1409 reichen sie
+         Typzeile: HausplanerApp.tsx:1297-1304 erzeugt die Linien, :1337/:1409 reichen sie
          durch, :349 schaltet, Kopfrahmen.tsx:304 traegt den Knopf, und
          Buehne.tsx:146 zeichnet ({rasterAn && rasterLinien}).
          NICHT als Beleg zulaessig: Buehne.tsx:62. Das ist die Props-Typzeile —
@@ -250,7 +250,7 @@ W_12_1_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 | Kriterium | Urteil | womit gemessen |
 |---|---|---|
 | **W-12-1-1** zwei `modus` je mit Träger | **erfüllt** | `hausplanerStore.ts:20` = `export type HausplanerModus`, `studioDaten.ts:97` = `export type StudioModus`, `HausplanerStudio.tsx:23` = `useState<StudioModus>` — alle drei am Bau-Stand selbst geöffnet. `setModus` gibt es zweimal: Store `:45`/`:126`, React-useState `:23`. |
-| **W-12-1-2** vier Gegenstände mit Fundstelle | **erfüllt** | `szene.ts:23/:100/:101/:170/:178` (Kamera + OrbitControls), `:621` `makeBasis` / `:627` `applyMatrix4` (F-032), `:212-215` GridHelper, 2D-Kette `HausplanerApp.tsx:349/:1261-1269/:1337/:1409` → `Kopfrahmen.tsx:304` → `Buehne.tsx:146` — jede Zeile einzeln geöffnet. `Buehne.tsx:62` steht dreimal ausdrücklich als **Nicht**-Beleg; „beide Renderer" nur in der Verneinung. |
+| **W-12-1-2** vier Gegenstände mit Fundstelle | **erfüllt** | `szene.ts:23/:100/:101/:170/:178` (Kamera + OrbitControls), `:621` `makeBasis` / `:627` `applyMatrix4` (F-032), `:212-215` GridHelper, 2D-Kette `HausplanerApp.tsx:349/:1297-1304/:1337/:1409` → `Kopfrahmen.tsx:304` → `Buehne.tsx:146` — jede Zeile einzeln geöffnet. `Buehne.tsx:62` steht dreimal ausdrücklich als **Nicht**-Beleg; „beide Renderer" nur in der Verneinung. |
 | **W-12-1-3** Zugriffsart statt Zahl, Zahlen mit Träger | **erfüllt** | selbst nachgezählt: `supportedViews` in `toolRegistry.ts` **12**, im ganzen Hausplaner **75** Zeilen (76 Vorkommen — eine Zeile doppelt), davon **54** in `toolCatalogStillgelegt.ts`; `'2d'`/`'split'` als Wert **9**; Registry-Einträge mit `id: 'ansicht'/'2d'/'3d'/'split'` **0**. Rot-Probe: dasselbe Muster findet `id: 'wand'` — es greift. |
 | **W-12-1-4** W-01-Frage beantwortet | **erfüllt** | `W-01-fang-beschreiben.md:94` selbst geöffnet: verweist die Rasterfrage tatsächlich hierher. Die ganze Kette steht in `7-GRENZEN`, `Buehne.tsx:62` als H-8-Nichtbeleg daneben. |
 | **W-12-1-5** Hygiene-Posten als Grenze | **erfüllt** | `uiState.ts:11` selbst geöffnet, Wortlaut deckt sich; an drei Blattstellen als *benannt und nicht angefasst* geführt. |
@@ -365,7 +365,7 @@ liefert `c1060bab` (10:01) und die Meldung `8346b5fe` (10:02); `git log … -- W
 | Kriterium | Urteil | womit gemessen (am Stand `c1060bab`) |
 |---|---|---|
 | **W-12-1-1** zwei `modus` je mit Träger | **erfüllt** | `hausplanerStore.ts:20`, `studioDaten.ts:97`, `HausplanerStudio.tsx:23` erneut geöffnet, Wortlaut unverändert; 8 Belegstellen im Blattwerk. |
-| **W-12-1-2** vier Gegenstände mit Fundstelle | **erfüllt** | `szene.ts:621`/`:627`/`:212-215`, `Buehne.tsx:146`, `:1261-1269`, `OrbitControls` in 2–6 Blättern; `Buehne.tsx:62` weiter in 3 Blättern als **Nicht**-Beleg. |
+| **W-12-1-2** vier Gegenstände mit Fundstelle | **erfüllt** | `szene.ts:621`/`:627`/`:212-215`, `Buehne.tsx:146`, `:1297-1304`, `OrbitControls` in 2–6 Blättern; `Buehne.tsx:62` weiter in 3 Blättern als **Nicht**-Beleg. |
 | **W-12-1-3** Zugriffsart statt Zahl | **erfüllt** | selbst nachgezählt: **12** / **75** (davon **54** in `toolCatalogStillgelegt.ts`) / **9** / **0**. Rot-Probe: `id: 'wand'` = 1 — das Muster greift. |
 | **W-12-1-4** W-01-Frage beantwortet | **erfüllt** | `7-GRENZEN.md:43` nennt `W-01-fang-beschreiben.md:94` weiterhin mit der ganzen Kette. |
 | **W-12-1-5** Hygiene-Posten als Grenze | **erfüllt** | `uiState.ts:11` geöffnet, in 3 Blättern als *benannt und nicht angefasst*. |
@@ -504,3 +504,51 @@ der Release-Linie bereits auf `BETRIEBSBESTAETIGT` (`3a68909a`, gemessen: **nich
 dieses Checkouts). Eine abgeschlossene Freigabe zurückzuholen, weil ihr Prüfer einen Fehler von mir
 gefunden hat, wäre das Gegenteil dessen, was der Fund wert ist.* **Berichtigt wird der Beleg, nicht
 die Entscheidung.**
+
+---
+
+## ⚠ BERICHTIGUNG 22.08. abends — der Erzeugungsort war an SIEBEN Stellen falsch
+
+```yaml
+befund: "plan-pruefer §413 (18:00:20), berichtigt in §418 (18:23:10) — sechs statt drei Stellen"
+ausgefuehrt: "planner, 22.08. abends"
+```
+
+**`HausplanerApp.tsx:1261-1269` erzeugt die Rasterlinien NICHT** — dort steht ein Kommentarblock
+über Knopf-Darstellung. **Richtig ist `:1297-1304`,** am Code nachgeprüft:
+
+```
+:1297  const rasterLinien: React.ReactElement[] = [];
+:1301  rasterLinien.push(<Line key={`vx${x}`} … stroke={FARBEN.rasterGrob} …/>);
+:1304  rasterLinien.push(<Line key={`hy${y}`} … />);
+:1446  rasterLinien={rasterLinien}          <- Durchreichung an die Bühne
+:12    Kopfkommentar: „rasterLinien und massElemente werden HIER gebaut"
+```
+
+**Sieben Stellen nachgezogen** (Z. 24, 52, 82, 173, 201, 253, 368). **Zeile 320 bleibt unverändert**
+— sie ist keine Fundstelle, sondern die **historische Selbstnotiz** des Plan-Prüfers vom 13.08.
+(*„Beide stehen an je drei Stellen — mein Fehler"*). *Eine Notiz über einen früheren Messfehler
+darf nicht mit dem Messwert mitwandern, sonst verliert sie ihren Gegenstand.*
+
+**Zwei Stellen (173, 201) stehen im DoR-Teil und tragen das Votum des Plan-Prüfers.** Er hat
+ausdrücklich verlangt, sie mitzuberichtigen — *„sonst deckt ein Votum weiter einen falschen Ort"*.
+**Der Wortlaut seiner Prüfung bleibt; nur die Zeilenangabe ist nachgezogen.**
+
+> **Die Kette selbst war immer richtig** — `:1337`/`:1409` reichen durch, `:349` schaltet,
+> `Kopfrahmen.tsx:304` ist der Knopf, `Buehne.tsx:146` zeichnet. **Nur das erste Glied zeigte
+> danebe­n.** *Der Befund macht die Kette nicht schwächer, er macht ihren Anfang nachprüfbar.*
+
+**Zwei Zählweisen, beide richtig — je nach Muster:**
+
+```
+grep -c '1261-1269'              8   alle Nennungen (davon 1 historische Notiz)
+grep -c 'HausplanerApp.tsx:1261' 6   nur die mit vorangestelltem Dateinamen
+```
+
+*Berichtigt wurden 7: die 6 mit Dateinamen plus eine in einer Aufzählung ohne ihn.*
+**Eine Zahl ohne ihr Messmuster ist keine Zahl** — dieselbe Lehre, die heute an fünf Fassungen
+derselben `dor_beleg`-Zählung entstanden ist.
+
+**Was NICHT berichtigt ist und wem es gehört:** `docs/STATUS.md:75` führt noch die ältere Fassung
+`:1274-1281` (4 Treffer). **`STATUS.md` hat einen alleinigen Schreiber (Integrator, ARBEITSREGELN
+§16)** — ich fasse sie nicht an.
