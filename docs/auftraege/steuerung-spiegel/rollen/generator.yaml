@@ -1,49 +1,46 @@
-auftrag_id: BAU-generator-A-37
-generation: 8            # 22.08. 09:07 — DoR der Nachschaerfung ERTEILT (Plan-Pruefer 1ca8d512 ueber 99ea9183+fdc8d7d5+96b24ca3): BAUEN. Deine Sitzung laeuft unter dem neuen Lauf 91834 (2.1.239); der alte Lauf 88088 bleibt T (verwaist) — er ist NICHT deine Sitzung, kein CONT noetig.
+auftrag_id: NACHBESSERUNG-generator-A-37
+generation: 9            # 2026-08-22T10:53:11+0200 — Evaluator-Votum NACHBESSERN db420cf0 (30/31; A-37-20 nicht erfuellt). NUR A-37-20 nachbessern. gen 8 (BAU) ist abgeschlossen: CODE_FERTIG c0dd4f83.
 rolle: generator
 sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8
-sitzung_gesperrt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b   # jeder Lauf dieser Sitzung wird automatisch SIGSTOPpt (Sperre des Dirigenten) bis A-37 ABGENOMMEN
+sitzung_gesperrt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b   # unveraendert: jeder Lauf dieser Sitzung beendet sich ohne Schreiben; Sperre bis Yamas fuenf Bedingungen
 worktree: /Users/yamanuri/Documents/ticket-rolle-generator
 branch: rolle/generator
-basis_sha: ab9e837c
+basis_sha: c0dd4f83      # dein Endstand; darauf aufsetzen, kein Rebase, kein Umschreiben
 prioritaet: P0
-aktion: bauen
-blatt: "docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md @ rolle/planner 96b24ca3 (in der Integration seit 968f39f6) — 31 Kriterien: A-37-1..27 + 22b/22c/22d/22e; DoR ERTEILT 1ca8d512"
+aktion: nachbessern
+ausloeser: "ereignisse/ABNAHME-evaluator-A-37/evaluator-NACHBESSERN.yaml (10:48) + Votum rolle/evaluator db420cf0 docs/rollenkette/rollen/4-evaluator/VOTUM-A-37-LIEFERUNG-22-08.md"
+massstab: |
+  A-37-20 WOERTLICH nach Blatt docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md @ rolle/planner c11f97ac:371 ff.
+  (inkl. Teil (a) exit-2-Mehrdeutigkeit und Teil (b) Codes 2/3/4 werden nicht vergeben) UND Votum db420cf0 Abschnitt
+  'Der eine Mangel: A-37-20' (Sammelstelle commit-pruefen.sh:836-839; exit 4 null Mal; exit 2 viermal fremd, exit 3 sechsmal
+  ENV_BLOCKED). Der Dirigent schreibt kein Kriterium nach: was 'erfuellt' heisst, steht im Blatt; wie es heute scheitert, im Votum.
 jetzt: |
-  1. Auftrag + Digest pruefen, ACK gen 8, Lease leases/BAU-generator-A-37/ (Token 2 haeltst du — Heartbeat auffrischen).
-  2. Die zwei offenen Skriptaenderungen (commit-pruefen.sh, rollen-tor.sh — A-37-24/25-Vorarbeit) duerfen jetzt weiterbearbeitet
-     und committet werden; die Vorab-Commits 49972884 (22) und 1155709d (23) bleiben; ergaenzende Commits folgen.
-  3. Reihenfolge: A-37-22b/22d (Preflight-Autorisierung + Probe-Root-Trennung in rueckweg.py) -> 22c (Doppelgaenger per
-     Aehnlichkeit) -> 22e (Generation/Digest/ACK-Alter/Aktion im Commit-Gate: commit-pruefen.sh UND .githooks/pre-commit) ->
-     23 (fertig, pruefen) -> 24 (BEFUNDNOTIZEN-Barriere) -> 25 (pre-commit: falscher Worktree/fehlende Rolle Exit 5/falscher
-     Zweig; Integrator darf begrenzten Integrationscommit; Merge-Hook bleibt; --no-verify dokumentiert) -> 26/27 (Zustandscommit-
-     Muster, js-yaml direkt + Lockfile) -> Altkriterien 1-21 gegenpruefen.
-  4. JEDE Negativprobe tatsaechlich ausloesen — ABER: Transport-/Pfad-/Zweig-/Doppelgaenger-Proben AUSSCHLIESSLICH im
-     Wegwerf-Repo unter dem Probe-Root (22d); am Bestand NUR Preflight-Ablehnung und Commit-Gate-Ablehnung (nebenwirkungsfrei).
-     NIE rueckweg.py auf realen Worktrees.
-  5. Commit-Gate fuer dich selbst: bis 22e gebaut ist, Commits nur ueber commit-pruefen.sh mit TICKET_ROLLE=generator und
-     NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules; vor JEDEM Commit rollen/generator.yaml + Digest neu lesen (wenn
-     aktion nicht mehr 'bauen' lautet oder generation neuer als dein ACK: NICHT committen). Sobald 22e steht: beide Tore selbst
-     gegen Probe-Steuerungsstelle negativ testen.
-  6. Ergebnis: ereignisse/BAU-generator-A-37/generator-CODE_FERTIG.yaml mit Ausgangs-SHA ab9e837c, ALLEN Ergebnis-SHAs
-     (inkl. 49972884, 1155709d), Pfaden, je Kriterium Messbefehl + Rohausgabe rot->gruen, Negativproben-Belege, Wegwerf-Repo-
-     Aufbauskript; Lease freigeben; Ball an den Evaluator (gen mit aktion: abnehmen folgt).
+  1. Auftrag + Digest pruefen, ACK gen 9 unter ack_pfad, Lease leases/NACHBESSERUNG-generator-A-37/ (neuer Token), Startmeldung
+     generator-AUFTRAG_GESTARTET.yaml MIT endstand_sha: c0dd4f83 (README 6e).
+  2. Nur A-37-20 beheben. Je Ursache (YAML-Syntax / MODUL / LAUFZEIT) ein eigener, im Bau wirklich erreichbarer Rueckgabewert
+     nach der Codetabelle des Blatts; Kollisionen mit vorhandenen exit 2/3-Bedeutungen so loesen, wie das Blatt (Teil a) es verlangt
+     — nicht still umetikettieren. Belege: je Ursache EIN Lauf mit Rohausgabe und 'echo $?' (rot auf c0dd4f83 -> gruen auf Ergebnis).
+  3. Die uebrigen 30 Kriterien NICHT anfassen. Gegenprobe im CODE_FERTIG: 'git diff --stat c0dd4f83..HEAD' zeigt nur die fuer
+     A-37-20 noetigen Dateien; Suite 1778/1778, tsc 0; Produktcode leer (git diff --stat c0dd4f83..HEAD -- resources/ app/).
+  4. Commit-Gate: NUR ueber scripts/commit-pruefen.sh mit TICKET_ROLLE=generator, NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules,
+     im eigenen Worktree; vor JEDEM Commit rollen/generator.yaml + Digest neu lesen (aktion != nachbessern oder generation > dein
+     ACK -> NICHT committen). Negativproben NUR im Wegwerf-Repo unter --probe-root (22d; README 6d).
+  5. Ergebnis: ereignisse/NACHBESSERUNG-generator-A-37/generator-CODE_FERTIG.yaml mit endstand_sha c0dd4f83, ergebnis_sha,
+     Pfaden, je Ursache Messbefehl + Rohausgabe + echo $?, Gegenprobe aus 3.; Abschlussmeldung CODE_FERTIG; Lease freigeben;
+     Ball an den Evaluator (gen 7 haengt per Muster an deinem CODE_FERTIG).
+  6. Ein Nachtrag heisst generator-CODE_FERTIG-nachtrag.yaml und traegt 'ersetzt_sha:' und 'ersetzt_datei:' (README 6c').
 verboten:
-  - rueckweg.py oder anderes Transportwerkzeug auf realen Worktrees
-  - Produktcode; DB-Laeufe; gemeinsamer Checkout; Beleg-Baum anfassen; W0-5-Staende
-  - Kriterientext aendern (nur Nachvollzugs-Matrix fuellen); eigene Abnahme
-  - nacktes git commit (bis pre-commit steht — danach ist es genau die Probe)
+  - andere Kriterien als A-37-20; Produktcode; DB-Laeufe; gemeinsamer Checkout; Beleg-Baum; W0-5-Staende
+  - rueckweg.py oder anderes Transportwerkzeug auf realen Worktrees; TICKET_ROLLE=<fremde Rolle> im Bestand
+  - Kriterientext aendern (nur Nachvollzugs-Matrix A-37-20 fuellen); eigene Abnahme; nacktes git commit
+  - Rebase/Amend/Force auf rolle/generator (c0dd4f83 bleibt, wie er ist)
 erlaubte_pfade:
-  - scripts/rollen-tor.sh
   - scripts/commit-pruefen.sh
-  - scripts/rueckweg.py
+  - scripts/rollen-tor.sh
   - .githooks/pre-commit
-  - .githooks/commit-msg
-  - package.json
-  - package-lock.json
-  - "docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md NUR Nachvollzugs-Matrix"
-  - "eigener Baubericht im Worktree; Wegwerf-Repo-Skript im Scratchpad (nicht im Repo)"
-steuerungshandlungen_erlaubt: [ACK, Lease-Heartbeat, Ereignisse]
+  - "docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md NUR Nachvollzugs-Matrix A-37-20"
+  - "eigener Baubericht im Worktree"
+steuerungshandlungen_erlaubt: [ACK, Lease-Heartbeat, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/BAU-generator-A-37/generator-ack.yaml
-erstellt: "2026-08-22T09:07 Dirigent (atomar veroeffentlicht)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/NACHBESSERUNG-generator-A-37/generator-ack.yaml
+erstellt: "2026-08-22T10:53:11+0200 Dirigent (atomar veroeffentlicht; Uhr: date)"

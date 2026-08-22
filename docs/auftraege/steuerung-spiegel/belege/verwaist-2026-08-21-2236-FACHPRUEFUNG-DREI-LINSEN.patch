@@ -1,0 +1,53 @@
+diff --git a/docs/FACHPRUEFUNG-DREI-LINSEN.md b/docs/FACHPRUEFUNG-DREI-LINSEN.md
+index 974b3201..629304fc 100644
+--- a/docs/FACHPRUEFUNG-DREI-LINSEN.md
++++ b/docs/FACHPRUEFUNG-DREI-LINSEN.md
+@@ -147,7 +147,25 @@ ## 3 · Maurerhandwerk: `wandFlaeche` ist Massenermittlung, kein Aufmaß
+ | Nr | Befund | |
+ |---|---|---|
+ | **M-1** | **`bruttoM2` ist die Fläche der Achsebene, ausgegeben als Ansichtsfläche „je Seite".** An der 5000×2500×300-Wand mit zwei gehrten Ecken: außen 13,25 m², **Achse 12,50 m²** (was geliefert wird), innen 11,75 m². Am geschlossenen Rechteck fehlen **3,0 m² Fassade** und stehen dieselben 3,0 m² zu viel Innenputz. *Für das Volumen ist das Achsmaß dagegen exakt* — **das Modul rechnet die richtige Größe für den Rohbau und beschriftet sie mit dem Namen der Größe, die es nicht rechnet** | ○ |
+-| **M-2** | **Ist die Schichtliste vollständig, liefert `bezug: 'fertig'` eine Wand mit 0 mm und 0 m³ — ohne Meldung.** `:159` prüft **echt größer**, also passiert Σ = Dicke. Dahinter ein Richtungsfehler: **im Handwerk ist das Fertigmaß größer als das Rohbaumaß**, der Code zieht ab | ○ |
++| **M-2** | **Ist die Schichtliste vollständig, liefert `bezug: 'fertig'` eine Wand mit 0 mm und 0 m³ — ohne Meldung.** `:159` prüft **echt größer**, also passiert Σ = Dicke. Dahinter ein Richtungsfehler: **im Handwerk ist das Fertigmaß größer als das Rohbaumaß**, der Code zieht ab | ✅ |
++
++> **M-2 nachgemessen 21.08.2026 — beide Haelften treffen, und sie brauchen verschiedene Entscheider.**
++> Empirisch gefahren statt erschlossen: eine Wand 300 mm mit `schichten: [200, 100]` und
++> `bezug: fertig` liefert `art: mengen` mit **dickeMm 0, bruttoM3 0, nettoM3 0 — und KEINER Meldung**.
++> Der Grund steht in `wandFlaeche.ts:174` und `:180` (Zeilen am Stand `4e02c273`, sie sind gegenueber der
++> Linse um rund 15 verschoben, weil M-3 einen Kommentarblock ergaenzt hat): der erste Zweig prueft
++> `schichtSumme > thickness`, der zweite `schichtSumme > 0`. Bei Gleichstand faellt der Fall durch
++> beide Netze — kein Fehler, aber auch kein Hinweis.
++>
++> **Zwei getrennte Fragen, und der Generator entscheidet keine davon:**
++> 1. *Ist Sigma = Dicke ein Zweifelsfall?* Das Modul sagt an anderer Stelle ausdruecklich
++>    "ein Zweifelsfall liefert keine Zahl". Eine Wand mit 0 mm Dicke ist plausibel falsch, also
++>    genau der Fall, den diese Haltung meint. Behebung waere `>=` statt `>` — eine
++>    VERHALTENSAENDERUNG: heute gueltige Szenen wuerden danach eine Meldung tragen.
++> 2. *Zieht der Code in die richtige Richtung ab?* Die Linse sagt, im Handwerk ist das Fertigmass
++>    GROESSER als das Rohbaumass, der Code zieht ab. Gemessen: er zieht ab (`thickness - schichtSumme`).
++>    **Ob das falsch ist, ist eine Fachfrage und ein hartes Gate** — hier wird nur festgehalten,
++>    WAS der Code tut, nicht ob er darf.
+ | **M-3** | **Der im Kommentar zugesagte Aufruf kann nie eine Zahl liefern.** `:131` sagt „die ganze Szene darf übergeben werden", `:142-148` erzeugt je fremder Öffnung eine Meldung, `:212` unterdrückt daraufhin das Zahlenergebnis vollständig | ✅ |
+ 
+ > **M-3 nachgemessen und behoben, 21.08.2026 — und behoben wurde die ZUSAGE, nicht die Rechnung.**
+@@ -162,7 +180,20 @@ ## 3 · Maurerhandwerk: `wandFlaeche` ist Massenermittlung, kein Aufmaß
+ > Der vorhandene Test prueft die fremde Oeffnung **allein** und war fuer den Fall der Zusage blind.
+ | **M-4** | **`bezug: 'fertig'` verändert keine einzige Flächenzahl** — nur die Volumen. Ein Etikett ohne Inhalt | ○ |
+ | **M-5** | **Am T-Stoß zählt das Achsmaß den Einbindebereich doppelt** (0,1125 m³ je Stoß bei 300/2500), ohne dass eine Konvention benannt ist. Fachlich vertretbar — **der Fehler ist, dass nirgends steht, welcher Konvention die Zahl folgt** | ○ |
+-| **M-6** | **Öffnung bis Wandoberkante passiert alle Prüfungen** — `>` statt `>=`. Der Sturz fehlt, der Renderer baut ihn nicht, niemand meldet es. Eine Öffnung ohne Restmaß über dem Sturz ist **nicht mauerbar** | ○ |
++| **M-6** | **Öffnung bis Wandoberkante passiert alle Prüfungen** — `>` statt `>=`. Der Sturz fehlt, der Renderer baut ihn nicht, niemand meldet es. Eine Öffnung ohne Restmaß über dem Sturz ist **nicht mauerbar** | ✅ |
++
++> **M-6 nachgemessen 21.08.2026 — trifft.**
++> Empirisch gefahren: eine Oeffnung mit `sillHeight 1100` und `height 1400` in einer 2500 mm hohen
++> Wand endet GENAU an der Oberkante und liefert `art: mengen` ohne jede Meldung. Der Grund steht in
++> `wandFlaeche.ts:207` (Stand `4e02c273`): `o.sillHeight + o.height > wand.height`, also echt groesser.
++> Bei Gleichstand bleibt ueber dem Sturz **0 mm**.
++>
++> **Warum der Generator das nicht behebt:** die Behebung ist eine Verhaltensaenderung, und sie
++> traegt eine Fachfrage. `>=` wuerde nur den Gleichstand fassen; ob darueber hinaus ein
++> MINDESTRESTMASS gefordert ist (und wie gross), ist ein Normwert und damit ein hartes Gate.
++> Dazu ein Bestandsrisiko, das genannt gehoert: gespeicherte Szenen mit einer solchen Oeffnung
++> sind heute gueltig und wuerden danach eine Meldung tragen — das ist kein Grund dagegen, aber
++> es ist eine Folge, die vor der Entscheidung auf dem Tisch liegen muss.
+ 
+ **Sechs weitere Fälle fehlen ganz:** kein Restpfeiler an der Ecke, Öffnung in der Gehrungszone,
+ geklemmte Öffnung (`clamped` wird vom Mengenmodul nicht gelesen), Giebelwand unter der Dachschräge

@@ -51,6 +51,9 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
     Ergebnis-SHA; wer ein Ereignis zitiert, zitiert den jüngsten Stand (per SHA, nicht per Wort). Nachträge nennen ausdrücklich,
     welchen SHA sie ablösen.
 6b. **Antworten des Dirigenten** stehen unter `ereignisse/<auftrag_id>/dirigent-*.yaml` — bei jedem Pull mitlesen.
+6e. **Endstand-SHA in jeder Meldung (externe Prüfung V-002/3, 22.08. 10:36):** Start- und Abschlussmeldung nennen `endstand_sha:`
+    (der Stand, **gegen den** gearbeitet wurde — z. B. der Generator-Endstand bei der Abnahme) und `ergebnis_sha:` (der Stand, **den**
+    die Rolle hinterlässt). Ein SHA ist prüfbar, „gelesen" nicht. Ein Votum ohne `endstand_sha` ist unvollständig.
 6c'. **Zeitquelle je Datei (Plan-Prüfer §302, 22.08. 10:35):** `zeit:` ist die Ausgabe von `date` **im Moment des Schreibens dieser
     Datei** — je Datei neu erhoben, nie eine einmal im Lauf gesetzte Marke (Befund: sechs Generator-Dateien bis 425 s *nach* ihrer
     mtime, identischer Feldwert bei verschiedenen mtimes). Wer eine Reihenfolge behauptet, **nennt seine Uhr** (Feld oder mtime);

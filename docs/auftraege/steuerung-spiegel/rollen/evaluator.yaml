@@ -1,33 +1,30 @@
-auftrag_id: ABNAHME-evaluator-A-37
-generation: 6            # Ausloeser-gebunden: NACH generator-CODE_FERTIG (BAU-generator-A-37) UND plan-pruefer-BESTAETIGT (DOR-plan-pruefer-A-37-errata). Bis dahin: bereit, lesende Vorbereitung, keine Sacharbeit.
+auftrag_id: NACHPRUEFUNG-evaluator-A-37
+generation: 7            # 2026-08-22T10:53:11+0200 — Ausloeser-gebunden (MUSTER): NACH ereignisse/NACHBESSERUNG-generator-A-37/generator-CODE_FERTIG*.yaml. Bis dahin: bereit, keine Sacharbeit. gen 6 abgeschlossen: NACHBESSERN db420cf0.
 rolle: evaluator
 sitzung_erwartet: 303cefb6-35fd-4c36-9aca-ed10515f59b3
 worktree: /Users/yamanuri/Documents/ticket-rolle-evaluator
 branch: rolle/evaluator
-basis_sha: e6af5693
+basis_sha: db420cf0
 prioritaet: P0
-aktion: warten_dann_abnehmen
+aktion: warten_dann_nachpruefen
 ausloeser:
-  - "ereignisse/BAU-generator-A-37/generator-CODE_FERTIG.yaml (alle A-37-Commits: 49972884, 1155709d, d64465b0, folgende)"
-  - "ereignisse/DOR-plan-pruefer-A-37-errata/plan-pruefer-BESTAETIGT.yaml (Errata geschlossen)"
-gegenstand: "Unabhaengige Abnahme von A-37 als EINE Lieferung: alle Commits auf rolle/generator seit ab9e837c (einschliesslich der Vorab-Commits 49972884/1155709d). Blatt: docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md @ rolle/planner (Errata-Stand) — 27 Kriterien + 22b/22c/22d/22e = 31. Generatorbericht ERST nach eigener Pruefung lesen."
+  - "ereignisse/NACHBESSERUNG-generator-A-37/generator-CODE_FERTIG*.yaml  (Muster! ein -nachtrag ersetzt den Endstand; juengster Stand per SHA zaehlt)"
+gegenstand: "Nachpruefung der Nachbesserung zu A-37-20 (Votum db420cf0): Endstand = ergebnis_sha des juengsten generator-CODE_FERTIG*; Basis c0dd4f83. Blatt c11f97ac:371 ff. A-37-20 (Teil a und b)."
 pruefen_vollstaendig:
-  - "Jedes Kriterium mit dem Messbefehl des Blatts: vorher rot (gegen ab9e837c) / nachher gruen (gegen Ergebnis-SHA)"
-  - "ALLE Negativproben SELBST ausloesen: falscher Worktree, fehlende Rolle (Exit 5), falscher Zweig, abgelaufene/veraltete Generation, fehlende ACK, aktion pausieren, doppelte Lease, unerlaubter Pfad, nacktes git commit, Merge ohne Berechtigung; Integrator darf begrenzten Integrationscommit; --no-verify als dokumentierte Grenze"
-  - "Transport-/Pfad-/Zweig-/Doppelgaenger-Proben AUSSCHLIESSLICH im Wegwerf-Repo unter Probe-Root (Aufbauskript des Generators reproduzieren oder eigenes bauen); am Bestand nur Preflight-/Gate-Ablehnung (nebenwirkungsfrei). NIE rueckweg.py auf realen Worktrees."
-  - "22e: Commit-Gate (commit-pruefen.sh UND .githooks/pre-commit) gegen eine Probe-Steuerungsstelle: veraltete ACK -> abgelehnt; fehlende ACK -> abgelehnt; aktion pausieren -> abgelehnt; aktuelle ACK + bauen -> erlaubt"
-  - "Keine DB-Laeufe (Verbot bis Z0-I1); Produktcode unveraendert (git diff --stat ab9e837c..HEAD -- resources/ app/ -> leer)"
-  - "Beide Altkriterien-Belege A-37-1..21 erneut (21/21) auf dem Ergebnisstand"
-meldepflicht: "Startmeldung + evaluator-AUFTRAG_GESTARTET.yaml vor der Arbeit; Abschluss 'ABGENOMMEN' oder 'NACHBESSERN' + evaluator-AUFTRAG_ABGESCHLOSSEN.yaml; Votum im eigenen Worktree committen (commit-pruefen.sh, TICKET_ROLLE=evaluator); Ereignis ereignisse/ABNAHME-evaluator-A-37/evaluator-<ABGENOMMEN|NACHBESSERN>.yaml mit Befehl, Rohausgabe, SHA je Kriterium. Zeiten nur gemessen."
-lease: "leases/ABNAHME-evaluator-A-37/ VOR der Pruefung; freigeben nach Votum."
+  - "A-37-20 rot (c0dd4f83) -> gruen (Endstand): je Ursache YAML-Syntax / MODUL / LAUFZEIT EIN eigener Lauf mit Rohausgabe und echo $?, selbst ausgeloest, Generatorbericht erst danach gelesen; Kollisionsfrage exit 2/3 nach Blatt Teil (a) bewertet"
+  - "Gegenprobe 'die uebrigen 30 unberuehrt' (deine eigene Formulierung): git diff --stat c0dd4f83..Endstand nur A-37-20-Dateien; Produktcode leer; Suite selbst gefahren (1778/0), tsc 0; die Negativproben von 22e/25 (veraltete/fehlende ACK, aktion pausieren, nackter Commit) einmal erneut im Wegwerf-Repo unter --probe-root"
+  - "Kein Vollvotum ueber 31 noetig — nur A-37-20 + Gegenprobe; die 30 Belege aus db420cf0 bleiben gueltig, wenn die Gegenprobe haelt"
+meldepflicht: "Startmeldung evaluator-AUFTRAG_GESTARTET.yaml MIT endstand_sha (README 6e); Abschluss ABGENOMMEN oder NACHBESSERN + evaluator-AUFTRAG_ABGESCHLOSSEN.yaml mit endstand_sha + ergebnis_sha (Votum-Commit); Votum im eigenen Worktree (commit-pruefen.sh, TICKET_ROLLE=evaluator, NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules)"
+lease: "leases/NACHPRUEFUNG-evaluator-A-37/ VOR der Pruefung; freigeben nach Votum."
+auflagen_aus_10_40: "Rueckweg-/Transport-Proben NUR --probe-root; keine Werkzeugkopie aus /tmp gegen den Bestand; TICKET_ROLLE=<fremd> in keinem realen Checkout; Argumentverarbeitung lesen, bevor ein Skript laeuft."
 erlaubte_pfade:
   - "eigenes Votumsblatt im Worktree (Dokument, kein Produktcode)"
 verboten:
-  - Produktcode aendern; Reparaturen am Bau (NACHBESSERN geht an den Generator)
+  - Produktcode aendern; Reparaturen am Bau
   - docs/STATUS.md / docs/BEFUNDNOTIZEN.md schreiben
   - Datenbanklaeufe; rueckweg.py auf realen Baeumen
   - Commit ohne Lease; Commit ausserhalb des eigenen Worktrees
 steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/ABNAHME-evaluator-A-37/evaluator-ack.yaml
-erstellt: "2026-08-22T09:30:24+02:00 Dirigent (gemessen)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/NACHPRUEFUNG-evaluator-A-37/evaluator-ack.yaml
+erstellt: "2026-08-22T10:53:11+0200 Dirigent (atomar veroeffentlicht; Uhr: date)"

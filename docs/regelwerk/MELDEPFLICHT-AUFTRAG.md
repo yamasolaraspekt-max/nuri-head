@@ -42,6 +42,12 @@ Erst danach dürfen Lease und Sacharbeit beginnen.
 Abschluss-Ereignis `ereignisse/<auftrag_id>/<rolle>-AUFTRAG_ABGESCHLOSSEN.yaml` mit denselben Feldern plus
 `abschlussbegriff`, `ergebnis_sha`, `erklaerung: "Ich habe meinen Anteil an diesem Auftrag als <Rolle> abgeschlossen."`
 
+**Nachtrag 22.08.2026 10:49 (externe Prüfung V-002/3, Dirigent unter Vollmacht):** Start- **und** Abschlussmeldung nennen
+zusätzlich `endstand_sha` — den Stand, **gegen den** gearbeitet wurde (z. B. der Generator-Endstand, den der Evaluator prüft;
+der Votum-SHA, den der Integrator transportiert). Anlass: Errata (10:02) und Bestätigung (10:12) gaben am 22.08. `561cc3d1`
+weiter, obwohl `c0dd4f83` seit 10:01:24 galt. Ein SHA ist prüfbar, „gelesen" nicht. Ein Votum ohne `endstand_sha` ist
+unvollständig; der Monitor (Z0-I3/Z0-I4) lehnt es ab.
+
 ## Technische Ablehnung (Beispiele)
 Generator schreibt `ABGENOMMEN` · Planner schreibt `gebaut` · Evaluator schreibt `behoben` · Integrator schreibt `fachlich
 entschieden` · Abschlussmeldung ohne Rolle · Abschlussmeldung zu veralteter Generation · Ergebnis-SHA existiert nicht.
