@@ -30320,3 +30320,63 @@ es dafür nicht gebaut ist.**
    X — nicht `gelesen_bis`. In diesem Fall entscheidet `prozess_start: 15:48:12`.
 
 Ball: **Dirigent** (die doppelte Messung abwenden) · bei mir **nichts**; die DoR ist bestätigt.
+
+## §375 — Die Prämisse des neuen Kriteriums trägt: `phpunit.xml` gewinnt gegen `.env.testing`, dreifach belegt
+
+Messstand: HEAD `0429e17f`, Baum 0, gemessen 15:58–15:59. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §375'` → 0).
+
+### Was angekommen ist
+
+`SPEZ-planner-anschlusswelle-1/dirigent-praezisierung-errata-z0-i1-phpunit.yaml`, **15:55:01** — 74
+Sekunden nach meinem §373. Der Dirigent übernimmt den Befund und macht Errata-Punkt (b) fest:
+
+> *„DB-Ziel von Z0-I1 Stufe 1 = `ticket_testing`, FESTGEMACHT an `phpunit.xml:28` (versioniert,
+> `force=true`) — nicht an `.env.testing`. **KEIN Messbefehl des Blatts darf `.env.testing`
+> voraussetzen**; wo die Datei fehlt, ist `phpunit.xml` die Quelle."*
+
+Und: *„Yamas Auflage 1 ist damit POSITIV erfüllt — Posten 10 gestrichen (Plan-Prüfer)."* Das deckt
+sich mit meiner eigenen Messung aus §373. **Yama-Liste bleibt bei neun.**
+
+### Die Prämisse, die dabei niemand geprüft hat — ich hole sie nach
+
+Das neue Kriterium lautet: *„Testlauf liest `DB_DATABASE` aus `phpunit.xml` (`force=true`)."* **Das
+setzt voraus, dass `phpunit.xml` gegen `.env.testing` gewinnt** — und in drei von fünf Bäumen liegen
+beide vor. Wenn `.env.testing` gewönne, wäre das Kriterium in genau den Bäumen unwirksam, in denen
+gebaut und abgenommen wird. Am Code gemessen, drei Stützen:
+
+    1  phpunit.xml:28              <env name="DB_DATABASE" value="ticket_testing" force="true"/>
+                                   PHPUnit setzt env-Variablen VOR dem Laravel-Bootstrap;
+                                   Loader.php:678 liest das force-Attribut aus.
+    2  Env.php:62                  $builder->immutable()->make()
+                                   IMMUTABLE: eine bereits gesetzte Variable wird von Dotenv
+                                   NICHT ueberschrieben.  <- der tragende Beleg
+    3  LoadEnvironmentVariables:29 $this->createDotenv($app)->safeLoad()
+                                   safeLoad wirft NICHT, wenn die Datei fehlt.
+
+**Ergebnis: `phpunit.xml` gewinnt, und wo `.env.testing` fehlt, läuft es trotzdem durch.** Die
+Anweisung des Dirigenten ist damit nicht nur ordnungspolitisch richtig (versionierter Ort statt
+ignorierter), sondern **technisch das, was ohnehin passiert**. Das Kriterium ist baubar.
+
+### Standangabe — die Regel, die ich in §373 dem Planner angemerkt habe, gilt für mich
+
+Mein Worktree hat **kein** `vendor/`. Ich habe im Hauptbaum gemessen, und deshalb gehört der Stand
+dazu:
+
+    gemessen in   /Users/yamanuri/Documents/ticket   HEAD 93ebc442, Zweig auto/hausplaner-integration
+    composer.lock Hauptbaum e8c5e6e1b859  ==  Integration e8c5e6e1b859   <- identisch
+    laravel/framework v11.48.0
+
+Die Gleichheit der `composer.lock` ist der Grund, warum die Messung an einem fremden Baum hier
+überhaupt gilt: **der Abhängigkeitsstand ist derselbe.** Ohne diese Gegenprobe wäre es genau der
+Beleg ohne Standangabe, den ich in §373 beanstandet habe.
+
+### Grenze
+
+**Am Code gelesen, nicht ausgeführt.** Ein Testlauf wäre ein DB-Lauf und ist bis Z0-I1 gesperrt. Die
+drei Stützen sind Quelltext, kein Beleg aus einem Lauf — sie sagen, wie das Framework es *tut*, nicht
+dass es heute so *lief*. Für den Bauenden ist der Nachweis `SELECT DATABASE()` im Beleg, wie das
+Kriterium es ohnehin verlangt.
+
+Ball: **Planner** (Errata-Bündel) · bei mir **wartend**. Sobald es vorliegt, prüfe ich (a) bis (d) in
+einem Zug und bringe diesen Abschnitt als Prämissenbeleg mit.
