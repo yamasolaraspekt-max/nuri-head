@@ -191,6 +191,11 @@ STAMM="$(printf '%s' "$ROLLE" | sed -E 's/-[0-9]+$//')"
 # hier mit. *Der Standardwert bleibt kanonisch; wer nichts setzt, prueft gegen die echte Quelle.*
 STEUERUNG="${TICKET_STEUERUNG:-/Users/yamanuri/.ticket-steuerung}"
 
+# A-43-11: die Datei muss sich selbst kennen, damit die Fehlermeldung ihre Wortlisten aus der
+# case-Anweisung LESEN kann statt sie zu wiederholen. BASH_SOURCE traegt den Pfad auch dann, wenn
+# das Tor als Funktion aus einem Haken gerufen wird; $0 waere dort der Haken und nicht diese Datei.
+TOR_DATEI="${BASH_SOURCE[0]:-$0}"
+
 # Rueckgabe 7 fuer "die Steuerung sagt: nicht jetzt". NEU in der Codetabelle und bewusst nicht 1
 # oder 5: 1 heisst "Rolle und Baum passen nicht zusammen", 5 "Rollenmarke fehlt oder ist falsch".
 # Beides waere hier gelogen — Rolle und Baum koennen tadellos stimmen, waehrend die Steuerung
@@ -357,9 +362,34 @@ steuerung_pruefen() {
   # den keine der beiden kennt, sperrt ebenfalls und sagt es. *Ein Commit unter einer Anweisung,
   # die niemand einordnen kann, ist genau der Fall, gegen den A-37-22e steht; Durchlassen waere
   # hier die falsche Vorsicht.*
+  # ── A-43 POSTEN 2 — DAS AKTIONSVOKABULAR KENNT ALLE SIEBEN ROLLEN ─────────────────────────
+  #
+  # **Der Befund des Blattes, an der echten case-Anweisung gemessen und nicht nachgebaut:**
+  # neun von elf Rollentaetigkeiten waren dem Tor unbekannt und gaben 7 mit *unbekannte aktion*.
+  # Die zwei, die liefen, gehoerten beide DERSELBEN Rolle — dem Generator, also mir.
+  # *Eine Liste, die nur die eigene Rolle kennt, ist keine Liste, sondern eine Gewohnheit.*
+  #
+  # **Warum es bis heute nicht geknallt hat:** die Uebergangsregel README 6f. Jede Rollenquelle
+  # traegt seit 12:17 ein TOR-WORT in `aktion:` (`bauen`, auch wenn die Rolle nichts baut) und die
+  # echte Taetigkeit in `taetigkeit:`. **Das ist eine Kruecke mit Ablaufdatum** — und sie erzeugt
+  # genau die zweite Wahrheit, die dieses Haus sonst bekaempft: das Feld, das das Tor liest, sagt
+  # etwas anderes als das Feld, das die Rolle beschreibt. Mit diesem Bau wird sie entbehrlich.
+  #
+  # **ZUR PAUSE-FORM `warten_dann_*`:** sie ist Pause, nicht Unbekannt. Das Blatt verlangt beides
+  # zugleich — A-43-9 will die Form anerkannt, A-43-10 verbietet einen Glob, der auch `wartenXYZ`
+  # durchlaesst. Deshalb `warten_dann_*` MIT Unterstrich und nicht `warten*`: der Unterstrich ist
+  # die Grenze, die eine Form von einem Tippfehler trennt.
+  #
+  # **ZU DEN MELDUNGSTEXTEN, und das ist der Grund fuer den sed-Griff unten:** hier standen die
+  # beiden Wortlisten ein ZWEITES Mal, als Text. Heute stimmten sie ueberein, morgen nicht mehr —
+  # *„keine zweite Definition, aber eine zweite Aussage"*, und wer nach einer Abweisung die Meldung
+  # liest, bekaeme eine Liste, die es nicht mehr gibt. Die Meldung LIEST die Woerter jetzt aus der
+  # case-Anweisung dieser Datei. **Damit gibt es eine Quelle und eine Ableitung, keine zwei
+  # Aussagen.** Faellt das Lesen aus, sagt die Meldung das, statt eine Liste zu erfinden — eine
+  # ausgefallene Messung ist kein Ergebnis, auch nicht in einer Fehlermeldung.
   case "$AKTION" in
-    bauen|nachbessern) ;;
-    pausieren|angehalten|angehalten_eingefroren|parken|warten)
+    bauen|nachbessern|spezifizieren|pruefen|erteilen|abnehmen|nachpruefen|transportieren|zustand_nachziehen|steuern|release_pruefen) ;;
+    pausieren|angehalten|angehalten_eingefroren|parken|warten|warten_dann_*)
       echo "ROLLEN-TOR  VERSTOSS  die Steuerung sagt '$AKTION' — das ist keine Arbeitsanweisung." >&2
       echo "            Quelle: $QUELLE (generation ${GEN:-?})" >&2
       echo "            Am 22.08. fiel ein Commit 3 Minuten 43 nach einer Pause, weil das Tor" >&2
@@ -369,10 +399,18 @@ steuerung_pruefen() {
       echo "ROLLEN-TOR  HINWEIS  Rollenquelle nennt keine aktion — Generation UNGEPRUEFT." >&2
       return 0 ;;
     *)
+      # Die beiden Listen werden aus der case-Anweisung oben GELESEN, nicht wiederholt.
+      _ARBEIT="$(sed -n 's/^    \(bauen|[a-z_|]*\)) ;;$/\1/p' "$TOR_DATEI" 2>/dev/null | head -1 | tr '|' ' ')"
+      _PAUSE="$(sed -n 's/^    \(pausieren|[a-z_|*]*\))$/\1/p' "$TOR_DATEI" 2>/dev/null | head -1 | tr '|' ' ')"
       echo "ROLLEN-TOR  VERSTOSS  unbekannte aktion '$AKTION' — weder Arbeit noch Pause." >&2
       echo "            Quelle: $QUELLE (generation ${GEN:-?})" >&2
-      echo "            Bekannt als Arbeit: bauen nachbessern" >&2
-      echo "            Bekannt als Pause:  pausieren angehalten angehalten_eingefroren parken warten" >&2
+      if [ -n "$_ARBEIT" ] && [ -n "$_PAUSE" ]; then
+        echo "            Bekannt als Arbeit: $_ARBEIT" >&2
+        echo "            Bekannt als Pause:  $_PAUSE" >&2
+      else
+        echo "            Die Wortlisten stehen in der case-Anweisung von $TOR_DATEI;" >&2
+        echo "            sie liessen sich von dort nicht lesen und werden hier NICHT geraten." >&2
+      fi
       echo "            Ein Commit unter einer Anweisung, die niemand einordnen kann, faellt aus." >&2
       return 7 ;;
   esac
