@@ -35884,3 +35884,102 @@ Ball: **keiner** — Vorratsbefund. Nachrichtlich an **Dirigent/Integrator**: we
 `STATUS.md` verweist, sollte die Kennung nennen (`auftrag: "W-05/1"`) statt der Zeilennummer, oder
 die Zeilennummer mit einem Stand versehen. Der offene Ball aus §447 (**Integrator**, Tafelfelder
 E0/E2) steht unverändert; Stille dort inzwischen **29 Minuten**.
+
+## §450 — Z2-W0-11b (AUTH) startet: mein Votum trägt, aber es nennt keinen Blattstand. Und der Planner hat §447 vor zweieinhalb Stunden schon einmal behoben
+
+Messstand: HEAD `c9d21fde`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 20:20–20:25.
+**Ereignis-Schnitt dieser Runde: 20:19:01** (2 neue Ereignisse). Abschnittsnummer gegen den frischen
+HEAD gewählt (`grep -c '^## §450'` → 0). Anlass: `generator-AUFTRAG_GESTARTET-Z2-W0-11b.yaml`
+(20:19:51) — **`art: "AUTH"`**, und Authentifizierung ist eine Schutzgrenze aus CLAUDE.md.
+
+### Mein Votum trägt — nachgemessen, nicht erinnert
+
+    mein DoR-Votum        16:52:38, ERTEILT (plan-pruefer-DOR-Z2-W0-11b-ERTEILT.yaml)
+    Blattstand damals     05d7f04a (16:48:39), Blob df1af47b, 251 Zeilen
+    Baustand jetzt        0d10461d,            Blob 9909055e, 251 Zeilen
+    Diff dazwischen       4 Zeilen — und es sind genau diese:
+      -dor_beleg: "steht aus — plan-pruefer"
+      +dor_beleg: "ERTEILT — plan-pruefer 2026-08-22T16:52:38, Beleg 343bd48f (…)"
+      -ballbesitz: "plan-pruefer (DoR)"
+      +ballbesitz: "generator (DoR erteilt — baubar)"
+    Kriterien a-f         auf BEIDEN Staenden identisch (Positivkontrolle des Musters: 12 Treffer)
+
+**Rein redaktionell. Kein Kriterium hat sich bewegt.** Der Generator baut gegen den Stand, den ich
+geprüft habe.
+
+**Und sein `Beleg 343bd48f` ist korrekt zitiert:** das ist mein §393-Commit, der Beleg des Votums —
+**nicht** der Blattstand. Meine erste Messung suchte dort das Blatt und fand 0 Zeilen; das war kein
+Befund gegen ihn, sondern meine Verwechslung von Votumsbeleg und Blattstand.
+
+### MEIN EIGENER MANGEL — und ich habe genau diese Form vor drei Stunden gelobt
+
+**Mein DoR-Ereignis nennt kein `blatt_sha`.** Es führt `endstand_sha` und `ergebnis_sha` — beides
+**meine eigenen** Commits. **Gegen welchen Blattstand die DoR gilt, steht nirgends.**
+
+    Folge: ich musste die Drift ueber die ZEIT rekonstruieren — Blatt-Historie ziehen, den Stand
+    vor 16:52:38 suchen, Blobs vergleichen. Mit einem Feld waere es ein Einzeiler gewesen.
+
+> **In §437 habe ich genau diese Form beim Generator gelobt:** *„Das `blatt`-Feld nennt BEIDE
+> DoR-Belege … ein Blatt mit zwei Ständen, beide zitiert, genau die Form, deren Fehlen in §414 den
+> Blattdrift erzeugte."*
+>
+> **Ich habe die Form gelobt und selbst nicht angewandt.** Das ist wörtlich der Satz des Generators
+> von 19:55:40, zum dritten Mal heute und jetzt an meinem Votum: *„Eine Lehre, die nur die eine
+> Stelle repariert, an der sie entstand, ist keine Lehre."*
+>
+> **Ab sofort trägt jedes DoR-Votum von mir ein `blatt_sha`** — den Blob, nicht den Commit (§440).
+
+### Der Planner hat §447 schon einmal behoben — vor zweieinhalb Stunden
+
+Der Blattstand `418bcb6c` (17:53:25) trägt die Botschaft:
+
+> *„Neun Blätter sagten DoR steht aus, obwohl sie erteilt ist — Kopfzeilen nachgezogen.
+> **DER FEHLER IST KEIN SCHÖNHEITSFEHLER…**"*
+
+**Das ist exakt die Klasse aus §447.** Dort ist es die Tafel: `docs/STATUS.md` führt Z1-E0-1 und
+Z1-E2-1 seit 19:44:42 mit `dor_beleg: "steht aus"`, obwohl seit 19:30:30 erteilt.
+
+> **Dieselbe Fehlerklasse, zwei Träger.** Der Planner hat sie in den **Blättern** erkannt, neunfach
+> behoben und ausdrücklich als „kein Schönheitsfehler" eingeordnet. **Zwei Stunden später ist sie in
+> der TAFEL wieder da.** §447 steht damit nicht mehr allein — es hat einen Präzedenzfall, und der
+> stammt nicht von mir.
+
+### Der Operand Y-12 — belegt, aber die Quelle ist flüchtig
+
+CLAUDE.md: *„Authentifizierungs-… Entscheidungen werden nicht still automatisiert. Fehlende
+Operanden führen zu Rückfrage."* Also geprüft, woher der Operand kommt:
+
+    Blatt (:15)        operand_y12: "GELIEFERT (gen 19 Posten 9): IDS-Connect-Standard — eigener
+                       einmaliger state/nonce …, TTL, an Sitzung/Nutzer gebunden, Pruefung im
+                       Callback, Ablehnung ohne/mit verbrauchtem Token."
+    planner.yaml       aktuell gen 21 (mtime 19:11:46)  ->  Y-12:  0 Treffer
+    generator.yaml     aktuell gen 20                    ->  Y-12:  0 Treffer
+    planner-CODE_FERTIG-Z2-W0-11b.yaml (16:49), :6       ->  „9 — Z2-W0-11b … mit Operand Y-12"
+
+**Der Operand ist NICHT fehlend — kein Verstoß.** Er ist belegt, nur nicht dort, wo das Blatt
+hinzeigt: **die Rollenquelle „gen 19" ist überschrieben, das Ereignis von 16:49 nicht.**
+
+> **Und das ist §449 in einer schärferen Form.** Dort zeigte ein Zeilenverweis auf etwas anderes.
+> Hier zeigt der Beleg einer **Auth-Entscheidung** auf eine Generation, die es nicht mehr gibt.
+> **Die Rollenquelle ist ein flüchtiger Träger — sie wird bei jeder Generation überschrieben.** Wer
+> in einer Woche fragt *„wer hat entschieden, dass ein state/nonce der richtige Weg ist?"*, findet
+> gen 19 nicht mehr. **Der dauerhafte Träger ist die Ereignisablage**, und dort steht es — der
+> Planner hat richtig gehandelt, indem er den Operanden ins Ereignis schrieb. **Der Blattverweis
+> nennt nur die falsche der beiden Quellen.**
+
+### Zwei ausgefallene Messungen, beide gefangen — und beide auf dieselbe Weise falsch
+
+    1. „Kriterienkennungen IDENTISCH"  — verglich zwei LEERE Mengen (Blatt in 343bd48f nicht vorhanden)
+    2. „alt <keine> / neu <keine> -> IDENTISCH" — Muster traf nicht, Positivkontrolle sagte 0 Treffer
+
+**Beide Male lautete das Ergebnis „identisch", und beide Male war nichts gemessen worden.** Zwei
+leere Mengen sind immer gleich. **Das ist die gefährlichste Form der ausgefallenen Messung: sie
+liefert nicht null, sondern eine BESTÄTIGUNG.** Eine Null macht misstrauisch; ein „identisch"
+beruhigt.
+
+**Elfte Falle in der stehenden Liste: der Vergleich zweier leerer Mengen.** Gefangen, weil die
+Positivkontrolle in der Ausgabe mitlief — beim zweiten Mal stand `0 Treffer` direkt daneben.
+
+Ball: **keiner** — Z2-W0-11b liegt beim Generator, mein Votum ist bestätigt. Der offene Ball aus
+§447 (**Integrator**, Tafelfelder E0/E2) steht unverändert; Stille dort **34 Minuten**, `ad2ac724`
+weiterhin nicht transportiert.
