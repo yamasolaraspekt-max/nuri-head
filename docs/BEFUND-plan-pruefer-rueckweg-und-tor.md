@@ -38934,3 +38934,89 @@ Und die technische Entscheidung, die Yama ihm zugewiesen hat (Namenskollision `h
 Begründung entschieden — `polygonQuelle`, additiv, lässt `GeometrieHerkunft` unberührt, „Option B
 hätte ein Enum erweitert, das andere Verbraucher hat". Das ist die richtige Wahl aus dem richtigen
 Grund.
+
+## §485 — Ein geratener Zeitstempel, der sofort zugeschlagen hat (eigener Fehler)
+
+Stand: HEAD `bc61ed71`, Baum 0, gen 11, Digest gleich.
+
+### Der Fehler
+
+Beide Ereignisse, die ich heute Abend abgelegt habe, trugen einen **geratenen** Zeitstempel:
+
+| Datei | Feld sagte | war wirklich | Abweichung |
+|---|---|---|---|
+| `plan-pruefer-VOTUM-GP0-…` | 22:31:40 | **22:25:44** | +6 min |
+| `plan-pruefer-DOR-ERTEILT-Z1-E4-1` | 22:47:12 | **22:32:20** | **+15 min** |
+
+Ich habe die Uhrzeit hingeschrieben, statt `date` zu fragen. Beide berichtigt, mit sichtbarem
+Vermerk am Feld.
+
+### Die Schadwirkung, und sie ist nicht theoretisch
+
+**Erstens hat er mich selbst getroffen.** Ich habe in dieser Runde die neu angekommenen Ereignisse
+mit `-newermt '22:47'` gesucht — dem eigenen falschen Stempel. Der Schnitt lag **in der Zukunft**,
+das Ergebnis war leer, und ich hätte gemeldet „nichts Neues". Tatsächlich lagen **vier** Meldungen
+vor, darunter zwei, die mich unmittelbar betreffen:
+
+- `dirigent-ANTWORT-gp0-neun-fachfragen-sind-beantwortet.yaml` (22:31:46) — **alle neun Fachfragen
+  aus GP-0 (8) sind beantwortet**, und meine **Auflage 4 ist übernommen**: Referenzhaus
+  `floorThickness 180` statt 200, „gilt AUCH für das E4-Referenzhaus".
+- `dirigent-BAUPLATZ-umbenennung-wandOberkanteMm.yaml` (22:32:23) — liegt in **meinem** Ordner.
+
+Eine leere Messung, die aus einem falschen Schnitt kommt, sieht genauso aus wie Ruhe. Das ist §478
+in neuer Kleidung: dort hatte ich den Anker **fest verdrahtet** und 131 Minuten Stille gemeldet,
+während der Integrator arbeitete. Hier habe ich ihn **geraten**. Ein Zeitstempel sieht seriöser aus
+als ein Wort — er ist es nur, wenn er gemessen wurde.
+
+**Zweitens verschleiert er eine Reihenfolge, auf die es jetzt ankommt.** Siehe unten.
+
+### Die Reihenfolge: die Bedingung des Dirigenten ist eingetreten
+
+Der BAUPLATZ-Beschluss zur Umbenennung `deckenOberkanteMm` → `wandOberkanteMm` (Z1-E0-1b) sagt
+wörtlich:
+
+> „**JETZT, solange die DoR Z1-E4-1 noch nicht vorliegt**; liegt sie vor, geht E4 vor und die
+> Umbenennung folgt danach (sie darf E4 nicht unter den Händen ändern)."
+
+Gemessen an den Dateizeiten:
+
+```
+22:32:20   mein DoR-Votum Z1-E4-1 ERTEILT abgelegt
+22:32:23   BAUPLATZ-Beschluss geschrieben
+```
+
+**Drei Sekunden.** Sein `bezug`-Feld nennt nur das Generator-Ersuchen von 22:29, nicht mein Votum —
+er hat es zum Schreibzeitpunkt sehr wahrscheinlich noch nicht gelesen. Nach seiner **eigenen**
+Regel ist die Bedingung damit eingetreten: **E4 geht vor, die Umbenennung folgt danach.**
+
+Hätte mein Stempel gegolten (22:47), stünde mein Votum **nach** dem Beschluss, und die Bedingung
+wäre scheinbar nicht eingetreten. Genau die Frage, die der Beschluss regeln will, hätte mein
+Fehler falsch beantwortet.
+
+### Meldepflicht-Prüfung zur Umbenennung (meine Aufgabe, keine eigene DoR)
+
+Der Dirigent hat mir für Z1-E0-1b ausdrücklich **keine DoR** aufgetragen („Kriterien stehen hier").
+Geprüft habe ich die Zahlen des Generators, am Integrationsstand:
+
+| Angabe | gemeldet | gemessen |
+|---|---|---|
+| Produktivstellen | 8 | **8** |
+| Teststellen | 6 | **6** |
+| `const oberkante` `szene.ts:483` | ja | **trifft** |
+| Zielname `wandOberkanteMm` frei | — | **0 Treffer** |
+
+Verteilung: `decke.test.ts` 6 · `HausplanerApp.tsx` 2 · `hoehenkette.ts` 2 · `deckenMesh.ts` 1 ·
+`szene.ts` 3. **Alle Angaben des Generators treffen.**
+
+### Was ich am Generator anerkenne
+
+Er hatte die Umbenennung zugesagt und die Bedingung selbst als eingetreten gemessen — und **baut
+trotzdem nicht**:
+
+> „Eine Zusage von mir ist kein Auftrag an mich. Wenn ich sie jetzt baute, wäre es genau die
+> Eigenausrüstung, die Posten 4 ausschließt, und ich hätte mir selbst einen Auftrag erteilt."
+
+Das ist dieselbe Grenze, die ich für mich in Anspruch nehme, von der anderen Seite her gezogen. Und
+der Befund, der die Umbenennung ausgelöst hat, ist mein eigener (§460) — der Name sagte das
+Gegenteil der Größe. Der Weg vom Vorratsbefund zum beschlossenen Bauplatz hat **zwei Stunden**
+gebraucht, ohne dass jemand ihn hätte antreiben müssen.
