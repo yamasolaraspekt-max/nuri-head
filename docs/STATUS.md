@@ -100,7 +100,7 @@
 | **Z1-W1-4** dachWerte: eine Quelle, Stilllegung statt Loeschung | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` · **DoR ERTEILT** (plan-pruefer §146) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §146), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Generator** |
 | **Z1-W1-5** insulationType: der tote Zweig sagt, dass er tot ist | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §147), offen: die Zahl · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §180), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
 | **Z1-W2-0** Bedienbarkeits-Probe: das Messgeraet fuer alle Werkzeugblaetter | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 14:5x · Basis `592df395` | **Blatt** `docs/auftraege/aktiv/Z1-W2-0-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR ERTEILT** (plan-pruefer 15:02, Pruefstand `adf03d32`) · Bau `ee6ce517` · Matrix `0d97a57c` · CODE_FERTIG 15:45:32 |
-| **Z1-W2-1** Integrationsabgleich anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 14:2x · Basis `767fb730` | **Blatt** `docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR ERTEILT** (plan-pruefer 14:25, Pruefstand `4611267e`) · Bau `1c80a1d8` · Matrix `1d193535` · CODE_FERTIG 15:26:32 · **Abnahme laeuft, Teil B ENV_BLOCKED 16:01** |
+| **Z1-W2-1** Integrationsabgleich anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 14:2x · Basis `767fb730` | **Blatt** `docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 14:25, Pruefstand `4611267e`) · Bau `1c80a1d8` · Matrix `1d193535` · **ABGENOMMEN (BROWSER)** 16:25:16, Reifegrad `BROWSERABGENOMMEN`, 6 von 6 Kriterien, drei Bildbelege · **Buendel** `be4f637c` transportiert |
 | **Z1-W2-2** Aufbautenstatus anschliessen | `ZURUECKGESTELLT` | **Planner** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-2-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae · **ZURUECKGESTELLT** — RoofAufbau ohne `surfaceId`, Flaechen ohne gespeicherte Kennung: nur "nie warnen" oder "immer warnen" moeglich, beides kein Anschluss · Dirigent 15:52:21 · **kein Bau-SHA** |
 | **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · **DoR ERTEILT** (plan-pruefer §353, `c2e8dd20`) · Bau `d00aeece` · Matrix `161868e9` · CODE_FERTIG 16:13:25 · **BERICHTIGUNG:** mein Commit `217fd547` fuehrte hier ZURUECKGESTELLT — das war seit 15:53:35 ueberholt |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -19065,8 +19065,8 @@ zustand_nachgezogen: |
 ```yaml
 auftrag: "Z1-W2-1"
 titel: "Integrationsabgleich anschliessen"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: dirigent
 blatt: "docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md"
 blatt_sha: 4611267e
 basis_sha: 767fb730
@@ -19093,6 +19093,26 @@ zustand_nachgezogen: |
   gemessen). Das ist ein Umstand der Umgebung, kein Mangel dieses Baus; der Zustand bleibt deshalb
   CODE_FERTIG und der Ball beim Evaluator. Ich vermerke es, damit CODE_FERTIG ohne Votum nicht
   als Stillstand gelesen wird.
+
+votum: |
+  ABGENOMMEN (BROWSER) — evaluator, 16:25:16,
+  evaluator-ABGENOMMEN-teil-B-Z1-W2-1.yaml, Sitzung 303cefb6, fencing_token 1.
+  reifegrad: BROWSERABGENOMMEN · 6 von 6 Kriterien · endstand 1d193535 · ergebnis ccbb70bc
+  Votum: docs/rollenkette/rollen/4-evaluator/VOTUM-Z1-W2-1.md
+  Bildbelege: Z1-W2-1-{a-meldung-frei,b-konflikt-blocker,c-rot-ohne-modul}.png
+  Sein Satz: "Der Bedienweg wurde gefahren, nicht behauptet."
+  Ball dirigent, wie im Ereignis angegeben — nicht release-pruefer.
+buendel: |
+  DAS ERSTE BUENDEL DER INSEL, das ein abgenommenes Werkzeug ausliefert: be4f637c,
+  gebaut 16:27:41 auf dieses Votum hin, transportiert von mir im Lauf 18:3x.
+  ausgeliefert war 1516311 Bytes vom 21.08. 21:10 · jetzt 1520902 Bytes.
+  Der Generator hat js UND css committet und die Abweichung von der Regel ("Diff NUR
+  hausplaner.js") selbst gemeldet: in der css steht hp-kw-marke--fehler, ohne die das rote
+  Zeichen der Blocker-Meldung farblos waere. Ich transportiere beide und aendere die Regel
+  nicht — sein Vorschlag, sie auf public/hausplaner/** zu fassen, liegt beim Dirigenten.
+  ZWISCHEN VOTUM UND AUSLIEFERUNG LAGEN ZWEI STUNDEN, und die Ursache lag bei mir: der
+  Transport hing, waehrend das Buendel seit 16:27 bereitlag. Drei Rollen haben es gemeldet
+  (plan-pruefer 394 um 16:55, externe Pruefung B-009 um 17:09, Vorlage an Yama um 17:29).
 
 ```
 
