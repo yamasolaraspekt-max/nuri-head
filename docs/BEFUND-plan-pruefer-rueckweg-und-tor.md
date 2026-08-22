@@ -27877,3 +27877,82 @@ zu alt sind (`blatt_sha 47dfbfb2` gegen `1e5ac476`), hat der Planner um 13:21:06
 **Ball: Integrator** — A-39 ist der einzige `UNGEKLAERT` im Vergleich, und `docs/STATUS.md` schreibt
 er allein. **Zur Kenntnis an den Dirigenten**, weil der Ball dieses Auftrags derzeit auf eine Rolle
 zeigt, die ihre Arbeit gemeldet hat.
+
+## §338 — Ich ziehe mein eigenes Abnahmekriterium aus §335 zurück: es vermischt Form und Betreff
+
+Gewählt gegen HEAD `2306d0ea` (Baum sauber, 13:26:34). §338 als Überschrift 0 Treffer, frei.
+**Dringlich, weil die Abnahme bevorsteht und der Fehler in MEINER Vorgabe liegt.**
+
+**Der Bau ist gefallen.** `generator` hat Posten 2 um **13:14:39** (`1b5611b4`) und Posten 1 um
+**13:22:11** (`8a08d625`) gebaut. Das Muster in `scripts/status-erzeugen.sh` lautet jetzt an beiden
+Stellen (`:208`, `:543`):
+
+    [A-Z]+-?[0-9]+[A-Za-z]?(?:-[A-Z]*[0-9]+[A-Za-z]?)*(?:/[0-9A-Za-z]+)?
+
+**Selbst gemessen, altes gegen neues Muster** — die acht Formen aus A-43-1:
+
+    Z0-I1     alt: I1              neu: Z0-I1          Z1-W1-1   alt: KEIN TREFFER   neu: Z1-W1-1
+    Z2-W0-1   alt: KEIN TREFFER    neu: Z2-W0-1        A-37-22b  alt: KEIN TREFFER   neu: A-37-22b
+    A-42 · A-37 · W-17/1 · P-05    alt = neu, alle vier unveraendert
+
+**Acht von acht.** Das ist eine Messung, keine Abnahme — die liegt beim Evaluator.
+
+## Der Rückzug: mein §335-Kriterium ist irreführend
+
+In §335 habe ich für die Abnahme angeboten: *„Wer nach dem Bau prüft, kann gegen **87 zu 3** messen
+… und die drei müssen abgewiesen **bleiben**. Eine Erweiterung, die auch nur eine der drei plötzlich
+erkennt, wäre ein Rückschritt."* **Das ist falsch, und zwar so, dass es zu einem
+Falsch-Rot führt.** Gemessen am gebauten Stand:
+
+    Mehrfachbetreff  "Z2-W0-1 · Z2-W0-3 · Z2-W0-7 · CODE_FERTIG · …"  ->  ERKANNT als Z2-W0-1
+    Bereichsbetreff  "Z1-W1-1..5 · CODE_FERTIG · …"                    ->  NICHT ERKANNT
+
+**Ich habe zwei Ebenen vermischt.** Meine drei „nicht erkannten" waren **Betreffe**, gewonnen aus
+Zustandscommits; A-43-1 spricht von **Formen**. Die Form `Z2-W0-1` **soll** künftig erkannt werden —
+genau das verlangt A-43-1. Abgewiesen bleiben muss der **Betreff mit mehreren Kennungen**, und das
+entscheidet **A-37-26 auf der Wortlaut-Ebene** (`WORTLAUT = ^(?:rolle:\s+)?KERN$` in
+`status-erzeugen.sh:213`, plus die Sperre in `commit-pruefen.sh`, dort 2 Treffer auf
+`A-37-26|Mehrfachkennung`) — **nicht das Kennungsmuster.**
+
+Wer nach meinem §335-Satz misst, sieht `Z2-W0-1` jetzt erkannt, liest „Rückschritt" und meldet rot,
+wo der Bau genau das Verlangte tut. **Ich ziehe den Satz in dieser Form zurück.** Was von §335
+bleibt: die Grundmenge (90 Kennungen) und der Befund, dass das Blatt keine Kennungsform übersieht.
+Was fällt: die Richtungsvorgabe „die drei müssen abgewiesen bleiben".
+
+**Richtig gestellt lautet der Maßstab:** die **Formen** werden erkannt (8 von 8, oben gemessen);
+die **Betreffe** mit Mehrfach- oder Bereichskennung bleiben auf der **Wortlaut-Ebene** abgewiesen —
+zwei getrennte Prüfungen, die man nicht mit demselben Lauf beantwortet.
+
+*Das ist dieselbe Klasse wie mein §337-Ausfall und wie A-43 selbst: **Grundmenge gegen die Frage
+prüfen statt gegen das Verfahren.** Ich hatte Betreffe zur Hand, weil ich sie aus dem Log gezogen
+hatte, und habe sie für Formen genommen.*
+
+## Präzisierung an einem Rot-Beleg des Blattes — A-43-1, `Z0-I1`
+
+A-43-1 schreibt: *„… `Z0-I1` **NICHT ERKANNT** · `Z1-W1-1` NICHT ERKANNT · `Z2-W0-1` NICHT ERKANNT
+· `A-37-22b` NICHT ERKANNT — **4 zu 4**."* Am genannten Stand `c82df498` selbst nachgemessen:
+
+    Z0-I1     -> I1              <- ERKANNT, aber FALSCH: eine Kennung, die es nicht gibt
+    Z1-W1-1   -> KEIN TREFFER    Z2-W0-1 -> KEIN TREFFER    A-37-22b -> KEIN TREFFER
+
+**Drei von vier sind richtig beschrieben, einer nicht** — und die Abweichung geht in die
+**harmlosere** Richtung. `Z0-I1` war nicht unsichtbar, es wurde auf die Phantom-Kennung `I1`
+**abgebildet**: `I1` erfüllt `[A-Z]+-?[0-9]+` und wird von ` · ` gefolgt.
+
+**Der Unterschied ist genau der zwischen meinen letzten beiden Befunden:** „nicht erkannt" ist die
+§333-Lage — *die Statuswahrheit sagt gar nichts*. „Als `I1` erkannt" ist die §337-Lage — *sie sagt
+etwas Falsches*, und zwar unter einer Kennung, die in keinem Blatt existiert.
+
+**Wirkung: nie eingetreten.** Gegenprobe: `zustand: Z0-I1` im Log **0 mal**, `auftrag: "I1"` in
+`docs/STATUS.md` **0**, `I1` mit Wortgrenze irgendwo in der Datei **0**. **Die Falschzuordnung war
+möglich, aber sie ist nie passiert** — weil für Z0-I1 nie ein Zustandscommit geschrieben wurde. Der
+Rot-Beleg trägt also; nur seine Beschreibung ist eine Stufe zu mild.
+
+**Kein Mangel am Bau und keine neue Auflage.** Der gebaute Stand erkennt `Z0-I1` korrekt; der
+Fehler wäre behoben, gleich wie man ihn benennt. Ich melde es, weil der Evaluator den Rot-Beleg
+nachmisst und dann `I1` sehen wird, wo das Blatt „NICHT ERKANNT" sagt — **eine Abweichung, die ohne
+diese Zeile wie ein Widerspruch aussieht.**
+
+**Ball: Evaluator** (zur Kenntnis vor der Abnahme) und **Planner** (eine Wortkorrektur am
+Rot-Beleg, wenn er das Blatt ohnehin anfasst — kein Auftrag von mir). Ein Votum gebe ich hier
+nicht ab: der Bau wird vom Evaluator abgenommen, nicht von mir.
