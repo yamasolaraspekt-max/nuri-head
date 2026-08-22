@@ -36617,3 +36617,88 @@ korrigiere ihn nicht.**
 
 Ball: **Dirigent** (Generation 21 — zweite Leermeldung; und die Vorbedingung, die wörtlich nicht
 erfüllbar ist) · **Integrator** (29 Commits, 60 Minuten) · **Yama** (§443/§444, Pfadfrage Z0-I1).
+
+## §458 — Er gießt meine Regel in ein Pflichtfeld. Das ist die Antwort auf mein §455-Problem, und ich hatte sie nicht
+
+Messstand: HEAD `5ec159c4`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 20:49–20:53.
+**Ereignis-Schnitt dieser Runde: 20:48:41** (1 neues Ereignis). Abschnittsnummer gegen den frischen
+HEAD gewählt (`grep -c '^## §458'` → 0). Anlass: `generator-ANTWORT-zwei-wirkungsrichtungen.yaml`
+(20:49:26) — **zitiert, nicht nachgebaut**.
+
+### Was er tut, und warum es besser ist als meine eigene Umsetzung
+
+> *„**Keine Skriptregel** — das ist eine Denkfrage, kein Messbefehl, und ich behaupte nicht, sie
+> automatisieren zu können. **Was prüfbar ist:** schreibe ich künftig ‚ENTFÄLLT' in ein CODE_FERTIG,
+> nenne ich BEIDE Richtungen ausdrücklich — was mitfällt UND was dadurch fällig wird. **Steht nur
+> eine Richtung da, ist die Meldung unvollständig, und das kann jeder Prüfer an einem Wort sehen.**
+> Das ist die Form, in der die Lehre bei mir hält: **nicht als Vorsatz, sondern als Pflichtfeld in
+> genau der Meldung, in der ich den Fehler gemacht habe.**"*
+
+**Er unterscheidet sauber, was ich zusammengeworfen hatte:**
+
+    automatisierbar        -> in den ABLAUF (Skript). Beispiel: sein Messzeit-Anker (§457)
+    nicht automatisierbar  -> in die FORM (Pflichtfeld). Beispiel: die zwei Wirkungsrichtungen
+    weder noch             -> bleibt Vorsatz und haelt nicht
+
+> **In §455 habe ich das Problem beschrieben:** *„Befunde liest man, Regeln fährt man"* — und
+> festgestellt, dass drei meiner Lehren nicht halten, weil sie nur in meinen Befunden stehen.
+> **Ich habe die Analyse geschrieben und nichts geändert.** Er hat binnen Minuten zweimal etwas
+> geändert: ein Skript (§457) und ein Pflichtfeld (hier).
+>
+> **Der dritte Weg, den ich nicht gesehen habe: eine Lehre, die man nicht automatisieren kann, wird
+> zur Formpflicht — dann prüft sie ein anderer.** Das ist genau die Rollentrennung, auf der dieses
+> Haus steht, angewandt auf die eigene Sorgfalt.
+
+### Also setze ich es um, statt es zu loben
+
+**Ab sofort trägt jedes DoR-Votum von mir vier Pflichtfelder.** Fehlt eines, ist mein Votum
+unvollständig — **und das kann jeder an einem Wort sehen, ohne meinen Text zu lesen:**
+
+    blatt_sha:            der BLOB des geprueften Blattes (nicht der Commit)          §450
+    zahlen_nachgerechnet: jede Zahl aus dem Kriterientext, am Basis-Stand gemessen    §451
+    streichung_abwaerts:  was faellt mit? (leer, wenn nichts gestrichen wird)         §454
+    streichung_aufwaerts: was wird dadurch faellig?                                   §456
+
+**Warum genau diese vier:** Jedes davon steht für einen Fehler, den ich heute gemacht habe — nicht
+für einen, den ich befürchte. `blatt_sha` fehlte bei Z2-W0-11b (§450). Die Zahlen von Kriterium (a)
+habe ich nicht nachgerechnet (§451). Die Abwärts-Reichweite fehlte bei Z1-W2-8-b (§454). Die
+Aufwärts-Wirkung habe ich auch dann noch nicht gesehen, als ich die Abwärts-Regel schon geschrieben
+hatte (§456).
+
+> **Vier Regeln aus vier eigenen Fehlern desselben Tages — und alle vier standen schon als Einsicht
+> in meinen Befunden, bevor ich den nächsten machte.** Das ist der Beleg, dass Einsicht nicht
+> genügt.
+
+### Und die Grenze, die er selbst zieht, ist die wichtigste
+
+> *„Ich behaupte nicht, sie automatisieren zu können."*
+
+**Das ist die Ehrlichkeit, die dem Verfahren Wert gibt.** Ein Pflichtfeld erzwingt, dass die Frage
+**gestellt** wird — nicht, dass sie richtig beantwortet wird. **Wer `streichung_aufwaerts: "nichts"`
+schreibt, ohne nachzusehen, hat das Feld erfüllt und die Sache verfehlt.** Der Unterschied ist, dass
+es jetzt eine Stelle gibt, an der ein Prüfer nachfragen kann. **Vorher gab es die nicht.**
+
+### Seine eigene Fehlerbilanz, die er dazu mitliefert
+
+> *„**Ich hatte beide Richtungen falsch, nacheinander:** erst abwärts zu viel gestrichen ((c) sei
+> mit (b) erledigt), dann beim Nachbessern die Aufwärts-Richtung gesehen — **aber erst, nachdem der
+> Planner mich darauf gestoßen hatte.**"*
+
+**Das ist die vollständige Kette, und sie geht durch drei Rollen:** Mein Halbsatz war unvollständig
+(§454) → er schloss daraus zu weit → der Planner fing es (20:35:22) → er lieferte nach (20:43:14) →
+seine Begründung berichtigte meine Regel (§456) → jetzt steht sie bei uns beiden als Form.
+**Vier Übergaben, und der Fehler ist an keiner Stelle stehengeblieben.**
+
+### Die Lage, frisch gemessen
+
+    Commits NICHT in der Integration    30      (26 -> 28 -> 29 -> 30)
+    Integrator-Stille                   64 Minuten
+    §447 „steht aus" bei E0/E2          unveraendert 2
+    Generator                           dritte Meldung „nichts frei", ball [dirigent]
+
+**Seine Zahl „28 Commits, 57 Minuten" ist die aus meinem §456** — er zitiert meinen Stand, nicht
+einen eigenen. **Frisch gemessen sind es 30 und 64.** Kein Fehler bei ihm: er nennt die Quelle. **Ich
+nenne die neue Zahl, weil die Wache es verlangt: jede Zahl frisch, auch die aus fremden Berichten.**
+
+Ball: **keiner von mir** · **Dirigent** (Generation 21 — dritte Leermeldung; Vorbedingung E0 aus
+§457) · **Integrator** (30 Commits, 64 Minuten) · **Yama** (§443/§444, Pfadfrage Z0-I1).
