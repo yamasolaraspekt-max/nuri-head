@@ -25720,3 +25720,87 @@ runder Ausreißer hätte mich bestätigt.
 
 **Ball:** keiner. Der Dirigent hat den Vorgang geschlossen (*„kein weiterer Verkehr dazu nötig"*), und
 das Ergebnis ist eine Entlastung — dazu schreibe ich kein Ereignis.
+
+## §306 — Posten (d): die zwölf sind neun ohne Votum und drei mit; und „26 Commits seit dem Schnitt" ist keine Drift, weil kein Produktpfad dabei ist
+
+**Messstand** `3c781a73` · Baum sauber · 0 neue Commits seit §305 · Integrationszweig `e579ac1e` →
+`e8a7149e`. Ballortung beidseitig **1** und **6** — nichts in meiner Bahn.
+
+### Was angekommen ist
+
+`EXTERNE-PRUEFUNG/dirigent-entscheidung-aufgabe-001.yaml` (10:48:55) — die erste Entscheidung über
+eine Vorlage der externen Prüfung, sieben Punkte, nichts ganz abgelehnt. **Punkt 4 betrifft meine
+künftigen Meldungen:** jede Start- und Abschlussmeldung nennt ab dem nächsten Pull `endstand_sha`
+(woran gearbeitet wurde) **und** `ergebnis_sha`. Das schließt strukturell genau die Lücke, die mein
+Fehler aus §301 war — ich hatte einen überholten Bau-Stand weitergereicht, weil die Meldung nur einen
+Ausgangs-SHA kannte. Zur Kenntnis, nichts zu tun.
+
+**Punkt 5** nennt eine Zahl aus fremder Quelle: *„zwölf ohne Votum"*. Meine Anweisung verlangt, jede
+solche Zahl frisch zu messen — auch die aus fremden Berichten.
+
+### Die Zahl, ausgezählt statt übernommen
+
+`docs/backlog/abnahmerueckstand-2026-08-22.md` liegt auf `rolle/dirigent` (24 Z.), Tabelle mit **12**
+Zeilen. Spalte `unabh. Votum` (Feld 7, an der Kopfzeile verifiziert):
+
+```
+OHNE Votum   9    Z2-W0-5 · W0-7 · W0-3 · W0-1 · W0-8 · W0-10 · W0-11 · W0-12 · A-38
+MIT  Votum   3    Z1-W1-5  a4144ff4  NACHBESSERN (eine Zahl)
+                  Z1-W1-1  d40adbf5  Kriterium C ENV_BLOCKED
+                  Z1-W1-2  27143f96  4/5, E ENV_BLOCKED
+```
+
+**Die Überschrift der Datei ist richtig** — *„gebaute, aber unbewiesene … (12)"*; unbewiesen sind alle
+zwölf. **Das Feld heißt aber `punkt_5_zwoelf_ohne_votum`, und ohne Votum sind neun.** Der Unterschied
+ist nicht kosmetisch: **drei Posten brauchen keine Erstabnahme.** Zwei warten auf die Auflösung einer
+Blockade (`ENV_BLOCKED`, hängt an Z0-I1/Browser-DB), einer auf eine Nachbesserung *einer Zahl*. Wer
+zwölf Erstabnahmen plant, plant drei zu viel und übersieht, dass zwei davon nicht am Evaluator hängen,
+sondern an einem Tor.
+
+**Zwei eigene Zählfehler auf dem Weg dahin:** „Votum-Spalte exakt `—`" gab **8** — Posten 1 trägt `—`
+*und* einen Bau-SHA im Kommentar. „Enthält einen SHA" gab **4** — dieselbe Zeile, von der anderen
+Seite falsch. Erst „beginnt mit `—`" trifft die Frage: 9 + 3 = 12.
+
+### Posten (d): Alterung — und warum meine erste Messung nichts wert war
+
+```
+1. Versuch, von meinem Zweig aus:
+   eb304cf5   148 min ·   9 Commits bis HEAD
+   06642e35   134 min · 124 Commits bis HEAD      <- jünger, aber mehr Commits: unmöglich
+```
+
+**Beide sind keine Vorfahren meines HEAD.** `X..HEAD` zählt dann Divergenz, nicht Fortschritt — die
+Zahlen messen, wie weit *mein* Zweig woanders steht, nicht wie alt der Schnitt ist. Richtig gemessen,
+je auf dem Zweig, auf dem der SHA lebt:
+
+```
+06642e35   Bilanz-Commit, rolle/dirigent      Vorfahr JA   14 Commits danach   134 min
+eb304cf5   Mess-SHA, auto/hausplaner-integration            26 Commits danach   149 min
+Gegenprobe: eb304cf5..eb304cf5 = 0 · 1ca8d512..HEAD = 8 (bekannter Vorfahr)
+```
+
+Beide SHAs sind **korrekt verwendet** — der eine ist der gemessene Stand, der andere der Commit, der
+die Bilanz schrieb. Sie leben nur auf verschiedenen Strängen, und genau daran ist meine erste Messung
+gescheitert.
+
+### Und die Zahl, auf die es ankommt
+
+26 Commits seit der Messbasis klingt nach Drift. Sie ist keine:
+
+```
+git diff --name-only eb304cf5..auto/hausplaner-integration   ->  4 Dateien, ALLE unter docs/
+```
+
+**Kein Produktpfad berührt.** Die Messbasis der Bilanz trägt für die zwölf Posten unverändert, obwohl
+zweieinhalb Stunden und 26 Commits vergangen sind. Das deckt sich mit Punkt 0 der Entscheidung
+(*„A-37 wird nicht angefasst"*) — und es ist die Unterscheidung, die eine Alterungsangabe erst
+brauchbar macht: **Alter in Minuten hoch, Alter in Wirkung null.**
+
+### Für Yama
+
+Der Abnahmerückstand ist **blockiert, nicht liegengeblieben**. Voraussetzung laut Blatt: *„A-37
+vollständig ABGENOMMEN (technische Barriere) und Z0-I1 (Test-DB-Isolation) VOR den Abnahmen;
+Browserfälle erst danach."* A-37 liegt beim Evaluator, Z0-I1 ist geparkt. Solange beide Tore zu sind,
+kann keiner der neun laufen — und die drei mit Votum warten ohnehin auf dasselbe Tor.
+
+**Ball:** Evaluator (A-37) · danach Integrator/Planner für die Punkte 2, 5, 6 der Entscheidung.
