@@ -36882,3 +36882,95 @@ Ball: **keiner von mir** — Vorratsbefund. Nachrichtlich an **Planner/Generator
 `deckenOberkanteMm` widerspricht seinem eigenen Kommentar; ob das ein eigenes Blatt wert ist,
 entscheidet der Planner. · **Integrator** (32 Commits, 70 Minuten) · **Dirigent** (Generation 21) ·
 **Yama** (§443/§444, Pfadfrage Z0-I1).
+
+## §461 — Vorratsprüfung (e): der Stillstand, aus einer zweiten Richtung gemessen. Und die Frage, ob ich zu viel melde
+
+Messstand: HEAD `8e1243ff`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 20:59–21:03.
+**Ereignis-Schnitt dieser Runde: 20:58:41** (0 neue Ereignisse, nichts in meiner Bahn).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §461'` → 0).
+Vorratsprüfung **Posten (e) — eigene Befunde verfolgen**, nach zwanzig Abschnitten (§441–§460).
+
+### Der Messweg — und er ist neu
+
+**Resonanz ist messbar:** fremde Ereignisse tragen ein `bezug:`-Feld. Wer meinen Befund aufgreift,
+nennt seinen Dateinamen. **Grundmenge: meine 21 Ereignisse seit 19:40, gesucht wird im GANZEN Baum,
+nur in FREMDEN Dateien** (Lehre §446 — Antworten liegen nicht zwingend im selben Ordner).
+Positivkontrolle des Wegs an einem bekannten Fall: 2 Treffer, greift.
+
+### Wer greift meine Befunde auf
+
+    Generator    zitiert mich in  5 Faellen
+    Planner                       3
+    Evaluator                     1
+    Integrator                    0
+    Dirigent                      0
+
+### Und wie es sich nach Ball-Adressat verteilt
+
+    BALL BEI      ANZAHL  ZITIERT  STILL
+    generator          1        1      0
+    planner            1        1      0
+    evaluator          4        2      2
+    integrator         5        1      4
+    dirigent           6        4      2
+    yama               5        3      2
+    keiner             7        1      6     <- erwartungsgemaess, kein Ball = keine Antwort erwartet
+
+### Die fünf Bälle beim Integrator, nach Alter
+
+    19:43  plan-pruefer-E0-NACHTRAG-GEWUERDIGT.yaml                 77 Min
+    19:49  plan-pruefer-HINWEIS-e0-e2-dor-beleg-steht-aus.yaml      70 Min
+    20:10  plan-pruefer-BEFUND-tafel-widerspricht-dem-bau.yaml      50 Min
+    20:14  plan-pruefer-MELDEPFLICHTEN-Z1-E0-1-GEPRUEFT.yaml        46 Min
+    20:35  plan-pruefer-LAGE-transportstau-ist-produktionsstopp.yaml 25 Min
+
+> **Das ist der Stillstand aus einer zweiten Richtung.** In §453 habe ich ihn über **Commits**
+> gemessen (heute 33), in §457 über **Zeit** (74 Minuten). **Hier über Resonanz** — und alle drei
+> Messungen zeigen dasselbe, obwohl keine von der anderen abhängt. **Drei unabhängige Wege auf ein
+> Ergebnis sind mehr wert als eine Zahl, die dreimal wiederholt wird.**
+
+### Die faire Lesart, und sie ist wichtig
+
+- **Integrator 0 Zitate ist keine Ignoranz, sondern Abwesenheit.** Er hat seit 74 Minuten
+  überhaupt nichts geschrieben — nicht nur nichts zu mir. **Wer nichts schreibt, zitiert auch
+  niemanden.**
+- **Dirigent 0 Zitate, aber 4 von 6 seiner Bälle wurden ANDERSWO zitiert.** Meine Befunde an ihn
+  erreichen das Haus — über Planner und Generator, die sie aufgreifen. **Der Kanal ist offen, nur
+  nicht direkt.**
+- **Generator 5 Zitate** — er ist der aktivste Gesprächspartner des Abends. Das deckt sich mit dem,
+  was er getan hat: zwei meiner Lehren übernommen (§457 Skript, §458 Pflichtfeld) und eine davon
+  verbessert.
+
+### Und die Frage, die ich mir selbst stellen muss
+
+**Sieben meiner 21 Ereignisse tragen `ball: keiner`** — ein Drittel. Das sind Vorratsbefunde,
+Würdigungen und Kenntnisnahmen.
+
+> **Melde ich zu viel?** Ich kann es nicht selbst entscheiden — **eine Rolle, die ihre eigene
+> Meldemenge für angemessen erklärt, hat die Frage nicht beantwortet, sondern übergangen.** Was ich
+> tun kann, ist sie messbar zu machen und offen zu stellen:
+>
+>     21 Ereignisse in 83 Minuten   =  eines alle 4 Minuten
+>     davon ball=keiner              7  (Vorratsbefunde, Wuerdigungen)
+>     davon mit Ball                14
+>
+> **Wenn das zu viel ist, sagt es mir — dann melde ich Vorratsbefunde gesammelt statt einzeln.**
+> Die Befunde mit Ball halte ich für nicht verzichtbar: jeder davon betraf ein Votum von mir, eine
+> Meldepflicht oder eine Schutzgrenze.
+
+### Was diese Messung NICHT ist
+
+**Kein Vorwurf und keine Leistungsmessung fremder Rollen.** Ein Zitat ist ein Zeichen, dass etwas
+ankam — **kein Zitat ist kein Zeichen, dass etwas falsch war.** Der Evaluator hat zwei von vier
+meiner Bälle nicht zitiert und arbeitet nachweislich (zwei Vorprüfungen 20:22 und 20:28); **er
+antwortet mit Arbeit statt mit Verweisen, und das ist genauso gültig.**
+
+### Die Lage, frisch
+
+    Commits NICHT in der Integration   33   (26 -> 28 -> 29 -> 30 -> 31 -> 32 -> 33)
+    Integrator-Stille                  74 Minuten
+    §447 „steht aus" bei E0/E2         unveraendert 2
+
+Ball: **keiner von mir** — Vorratsbefund über das eigene Wirken. · **Integrator** (33 Commits,
+74 Minuten, fünf unbeantwortete Bälle, ältester 77 Min) · **Dirigent** (Generation 21) · **Yama**
+(§443/§444, Pfadfrage Z0-I1 — **und die Frage, ob meine Meldedichte stimmt**).
