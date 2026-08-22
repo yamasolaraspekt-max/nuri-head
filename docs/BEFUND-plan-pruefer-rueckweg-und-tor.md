@@ -37561,3 +37561,82 @@ danebensteht.*
 
 Ball: **Dirigent** — dritte Postenmessung, `entscheidungsreif: ja (nicht dringlich)`. **Geht sofort
 als Ereignis** (§463).
+
+## §469 — Postenmessung 4/9: der Seed-Weg ist gebaut, und das Skript hält die Lehre ein, die der Generator heute zweimal an sich selbst vermisst hat
+
+Messstand: HEAD `2b034319`, Baum 0 · Integration `57e661bd`, Baum 0 · **Rückstand `HEAD..auto` = 153**
+· gemessen 21:27–21:34. **Ereignis-Schnitt dieser Runde: 21:26:44** (0 neue Ereignisse).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §469'` → 0).
+**Vierter Posten für den Dirigenten-Auftrag von 14:48:57.**
+
+### Der Posten und seine Einordnung
+
+Der Dirigent (14:48): *„Seed-Weg der Prüfbühne → hängt an Z0-I1/Y-13 (Test-DB); nach GRANT als Teil
+von Z0-I1."* **Die Einordnung trifft — der Posten ist dort als Kriterium aufgenommen:**
+
+    Z0-I1-Blatt:441   „Z0-I1-11 · DER SEED STELLT SEINE VORBEDINGUNG SELBST HER."
+      Verlangt: Ein Skript legt die Pruefvoraussetzungen IDEMPOTENT in ticket_testing an —
+      Pruefnutzer (a24) und Pruefobjekt, sonst nichts.
+      Mit Yamas Entscheidung vom 13.08. woertlich zitiert (Weg C).
+
+**Der Anlass steht im Skriptkopf und ist von heute:** *„Beide standen bisher von Hand in
+`ticket_testing` — und jeder `RefreshDatabase`-Lauf räumte sie weg. **Am 22.08. traf es eine
+LAUFENDE Abnahme mitten im Bedienweg; der Evaluator musste sie neu aufsetzen.**"*
+
+### Gemessen: gebaut
+
+    scripts/pruefstand-saeen.sh   98 Zeilen · zuletzt 22.08. 16:53
+    Positivkontrolle: 23 Skripte in scripts/ (das Muster greift)
+    ERWARTETE_DB=ticket_testing   — EIN Name, exakt
+
+### Und die Sicherheitsprüfung, die an §444 anschließt
+
+**§444 hat gezeigt: jeder `artisan`-Aufruf ohne ausdrückliche Umleitung landet über `.env` bei
+`ticket`.** Also jeden Aufruf im Skript einzeln geprüft:
+
+    3 Vorkommen von „artisan":
+      Z.35  Kommentar
+      Z.39  GESCHUETZT   GEFUNDEN=$(APP_ENV=testing php artisan tinker --execute='… SELECT DATABASE() …')
+      Z.55  GESCHUETZT   APP_ENV=testing php artisan tinker --execute='…'
+    UNGESCHUETZT: 0
+
+    Reihenfolge Riegel gegen Schreiben:
+      Z.39  SELECT DATABASE() abfragen
+      Z.41  Abbruch, wenn keine Auskunft
+      Z.47  Abbruch, wenn != ticket_testing   <- DER RIEGEL
+      Z.72  $u->save()                        <- ERSTE Schreiboperation
+      Z.76  insertGetId(…)
+    -> DER RIEGEL STEHT 25 ZEILEN VOR DEM ERSTEN SCHREIBZUGRIFF.
+
+> **Das ist die Lehre, die der Generator heute zweimal an sich selbst vermisst hat** — in §439
+> (*„die Sicherheit hing an einer Env-Zuweisung IM AUFRUF, also am Gedächtnis des Aufrufers"*) und
+> in §444 (*„zum zweiten Mal gegen die Produktiv-Datenbank gelesen"*). **In diesem Skript hat er sie
+> angewandt: `APP_ENV=testing` steht an jedem einzelnen Aufruf, und der Riegel greift vor der ersten
+> Zeile, die schreibt.**
+>
+> **Das gehört gesagt, weil das Gegenteil heute dreimal gemeldet wurde.** Wer nur die
+> Selbstmeldungen liest, bekommt ein Bild, das die Messung nicht bestätigt: **das Skript, an dem die
+> Lehre entstand, hält sie ein.**
+
+    entscheidungsreif: JA
+    Ergebnis: DER POSTEN IST GEBAUT. Er wartet nur noch auf die Abnahme von Z0-I1 — die steht
+    beim Evaluator und haengt am Transport (§453: 11 offene Abnahmen).
+    Damit ist von neun Posten der ERSTE nachweislich erledigt, nicht nur eingeordnet.
+
+### Was ich ausdrücklich nicht sage
+
+**Nicht, dass Z0-I1 abgenommen ist.** Das ist Evaluator-Sache und steht aus. **Und nicht, dass die
+drei Auflagen vollständig erfüllt sind** — ich habe Auflage 1 (fail closed vor jedem Schreiben)
+gemessen; Idempotenz und „nur wenn es läuft" habe ich **nicht** geprüft, das verlangt einen Lauf,
+und ein Lauf gegen eine Datenbank ist nicht meine Rolle.
+
+### Lage, jetzt gemessen (21:27:58)
+
+    Commits NICHT in der Integration      41
+    Integrator-Stille                    102 Minuten
+    §447 „steht aus" bei E0/E2             2
+    Baelle beim Integrator (ganzes Haus)  21
+    Rueckstand mein Baum -> Integration   153
+
+Ball: **Dirigent** — vierte Postenmessung, `entscheidungsreif: ja`, Ergebnis **gebaut**. **Geht
+sofort als Ereignis** (§463).
