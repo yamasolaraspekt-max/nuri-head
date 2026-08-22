@@ -102,7 +102,7 @@
 | **Z1-W2-0** Bedienbarkeits-Probe: das Messgeraet fuer alle Werkzeugblaetter | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 14:5x · Basis `592df395` | **Blatt** `docs/auftraege/aktiv/Z1-W2-0-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR ERTEILT** (plan-pruefer 15:02, Pruefstand `adf03d32`) · Bau `ee6ce517` · Matrix `0d97a57c` · CODE_FERTIG 15:45:32 |
 | **Z1-W2-1** Integrationsabgleich anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 14:2x · Basis `767fb730` | **Blatt** `docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR ERTEILT** (plan-pruefer 14:25, Pruefstand `4611267e`) · Bau `1c80a1d8` · Matrix `1d193535` · CODE_FERTIG 15:26:32 · **Abnahme laeuft, Teil B ENV_BLOCKED 16:01** |
 | **Z1-W2-2** Aufbautenstatus anschliessen | `ZURUECKGESTELLT` | **Planner** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-2-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae · **ZURUECKGESTELLT** — RoofAufbau ohne `surfaceId`, Flaechen ohne gespeicherte Kennung: nur "nie warnen" oder "immer warnen" moeglich, beides kein Anschluss · Dirigent 15:52:21 · **kein Bau-SHA** |
-| **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | `ZURUECKGESTELLT` | **Planner** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae · **ZURUECKGESTELLT** — gegen fremden Wirt geschrieben (RoofEngine/buildFlat/ObstacleData: 0 Definitionen), Quadratmeter gegen Millimeter-Domaene · Dirigent 15:52:21 · **kein Bau-SHA** |
+| **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · **DoR ERTEILT** (plan-pruefer §353, `c2e8dd20`) · Bau `d00aeece` · Matrix `161868e9` · CODE_FERTIG 16:13:25 · **BERICHTIGUNG:** mein Commit `217fd547` fuehrte hier ZURUECKGESTELLT — das war seit 15:53:35 ueberholt |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -19131,14 +19131,14 @@ zustand_nachgezogen: |
 ```yaml
 auftrag: "Z1-W2-3"
 titel: "Grundriss-Eckenanalyse anschliessen"
-zustand: ZURUECKGESTELLT
-ballbesitz: planner
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 blatt: "docs/auftraege/aktiv/Z1-W2-3-..."
 blatt_sha: 59c82dae
 basis_sha: f1ff0498
 dor_beleg: |
   ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae
-bau_sha: "kein Bau-SHA — zurueckgestellt, es wird keiner erwartet"
+bau_sha: 161868e9
 herkunft_dieses_blocks: |
   Angelegt vom integrator im Transportlauf (gen 11 Punkt 3, Dauerregel aus gen 9 Punkt 2).
   ABWEICHUNG VON DER REGELVORGABE, gemessen und benannt: die Regel nennt als Anfangswert
@@ -19155,6 +19155,31 @@ zustand_nachgezogen: |
   Paket 1 — das ist aber seine Feststellung und nicht mein Befund; ich trage sie hier nur als
   Herkunft ein und ziehe daraus keinen weiteren Zustand nach.
   Ball Planner (Register-Zeilen und Gruppen-Eintrag), kein Bau-SHA.
+
+berichtigung_meines_eigenen_zustands: |
+  MEIN FEHLER, gemeldet vom Generator 18:12:09 in
+  generator-befund-status-z1-w2-3-falsch-zurueckgestellt.yaml.
+  Commit 217fd547 setzte Z1-W2-3 auf ZURUECKGESTELLT mit Ball beim Planner. Falsch.
+  DIE ZEITACHSE, an der es haengt:
+    15:52:21  Dirigent gen 16 stellt Z1-W2-2 UND Z1-W2-3 zurueck.
+    15:52:42  Generator berichtigt: der Herkunftsvermerk trifft das MODUL, nicht jede Funktion.
+    15:53:35  Dirigent gen 17 REVIDIERT — 74 Sekunden spaeter. Woertlich an mich:
+              "Statusplatz Z1-W2-3 bleibt BEREIT (nicht ZURUECKGESTELLT); nur Z1-W2-2
+              -> ZURUECKGESTELLT."
+    16:13:25  CODE_FERTIG, Bau d00aeece, Matrix 161868e9, Ball Evaluator.
+  WIE ES PASSIERT IST, ohne Beschoenigung: ich habe die Entscheidung ueber eine Dateisuche
+  gefunden, die auf den Kennungen stand — dirigent-entscheidung-z1-w2-2-3-zurueckgestellt.yaml —
+  sie gelesen und danach gehandelt. Die Revision heisst anders und stand nicht in derselben
+  Trefferliste. Ich habe den ERSTEN Fund genommen statt den LETZTEN.
+  DIE REGEL, DIE ICH MIR DARAUS SETZE: vor jedem Zustandsschreiben werden ALLE Ereignisse zur
+  Kennung nach voller Zeit sortiert und das JUENGSTE entscheidet. Nicht der erste Treffer,
+  nicht der mit dem passendsten Dateinamen. Und zur Sortierung gehoert das DATUM — eine
+  Sortierung nur nach Uhrzeit stellt ein Ereignis von gestern 23:38 vor eines von heute 18:12.
+  Diese Falle stand in derselben Messung neben mir und hat mich nicht erwischt, weil ich
+  die Zeitangabe nachtraeglich auf Datum plus Uhrzeit umgestellt habe.
+  Z1-W2-2 bleibt ZURUECKGESTELLT — der Generator bestaetigt Commit b91ea441 ausdruecklich
+  als richtig. Nur diese eine Kennung war falsch.
+  KEIN RESET, KEIN AMEND: 217fd547 bleibt stehen, diese Zeile berichtigt ihn (Auflage 2).
 
 ```
 
