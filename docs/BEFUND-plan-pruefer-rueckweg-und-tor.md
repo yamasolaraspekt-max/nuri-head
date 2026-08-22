@@ -30603,3 +30603,56 @@ sage nur: reif ist es.
 
 Ball: **Dirigent** (baut (12) jetzt mit oder später?) · **Generator** (Stufe 1 nach Errata) · bei mir
 nichts.
+
+## §379 — Zwei von drei Messbelegen haben ihre Standangabe nachgetragen. Der dritte ist der tragende
+
+Messstand: HEAD `50939348`, Baum 0, gemessen 16:11–16:18. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §379'` → 0). Vorratsprüfung (e): eigenen Befund verfolgen.
+
+### Was seit §373 geschehen ist
+
+Mein Befund lautete: *„Ein Beleg ohne Standangabe ist kein Beleg"* — angewandt auf den Satz
+`.env.testing zeigt auf den TCP-Weg`, gemessen in einem Baum, der die Datei nicht hat. **Zwei von
+drei Beteiligten haben seither nachgetragen:**
+
+    1  Planner       15:36  ->  16:05  "Mein Satz stand als MESSUNG im Blatt — in DIESEM Baum
+                                        gibt es die Datei nicht. Ich habe im Hauptbaum gemessen
+                                        und den Baum nicht genannt."     Tabelle ueber alle 5 Baeume
+    2  Lesesitzung   15:48  ->  16:08  Nachtrag mit Baum, Verbindung, CURRENT_USER, Port
+                                        "Sein Satz gilt fuer mich genauso."
+    3  Dirigent      15:49  ->    —    0 Treffer auf worktree|baum|Documents/ticket
+
+**Der dritte ist die tragende Messung.** Sie ist es, auf die die Berichtigung sich stützt: *„Die
+Folgerung ‚Z0-I1 Stufe 1 ohne root baubar' bleibt; **der Beleg dafür ist jetzt dieser (dreifach
+gemessene) Zugriff**, nicht mein Kausalsatz."* Und sie ist die einzige der drei, die **beide Wege**
+misst — TCP **und** Socket.
+
+### Warum es hier besonders zählt
+
+Die Dirigenten-Messung nennt als zweiten Weg:
+
+    SOCKET (ticket_user@localhost, ALL auf ticket, ticket_g1b1_testing, ticket_testing, …)
+
+**Ein Socket-Weg ist in `phpunit.xml` gar nicht konfiguriert** — `DB_SOCKET` steht dort nicht (§378,
+0 Treffer), der versionierte Default ist leer. Wer diesen Zweig nachfahren will, braucht also
+zwingend die Angabe, **aus welcher Quelle** die Verbindung kam. Ohne sie ist nicht entscheidbar, ob
+der Socket-Zweig überhaupt der Weg ist, den ein Testlauf nimmt — und genau diese Frage macht
+`Z0-I1-12` zum Kriterium.
+
+### Was ich ausdrücklich nicht behaupte
+
+**Der Dirigent hat nichts versäumt, als er maß.** Seine Messung lief 15:49:53; meine Regel entstand
+15:53:47, also **vier Minuten später**. Rückwirkend gibt es hier nichts vorzuwerfen. Feststellbar ist
+nur: er hat seither zwei Ereignisse geschrieben (15:55:01, 15:59:12) und die Standangabe nicht
+nachgezogen — während die anderen beiden es taten. **Das ist ein offener Posten, kein Fehler.**
+
+Und ich behaupte nicht, dass die Zahlen falsch sind. Die Lesesitzung schreibt es für sich selbst
+richtig: *„An den Zahlen ändert sich nichts; nur ist jetzt nachfahrbar, WO sie gelten."*
+
+### Nebenbei gemessen, kein Befund
+
+`Z2-W0-5b` steht im Datensatz auf `zustand: BEREIT`, `bau_sha: "noch offen"` — der Bau ist seit
+16:03:25 fertig gemeldet (`48b52294`). **Rückstand: 8 Minuten.** Das ist laufender Betrieb, kein
+Nachzieh-Mangel; ich halte es fest, damit die Zahl beim nächsten Blick eine Vorgeschichte hat.
+
+Ball: **Dirigent** (Standangabe zur dritten Messung, ein Zweizeiler) · bei mir nichts.
