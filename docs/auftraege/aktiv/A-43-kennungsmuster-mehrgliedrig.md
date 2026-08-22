@@ -1,18 +1,22 @@
-# A-43 — Zwei Wortlisten des Tors kennen die eigene Wirklichkeit nicht
+# A-43 — Drei Wortlisten des Tors kennen die eigene Wirklichkeit nicht
 
 *Teil 1: das Kennungsmuster erkennt mehrgliedrige Kennungen nicht.
-Teil 2: die Aktionsliste erkennt neun von elf Rollentätigkeiten nicht.*
+Teil 2: die Aktionsliste erkennt neun von elf Rollentätigkeiten nicht.
+Teil 3: der Dirigent-Bereich ist enger als die Vollmacht, die ihn erteilt.*
 
 ```yaml
 auftrag: "A-43"
 werkzeug: "— (Werkzeug der Rollenkette, kein Hausplaner-Werkzeug)"
-art: "WORTLISTEN-KORREKTUR — zwei Aufzaehlungen in scripts/ werden erweitert:
-      das Kennungsmuster (status-erzeugen.sh) und das Aktionsvokabular (rollen-tor.sh).
+art: "WORTLISTEN-KORREKTUR — drei Aufzaehlungen in scripts/ werden erweitert: das Kennungsmuster
+      (status-erzeugen.sh), das Aktionsvokabular und der Dirigent-Bereich (beide rollen-tor.sh).
       KEIN Produktcode, KEINE Aenderung an docs/STATUS.md durch den Bau, KEIN Blattumbau."
-zwei_posten: "Posten 1 Kennungsmuster (Dirigent gen 13, Weg A) · Posten 2 Aktionsvokabular
-              (Dirigent gen 14, nach Befunden Evaluator 12:04, Plan-Pruefer 12:06,
-              Integrator 12:1x, externe Pruefung B-005). Ein Blatt, weil beide dieselbe
-              Bauform haben: eine Aufzaehlung im Tor, die die Wirklichkeit nicht abbildet."
+drei_posten: "Posten 1 Kennungsmuster (Dirigent gen 13, Weg A) · Posten 2 Aktionsvokabular
+              (Dirigent gen 14, nach Befunden Evaluator 12:04, Plan-Pruefer 12:06, Integrator
+              12:1x, externe Pruefung B-005) · Posten 3 Dirigent-Bereich (Dirigent 13:25:41,
+              NACH erteilter DoR und NACH dem Bau — siehe Vermerk in Teil 3).
+              Ein Blatt, weil alle drei dieselbe Bauform haben: eine Aufzaehlung im Tor,
+              die die Wirklichkeit nicht abbildet, und daneben ein Meldungstext, der sie
+              ein zweites Mal fuehrt."
 spur: A
 heimat_app: ticket
 dor_beleg: "Runde 1 NICHT ERTEILT (plan-pruefer 12:30:11, Blatt 352900f3, drei Restpunkte).
@@ -519,6 +523,99 @@ aktion"*).
 
 ---
 
+# Teil 3 — Der Dirigent-Bereich (Nachtrag nach erteilter DoR)
+
+**Auftrag des Dirigenten unter Vollmacht, 22.08. 13:25:41** (`dirigent-errata-posten3-dirigent-bereich.yaml`).
+**Dritte Wortliste desselben Bautyps** — nach Kennungsmuster und Aktionsvokabular jetzt die
+Positivliste der Schreibpfade.
+
+**Anlass, ausgelöst und nicht behauptet:** Am 22.08. **13:08** hat das transportierte Tor den
+Dirigenten abgewiesen:
+
+```
+ROLLEN-TOR  VERSTOSS  Rolle 'dirigent' schreibt ausserhalb ihres Bereichs.
+            Erlaubt sind nur: docs/konzept/  docs/regelwerk/  docs/auftraege/
+            abgewiesen: docs/backlog/steuerungs-backlog-2026-08-22.md
+```
+
+**Kein `--no-verify`** — er hat die Abweisung hingenommen und gemeldet. *Das Tor hat richtig
+funktioniert; die Liste darin ist zu eng.*
+
+**Der Widerspruch, beide Quellen im Wortlaut:** `docs/regelwerk/VOLLMACHT-DIRIGENT.md` (Yama,
+21.08.) gibt ihm **„Steuerungs- und Konzeptdokumente"**. Die drei Steuerungslisten liegen in
+`docs/backlog/`, die Lageberichte in `docs/fortschritt/`. **Das Tor ist enger als die Vollmacht** —
+und damit sperrt eine Regel eine Arbeit, die eine höhere Regel ausdrücklich erlaubt.
+
+- **A-43-13** · **DER DIRIGENT-BEREICH DECKT SEINE VOLLMACHT.**
+
+  **Verlangt:** Die Positivliste in `scripts/rollen-tor.sh` (A-37-23) kennt zusätzlich
+  **`docs/backlog/`** und **`docs/fortschritt/`**. **Weiterhin abgewiesen bleiben:** `scripts/`,
+  `.githooks/`, `docs/STATUS.md`, `docs/BEFUNDNOTIZEN.md` und Produktcode. *Der Bereich wächst um
+  zwei Verzeichnisse, er wird nicht zum Schlüssel.*
+
+  **Messbefehl:**
+  ```
+  Positivprobe : Commit als dirigent mit einem Pfad unter docs/backlog/     -> erwartet 0
+                 desgleichen unter docs/fortschritt/                        -> erwartet 0
+  Negativprobe : Commit als dirigent mit docs/STATUS.md                     -> erwartet 1
+                 desgleichen mit scripts/                                   -> erwartet 1
+  je Lauf die Meldung mitnehmen, nicht nur echo $?
+  ```
+
+  **Heutiges (rotes) Ergebnis:** `scripts/rollen-tor.sh:754` führt
+  `docs/konzept/*|docs/regelwerk/*|docs/auftraege/*` — **`docs/backlog/` und `docs/fortschritt/`
+  fehlen beide.** Ausgelöst belegt durch die Abweisung von 13:08 (Dirigent-Stand `572c7fc2`,
+  Rückgabe 1).
+
+  > **Am Code gemessen, die Probe nicht selbst gefahren:** ein Lauf mit `TICKET_ROLLE=dirigent`
+  > in einem realen Checkout ist nach A-37-22d untersagt. Der Rot-Beleg steht deshalb auf zwei
+  > Beinen: der **Positivliste im Code** (von mir gelesen) und der **ausgelösten Abweisung** des
+  > Dirigenten (von ihm gefahren). *Ich melde, welche Hälfte von wem stammt.*
+
+  **Absage-Regel — und sie ist dieselbe wie bei A-43-11:** `scripts/rollen-tor.sh:760` **wiederholt
+  die Liste als Meldungstext** (*„Erlaubt sind nur: docs/konzept/ docs/regelwerk/ docs/auftraege/"*).
+  Wer nur die `case`-Zeile erweitert, lässt die Auskunft falsch stehen: der Dirigent dürfte dann
+  nach `docs/backlog/` schreiben, während die Fehlermeldung ihm weiterhin das Gegenteil sagt.
+  **Die Meldung muss die Liste aus derselben Quelle lesen** — eine Quelle, eine Ableitung, wie der
+  Generator es bei den Aktionswörtern bereits gebaut hat.
+
+## Vermerk zum Zeitpunkt — dieses Kriterium kommt zu spät, und das gehört gesagt
+
+**Gemessene Reihenfolge:**
+
+```
+12:53:35  DoR ERTEILT_MIT_AUFLAGE          -> Kriterienstand eingefroren (Yamas Errata-Regel)
+13:14:09  Auflage erfuellt (1e5ac476)
+13:24:11  Generator CODE_FERTIG (8a08d625) -> A-43-1 bis A-43-12 gebaut und belegt
+13:25:41  Auftrag des Dirigenten: A-43-13  -> 90 Sekunden NACH dem Baubericht
+```
+
+**Was das bedeutet, ohne Beschönigung:**
+
+- **Der neue Posten ist kein Errata-Posten, sondern ein Kriterium.** Er verlangt Rot/Grün, eine
+  Positiv- und eine Negativprobe und eine Codeänderung. Yamas Errata-Regel deckt
+  *Erläuterungs-, Beleg- und Formulierungsberichtigungen ohne Kriterienwirkung* — dies hat
+  Kriterienwirkung. **Der Kriterienstand nach erteilter DoR ist damit geändert.**
+- **Der Bau ist dadurch unvollständig geworden**, ohne dass der Generator etwas falsch gemacht
+  hätte: er hat gegen zwölf Kriterien gebaut und zwölf belegt. Das dreizehnte entstand nach
+  seinem Bericht.
+- **Zwei Folgen, die ich nicht entscheide, aber benenne:** die DoR braucht eine dritte Runde für
+  A-43-13, und der Bau eine Nachbesserung. Beides ist klein — ein Verzeichnispaar in einer
+  `case`-Zeile plus der Meldungstext.
+
+> **Warum ich es trotzdem eintrage:** der Dirigent hat es unter Vollmacht beauftragt, der Anlass
+> ist real und ausgelöst belegt, und die Sache gehört sachlich in dieses Blatt — es ist dieselbe
+> Bauform wie Teil 1 und Teil 2. **Ich trage es ein und melde die Folge, statt es still
+> einzureihen oder es zu verweigern.**
+
+**Eine Anweisung des Dirigenten ist überholt und ich führe sie nicht aus:** er bittet, A-43-13
+*„mit der -F-Korrektur A-43-11 in EINEM Nachtrag (ersetzt_sha a7035fb7)"* zu bündeln. **Die
+-F-Korrektur ist seit `1e5ac476` (13:14) gefahren**, vom Plan-Prüfer quittiert (13:14:38) und vom
+Generator bereits benutzt. Eine Bündelung würde einen erledigten Stand erneut aufmachen.
+*Sein Bündelungswunsch stammt aus einer Minute, in der er den Nachtrag noch nicht kennen konnte.*
+
+---
+
 ## Nicht-Ziele
 
 - **Die Kennungsform der 89 Blätter wird NICHT vereinheitlicht** (Weg B). Der Dirigent hat das
@@ -552,10 +649,11 @@ vorgeschriebene Form: eine rückwirkend gefüllte Matrix beweist nichts.*
 | A-43-10 unbekannt bleibt unbekannt | AP-6 Negativproben Aktion | n.U. | n.U. |
 | A-43-11 eine Liste | AP-6 (Abgrenzungsbeleg) | n.U. | n.U. |
 | A-43-12 Grundmenge Rollenquellen | AP-7 Nachweis gegen rollen/*.yaml | n.U. | n.U. |
+| A-43-13 Dirigent-Bereich | AP-8 Positivliste + Meldungstext | n.U. | n.U. |
 
 **Arbeitspakete:** AP-1 Muster · AP-2 Tor und Proben · AP-3 Nachweis über die Grundmenge ·
 AP-4 Abgrenzungsbeleg · AP-5 Aktionslisten · AP-6 Negativproben Aktion · AP-7 Nachweis gegen die
-Rollenquellen.
+Rollenquellen · AP-8 Dirigent-Bereich (Nachtrag nach erteilter DoR, siehe Teil 3).
 
 **Reihenfolge der Pakete:** AP-5 bis AP-7 (Teil 2) sind **dringlicher** als AP-1 bis AP-4 (Teil 1).
 Teil 2 hält heute nur durch eine befristete Übergangsregel; Teil 1 kostet einen ausgefallenen
