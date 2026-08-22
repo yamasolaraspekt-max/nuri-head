@@ -33022,3 +33022,165 @@ ausdrücklich nicht (Nicht-Ziel: *„Keine Änderung an der Treppe"*).
 Ball: **Planner** (ob daraus ein Blatt wird) · **Yama** (die Fachfrage, wenn es eines wird).
 Der Stillstand daneben unverändert: Integrations-Zweig `ceb4224a` seit **16:05:04**, 13
 Planner-Commits offen, `docs/STATUS.md` seit 15:56:52.
+
+## §416 — Der Integrator hat die Tafel nachgeführt, aber nichts transportiert. Zwei Zustände waren bei der Niederschrift schon überholt — einer davon 104 Minuten
+
+Messstand: HEAD `22fb6a28`, Baum 0, gemessen 18:11–18:13. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §416'` → 0).
+
+### Zuerst das Positive, und es ist echt
+
+Nach **132 Minuten** Stille hat der Integrator um **18:09:33** fünf Zustandscommits geschrieben
+(`72fabf4f` … `217fd547`). **Dabei sind zwei meiner drei Karteileichen aus §413 verschwunden:**
+
+    Z1-W2-1   ENTWURF / plan-pruefer   ->   CODE_FERTIG / evaluator
+    Z1-W2-0   ENTWURF / plan-pruefer   ->   CODE_FERTIG / evaluator
+    mein ballbesitz in STATUS.md:  3  ->  1   (geblieben: P-02, VORLAGE)
+
+Die Tafel führt mich nicht mehr für Arbeit, die ich vor Stunden erledigt habe. Das war überfällig
+und ist erledigt.
+
+### Aber: es war Zustandspflege, kein Transport
+
+    Planner-Commits nicht in der Integration:   13     (unveraendert)
+    Z1-W2-4 / -5 / -6 / Z2-W0-11b im Checkout:  FEHLEN WEITER
+    Z0-I1-Blatt im Checkout:                    ELF Kriterien, Z0-I1-12 nicht lesbar
+
+**Meine erste Lesart dieser Runde — „der Stillstand ist aufgelöst" — war falsch**, und nur die
+Messung hat sie gestoppt. Fünf Commits mit dem Wort „integrator" davor sehen nach Bewegung aus; die
+Zahl, die zählt, hat sich nicht bewegt. §414 gilt unverändert.
+
+### Fall 1: Z1-W2-3 — zitiert, nicht nachgebaut
+
+Der Generator hat es um **18:12:09** selbst gemeldet
+(`BAU-generator-Z2-W0-5b/generator-befund-status-z1-w2-3-falsch-zurueckgestellt.yaml`,
+`ball: integrator`). **Seine Zeitachse, die ich am Diff nachgemessen und bestätigt habe:**
+
+    15:52:21  Generation 16 stellt Z1-W2-2 UND Z1-W2-3 zurueck
+    15:52:42  seine Berichtigung: der Herkunftsvermerk trifft das MODUL, nicht jede Funktion
+    15:53:35  GENERATION 17 REVIDIERT — "Z1-W2-3 ist baubar"        <- 74 Sekunden spaeter
+    16:12:31  Bau d00aeece · 16:13:25 CODE_FERTIG, ball evaluator
+    18:09:33  Integrator schreibt ZURUECKGESTELLT, berufen auf 15:52:21
+
+Eigene Gegenprobe am Commit `217fd547`: `-zustand: BEREIT / -ballbesitz: generator` →
+`+zustand: ZURUECKGESTELLT / +ballbesitz: planner`. **Der Diff bestätigt ihn.**
+
+Sein Satz zur Schuldfrage trägt und ich übernehme ihn: *„Kein Vorwurf: wer Generation 16 liest und
+nicht 17, schreibt genau das."*
+
+### Fall 2: Z1-W2-1 — derselbe Mechanismus, und den hat er nicht
+
+    Tafel (geschrieben 18:09:33):   zustand: CODE_FERTIG   ballbesitz: evaluator
+    Ereignislage:
+      16:25:16  ABGENOMMEN         ball: dirigent          (evaluator-ABGENOMMEN-teil-B-Z1-W2-1)
+      16:27:41  BUENDEL_GEBAUT     ball: integrator (transportieren)
+
+**Bei der Niederschrift war der Zustand 104 Minuten überholt**, und der Ball ist **doppelt** falsch:
+weder Evaluator (der hat abgenommen) noch CODE_FERTIG (das ist ABGENOMMEN). Der wirkliche Ball liegt
+seit 16:27:41 beim **Integrator selbst** — das Bündel wartet auf Transport.
+
+**Das ist die bittere Pointe:** Die Tafelzeile, die der Integrator geschrieben hat, verdeckt einen
+Posten, der bei ihm selbst liegt.
+
+### Die Abgrenzung, ohne die der Befund zu breit wäre
+
+**Z1-W2-0 ist KEIN Fehler.** Dort steht ebenfalls `CODE_FERTIG / evaluator` — aber das `ABGENOMMEN`
+kam um **18:11:23**, also **110 Sekunden NACH** dem Tafelschreiben. Bei der Niederschrift war der
+Zustand richtig. Wer alle drei über einen Kamm schert, meldet einen Fehler, den es nicht gibt.
+
+Ebenso: **Z1-W2-2 ist zu Recht zurückgestellt** — das BASE_BLOCKED steht, die Modellfrage
+(`RoofAufbau` ohne `surfaceId`) ist offen und gehört Yama. Commit `b91ea441` ist korrekt.
+
+### Meine eigene ausgefallene Messung in dieser Runde
+
+Mein Python-Muster `kennung:\s*"?<K>"?\s*$` fand für **alle fünf** Kennungen null Ereignisse. Die
+Gegenprobe `grep -l 'kennung: Z1-W2-1'` fand **fünf Dateien**. Ich habe die Null **nicht gemeldet**,
+sondern mit dem Werkzeug neu gemessen, dessen Gegenprobe trägt. Ohne die Gegenprobe hätte ich
+geschrieben, es gebe zu keiner dieser Kennungen ein Ereignis — bei fünf laufenden Vorgängen.
+
+### Was bei mir liegt
+
+Ein Ballbesitz: **P-02**, Zustand `VORLAGE`, Blatt `docs/PRUEFAUFTRAG-P-02-parallele-instanzen.md`.
+Dazu liegen zwei Voten von mir in der Ablage (`plan-pruefer-VOTUM-P-02-vorlage.yaml`,
+`…-vollstaendig.yaml`). Kein akuter Posten; ich nehme ihn in der nächsten Runde auf.
+
+Ball: **Integrator** (Z1-W2-3 richtigstellen, Z1-W2-1 auf ABGENOMMEN, das eigene Bündel seit
+16:27:41, 13 Commits) · **Dirigent** (Z1-W2-0 ABGENOMMEN 18:11:23 liegt neu bei ihm).
+
+## §417 — Der Rückstau ist aufgelöst: 13 auf 0, alle vier Blätter da, Z0-I1 auf zwölf Kriterien. Mein letzter Ballbesitz ist seit 250 Minuten erledigt
+
+Messstand: HEAD `beb5e5a7`, Baum 0, gemessen 18:15–18:17. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §417'` → 0).
+
+### Die Auflösung, gemessen statt angenommen
+
+Zwischen **18:09:33** und **18:15:26** — knapp **sechs Minuten** — hat der Integrator alles
+nachgeholt, was seit 16:04 lag:
+
+    Planner-Commits nicht in der Integration     13  ->  0
+    Rueckweg transportiert:  plan-pruefer 39 · planner 13 · generator 11 · evaluator 3 Staende
+
+    Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md   FEHLTE -> DA
+    Z1-W2-5-wandflaeche-anschliessen.md                FEHLTE -> DA
+    Z1-W2-6-auswechslung-anschliessen.md               FEHLTE -> DA
+    Z2-W0-11b-ids-callback-state-token.md              FEHLTE -> DA
+
+    Z0-I1 im Checkout:   ELF Kriterien -> ZWOELF, 'Z0-I1-12' fuenfmal lesbar
+    Z1-W2-3:  ZURUECKGESTELLT/planner  ->  CODE_FERTIG/evaluator   (Bau 161868e9)
+    Z1-W2-1:  CODE_FERTIG/evaluator    ->  ABGENOMMEN/dirigent     (Votum ccbb70bc)
+    Z1-W2-0:  CODE_FERTIG/evaluator    ->  ABGENOMMEN/dirigent     (Votum 31152ef1)
+
+**Alle drei offenen Befunde sind behoben** — §414 (Z0-I1 mit elf statt zwölf Kriterien), §416 Fall 1
+(Z1-W2-3, vom Generator gemeldet) und §416 Fall 2 (Z1-W2-1, von mir). Das ist die vollständige
+Gegenprobe zu meiner eigenen Fehlmessung eine Runde zuvor: **damals sah es nach Bewegung aus und war
+keine; diesmal sieht es nach Bewegung aus und ist welche.** Der Unterschied ist in beiden Fällen
+dieselbe Zahl — 13 gegen 0.
+
+**Und diesmal habe ich zuerst gemessen und dann geschrieben.** Letzte Runde hatte ich „der Stillstand
+ist aufgelöst" schon fast gemeldet, bevor `rev-list --count` es widerlegte.
+
+### Mein letzter Ballbesitz ist erledigt — seit 250 Minuten
+
+`docs/STATUS.md` führt genau einen Posten auf mich:
+
+    :18430  auftrag: "P-02"   zustand: VORLAGE   ballbesitz: plan-pruefer
+
+**Mein Votum dazu liegt seit 14:07 vor** (`plan-pruefer-VOTUM-P-02-vollstaendig.yaml`,
+`blatt_sha: 6e37d2b5`, Beleg §345) und ist abschließend:
+
+    punkt_1_claim_gilt:                 ERTEILT
+    punkt_2_trennung:                   ueberholt, gekennzeichnet — kein Erteilungsgegenstand
+    punkt_3_operand_statt_umschnitt:    ERTEILT
+    punkt_4_verlinken_statt_nachbauen:  ERTEILT
+    punkt_5_frisch_messen:              ERTEILT
+    ergebnis: "P-02 ist aus Pruefersicht ABGESCHLOSSEN — nach 15 Tagen auf VORLAGE."
+    ball: dirigent
+
+**Die Tafel führt mich also für Arbeit, die ich vor 250 Minuten abgegeben habe.** Das ist dieselbe
+Klasse wie die drei Karteileichen aus §413 — von denen der Integrator zwei soeben bereinigt hat.
+Diese hier ist die letzte, und sie ist die älteste.
+
+Damit ist meine Bahn nach P-03 **beidseitig leer**: STATUS.md 1 (tot), Blätter 0.
+
+### Zwei Beobachtungen, ausdrücklich KEINE Befunde
+
+**Erstens:** Das Blatt trägt im Kopf `stand_sha: 136b6e79`. Dieser Commit existiert und ist vom
+**07.08. 09:30:25** („Tafel: A-08 ist BEREIT"). Das Blatt wurde zuletzt am **22.08. 14:03:11** durch
+`6e37d2b5` geändert. Das ist **kein** Fehler, solange `stand_sha` den Stand meint, gegen den die
+Vorlage entstand — der Vorfall mit zwei Planner-Instanzen war am 07.08. Ich melde es als
+Beobachtung, weil ein 15 Tage alter SHA im Kopf eines gerade geänderten Blattes beim nächsten Leser
+Fragen aufwirft, und beantworte sie hier, statt einen Mangel zu behaupten.
+
+**Zweitens, und es gehört zu P-02 selbst:** Mein Votum stützt sich auf fünf Punkte zur Absprache
+zwischen parallelen Instanzen. **Heute ist ein sechster Fall dazugekommen, den das Blatt nicht
+kennt** — nicht die *Absprache*, sondern die *Erkennung*: Ich habe in §405 gemessen, dass
+`pgrep -f <sitzungs-id>` **zwei von vier** laufenden Sitzungen findet. Wer mit `pgrep` prüft, ob eine
+zweite Instanz seiner Rolle läuft, bekommt in der Hälfte der Fälle „nein". P-02 regelt, was zwei
+Instanzen miteinander tun; es sagt nicht, woran man die zweite erkennt.
+
+Das ist **kein Einwand gegen mein Votum** — die fünf Punkte bleiben erteilt. Es ist ein Posten für
+den Planner, falls er P-02 fortschreibt.
+
+Ball: **Integrator** (P-02-Tafelzeile auf den Stand von 14:07) · **Dirigent** (P-02 liegt seit 14:07
+bei ihm; dazu Z1-W2-0 und Z1-W2-1, beide ABGENOMMEN) · **Planner** (die Erkennungsfrage, wenn P-02
+fortgeschrieben wird).
