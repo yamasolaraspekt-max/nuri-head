@@ -67,29 +67,46 @@ dachformVorlagen.ts   Vorlagenwerte je Dachform: 8x 70 cm, 1x 62,5 cm
 *Der Bau darf ihn erfragen oder aus der gewählten Dachform-Vorlage übernehmen — **er darf ihn nicht
 erfinden und nicht verschweigen.*** Kriterium (c).
 
-## ⚠ Der Achsen-Fallstrick: `hoeheMm` ist NICHT `hoeheM`
+## ⚠ Der Achsen-Fallstrick — und der Bestand hat ihn bereits gelöst
 
-**Zwei Welten benennen dieselben Wörter verschieden, und die naheliegende Zuordnung ist die
-falsche.** Gemessen:
+**Zwei Welten benennen dieselben Wörter verschieden.** Gemessen:
 
 | Modell `RoofAufbau` (`scene.types.ts:265-275`) | Modul `Oeffnung` (`auswechslung.ts:52-61`) |
 |---|---|
 | `breiteMm` — „Breite **parallel Traufe**" | `breiteM` — „u-Richtung (**parallel Traufe**)" ✔ dieselbe Achse |
-| `hoeheMm` — „**vertikale** Aufbau-/Fronthöhe" | — *(keine Entsprechung)* |
-| `tiefeMm` — „Ausdehnung **entlang der Dachschräge**" | `hoeheM` — „v-Richtung (**geneigt Traufe→First**)" |
+| `hoeheMm` — „**vertikale** Aufbau-/Fronthöhe" | ↘ **art-abhängig, siehe unten** |
+| `tiefeMm` — „Ausdehnung **entlang der Dachschräge**" | ↗ `hoeheM` — „v-Richtung (**geneigt Traufe→First**)" |
 
-> **Wer `hoeheMm → hoeheM` mappt, weil die Namen gleich klingen, nimmt die vertikale Fronthöhe für
-> ein Maß in der Dachfläche.** Das Ergebnis wäre eine plausible falsche Sparrenzahl.
-> **Und der Modulkommentar warnt vor genau dieser Klasse Fehler — mit einem anderen Wortgebrauch:**
-> `:11-13` sagt *„Die Aufbau-TIEFE (depth, Aufbauhöhe über der Fläche) wird NICHT als Öffnungshöhe
-> verwendet"* — dort meint „Tiefe" die Höhe **über** der Fläche, im Modell meint `tiefeMm` die
-> Ausdehnung **in** der Fläche. *Zwei Bedeutungen desselben Wortes, an der Nahtstelle, an der
-> gemappt werden muss.*
+> ## ⚠ BERICHTIGUNG 22.08. — die Zuordnung ist **art-abhängig**, und es gibt sie schon
 >
-> **Der Grund für den Unterschied ist gemessen:** der Modulkopf (`:6`) beschreibt Aufbauten als
-> `ObstacleData` — **diesen Typ gibt es im Produktivbaum nicht**; fünf `geometry/`-Module vermerken
-> das selbst (*„`buildFlat`, `ObstacleData` und `RoofEngine` haben in … nicht im Produktivbaum"*).
-> **Der Kommentar beschreibt eine ältere Welt; gemappt wird gegen `RoofAufbau`.**
+> ~~Die erste Fassung dieses Blattes sagte: `tiefeMm → hoeheM`, `hoeheMm` habe keine Entsprechung.~~
+> **Das ist für Gauben und Kamine richtig und für Dachfenster falsch.** Gemessen beim Zuschnitt von
+> Paket 2:
+>
+> ```
+> geometry/dachOeffnung.ts:51-54
+>   /** Schraegen-Tiefe (v-Ausdehnung) der Oeffnung je Art: Dachfenster -> hoeheM, sonst -> tiefeM. */
+>   export function oeffnungVTiefeM(o: { art, hoeheM, tiefeM }): number {
+>     return o.art === 'window' ? endlich(o.hoeheM) : endlich(o.tiefeM);
+>   }
+>
+> Nutzer AUSSERHALB der eigenen Datei: 0   (intern ruft sie dachOeffnung.ts:65 selbst)
+> geprueft in __tests__/dachformVorlagen.test.ts:1299-1302 — window 1.18 · giebelgaube 2.5 · chimney 0.6
+> ObstacleType (scene.types.ts:248-258): 10 Arten, 'window' ist genau EINE davon
+> ```
+>
+> **Die Regel existiert, ist getestet, und niemand ruft sie auf.** *Der Anschluss darf sie nicht neu
+> erfinden — das wäre eine zweite Wahrheit über die Achsenzuordnung, an genau der Stelle, an der
+> ein Fehler eine plausible falsche Sparrenzahl erzeugt.* **Wiederverwendung vor Neuentwicklung
+> (CLAUDE.md).**
+>
+> **Was bestehen bleibt:** `hoeheMm` blind auf `hoeheM` zu mappen ist für **neun von zehn** Arten
+> falsch. Die Warnung war richtig, nur zu absolut.
+>
+> **Der Grund für die zwei Welten ist gemessen:** der Modulkopf von `auswechslung.ts:6` beschreibt
+> Aufbauten als `ObstacleData` — **diesen Typ gibt es im Produktivbaum nicht**; fünf
+> `geometry/`-Module vermerken das selbst. *Der Kommentar beschreibt eine ältere Welt; gemappt wird
+> gegen `RoofAufbau`.*
 
 **Dieses Blatt legt die Zuordnung nicht fest — es macht sie zur belegpflichtigen Zusage** (b).
 
@@ -122,25 +139,34 @@ falsche.** Gemessen:
 
   **Absage-Regel:** Ein Konsolen-Log erfüllt (a) nicht.
 
-- **Z1-W2-6-b** · **DIE ACHSEN-ZUORDNUNG IST BELEGT, NICHT ANGENOMMEN.**
+- **Z1-W2-6-b** · **DIE v-AUSDEHNUNG KOMMT AUS `oeffnungVTiefeM` — NICHT AUS EINER NEUEN REGEL.**
 
-  **Verlangt:** Der Bericht nennt für **jedes** der vier `Oeffnung`-Felder das Modellfeld, aus dem
-  es stammt, **mit Begründung an der Achse** — und belegt die Zuordnung an **einem Fall mit
-  ungleichen Maßen**, bei dem eine Vertauschung ein **anderes** Ergebnis liefert.
+  **Verlangt:** Die Umrechnung `RoofAufbau → Oeffnung` benutzt **`oeffnungVTiefeM`**
+  (`geometry/dachOeffnung.ts:52`) für das v-Maß. Der Bericht nennt für **jedes** der vier
+  `Oeffnung`-Felder das Modellfeld, aus dem es stammt.
 
   **Messbefehl:**
   ```
-  Zuordnungstabelle im Bericht:  xRel · yRel · breiteM · hoeheM  <- je Modellfeld + Achse
-  Probefall: ein Aufbau mit breiteMm != tiefeMm != hoeheMm
-    Lauf 1 (die gewaehlte Zuordnung)   -> betroffeneSparren = X
-    Lauf 2 (hoeheMm statt tiefeMm)     -> betroffeneSparren = Y,  X != Y  im Bericht beziffert
+  grep -n 'oeffnungVTiefeM' <die neue Umrechnungsstelle>          -> mindestens 1
+  Zuordnungstabelle im Bericht: xRel · yRel · breiteM · hoeheM  <- je Modellfeld + Achse
+  Probefall mit ZWEI Arten, weil die Regel art-abhaengig ist:
+    typ 'window'      (hoeheMm != tiefeMm)  -> betroffeneSparren = X
+    typ 'giebelgaube' (dieselben Masse)     -> betroffeneSparren = Y
+    X != Y, beide beziffert — DAS ist der Beleg, dass die Art wirkt
+  Gegenprobe: dieselbe Lage mit fest verdrahtetem tiefeMm -> beim Dachfenster ANDERES Ergebnis
   ```
 
-  **Heutiges (rotes) Ergebnis:** keine Zuordnung vorhanden; das Modul wird nicht aufgerufen.
+  **Heutiges (rotes) Ergebnis:** `oeffnungVTiefeM` hat **0 Nutzer außerhalb der eigenen Datei**
+  (intern ruft `dachOeffnung.ts:65` sie selbst); `auswechslung` wird nicht aufgerufen — **und
+  `dachOeffnung` hat ebenfalls keinen Ladeweg** (sein einziger Importeur `dachAusschnitt.ts` ist
+  selbst unerreichbar). *Die Regel ist gebaut, geprüft (`dachformVorlagen.test.ts:1299-1302`) — und
+  erreicht niemanden.*
 
-  **Absage-Regel:** *„Die Felder heißen gleich"* erfüllt (b) **nicht.** **Und wenn der Bau zu einer
-  anderen Zuordnung kommt als die Tabelle oben, gilt sein Befund** — dann ist dieses Blatt zu
-  ändern, nicht der Code zu biegen. *Eine Fach-Linse (Zimmerer/Dachdecker) ist hier empfohlen; die
+  **Absage-Regel:** Eine **eigene** `if (art === 'window')`-Zeile im Anschlusscode erfüllt (b)
+  **nicht** — das wäre eine zweite Wahrheit über die Achsenzuordnung. **Und ein Probefall mit nur
+  einer Art erfüllt (b) nicht**: er kann nicht zeigen, dass die Unterscheidung überhaupt wirkt.
+  *Kommt der Bau zu einer anderen Zuordnung als hier, gilt sein Befund — dann ist dieses Blatt zu
+  ändern, nicht der Code zu biegen. Eine Fach-Linse (Zimmerer/Dachdecker) bleibt empfohlen; die
   Achsenfrage ist Handwerkswissen, nicht Typprüfung.*
 
 - **Z1-W2-6-c** · **DER SPARRENABSTAND IST SICHTBAR UND STAMMT AUS EINER BENANNTEN QUELLE.**
@@ -241,7 +267,7 @@ falsche.** Gemessen:
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
 | Z1-W2-6-a Analyse sichtbar | AP-1 Anzeigekomponente | n.U. | n.U. |
-| Z1-W2-6-b Achsen-Zuordnung belegt | AP-2 Umrechnung + Probefall | n.U. | n.U. |
+| Z1-W2-6-b v-Maß aus `oeffnungVTiefeM`, zwei Arten | AP-2 Umrechnung + Probefall | n.U. | n.U. |
 | Z1-W2-6-c Sparrenabstand sichtbar, Quelle benannt | AP-2 (Operand) | n.U. | n.U. |
 | Z1-W2-6-d `pruefpflichtig` als Vorbehalt | AP-1 (Vorbehalt) | n.U. | n.U. |
 | Z1-W2-6-e Rot-Probe | AP-3 Vorher/Nachher | n.U. | n.U. |
