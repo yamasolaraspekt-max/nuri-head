@@ -26258,3 +26258,69 @@ an den Gebrauchsort, nicht an den Fundort.
 
 **Ball:** Planner (Tabellenzeile für 7, wenn das Blatt nach A-37 wieder angefasst wird — er führt
 bereits Posten 4 und 5 im Vorrat) · Evaluator nachrichtlich, weil er gegen diese Tabelle prüft.
+
+## §313 — Der Planner korrigiert meine Korrektur, und er hat recht: es sind ZWEI Formate, und ich habe Zitate mitgezählt
+
+**Messstand** `14c5f8e7` · Baum sauber · 0 neue Commits seit §312 · Integrationszweig `a69e50ed` →
+`380b2081`. Ballortung dreiseitig **1 · 6 · 14**, keine neuen Bälle.
+
+### Was angekommen ist
+
+`planner-quittung-zeitformate-berichtigt.yaml` (11:15:39) — er nimmt meine Berichtigung aus §310 an,
+arbeitet sie am Gebrauchsort ein und **misst selbst nach, statt zu übernehmen.** Und
+`evaluator-AUFTRAG_GESTARTET.yaml` (11:15:50): die Nachprüfung läuft, `endstand_sha: c82df498`
+**selbst bestimmt** — *„Muster `generator-CODE_FERTIG*.yaml`: GENAU EINE Datei … Kein Nachtrag
+vorhanden, der den Endstand ablösen würde."* Das ist die Musterregel des Dirigenten von 10:24, sauber
+angewandt: er hat nicht den Dateinamen geglaubt, sondern das Muster geprüft.
+
+### Sein Widerspruch trifft — und mein Fehler ist größer als der, den er nennt
+
+Er misst `45/4`, ich hatte `44/5`, beide Summen 49. Er nennt die Ursache (eine Lease eine Ebene
+tiefer, eine Punktdatei) und sagt ausdrücklich: *„Ich behaupte nicht, dass seine Zahl falsch ist — ich
+nenne die Grundmenge, die meine erzeugt hat."* **Für die Spezifikation ist die Differenz folgenlos;
+entscheidend ist, dass `Z` vorkommt.** Beides richtig.
+
+**Der Fehler, den er nur beiläufig korrigiert, ist meiner und wiegt schwerer.** §310 schreibt:
+
+```
+49 Werte · +0200 44 · +02:00 0 · Z 5 · ohne Zone 0   -> "DREI Formate, nicht vier"
+```
+
+**Formate mit Vorkommen sind zwei** — `+0200` und `Z`. Die anderen beiden stehen mit **Null** in
+meiner eigenen Tabelle. Ich habe die *Zeilen der Aufstellung* gezählt statt der *belegten Formen*.
+Er schreibt es richtig: *„ALSO ZWEI FORMATE, nicht drei und nicht vier."* Damit hat meine Korrektur
+den Fehler, den sie korrigierte, in kleinerer Ausführung wiederholt: erst „vier" statt „heartbeat_bis
+hat drei", jetzt „drei" statt „zwei" — **jedes Mal, weil ich die Kategorien zählte und nicht die
+Treffer.**
+
+### Und der zweite: ich habe Zitate mitgezählt
+
+```
+grep -rh 'heartbeat_bis:' über die GANZE Steuerung   -> enthält 2 Zeilen AUSSERHALB leases/:
+   ereignisse/VORRAT-Z0-I2/plan-pruefer-befund-zeitformate.yaml:21   <- mein eigener Befund
+   ereignisse/ERRATA-planner-A-37/planner-quittung-…:40              <- seine Quittung
+Feldzeilen NUR in leases/, jetzt: 51 · +0200 47 · +02:00 0 · Z 4 · ohne Zone 0
+```
+
+**Das ist wörtlich die Regel, die ich ihm in §310 selbst gegeben habe** — *„wer Zitate mitzählt, zählt
+Belege als Fälle"*, gesagt über die kaputten Zeitstempel. Er gibt sie mir zurück, angewandt auf meine
+eigene Messung: *„beim Messen auf die Feldzeile beschränken, nicht auf den Dateiinhalt."*
+
+### Die Zahl bewegt sich außerdem
+
+```
+11:09  meine Messung (rekursiv, inkl. Zitate)   49
+11:15  seine Messung (leases/)                  49   (45/4)
+11:18  Feldzeilen in leases/                    51   (47/4)
+```
+
+Zwei Leases sind in neun Minuten dazugekommen — die Kette arbeitet. **Keine der drei Zahlen ist
+falsch; jede gilt für ihren Befehl und ihre Minute.** Für die Spezifikation zählt keine von ihnen,
+sondern der Satz darunter: bei `heartbeat_bis` kommen **zwei** Formen vor, `Z` ist darunter, und
+zonenlose Werte gibt es dort **nicht**.
+
+**Berichtigt, nicht chirurgisch:** §310 bleibt stehen wie geschrieben; dieser Abschnitt schreibt ihn
+fort — dieselbe Form, die Generator und Planner heute dreimal benutzt haben.
+
+**Ball:** keiner. Der Punkt ist zwischen uns geschlossen, die Spezifikation liegt beim Planner,
+A-37-20 beim Evaluator in der Nachprüfung.
