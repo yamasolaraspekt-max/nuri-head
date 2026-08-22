@@ -14,6 +14,10 @@ import { FENSTER_BAUARTEN, TUER_BAUARTEN, fensterBauartNach, type OeffnungsBauar
 import { TREPPEN_BAUARTEN, type TreppenBauart } from '../geometry/treppenBauarten';
 import { HEIZKOERPER_TYPEN, type HeizkoerperTyp } from '../geometry/heizkoerperTypen';
 import { neuesPaket, type ConfiguratorType } from '../geometry/configuratorPackage';
+// Z1-W2-1: der Integrationsabgleich war gebaut, geprueft und unerreichbar — 0 Aufrufer im
+// Produktivpfad. Hier bekommt er seinen Weg zum Benutzer. Die Fachlogik bleibt unangetastet.
+import { pruefeOeffnungsIntegration, type IntegrationsErgebnis } from '../geometry/integrationAbgleich';
+import { IntegrationsKonflikte } from './rahmen/IntegrationsKonflikte';
 import { useHausplanerStore } from '../store/hausplanerStore';
 import type { SceneNode, WallNode, OpeningNode, ObjectNode } from '../domain/scene.types';
 import { treppeZuParametern } from '../geometry/treppeObjekt';
@@ -51,6 +55,52 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
 
   const iconUrl = (k: Kachel): string => `${ICON_BASE}icons/${ordner}/${k.datei}`;
   const letzter = schritt === SCHRITTE.length - 1;
+
+  // ── Z1-W2-1 — DER INTEGRATIONSABGLEICH, GERECHNET WO ER GEBRAUCHT WIRD ────────────────────
+  //
+  // **Das Ziel ist eine VORHANDENE Öffnung, nicht die freie Wandlänge.** Das Modul sagt es in
+  // seinem eigenen Kopf: *„Öffnung in eine vorhandene Wandöffnung einsetzen. Deckt Yamas
+  // konkretes Beispiel ab: Fensterbreite 1.510 vs. Öffnung 1.480 → ‚30 mm breiter'."*
+  //
+  // ⚠ **Das hatte ich beim ersten Verdrahten falsch:** ich reichte `Wandlänge − 100` als
+  // `oeffnungBreite` und hätte damit ein 1200er Fenster gegen eine 11.900er „Öffnung" gerechnet —
+  // ein Blocker mit einer Zahl, die niemandem hilft. *Der Aufruf war da, die Frage war die
+  // falsche.* Gefunden beim Lesen der Fachlogik vor der Browserabnahme, nicht durch einen Test:
+  // die Suite war grün, weil sie die Fachlogik prüft und nicht meinen Aufruf.
+  //
+  // **Der Bedienweg:** eine bestehende Öffnung im Grundriss wählen, dann Fenster oder Tür
+  // konfigurieren. Schritt `Prüfung` beantwortet: *passt das Konfigurierte in diese Öffnung?*
+  // Kein Leisteneintrag — N4: *eine Warnung, die man erst anklicken muss, warnt nicht.*
+  //
+  // **Was hier NICHT geschieht:** rechnen. `pruefeOeffnungsIntegration` liefert das Ergebnis,
+  // diese Datei stellt nur die Frage. Anschließen heißt verdrahten.
+  //
+  // Zum Status `approved` siehe den Kopf von `rahmen/IntegrationsKonflikte.tsx` — Entscheidung des
+  // Dirigenten in Yamas Namen (22.08. 14:53:40), im Blatt unter Kriterium b.
+  const integrationsErgebnis = React.useMemo<IntegrationsErgebnis | null>(() => {
+    if (art !== 'fenster' && art !== 'tuer') return null;
+    const stand = useHausplanerStore.getState();
+    const szene = stand.scene;
+    if (!szene) return null;
+    // Gewählt sein muss die ÖFFNUNG. Ist eine Wand gewählt, gibt es nichts einzupassen — dann
+    // erzeugt „Übernehmen" unten eine neue Öffnung, und dieser Abgleich hat keine Frage.
+    const ziel = szene.nodes.find(
+      (n): n is OpeningNode =>
+        (n.type === 'window' || n.type === 'door') && stand.selectedNodeIds.includes(n.id),
+    );
+    if (!ziel) return null;
+    const pruefPaket = {
+      ...neuesPaket({
+        id: 'pruefung', type: TYP_MAP[art], jetzt: new Date(0).toISOString(), autor: 'Pruefung',
+        parameters: { bauart: wahl.id }, geometry: { breite, hoehe },
+      }),
+      status: 'approved' as const,
+    };
+    return pruefeOeffnungsIntegration(pruefPaket, {
+      oeffnungBreite: ziel.width,
+      oeffnungHoehe: ziel.height,
+    });
+  }, [art, breite, hoehe, wahl, schritt]);
 
   const huelle = React.useRef<HTMLDivElement>(null);
   const titelId = React.useId();
@@ -133,6 +183,9 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
                 <div className="hp-kw-pruefzeile"><span className="hp-kw-marke hp-kw-marke--ok">✓</span>Maße plausibel</div>
                 <div className="hp-kw-pruefzeile"><span className="hp-kw-marke hp-kw-marke--ok">✓</span>{art === 'treppe' ? 'DIN 18065 Schrittmaß' : 'Norm-Anschlag korrekt'}</div>
                 <div className="hp-kw-pruefzeile"><span className="hp-kw-marke hp-kw-marke--warn">!</span>Rastermaß — 40 mm Versatz prüfen</div>
+                {/* Z1-W2-1: die echte Pruefung. Die drei Zeilen darueber sind Bestand und
+                    bleiben unangetastet — sie gehoeren nicht zu diesem Auftrag. */}
+                <IntegrationsKonflikte ergebnis={integrationsErgebnis} />
               </>
             )}
             {schritt === 4 && (

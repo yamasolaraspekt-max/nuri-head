@@ -491,13 +491,33 @@ test('Scheibe 5: genau ZWEI Ausnahmen, beide benannt, beide ohne Token', () => {
   }
 });
 
+/**
+ * Die Dateien, die `hp-kw-*`-Klassen TRAGEN.
+ *
+ * **Aufgezaehlt, nicht erraten** — dieselbe Begruendung wie in `_zerlegteApp.ts`: ein `readdir`
+ * ueber `app/` wuechse still mit jedem neuen Modul, und irgendwann wird die Zusage zufaellig gruen.
+ * Kommt ein Traeger hinzu, wird er hier eingetragen; das ist eine bewusste Zeile, keine Automatik.
+ *
+ * **Warum die Liste ueberhaupt entstand (Z1-W2-1):** sie stand als EIN fester Pfad da, weil der
+ * Konfigurator lange die einzige Datei mit diesen Klassen war. Als der Integrationsabgleich seine
+ * Meldezeile bekam, meldete die Zusage `hp-kw-marke--fehler` als *Regel ins Leere* — die Klasse
+ * hatte einen Traeger, nur eben nicht den einen, den die Zusage kannte. *Die Zusage mass richtig,
+ * ihre Grundmenge war zu eng.* Erweitert, nicht gelockert: eine Klasse ohne JEDEN Traeger faellt
+ * unveraendert durch.
+ */
+const KW_TRAEGER = [
+  KONFIG,                                                   // app/ConfigWizard.tsx — der Konfigurator selbst
+  join(hier, '../app/rahmen/IntegrationsKonflikte.tsx'),    // Z1-W2-1: die Meldezeile im Pruefschritt
+] as const;
+
 test('Scheibe 5: jede angelegte Klasse wird auch benutzt — keine Regel ins Leere', () => {
   // Die andere Richtung. Eine Klasse in der CSS, die niemand traegt, ist tote Regel; sie faellt in
   // keinem Gate auf und wird beim naechsten Aufraeumen mitgeschleppt.
   const ohneKommentare = quelle.replace(/\/\*[\s\S]*?\*\//g, '');
   const klassen = [...ohneKommentare.matchAll(/\.(hp-kw-[a-z0-9-]+)\s*\{/g)].map((m) => m[1]!);
   assert.ok(klassen.length >= 30, `nur ${klassen.length} Scheibe-5-Klassen in der CSS`);
-  const quelltext = readFileSync(KONFIG, 'utf8');
+  for (const t of KW_TRAEGER) assert.ok(existsSync(t), `Traeger fehlt: ${t}`);
+  const quelltext = KW_TRAEGER.map((t) => readFileSync(t, 'utf8')).join('\n');
   const unbenutzt = [...new Set(klassen)].filter((k) => !traegt(quelltext, k));
   assert.deepEqual(unbenutzt, [], `Klassen ohne Traeger:\n${unbenutzt.join('\n')}`);
 });
