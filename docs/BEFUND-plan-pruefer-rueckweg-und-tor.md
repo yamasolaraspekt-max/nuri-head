@@ -38719,3 +38719,100 @@ zwar auf dem Weg, den der Generator in §464 vorgemacht hat: **aus einem Vorsatz
 
 **Der Auftrag aus Generation 11, wörtlich:** *„GP-0-Plan freigeben (heute Nacht), DoR Z1-E4-1 sofort
 nach Schnitt, dann E1/E3"* — Abschluss: **`FREIGEGEBEN` oder `WIDERSPROCHEN` in EINEM Durchgang.**
+
+## §483 — GP-0-Plan: FREIGEGEBEN MIT FÜNF AUFLAGEN (alle acht Abschnitte geprüft)
+
+Stand: HEAD `0c8dedb6`, Baum 0, Rollenquelle gen 11, Digest `5154d5c8…` gleich.
+Blatt: `docs/konzept/golden-path-gp0-modellplan-bodenplatte.md` @ Integration, **blatt_sha `bafe62a2`**, 240 Zeilen.
+Fortsetzung von §482 (dort Abschnitt 1). Hier die Abschnitte (2) bis (8) und das Gesamtvotum.
+
+### Votum: FREIGEGEBEN
+
+Der Plan ist tragfähig. Er folgt durchgehend **bestehenden Mustern des Bestands** statt neue zu
+erfinden (`ADD/UPDATE/REMOVE_CEILING` für die Commands, `dach_pro_level_vorhanden` für die
+Ablehnungsgründe — beides selbst gemessen, `applyCommand.ts:70` und `:114`), er trennt
+Fußbodenaufbau und tragende Platte ausdrücklich statt sie zu vermischen, und er entscheidet
+**neun Fachfragen nicht selbst**, sondern legt sie Yama vor. Das ist die Form, die CLAUDE.md
+verlangt ("Fehlende Operanden führen zu Rückfrage").
+
+**zahlen_nachgerechnet:** 16 Zeilenangaben aus (2) einzeln gemessen — **14 treffen exakt**.
+Eine dritte Abweichung war **mein** Messfehler: Muster `Decke` gegen Text `Geschossdecke`
+(`szene.ts:477` trifft). Referenzhaus (6) durchgerechnet: 0 → 2500 → 2700 → **Traufe 5200 mm**,
+plausibel für zwei Vollgeschosse. `berechneHoehenkette`: **0 Treffer** im Insel-Bestand
+(Positivkontrolle `hoehenkette` 7 Dateien).
+
+**streichung_abwaerts:** Keine. Ich streiche nichts aus dem Plan.
+**streichung_aufwaerts:** Keine. Ich fordere keinen zusätzlichen Umfang — die fünf Auflagen sind
+Berichtigungen an vorhandenen Aussagen, keine neue Bauleistung.
+
+### Auflage 1 — Abschnitt (1) und (3) sind überholt, seit **gestern Abend 20:09**
+
+`hoehenkette.ts` wurde durch `ad2ac724` ("generator: Z1-E0-1 — die Hoehenkette ist eine Wahrheit")
+angelegt. Der Plan ist vom 21.08. 21:42 und **22 Stunden älter als der Bau**. Drei Folgen:
+
+- Der Plan sagt "**neue Datei** `geometry/hoehenkette.ts`". Richtig ist jetzt: **Erweiterung**
+  einer vorhandenen Datei (59 Zeilen, zwei Exporte).
+- Der Plan nennt `naechsteEtageElevationMm` "endlich verdrahtet statt **tot**". Über den
+  **Funktionsnamen** gemessen, nicht über den Dateinamen: **4 Produktivverbraucher**
+  (`deckenMesh.ts`, `Kopfrahmen.tsx`, `hoehenkette.ts`, `geschossVorlage.ts`).
+- Das "`Kopfrahmen.tsx:172`-Inline, ab jetzt hierher verlagert" **ist bereits verlagert** —
+  Kopfrahmen ist heute Verbraucher der Funktion.
+
+Was **nicht** überholt ist: der gebündelte Ergebnistyp. `HoehenkettenErgebnis` und alle fünf
+Feldnamen haben **je 0 Treffer** in `hoehenkette.ts`. Der Plan bleibt hier inhaltlich gültig.
+
+### Auflage 2 — Kriterium 3 nennt eine Funktion, die es nicht gibt
+
+Abnahmekriterium 3 misst gegen `berechneHoehenkette(...)`; das Referenzhaus (6) rechnet zweimal
+damit. **0 Treffer.** Der Dirigent hat den Namen um 22:01 bereits als *GP-0-Vorschlag, kein
+Kriterium* eingeordnet — das deckt sich mit meiner Messung aus §457. Das Kriterium muss den Namen
+als **zu bauend** kennzeichnen oder auf die beiden gebauten Exporte zeigen. Sonst misst der
+Evaluator gegen einen Namen und findet nichts, ohne dass etwas fehlt.
+
+### Auflage 3 — Kriterium 1 verweist für Undo auf ein Muster ohne Undo
+
+> "`ADD_FOUNDATION_SLAB` erhöht `foundationSlabs.length` um 1; **Undo entfernt sie (ein Schritt)**
+> — Muster `decke.test.ts:50`."
+
+`decke.test.ts`: **0 Treffer auf undo** (Positivkontrolle `ADD_CEILING` 7 Treffer, der Griff
+greift also). Die Zeile 50 trifft im Kern gut — bei 52 steht "ADD_CEILING legt eine Decke an;
+zweite je Level wird abgelehnt", das ist das Muster für Kriterium 1 **und** 2. Nur der Undo-Teil
+steht dort nicht. Undo-Muster liegen in **10 anderen Testdateien**, u. a. `sammelBefehle.test.ts`.
+Verweis um eine davon ergänzen.
+
+### Auflage 4 — das Referenzhaus kann den Zweig nicht unterscheiden, den es prüfen soll
+
+(6) setzt `floorThickness 200` **und** Zwischendecke `dickeMm 200`. `naechsteEtageElevationMm`
+wählt genau zwischen diesen beiden (`hoehenkette.ts:49-56`: Decke vorhanden → `decke.dickeMm`,
+sonst → `level.floorThickness`). Bei **gleichem Wert liefern beide Zweige 2700** — die Fixture
+kann nicht zeigen, ob der richtige genommen wurde. Ein Wert muss abweichen (z. B.
+`floorThickness 180`), sonst ist Kriterium 3 an dieser Stelle nicht aussagekräftig.
+
+Das ist kein Rechenfehler des Plans. Die Kette stimmt; sie ist nur an einer Stelle nicht
+unterscheidungsfähig, und das sieht man erst beim Durchrechnen.
+
+### Auflage 5 — Zeilenangaben-Drift 2 bis 6 Zeilen, beim Bau am Inhalt orientieren
+
+`CeilingNode` steht bei **348** statt 342 (+6), `gebaeudeUmriss` bei **758** statt 753 (+5),
+das Testmuster bei **52** statt 50 (+2). Ursache ist der heutige Bau: `HausplanerApp.tsx` wurde
+22.08. 20:17 durch Z1-E2-1 geändert und hat heute 1540 Zeilen. Der Inhalt steht überall, nur
+verschoben. Wer beim Bau die Zeilennummer nimmt statt den Inhalt, greift daneben.
+
+### Was ich ausdrücklich **nicht** beanstande
+
+- **(4) Abhängigkeitsmatrix**: jede Zelle nennt den Codebezug, nicht nur ein Ja/Nein.
+- **(5) Phasendefinition**: 15 Phasen, 12 Spalten, und Phasen 11–13 werden auf
+  `dachschichten-reuse-matrix.md` **verwiesen statt dupliziert** — genau die Disziplin, die eine
+  zweite Wahrheit verhindert.
+- **(7) Nicht-Ziele**: sauber abgegrenzt, mit `scene.types.ts:386` und `raumProjektion.ts:107`
+  belegt. Beide treffen (meine erste Null bei `raumProjektion` war ein **geratener Pfad** —
+  `projection/`, nicht `geometry/`; das ist §467 zum vierten Mal, diesmal an mir selbst).
+- **(8) Neun Fachfragen an Yama**, keine still entschieden. Vorbildlich.
+
+### Warum FREIGEGEBEN und nicht WIDERSPROCHEN
+
+Keine der fünf Auflagen betrifft die **Tragfähigkeit** des Modells. Vier sind Berichtigungen an
+Verweisen und Namen, eine ist ein Fixture-Wert. Der Kern — additiver `FoundationSlabNode`, drei
+Commands nach dem Decke-Muster, eine gebündelte Höhenkette, Bestandsdokumente laden unverändert —
+hält jeder Messung stand, die ich gefahren habe. Ein Widerspruch würde einen Plan aufhalten, der
+seit 12:23 offen ist und dessen Mängel in einem Durchgang zu beheben sind.
