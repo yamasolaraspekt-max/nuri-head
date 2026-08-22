@@ -130,8 +130,8 @@ Feststellung: „ein Werkzeug = ein Blatt" braucht hier eine andere Anbindung al
 
 | Modul | Z. | Registerzeile | Registry-Kennung | Reifegrad | Zielmenü |
 |---|---|---|---|---|---|
-| `geometry/wandFlaeche.ts` | 253 | W-02 · W-04 · **W-08** Dachfläche messen | `flaeche-messen` (W-08) | CODE | **offen** |
-| `geometry/auswechslung.ts` | 195 | W-21 · W-22 · W-25 · W-28 · W-29 | — | CODE | **offen** |
+| `geometry/wandFlaeche.ts` | 253 | ~~W-08~~ → **W-02** Wand zeichnen (5) · W-08 (2) · W-04 (1) | ~~`flaeche-messen` (W-08)~~ **—** | CODE | **offen** |
+| `geometry/auswechslung.ts` | 195 | **W-29** Dachdurchdringungen (7) · W-25 (5) · W-21 (5) · W-22 (2) · W-28 (1) | — | CODE | **offen** |
 | `geometry/wandaufbau.ts` | 96 | W-02 · W-10 · W-22 | — | CODE | **offen** |
 | `geometry/holzBauteile.ts` | 99 | W-21 · W-25 · **W-43** Abbund | — | CODE | **offen** |
 | `geometry/holzMengen.ts` | 81 | **W-20** Stückliste und Mengen · W-21 | — | CODE | **offen** |
@@ -224,7 +224,33 @@ Register-Zeilen der Dachmodule **zitiert, nicht nachgebaut** (P-02 Punkt 4), sob
 > **Namensähnlichkeit** geschlossen, ohne die Abgrenzung zu lesen. *Der Name war mein Kriterium,
 > nicht die Sache.* **Kein Gegenbefund** — die Abgrenzung trägt.
 
-#### Entscheidung: **STILLLEGEN** (Dirigent 14:11:33, nach Fachlinse Software-Architekt)
+#### ~~Entscheidung: **STILLLEGEN** (Dirigent 14:11:33, nach Fachlinse Software-Architekt)~~ → **AUFGESCHOBEN**
+
+> ## ⚠ NACHGEFÜHRT 22.08. — diese Entscheidung ist **35 Minuten später** überholt worden
+>
+> **Die WERKZEUGWEG-Entscheidung (14:46:11) hebt die Reihenfolge auf, nicht das Ziel:**
+>
+> > *„**Stilllegung erst nach der Probe**; Ausgang ‚funktioniert' → Weg belegt, **Stilllegung
+> > entfällt**; ‚funktioniert nicht' → Stilllegung begründet."* — Punkt 1, ANGENOMMEN
+>
+> **Damit ist die Stilllegung heute keine Entscheidung mehr, sondern ein Ausgang von zweien.**
+> Die Probe ist geschnitten: **`Z1-W2-4`** (`docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md`,
+> `6d8e819f`), Kriterium (f) verlangt ausdrücklich **eine Empfehlung, keine Entscheidung.**
+>
+> **Die Register-Zeile lautet ab jetzt `Probe laeuft (Z1-W2-4) — Ausgang offen`**, nicht
+> `stillzulegen`. *Wer das alte Wort zitiert, zitiert eine Fassung, die 35 Minuten galt.*
+>
+> **Was die Fachmessung unten trägt, bleibt gültig** — sie ist der Grund, warum die Probe fair ist:
+> `werkzeugRegistry` ist der unbenutzte vierte Entwurf, und genau das muss die Probe an einem
+> echten Bauteil zeigen oder widerlegen. *Der Befund ist nicht zurückgenommen, nur seine Folge
+> wartet auf eine Messung.*
+>
+> **Und `Z1-W2-4` hat den Befund inzwischen geschärft:** `Parametrik` (`werkzeugRegistry.ts:12`)
+> kann `TreppenErgebnis.pruefungen` **nicht abbilden**, `EngineErgebnis` (`enginePanels.ts:89`)
+> **kann es** — der benutzte Vertrag ist der reichere. *Das ist ein Messbefund für die Probe, keine
+> vorweggenommene Entscheidung.*
+
+**Die ursprüngliche Fassung, als Beleg stehengelassen:**
 
 **Eine Fachmessung geht über meinen Befund hinaus und ändert die Antwort:** `werkzeugRegistry.ts`
 ist **nicht der Zwilling von `toolRegistry`** (die Datenmodelle sind disjunkt — das deckt sich mit
@@ -232,9 +258,12 @@ meiner Messung), sondern **der unbenutzte vierte Entwurf der Bauteil-Schicht** n
 `scene.types`, `geometry/*` und `enginePanels.ts:89` (`EngineErgebnis`) / `faehigkeiten.ts`.
 **0 Produktivverbraucher.**
 
-**Register-Zeile: `stillzulegen (Kleinblatt nach Paket 3)`** — nach dem Muster
+~~**Register-Zeile: `stillzulegen (Kleinblatt nach Paket 3)`** — nach dem Muster
 `toolCatalogStillgelegt`: **nicht verwerfen, nicht anschließen, NICHT mit `toolRegistry`
-zusammenführen.** Der Grund gehört in den Dateikopf. *Kein Blatt jetzt.*
+zusammenführen.** Der Grund gehört in den Dateikopf. *Kein Blatt jetzt.*~~
+*(Fassung 14:11:33 — durch 14:46:11 überholt, siehe Kasten oben. **Gültig ist:
+`Probe laeuft (Z1-W2-4) — Ausgang offen`.** Was bestehen bleibt: nicht verwerfen, nicht mit
+`toolRegistry` zusammenführen.)*
 
 > **Meine Frage war die falsche.** Ich habe gefragt: *„welche der zwei Registries gilt?"* — die
 > richtige Frage lautet **„Parametrik oder `EngineErgebnis`?"**, und **`EngineErgebnis` lebt**.
@@ -288,3 +317,77 @@ kein Dauerzustand: das Register hält sie fest, das Blatt entscheidet sie.*
 | `integrationAbgleich.ts` | **W-40** Gültigkeitsstatus |
 | `aufbautenStatus.ts` | **W-22** Gaube |
 | `grundriss.ts` | **im Blatt zu entscheiden** — aus W-05 · W-08 · W-10 · W-11 · W-17 · W-26 |
+
+---
+
+# NACHFÜHRUNG 22.08. abends — Stand `3808e4ee`
+
+```yaml
+art: "Nachfuehrung des eigenen Registers. Kein Bau, keine neue Entscheidung."
+anlass: "Zwischen 6e37d2b5 (Registerstand) und heute Abend sind sieben Blaetter und drei
+         Zuschnitte entstanden. Ein Register, das den eigenen Fortschritt nicht kennt,
+         wird beim naechsten Zaehlen zur zweiten Wahrheit."
+```
+
+## 1 · Eine Trägerangabe war falsch — gemessen, nicht vermutet
+
+**Die Zeile zu `geometry/wandFlaeche.ts` nannte `W-08` als Träger und `flaeche-messen (W-08)` als
+Kennung. Beides trifft nicht zu:**
+
+```
+wandFlaeche im Register    W-02  5 Stellen   <- Traeger
+                           W-08  2 Stellen
+                           W-04  1 Stelle
+'flaeche-messen' liegt in  W-10 und W-36  —  NICHT in W-08
+
+W-02 = wand-zeichnen        W-08 = dachflaeche-messen        W-04 = oeffnung-tuer-fenster
+```
+
+> **Zwei Fehler in einer Zelle, und sie stützten einander:** die Kennung wurde einem Werkzeug
+> zugeschrieben, bei dem sie nicht steht — und daraufhin ein **Wand**modul einem **Dach**werkzeug.
+> *Der Name „Fläche messen" klang passend; gemessen war er nicht.* **Dieselbe Falle wie bei `W-16`
+> und `grundriss.ts`, nur diesmal in meinem eigenen Register.**
+
+**`Z1-W2-5` (`1146cbe6`) trägt bereits die richtige Zuordnung W-02.** *Das Blatt war richtig, das
+Register falsch — nachgezogen ist jetzt das Register.*
+
+## 2 · Sechs der 24 Kandidaten haben ein Blatt
+
+| Modul | Blatt | SHA | Stand |
+|---|---|---|---|
+| `integrationAbgleich` | `Z1-W2-1` | `59c82dae` | DoR erteilt |
+| `aufbautenStatus` | `Z1-W2-2` | `59c82dae` | DoR erteilt |
+| `grundriss` | `Z1-W2-3` | `59c82dae` | DoR erteilt |
+| `werkzeugRegistry` | `Z1-W2-4` | `6d8e819f` | DoR steht aus — **Probe, beide Ausgänge offen** |
+| `wandFlaeche` | `Z1-W2-5` | `1146cbe6` | DoR steht aus |
+| `auswechslung` | `Z1-W2-6` | **`49141f90`** | DoR steht aus — *berichtigte Fassung* |
+
+**Reifegrad aller sechs weiterhin `CODE`.** *Ein Blatt ist kein Produktivpfad — die Stufe steigt
+erst mit dem Bau.*
+
+## 3 · Paket 1 zerfällt in zwei Klassen (Zuschnitt `281a60f9`)
+
+```
+Klasse A — baubar          wandFlaeche (W-02) · auswechslung (W-29)      -> Z1-W2-5 / Z1-W2-6
+Klasse B — Operand fehlt   wandaufbau · holzMengen · holzBauteile        -> Frage bei Yama
+```
+
+**Klasse B ist nicht „später", sondern „nicht ohne Antwort":** λ hat im ganzen Bestand nur eine
+Fundstelle (kein Materialkatalog), die Schichtreihenfolge ist seit AUF-76 als Frage
+zurückgegeben, und `Holzliste` existiert in `domain/` **gar nicht**.
+
+## 4 · Paket 2 — die Aufteilung braucht eine Entscheidung (Zuschnitt `3808e4ee`)
+
+**Drei Module zeigen auf W-29, und dort liegt bereits `Z1-W2-6`:**
+`auswechslung` · `dachOeffnung` (7 von 7 Blattteilen) · `dachAusschnitt` (7 von 7).
+
+**„Ein Werkzeug = ein Blatt" ist damit nicht erfüllbar, ohne zu entscheiden.** Drei Wege liegen
+vor, **Weg A empfohlen** (`Z1-W2-6` um `dachOeffnung` erweitern). *Beim Dirigenten.*
+
+## 5 · Was dieses Register weiterhin NICHT sagt
+
+- **Die Zielmenü-Spalte bleibt bei 21 von 24 „offen"** — und das ist kein Messrückstand, sondern
+  eine Gestaltungsentscheidung der jeweiligen Anschlussblätter (N4).
+- **Kein Reifegrad ist gestiegen.** *Sieben Blätter und drei Zuschnitte sind Spezifikation, kein
+  Fortschritt am Produkt — die Unterscheidung gehört an diese Stelle, damit die Tabelle nicht
+  Fortschritt behauptet, den es nicht gibt.*
