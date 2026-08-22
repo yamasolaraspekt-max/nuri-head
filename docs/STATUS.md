@@ -2749,7 +2749,12 @@ zettel_4_A_08_A_04_statuswahrheit: "STATUS.md:4826 meldet einen Widerspruch in e
   Tafelzeile VEROEFFENTLICHT gegen Datensatz RELEASE_FREI mit ballbesitz yama. Heute: A-08 und
   A-04 stehen BETRIEBSBESTAETIGT, RELEASE_FREI kommt im ganzen Bestand 0 Mal vor."
 
-zettel_5_prozesspruefung_03: "STATUS.md:5071/:5093, §4-Vertretungsfrage. Das Feld traegt selbst
+zettel_5_prozesspruefung_03: "STATUS.md, Abschnitt 'Der Scope-Bruch -8 an W-07N ist MEIN
+  Fehler' (plan-pruefer 12.08.), §4-Vertretungsfrage.
+  ZEILENVERWEIS ENTFERNT vom integrator: die urspruengliche Angabe lautete :5071/:5093.
+  Nachgemessen — 5071 ist heute LEER (1 Zeichen), 5093 traegt die Ueberschrift des Abschnitts.
+  Gemeldet vom plan-pruefer, §465. Zeilennummern in einer wachsenden Datei wandern; der
+  Abschnittstitel wandert nicht. Das Feld traegt selbst
   'ballbesitz: — # §4-Teilfrage vom plan-pruefer 12.08. beantwortet (NEIN, mit Begruendung)'.
   Erledigt, und zwar von der richtigen Rolle: eine Frage ueber MEINE Vollmacht entscheidet nicht,
   wer davon profitiert."
@@ -3317,7 +3322,7 @@ naechster_schritt: "Evaluator prueft af8f2054 unabhaengig (§9): Suite an Basis 
 claim_abnahme: "evaluator (Erstinstanz) 10.08. 21:0x: Abnahme A-09 GECLAIMT vor dem Pruefstand-Aufbau — Lehre aus der A-04-Kollision, bei der zwei Instanzen denselben Auftrag genommen haben. Pruef-SHA af8f2054, Bau 12ca3798, Elter-Kontrolle folgt."
 letztes_votum: "evaluator 10.08.: ABGENOMMEN an af8f2054 (Bau 12ca3798; scripts/ zwischen Bau, Pruef-SHA und HEAD ded32c75 content-identisch, 0 Zeilen Drift — selbst gemessen). Alles unabhaengig nachgemessen in eigenen Worktrees (git worktree add -q): Basis 12ca3798^ = fec3a07a Suite 42/42, Pruef-SHA 50/50; Namensabgleich per tap+comm: exakt 8 neue A-09-Zusagen, 0 Bestandszusagen weggefallen — alle 42 must_preserve laufen namensgleich gruen, A-08-0-Byte-Schranke und A-07-Angleichung unberuehrt (Torlaeufe zeigten INDEX ANGEGLICHEN). Probe C (--git-dir, fremde cwd) und Probe D (GIT_DIR nur in der Umgebung, per ps -E am lebenden Prozess belegt, args ohne GIT_DIR) je in BEIDEN Richtungen am SELBEN lebenden Prozess: neues Tor exit 3 + Lock liegt + ENV_BLOCKED, Basis-Tor beiseite + Commit lief (01dd4f5 / 5027789). Eigener Gegen-Beweis A-09-3: echtes zweites Wegwerf-Repo, --git-dir dorthin, Prozess lebte — zaehlt NICHT, Commit 4565feb lief; 'jeder git zaehlt' widerlegt. A-09-2 via git -C lebend geprueft: exit 3. Relative Form --git-dir=pr-c/.git aus fremder cwd: gefangen. A-09-5 nach §12.4 selbst: M3 Rohvergleich statt Aufloesung -> 50/45/fail 5 (exakt die fuenf Neu-Verhalten), M6 ps ohne -E -> fail 2 (beide Umgebungs-Zusagen) — beide Zahlen decken den Generator-Bericht, md5 fd351a78 vor und nach jeder Probe selbst gemessen, Suite danach 50/50. A-09-4: 48ca0099 selbst gelesen (Diff traegt den Zeilentausch FREMDES VERZEICHNIS -> FREMDES REPOSITORIUM samt Befund-Vermerk 23b3a490/Probe C/SPEC) — kein Doppel-Diff war richtig, die Abweichungs-Deklaration trifft zu. Grenzen gegengelesen: fremde Nutzer KONSERVATIV (cwd-Zweifelspfad haelt Richtung Blockade), Leerzeichen-Pfade ehrlich benannt, wirken Richtung Uebersehen — Randnotiz ohne Auftrag, solange kein Arbeitsbaum mit Leerzeichen existiert. Realtest Erstnutzer: Votum-Commit e53e3cfb und dieser STATUS-Commit liefen selbst durchs neue Tor. Fehlerklasse KEINE, keine offenen P0/P1. Ball beim Release-Pruefer."
 naechster_schritt_evaluator: "Release-Pruefer faehrt §10 auf dem Abnahme-Stand: Kette d6846f69 -> 12ca3798 -> af8f2054 -> e53e3cfb je is-ancestor, Suite am Release-Kandidaten, Scope-Diff nur Blatt-Dateien, Rueckweg git revert 12ca3798"
-release_vermerk: "release-pruefer 10.08.: RELEASE_FREI an af8f2054 (§10-Abschnitt im Blatt, alles selbst gemessen). Kette c93d68ae -> d6846f69 -> 12ca3798 -> af8f2054 -> 8cd9de10 -> e53e3cfb -> HEAD a1e732d5: sechsmal is-ancestor OK. Suite im eigenen Worktree am Pruef-SHA: tests 50 pass 50 fail 0; bash -n und node --check am HEAD exit 0. Release-Diff: git show 12ca3798 --stat = exakt 2 Dateien (+316/-7), Skript-Hunks genau @@68 und @@107 — Botschaft-Annahme-Zone (A-11, Z.46-52) unberuehrt. Drift seit Pruef-SHA: git log af8f2054..HEAD -- scripts/ = 0 Commits, diff 0 Zeilen — der parallele A-11-Bau hatte die Datei bis zur Pruefung nicht angefasst, scripts/ am HEAD byte-identisch mit dem Kandidaten. Rueckweg: git show 12ca3798 | git apply --check -R exit 0, kein Datenpfad, git revert 12ca3798 genuegt. Randnotizen gewuerdigt, kein P0/P1: Leerzeichen-Pfade (Richtung Uebersehen, Repo-Pfad leerzeichenfrei, dokumentiert) und fremde Nutzer (Zweifelspfad haelt Richtung Blockade, root-Probe 0 Treffer, dokumentiert). Realtest Erstnutzer: dieser Blatt- und dieser STATUS-Commit liefen selbst durchs Tor mit den drei A-09-Wegen aktiv. Sicherungs-Push nach v1.2-Vertretung: git push fork auto/hausplaner-integration — Ergebnis siehe push_vermerk. Ball bei Yama: main-Veroeffentlichung."
+release_vermerk_1: "release-pruefer 10.08.: RELEASE_FREI an af8f2054 (§10-Abschnitt im Blatt, alles selbst gemessen). Kette c93d68ae -> d6846f69 -> 12ca3798 -> af8f2054 -> 8cd9de10 -> e53e3cfb -> HEAD a1e732d5: sechsmal is-ancestor OK. Suite im eigenen Worktree am Pruef-SHA: tests 50 pass 50 fail 0; bash -n und node --check am HEAD exit 0. Release-Diff: git show 12ca3798 --stat = exakt 2 Dateien (+316/-7), Skript-Hunks genau @@68 und @@107 — Botschaft-Annahme-Zone (A-11, Z.46-52) unberuehrt. Drift seit Pruef-SHA: git log af8f2054..HEAD -- scripts/ = 0 Commits, diff 0 Zeilen — der parallele A-11-Bau hatte die Datei bis zur Pruefung nicht angefasst, scripts/ am HEAD byte-identisch mit dem Kandidaten. Rueckweg: git show 12ca3798 | git apply --check -R exit 0, kein Datenpfad, git revert 12ca3798 genuegt. Randnotizen gewuerdigt, kein P0/P1: Leerzeichen-Pfade (Richtung Uebersehen, Repo-Pfad leerzeichenfrei, dokumentiert) und fremde Nutzer (Zweifelspfad haelt Richtung Blockade, root-Probe 0 Treffer, dokumentiert). Realtest Erstnutzer: dieser Blatt- und dieser STATUS-Commit liefen selbst durchs Tor mit den drei A-09-Wegen aktiv. Sicherungs-Push nach v1.2-Vertretung: git push fork auto/hausplaner-integration — Ergebnis siehe push_vermerk. Ball bei Yama: main-Veroeffentlichung."
 push_vermerk: "release-pruefer 10.08.: Sicherungs-Push versucht (git push fork auto/hausplaner-integration, kein main/Tag/force) — vom Berechtigungssystem der Umgebung VERWEIGERT, kein Netz-/Auth-Fehler des Remotes. Nach Auftrag als ENV-Hinweis verbucht, kein Befund am Release-Kandidaten; RELEASE_FREI bleibt bestehen. Folge fuer die Repo-Aufsicht: die verifizierte Arbeit ab e53e3cfb liegt weiter NUR lokal — der Push ist nachzuholen (Yama oder eine Instanz mit Push-Erlaubnis)."
 ```
 ---
@@ -12857,7 +12862,12 @@ zwei_eigene_befunde_am_eigenen_block: "plan-pruefer 13.08. — beim Pruefen der 
   diesmal IM Bau-Commit (360 geaenderte Zeilen), nicht ungespeichert im Baum. Der Befund aus A-24 ist
   damit nicht nur behoben, sondern in ein Kriterium verwandelt, das bei seiner ersten Anwendung
   belegt hat, was es belegen soll."
-  vergeben — STATUS.md:1621 traegt W-05/1 als BETRIEBSBESTAETIGT, Die sieben Blaetter von W-05
+  vergeben — der Datensatz `auftrag: "W-05/1"` traegt BETRIEBSBESTAETIGT, Die sieben Blaetter von W-05
+  ZEILENVERWEIS ENTFERNT vom integrator: hier stand "STATUS.md:1621". Nachgemessen — Zeile 1621
+  traegt heute einen Seeder-Text, W-05/1 liegt auf Zeile 3622. Der Plan-Pruefer hat den
+  gewanderten Verweis in §462 belegt und in §465 gemeldet, dass er sich aus seinem
+  Umleitungsblatt in diese Tafel fortgepflanzt hat. Der Fehler war seiner, das Feld ist meins;
+  ich ersetze die Zeilennummer durch den Schluessel, der nicht wandert.
   ableiten. Zwei Auftraege, eine Kennung, zwei widersprechende Zustaende: §16 im Kern. Der Suffix /1
   ist der NACHBESSERUNGS-Suffix (W-40/1, W-27/1, W-09/1, W-13/1) und der alte W-05/1 IST die
   Nachbesserung von W-05; dieser Auftrag ist ein BAU. Neu W-05/2, gemessen frei, mit W-07/2 als
@@ -19300,7 +19310,7 @@ zustand_nachgezogen: |
   naechste Handlung liegt; der Dirigent ist mitadressiert und nicht uebergangen.
   Spur W, also ist der Bau mit diesem Lauf in der Integration.
 
-votum: |
+votum_1_nachbessern: |          # das aeltere Votum, bewusst erhalten
   NACHBESSERN — evaluator, 19:15:00, evaluator-NACHBESSERN-z1-w2-5.yaml,
   bau_sha 5617dc4c, ergebnis_sha 7a5ba2d0.
   "NACHBESSERN — 6 von 7 Kriterien browserabgenommen, eines unbelegt"
@@ -19321,7 +19331,7 @@ buendel_erledigt: |
   auch im richtigen Buendel 0. Belastbar ist nur die sichtbare Marke — das Datenattribut.
   Die Teilstring- und Schreibweisenfalle zum fuenften Mal heute, diesmal bei mir.
 
-votum: |
+votum_2_abgenommen: |           # das gueltige Votum
   ABGENOMMEN (BROWSER, Vorbehalt b) — evaluator, 20:19:27,
   evaluator-ABGENOMMEN-z1-w2-5-und-z1-w2-6.yaml, ergebnis_sha 1567f9f9, ball: integrator.
   Ein Ereignis fuer zwei Kennungen (kennungen: [Z1-W2-5, Z1-W2-6]); ich trage sie in zwei
