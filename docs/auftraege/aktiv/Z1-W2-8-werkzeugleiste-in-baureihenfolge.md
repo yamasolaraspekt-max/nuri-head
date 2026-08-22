@@ -56,9 +56,11 @@ IST    (kein Eintrag) wand -> fenster -> tuer -> DACH  -> decke -> treppe -> …
 
 - **Z1-W2-8-a** · **DIE REIHENFOLGE STIMMT — IN LEISTE UND MENÜ.**
 
-  **Verlangt:** In **beiden** Ansichten exakt: `bodenplatte → wand → fenster → tuer → treppe →
-  decke → kontur → dach`. **Die übrigen Gruppen** (Auswahl/Messen/Bearbeiten/CAD) stehen
+  **Verlangt:** In **beiden** Ansichten exakt: `wand → fenster → tuer → treppe → decke → kontur →
+  dach` — **SIEBEN Einträge**. **Die übrigen Gruppen** (Auswahl/Messen/Bearbeiten/CAD) stehen
   **unverändert dahinter**.
+  *(~~`bodenplatte` als achter Eintrag an erster Stelle~~ — gestrichen mit dem Nachtrag unten:
+  sie braucht `GP-0`. DoR gegen `dbaa6b4d` erteilt: „SIEBEN Einträge, KEIN `bodenplatte`-Eintrag".)*
 
   **Messbefehl:**
   ```
@@ -79,12 +81,13 @@ IST    (kein Eintrag) wand -> fenster -> tuer -> DACH  -> decke -> treppe -> …
   **Verlangt:** Neuer Registry-Eintrag `bodenplatte` mit **`bauteilKind: 'ceiling'`**, der die
   Decke **auf der untersten Ebene** setzt. **KEIN neuer Knotentyp, keine Modelländerung.**
 
-  **Messbefehl:**
+  **Messbefehl — (b) FÄLLT, siehe Nachtrag. Was BLEIBT, ist die Sperre:**
   ```
-  grep -c "id: 'bodenplatte'" app/tools/toolRegistry.ts      0 -> 1
-  im Eintrag: bauteilKind 'ceiling'
-  git diff <basis>..<bau> -- domain/ commands/              -> LEER (kein Knotentyp)
+  grep -c "id: 'bodenplatte'" app/tools/toolRegistry.ts      0 -> 0   <- KEIN Eintrag
+  grep -c "bauteilKind: 'ceiling'" ...                       unveraendert (nur das Deckenwerkzeug)
+  git diff <basis_sha>..<endstand_sha> -- domain/ commands/  -> LEER
   ```
+  ~~`0 -> 1`, im Eintrag `bauteilKind 'ceiling'`~~ *(Fassung 18:50 — durch den Nachtrag ersetzt.)*
 
   **Heutiges (rotes) Ergebnis:** 0 Einträge; die Bodenplatte existiert nur als Tooltip-Wort
   (`:147` „Decke / Bodenplatte").
@@ -168,7 +171,7 @@ IST    (kein Eintrag) wand -> fenster -> tuer -> DACH  -> decke -> treppe -> …
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
 | Z1-W2-8-a Reihenfolge in Leiste **und** Menü | AP-1 Registry + Gruppen | n.U. | n.U. |
-| Z1-W2-8-b `bodenplatte` als Eintrag, `ceiling` | AP-1 (Eintrag) | n.U. | n.U. |
+| ~~Z1-W2-8-b `bodenplatte` als Eintrag~~ **FÄLLT** — braucht `GP-0` (Nachtrag) | — | — | — |
 | Z1-W2-8-c Tooltips ehrlich | AP-1 (Texte) | n.U. | n.U. |
 | Z1-W2-8-d Rot-Probe + Bildbeleg alt/neu | AP-2 Browserabnahme | n.U. | n.U. |
 | Z1-W2-8-e `tsc` 0, Suite grün, Bündel | AP-2 (Lieferung) | n.U. | n.U. |
