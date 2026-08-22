@@ -242,6 +242,27 @@ class HausplanerSpeichernNutzlastTest extends TestCase
         $this->assertSame($vorher, $this->dokumentZeile($alt), '422 darf nichts veraendert haben.');
     }
 
+    /**
+     * **Der VIERTE der vier Tests, die (d2) verlangt.**
+     *
+     * *Er fehlte in meiner Lieferung 3b4e8f6b.* Ich hatte die DREI neuen Sammlungen geprüft und
+     * `nodes` übergangen, weil dessen Schleife im Bestand schon stand — **aber (d2) verlangt „je
+     * Sammlung EIN PHP-Feature-Test", nicht „je neuer Sammlung".** Und der Grund dafür ist gut:
+     * eine Spiegelung, von der drei Viertel geprüft sind, ist keine geprüfte Spiegelung. Fiele die
+     * `nodes`-Schleife morgen aus, meldete es keine dieser Zusagen.
+     */
+    public function test_node_auf_unbekanntem_level_wird_abgelehnt(): void
+    {
+        $this->assert422WegenUnbekanntemLevel(620, 'nodes', [
+            ...$this->basisNode('w9', 'wall'),
+            'levelId' => 'gibt-es-nicht',
+            'start' => ['x' => 0, 'y' => 0],
+            'end' => ['x' => 8000, 'y' => 0],
+            'thickness' => 240,
+            'height' => 2500,
+        ], 'Node');
+    }
+
     public function test_decke_auf_unbekanntem_level_wird_abgelehnt(): void
     {
         $this->assert422WegenUnbekanntemLevel(580, 'ceilings', [
