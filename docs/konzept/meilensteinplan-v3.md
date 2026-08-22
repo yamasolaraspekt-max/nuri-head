@@ -54,7 +54,11 @@ KONZEPT  ──▶  MEILENSTEIN  ──▶  AUFTRAG (Blatt)  ──▶  AUFGABE 
   - **Z0-I1 Test-DB-Isolation** (Planner PARKED_DRAFT → DoR → Generator → Evaluator) — Ziel: Tests laufen nur gegen eindeutig benannte Test-DBs, parallel je Rolle. Aufgaben: A1 GRANT (Yama), A2 Blatt aus PARKED_DRAFT schneiden, A3 Bau, A4 Kollisionsprobe. Kriterien: vier DBs, `TEST_ROLLE` Pflicht, `SELECT DATABASE()` je Lauf, Kollisionsprobe rot→grün, Produktiv-DB unberührt.
   - **Werkzeug-Register (V3-2)** (Planner, Konzept→Regel) — Ziel: jede Registerzeile hat Modul + Kennung + Reifegrad. Aufgaben: A1 aus Anschluss-Vorlage, A2 Lücken als „parken/verwerfen" markieren. Kriterien: 37/37 Zeilen mit Kennung oder Ausnahme; 0 Module ohne Zeile.
   - **Anschlussentscheidung** (Yama) — Ziel: je Paket ein Wort. Aufgaben: A1 Vorlage lesen, A2 entscheiden. Kriterium: Entscheidung als Datei `auftraege/ANSCHLUSS-entscheidung-yama.md` mit Datum.
-  - **Tor-Wörter zurücknehmen** (Dirigent) — Ziel: `aktion` = Rollenverb in 7/7 Rollenquellen; Kriterium: Commit je Rolle durch das Tor mit dem Verb (Evaluator-Stichprobe).
+  - **Tor-Wörter zurücknehmen** (Dirigent) — Ziel: `aktion` = Rollenverb in 7/7 Rollenquellen; Kriterium: Commit je Rolle durch das Tor mit dem Verb (Evaluator-Stichprobe). **✔ 14:11**
+  - **Nachtrag 14:4x aus „Warum keine Werkzeuge entstehen" (`auftraege/WERKZEUGWEG-entscheidung-2026-08-22.md`):**
+    **Z1-W2-0 DOM-Probe über TOOL_DEFINITIONS** (Spur W; Ziel: Bedienbarkeit je Werkzeug als Test statt Meinung; Kriterien: Kürzel → aktiv → Aktion → Szene geändert → Escape, Rot ohne Bedienweg, 13/13 grün oder begründet ausgenommen, neues Werkzeug automatisch erfasst) — wird Pflicht-Messbefehl jeder Bedienbarkeitsabnahme ·
+    **`registry_id` je Registerzeile + Zählbefehl „Anschlussvorrat"** (Planner, ohne Bau) · **Werkzeug-Vorlage aus A-35** (12 Stellen; Pflichtanhang jedes Spur-W-Blatts) ·
+    **Grundgesamtheit der 110 = Auswahl in `faehigkeiten.ts`** (entschieden; Planner zählt N von 110) · M2: **Treppe-Probe über werkzeugRegistry-Vertrag vor der Stilllegung**, Verfallsdatum-Kopfzeilen (27), Bundle-Klärung `public/hausplaner/hausplaner.js`.
 - **Besitzer:** Dirigent; Yama für GRANT + Anschluss. **Risiko:** Y-13 (nur Yama); Evaluator-Kapazität.
 
 ### M2 — „Erste Anschlusswelle bedienbar" — Ziel bis **29.08.**
