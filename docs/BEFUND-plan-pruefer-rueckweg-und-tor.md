@@ -27736,3 +27736,76 @@ der drei plötzlich erkennt, wäre ein Rückschritt und kein Fortschritt.
 **Ball: niemand bei mir.** Der Dirigent hat meinen §334 um 13:11:11 an den Generator
 weitergegeben (*„den KORRIGIERTEN Befehl aus dem Planner-Nachtrag zitieren, nicht den defekten"*),
 der Bau läuft seit 13:09:41, der Planner trägt ein Zeichen nach.
+
+## §336 — Die Regelkollision §5 gegen §16 ist keine Kollision: Yama hat sie am 16.08. entschieden
+
+Gewählt gegen HEAD `5f435f6c` (Baum sauber, 13:16:21). §336 als Überschrift 0 Treffer, frei.
+
+**Lage.** Der Planner hat zu meinem §333 eine Regelkollision vorgelegt
+(`planner-frage-statusplatz-a43.yaml`, 13:05:27) und drei Wege ohne Empfehlung genannt; **Ball
+Dirigent**. Seine beiden Zitate habe ich geprüft — **beide stimmen wörtlich**:
+
+- `docs/ARBEITSREGELN.md:231-236` (§5, Herkunft *„A-20, 12.08."*): *„Wer ein Auftragsblatt
+  schneidet, legt im SELBEN Commit Tafelzeile UND Datensatz-Block in `docs/STATUS.md` an."*
+- `docs/ARBEITSREGELN.md:1280`: *„… und ist **alleiniger Schreiber von `docs/STATUS.md`** —
+  ausnahmslos, auch für eine einzelne Tafelzeile."* Gegenprobe: die Formulierung kommt in der
+  Datei **genau einmal** vor, in `CLAUDE.md:26` als Schutzgrenze wiederholt.
+
+**Die Auflösung steht im selben Regelwerk, 231 Zeilen weiter, und sie ist neuer.**
+`docs/ARBEITSREGELN.md:1509-1511`:
+
+> **„Nachtrag vom 16.08. — Der Zustandswechsel IST der Commit.** Yamas §1-Entscheidung zu
+> `e521bd98`. `docs/STATUS.md` wird ab sofort **erzeugt, nicht geschrieben**."
+
+Und der Nachtrag beantwortet die Frage des Planners **wörtlich vorweg**:
+
+> **„Damit fällt die Frage ‚wer darf schreiben' weg, statt beantwortet zu werden"** — derselbe
+> Griff wie bei den getrennten Worktrees: *der Fall kann nicht mehr entstehen.*
+
+Was daraus folgt, `:1555-1556`:
+
+> **„Niemand bearbeitet `docs/STATUS.md` von Hand.** Der **Integrator** lässt
+> `scripts/status-erzeugen.sh` laufen und schreibt die Tafel daraus."
+
+**Damit ist die Kollision eine Altersfrage, keine Sachfrage.** §5 stammt aus **A-20, 12.08.** — aus
+der Zeit, als die Tafel von Hand geschrieben wurde. Der Nachtrag ist vom **16.08.**, trägt Yamas
+§1-Entscheidung und ist damit die jüngere Regel. **Die Sache von §5 bleibt** (ein Auftrag braucht
+seinen Platz sofort, sonst entsteht das W-38-Fenster); **die Form ändert sich**: nicht Datei-Edit,
+sondern **Zustandscommit**.
+
+**Gegenprobe an der gelebten Praxis — sie bestätigt es:**
+
+    planner: zustand: A-41 · ENTWURF · planner      · blatt e521bd98
+    planner: zustand: A-42 · ENTWURF · plan-pruefer · blatt e802c1f8
+    A-43 desgleichen: 0
+
+**Beide Nachbarn haben ihren Platz per Zustandscommit bekommen, beide vom Planner geschrieben** —
+das dritte Feld nennt nur den Zuständigen (§333, Beinahe-Fehler 1). Bei A-43 fehlt genau dieser
+eine Commit. **Es fehlt kein Datei-Edit, es fehlt eine Meldung.**
+
+**Was das für die drei Wege des Planners heißt** — als Messung, nicht als Entscheidung:
+
+- **Weg A** (Integrator legt an) und **Weg B** (Planner legt an mit Einzelfreigabe) setzen beide
+  einen **Datei-Edit** voraus. Beide stoßen gegen *„niemand bearbeitet `docs/STATUS.md` von Hand"*.
+- **Weg C** (Block entsteht erzeugt aus einem Zustandscommit) ist der einzige, der **beide** Regeln
+  erfüllt — und er ist zugleich die gelebte Praxis bei A-41 und A-42.
+
+Sein Vorbehalt zu Weg C (*„dann muss aber erst A-43 selbst gebaut sein, sonst erkennt das Muster
+die Kennung"*) trägt hier **nicht**: `A-43` ist **einteilig**. Selbst gemessen mit dem Muster aus
+der Quelle: `A-43 · ENTWURF · planner · blatt …` wird vom heutigen `KERN` **erkannt** (§335: 87 von
+90 Kennungen erkannt, die drei Ausnahmen sind Bereichs- und Mehrfachkennungen). **Weg C ist ohne
+den Bau gangbar** — er hätte es die ganze Zeit gewesen sein können.
+
+**Was ich NICHT tue.** Ich entscheide nichts und schreibe keinen Zustandscommit für A-43. Die
+Zuweisung liegt beim Dirigenten, und ob eine 12.08.-Regel durch einen 16.08.-Nachtrag als abgelöst
+gilt, ist eine Regelfrage — nicht meine. **Mein Beitrag ist nur: die Frage ist im Regelwerk bereits
+beantwortet, und die Antwort steht 231 Zeilen unter der Regel, die sie ablöst.**
+
+**Nebenbefund zur Regelpflege, ohne Auftrag:** §5 trägt die alte Form unverändert weiter, ohne
+Verweis auf den Nachtrag vom 16.08. Wer §5 liest und dort aufhört — so wie ich in §333 —, bekommt
+eine Anweisung, die eine andere Stelle desselben Dokuments verbietet. **Das ist genau die zweite
+Wahrheit, die A-41 beseitigt hat, nur eine Ebene höher: nicht im Status, sondern in der Regel
+darüber.**
+
+**Ball: Dirigent** (unverändert). Bei mir nichts offen. Zur Kenntnis auch an den Planner, weil
+seine Frage damit beantwortbar ist, ohne dass jemand neu entscheiden muss.
