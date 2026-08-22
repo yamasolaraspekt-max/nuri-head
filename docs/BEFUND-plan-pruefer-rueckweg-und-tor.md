@@ -26183,3 +26183,78 @@ ob seine Probe den Fall überhaupt herstellt."* Genau das ist auch der Kern des 
 **Ball:** Evaluator — Nachprüfung von A-37-20 plus Gegenprobe, dass die übrigen 30 unberührt sind.
 Für 22e wäre die Vielfalt-Probe (mehrere ACK-Ordner) der Fall, den die alte Probe nicht herstellen
 konnte; ob er in die Nachprüfung gehört, entscheidet er.
+
+## §312 — Posten (c): die Codetabelle führt 1–6, der Bau vergibt sieben. Der siebte hat eine eigene Bedeutung und steht in keiner Tabelle
+
+**Messstand** `ab6e493b` · Baum sauber · 0 neue Commits seit §311 · Integrationszweig `a69e50ed`
+unverändert. Ballortung dreiseitig **1 · 6 · 14**, keine neuen Bälle, nichts angekommen.
+
+### Die tragende „Formel" dieser Kette ist eine Tabelle
+
+A-37-8 und A-37-20 hängen beide an der Codetabelle im Blatt (`c11f97ac:317–323`). Sie ordnet
+**sechs** Werte zu und benennt **eine** Kollision ausdrücklich:
+
+```
+1  Rolle und Baum passen nicht      rollen-tor.sh
+2  YAML-Syntaxfehler                commit-pruefen.sh      (2) auch: Rollenkennung fehlt — benannt
+3  fehlende Modulauflösung MODUL    commit-pruefen.sh
+4  sonstiger Laufzeitfehler         commit-pruefen.sh
+5  Rollenkennung beim direkten Aufruf  rollen-tor.sh
+6  MODULSTAND                       rollen-tor.sh
+```
+
+### Durchgerechnet am neuen Stand `c82df498`
+
+```
+exit 0   commit-pruefen 2 · rollen-tor 21 · pre-commit 3
+exit 1   7 · 9 · 0        exit 2   5 · 1 · 0        exit 3   6 · 1 · 0
+exit 4   1 · 0 · 0   <- neu gebaut, vorher 0        exit 5   0 · 1 · 1
+exit 6   0 · 2 · 0        exit 7   0 · 0 · 0
+```
+
+**Mein erster Durchgang gab für 7 eine Null — und das war ein Messausfall.** Das Muster suchte `exit N`;
+der siebte Code steht als **`return 7`** in Funktionen und wird von dort durchgereicht:
+
+```
+'return N' mit N >= 2, Stand c82df498:
+  scripts/commit-pruefen.sh   keine
+  scripts/rollen-tor.sh       :281 :314 :367 :377 :401 :415   -> sechsmal return 7
+```
+
+### Der siebte Code hat eine eigene Bedeutung
+
+Die sechs Stellen sind allesamt **22e-Verstöße**, mit je eigener Meldung:
+
+> *„eine andere Sitzung hält die Lease und lebt"* · *„Digest der Rollenquelle stimmt nicht"* ·
+> *„die Steuerung sagt ‚…' — das ist keine Arbeitsanweisung"*
+
+Das ist keine Variante von 1–6, sondern eine **siebte Klasse**. Und sie steht in **keiner** Tabelle:
+
+```
+'exit 7' / 'Code 7' / 'Rückgabe 7' im Blatt c11f97ac:   0
+Gegenprobe 'Code 2':                                     5   (der Griff greift)
+die zwei '**7**'-Treffer im Blatt sind etwas anderes:
+   :548 "7 sind Rollenbäume"   ·   :745 "grep -cw 'TICKET_ROLLE' → 7"
+```
+
+### Wem gehört das — und wem nicht
+
+**Kein DoR-Mangel:** `return 7` entstand mit `582232e9` („A-37-22e gebaut"), **nach** meiner DoR; zum
+Zeitpunkt der Abnahme führte die Tabelle vollständig, was es gab.
+**Kein Bau-Mangel:** 22e *verlangt* die Abweisung, ein eigener Code dafür ist die saubere Lösung —
+und der Generator hat ihn **offengelegt**: *„vergeben: exit 0 5x, 1 4x, 5 1x, 6 1x — und NEU 7, das
+als `return 7` in Funktionen steht."*
+**Kein Abnahme-Mangel:** A-37-20 fragt nur nach den **drei** Ursachen aus A-37-8.
+
+**Der Mangel liegt zwischen allen dreien:** Die Tabelle ist die Referenz, gegen die A-37-8 und A-37-20
+gemessen werden. Sie ist seit `582232e9` unvollständig, und die Kriterien sind seit `1ca8d512`
+eingefroren. **Jeder hat seinen Teil richtig gemacht, und trotzdem führt die Referenz einen Wert
+nicht, den das Werkzeug täglich vergibt.** Genau den Zustand sollten A-37-8/20 verhindern — *„damit
+die Quelle am Code ablesbar ist"*. Wer künftig eine 7 sieht, findet sie in keiner Tabelle.
+
+**Das ist §300 und §310 in dritter Gestalt:** dort wanderte eine Zahl, hier wächst der Bau — und in
+allen drei Fällen bleibt die **Referenz** stehen, während sich die Sache bewegt. Die Korrektur gehört
+an den Gebrauchsort, nicht an den Fundort.
+
+**Ball:** Planner (Tabellenzeile für 7, wenn das Blatt nach A-37 wieder angefasst wird — er führt
+bereits Posten 4 und 5 im Vorrat) · Evaluator nachrichtlich, weil er gegen diese Tabelle prüft.
