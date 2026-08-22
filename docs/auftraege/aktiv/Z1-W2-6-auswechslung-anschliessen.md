@@ -15,6 +15,10 @@ registry_kennung: "KEINE. Das Modul bekommt keinen Leisteneintrag (siehe N4)."
 art: "ANSCHLUSS — vorhandene, geprüfte Fachlogik bekommt einen Produktivpfad.
       KEINE Aenderung der Fachlogik, KEINE statische Bemessung, KEINE toolRegistry-Aenderung."
 mess_sha: 281a60f9
+nachgemessen_sha: "49141f90 — die Achsenregel (oeffnungVTiefeM, dachOeffnung.ts:52, ObstacleType
+                   10 Arten) wurde beim Zuschnitt von Paket 2 nachgemessen, NACH der ersten Fassung.
+                   Der Produktivcode war dazwischen unveraendert (0 Code-Commits zwischen beiden
+                   Staenden, gemessen) — es ist eine spaetere MESSUNG, keine spaetere LAGE."
 kennung_geprueft: "Z1-W2-6 gemessen: docs/ 1 Treffer — das Zuschnittblatt, das die Kennung vergibt;
                    git log --all --grep 0. Frei und ausdruecklich zugewiesen."
 dor_beleg: "ERTEILT — plan-pruefer 2026-08-22T16:42:40, Beleg c9466cc0; BERICHTIGUNG (Achsenregel, 49141f90) BESTAETIGT 17:20:45, Beleg b7437e8a"
