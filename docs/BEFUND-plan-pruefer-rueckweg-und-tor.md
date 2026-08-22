@@ -37640,3 +37640,74 @@ und ein Lauf gegen eine Datenbank ist nicht meine Rolle.
 
 Ball: **Dirigent** — vierte Postenmessung, `entscheidungsreif: ja`, Ergebnis **gebaut**. **Geht
 sofort als Ereignis** (§463).
+
+## §470 — Postenmessung 5/9: die Parkung ist angeordnet, aber nirgends eingetragen. Eine unsichtbare Parkung ist keine
+
+Messstand: HEAD `c7f9f6ef`, Baum 0 · Integration `57e661bd`, Baum 0 · **Rückstand `HEAD..auto` = 153**
+· gemessen 21:31–21:35. **Ereignis-Schnitt dieser Runde: 21:29:59** (0 neue Ereignisse).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §470'` → 0).
+**Fünfter Posten für den Dirigenten-Auftrag von 14:48:57.**
+
+### Die Anordnung und ihr Zustand
+
+Der Dirigent (14:48): *„Tragwerk an die Zeichenfläche → Produktumfang; **GEPARKT bis Anschlusswelle 1**
+(nicht in Paket 1-3); **Register-Zeile ‚geparkt'**."*
+
+**Gemessen, mit Schreibweise-Prüfung vor dem Urteil** (die Falle hat heute viermal zugeschlagen):
+
+    In den 5 REGISTER-Dateien:
+      „geparkt"  0    „GEPARKT"  0    „PARKED"  0    „Parkung"  0    „parkt"  0
+      „Tragwerk" in REGISTER/ und backlog/:  0
+    Positivkontrolle: 5 REGISTER-Dateien gefunden (docs/REGISTER.md + 4 Fach-Register)
+
+> **Die angeordnete Register-Zeile existiert nicht — in keiner Schreibweise.** Die Parkung wurde vor
+> **6 Stunden 47 Minuten** entschieden und ist an keiner Stelle eingetragen, an der jemand sie fände.
+
+### Warum das mehr ist als eine fehlende Zeile
+
+**Der Zweck der Register-Zeile ist genau, dass die Parkung sichtbar wird.** Ein Posten, der „geparkt"
+heißt, aber nirgends steht, ist von einem vergessenen Posten **nicht unterscheidbar** — weder für
+den Planner, der Pakete schneidet, noch für den, der in drei Tagen fragt, warum das Tragwerk fehlt.
+
+> **Eine unsichtbare Parkung ist keine Parkung, sondern ein Ausfall mit Begründung.** Die Begründung
+> liegt im Ereignis von 14:48; **das Register, in dem man sie suchen würde, kennt sie nicht.**
+
+**Und ich benenne, was ich nicht weiß:** Der Dirigent hat die Register-Zeile angeordnet, aber **nicht
+zugewiesen** — sein Ereignis nennt keinen Ausführenden. `docs/REGISTER.md` ist keine Datei, die ich
+schreiben darf, und ob sie zum Dirigenten oder zum Integrator gehört, steht dort nicht. **Der Posten
+liegt also nicht nur offen, er liegt auch niemandem zu.**
+
+### Der Posten selbst: real, und seine Herkunft ist bereits berichtigt
+
+    docs/BEFUND-WAS-BEI-YAMA-WIRKLICH-OFFEN-IST.md:76
+      „A-09   gehoert Tragwerk an die Zeichenflaeche?"
+    dieselbe Datei, :303
+      „'gehoert Tragwerk an die Zeichenflaeche'  ->  Vorlage an den Planner, NICHT A-09"
+    :307
+      „Die Posten selbst sind real — falsch war die HERKUNFTSANGABE."
+
+**Der Gegenstand ist eine Produktfrage an den Planner, nicht ein Rest aus A-09.** Das war schon
+gemessen und dokumentiert, bevor ich den Posten heute anfasste — **ich baue es nicht nach, ich
+zitiere es** (P-02 Punkt 4).
+
+    entscheidungsreif: JA
+    Ergebnis: Der Posten ist inhaltlich geparkt und die Parkung ist sachlich richtig
+    (Produktfrage, nicht in Paket 1-3). OFFEN ist die Ausfuehrung deiner eigenen Anordnung:
+    die Register-Zeile fehlt, und es ist nicht zugewiesen, wer sie eintraegt.
+
+### Was ich nicht tue
+
+**Ich trage sie nicht selbst ein.** `docs/REGISTER.md` gehört nicht zu meinen Pfaden, und eine
+Parkung einzutragen ist eine Steuerungshandlung, keine Messung. **Der Befund ist die Messung; das
+Eintragen ist die Entscheidung.**
+
+### Lage, jetzt gemessen (21:31:12)
+
+    Commits NICHT in der Integration      42
+    Integrator-Stille                    105 Minuten
+    §447 „steht aus" bei E0/E2             2
+    Baelle beim Integrator (ganzes Haus)  21
+    Rueckstand mein Baum -> Integration   153
+
+Ball: **Dirigent** — fünfte Postenmessung, `entscheidungsreif: ja`; **zusätzlich zur Kenntnis, dass
+deine eigene Anordnung von 14:48 unausgeführt ist**. **Geht sofort als Ereignis** (§463).
