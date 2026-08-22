@@ -159,6 +159,12 @@ eindeutig messbar (fremder Host, fehlende Startkennung) → **fail closed**: Ver
 informieren · Alternative für Z0-I2: betriebssystemverwalteter Dateilock (`flock`), der beim
 Prozessende automatisch freigegeben wird — dann entfällt die Identitätsprüfung, der Crash gibt die
 Sperre von selbst frei. Das ist eine **Implementierungsanforderung für Z0-I2**, kein Konzeptvorbehalt.
+**Lease-Identität bei headless/Resume-Betrieb (Yama 22.08., sechste Runde — gemessen am Planner: Lease
+nannte PID 88928, die Sitzung arbeitete unter 97092 weiter):** stabile Identität = **Sitzungs-ID**; pro
+Lauf aktuelle PID plus Startkennung; während Schreibarbeit regelmäßig erneuerter Heartbeat; **Übernahme
+nur bei abgelaufenem Heartbeat und fehlendem aktuellen Lauf**; Fencing-Token bleibt maßgeblich; **eine alte
+PID allein darf niemals eine Lease für verwaist erklären** — sonst entzöge das System einem arbeitenden
+Inhaber die Lease. Prüfmaßstab für A-37-25 / Z0-I2 / Z0-I3.
 Übernahme nach Ablauf: `active/` darf nur entfernt werden, wenn `heartbeat_bis` verstrichen ist; der
 neue Bewerber erhält aus dem **dauerhaften** `counter` zwingend einen höheren Token — ein Token kann
 nach Löschung von `active/` nie wiederverwendet werden. **Ablehnung veralteter Token durch drei Hooks**: (1) `scripts/commit-pruefen.sh` vor jedem Commit (Lease
