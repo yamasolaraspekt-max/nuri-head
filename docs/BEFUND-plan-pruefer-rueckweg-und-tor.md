@@ -28063,3 +28063,67 @@ der Messdatei statt getippt wiederholt — zwei Zweige, bestätigt.
 
 **Ball: Planner** (Ortsangabe im Messbefehl von A-43-13, ein Halbsatz) · **Dirigent** (die
 Ordner-Regel aus B-008, und die Frage der vier ungesicherten Zweige).
+
+## §340 — A-43-13 ist vollständig: die Auflage ist erfüllt, und die Probe wäre sogar ohne Wegwerf-Repo gegangen
+
+Gewählt gegen HEAD `907397a9` (Baum sauber, 13:42). §340 als Überschrift 0 Treffer, frei.
+
+**Die Auflage ist erfüllt.** Der Planner hat sie um **13:40:47** eingetragen (Blatt `3aa7c730`,
+`planner-CODE_FERTIG-nachtrag-auflage-a43-13.yaml`). Selbst nachgemessen im neuen Blattstand:
+
+    A-43-13 ab Zeile 549 · Zeile 558:
+      "ORT: alle vier Laeufe im WEGWERF-REPO unter TMPDIR (--probe-root), nach A-37-22d."
+    13 Kriterien / 13 Matrixzeilen, deckungsgleich.
+
+**Damit ist A-43-13 aus meiner Sicht baureif.** Mein Votum `ERTEILT_MIT_AUFLAGE` von 13:38 bleibt;
+ein erneutes brauche ich dafür nicht, wie angekündigt.
+
+**Beinahe einen überholten Stand committet.** Mein Abschnitt war fertig geschrieben mit dem Satz
+*„Stand der Auflage: offen … Ball bleibt bei ihm"* — die Meldung kam **13:40:47**, mitten hinein.
+Gefangen hat es die Regel, den Messstand **vor** dem Schreiben neu zu messen; die Datei war noch
+nicht committet und wurde zurückgesetzt. **Zum zweiten Mal heute hat diese Regel einen falschen
+Bericht verhindert** — nachdem sie mir um 12:41 einmal gefehlt hat.
+
+**Eine eigene Vermutung geprüft und verworfen.** Zeile 231 des Blattes lautet *„selbst geprobt im
+Wegwerf-Verzeichnis. **Das Tor lässt dann alles durch.**"* Das las sich wie ein Einwand gegen meine
+eigene Auflage. Im Kontext gemessen: Der Satz gehört zu **A-43-3** und betrifft die **Probe-Bauform**
+„Konstante vor `KERN`", die `HINWEIS … nicht auswertbar — UNGEPRÜFT` bei Rückgabewert **0** liefert.
+**Nicht der Ort lässt alles durch, sondern das unauswertbare Muster.** Kein Widerspruch — und ich
+hätte es fast als solchen gemeldet.
+
+**Eine Messung, die bleibt: die Probe wäre billiger zu haben.** Die Pfadprüfung des
+Dirigent-Bereichs ist eine **vierzeilige `case`-Anweisung** (`scripts/rollen-tor.sh:753-756`), die
+nur `$_p` und `$TOR_UNERLAUBT` braucht — **kein Repo, kein Commit, keine Rollenmarke**. Extrahiert
+statt nachgebaut und selbst gefahren:
+
+    docs/backlog/eintrag.md      ABGEWIESEN     <- die Rot-Lage von A-43-13, reproduziert
+    docs/fortschritt/beleg.md    ABGEWIESEN     <- desgleichen
+    docs/STATUS.md               ABGEWIESEN     soll so bleiben
+    scripts/rollen-tor.sh        ABGEWIESEN     soll so bleiben
+    docs/konzept/x.md            durchgelassen  heute gruen
+    docs/auftraege/y.md          durchgelassen  heute gruen
+
+**Der gewählte Weg (Wegwerf-Repo mit `--probe-root`) ist zulässig und erfüllt die Auflage** — ich
+fordere nichts nach. Aber die Rot-Lage lässt sich auch **ohne jedes Repo** auslösen, auf demselben
+Weg, den A-43-1 für `KERN` vorschreibt (*„Ausschnitt auslesen und ausführen"*) und den ich für
+A-43-8…10 gefahren bin. **Zur Kenntnis für den Evaluator**, falls ihm der Aufbau eines Wegwerf-Repos
+für eine Pfadliste unverhältnismäßig erscheint.
+
+**Grenze der eigenen Probe, ausdrücklich.** Meine Extraktion beginnt bei Zeile **753**; Zeile 752
+trägt `[ -z "$_p" ] && continue` und ist **nicht** mit drin — deshalb weist meine Probe den leeren
+Pfad ab, während das Tor ihn überspringt. Für die sechs geprüften Pfade ohne Folge, aber es gehört
+gesagt. Und grundsätzlich: **die isolierte Probe misst den Pfadvergleich, nicht die ganze Kette**
+(Rolle erkennen → Pfade sammeln → vergleichen). Sie ist **eine zulässige Form, kein Ersatz** für
+einen Nachweis, der die Kette meint. *Genau diese Unterscheidung habe ich in §338 zu spät gemacht —
+dort Form gegen Betreff, hier Teilprüfung gegen Kette. Diesmal steht sie da, bevor jemand danach
+misst.*
+
+**B-008 ist praktisch gelöst, ohne Regeländerung.** Der Planner hat zusätzlich einen **Zeiger** im
+Ordner `BAU-generator-A-43` abgelegt (`planner-zeiger-auflage-a43-13.yaml`, ausdrücklich *„KEIN
+Auslöser für den Bau"*), der auf seine Meldung im anderen Ordner verweist. Seine Begründung nennt
+den Vorfall beim Namen: *„Meine vorige Meldung lag in einem Ordner, in den die A-43-Prüfer nicht
+schauen … zwei Minuten unauffindbar in der Bahn des Plan-Prüfers."* Die Regelfrage bleibt beim
+Dirigenten; der heutige Fall ist damit erledigt.
+
+**Ball: niemand bei mir.** A-43 ist gebaut (13:24) und mit 13 Kriterien vollständig spezifiziert;
+die Abnahme liegt beim Evaluator.
