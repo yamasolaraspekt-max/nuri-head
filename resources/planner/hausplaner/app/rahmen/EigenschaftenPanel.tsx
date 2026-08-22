@@ -22,6 +22,7 @@ import { useHausplanerStore } from '../../store/hausplanerStore';
 import type { ObjectNode, OpeningNode, RoofNode, RoofAnbauMasse, SceneNode, WallNode } from '../../domain/scene.types';
 import { istVerschneidungsForm } from '../../domain/roofShape';
 import { GrundrissformHinweis } from './GrundrissformHinweis';
+import { WandflaechenAnzeige } from './WandflaechenAnzeige';
 import { T, FARBEN, OP_TOKEN } from '../studioDaten';
 import { opKnopfBild } from '../dashboard/opKnopfZustand';
 import { PANEL_TABS, type PanelTabId } from '../dashboard/panelTabs';
@@ -344,6 +345,16 @@ export function EigenschaftenPanel({
             <input type="number" min={1} value={Math.round(Math.hypot(selectedWall.end.x - selectedWall.start.x, selectedWall.end.y - selectedWall.start.y))} onChange={(e) => setzeWandLaenge(Math.max(1, Math.round(Number(e.target.value))))} style={panelInput} />
           </label>
           <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 8 }}>Länge ändern verschiebt das Wandende entlang der Achse. Bewegen: Wand im Plan ziehen.</div>
+          {/* Z1-W2-5: die Mengen stehen AM AUSGEWAEHLTEN OBJEKT — dort, wo Laenge, Hoehe und
+              Dicke schon stehen, aus denen sie sich ergeben. Die Oeffnungen kommen aus der Szene
+              UNGEFILTERT: das Modul sortiert fremde selbst aus und MELDET sie, und diese Meldung
+              gehoert dem Benutzer, nicht einem Filter an dieser Stelle. */}
+          <WandflaechenAnzeige
+            wand={selectedWall}
+            oeffnungen={(store.getState().scene?.nodes ?? []).filter(
+              (n): n is OpeningNode => n.type === 'window' || n.type === 'door' || n.type === 'opening',
+            )}
+          />
           <div className="hp-ep-knopfreihe">
             <button type="button" style={{ ...knopf(false), flex: 1 }} onClick={dupliziere}>Duplizieren</button>
             <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
