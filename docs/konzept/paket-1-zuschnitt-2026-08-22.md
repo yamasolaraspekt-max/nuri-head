@@ -70,13 +70,37 @@ Eigenschaft ihres Vertrags — und der Generator hat sie damals richtig benannt 
 
 ## Zwei Klassen, und die Trennlinie ist der Operand
 
-### Klasse A — baubar, weil die Geometrie im Modell liegt (2 Module)
+### Klasse A — baubar (2 Module)
 
-`wandFlaeche` (`wandMengen`) und `auswechslung` (`sparrenPositionenU`, `analysiereAuswechslung`)
-rechnen auf **Wand-, Flächen- und Öffnungsmaßen**. Die führt das `SceneDocument` bereits.
-**Sie brauchen keine Liste, die es nicht gibt, und keinen Wert, den niemand kennt.**
+**Beide brauchen keine Liste, die es nicht gibt, und keinen Fachwert, den niemand kennt.**
+*Die Begründung ist bei den beiden aber nicht dieselbe, und die erste Fassung dieses Blattes hat das
+verschliffen — berichtigt:*
+
+**`wandFlaeche` (`wandMengen`) — der Eingang ist unmittelbar Modell.**
+
+```
+wandMengen(wand: WallNode, oeffnungen: readonly OpeningNode[], bezug: Bezugsmass)
+WallNode · OpeningNode  ->  domain/scene.types.ts, beide im SceneDocument gefuehrt
+Bezugsmass 'roh'|'fertig' -> PFLICHT, eine NUTZERWAHL (wandFlaeche.ts:38, :47)
+```
+
+**`auswechslung` — die Maße sind ableitbar, ein Wert ist es nicht.**
+
+```
+analysiereAuswechslung(flaeche: FlaecheMasse, oeffnung: Oeffnung, rafterDistM: number, opts?)
+FlaecheMasse · Oeffnung  ->  EIGENE Modultypen, aus RoofNode/RoofAufbau ableitbar
+rafterDistM              ->  STEHT NICHT IM SceneDocument (0 Treffer in domain/)
+```
+
+> **Der Sparrenabstand ist trotzdem kein fehlender Operand — er wird bereits erfragt:**
+> `enginePanels.ts:184` führt `sparrenabstandM` als **Pflichtfeld mit Vorgabe `0.8` m** für die
+> Sparren-Engine; `geometry/dachformVorlagen.ts` trägt Vorlagenwerte (8× `70`, 1× `62.5` cm).
+> **Ein bekannter, üblicher Wert mit vorhandener Vorgabe ist etwas anderes als ein Fachwert ohne
+> Quelle (λ) oder eine fehlende Struktur (Holzliste).** *Die Trennlinie zu Klasse B hält — aber sie
+> verläuft an der Verfügbarkeit des Operanden, nicht am Satz „liegt im Modell".*
 
 → **Zwei Anschlussblätter, `Z1-W2-5` (W-02) und `Z1-W2-6` (W-29)**, nach dem Muster von Paket 3.
+**`Z1-W2-6` muss den Sparrenabstand ausdrücklich als erfragten Wert führen**, nicht als Modellwert.
 
 ### Klasse B — Operand fehlt (3 Module). **Das ist eine Frage, kein Blatt.**
 
