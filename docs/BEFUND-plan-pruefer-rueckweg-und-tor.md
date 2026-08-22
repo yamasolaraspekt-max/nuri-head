@@ -34011,3 +34011,107 @@ den ganzen Nachmittag überdauert hat** — und er ist der älteste, den ich fü
 
 Ball: **niemand** — §425 ist erledigt, die Restaussage ist ein Befund an meiner eigenen Ablage.
 **Integrator** unverändert für P-02.
+
+## §428 — Z1-W2-8 liegt in meiner Bahn, aber das Blatt im Checkout ist überholt. Der Blocker des Planners trägt — und er deckt eine Lücke in meinem eigenen Halbsatz von vor 25 Minuten auf
+
+Messstand: HEAD `09782baa`, Baum 0, gemessen 18:59–19:05. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §428'` → 0).
+**Ereignis dieses Abschnitts:** `ereignisse/SPEZ-planner-spur-V-sammelblatt-1/plan-pruefer-BEFUND-Z1-W2-8-blattdrift.yaml`
+*(neue Regel aus §427: der Pfad steht im Abschnitt.)*
+
+### Zwei Dinge sind eingetroffen
+
+**§427 ist behoben:** `57a87954` (18:56:26) — *„Z1-V1-1 · dor-ereignis nachgetragen"*. Der Integrator
+hat mein Ereignis gefunden und eingetragen.
+
+**Und Z1-W2-8 liegt neu in meiner Bahn:** `ENTWURF · ballbesitz plan-pruefer`,
+`dor_beleg: "steht aus — der Plan-Prüfer prüft in EINEM Durchgang direkt nach Z1-V1-1"`. P0 auf
+Yamas ausdrückliche Anweisung (Posten 24).
+
+### DAS BLATT IM CHECKOUT IST NICHT DAS GÜLTIGE
+
+    Tafel nennt        blatt_sha 262ed5c7   (18:50:50)
+    HEAD fuehrt        Blob 680382eb        aus genau diesem Commit
+    rolle/planner      Blob 877ea752        aus dbaa6b4d (18:58:05)
+    Planner-Meldung    ergebnis_sha dbaa6b4d · ersetzt_sha 262ed5c7
+
+**Der gültige Stand ist `dbaa6b4d` und liegt nicht im Integrations-Checkout.** Das ist §414 in
+Echtzeit — nur diesmal mit einer Zeitbombe: die Planner-Meldung ist als **HOCH dringlich**
+gekennzeichnet, weil *„der Generator Z1-W2-8 sofort nach DoR baut (30-Minuten-Bau). Diese Meldung
+muss ihn vorher erreichen."*
+
+**Hätte ich gegen den Checkout-Stand votiert, hätte ich ein Blatt freigegeben, das der Planner vor
+sieben Minuten ersetzt hat.** Punkt 1 der Wache — *„miss BEIDE Seiten"* — hat das gefangen.
+
+### Der Blocker trägt — selbst nachgemessen, nicht übernommen
+
+Der Planner meldet, `bodenplatte` könne nicht als Registry-Eintrag auf `bauteilKind: 'ceiling'`
+gebaut werden. Seine drei Belege, je von mir gemessen:
+
+    1  CeilingNode fuehrt KEIN Hoehenfeld
+       gemessen: Block Z. 348-358, Felder type · polygon · dickeMm · oeffnungen · schichten
+                 'eleva' IM BLOCK: 0                                         SEINE AUSSAGE HAELT
+
+    2  Die harte Sperre applyCommand.ts:112
+       gemessen woertlich:
+         if ((draft.ceilings ?? []).some(c => c.id !== ceiling.id && c.levelId === ceiling.levelId))
+           throw new CommandAbgelehnt(`Level ... hat bereits eine Decke (max. 1 je Level).`)
+       Aufrufstellen :296 und :315                                            SPERRE BESTAETIGT
+
+    3  Der CRM trennt die Bauteile
+       UWertService.php:26  'decke' => [0.10, 0.04]   // oberste Geschossdecke, aufwaerts
+       UWertService.php:27  'boden' => [0.17, 0.00]   // abwaerts, gegen Erdreich/unbeheizt
+                                                                              EXAKT wie gemeldet
+
+**Die Folgerung trägt:** Wer die Bodenplatte als `ceiling` auf das EG-Level setzt, sperrt dort die
+Zwischendecke — oder sie ist von ihr ununterscheidbar. **Beides ist schlechter als kein Eintrag.**
+
+### Zwei seiner Zahlen sind ungenau — keine ändert die Aussage
+
+    er schreibt   "Treffer auf 'eleva': 0"        gemessen: 0 IM BLOCK, 3 in der DATEI
+                                                  (:66 Level.elevation · :327 Kommentar ·
+                                                   :343 Kommentar ueber CeilingNode)
+    er schreibt   "DREI Aufrufstellen (u. a. :296)"  gemessen: 2 Aufrufe (:296, :315)
+                                                     + 1 Definition (:112) = 3 ZEILEN
+
+**Beides ist die Grundmengenfrage, nicht ein Denkfehler.** Seine Sätze sind richtig, seine Zahlen
+zählen eine andere Menge als sie benennen. Ich melde es, weil eine Zahl ohne ihre Grundmenge beim
+nächsten Zitieren zur Behauptung wird.
+
+### UND EINE LÜCKE IN MEINEM EIGENEN HALBSATZ, 25 MINUTEN ALT
+
+In §421 habe ich als Halbsatz 3 zu V-1 geschrieben:
+
+> *„gezählt wird die **Aufrufstelle mit Klammer** — nicht das Vorkommen des Namens, nicht der
+> Import."*
+
+**Gemessen an diesem Fall:**
+
+    grep -cE '\bpruefeDeckeProLevel\('  ->  3
+    davon Definition (function …(  )   ->  1
+    echte Aufrufstellen                ->  2
+
+**Die Definition trägt selbst eine Klammer.** Mein Halbsatz schließt Name und Import aus — die
+**Definitionszeile** nicht. Bei den fünf Modulen in Z1-V1-1 fiel das nicht auf, weil dort der
+Blatt-Messbefehl die Definitionsdatei ausschließt (`grep -vE '/<modul>\.ts:'`); **liegt die
+Definition in derselben Datei wie die Aufrufe, zählt sie mit.**
+
+**Nachschärfung, die ich beim nächsten Spur-V-Blatt einbringe:** *„…mit Klammer, **ohne die
+Definitionszeile** (`function <name>(` / `const <name> = (`)."*
+
+Das ist derselbe Mechanismus wie beim Planner: **ein Muster, das die richtige Frage stellt und eine
+Zeile zu viel fängt.** Er hat es an `pruefeDeckeProLevel` erwischt, ich hätte es an jedem Modul
+erwischt, dessen Definition neben dem Aufruf steht.
+
+### Was ich daraus für die DoR mache
+
+**Ich prüfe gegen `dbaa6b4d`** — den gültigen Stand auf `rolle/planner`, nicht gegen den überholten
+im Checkout. Der Blob ist mir zugänglich; das genügt, und ich schreibe es ins Votum.
+
+**Die Bodenplatte ist nicht mein Gegenstand.** Sie ist eine **Modellentscheidung** (`GP-0`,
+`FoundationSlabNode`), und der Ball liegt bei **[dirigent, yama]** — CLAUDE.md: Fachentscheidungen
+werden nicht still automatisiert. Ich votiere über die **sieben baubaren** Einträge, wenn das Blatt
+sie sauber abgrenzt.
+
+Ball: **Integrator** (`dbaa6b4d` transportieren, Tafel auf den gültigen `blatt_sha`) · **Dirigent /
+Yama** (die Bodenplatte, GP-0) · bei mir: **DoR gegen `dbaa6b4d`, ein Durchgang**.
