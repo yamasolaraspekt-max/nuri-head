@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+#
+# A-37-22e — DER HAKEN LIEST DIE STEUERUNG, BEVOR EIN COMMIT ENTSTEHT.
+#
+# **Warum ein pre-commit-Haken und nicht nur das Skript-Tor:** `scripts/commit-pruefen.sh` schuetzt
+# nur den, der es aufruft. Ein nackter `git commit` geht daran vorbei — und genau so ist am 22.08.
+# um 08:16:37 ein Commit gefallen, drei Minuten 43 nachdem eine Pause veroeffentlicht worden war.
+# *Der Bauende hat gegen keine Regel verstossen; sein Takt hatte die Pause noch nicht gelesen.*
+# **Ein Haken hat keinen Takt. Er laeuft, wenn der Commit faellt.**
+#
+# **Was hier NICHT geprueft wird:** Baum, Rolle und Zweig. Das ist A-37-25 und kommt an dieser
+# Stelle dazu. *Ich baue es nicht vor, weil zwei Kriterien in einem Commit hinterher nicht mehr
+# auseinanderzuhalten sind — der Evaluator misst sie einzeln.*
+#
+# ## ⚠ DIE GRENZE, UND SIE WIRD HIER GENANNT STATT VERSCHWIEGEN
+#
+# `git commit --no-verify` uebergeht JEDEN Haken, auch diesen. Das ist kein Mangel dieses Bausteins,
+# sondern eine Eigenschaft von git. **Ein Haken ist eine Zusage unter Mitwirkenden, keine Sperre
+# gegen einen, der sie nicht will.** Wer `--no-verify` faehrt, tut es sichtbar und absichtlich; der
+# Haken macht den Unterschied zwischen Versehen und Entscheidung, und mehr kann er nicht.
+# *Dasselbe gilt fuer `core.hooksPath`: wer ihn umbiegt, schaltet den Haken ab.*
+set -uo pipefail
+
+# Ohne Rollenmarke ist die Steuerungsquelle nicht bestimmbar — durchlassen und melden, wie das
+# Rollen-Tor es bei fehlender Zuordnung tut. Sperren waere hier falsch: der Haken laeuft auch in
+# Wegwerf-Repos und bei Mitwirkenden ohne Steuerungsanbindung, und eine Barriere, die zu oft
+# warnt, wird abgeschaltet (A-03) — danach schuetzt sie nirgends mehr.
+if [ -z "${TICKET_ROLLE:-}" ]; then
+  echo "PRE-COMMIT  HINWEIS  TICKET_ROLLE nicht gesetzt — Steuerung UNGEPRUEFT." >&2
+  exit 0
+fi
+
+# Das Tor traegt die Pruefung; hier steht kein zweites Exemplar davon. Zwei Fassungen derselben
+# Regel waeren zwei Wahrheiten, und die zweite altert still — dieselbe Begruendung, mit der die
+# Zuordnung Baum/Zweig im Tor genau einmal steht.
+WURZEL="$(git rev-parse --show-toplevel 2>/dev/null)" || WURZEL=""
+TOR="$WURZEL/scripts/rollen-tor.sh"
+if [ ! -f "$TOR" ]; then
+  echo "PRE-COMMIT  HINWEIS  scripts/rollen-tor.sh fehlt in diesem Baum — Steuerung UNGEPRUEFT." >&2
+  echo "            Die Datei kommt ueber den Transport; ohne sie ist hier nichts pruefbar." >&2
+  exit 0
+fi
+
+bash "$TOR" --steuerung
+RC=$?
+if [ "$RC" -ne 0 ]; then
+  echo "" >&2
+  echo "KEIN COMMIT. Die zentrale Rollenquelle laesst ihn nicht zu (Rueckgabe $RC)." >&2
+  echo "            Generation, Digest und ACK werden im Moment des Commits gelesen," >&2
+  echo "            nicht beim letzten Takt. Genau dazwischen lag der Fall vom 22.08." >&2
+  exit "$RC"
+fi
+exit 0

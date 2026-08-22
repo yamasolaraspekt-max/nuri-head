@@ -127,20 +127,38 @@ if [ -f scripts/rollen-tor.sh ]; then
   # A-37 Teil 2: das Tor muss wissen, OB die Statuswahrheit in der Pfadliste steht. Es bekommt
   # die Auskunft als Umgebungsvariable, damit es selbst keine Pfadliste kennen muss — es prueft
   # Rolle gegen Baum und nicht Dateien.
+  # A-37-24: die Barriere gilt fuer BEIDE Dateien mit genau einem Schreiber. Sie stehen hier
+  # als Liste und nicht als zwei Zweige, damit die naechste Datei eine Zeile kostet und nicht
+  # eine zweite Sperre. TOR_STATUS_DATEIEN sagt dem Tor, WELCHE davon anliegt — sonst nennt
+  # es beim Abweisen den falschen Namen.
   TOR_STATUS_PFAD=0
+  TOR_STATUS_DATEIEN=""
   for _p in "$@"; do
-    case "$_p" in docs/STATUS.md) TOR_STATUS_PFAD=1 ;; esac
+    case "$_p" in
+      docs/STATUS.md|docs/BEFUNDNOTIZEN.md)
+        TOR_STATUS_PFAD=1
+        TOR_STATUS_DATEIEN="${TOR_STATUS_DATEIEN:+$TOR_STATUS_DATEIEN }$_p" ;;
+    esac
   done
   # A-37-23: der dirigent hat einen technisch begrenzten Schreibbereich. Durchsetzen kann das
   # Tor ihn nur, wenn es die Pfade SIEHT — die Ja/Nein-Auskunft oben reicht dafuer nicht. Die
   # Liste geht zeilenweise hinueber, damit ein Pfad mit Leerzeichen nicht in zwei zerfaellt.
   # Das Tor entscheidet, was es damit anfaengt; hier wird nichts bewertet.
   TOR_PFADE="$(printf '%s\n' "$@")"
-  TICKET_ROLLE="$ROLLE" TOR_STATUS_PFAD="$TOR_STATUS_PFAD" TOR_PFADE="$TOR_PFADE" bash scripts/rollen-tor.sh
+  TICKET_ROLLE="$ROLLE" TOR_STATUS_PFAD="$TOR_STATUS_PFAD" \
+    TOR_STATUS_DATEIEN="$TOR_STATUS_DATEIEN" TOR_PFADE="$TOR_PFADE" bash scripts/rollen-tor.sh
   TOR_RC=$?
   if [ "$TOR_RC" -ne 0 ]; then
     echo "" >&2
-    echo "KEIN COMMIT. Der Baum gehoert nicht zu dieser Rolle (Rollen-Tor, Rueckgabe $TOR_RC)." >&2
+    # Die Meldung muss zur URSACHE passen und nicht zur haeufigsten. Mit A-37-22e kann das Tor
+    # jetzt auch 7 zurueckgeben — "die Steuerung sagt nicht jetzt" —, und da stimmt der Satz vom
+    # falschen Baum nicht mehr: Baum und Rolle koennen tadellos zusammenpassen, waehrend die
+    # Steuerung pausiert. In der Probe stand genau das da, und es war irrefuehrend.
+    if [ "$TOR_RC" = "7" ]; then
+      echo "KEIN COMMIT. Die zentrale Rollenquelle laesst ihn nicht zu (Rollen-Tor, Rueckgabe 7)." >&2
+    else
+      echo "KEIN COMMIT. Der Baum gehoert nicht zu dieser Rolle (Rollen-Tor, Rueckgabe $TOR_RC)." >&2
+    fi
     # DER RUECKGABEWERT WIRD DURCHGEREICHT und nicht durch einen eigenen ersetzt.
     #
     # **Vorher stand hier `exit 2`** — und damit war an der Einhaengestelle genau die
@@ -991,6 +1009,33 @@ if [ "$TROCKEN" = "1" ]; then
     fi
   done
   exit 0
+fi
+
+# ── A-37-22e — DIE STEUERUNG WIRD HIER ERNEUT GELESEN, NICHT NUR AM ANFANG ──────────────────
+#
+# **Yamas Wortlaut verlangt zwei Zeitpunkte:** *vor jedem schreibenden Schritt* UND *unmittelbar im
+# Commit-Gate.* **Der erste schreibende Schritt ist die naechste Zeile** — `git add` fuer ungetrackte
+# Pfade. Deshalb steht die Pruefung HIER und nicht nach dem Stagen.
+#
+# **Das Tor oben (Zeile ~134) hat dieselbe Pruefung schon gefahren — und das genuegt nicht.**
+# Dazwischen liegen die YAML-Koepfe, der Modulstand und die B5-bis-B8-Zusagen: Sekunden bis Minuten.
+# *Eine Pause, die in diesem Fenster veroeffentlicht wird, faende sonst genau dasselbe Loch wieder
+# vor, nur kleiner.* **Die Absage-Regel des Kriteriums zielt darauf: verlangt ist die Pruefung IM
+# Commit-Gate, nicht davor.** Ein Tor, das die Generation einmal liest und dann zwischenspeichert,
+# erfuellt A-37-22e nicht.
+#
+# **Gemessen, warum es dieses Fenster wirklich gibt:** am 22.08. lagen zwischen der Veroeffentlichung
+# der Pause (08:12:54) und dem Commit (1155709d, 08:16:37) drei Minuten und 43 Sekunden. Der Bauende
+# hatte die Quelle davor gelesen — nur eben davor.
+if [ -f scripts/rollen-tor.sh ]; then
+  TICKET_ROLLE="$ROLLE" bash scripts/rollen-tor.sh --steuerung
+  STEUER_RC=$?
+  if [ "$STEUER_RC" -ne 0 ]; then
+    echo "" >&2
+    echo "KEIN COMMIT. Die zentrale Rollenquelle laesst ihn nicht zu (Rueckgabe $STEUER_RC)." >&2
+    echo "            Generation, Digest und ACK werden hier erneut gelesen — nicht erinnert." >&2
+    exit "$STEUER_RC"
+  fi
 fi
 
 for p in "$@"; do
