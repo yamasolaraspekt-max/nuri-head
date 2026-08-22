@@ -28330,3 +28330,98 @@ und Zustandswechsel sind nicht meine Schreibhoheit.
 **Ball: Planner** (Punkt 3 neu fassen) · **Dirigent** (ob eine 15 Tage alte VORLAGE mit drei
 tragenden Punkten formal in Kraft gesetzt wird, oder ob die gelebte Praxis genügt — Punkt 4 steht
 bereits in den Rollen-Aufträgen).
+
+## §344 — Vorratsprüfung (d): meine letzten fünf Befunde existieren nur auf dieser Maschine
+
+Gewählt gegen HEAD `5a43ba50` (Hinweg gefahren: 19 Commits, Konfliktprobe vorher 0, Rückstand
+danach 0). §344 als Überschrift 0 Treffer, frei.
+
+**Gemessen um 13:57, Sicherungsstand nachgeprüft um 14:01:18 (Stand genannt, weil die Zahl mit
+jeder Minute wächst — A-43-4 gilt auch für eigene Zahlen).** Von meinen **56** Commits des heutigen
+Tages sind **51** in `auto/hausplaner-integration` enthalten, **fünf nicht** — genau die letzten
+(Alter bezogen auf 13:57):
+
+    907397a9  §339  13:37:34   Alter 19 min
+    29415edc  §340  13:42:38   Alter 14 min
+    e8c9b598  §341  13:47:20   Alter  9 min
+    c155e7cf  §342  13:50:55   Alter  6 min
+    b1b0444d  §343  13:54:57   Alter  2 min
+
+**Und sie existieren auf keinem Remote-Zweig.** Um 14:01:18 gegen **alle 35** `fork`-Refs geprüft,
+**alle fünf einzeln**: `nein`. Ebenso keiner in der lokalen `auto/hausplaner-integration`. Gegenprobe des Griffs an einem bekannten Fall: `675bf079`
+(transportiert 12:43) gibt **JA**. Der Griff greift, das Ergebnis trägt.
+
+**Der Takt hat sich messbar geändert — ohne dass jemand einen Fehler gemacht hätte.**
+
+    675bf079  geschrieben 12:41:06  transportiert 12:43:18   Verzug 2 min
+    794cd018  geschrieben 12:52:45  transportiert 12:55:02   Verzug 2 min
+    df064cab  geschrieben 12:59:37  transportiert 13:05:12   Verzug 5 min
+    letzter Rueckweg fuer rolle/plan-pruefer: 13:31:16       -> seither 26 min
+
+Der Integrator steht **nicht** still: sein jüngster Commit ist von **13:56:14**
+(`integrator: zustand: Z1-W1-5 · NACHBESSERN · generator · votum a4144ff4`). Er arbeitet an der
+Z1-Kette. **Das ist eine Priorisierung, kein Versäumnis** — und ich melde es ausdrücklich nicht als
+Mangel gegen ihn.
+
+**Warum es trotzdem zählt.** Ich darf nicht pushen (`KEIN PUSH` steht in meinem Auftrag), und das ist
+richtig so. Die Folge ist aber: **zwischen dem Schreiben eines Befundes und seinem Transport gibt es
+ein Fenster, in dem Prüfarbeit ausschließlich lokal existiert.** Bisher waren das 2–5 Minuten,
+gerade sind es 19–26. Der Governance-Rahmen benennt genau diese Lage: *„Vor dem Deploy ist der
+Remote die einzige Kopie außerhalb der Maschine — ‚nicht gepusht' heißt nicht ‚unordentlich',
+sondern ‚kein Backup'."*
+
+**Das ist dieselbe Bauart wie mein §339-Zweitteil** (vier von 37 Zweigen ohne Remote-Kopie) — nur
+betrifft es hier meine eigene, gerade erst geschriebene Arbeit. *Ein Prüfer, der Sicherungslücken
+bei anderen misst, sollte die eigene mitmessen.*
+
+**Was das nicht ist.** Kein Notfall: zwanzig Minuten Textarbeit, und die tragenden Aussagen liegen
+zusätzlich als Ereignisse in `~/.ticket-steuerung/` — die sind sofort sichtbar und liegen außerhalb
+des Git-Baums. **Verloren wäre die Belegkette, nicht die Nachricht.**
+
+**Kein Ball, keine Forderung.** Der Rückweg läuft ohnehin; ich stelle nur die Kennzahl bereit, die
+bisher niemand geführt hat: **Verzug zwischen Schreiben und Sicherung.** Wenn sie interessiert, ist
+sie in einer Zeile messbar — `merge-base --is-ancestor <commit> <fork-zweig>` über alle Remote-Refs.
+
+**Auflösung noch in derselben Runde — und sie ist der Beleg für den Stand-Zusatz.** Beim
+Kontroll­lauf **14:03:38**, unmittelbar vor dem Commit dieses Abschnitts, waren **alle fünf auf
+`fork`**. Der Transport lief zwischen **14:01:18** und **14:03:38**. **Der Befund ist damit nicht
+falsch, sondern abgelaufen** — und genau deshalb steht der Messstand in der Überschrift der Tabelle.
+*Hätte ich ihn weggelassen, läse sich derselbe Text morgen als Vorwurf gegen den Integrator.*
+
+**Der gemessene Endwert der neuen Kennzahl:** Verzug zwischen Schreiben und Sicherung, heute
+**2–5 Minuten im Regelfall**, im gemessenen Ausreißer **bis 26 Minuten** (§339: geschrieben 13:37:34,
+gesichert zwischen 14:01 und 14:04). **Kein Mangel — eine Spanne, die vorher niemand kannte.**
+
+## Nachtrag zur selben Runde — das Tor-Wort ist zurückgenommen, und ich habe es an einer Abweisung gemerkt
+
+**Der Commit dieses Abschnitts fiel um 14:02 aus**, Rückgabe 7:
+*„ROLLEN-TOR VERSTOSS kein ACK gefunden für Rolle `plan-pruefer`."* Ursache: seit **13:58:44** gilt
+**gen 9** — neuer Auftrag `DOR-plan-pruefer-w0-5b`, und darin:
+
+    aktion: pruefen        # gen 8 hatte: aktion: bauen   (Tor-Wort, befristet)
+    generation: 9   "... Tor-Wort zurueckgenommen: aktion = pruefen."
+
+**Das ist der Folgeposten README 6f eingelöst** — derselbe, den ich am 12:33 im Votum-Nachtrag zu
+A-43 als Teil von Restpunkt 1 benannt hatte: *„Tor-Wörter zurücknehmen, sobald das Vokabular
+transportiert ist."* Das Vokabular ist transportiert (A-43 Posten 2, abgenommen 13:36), also fällt
+die Krücke. **Mein Tor kannte `pruefen` im Moment der Abweisung noch nicht** (Treffer 0 in der
+`case`-Zeile); nach dem vom Auftrag verlangten Hinweg kennt es **elf Verben**:
+
+    bauen|nachbessern|spezifizieren|pruefen|erteilen|abnehmen|nachpruefen|transportieren|
+    zustand_nachziehen|steuern|release_pruefen
+
+**Wie ich es gemerkt habe, ist der eigentliche Befund: nicht durch Messen, sondern durch eine
+Abweisung.** Meine Runde begann 13:56, die Quelle war seit 13:58:44 neu — **ich habe in dieser Runde
+die Ereignisse gemessen und die Rollenquelle nicht.** Sie ist keine Ereignisdatei und fällt deshalb
+durch mein Fenster; ich hatte sie zwar in der Eingangsmessung, aber nur als *„Digest ok"* — **die
+Prüfung, ob der Digest stimmt, sagt nichts darüber, ob die Generation dieselbe ist.**
+
+*Das ist §341/§342 zum dritten Mal, nur an einem anderen Gegenstand.* **Prüfliste erweitert:**
+
+    Rollenquelle in JEDER Runde mit generation UND Dateizeit lesen, nicht nur "Digest ok" —
+    ein gueltiger Digest beweist die Unversehrtheit der Datei, nicht die Aktualitaet meines Auftrags.
+
+**Gen 8 ist abgeschlossen:** A-43 (Posten 1+2) ERTEILT MIT AUFLAGE, A-43-13 ebenso, beide Auflagen
+vom Planner erfüllt und von mir nachgemessen, P-02 votiert. **Gen 9 ist quittiert** (ACK 14:03,
+Digest selbst gerechnet und zeichengleich), der Hinweg ist gefahren. **Neuer Gegenstand: DoR für
+Z2-W0-5b.**
