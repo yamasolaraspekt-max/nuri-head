@@ -72,14 +72,58 @@ import sys
 #
 # Unveraendert gilt die Kernzahl: beim Evaluator 50 Fremd-Fast-forwards gegen 12 eigene
 # Commits — der Rueckweg bewegt seinen HEAD 4,2-mal so oft, wie er selbst committet.
+# A-37-22 — DIE BAUMAUSWAHL GEHT UEBER (PFAD, ZWEIG)-PAARE, NIE UEBER NAMEN.
+#
+# **Warum der Name nicht genuegt, gemessen:** unter ~/Documents tragen 15 Baeume ein
+# `ticket`-Praefix, aber nur SIEBEN sind Rollenbaeume. Das Muster `ticket-rolle-*` liefert SECHS —
+# davon ist einer (`ticket-rolle-release`, detached) der tote Rest aus P2H-09, waehrend der
+# lebende `ticket-release-pruefung` fehlt. Ein weiterer Gleichnamiger liegt im Scratchpad einer
+# fremden Sitzung und steht in `git worktree list` des gemeinsamen Repos; seit dem 22.08. kommt
+# `ticket-rolle-generator-beleg-2026-08-21` dazu. **Wer ueber den Namen sucht, erwischt ihn und
+# misst dann am falschen Stand.**
+#
+# **Was das Paar leistet:** vor jedem Merge wird der TATSAECHLICH ausgecheckte Zweig gegen den
+# erwarteten gehalten. Weicht er ab, wird der Baum uebersprungen und gemeldet — nie gemergt.
+# Vorher wurde ein Baum auf fremdem Zweig `--ff-only` nachgezogen, solange der Merge technisch
+# durchging.
+#
+# **`ticket-release-pruefung` ist jetzt ein VOLLWERTIGER Eintrag.** Vorher kam er genau einmal vor,
+# als Quelle des ZIEL-SHA (:118) — der Baum, der das Ziel definiert, wurde selbst nie nachgezogen.
 BAEUME = [
-    'ticket',
-    'ticket-rolle-planner',
-    'ticket-rolle-plan-pruefer',
-    'ticket-rolle-generator',
-    'ticket-rolle-evaluator',
+    ('ticket',                    'auto/hausplaner-integration'),
+    ('ticket-rolle-planner',      'rolle/planner'),
+    ('ticket-rolle-plan-pruefer', 'rolle/plan-pruefer'),
+    ('ticket-rolle-generator',    'rolle/generator'),
+    ('ticket-rolle-evaluator',    'rolle/evaluator'),
+    ('ticket-release-pruefung',   'rolle/release-pruefer'),
+    ('ticket-rolle-dirigent',     'rolle/dirigent'),
 ]
 WURZEL = '/Users/yamanuri/Documents'
+
+# Die Namen der Liste — nur zum Erkennen von Gleichnamigen ausserhalb der Liste.
+NAMEN = {name for name, _ in BAEUME}
+PFADE = {f'{WURZEL}/{name}' for name, _ in BAEUME}
+
+
+def gleichnamige_ausserhalb():
+    """Baeume, die wie ein Listenbaum HEISSEN, aber woanders liegen — gemeldet und ausgeschlossen.
+
+    Erhebung wie im Kriterium festgelegt: `git worktree list --porcelain` im Integrations-Checkout.
+    Nur LESEN; dieser Lauf fasst dort nichts an.
+    """
+    rc, aus = git(f'{WURZEL}/ticket', 'worktree', 'list', '--porcelain')
+    if rc:
+        return None                      # nicht erhebbar — der Aufrufer macht daraus 'unmessbar'
+    fremde = []
+    for zeile in aus.split('\n'):
+        if not zeile.startswith('worktree '):
+            continue
+        pfad = zeile[len('worktree '):].strip()
+        if pfad in PFADE:
+            continue
+        if pfad.rstrip('/').split('/')[-1] in NAMEN:
+            fremde.append(pfad)
+    return fremde
 
 
 def git(pfad, *args):
@@ -124,8 +168,36 @@ def main(ziel=None):
     print(f'  Ziel: {kurz}\n')
 
     fehler = unmessbar = 0
-    for name in BAEUME:
+
+    # A-37-22 — Gleichnamige ausserhalb der Liste: MELDEN und ausschliessen. Sie werden nie
+    # angefasst, weil sie nicht in BAEUME stehen; die Meldung sagt, dass sie da sind.
+    fremde = gleichnamige_ausserhalb()
+    if fremde is None:
+        unmessbar += 1
+        print('  worktree list im Integrations-Checkout nicht lesbar — Gleichnamige UNGEPRUEFT')
+    else:
+        for pfad in fremde:
+            print(f'  GLEICHNAMIG AUSSERHALB DER LISTE  {pfad} — ausgeschlossen, nicht angefasst')
+
+    for name, soll_zweig in BAEUME:
         pfad = f'{WURZEL}/{name}'
+
+        # A-37-22 — Absage-Regel: ein Baum der Liste, den es nicht gibt, ist keine Erfolgsmeldung.
+        # Er wird gemeldet und uebersprungen, und der Lauf endet mit 'nicht messbar' (2), nie 0.
+        rc_z, ist_zweig = git(pfad, 'rev-parse', '--abbrev-ref', 'HEAD')
+        if rc_z:
+            unmessbar += 1
+            print(f'  {name:28} UNMESSBAR      Baum fehlt oder ist kein Repository — nicht angefasst')
+            continue
+
+        # A-37-22 — DIE ZWEIGPRUEFUNG. Vorher gab es sie nicht: `lage()` las HEAD, status und
+        # rev-list, nie den Zweig. Ein Baum auf fremdem Zweig wurde nachgezogen, solange der
+        # ff-only-Merge durchging.
+        if ist_zweig != soll_zweig:
+            unmessbar += 1
+            print(f'  {name:28} UEBERSPRUNGEN  Zweig {ist_zweig} statt {soll_zweig} — nie gemergt')
+            continue
+
         zustand, text = lage(pfad, ziel)
         if zustand == 'unmessbar':
             unmessbar += 1
