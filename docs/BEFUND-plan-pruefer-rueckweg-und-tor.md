@@ -40340,3 +40340,85 @@ Seine Zeitachse ist bis auf diesen einen Punkt vollständig richtig, und seine Z
 auch: *„Ich melde die Lage, damit sie nicht als sein Fehler gelesen wird — und damit er es erfährt,
 bevor mein Votum kommt."* Genau so. Nur ist die Lage seit 28 Sekunden vor seiner Meldung eine andere,
 und er soll das erfahren, **bevor** er das Votum schreibt.
+
+## §504 — Nachtrag zu §503, und der Mindestpfeiler durchgerechnet: die Lücke ist echt, und der Ort dafür existiert schon
+
+Stand: HEAD `69377c67`, Baum 0, gen 11, Digest gleich. Zeit 23:42. Messstand `48b6a730`.
+
+### Nachtrag zu §503: der Dirigent war 2,5 Minuten vor mir da
+
+`dirigent-hinweis-e4-e-nachbesserung-liegt-vor.yaml` (**23:34:17**) sagt dasselbe wie meine
+Standklärung von 23:36:49: *„Zeitachse stimmt — und sie ist schon aufgelöst […] Evaluator: a-i
+gegen diesen Stand messen, ein Votum."*
+
+Ich habe ihn nicht zitiert, weil ich ihn nicht kannte — mein Ereignis-Schnitt der Vorrunde lag bei
+23:31, der Hinweis kam 43 Sekunden danach. **Das ist derselbe Mechanismus wie in §503 beschrieben,
+nur an mir.** Ich trage es hier nach, weil P-02 Punkt 4 verlangt zu zitieren statt nachzubauen.
+
+Was mein Beitrag darüber hinaus trägt: Er **misst**, wo der Hinweis **verweist** — die zwei
+Ablehnungsgründe, der Aufruf in ADD *und* UPDATE, und vor allem, dass der verbliebene „nicht
+erfasst"-Zweig **kein Rest ist, sondern die Ausnahme** für nicht-erdberührte Platten. Der Hinweis
+sagt „ist aufgelöst", ich sage, woran man es sieht.
+
+### Vorratsposten (c): Mindestpfeiler = max(240 mm, Wanddicke)
+
+Posten 31 (23:36:55) setzt einen **Hauswert in Yamas Namen, ausdrücklich keine Norm**.
+Durchgerechnet:
+
+```
+Wanddicke 175  →  max(240, 175) = 240      Warnung, wenn Rest < 240
+Wanddicke 240  →  max(240, 240) = 240
+Wanddicke 365  →  max(240, 365) = 365      der Pfeiler wächst mit der Wand
+Wanddicke 490  →  max(240, 490) = 490
+```
+
+Fachlich plausibel: 240 mm ist das klassische Steinmaß; bei dickeren Wänden wäre ein 240er-Pfeiler
+**schlanker als die Wand selbst** — deshalb das Maximum und nicht die feste Zahl. Die Form
+(„Warnung, kein Zwang, Schwelle als benannter Hauswert lesbar") passt zu „Prüfung ehrlich": Ein
+Stahlbeton- oder Holzrahmenbau darf bis zur Ecke.
+
+**Die Auslöser sind messbar:** `offsetFromWallStart` existiert mit **52 Treffern** in fünf
+Produktivdateien. „`offsetFromWallStart = 0`" und „Rest < Schwelle am Wandende" sind also beide am
+Bestand prüfbar.
+
+### Die Lücke ist echt — und der Ort dafür steht schon
+
+`wandFlaeche.ts` führt genau **fünf** Meldungsarten:
+
+```
+'oeffnung-ragt-hinaus' · 'oeffnungen-ueberlappen' · 'oeffnung-hoeher-als-wand'
+'schichten-dicker-als-wand' · 'fremde-oeffnung'
+```
+
+Keine prüft ein Restmaß an der Ecke. Der einzige `Pfeiler`-Treffer im Insel-Bestand steht in
+`geschossVorlage.ts:3` — **„Reuse-Pfeiler"**, ein Wortspiel im Kommentar.
+
+**Der eigentliche Fund** liegt daneben. `wandFlaeche.ts` führt eine Liste `rohmassRest`, die
+ausdrücklich sagt, **was nicht gerechnet ist**:
+
+```
+:184  'dicke: keine Schichten am Knoten hinterlegt (AUF-76)'
+:189  'laenge: Wandverbund nicht gerechnet (Auftrag §3)'
+:196  'hoehe: Fussboden-/Deckenaufbau nicht im Eingang (Operanden-Gate)'
+```
+
+**Der Wandverbund ist dort bereits als ungerechnet vermerkt** — und genau in dieses Feld gehört der
+Mindestpfeiler. Wer ihn baut, sollte `:189` mitnehmen: Aus „Wandverbund nicht gerechnet" wird dann
+„Verbund nicht gerechnet, Mindestpfeiler geprüft". Sonst steht künftig eine Ehrlichkeitszeile da,
+die zu viel zugibt.
+
+Das ist ein **Vorabbefund für das Blatt, das morgen geschnitten wird** — kein Auftrag, keine DoR.
+
+### Drei Schreibweisen-Fallen in einer Runde
+
+```
+pfeiler       0  ·  Pfeiler       1    (Groß-/Kleinschreibung)
+rest          0  ·  grep -i rest  6    (rohmassRest, großes R in der Mitte)
+```
+
+Dazu die zwei aus §502 (`>=` gegen `≥`, `Pflichtfeld` gegen `PFLICHTFELD`). **Fünf in zwei Runden.**
+
+Jede einzelne hätte eine falsche Null geliefert, und jede war durch dieselbe Regel zu fangen:
+**Muster am bekannten Treffer verifizieren.** Ich fange sie inzwischen zuverlässig — aber ich
+erzeuge sie auch weiter. Der Unterschied zu früher ist nur, dass ich nach jeder Null noch einmal
+hinsehe, statt sie zu melden.
