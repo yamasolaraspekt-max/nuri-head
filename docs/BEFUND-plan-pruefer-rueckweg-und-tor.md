@@ -28792,3 +28792,61 @@ belegt, *dass irgendetwas* erscheint.
 **Ball: Planner** (Halbsatz eintragen, keine neue DoR nötig) · die zwei Geschwisterblätter folgen
 laut seiner Meldung und sind strukturgleich — **wenn sie denselben Messbefehl tragen, tragen sie
 denselben Mangel.**
+
+## §351 — Blätter gegen Blöcke: 34 Blätter melden einen DoR-Beleg als ausstehend, den der Block trägt
+
+Gewählt gegen HEAD `05c26de4` (Baum sauber, 14:34). §351 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok. **Statuswahrheit aus `auto/hausplaner-integration`** (§342).
+
+**Wache-Punkt 2, den ich heute nur oberflächlich gefahren habe.** Gemessen:
+
+    Blaetter in docs/auftraege/aktiv/ mit  dor_beleg: "steht aus"      39
+      davon Blockzustand BETRIEBSBESTAETIGT                            32
+                         ABGENOMMEN                                     2
+                         BEREIT                                         2
+                         ZURUECKGEZOGEN                                  1
+                         ENTWURF                                        1
+                         (noch kein Block)                              1   <- Z1-W2-1, 11 min alt
+      davon MIT dor_beleg im BLOCK                                     37
+      davon Block hat Beleg UND Zustand ist durch                      34
+
+**Ein einziges der 39 ist der legitime Fall** (`ENTWURF`, Beleg steht wirklich aus) — dazu mein
+eigenes Z1-W2-1, das seit 11 Minuten erteilt ist und dessen Block noch entsteht. **Bei 34 sagt das
+Blatt „steht aus", während der Block den Beleg führt und der Auftrag betriebsbestätigt oder
+abgenommen ist.**
+
+**Kein Mangel gegen jemanden — die Regel erklärt es.** §5/A-20: *„Wer danach prüft oder baut,
+**ÄNDERT Felder in diesem einen Block**. Er legt keinen zweiten an. Nie."* **Der Block ist der
+maßgebliche Ort; das Blattfeld ist der Anfangszustand und wird bewusst nicht nachgezogen.**
+
+**Was es trotzdem zu einem Befund macht: die Pflege ist uneinheitlich.** A-37 trägt im Blatt gerade
+**nicht** „steht aus", sondern *„NICHT ERTEILT — 3. Runde, **siehe `docs/STATUS.md`**. Restpunkte
+16.08. behoben."* — der Block dazu sagt *„BEREIT — 2. Runde 15.08."*, Zustand `ABGENOMMEN`.
+**Manche Blätter werden nachgezogen, 39 nicht.** Wer ein Blatt liest, weiß also nicht, ob das Feld
+den Anfangszustand oder den aktuellen meint.
+
+*Das ist dieselbe Klasse wie die Zeilennummern in A-34 („zeigen auf die falsche Formel") und wie
+mein §346: **ein Feld, das mal gepflegt wird und mal nicht, ist unzuverlässiger als eines, das nie
+gepflegt wird** — denn beim zweiten weiß man wenigstens, dass man es nicht lesen darf.*
+
+**Warum es gerade jetzt zählt.** N4 ist seit 14:20:19 in Kraft und verlangt eine **Blattangabe** vor
+dem DoR (*„Jedes Produkt-Blatt nennt vor dem DoR …"*). **Damit gewinnen Blattfelder an Gewicht, und
+die Frage, welche davon gepflegt werden, ist nicht mehr nur Ordnung.** A-37s eigenes Blattfeld zeigt
+den Ausweg schon: es trägt den Zeiger *„siehe `docs/STATUS.md`"* mit.
+
+**Zwei eigene Messfehler, beide gefunden und behoben.**
+
+**(1) Blockgrenze zu früh.** Mein erster Griff brach den Block bei der ersten Leerzeile ab und
+meldete für A-21 *„kein `dor_beleg` im Block"*. **Falsch** — der A-37-Block allein enthält **5**
+Leerzeilen, und A-21 trägt den Beleg sehr wohl. Mit der Blockgrenze *„bis zur nächsten
+`auftrag:`-Zeile"* neu gefahren: 105 Blöcke, 65 mit Beleg, 40 ohne. **Eine Grenze, die aus dem
+Augenschein stammt statt aus der Struktur, misst das Falsche.**
+
+**(2) Die Stichprobe hätte mich fast in die Irre geführt.** Aus A-37 (Blatt sagt „NICHT ERTEILT",
+Block sagt „BEREIT") wäre beinahe der Befund *„zwei Wahrheiten über denselben Beleg"* geworden.
+Erst der Blick in das Blattfeld selbst zeigte den Zusatz *„siehe `docs/STATUS.md`"* — **es ist ein
+Zeiger, kein Duplikat.** Der Befund ist dadurch kleiner und richtiger geworden.
+
+**Ball: niemand.** Keine Forderung, kein DoR-Gegenstand. Die Zahl **34 von 39** geht als Lesewarnung
+weiter: **`dor_beleg` im Blatt ist kein Statusträger — maßgeblich ist der Block.** Wer das Blatt
+liest, muss den Block dazunehmen; das gilt für mich zuerst.
