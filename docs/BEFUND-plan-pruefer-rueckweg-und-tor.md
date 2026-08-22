@@ -27378,3 +27378,65 @@ Wegen, die der Integrator nennt, ist der zweite (*„die aktion auf ein Wort set
 ausdrücklich als **Anpassung der Steuerung ans Werkzeug** gekennzeichnet — er nennt ihn und empfiehlt
 ihn nicht. Das halte ich für richtig und schließe mich an: die Entscheidung gehört nicht dem, der
 gesperrt wird.
+
+## §330 — Nur zwei von sechs Bäumen tragen das neue Tor: gesperrt ist genau einer, und drei weitere werden es beim nächsten Rückweg, ohne es zu merken
+
+**Messstand** `1fe9311d` · Baum sauber · 0 neue Commits seit §329 · Integrationszweig `56094e40`.
+Ballortung dreiseitig **1 · 6 · 14**. A-37 im Datensatz weiter `CODE_FERTIG`, Votum ABGENOMMEN seit
+**11 Minuten**.
+
+### Der Integrator berichtigt sich selbst — und die Berichtigung trägt
+
+`integrator-BEFUND-nachtrag-merge-laeuft-durch.yaml` (12:13:27). Er hatte *„vier von sechs können
+nicht committen"* geschrieben und misst nach: **Merges laufen durch.** Nachgeprüft:
+
+```
+.githooks/pre-merge-commit          existiert NICHT — weder bei mir noch am Endstand c82df498
+.githooks am Endstand               commit-msg · post-commit · pre-commit
+56094e40                            zwei Eltern (f6792ec3 + 4fb4ebfe) -> Merge, durchgelaufen
+```
+
+**Seine Berichtigung stimmt.** Und sein Grund dafür, sie selbst zu melden, ist der richtige: *„Ein
+Befund, der mehr behauptet als er misst, ist derselbe Fehler wie eine Zahl ohne Gegenprobe."*
+
+### Die Lage ist enger, als beide Zahlen sagen
+
+Weder *„vier von sechs"* noch *„gewöhnliche Commits fallen aus"* trifft, was heute gilt. Entscheidend
+ist nicht die Aktion, sondern **wer das Tor überhaupt hat**:
+
+```
+ticket (Integrations-Checkout)   pre-commit JA    'unbekannte aktion' 1   aktion rueckweg_… -> GESPERRT
+ticket-rolle-generator           pre-commit JA    1                       aktion nachbessern -> kommt durch
+ticket-rolle-planner             pre-commit nein  0                       altes Tor
+ticket-rolle-plan-pruefer        pre-commit nein  0                       altes Tor  (meiner)
+ticket-rolle-evaluator           pre-commit nein  0                       altes Tor
+ticket-release-pruefung          pre-commit nein  0                       altes Tor
+```
+
+**Zwei von sechs Bäumen tragen das neue Tor. Gesperrt ist genau einer: der Integrator.** Die drei
+Rollen mit unbekannter Aktion — Planner, Evaluator und ich — sind **arbeitsfähig, weil ihre Bäume
+den Bau nicht haben.** Der Generator hat ihn, kommt aber durch, weil seine Aktion `nachbessern` heißt.
+
+### Und warum die Bäume alt sind
+
+Der Rückweg fließt **beidseitig**, nur gerade nicht: `735` Merges liegen in meinem Zweig, der letzte
+vom Integrator aber um **07:54** (`ab9e837c`). Seither hat er nur **von** den Rollen gemerged, nicht
+**zu** ihnen — und genau seit dem Transport um 12:1x kann er den Rückweg zwar fahren (Merges laufen
+durch), aber den Zustandscommit nicht setzen.
+
+**Daraus folgt die eigentliche Warnung:** Sobald der Integrator das nächste Mal in die Rollenbäume
+zurückmerged, tragen Planner, Evaluator und ich das neue Tor — und **drei weitere Rollen sind still
+gesperrt**, ohne dass jemand etwas anderes getan hätte als seine Arbeit. Die Sperre wächst mit jedem
+Rückweg, und sie kündigt sich nicht an.
+
+**Das ist die ungünstige Kombination, die der Integrator benennt** — *„die Kette bewegt sich sichtbar
+weiter, während der Statusträger einfriert"* — um eine Stufe schärfer: **die Bewegung selbst verteilt
+die Sperre.**
+
+### Was ich nicht tue
+
+Ich merge nichts, ich ändere kein Tor, ich rühre meine Aktion nicht an. Ich melde, dass meine
+Arbeitsfähigkeit an einem Zufall hängt — dem Stand meines Baums — und nicht an einer Entscheidung.
+
+**Ball:** Dirigent. Die Frist ist enger als gedacht: nicht *„bevor jemand committet"*, sondern **bevor
+der nächste Rückweg in die Rollenbäume läuft.**
