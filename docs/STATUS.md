@@ -104,7 +104,7 @@
 | **Z1-W2-2** Aufbautenstatus anschliessen | `ZURUECKGESTELLT` | **Planner** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-2-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae · **ZURUECKGESTELLT** — RoofAufbau ohne `surfaceId`, Flaechen ohne gespeicherte Kennung: nur "nie warnen" oder "immer warnen" moeglich, beides kein Anschluss · Dirigent 15:52:21 · **kein Bau-SHA** |
 | **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · **DoR ERTEILT** (plan-pruefer §353, `c2e8dd20`) · Bau `d00aeece` · Matrix `161868e9` · **ABGENOMMEN (BROWSER)** 18:37:10, 7 von 7, Reifegrad `browserabgenommen`, vier Bildbelege · zuvor von mir faelschlich ZURUECKGESTELLT (`217fd547`), berichtigt in `f3fc3c44` |
 | **Z1-W2-4** Treppe ueber den Werkzeugregistry-Vertrag anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md` · **DoR ERTEILT** (plan-pruefer 16:21:25) · Planner-Blatt `418bcb6c` |
-| **Z1-W2-5** Wandflaeche anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` |
+| **Z1-W2-5** Wandflaeche anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` · Bau `5617dc4c` · CODE_FERTIG 18:52:39 · **die Wandflaeche erreicht den Benutzer** |
 | **Z1-W2-6** Auswechslung anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` |
 | **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | `BEREIT` | **Generator** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 |
 | **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `ENTWURF` | **Planner** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt noch nicht geschnitten** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR |
@@ -19260,8 +19260,8 @@ herkunft_dieses_blocks: |
 ```yaml
 auftrag: "Z1-W2-5"
 titel: "Wandflaeche anschliessen"
-zustand: BEREIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 blatt: "docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md"
 blatt_sha: 418bcb6c
 basis_sha: 161868e9
@@ -19271,10 +19271,19 @@ dor_beleg: |
   EIN VOTUM FUER ZWEI KENNUNGEN: das Feld heisst dort kennungen: [Z1-W2-5, Z1-W2-6].
   Ich trage es bei beiden ein und lege trotzdem zwei getrennte Statusplaetze an —
   zwei Kennungen altern getrennt, auch wenn sie zusammen freigegeben wurden.
-bau_sha: "noch offen"
+bau_sha: 5617dc4c
 herkunft_dieses_blocks: |
   Statusplatz vom integrator angelegt, verspaetet aus demselben Grund wie Z1-W2-4.
   Blatt fertig 16:38, DoR 16:42:40.
+
+zustand_nachgezogen: |
+  CODE_FERTIG aus generator-CODE_FERTIG-Z1-W2-5.yaml, 18:52:39.
+  ausgangs_sha 171284e9 · endstand_sha 171884e9-Blattstand · ergebnis_sha 5617dc4c
+  Sein Betreff: "Z1-W2-5 — die Wandflaeche erreicht den Benutzer."
+  Das Ereignis nennt ball: [evaluator, dirigent]. In der Tafel steht Evaluator, weil dort die
+  naechste Handlung liegt; der Dirigent ist mitadressiert und nicht uebergangen.
+  Spur W, also ist der Bau mit diesem Lauf in der Integration.
+
 ```
 
 ```yaml
