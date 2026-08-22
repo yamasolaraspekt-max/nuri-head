@@ -516,3 +516,20 @@ Prüfung; **die technische Schreibsperre hat Vorrang vor jeder weiteren Konzept-
 | 14:0x | **A-43 Posten 3 ABGENOMMEN → A-43 vollständig 13/13**; Werkzeug-Register (Planner `4f4bbc6e`) | Evaluator `71a75985` |
 | 14:13 | Externe Prüfung: Zuschreibung „lesesitzung-6b369768" falsch — berichtigt | `dirigent-berichtigung-zuschreibung-lesesitzung.yaml` |
 | 14:14:57 | Evaluator gen 13 Z2-W0-7; Integrator gen 11 (zustand_nachziehen); Planner gen 17 Paket-3-Blätter | Spiegel |
+
+### Protokoll 14:16–18:16:15 (Dirigent; Uhr: `date` lokal)
+| Zeit | Ereignis | Beleg |
+|---|---|---|
+| 14:2x–14:5x | Abnahmewelle: Z2-W0-7 5/5, Z2-W0-3 4/4, Z2-W0-1 (D begründet) ABGENOMMEN → Rückstand 4/12 | Evaluator `5f19d9c7` `6853e1a1` `88289251` |
+| 14:46 | Werkzeugweg-Entscheidung (6 Vorschläge) → Z1-W2-0 DOM-Probe, registry_id, Vorlage aus A-35, Treppe-Probe vor Stilllegung, Grundgesamtheit = faehigkeiten.ts | `9cea7297` |
+| 15:1x | Delegation: drei „bei Yama"-Posten erledigt (Y-13 Stufe 1 ohne root, Y-12 per IDS-Connect, Zuschreibung gemessen) — DB-Prämisse 15:49 berichtigt (Zugriff war nie das Problem, Isolation ist es) | `11a64f40` `1c683233` |
+| 15:2x | Paket 3 geschnitten (Z1-W2-1/2/3) + Z1-W2-0 Messgerät; DoR je in einem Durchgang; Z1-W2-1 CODE_FERTIG 15:26 | Planner, Plan-Prüfer |
+| 15:5x | Z1-W2-2 ZURÜCKGESTELLT (Modellerweiterung surfaceId), Z1-W2-3 nach Generator-Berichtigung doch gebaut (einheitenfreier Ausschnitt) | `dirigent-revision-z1-w2-3-bauen.yaml` |
+| 15:45 | **Z1-W2-0 CODE_FERTIG: 12/13 Werkzeuge bedienbar belegt** — erstes Messgerät für „Abnahme = Bedienbarkeit" | Generator `0d97a57c` |
+| 16:00–16:04 | DB-Kollision (Generator-Testlauf setzte ticket_testing neu auf, Evaluator ENV_BLOCKED) → **DB-Lease-Regel 6j sofort**; Evaluator nimmt Lease, fährt zu Ende | README 6j |
+| 16:02 | Bündel-Regel: Werkzeug-Commits ohne Bundle; Generator committet Bündel einmal je ABGENOMMEN (BROWSER) | `dirigent-entscheidung-buendel.yaml`, Generator gen 18 |
+| **16:24** | **Z1-W2-1 ABGENOMMEN (BROWSER) 6/6 — erstes browserabgenommenes Werkzeug der Anschlusswelle**; Bündel be4f637c gebaut 16:27 | Evaluator `ccbb70bc` |
+| 16:03–17:00 | Generator: Z2-W0-5b, Z1-W2-3, **Z0-I1 Stufe 1** CODE_FERTIG; Z0-I1-Errata bestätigt (phpunit.xml als DB-Ziel, Seed-Weg umgebucht) | Generator `b593357c` `161868e9` `04949151` |
+| 16:05–18:08 | **Integrator-Lücke 2 h** (Wecker?) — Bündel/Transport/Zustände standen; 18:08 von selbst wieder aktiv; Z1-W2-3 zunächst falsch ZURÜCKGESTELLT (veraltete Entscheidung), 18:14 korrigiert | Plan-Prüfer Stillstandsmeldung, Integrator `f3fc3c44` `98c18fdc` |
+| 18:1x | Evaluator Z1-W2-0 ABGENOMMEN 8/8; Planner: neun Blätter DoR-erteilt (Z1-W2-4/5/6, Z2-W0-11b, Dach-2-Zuschnitt, Register nachgeführt, Anschlussvorrat) | Evaluator `31152ef1` |
+| 18:16:15 | Integrator gen 12, Generator gen 19 (Paket 1 → Treppe-Probe → W0-11b → Dach-2), Evaluator gen 16 (Z1-W2-3 → Z0-I1 → W0-5b → W1-1/2 → Rückstand) | Spiegel |

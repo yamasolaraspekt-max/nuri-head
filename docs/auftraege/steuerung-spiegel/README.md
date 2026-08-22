@@ -60,6 +60,12 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
     CODE_FERTIG **vor** der Abnahme in die Integration transportiert, weil `http://ticket.test` den Integrations-Checkout bedient; Zustand
     bleibt CODE_FERTIG bis zum Votum; NACHBESSERN = vorwärts nachbauen, NICHT bedienbar + Rückweg = Revert des Transports. Spur A (Rechte/
     DB/Auth): Transport erst nach ABGENOMMEN.
+6j. **DB-LEASE AB SOFORT (Dirigent 22.08. 16:04, Realfall: fremder Testlauf setzte `ticket_testing` während einer Browserabnahme neu auf):**
+    Wer gegen `ticket_testing` läuft — Feature-/DB-Tests (`php artisan test`, phpunit), Seeds, Browserbühne mit Anmeldung — hält vorher die
+    Lease `leases/TESTDB-ticket_testing/` (V2 §8: `counter`, `counter.lock/`, `active/lease.yaml` mit owner/rolle/auftrag/heartbeat_bis,
+    tmp+mv) und gibt sie nach dem Lauf frei. Existiert `active/` gültig → warten, nicht starten. Gilt für alle Rollen bis Z0-I1 Stufe 1
+    das im Testläufer erzwingt. Ein Lauf ohne Lease ist ein Regelverstoß (Selbstmeldung). Browserabnahmen haben Vorrang: ein wartender
+    Evaluator bekommt die Lease vor dem nächsten Testlauf.
 6b. **Antworten des Dirigenten** stehen unter `ereignisse/<auftrag_id>/dirigent-*.yaml` — bei jedem Pull mitlesen.
 6f. **AUFGEHOBEN 22.08. 14:11 — Tor-Wörter zurückgenommen:** A-43 Posten 2 (Aktionsvokabular) ist abgenommen und transportiert; alle sieben
     Rollenquellen tragen wieder Rollenverben (steuern · spezifizieren · pruefen · abnehmen/nachpruefen · bauen/warten · parken ·
@@ -73,6 +79,10 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
     Aktionsvokabular des Tors rollengerecht erweitert und transportiert ist (Planner gen 14, Posten 2; Backlog 23) — dann werden die
     Tor-Wörter zurückgenommen. Meldepflicht-Abschlussbegriffe (SPEZIFIZIERT, ERTEILT, CODE_FERTIG, ABGENOMMEN, TRANSPORTIERT …)
     bleiben unverändert die Rollenwahrheit.
+6g'. **Präzisierung 22.08. 15:58 (Plan-Prüfer §374: 101 von 104 Feldern waren = `zeit`, das misst nichts):** `gelesen_bis` ist die Zeit des
+    **letzten vollständigen Pulls** der Ereignisablage (`ls -t ereignisse/…` zum Pull-Zeitpunkt), **nicht** die Schreibzeit. Wer schreibt,
+    pullt unmittelbar vorher erneut (dann gelesen_bis ≈ zeit, ehrlich) **oder** trägt die frühere Pull-Zeit ein — dann ist sichtbar, was er
+    nicht gesehen haben kann. Ein `gelesen_bis`, das jünger ist als eine Datei, die der Melder nachweislich nicht kannte, ist ein Befund.
 6g. **`gelesen_bis` in jeder Abschluss-, Votums- und Fertigmeldung (externe Prüfung V-003, 22.08. 12:35; Dirigent 12:58):** der
     `date`-Zeitpunkt, bis zu dem die Rolle `ereignisse/` (eigener Ordner **und** die Ordner, deren Ereignisse sie zitiert) gelesen hat.
     Anlass: sechs Fälle heute (Plan-Prüfer 10:12/12:30/12:41, externe Prüfung 10:14/12:19, Planner 12:22), alle mit Sorgfalt, alle

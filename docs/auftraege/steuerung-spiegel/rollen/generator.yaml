@@ -1,5 +1,5 @@
-auftrag_id: BAU-generator-Z2-W0-5b
-generation: 17           # 2026-08-22T15:53:35+0200 — Revision: Z1-W2-3 ist baubar (deine Berichtigung 15:52:42, einheitenfreie Winkelanalyse). Reihenfolge: Z2-W0-5b (falls begonnen: fertig bauen, sonst zuerst Z1-W2-3) -> Z1-W2-3 -> Z0-I1 Stufe 1 nach Errata. ACK gen 17; Lease weiterfuehren.
+auftrag_id: BAU-generator-welle-1b
+generation: 19           # 2026-08-22T18:15:34+0200 — gen 18 abgeschlossen (Z2-W0-5b, Z1-W2-3, Z0-I1 Stufe 1 CODE_FERTIG; Buendel Z1-W2-1). Neun Blaetter sind DoR-erteilt; Reihenfolge nach Yamas Massstab (Werkzeuge zuerst).
 rolle: generator
 sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8
 sitzung_gesperrt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b   # Vermerk
@@ -7,13 +7,16 @@ worktree: /Users/yamanuri/Documents/ticket-rolle-generator
 branch: rolle/generator
 prioritaet: P0
 aktion: bauen
-taetigkeit: "bauen (Generator): Z2-W0-5b (Spur A) und Z1-W2-3 (Spur W, einheitenfreier Ausschnitt) — je eigene Lieferung -> Z0-I1 Stufe 1 nach Errata"
-blatt_z2_w0_5b: "blattpfad: docs/auftraege/aktiv/Z2-W0-5b-linked-ohne-wache.md ergebnis_sha: "14563070"  — docs/auftraege/aktiv/ (Kennung Z2-W0-5b) @ rolle/planner; Hinweg zuerst (Merge mit Herkunftszeile); Kriterien woertlich: linked an denselben Baustein wie link/unlink/addToPlan, fremd 403/404 bei BEIDEN Schalterstellungen, eigen 200, Vertragstest, Grundmenge api/planner/* GET mit {plannerItem} + STAND; Tests NUR gegen Test-DB (ticket_testing, TCP-Weg — Zugriff dreifach gemessen)."
-blatt_z1_w2_3: "docs/auftraege/aktiv/Z1-W2-3-grundriss-eckenanalyse-anschliessen.md @ rolle/planner 39260edd (DoR ERTEILT c2e8dd20): NUR eckenAnalyse/anzahlInnenwinkel/erwarteteInnenwinkel anschliessen (Kriterium b: Form gewaehlt, Kontur mit unpassender Innenwinkelzahl -> Meldung; passend -> keine), KEIN grundrissPolygon/FlaecheM2 (Herkunftsvermerk gilt dort weiter); Belege je Funktion; CODE_FERTIG-Ereignis generator-CODE_FERTIG-Z1-W2-3.yaml in ereignisse/BAU-generator-paket-3/ (Evaluator-Muster) — Hinweis ans Bundle wie bei Z1-W2-1."
-z0_i1_stufe_1: "ERST nach ereignisse/SPEZ-planner-anschlusswelle-1/planner-*errata*Z0-I1*.yaml bzw. planner-CODE_FERTIG-Z0-I1*nachtrag*.yaml (Muster): Blatt dann in der Errata-Fassung (DB-Ziel ticket_testing ueber TCP, DB-Lease, TEST_ROLLE, fail-closed, Seed Weg C). Kein Kausalsatz 'Sperre lag am Weg' in deinen Belegen."
-regeln: "Je Lieferung EIN CODE_FERTIG-Ereignis (generator-CODE_FERTIG-<Kennung>.yaml) mit endstand_sha/ergebnis_sha/gelesen_bis; Commits nur via commit-pruefen.sh (TICKET_ROLLE=generator, NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules); Bundle public/hausplaner/hausplaner.js NICHT committen (Bundle-Klaerung offen) — Hinweis an den Evaluator wie bei Z1-W2-1; kein Kriterium aendern; Negativproben in Test-DB/Probe-Root."
-verboten: [Produktcode ausserhalb des Blatt-Umfangs, Produktiv-DB, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Rebase/Amend/Force, eigene Abnahme, surfaceId/Pruefpflicht-Listen erfinden]
+taetigkeit: "bauen (Generator): Paket 1 Klasse A (Z1-W2-5, Z1-W2-6) -> Treppe-Probe Z1-W2-4 -> Z2-W0-11b (Spur A) -> Dach-2-Blaetter sobald geschnitten+DoR; dazwischen Buendel-Commits nach Browser-Voten"
+reihenfolge:
+  - "Z1-W2-5, Z1-W2-6 (Paket 1 Massenermittlung/Holzbau, Klasse A; DoR ERTEILT; Z1-W2-6 Achsenregel-Berichtigung 49141f90 BESTAETIGT) — je EINE Lieferung, Spur W, Blatt @ rolle/planner (Stand aus dem juengsten planner-CODE_FERTIG/BERICHTIGUNG)"
+  - "Z1-W2-4 Treppe-Probe ueber den werkzeugRegistry-Vertrag (DoR ERTEILT) — beide Ausgaenge sind Ergebnis; KEINE Stilllegung in diesem Blatt"
+  - "Z2-W0-11b CSRF ids/callback Teil B (Spur A, DoR ERTEILT; Operand Y-12 = IDS-Connect, eigener state-Token in der hookUrl; Tests gegen ticket_testing NUR mit DB-Lease 6j)"
+  - "Dach-2 (Paket 2) Blaetter, sobald planner-CODE_FERTIG-Z1-W2-7*/DoR ERTEILT vorliegen (Muster)"
+  - "BUENDEL-REGEL gilt weiter: nach jedem evaluator-ABGENOMMEN*(BROWSER) eigener Buendel-Commit + generator-BUENDEL-<Kennung>.yaml"
+regeln: "Hinweg vor jeder Lieferung (Herkunftszeile); Blattstand = juengster Planner-SHA (zitieren); Messbefehle zitieren, Defekt melden statt nachbauen; Herkunftsvermerke je FUNKTION lesen; CODE_FERTIG je Kennung (generator-CODE_FERTIG-<Kennung>.yaml) mit endstand_sha/ergebnis_sha/gelesen_bis(=Pull-Zeit); Commits nur via commit-pruefen.sh (TICKET_ROLLE=generator, NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules); DB-Tests nur mit leases/TESTDB-ticket_testing/ (6j); Produktcode nur im Blatt-Umfang; Z1-W2-2 NICHT anfassen (zurueckgestellt)."
+verboten: [Produktcode ausserhalb des Blatt-Umfangs (Ausnahme Buendel-Commit), Produktiv-DB, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Rebase/Amend/Force, eigene Abnahme, surfaceId/Pruefpflicht-Listen erfinden, DB-Tests ohne DB-Lease]
 steuerungshandlungen_erlaubt: [ACK, Lease-Heartbeat, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/BAU-generator-Z2-W0-5b/generator-ack.yaml
-erstellt: "2026-08-22T15:52:21+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/BAU-generator-welle-1b/generator-ack.yaml
+erstellt: "2026-08-22T18:15:34+0200 Dirigent (atomar; Uhr: date)"

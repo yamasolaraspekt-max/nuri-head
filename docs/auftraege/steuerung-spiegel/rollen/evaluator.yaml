@@ -1,24 +1,21 @@
-auftrag_id: ABNAHME-evaluator-Z2-W0-1-und-browser-paket-3
-generation: 15           # 2026-08-22T14:39:32+0200 — gen 14 abgeschlossen (Z2-W0-3 ABGENOMMEN 4/4, 6853e1a1). Zwei Teile: (A) Rueckstand Posten 4 Z2-W0-1 JETZT; (B) sobald generator-CODE_FERTIG-Z1-W2-*.yaml erscheint: BROWSERABNAHME hat Vorrang (Teil A nach dem laufenden Kriterium sauber abschliessen oder als Zwischenstand melden).
+auftrag_id: ABNAHME-evaluator-welle-1b
+generation: 16           # 2026-08-22T18:15:34+0200 — gen 15 abgeschlossen (Z2-W0-1 ABGENOMMEN; Z1-W2-1 ABGENOMMEN (BROWSER) 6/6 — das erste browserabgenommene Werkzeug der Welle; Z1-W2-0 ABGENOMMEN 8/8). Z1-W2-2 kommt nicht (zurueckgestellt).
 rolle: evaluator
 sitzung_erwartet: 303cefb6-35fd-4c36-9aca-ed10515f59b3
 worktree: /Users/yamanuri/Documents/ticket-rolle-evaluator
 branch: rolle/evaluator
-basis_sha: 6853e1a1
 prioritaet: P0
 aktion: abnehmen
-taetigkeit: "abnehmen (Evaluator): (A) Z2-W0-1 S-5 Gebaeudeakte /objekte/* (Bau 314ea991); (B) Browserabnahme Z1-W2-1/2/3 (Paket 3, Spur W) — Reifegrad BROWSERABGENOMMEN"
-teil_A: "Blatt docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md am Integrationsstand; Kriterien woertlich; ohne Customer-Recht 403, mit Schalter true 200; Grundmenge /objekte/*-Routen mit STAND; DB nur Test-DB (ENV_BLOCKED dokumentieren, nicht raten)."
-teil_B: |
-  Ausloeser: ereignisse/BAU-generator-paket-3/generator-CODE_FERTIG-Z1-W2-*.yaml (Muster). Je Blatt: Kriterien des Blatts (<= 8) inkl. Browserlauf
-  (Puppeteer/Chrome headful, lokale App http://ticket.test; NUR lesen/klicken im Hausplaner, keine Produktivdaten aendern — Probe-Szene im Browser,
-  nicht speichern oder in Test-Daten), Rot-Probe 'ohne Modul keine Meldung' selbst ausloesen, Produktcode nur Insel, Suite/tsc gruen.
-  Votum je Blatt: ABGENOMMEN (BROWSER) / ABGENOMMEN (CODE, Browser offen: Grund) / NACHBESSERN — mit endstand_sha, ergebnis_sha, gelesen_bis,
-  Screenshot-Pfad als Beleg im eigenen Worktree (docs/rollenkette/rollen/4-evaluator/belege/). Spur-W-Disziplin: eine Runde, keine Auflagen-Schleife.
-meldepflicht: "AUFTRAG_GESTARTET je Teil mit endstand_sha + gelesen_bis; Abschluss je Teil/Blatt mit endstand_sha, ergebnis_sha, gelesen_bis"
-lease: "leases/ABNAHME-evaluator-Z2-W0-1-und-browser-paket-3/"
-verboten: [Produktcode, Reparaturen, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Commit ausserhalb des eigenen Worktrees, Produktiv-DB aendern, Szenen im Produktivbestand speichern]
+taetigkeit: "abnehmen (Evaluator): Z1-W2-3 Browser -> Z0-I1 Stufe 1 -> Z2-W0-5b -> W1-1/W1-2 Browser (mit Z0-I1) -> Rueckstand Posten 5 ff."
+reihenfolge:
+  - "Z1-W2-3 (Grundriss-Eckenanalyse, Spur W; generator-CODE_FERTIG-Z1-W2-3.yaml, ergebnis "161868e9"; Blatt 39260edd; nur der einheitenfreie Ausschnitt): Browserabnahme mit Z1-W2-0-Probe als Messgeraet + Bildbeleg; Bundle selbst bauen; DB-Lease 6j fuer die Buehne; Votum ABGENOMMEN (BROWSER)/(CODE)/NACHBESSERN."
+  - "Z0-I1 Stufe 1 (Spur A; generator-CODE_FERTIG-Z0-I1.yaml "04949151", Teillieferungen AP1-AP3, Klarstellung 7/8 = Stufe 2; Blatt = Errata-Fassung 7791920f + Bestaetigung): Kriterien 1-12 Stufe 1; Kollisionsprobe selbst ausloesen (zwei Laeufe, Lease serialisiert, fail-closed gegen ticket); Seed-Weg idempotent; SELECT DATABASE() im Beleg."
+  - "Z2-W0-5b (Spur A; b593357c; DoR 14563070): linked fremd 403/404 bei beiden Schalterstellungen, Vertragstest, Grundmenge GET api/planner/* mit {plannerItem} + STAND; DB-Lease."
+  - "W1-1 / W1-2 Browserlaeufe (Kriterium C bzw. E, bisher ENV_BLOCKED) — jetzt mit Z0-I1 Stufe 1 und DB-Lease moeglich."
+  - "Abnahmerueckstand Posten 5 ff. (Z2-W0-8, W0-10, W0-11, W0-12, A-38) in der Reihenfolge der Liste."
+regeln: "Je Votum: endstand_sha, ergebnis_sha, gelesen_bis (= Pull-Zeit, 6g'), Reifegrad; Buehne aus eigenem Worktree; DB-Lease vor jedem DB-/Browserlauf; kein Produktcode; Messbefehle zitieren; ENV_BLOCKED dokumentieren statt raten."
+verboten: [Produktcode, Reparaturen, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Commit ausserhalb des eigenen Worktrees, Produktiv-DB, Szenen im Produktivbestand speichern]
 steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/ABNAHME-evaluator-Z2-W0-1-und-browser-paket-3/evaluator-ack.yaml
-erstellt: "2026-08-22T14:39:32+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/ABNAHME-evaluator-welle-1b/evaluator-ack.yaml
+erstellt: "2026-08-22T18:15:34+0200 Dirigent (atomar; Uhr: date)"
