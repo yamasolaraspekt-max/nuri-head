@@ -38031,3 +38031,83 @@ Modulen 32 geworden sind oder ob sich nur die Kante verschoben hat.**
 
 Ball: **Dirigent** (neunte Messung + Schlussbilanz) · **Yama** (die fünf entscheidungsreifen Posten
 liegen jetzt vollständig vor). **Geht sofort als Ereignis** (§463).
+
+## §475 — Vorratsprüfung (c)+(e): mein §415-Fachbefund war zu weit. Die Schrittmaß-Prüfung ist tautologisch — aber nur in einem von zwei Zweigen
+
+Messstand: HEAD `73cdde46`, Baum 0 · Integration `57e661bd`, Baum 0 · **Rückstand `HEAD..auto` = 153**
+· gemessen 21:48–21:53. **Ereignis-Schnitt dieser Runde: 21:46:29** (0 neue Ereignisse).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §475'` → 0).
+Vorratsprüfung **(c) tragende Formel durchrechnen** + **(e) eigenen Befund verfolgen**.
+
+### Was §415 behauptet hat
+
+    treppenBerechnung.ts:75   const schrittmass = 2 * steigungExakt + auftrittExakt;   // = 630, IMMER
+    treppenBerechnung.ts:87   push('schrittmass', schrittmass >= 590 && schrittmass <= 650, …)
+    -> §415: die Pruefung ist wirkungslos.
+
+### Die Formel, beide Zweige durchgerechnet
+
+    auftrittExakt = verfuegbareLauflaenge > 0
+                      ? verfuegbareLauflaenge / anzahlAuftritte     ZWEIG A
+                      : 630 - 2 * steigungExakt                     ZWEIG B  („Schrittmassregel")
+
+    ZWEIG B:  s=150 -> a=330 -> schrittmass 630
+              s=170 -> a=290 -> schrittmass 630
+              s=190 -> a=250 -> schrittmass 630
+              s=210 -> a=210 -> schrittmass 630
+              -> 2s + (630 - 2s) = 630. IMMER. Die Pruefung kann nicht fallen.
+
+    ZWEIG A:  s=190, L=3000/15 -> a=200.0 -> schrittmass 580.0   <- FAELLT (590..650)
+              s=150, L=2000/12 -> a=166.7 -> schrittmass 466.7   <- FAELLT
+              s=210, L=5000/14 -> a=357.1 -> schrittmass 777.1   <- FAELLT
+              -> VARIABEL. Hier WIRKT die Pruefung.
+
+### Und welcher Zweig läuft — über den Feldnamen gemessen (§451)
+
+    verfuegbareLauflaenge im Insel-Bestand: 28 Vorkommen
+      szene.ts:410        verfuegbareLauflaenge: Math.hypot(tp.endX - tp.startX, …)   <- AUS DER GEOMETRIE
+      treppe2D.ts:56      verfuegbareLauflaenge: len > 0 ? len : undefined
+      enginePanels.ts:111 aus der Eingabe, wenn angegeben
+      enginePanelTreppe.test.ts:154  testet ausdruecklich den Fall „nicht angegeben"
+
+> **Wer eine Treppe ZEICHNET, bekommt Zweig A** — die Lauflänge wird aus der gezeichneten Geometrie
+> gerechnet (`Math.hypot`). **Zweig B ist der Rückfall für die Treppe ohne gezeichneten Lauf**, und
+> der Bestand testet ihn ausdrücklich. **Beide Zweige leben.**
+
+### Damit ist mein §415-Befund zu berichtigen
+
+    §415 sagte:  „schrittmass = 630, IMMER" — und daraus: die Pruefung ist wirkungslos.
+    Richtig ist: sie ist TAUTOLOGISCH IM RUECKFALLZWEIG und WIRKSAM IM HAUPTZWEIG.
+
+> **Ich habe einen Zweig für die ganze Funktion genommen.** Das ist dieselbe Klasse wie *„Grundmenge
+> gegen die Frage prüfen"* — nur eine Ebene tiefer: **nicht die falsche Datei, nicht die falsche
+> Zeile, sondern der falsche Ast derselben Zeile.**
+>
+> **Und der Kommentar im Code sagt es sogar:** `// Schrittmaßregel` steht **an Zweig B**, nicht an
+> der Prüfung. Der Bestand hat den Zweig als Regel gekennzeichnet — ich habe die Kennzeichnung
+> gelesen und trotzdem die ganze Funktion gemeint.
+
+**Was vom Befund bleibt, und es ist nicht wenig:** Im Rückfallzweig prüft der Code eine Größe, die er
+selbst gerade aus der Prüfgrenze erzeugt hat. **Ein Prüfergebnis, das per Konstruktion grün ist, ist
+kein Prüfergebnis** — es sagt dem Nutzer „Schrittmaß in Ordnung", obwohl nichts gemessen wurde.
+**Der Befund schrumpft von „die Prüfung ist wirkungslos" auf „die Prüfung ist im Rückfall eine
+Selbstbestätigung" — das ist enger, aber es steht.**
+
+### Alterung: der Befund ist stabil
+
+    treppenBerechnung.ts   114 Zeilen · zuletzt geaendert 22.07. 07:25  ->  ein Monat unveraendert
+
+**Die Datei hat sich seit §415 nicht bewegt** — die Berichtigung betrifft meine Lesart, nicht den
+Code.
+
+### Lage, jetzt gemessen (21:47:55)
+
+    Commits NICHT in der Integration      47
+    Integrator-Stille                    122 Minuten
+    §447 „steht aus" bei E0/E2             2
+    Baelle beim Integrator (ganzes Haus)  21
+    Rueckstand mein Baum -> Integration   153
+
+Ball: **keiner** — Berichtigung am eigenen Befund. **Kein Ereignis** (§463: Vorratsbefunde und
+Berichtigungen ohne Ball werden gesammelt); geht in die nächste Sammelmeldung, zusammen mit den
+Posten aus §464/§465.
