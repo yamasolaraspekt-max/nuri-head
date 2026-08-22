@@ -1,30 +1,30 @@
-auftrag_id: SPEZ-planner-kennungsmuster   # gen 14 = gen 13 + Posten 2 (Aktionsvokabular) + Hinweg
-generation: 14           # 2026-08-22T12:17:32+0200 — Weg 3: aktion = Tor-Wort; Posten 2 Aktionsvokabular ins SELBE Blatt; vorher Hinweg (basis_nachziehen). Inhalt von gen 13 unveraendert uebernommen.
+auftrag_id: KONZEPT-planner-anschluss
+generation: 15           # 2026-08-22T13:29:42+0200 — gen 14 (A-43 spezifiziert, Auflage + Befehl 2 erledigt; Errata-Posten 3 Dirigent-Bereich bleibt als NACHTRAG zu A-43 offen — siehe unten) . Yama 13:2x: 'die fuenf Z1-Bauten abnehmen und die Anschlussentscheidung treffen'. Du bereitest die Anschlussentscheidung als VORLAGE vor; Yama entscheidet.
 rolle: planner
 sitzung_erwartet: ef8ec540-263d-4f06-8a02-5a2f1beeb572
 worktree: /Users/yamanuri/Documents/ticket-rolle-planner
 branch: rolle/planner
-basis_sha: c11f97ac
-prioritaet: P1           # hinter A-37; nutzt freie Planner-Kapazitaet, beruehrt die A-37-Kette nicht
-aktion: bauen            # TOR-WORT (befristet, README 6f). Deine Taetigkeit: taetigkeit:
-taetigkeit: "spezifizieren (Planner); kein Produktcode"
-gegenstand: "Kleinauftrag 'Kennungsmuster mehrgliedrig': das Muster (?P<kennung>[A-Z]+-?[0-9]+[A-Za-z]?(?:/[0-9A-Za-z]+)?) in scripts/status-erzeugen.sh erkennt Z0-I1, Z1-W1-1, Z2-W0-1, A-37-22b NICHT (dein Befund 11:44). Ziel: EIN erweitertes Muster, das alle sieben gemessenen Formen erkennt, alle heute erkannten Formen unveraendert erkennt, und an das commit-pruefen.sh/pre-commit per A-37-26 weiterhin gebunden bleiben (keine zweite Definition)."
-blatt: "docs/auftraege/aktiv/<naechste freie A-Kennung laut docs/auftraege/REGISTER.md bzw. Tafel — du vergibst sie und nennst die Messung, dass sie frei ist>-kennungsmuster-mehrgliedrig.md — MIT Nachvollzugs-Matrix (ARBEITSREGELN N3; dein Befund 10:54 gilt fuer neue Blaetter ab sofort)"
-hinweg_zuerst: "VOR der Sacharbeit: git -C /Users/yamanuri/Documents/ticket-rolle-planner merge --no-edit auto/hausplaner-integration (kein Rebase, kein Force); bei Konflikt oder 'local changes would be overwritten' (PARKED_DRAFT!) -> NICHTS erzwingen, BASE_BLOCKED melden und ohne Hinweg weiterarbeiten. Danach 'ls -l .githooks/pre-commit' im Ereignis planner-BASIS_NACHGEZOGEN.yaml melden. Ab dann laeuft jeder deiner Commits durch das Tor: TICKET_ROLLE=planner, ACK gen 14, aktion bauen."
-posten_2_aktionsvokabular: "Ins SELBE Blatt: scripts/rollen-tor.sh:360-375 kennt als Arbeit nur bauen|nachbessern, als Pause pausieren|angehalten|angehalten_eingefroren|parken|warten; alles andere exit 7 (Befunde Evaluator 12:04, Plan-Pruefer 12:06, Integrator 12:1x, externe Pruefung B-005). Kriterien: je Rolle ein rollengerechtes Arbeitsverb als Arbeit anerkannt (z. B. spezifizieren, pruefen/erteilen, abnehmen/nachpruefen, transportieren/zustand_nachziehen, steuern, release_pruefen) + 'warten*' und die bestehenden Pausewoerter als Pause + unbekannt bleibt 7; Rot/Gruen je Wort mit Rohausgabe; EINE Liste (keine zweite Definition in pre-commit/commit-pruefen); Grundmenge: alle heute in rollen/*.yaml gesetzten aktion-Werte + die Tor-Woerter der Uebergangszeit (README 6f) laufen gruen. Danach nimmt der Dirigent die Tor-Woerter wieder zurueck."
-kriterien_mindestens:
-  - "Rot/Gruen je Form: A-42, A-37, W-17/1, P-05, Z0-I1, Z1-W1-1, Z2-W0-1, A-37-22b — vorher/nachher je ein Lauf mit Rohausgabe"
-  - "Grundmenge: alle Betreffs mit 'zustand:' im Integrationslog (gemessen: 'zustand: Z' 6, 'zustand: A-' 21) — nach dem Bau erkennt das Muster 100 % davon; Zahl und Befehl im Blatt"
-  - "Eine Definition: grep ueber scripts/ und .githooks/ zeigt genau EINE Musterquelle; commit-pruefen.sh und pre-commit lesen sie (A-37-26 unveraendert)"
-  - "Kein Produktcode; keine STATUS.md-Aenderung durch den Bau selbst; Negativprobe: 'zustand: FOO' (keine Kennung) wird weiterhin abgewiesen"
-  - "Folgeposten im Blatt benannt (nicht bauen): die fuenf Z1-W1-Zustandscommits als NICHT-leere Commits durch den Integrator nach Transport"
-reihenfolge: "du SPEZIFIZIERT -> Plan-Pruefer DoR NACH der A-37-Nachpruefung -> Generator baut NACH A-37 ABGENOMMEN + Transport -> Evaluator"
-verboten:
-  - Z0-I1 PARKED_DRAFT anfassen; A-37-Blatt anfassen (eingefroren, Errata-Vorrat bleibt Vorrat)
-  - scripts/ aendern (Generator); Kriterien fuer A-37 nachschreiben
-  - eigene Kennungsvergabe ohne Messung der Freiheit
+basis_sha: 1e5ac476
+prioritaet: P0
+aktion: bauen            # TOR-WORT = Arbeit erlaubt (README 6f)
+taetigkeit: "konzipieren (Planner): Anschluss-Vorlage fuer Yama — KEIN Blatt, KEIN Bau, KEINE Produktaenderung"
+posten_1_zuerst_kurz: "A-43 Errata-Posten 3 (dirigent-errata-posten3-dirigent-bereich.yaml 13:25): ein Nachtrag ins A-43-Blatt (Dirigent-Bereich += docs/backlog/ docs/fortschritt/, Rot/Gruen + Negativprobe STATUS.md), ersetzt_sha 1e5ac476; Abschlussereignis planner-CODE_FERTIG-nachtrag-posten3.yaml. Danach Posten 2."
+posten_2_anschluss_vorlage: |
+  Gegenstand: 'Werkzeugkasten kommt nicht beim Benutzer an' (Bewertung 22.08. 10:39, Abschnitt 3.2; Plan-Pruefer §300: 27 von 160
+  Hausplaner-Modulen ohne Ladeweg, toolRegistry.ts 13 Werkzeuge seit 15.08. unveraendert, Register 37 BESCHRIEBEN / 2 ENTWORFEN).
+  Liefern: docs/konzept/anschluss-entscheidung-2026-08-22.md (ENTWURF, Mess-SHA nennen) mit
+    a) frischer Messung: Liste der Module ohne Ladeweg (Pfad, Zeilen, was es tut, Zielwerkzeug/Menue, vorhandene Tests), Befehl + STAND;
+    b) Gruppierung in 3-5 Anschlusspakete (z. B. 'Massenermittlung', 'Dach', 'Treppe', 'Pruefungen/Badges') mit je: Nutzerwert, Aufwand
+       (klein/mittel/gross, Zeilen), Risiko, Abhaengigkeit (Z0-I1, Browserabnahme), Reihenfolge;
+    c) je Paket ein Vorschlag 'anschliessen / parken / verwerfen' mit Begruendung — EMPFEHLUNG ausgesprochen, Entscheidung bei Yama;
+    d) was NICHT angeschlossen werden sollte und warum (zweiter Weg gebaut, erster liegt — deckenMesh.ts-Fall);
+    e) das Erledigt-Kriterium je Paket (bedienbar im Browser, Browserabnahme, Reifegrad 'BROWSERABGENOMMEN').
+  Kein Bau, keine toolRegistry-Aenderung, kein Produktcode. Abschluss: planner-CODE_FERTIG.yaml (SPEZIFIZIERT-Aequivalent 'KONZIPIERT'
+  als abschlussbegriff-Feld) mit ergebnis_sha, gelesen_bis. Zeitrahmen: diese Stunde; lieber 80 % gemessen als 100 % geschaetzt.
+z0_i1: "bleibt geparkt (PARKED_DRAFT unberuehrt) bis Yamas Y-13-GRANT als root vorliegt — dann gen 16."
+verboten: [Produktcode, toolRegistry aendern, Blatt-Kriterien fuer Anschluss schreiben (kommt nach Yamas Entscheidung), PARKED_DRAFT anfassen, --no-verify]
 steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
-meldepflicht: "AUFTRAG_GESTARTET mit endstand_sha (c11f97ac) vor der Arbeit; Abschluss SPEZIFIZIERT + ergebnis_sha; Commit nur ueber commit-pruefen.sh (TICKET_ROLLE=planner, NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules) im eigenen Worktree"
+meldepflicht: "AUFTRAG_GESTARTET mit endstand_sha + gelesen_bis; Abschluss mit ergebnis_sha + gelesen_bis; Commit via commit-pruefen.sh (TICKET_ROLLE=planner, NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules) im eigenen Worktree (docs/konzept/ ist dein Pfad)"
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/SPEZ-planner-kennungsmuster/planner-ack.yaml
-erstellt: "2026-08-22T12:03:49+0200 Dirigent (atomar veroeffentlicht; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/KONZEPT-planner-anschluss/planner-ack.yaml
+erstellt: "2026-08-22T13:29:42+0200 Dirigent (atomar; Uhr: date)"
