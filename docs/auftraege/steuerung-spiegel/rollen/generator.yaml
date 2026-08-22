@@ -1,34 +1,23 @@
-auftrag_id: BAU-generator-A-43
-generation: 11           # 2026-08-22T12:56:16+0200 — DoR A-43 ERTEILT_MIT_AUFLAGE (Plan-Pruefer 794cd018, Pruefstand Blatt 47dfbfb2). Ausloeser-gebunden: NACH dem Planner-Nachtrag zur Auflage A-43-11. gen 10 (warten) beendet.
+auftrag_id: NACHLIEFERUNG-generator-A-43-posten3
+generation: 12           # 2026-08-22T13:41:49+0200 — gen 11 abgeschlossen (CODE_FERTIG 8a08d625, ABGENOMMEN fbb8a73a). Posten 3 (Dirigent-Bereich, Planner ebb798d7; Plan-Pruefer ERTEILT_MIT_AUFLAGE A-43-13 907397a9) als Nachlieferung, Ausloeser-gebunden.
 rolle: generator
 sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8
-sitzung_gesperrt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b   # unveraendert
+sitzung_gesperrt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b
 worktree: /Users/yamanuri/Documents/ticket-rolle-generator
 branch: rolle/generator
-basis_sha: c82df498      # dein Endstand; Integration traegt ihn (f6792ec3). Vor dem Bau: Hinweg (git merge --no-edit auto/hausplaner-integration mit Rollenmarke 'generator: Hinweg — ...'), damit Blatt A-43 und aktuelle Skripte im Baum liegen.
-prioritaet: P0
-aktion: bauen            # TOR-WORT = Arbeit (hier zugleich zutreffend)
-taetigkeit: "bauen (Generator): A-43 Kennungsmuster mehrgliedrig + Aktionsvokabular; kein Produktcode"
+basis_sha: 8a08d625
+prioritaet: P1
+aktion: bauen
+taetigkeit: "bauen (Generator): A-43 Posten 3 — Dirigent-Bereich in rollen-tor.sh um docs/backlog/ und docs/fortschritt/ erweitern"
 ausloeser:
-  - "ereignisse/SPEZ-planner-kennungsmuster/planner-CODE_FERTIG-nachtrag-auflage*.yaml ODER planner-SPEZIFIZIERT*auflage*.yaml (Muster; juengster Stand per SHA) — vorher NICHT beginnen"
-blatt: "docs/auftraege/aktiv/A-43-kennungsmuster-mehrgliedrig.md @ rolle/planner — Stand laut Planner-Nachtrag (ersetzt 47dfbfb2); 12 Kriterien A-43-1..12 (Posten 1: Muster, 7 Formen, Grundmenge mit STAND; Posten 2: Aktionsvokabular je Rolle, warten* = Pause, unbekannt = 7, EINE Liste) + N3-Matrix; DoR-Votum docs/DOR-A-43-plan-pruefer.md @ rolle/plan-pruefer 794cd018"
+  - "ereignisse/KONZEPT-planner-anschluss/planner-*auflage*13*.yaml ODER ereignisse/SPEZ-planner-kennungsmuster/planner-*auflage*13*.yaml (Halbsatz Ortsangabe A-43-13; Muster; juengster Stand) — vorher NICHT beginnen"
 jetzt: |
-  1. Ausloeser abwarten; dann ACK gen 11, Lease leases/BAU-generator-A-43/, Startmeldung MIT endstand_sha (Blatt-SHA aus dem Nachtrag) + ausgangs_sha (dein HEAD nach Hinweg).
-  2. Bauen nach Blatt: EINE Musterquelle (scripts/status-erzeugen.sh) — commit-pruefen.sh/pre-commit bleiben per A-37-26 daran gebunden; EINE Aktionsliste im Tor (rollen-tor.sh), rollengerechte Arbeitsverben als Arbeit, warten*/Pausewoerter als Pause, unbekannt bleibt 7; Meldungstexte :374-375 mit den Listen gleichziehen (Plan-Pruefer-Hinweis, kein Kriterium — Ordnung).
-  3. Je Kriterium Rot (c82df498) -> Gruen (Ergebnis) mit dem Messbefehl DES BLATTES (zitieren, nicht nachbauen — Plan-Pruefer P-02/4), Rohausgabe, echo $?. Grundmengen mit STAND-SHA. Negativproben nur im Wegwerf-Repo/--probe-root.
-  4. Commits NUR ueber commit-pruefen.sh (TICKET_ROLLE=generator, NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules); vor JEDEM Commit rollen/generator.yaml + Digest neu lesen. Kein Produktcode (git diff --stat -- resources/ app/ leer).
-  5. generator-CODE_FERTIG.yaml mit endstand_sha/ergebnis_sha, Pfaden, Belegen je Kriterium; Abschlussmeldung CODE_FERTIG; Lease freigeben. Nachtrag = -nachtrag*.yaml mit ersetzt_sha/ersetzt_datei.
-verboten:
-  - Produktcode; DB-Laeufe; gemeinsamer Checkout; Beleg-Baum; W0-5-Staende; rueckweg.py auf realen Baeumen; TICKET_ROLLE fremd; --no-verify
-  - Kriterientext aendern (nur N3-Matrix-Spalten des Baus fuellen); eigene Abnahme; nacktes git commit; Rebase/Amend/Force
-erlaubte_pfade:
-  - scripts/status-erzeugen.sh
-  - scripts/rollen-tor.sh
-  - scripts/commit-pruefen.sh
-  - .githooks/pre-commit
-  - "docs/auftraege/aktiv/A-43-kennungsmuster-mehrgliedrig.md NUR Nachvollzugs-Matrix (Bau-Spalten)"
-  - "eigener Baubericht im Worktree; Wegwerf-Repo-Skript im Scratchpad"
+  1. Ausloeser abwarten; Hinweg (git merge --no-edit auto/hausplaner-integration, Rollenmarke), ACK gen 12, Lease, Startmeldung mit endstand_sha (Blatt-SHA) + gelesen_bis.
+  2. A-43-13 nach Blatt bauen: Dirigent-Bereich += docs/backlog/ docs/fortschritt/ (weiterhin NICHT scripts/, .githooks/, docs/STATUS.md, docs/BEFUNDNOTIZEN.md, Produktcode). Rot/Gruen + Negativprobe NUR im Wegwerf-Repo unter TMPDIR (A-37-22d) — nie als TICKET_ROLLE=dirigent im Bestand.
+  3. CODE_FERTIG mit endstand_sha/ergebnis_sha/gelesen_bis; Lease frei. Produktcode leer.
+verboten: [Produktcode, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd im Bestand, --no-verify, Kriterientext aendern, eigene Abnahme, Rebase/Amend/Force]
+erlaubte_pfade: [scripts/rollen-tor.sh, "docs/auftraege/aktiv/A-43-kennungsmuster-mehrgliedrig.md NUR Matrix-Bauspalten", "eigener Baubericht"]
 steuerungshandlungen_erlaubt: [ACK, Lease-Heartbeat, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/BAU-generator-A-43/generator-ack.yaml
-erstellt: "2026-08-22T12:56:16+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/NACHLIEFERUNG-generator-A-43-posten3/generator-ack.yaml
+erstellt: "2026-08-22T13:41:49+0200 Dirigent (atomar; Uhr: date)"

@@ -1,25 +1,22 @@
-auftrag_id: INT-zustand-kette
-generation: 9            # 2026-08-22T13:05:19+0200 — gen 8 vollzogen (Punkt 1 aec713a6, Punkt 3 verworfen mit Beleg, Punkt 2 entfallen, Punkt 4 laufend). Neu: Statusplatz A-43 (Plan-Pruefer 13:00, ARBEITSREGELN §5) + Regel fuer kuenftige Blaetter.
+auftrag_id: INT-zustand-z-welle
+generation: 10           # 2026-08-22T13:41:49+0200 — deine Standmeldung 13:37:47 ('elf Posten setzbar, warten auf Weisung'): hier ist sie. A-43 ABGENOMMEN 12/12 (fbb8a73a), Bau 8a08d625 bereits in der Kette (3b3ec356). gen 9 Posten 1/2 erledigt.
 rolle: integrator
 sitzung_erwartet: 03737d75-b216-4299-b4ea-595407d3e457
 worktree: /Users/yamanuri/Documents/ticket
 branch: auto/hausplaner-integration
-basis_sha: 1bc0d415
+basis_sha: fafcc882
 prioritaet: P0
-aktion: bauen            # TOR-WORT = Arbeit erlaubt (README 6f)
-taetigkeit: "transportieren + zustand_nachziehen (Integrator); kein Produktcode"
+aktion: bauen            # TOR-WORT; nach deinem Hinweg (A-43-Vokabular) gilt 'zustand_nachziehen' — Umstellung folgt als gen 11 fuer alle Rollen
+taetigkeit: "zustand_nachziehen + transportieren (Integrator); kein Produktcode"
 jetzt:
-  1: "Statusplatz A-43: Tafelzeile UND Datensatz-Block in docs/STATUS.md (Wortlaut status-erzeugen.sh; A-Kennung, vom Muster erkannt): zustand BEREIT, dor_beleg = Plan-Pruefer ERTEILT_MIT_AUFLAGE 794cd018 (Runde 1 NICHT ERTEILT 51d26c29 ersetzt), blatt = rolle/planner 47dfbfb2 (bzw. Auflage-Nachtrag-SHA, sobald vorhanden), bau = noch offen. EIN nicht-leerer Commit, git show --stat danach. Beleg: §5 ('Wer schneidet, legt den Platz an') — der Planner kann STATUS.md nicht schreiben (§16: nur du), deshalb hier."
-  2: "Regel ab jetzt: bei JEDEM Transport eines neuen Blatts (docs/auftraege/aktiv/<Kennung>-*.md ohne Block) legst du im Transportlauf den Block mit zustand ENTWURF + 'dor_beleg: steht aus' an — Fenster zwischen Schnitt und Pruefung geschlossen (Praezedenz W-38 12.08.). Gilt fuer A-Kennungen sofort, fuer Z-Kennungen erst nach A-43-Transport (Musterluecke)."
-  3: "Transportkette weiter wie gen 7/8 (Planner-Blaetter, Plan-Pruefer, Evaluator-Voten, Generator-Bau A-43 NACH generator-CODE_FERTIG*, rolle/dirigent). Jede Abschlussmeldung mit endstand_sha, ergebnis_sha, gelesen_bis."
-verboten:
-  - "Zustandscommits fuer Z-Kennungen (Z0-*, Z1-*, Z2-*) bis das erweiterte Kennungsmuster (A-43) transportiert ist"
-  - "Produktcode; --no-verify; core.hooksPath aendern; leere Commits; Transport von A-38/A-39/Z1-W1-5-1-Bauten als Fortschritt"
-erlaubte_pfade:
-  - docs/STATUS.md
-  - docs/BEFUNDNOTIZEN.md
-  - "Rueckweg-Commits (Merge/FF) der Rollenzweige"
+  1: "Zustandscommit A-43 ABGENOMMEN (Bau 8a08d625, Beleg fbb8a73a; Posten 3 als 'Nachlieferung offen' im Block), A-Kennung."
+  2: "Die elf Z-Zustandscommits, je EIN nicht-leerer Commit mit Votum-/Bau-SHA, Reihenfolge: (a) Z2-W0-5 ABGENOMMEN 28ca0834 / 639a7a32 + Satz zu Bau B ef7a8c89 (Beleg/Vorrat, nicht transportiert, Entscheidung Yama); (b) Z1-W1-3 ABGENOMMEN b9fe55c0; (c) Z1-W1-4 ABGENOMMEN 36eb8b63; (d) Z1-W1-1 CODE_FERTIG (Bau b3c6ac29; Votum d40adbf5 Teil-ENV_BLOCKED, Browser offen); (e) Z1-W1-2 CODE_FERTIG (Bau 60c04eef; Votum 27143f96 4/5, E ENV_BLOCKED); (f) Z1-W1-5 NACHBESSERN (Bau da86c59d; Votum a4144ff4; Nachbesserung 7eaab966 Herkunft Direktcommit — Nachpruefung laeuft); (g)-(k) die fuenf Z2-W0 (314ea991, 69c85d01, 5831c06a, 29eb791c, + der fuenfte laut Plan-Pruefer §318) CODE_FERTIG — Zustand NUR nach Beleglage, kein Votum erfinden; wo ein Votum existiert, dessen Ergebnis."
+  3: "Jeder Zustandscommit ueber das Muster (status-erzeugen.sh), Mustersperre fuer Mehrfachbetreffe bleibt; 'git show --stat' je Commit im Abschlussereignis. Kein Handtext in STATUS.md ausser dem erzeugten Block."
+  4: "Transportkette weiter (Planner ebb798d7/A-43 Posten 3, Plan-Pruefer, Evaluator-Voten, Generator-Nachlieferung)."
+abschluss: "ZUSTAND_NACHGEZOGEN mit Liste (Kennung -> Zustand -> Commit-SHA), endstand_sha, ergebnis_sha, gelesen_bis."
+verboten: [Produktcode, --no-verify, core.hooksPath aendern, leere Commits, Voten erfinden]
+erlaubte_pfade: [docs/STATUS.md, docs/BEFUNDNOTIZEN.md, "Rueckweg-Commits der Rollenzweige"]
 steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/INT-zustand-kette/integrator-ack.yaml
-erstellt: "2026-08-22T13:05:19+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/INT-zustand-z-welle/integrator-ack.yaml
+erstellt: "2026-08-22T13:41:49+0200 Dirigent (atomar; Uhr: date)"

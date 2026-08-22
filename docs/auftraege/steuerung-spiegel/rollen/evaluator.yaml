@@ -1,27 +1,25 @@
-auftrag_id: ABNAHME-evaluator-A-43
-generation: 10           # 2026-08-22T13:26:42+0200 — gen 9 abgeschlossen (Z2-W0-5 ABGENOMMEN 8/8, 639a7a32). A-43 VOR Posten 2 des Rueckstands: A-43 entsperrt die Z-Zustandscommits (auch fuer W0-5) und die Ruecknahme der Tor-Woerter.
+auftrag_id: NACHPRUEFUNG-evaluator-Z1-W1-5
+generation: 11           # 2026-08-22T13:41:49+0200 — gen 10 abgeschlossen (A-43 ABGENOMMEN 12/12, fbb8a73a). Yama 13:3x: 'die fuenf Z1-Bauten abnehmen' — W1-3/W1-4 sind abgenommen (Zustandscommits laufen), W1-1/W1-2 haengen an Browser+Test-DB (Y-13 GRANT bei Yama), W1-5 ist JETZT pruefbar.
 rolle: evaluator
 sitzung_erwartet: 303cefb6-35fd-4c36-9aca-ed10515f59b3
 worktree: /Users/yamanuri/Documents/ticket-rolle-evaluator
 branch: rolle/evaluator
-basis_sha: 639a7a32
+basis_sha: fbb8a73a
 prioritaet: P0
-aktion: bauen            # TOR-WORT = Arbeit erlaubt
-taetigkeit: "abnehmen (Evaluator): A-43 Posten 1 (Kennungsmuster mehrgliedrig) + Posten 2 (Aktionsvokabular) als EINE Lieferung"
-ausloeser: "ereignisse/BAU-generator-A-43/generator-CODE_FERTIG*.yaml — liegt vor (ergebnis_sha 8a08d625)"
+aktion: bauen            # TOR-WORT (Umstellung auf 'nachpruefen' folgt nach deinem Hinweg auf den A-43-Stand)
+taetigkeit: "nachpruefen (Evaluator): Z1-W1-5 nach NACHBESSERN a4144ff4"
 gegenstand: |
-  Unabhaengige Abnahme von A-43 (Blatt docs/auftraege/aktiv/A-43-kennungsmuster-mehrgliedrig.md @ rolle/planner 1e5ac476 — juengster
-  Stand per SHA; DoR ERTEILT_MIT_AUFLAGE 794cd018, Auflage erfuellt a7035fb7, Befehl 2 repariert 1e5ac476): Generator-Endstand
-  8a08d625 auf rolle/generator, Basis c82df498. 12 Kriterien A-43-1..12, je rot (c82df498) -> gruen (Endstand)
-  mit dem Messbefehl DES BLATTES (zitieren, nicht nachbauen; Plan-Pruefer-Hinweis Grundmenge 87/90 zur Kenntnis), Negativproben selbst
-  ausloesen (im Wegwerf-Repo/--probe-root, wo Baeume beruehrt wuerden), Produktcode leer, EINE Musterquelle / EINE Aktionsliste, A-37-26
-  weiter gebunden. Posten 3 (Dirigent-Bereich docs/backlog/+docs/fortschritt/, Errata 13:25) ist NICHT Teil dieser Lieferung — er kommt
-  als Nachlieferung (wie A-37-20) und wird getrennt nachgeprueft.
-meldepflicht: "AUFTRAG_GESTARTET mit endstand_sha (Generator-Endstand) + gelesen_bis; Abschluss ABGENOMMEN/NACHBESSERN + AUFTRAG_ABGESCHLOSSEN mit endstand_sha, ergebnis_sha, gelesen_bis; Votum im eigenen Worktree (commit-pruefen.sh, TICKET_ROLLE=evaluator)"
-lease: "leases/ABNAHME-evaluator-A-43/ VOR der Pruefung; freigeben nach Votum."
-danach: "gen 11 = Abnahmerueckstand Posten 2 (Z2-W0-7), es sei denn A-43 geht in NACHBESSERN."
-verboten: [Produktcode, Reparaturen, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Commit ausserhalb des eigenen Worktrees]
+  Dein Votum a4144ff4 (NACHBESSERN, 'eine Zahl') zu Z1-W1-5 (K-1 insulationType-Ausweis, Bau da86c59d). Die Nachbesserung 7eaab966 entstand
+  als DIREKTCOMMIT im Integrations-Checkout (Abweichungsprotokoll 21.08.) und ist deshalb prozessual nicht abnahmefaehig gewesen; sie ist
+  heute Bestandteil des Integrationsstands. Pruefe den INHALT am aktuellen Integrationsstand (SHA nennen): ist der eine Mangel aus a4144ff4
+  behoben (rot a4144ff4-Stand -> gruen heute), haelt die Gegenprobe (Z1-W1-5-Kriterien unveraendert, Tests 1778+/0, tsc 0, Produktcode-Diff
+  nur die Ausweiszeilen)? Herkunft der Nachbesserung im Votum AUSDRUECKLICH benennen (Direktcommit, seitdem Tor A-37-25 wirksam) —
+  Votum ABGENOMMEN / NACHBESSERN nach Inhalt. Kein Kriterium nachschreiben; Browser ist fuer W1-5 nicht verlangt (Kriterien pruefen).
+meldepflicht: "AUFTRAG_GESTARTET mit endstand_sha + gelesen_bis; Abschluss mit endstand_sha, ergebnis_sha, gelesen_bis"
+lease: "leases/NACHPRUEFUNG-evaluator-Z1-W1-5/"
+danach: "gen 12 = Nachpruefung A-43 Posten 3 (sobald Generator-Nachlieferung CODE_FERTIG) ODER Abnahmerueckstand Posten 2 (Z2-W0-7) — je nachdem, was zuerst vorliegt; W1-1/W1-2 Browser sobald Y-13 GRANT vorliegt (Yama)."
+verboten: [Produktcode, Reparaturen, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Commit ausserhalb des eigenen Worktrees, Produktiv-DB]
 steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/ABNAHME-evaluator-A-43/evaluator-ack.yaml
-erstellt: "2026-08-22T13:26:42+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/NACHPRUEFUNG-evaluator-Z1-W1-5/evaluator-ack.yaml
+erstellt: "2026-08-22T13:41:49+0200 Dirigent (atomar; Uhr: date)"
