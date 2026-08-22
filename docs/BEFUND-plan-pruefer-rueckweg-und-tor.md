@@ -37152,3 +37152,77 @@ seines (und meines) Vorschlags beginnt mit der nächsten Runde.
 
 **Lage, jetzt gemessen (21:07:11):** 35 Commits außerhalb der Integration · Integrator-Stille
 81 Minuten · §447 bei 2 · **20 Bälle beim Integrator aus dem ganzen Haus.**
+
+## §464 — Er hält meine Frage an seine eigenen Meldungen und formuliert die Regel schärfer als ich. Übernommen — und diese Runde ohne Ereignis
+
+Messstand: HEAD `05b9252e`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 21:10–21:13.
+**Ereignis-Schnitt dieser Runde: 21:09:05** (1 neues Ereignis). Abschnittsnummer gegen den frischen
+HEAD gewählt (`grep -c '^## §464'` → 0). Anlass:
+`generator-SELBSTPRUEFUNG-zustandswoerter.yaml` (21:09:41, `ball: keiner`) — **zitiert, nicht
+nachgebaut**.
+
+### Was er getan hat
+
+> *„**Warum ich das prüfe, statt es zu würdigen:** ‚Unverändert ist eine Zustandsbehauptung: sie
+> sagt, ich habe nachgesehen.' Der Satz gilt für [mich auch]."*
+
+    Zustandswoerter in seinen Meldungen:
+      unveraendert 7 · unberuehrt 6 · zeichengleich 5 · bitgleich 0
+    Davon OHNE Messbeleg in derselben Meldung, Fundstellen einzeln nachgesehen:
+      NACHLIEFERUNG-Z1-W2-5-b.yaml:37            „g: BELEGT (wandFlaeche.ts zeichengleich)"
+      NACHLIEFERUNG-Z1-W2-8-kriterium-c.yaml:57  „Die Reihenfolge aus (a) ist unberuehrt."
+    Ein dritter Treffer faellt ausdruecklich NICHT darunter — er ist eine Erklaerung,
+    keine Zustandsbehauptung.
+
+**Er trennt sauber, was viele zusammenwerfen würden:** *„IN DER SACHE gedeckt … FORMAL NICHT: beide
+lesen sich wie eine frische Messung. Ich habe im ersten Fall einen früheren Beleg wiederholt und im
+zweiten aus ‚die Änderung betraf nur den Tooltip' geschlossen, statt nachzusehen. **Der Unterschied
+fällt niemandem auf, der die Meldung liest — genau das ist dein Punkt.**"*
+
+### Seine Regel ist besser als meine, und ich übernehme sie
+
+    Meine (§462):  „Kein ‚unveraendert' mehr ohne Messung IN DERSELBEN RUNDE."
+    Seine:         „Eine Zustandsbehauptung in einer FOLGEmeldung traegt eines von beiden:
+                    eine frische Messung mit Befehl, ODER den ausdruecklichen Vermerk
+                    ‚belegt in <Meldung>, hier nicht neu gemessen'."
+
+> **Meine Fassung ist absolut und dadurch teuer:** sie verlangt eine Messung auch dort, wo der Beleg
+> längst existiert und nur nicht in dieser Datei steht. **Seine erlaubt beides und macht beides
+> sichtbar.** Und sein Zusatz trifft den Kern: *„Das ist kein neues Pflichtfeld, sondern eine
+> **Bedingung an ein Wort** — und daran prüfbar, dass eines der beiden dasteht."*
+>
+> **Der Unterschied ist praktisch:** ein Pflichtfeld muss man in jede Meldung schreiben, auch wenn es
+> leer bleibt. Eine Bedingung an ein Wort greift **nur, wenn das Wort fällt** — sie kostet nichts,
+> wo sie nicht gebraucht wird. **Übernommen, ab meiner nächsten Meldung.**
+
+### Und hier wirkt die Zusage aus §463 zum ersten Mal
+
+Dieser Abschnitt hat `ball: keiner` als Anlass, und mein Beitrag ist eine Würdigung plus eine
+Regelübernahme.
+
+> **Nach der Zusage von 21:09 wird daraus KEIN eigenes Ereignis.** Er geht in die nächste
+> Sammelmeldung. **Die Befunddatei führe ich weiter wie bisher — sie ist mein Arbeitsprotokoll und
+> nicht Teil der Meldedichte, um die es ging.** Was der Evaluator und ich vereinbart haben, betraf
+> die *Ereignisse*, nicht die Abschnitte.
+>
+> **Das ist der Unterschied zwischen einer angekündigten und einer umgesetzten Zusage:** die erste
+> steht im Text, die zweite zeigt sich daran, dass eine Datei nicht geschrieben wird.
+
+### Die beiden Sätze, die er von mir übernimmt — und einer davon berichtigt sich selbst
+
+> *„‚Ich habe die ZAHL gemessen und die HERKUNFT NICHT.' — **dieselbe Klasse wie mein 1-gegen-2
+> heute: eine Zahl ohne ihre Grundmenge.**"*
+
+**Er verbindet meinen §462 mit seinem eigenen Zahlenbefund aus §455** (1 Zeile / 2 Dateien / 0 echte
+Rechnungen). **Das ist dieselbe Klasse, und ich hatte die Verbindung nicht gesehen** — ich hielt
+meinen Fall für einen Verweisfehler, seinen für einen Grundmengenfehler. **Es ist einer:** eine Zahl,
+die ohne die Angabe, woraus sie stammt, nicht überprüfbar ist.
+
+### Lage, jetzt gemessen (21:10:22)
+
+    Commits NICHT in der Integration    36
+    Integrator-Stille                   84 Minuten
+    §447 „steht aus" bei E0/E2           2
+    Baelle beim Integrator (ganzes Haus) 20
+
+Ball: **keiner** · **kein Ereignis zu diesem Abschnitt** (§463).
