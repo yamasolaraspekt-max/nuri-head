@@ -39485,3 +39485,146 @@ Auch der Griff war unsauber: `ls-tree | grep -i 'TestDatenbankGuard' | head -1` 
 meldete „0 Treffer" — ein sauberes, beruhigendes, **falsches** Ergebnis. Gefangen nur, weil die
 Gegenprobe über den ganzen Baum eine Datei fand, die es nach der ersten Messung nicht hätte geben
 dürfen.
+
+## §492 — Posten 28 erweitert Kriterium d, steht aber noch in keinem Blatt — und Yamas Migrationsregel greift genau an der Naht, die E4 überschreitet
+
+Stand: HEAD `0f6786ac`, Baum 0, gen 11, Digest gleich. Zeit 23:01.
+
+Um **22:53:20** hat der Dirigent Posten 28 abgelegt (`cfd7e52e`, in
+`YAMA-ENTSCHEIDUNGEN-2026-08-22.md`): Das Folgeblatt **Z1-E4-2 von 22:52 entfällt**, die
+PHP-Spiegelung geht stattdessen **in Z1-E4-1** — „Halbsatz zu Kriterium d: 422 bei unbekanntem
+Level für `nodes`/`ceilings`/`roofs`/`foundationSlabs`, je Sammlung ein PHP-Test, Kommentar
+`:51-52` durch Tests wahr oder gestrichen." Begründung: „Fenster offen nur während E4 das Schema
+anfasst; ein Durchlauf statt eines neuen Blatts (Nachtrag 1.6)."
+
+Damit ist **mein DoR-Gegenstand betroffen** — Kriterium d ist genau das, wogegen ich am
+22:32 erteilt habe. Drei Feststellungen.
+
+### 1. Der Halbsatz steht noch in keinem Blatt, und niemand hat den Ball
+
+Gemessen am Integrationsstand:
+
+```
+Blatt-Blob @ Integration      5a43528b
+Blob bei meiner DoR-Bestätigung  5a43528b   ← identisch, 298 Zeilen
+'Spiegel' im Blatt: 0 Treffer · 'ceilings': 1
+```
+
+Kriterium d lautet dort unverändert: „Dokument **mit** Platte speichert und lädt (PHP 200, nicht
+422); Bestandsdokument **ohne** Platte lädt unverändert."
+
+Und: **kein Ereignis seit 22:53 trägt den Auftrag für den Halbsatz.** Die Anordnung steht in einem
+Entscheidungsdokument, nicht in der Ereigniskette — der Planner, der sie einarbeiten müsste, hat
+sie nicht zugestellt bekommen.
+
+**Der Generator baut seit 22:37 gegen `998ff9f2`.** Solange der Halbsatz nicht im Blatt steht, baut
+er gegen ein Kriterium d, das eine Stufe kleiner ist als das beschlossene. Das ist kein Fehler von
+ihm — er kann nur bauen, was zugestellt ist.
+
+### 2. Die Erweiterung ist messbar — und deckt sich mit meiner Zahl
+
+Als DoR-Prüfung der Erweiterung, vorgezogen, damit sie beim Einarbeiten nicht erst gestellt wird:
+
+| Anordnung | messbar? |
+|---|---|
+| 422 für vier Sammlungen | **ja** — vier Testfälle, zählbar |
+| je Sammlung ein PHP-Test | **ja** — zählbar |
+| Kommentar `:51-52` wahr **oder** gestrichen | **ja** — per Diff prüfbar |
+
+Und sie deckt sich mit §490: `nodes` steht bereits, **drei** kommen hinzu. Meine dortige Aussage
+(„es sind genau drei Schleifen, keine versteckte vierte") gilt unverändert — sie ist nur nicht mehr
+Zuarbeit für ein Folgeblatt, sondern für den Halbsatz selbst.
+
+**Ein Punkt, den der Halbsatz sauber trennen muss:** Kriterium d spricht heute vom **Laden**
+(„Bestandsdokument lädt unverändert"), die Anordnung vom **Speichern** („bekäme beim Speichern
+422 — gewollt"). Das ist kein Widerspruch, solange beide Wörter im Halbsatz stehen. Fehlt die
+Trennung, entsteht einer.
+
+### 3. Yamas eigene Regel greift genau an der Naht, die E4 überschreitet
+
+Yamas Wortlaut, den der Dirigent zitiert:
+
+> „eine Zeile, solange gebaut wird — **eine Migration, sobald das Schema auf 4 steht**; ein Test,
+> der die Spiegelung prüft, statt eines Kommentars, der sie behauptet"
+
+Gemessen: `SCHEMA_VERSION = 3 as const`. **Und E4 setzt es auf 4** — das ist Kriterium d selbst
+(„Schema 3→4"). Das Fenster, in dem „eine Zeile" genügt, wird also **von genau dem Bau geschlossen,
+in dem die Zeile eingebaut wird.**
+
+Daraus folgt eine Frage, die ich stellen, aber nicht beantworten kann: **Wie viele
+Bestandsdokumente tragen heute eine verwaiste Decke oder ein verwaistes Dach?** Sie bekämen nach
+E4 beim nächsten Speichern ein 422. Die Anordnung hält das für unproblematisch („gewollt, Client
+lehnt es heute schon ab") — das ist plausibel, aber **ungemessen**.
+
+Ich darf es nicht messen: Die Dirigenten-Entscheidung vom 22:01:46 verbietet jeden Zugriff auf
+`ticket`, und CLAUDE.md hält fest, dass Produktdaten nicht als Nebenwirkung verändert werden.
+**Ich melde die Frage, ich messe sie nicht.** Wer sie beantworten will, braucht Yamas Auftrag und
+einen lesenden Weg, der nicht über eine Testverbindung läuft.
+
+Zwei Migrationen mit Hausplaner-Bezug existieren
+(`2026_07_16_…create_hausplaner_foundation_tables`,
+`2026_07_26_…configurator_packages`) — die Bauform für den Fall, dass Yamas Migrationssatz greift,
+ist also vorhanden und muss nicht erfunden werden.
+
+## §493 — Posten 29 beantwortet meine Regelfrage; die Schlussprobe hält, und der Messbefehl braucht eine Zeile mehr
+
+Stand: HEAD `3857a069`, Baum 0, gen 11, Digest gleich. Zeit 23:04.
+
+Um **22:59:02** hat der Dirigent Posten 29 abgelegt (`c710f0bc`) — meine Regelfrage aus §491,
+beantwortet in der von mir vorgeschlagenen Richtung:
+
+> „**VERBINDEN verboten** (jede Verbindung zu `ticket` aus Tests/Proben/Skripten/Rollenbäumen);
+> **NENNEN als abzulehnender Wert erlaubt und erwünscht** (Negativproben müssen den String
+> enthalten). **Messbefehl = Verbindungsaufrufe, nicht String-Treffer.**"
+
+Der letzte Satz stammt nicht von mir und ist der wertvollste: Er macht aus der Unterscheidung eine
+**Messanweisung**. Damit ist die Teilstring-Lehre, die mich heute mehrfach beschäftigt hat
+(A-37-22e, §487, §491), in Regelform gegossen — an einer Stelle, an der ein falscher Griff eine
+Schutzgrenze scheinbar verletzt aussehen ließe.
+
+### Schlussprobe nach dem neuen Maßstab: die Grenze hält
+
+```
+ECHTE Verbindungsaufrufe auf blankes 'ticket':   0
+Die zwei echten Aufrufe:
+  TestDatenbankGuardTest.php:53   verbindeMit('ticket_g1b1_testing')
+  TestDatenbankGuardTest.php:89   verbindeMit('information_schema')
+scripts/: ticket_testing in 7 Dateien · blankes ticket als DB-Ziel: 0
+```
+
+Beides genau das, was Posten 29 erlaubt.
+
+### Der Messbefehl braucht eine Zeile mehr, als die Regel nennt
+
+Mein erster Versuch setzte die Regel wörtlich um — ich suchte **Aufrufe** statt Strings:
+
+```
+grep -oE "verbindeMit\('[a-z_0-9]+'\)"   →   verbindeMit('ticket')   1 Treffer
+```
+
+**Und lief trotzdem in die Falle.** Der Treffer steht in Zeile 76 — einer **Kommentarzeile**, die
+den behobenen Vorzustand dokumentiert (§491). Ein Kommentar, der einen Aufruf zitiert, sieht für
+jeden Mustervergleich aus wie ein Aufruf.
+
+Erst mit ausgeschlossenen Kommentarzeilen (`//`, `*`, `/*`, `#` nach Einrückung) fiel der Treffer
+weg und die Zahl wurde **0**. Die Regel sagt richtig „Verbindungsaufrufe, nicht String-Treffer" —
+aber ein Muster, das nach Aufrufen sucht, ist immer noch ein String-Treffer. **Wer sie umsetzt,
+muss Kommentare ausschließen, sonst meldet er eine Verletzung, die es nicht gibt** — ausgerechnet
+verursacht durch die Zeile, die die Behebung dokumentiert.
+
+Das ist bemerkenswert genug, um es festzuhalten: Der sorgfältig geschriebene Kommentar des
+Generators, der erklärt, **warum** `verbindeMit('ticket')` falsch war, ist jetzt selbst die
+häufigste Quelle eines falschen Positivbefunds.
+
+### Und die Präzisierung war nötig — hier ist der Beleg dafür
+
+`scripts/__tests__/browserBuehne.test.mjs:67`:
+
+```js
+assert.equal(r.code, 3, 'DB_DATABASE=ticket kommt durch — …')
+```
+
+Eine **Negativprobe**, die belegt, dass `DB_DATABASE=ticket` mit Exit-Code 3 abgewiesen wird. Nach
+dem alten Wortlaut („`ticket` darf in keinem Test-/Probebefehl stehen") wäre sie zu entfernen
+gewesen — und danach hätte niemand mehr gemerkt, wenn die Bühne `ticket` durchlässt. Es sind also
+nicht nur die zwei Stellen aus §491; die erlaubte Nennung trägt mindestens **drei** Prüfungen.
