@@ -40195,3 +40195,82 @@ die Zwei-Typen-Frage aus meiner §484-Anmerkung 2. Dort hatte ich gemeldet, dass
 `dickeMm` verschiedene Domänen sind und es keinen Konverter gibt. Der neue Kommentar behauptet
 Feldgleichheit. **Das ist zu prüfen, sobald der Evaluator durch ist** — nicht jetzt, weil es kein
 Kriterium von E4 berührt.
+
+## §502 — Posten 30 QUITTIERT. Meine Lücken-Meldung war 46 Sekunden zu spät, und mein Griff zweimal zu eng
+
+Stand: HEAD `f75231a7`, Baum 0, gen 11, Digest gleich. Zeit 23:35.
+**Messstand `a552c423`, Blatt-Blob `a8924820`** — vom Planner gemeldet und von mir nachgemessen:
+`a8924820`, 352 Zeilen.
+
+Der Planner meldet um 23:30:17, Posten 30 liege seit `a552c423` im Blatt. **Er hat recht.**
+
+### Die Zeitachse — und sie ist mein eigener Befund, auf mich angewandt
+
+```
+23:12:40  Dirigent: Posten 30
+23:13:49  Planner-Commit fae5d48d — Posten 30 noch nicht drin      (69 s)
+23:20:52  meine Quittung gegen 19a97b2b: „Posten 30 fehlt"          RICHTIG für den Stand
+23:22:07  Planner-Commit a552c423 — Posten 30 eingearbeitet
+23:23:42  meine Entlastung: „das Blatt trägt Posten 30 bis jetzt nicht"   46 s ZU SPÄT
+```
+
+In §498 hatte ich geschrieben: *„Bei Taktzeiten von einer Minute ist die Zustellung nicht schneller
+als die Arbeit. Wer eine Entscheidung trifft, während gebaut wird, muss damit rechnen, dass der
+nächste Stand sie noch nicht trägt — und danach **fragen**, statt sie als eingearbeitet anzunehmen."
+
+Derselbe Satz gilt umgekehrt: Wer einen **Mangel** meldet, während gearbeitet wird, muss damit
+rechnen, dass er schon behoben ist — und danach fragen, statt ihn als bestehend anzunehmen. Ich habe
+die Regel formuliert und zwei Minuten später gegen sie verstoßen.
+
+### Quittung: alle sechs Merkmale, selbst gemessen
+
+| Merkmal | `19a97b2b` (mein alter Stand) | `a8924820` (jetzt) |
+|---|---|---|
+| Absage-Regel `≥ 0` | 0 | **1** |
+| `PFLICHTFELD` | 0 | **2** |
+| `180` | 1 | **2** |
+| `-180` | 0 | **1** |
+| `250` | 0 | **1** |
+| `-430` | 0 | **1** |
+| `floorThickness` | 2 | **6** |
+| Kriterien `[a-i][0-9]?` | 10 | **10** |
+
+**Posten 30 ist vollständig eingearbeitet. QUITTIERT.** Kriterienzahl unverändert bei 10 — die
+Halbsatz-Form nach Nachtrag 1.5 hält, kein neuer Durchgang.
+
+Der Wortlaut ist **schärfer als angeordnet**:
+
+> „`oberkanteMm` **≥ 0** bei `erdberuehrt=true` erfüllt (e) **nicht — die Null eingeschlossen.**
+> […] ein Default von 0 wäre genau die Lücke, die Posten 25.6 gerissen hätte. **Ein stiller Default
+> für…**"
+
+Und mein §496-Punkt steht als eigener Kasten im Blatt: *„`Level.floorThickness` ist **nicht** der
+Fußbodenaufbau"* — mit `scene.types.ts:352` und `hoehenkette.ts:53` belegt.
+
+### Zwei eigene Griff-Fehler, beide vor dem Melden gefangen
+
+Meine erste Messung gab **`">= 0"` → 0** und **`Pflichtfeld` → 0**. Hätte ich sie gemeldet, stünde
+zum zweiten Mal ein Befund gegen ein sauberes Blatt.
+
+```
+ASCII  ">= 0"       0      ← mein Griff
+Unicode "≥ 0"       1      ← so steht es
+grep -c 'Pflichtfeld'   0  ← mein Griff
+grep -ci 'pflichtfeld'  2  ← im Blatt steht PFLICHTFELD
+```
+
+Das erste ist **§445 in neuer Form**: dort `BEGRUENDET` gegen `BEGRÜNDET`, hier ASCII `>=` gegen
+Unicode `≥`. Das zweite ist die Groß-/Kleinschreibung — dieselbe Falle wie `Decke` gegen
+`Geschossdecke` in §483, wo ich schon einmal einen Treffer verlor, den es gab.
+
+Beide Male hat die Regel aus Punkt 7 sie gefangen: **Suchmuster an einem bekannten Treffer
+verifizieren.** Ich hatte die Zeile 216 im Klartext vor mir und konnte sehen, dass mein Muster sie
+nicht traf.
+
+### Was ich am Planner würdige
+
+Er hat meine **zwei Messausfälle aus §498 als Lehre übernommen** und in seiner eigenen Gegenprobe
+vermieden — `[a-i][0-9]?` statt `[a-i]`, und `grep -e '-180'` statt `grep -c '-180'`. Er zitiert sie
+ausdrücklich als Begründung dafür, warum er so misst.
+
+Und er meldet den Blob (`a8924820`), nicht nur den Commit. Zweite Rolle heute, die das aufnimmt.
