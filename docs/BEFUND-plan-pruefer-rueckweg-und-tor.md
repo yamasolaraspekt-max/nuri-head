@@ -39351,3 +39351,61 @@ Entscheidung, keine Messfrage**, und sie gehört nicht mir.
 Erst der Schnitt bis zur **nächsten `^export`-Deklaration** (Z. 363–419, 57 Zeilen) lieferte die
 sechs Prüfungen. Beide Ausfälle sahen aus wie Ergebnisse: „0 Prüfungen" ist eine Zahl, und eine
 Zahl liest sich wie eine Messung.
+
+## §490 — Z1-E4-2 ist vollständig bestimmt: es sind genau drei Schleifen, keine versteckte vierte
+
+Stand: HEAD `c7068bb6`, Baum 0, gen 11, Digest gleich. Zeit 22:54.
+
+Der Dirigent hat um **22:52:05** entschieden (`dirigent-ANTWORT-php-integritaet-folgeblatt.yaml`):
+Weg des Generators bestätigt, Folgeblatt **Z1-E4-2** „PHP-Integrität spiegelt TS", Spur A klein —
+`SceneDocumentValidator::integritaetsfehler` um `ceilings`, `roofs`, `foundationSlabs` erweitern,
+Kommentar `:51-52` wahr machen, morgen nach E1/E3 schneiden.
+
+Meine Reichweitenmessung (§489) lag **sechs Sekunden später**. Sie ändert die Entscheidung nicht.
+Aber sie beantwortet eine Frage, die das Folgeblatt braucht und die bisher niemand gestellt hat:
+
+> **Reicht die Erweiterung um diese drei Sammlungen, damit der Kommentar wahr wird — oder fehlt
+> danach noch etwas anderes?**
+
+### Gegenprobe über einen zweiten, unabhängigen Griff
+
+§489 zählte **Prüfungen** (`fehler.push` gegen `$fehler[] =`) und kam auf TS 9 / PHP 7. Jetzt
+derselbe Sachverhalt über die **Regelnamen** gemessen — ein anderer Weg zur selben Frage:
+
+| Regel | TS | PHP | |
+|---|---|---|---|
+| Decke | 12 | **0** | nur TS |
+| Dach | 8 | **0** | nur TS |
+| Node | 37 | 15 | beide |
+| Wirtswand | 2 | 2 | beide |
+| anderem Geschoss | 1 | 1 | beide |
+| Wandende | 1 | 1 | beide |
+| Länge 0 | 1 | 1 | beide |
+| kürzer als Dicke | 1 | 1 | beide |
+| `derived` | 3 | 2 | beide |
+
+**Sieben von neun Regeln haben ein PHP-Gegenstück. Genau zwei nicht — Decke und Dach.**
+
+Zwei unabhängige Griffe, dasselbe Ergebnis. Das ist mehr wert als eine zweimal gefahrene Zählung:
+der erste Weg hätte eine Regel übersehen können, die anders heißt; der zweite hätte eine übersehen
+können, die gar keine eigene Zeile hat. Beide zusammen schließen beides aus.
+
+### Die Antwort für das Folgeblatt
+
+**Der Umfang ist vollständig bestimmt.** Nach der Erweiterung um `ceilings` und `roofs` (Bestand)
+plus `foundationSlabs` (neu aus E4) sind beide Seiten deckungsgleich — es gibt **keine vierte
+Lücke**, die danach noch übrig bliebe. Der Kommentar `:51-52` („spiegeln exakt") wird durch genau
+diese drei Schleifen wahr, nicht nur weniger falsch.
+
+Das ist für ein Blatt, das morgen geschnitten wird, die nützlichere Aussage als „PHP hinkt
+hinterher": Der Planner kann den Umfang **abschließend** benennen, und der Evaluator hat ein
+Kriterium, das erfüllbar ist statt asymptotisch.
+
+### Für das E4-Votum, wie der Dirigent es angeordnet hat
+
+> „Evaluator E4: Kriterium d wird gegen den **heutigen** PHP-Stand gemessen; der Spiegel-Mangel ist
+> im Votum als **bekannter Folgeposten** zu nennen, nicht als E4-Mangel."
+
+Dem ist aus meiner Messung nichts hinzuzufügen — außer der Zahl, die ins Votum gehört, damit der
+Folgeposten benannt und nicht nur erwähnt ist: **zwei fehlende Sammlungen im Bestand, eine dritte
+kommt mit E4 hinzu; sieben von neun Regeln sind bereits deckungsgleich.**
