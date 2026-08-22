@@ -38263,3 +38263,159 @@ und er blockiert nichts — **er zeigt nur, dass niemand die Tafel maschinell li
 Ball: **Integrator** (`docs/STATUS.md` schreibt er allein, §16 — der doppelte Schlüssel bei A-09
 gehört zu seinen Feldern). **Geht in die nächste Sammelmeldung**, nicht sofort: kein Blocker,
 zwölf Tage alt, und er liest seit 127 Minuten nicht.
+
+## §478 — Der Integrator ist zurück, und meine „131 Minuten Stille" waren gegen einen fest verdrahteten Anker gerechnet
+
+Messstand: HEAD `9acb393a`, Baum 0 · **Integration `4ac8085c`** (war `57e661bd`) · **Rückstand
+`HEAD..auto` = 154** · gemessen 21:57–22:00. **Ereignis-Schnitt dieser Runde: 21:53:32** (1 neues
+Ereignis). Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §478'` → 0).
+
+### Was passiert ist
+
+    27a45baa  21:56:43  integrator: zustand: Z1-V1-1 · ABGENOMMEN · dirigent · votum 187e4eae
+    352a8996  21:57:23  integrator: zustand: Z1-W2-6 · CODE_FERTIG · evaluator · bau a7d1e9a6
+    4ac8085c  21:57:23  integrator: zustand: Z0-I1  · CODE_FERTIG · evaluator · bau ba6fc673
+
+**Die Stille ist beendet — 40 Sekunden vor meiner Messung.**
+
+### Und mein Fehler, in derselben Minute
+
+**Ich habe die Integrator-Stille in JEDER Runde gegen `19:45:38` gerechnet** — einen Zeitpunkt, den
+ich einmal gemessen und dann **fest in den Messbefehl geschrieben** habe.
+
+    mein Befehl, jede Runde:  $(( ($(date +%s) - $(date -j … '2026-08-22 19:45:38' +%s)) / 60 ))
+    Ergebnis diese Runde:     131 Minuten
+    tatsaechlich, gemessen:   juengster Integrator-Commit 21:57:23  ->  0 Minuten
+
+> **Hätte ich in dieser Runde nicht zufällig die Zweigprobe gelesen und den geänderten
+> Integrationsstand gesehen, hätte ich „131 Minuten Stille" gemeldet, während der Integrator gerade
+> arbeitet.**
+>
+> **Das ist §462 in seiner reinsten Form, und diesmal nicht in einem Text, sondern in einem
+> Messbefehl:** Ein fest verdrahteter Anker ist dasselbe wie das Wort „unverändert" — **eine
+> Behauptung über einen Zustand, die bei jeder Wiederholung ungeprüft mitläuft.** Der Unterschied
+> ist, dass ein Befehl seriöser aussieht als ein Wort. **Er ist es nicht.**
+
+**Berichtigt, ab sofort:** Der Anker wird in jeder Runde gemessen —
+`git log -1 --format=%cd auto/hausplaner-integration` — und nicht als Datum in den Befehl
+geschrieben. **Sechste Formregel, und die erste, die einen Befehl betrifft statt einen Satz.**
+
+### Was er tut — und was noch nicht
+
+    drei Commits, alle vom Typ „zustand: … · <Rolle> · <SHA>"
+    -> ZUSTANDSFELDER, kein Rueckweg.
+
+    Commits NICHT in der Integration:  50   (unveraendert)
+    meine Befunde 73cdde46, 10601a53, 9acb393a:  alle NEIN
+    generator ad2ac724 (Z1-E0-1):                 NEIN
+    §447 „steht aus" bei E0/E2:                    2   (unveraendert, gegen 4ac8085c gemessen)
+
+**Er trägt die Zustände nach, die seit 19:45 aufgelaufen sind — der Transport steht noch aus.** Das
+ist kein Vorwurf: **Zustand vor Transport ist die richtige Reihenfolge**, denn ein transportierter
+Bau ohne Zustandszeile wäre in der Tafel unsichtbar.
+
+### Der Evaluator hat den git-grep-Befund bestätigt — und besser als ich
+
+> *„Nicht seinen Fall nachgebaut, sondern einen eigenen genommen — `registriereWerkzeug`, in meinem
+> Baum, im Insel-Pfad."*
+>
+>     git grep -cE '\bregistriereWerkzeug\b'  ->  0   <- FALSCH
+>     git grep -cE   'registriereWerkzeug'    ->  8
+>     git grep -cwE  'registriereWerkzeug'    ->  8
+>     grep -rcE '\bregistriereWerkzeug\b'     ->  8   <- normales grep kennt \b sehr wohl
+
+**Drei unabhängige Bestätigungen mit drei verschiedenen Suchbegriffen, Pfaden und Bäumen** —
+Planner (`IdsController`), ich (`IdsController` im Integrationsbaum), Evaluator
+(`registriereWerkzeug` in seinem Baum). **Und alle drei kamen auf dieselbe Gegenprobe: das normale
+`grep` ist nicht betroffen.**
+
+> **Sein Vorgehen ist strenger als meines.** Ich habe **seinen** Suchbegriff genommen und damit
+> streng genommen nur reproduziert; **er hat einen eigenen genommen und damit unabhängig
+> bestätigt.** Der Unterschied zählt: **eine Reproduktion prüft den Befehl, eine unabhängige
+> Messung prüft die Aussage.**
+
+### Lage, jetzt gemessen (21:57:46) — mit gemessenem Anker
+
+    Integration                           4ac8085c  (juengster Commit 21:57:23)
+    Integrator-Stille                     0 Minuten
+    Commits NICHT in der Integration      50
+    §447 „steht aus" bei E0/E2             2
+    Baelle beim Integrator (ganzes Haus)  22
+    Rueckstand mein Baum -> Integration   154
+
+Ball: **keiner von mir** — aber der Integrator liest wieder. **Die Sammelmeldung geht jetzt raus**
+(§463): §464, §465 ×2, §475, §477.
+
+## §479 — Der Stau ist aufgelöst: 56 Commits in zwei Minuten, §447 behoben. Und mein Rückstand ist dadurch von 154 auf 182 gestiegen
+
+Messstand: HEAD `54e822a8`, Baum 0 · **Integration `67d3ff15`** · **Rückstand `HEAD..auto` = 182**
+· gemessen 22:00–22:04. **Ereignis-Schnitt dieser Runde: 21:57:46** (0 neue Ereignisse).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §479'` → 0).
+**Anker gemessen, nicht verdrahtet** (§478).
+
+### Was in zwei Minuten geschah
+
+    21:57:50  zustand: Z1-E0-1 · BEREIT · generator · dor 3ddf6a3e
+    21:57:50  zustand: Z1-E2-1 · BEREIT · generator · dor 3ddf6a3e
+    21:58:43  Rueckweg — rolle/generator,    7 Staende
+    21:58:43  Rueckweg — rolle/evaluator,    2 Staende
+    21:58:43  Rueckweg — rolle/planner,      4 Staende
+    21:58:43  Rueckweg — rolle/plan-pruefer, 37 Staende
+
+    Commits transportiert:  56   ·   davon von mir: 37   ·   offen jetzt: 1 (mein §478)
+
+**Und die Reihenfolge war die richtige: erst die Zustände, dann der Rückweg.** Genau das, was ich in
+§478 als seine Logik vermutet hatte — **jetzt ist es gemessen, nicht vermutet.**
+
+### §447 ist behoben — gegengeprüft am neuen Stand
+
+    Z1-E0-1:  zustand: BEREIT · ballbesitz: generator
+    Z1-E2-1:  zustand: BEREIT · ballbesitz: generator
+    „steht aus" bei E0/E2:  0   (war 2, seit 19:44:42)
+
+**Und der `dor_beleg` trägt jetzt mein Votum im Wortlaut:**
+
+> *„ERTEILT — plan-pruefer, 19:30:30, `plan-pruefer-DOR-Z1-E0-1-und-Z1-E2-1-ERTEILT.yaml`, endstand
+> `3ddf6a3e`. VOTUM: »BEIDE ERTEILT, ohne Halbsätze. EIN Durchgang, wie der Dirigenten-Hinweis
+> 19:11:46 verlangt.« ball: [generator, evaluator]."*
+
+**Er hat mehr eingetragen als ich gemeldet hatte:** Zeitpunkt, Dateiname, Endstand, Votumstext und
+Ballwechsel. **§447 verlangte, dass „steht aus" verschwindet; er hat den ganzen Beleg nachgezogen.**
+
+**Und er erklärt den ursprünglichen Fehler selbst** — im Feld `herkunft_dieses_blocks`: *„Statusplatz
+vom integrator im selben Lauf wie der Transport angelegt (Dauerregel gen 9 Punkt 2). Geschnitten
+19:24:44, gemeldet 19:25:24, transportiert und eingetragen unmittelbar danach."* **Der Platz entstand
+aus einer Dauerregel, die Zustand und Transport koppelt — und der Zustand war beim Anlegen der von
+19:25, nicht der von 19:30.** Das ist die genaue Mechanik hinter §447, und sie stammt von ihm.
+
+### Damit sind vier meiner Meldungen erledigt
+
+    §447  Tafel widerspricht dem Bau           ->  behoben (dor_beleg gestellt)
+    §448  Meldepflichten Z1-E0-1               ->  Bau transportiert (ad2ac724 in der Integration)
+    §453  „meine Befunde sind nicht lesbar"    ->  37 Staende transportiert
+    §478  Stille 131 Minuten                   ->  gegenstandslos, er arbeitet
+
+### Und die Kehrseite, die ich sofort melde
+
+    Rueckstand mein Baum -> Integration:  182   (vorher 154, davor 153)
+
+> **Der Transport hat meinen eigenen Rückstand vergrößert.** Die Integration ist um 56 Commits
+> gewachsen — darunter 37 von mir, die dort jetzt liegen und in meinem Baum weiterhin als „voraus"
+> zählen, plus 19 fremde, die ich nicht habe.
+>
+> **Das ist kein Fehler, sondern die Mechanik der getrennten Bäume** — und genau der Gegenstand von
+> Posten 1 der Yama-Liste (§466: `ARBEITSREGELN:1863`, „ist die Zahl größer als null, wird zuerst
+> nachgezogen"). **Die Regel wird durch jeden erfolgreichen Transport verletzter, nicht weniger.**
+> Der Evaluator zieht nach; sein Zweig steht auf `67d3ff15`, also exakt auf dem Integrationsstand.
+
+### Lage, alles in dieser Runde gemessen (22:00:22)
+
+    Integration                           67d3ff15  (juengster Commit 21:58:43)
+    Integrator-Stille                     1 Minute   [Anker gemessen]
+    Commits NICHT in der Integration      1          (vorher 50)
+    §447 „steht aus" bei E0/E2            0          (vorher 2)
+    ballbesitz plan-pruefer in der Tafel  1          (vorher 3)
+    Baelle beim Integrator (ganzes Haus)  23
+    Rueckstand mein Baum -> Integration   182
+
+Ball: **keiner** — der Stau ist aufgelöst, die Würdigung geht als Ereignis raus.
