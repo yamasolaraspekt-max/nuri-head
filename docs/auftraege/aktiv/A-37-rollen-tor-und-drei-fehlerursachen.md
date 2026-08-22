@@ -559,6 +559,95 @@ ausnahmslos eine **ausgelöste** Negativprobe mit Rohausgabe und `echo $?`, nich
   Das ist die Zusage, die im Kopf der Datei bereits steht (*„eine ausgefallene Messung ist KEIN
   Ergebnis"*); das Kriterium dehnt sie von den drei Vorbedingungen auf die **Baumauswahl** aus.
 
+- **A-37-22b** · **NUR DER INTEGRATOR DARF DEN ECHTEN RÜCKWEG AUSFÜHREN.**
+  *(Nachschärfung 22.08. auf Yamas Anweisung, vor dem ersten Bau-Commit.)*
+
+  **Verlangt:** `scripts/rueckweg.py` prüft **vor jeder Änderung an einem Baum** zwei Dinge —
+  `TICKET_ROLLE == integrator` **und** Arbeitsverzeichnis = Integrations-Checkout
+  (`/Users/yamanuri/Documents/ticket` auf `auto/hausplaner-integration`). Trifft eines nicht zu:
+  **Abbruch mit Meldung und Rückgabe ≠ 0, ohne einen einzigen Baum zu berühren.**
+
+  **Messbefehle und heutiges (rotes) Ergebnis:**
+  ```
+  grep -c 'TICKET_ROLLE'          scripts/rueckweg.py  -> 0
+  grep -c 'integrator'            scripts/rueckweg.py  -> 0
+  grep -c 'berechtig'             scripts/rueckweg.py  -> 0
+  grep -c 'erlaubt'               scripts/rueckweg.py  -> 0
+  grep -c 'Integrations-Checkout' scripts/rueckweg.py  -> 0
+  Gegenprobe, dass der Griff trägt:  grep -c 'BAEUME' -> 3
+  ```
+  **Art des Rot: Schutz.** *Das Werkzeug fragt heute nicht, wer es aufruft — es fragt nur, ob der
+  Zielbaum sauber ist. Wer es startet, zieht fremde Bäume nach, ohne dass irgendetwas widerspricht.*
+
+  **Negativproben (ausgelöst, mit Rohausgabe und `echo $?`):** Aufruf als `generator` → abgewiesen;
+  Aufruf **ohne** `TICKET_ROLLE` → abgewiesen; Aufruf als `integrator` **außerhalb** des
+  Integrations-Checkouts → abgewiesen. **Positivprobe:** `integrator` im Checkout läuft durch.
+  **Absage-Regel:** Die Prüfung muss **vor** der ersten Baumänderung stehen. *Ein Tor, das nach dem
+  ersten `merge --ff-only` greift, hat den Schaden bereits zugelassen — bei diesem Werkzeug ist die
+  Reihenfolge das Kriterium, nicht das Vorhandensein.*
+
+  **⚠ ZUM ANLASS — als INDIZ gekennzeichnet, nicht als Beleg** *(auf ausdrückliches Verlangen des
+  Plan-Prüfers, der den Fall an seinem eigenen Baum gemessen hat)*: am 22.08. gegen 08:06 wurden drei
+  fremde Arbeitsbäume per Fast-forward auf `ab9e837c` gezogen, ohne dass ihre Rollen es auslösten
+  (Reflog-Eintrag `merge ab9e837c…: Fast-forward`). **Der Reflog nennt keinen Verursacher.** Dass es
+  ein Generator-Lauf von `rueckweg.py` war, ist durch die Selbstmeldung des Generators und die
+  Dirigenten-Antwort vom 08:12 belegt — **nicht durch den Reflog**. *Kein Schaden entstanden: kein
+  Merge-Commit, keine Zeile geändert, alle Commits erreichbar.* **Das Kriterium hängt nicht an diesem
+  Fall** — es hängt an den fünf Nullen oben.
+
+- **A-37-22c** · **DOPPELGÄNGER WERDEN ÜBER ÄHNLICHKEIT ERKANNT, NICHT ÜBER GLEICHHEIT.**
+
+  **Verlangt:** Die Baumauswahl erkennt Namens-**Ähnliche** (Präfix, Teilstring, Scratchpad-Klone)
+  und **meldet sie ausdrücklich als ausgeschlossen**. *Ein Vergleich auf exakt gleichen
+  Verzeichnisnamen genügt nicht.*
+
+  **Messbefehle und heutiges (rotes) Ergebnis:**
+  ```
+  git worktree list --porcelain | (Pfad, Zweig)      -> ZWEI Bäume mit dem Präfix ticket-rolle-generator:
+     ticket-rolle-generator                 rolle/generator                  (baut gerade)
+     ticket-rolle-generator-beleg-2026-08-21  rolle/generator-beleg-2026-08-21 (eingefroren)
+  scripts/rueckweg.py:128   pfad = f'{WURZEL}/{name}'      -> Auswahl über den NAMEN
+  grep -cE 'startswith|praefix|aehnlich|fnmatch|glob' scripts/rueckweg.py  -> 0
+  ```
+  **Art des Rot: Vergleich.**
+
+  **⚠ Der Doppelgänger ist ABSICHT, nicht Versehen — und das ändert das Kriterium.** Der Belegbaum
+  entstand in der Nacht zum 22.08. als Antwort auf eine Nicht-FF-Blockade: drei Commits wurden
+  gesichert (`ef7a8c89`, `14e7b7ac`, `abd1719c`), der Generator auf frische Basis gesetzt.
+  **Verlangt ist deshalb NICHT, ihn zu beseitigen, sondern ihn zu ERKENNEN und zu BENENNEN.**
+  *Ein Kriterium, das Doppelgänger als Fehler behandelt, würde eine bewusste Sicherung zum Mangel
+  erklären — und beim nächsten Mal würde niemand mehr sichern.*
+  **Erwartetes Grün:** der Lauf nennt den Belegbaum namentlich in einer Zeile *„ausgeschlossen,
+  nicht in der (Pfad, Zweig)-Liste"* und fasst ihn nicht an. **Absage-Regel:** stiller Ausschluss
+  genügt nicht — *wer einen Baum übergeht, ohne ihn zu nennen, erzeugt genau die Lücke, die
+  `A-37-22` schließen soll: eine Liste, die nicht sagt, was sie ausgelassen hat.*
+
+- **A-37-22d** · **ALLE PROBEN LAUFEN IM WEGWERF-REPOSITORY — AM BESTAND WIRD NUR DIE ABLEHNUNG GEMESSEN.**
+
+  **Verlangt:** Pfad-, Zweig-, Doppelgänger- und Transportproben laufen für **Bau und Abnahme**
+  ausschließlich in einem temporären Wegwerf-Repository im Scratchpad; sein Aufbau liegt als
+  **reproduzierbares Skript** im Bau-Bericht, damit der Evaluator ihn nachstellen kann.
+  **Am Bestand wird ausschließlich die Ablehnung gemessen** — der Rückgabewert **vor** jeder Änderung.
+
+  **Rot heute:** es gibt kein solches Wegwerf-Repo und keinen Aufbau dafür; die einzige
+  Transport-„Probe" dieser Nacht lief **am Bestand** und bewegte drei fremde Bäume (siehe `A-37-22b`).
+  **Art des Rot: Schutz.**
+
+  **⚠ ABGRENZUNG, weil der Plan-Prüfer sie vor der Abnahme ausdrücklich erfragt hat** — er hat vier
+  Proben gefahren, drei im Scratchpad und **eine am Bestand** (`docs/PROBE-yaml-kopf-plan-pruefer.md`,
+  `--trocken`, Datei danach entfernt, Baum wieder auf 0) und offengelegt, dass unklar sei, ob 22d das
+  verbietet. **Antwort, und sie gehört ins Kriterium statt in eine Auslegung:**
+  **22d gilt für Pfad-, Zweig-, Doppelgänger- und Transportproben — also für alles, was Bäume
+  auswählt oder bewegt.** Eine Probe, die **keinen Baum berührt und keinen Transport auslöst**
+  (Beispiel: ein `--trocken`-Lauf gegen eine neu angelegte, danach entfernte Probedatei), fällt
+  **nicht** darunter. **Das Unterscheidungsmerkmal ist nicht der Ort, sondern die Wirkung:** kann die
+  Probe einen fremden Baum verändern, gehört sie ins Wegwerf-Repo — kann sie es nicht, genügt der
+  Nachweis, dass der Bestand danach unverändert ist (`git status` → 0).
+  *Die Regel richtet sich gegen bewegte Bäume, nicht gegen Messen im eigenen Haus.*
+  **Absage-Regel:** Wer eine Transportprobe am Bestand fährt und sie mit *„es ist ja nichts kaputt
+  gegangen"* begründet, hat `A-37-22d` **nicht** erfüllt. *Genau diese Begründung trug der Vorfall
+  vom 08:06 — und sie stimmte sogar; unzulässig war er trotzdem.*
+
 - **A-37-23** · **DAS ROLLEN-TOR KENNT DEN `dirigent` — MIT TECHNISCH BEGRENZTEM SCHREIBBEREICH.**
 
   **Verlangt:** siebter Eintrag `dirigent` → Verzeichnis `ticket-rolle-dirigent`, Zweig
