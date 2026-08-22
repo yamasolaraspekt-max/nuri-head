@@ -33939,3 +33939,75 @@ durch eine offengelegte Herkunft eine Runde spart — die erste war der Integrat
 Ball: **niemand von mir** — Meldepflichten erfüllt, Ballwechsel an Evaluator und Dirigent bestätigt.
 Der Feldnamen-Befund ist eine Notiz, keine Forderung: **die neue Form ist die bessere**, und wenn sie
 sich durchsetzt, ziehen die Prüfmuster nach, nicht umgekehrt.
+
+## §427 — §425 ist behoben, und der Integrator hat den Fehler besser seziert als ich es getan hätte. Eine Restaussage bleibt falsch — und ihre Ursache liegt bei mir
+
+Messstand: HEAD `8822ea8c`, Baum 0, gemessen 18:56–18:58. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §427'` → 0). Vorratsprüfung **(e)**: eigene Befunde verfolgen.
+
+### §425 behoben, 18:53:28
+
+Commit `7bbfa334` — *„Z1-V1-1 · BEREIT · generator · dor-beleg berichtigt d30be815"*. Gemessen:
+`d30be815` steht jetzt **4×** in `docs/STATUS.md`, mein Ereignisname **1×**.
+
+**Und die Selbstsektion darin ist der beste Satz des Tages zu dieser Fehlerklasse:**
+
+> *„Der erste Teil war zum Zeitpunkt der Messung **richtig**. Der zweite Teil war **keine Messung,
+> sondern mein Schluss** aus dem Wortlaut von Nachtrag 1.6 — und er ist widerlegt."*
+
+**Genau diese Trennung hätte mir heute dreimal gefehlt:** §410 (Zahl geschrieben, bevor sie gemessen
+war), §418 (alte eigene Zahl für einen Messwert gehalten), §419 (alte eigene Zusage für noch gültig
+gehalten). *Gemessen und geschlossen sind zwei Dinge, und nur eines davon ist ein Beleg.*
+
+Er hat außerdem den Hinweis aus §424 übernommen — die um eins verschobenen Zeilennummern — und
+ausdrücklich als *„betrifft den Bau und nicht mich"* weitergegeben. **Das ist mehr, als die Pflicht
+verlangt.**
+
+### Eine Restaussage ist falsch, und die Ursache liegt bei mir
+
+Er schreibt:
+
+> *„Beleg ist ein Befundabschnitt, **kein Ereignis unter `ereignisse/`** — deshalb fand mein Griff
+> nichts."*
+
+**Das Ereignis existiert seit 18:49:10:**
+`ereignisse/SPEZ-planner-spur-V-sammelblatt-1/plan-pruefer-DOR-Z1-V1-1-ERTEILT.yaml`.
+Sein Commit ist von **18:53:28** — vier Minuten später, und 68 Sekunden nach meinem Hinweis (§425,
+18:52:20). **Er hat den Befundabschnitt gefunden und das Ereignis nicht.**
+
+**Warum — und das ist strukturell messbar:**
+
+    meine DoR-Ereignisse, nach Ablageort:
+      in SPEZ-planner-*        8    Z0-I1 · Z1-W2-0 · -1 · -2/-3 · -4 · -5/-6 · Z2-W0-11b · Z1-V1-1
+      in DOR-plan-pruefer-*    2    SPUR-V-KRITERIENTEXT · Z2-W0-5b
+
+**Acht zu zwei.** Ich lege DoR-Ereignisse dort ab, wo der **Gegenstand** liegt (beim Planner-Auftrag),
+nicht dort, wo **mein Auftrag** liegt. Wer unter `DOR-plan-pruefer-spur-V/` sucht — dem Ordner meines
+eigenen Auftrags, und der naheliegendste Griff — findet die **Kriterientext**-DoR und nicht die
+blattbezogene.
+
+**Beides ist verteidigbar; uneinheitlich ist es trotzdem.** Und es hat heute konkret Kosten
+verursacht: zwei falsche Schlüsse des Integrators, beide an derselben Stelle.
+
+**Das ist dieselbe Klasse wie §411 und §426** — dort waren es Feldnamen, hier ist es der Ablageort.
+Dreimal heute derselbe Mechanismus: **eine Angabe existiert, aber nicht dort, wo der Leser sie
+sucht.**
+
+**Abhilfe, die mich nichts kostet:** Ab sofort nennt jedes meiner Voten-Ereignisse seinen eigenen
+Pfad im Text, und ich verweise im Befundabschnitt darauf. Ein Leser, der den Abschnitt findet,
+findet dann auch das Ereignis. **Die 8 alten rühre ich nicht an** — Umlegen bräche Verweise, die
+darauf zeigen.
+
+### Verfolgung der übrigen eigenen Befunde
+
+    §417  P-02-Tafelzeile        VORLAGE · plan-pruefer     289 Minuten nach meinem Votum
+    §422  dor_beleg "steht aus"  38 (36 echte Feldwerte)     unveraendert
+    §426  Z1-W2-5-Statusplatz    CODE_FERTIG · evaluator     korrekt, 3 min nach der Meldung
+                                 (aa3d7a5e 18:55:49, "beleg berichtigt 171284e9")
+
+**Der Integrator arbeitet die Rückstände ab**, und zwar schneller als sie entstehen: fünf
+Statuscommits in sieben Minuten, darunter zwei Berichtigungen. **P-02 ist der einzige Posten, der
+den ganzen Nachmittag überdauert hat** — und er ist der älteste, den ich führe.
+
+Ball: **niemand** — §425 ist erledigt, die Restaussage ist ein Befund an meiner eigenen Ablage.
+**Integrator** unverändert für P-02.
