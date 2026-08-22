@@ -27440,3 +27440,84 @@ Arbeitsfähigkeit an einem Zufall hängt — dem Stand meines Baums — und nich
 
 **Ball:** Dirigent. Die Frist ist enger als gedacht: nicht *„bevor jemand committet"*, sondern **bevor
 der nächste Rückweg in die Rollenbäume läuft.**
+
+## §332 — Die Entlastung zum `erstellt`-Feld hält nicht: das Feld trägt die behauptete Bedeutung nachweislich nicht
+
+Gewählt gegen HEAD `51d26c29` (Baum sauber, 12:39:37). §331 ist als Überschrift nicht belegt;
+332 ist frei. Nummern eindeutig, nicht aufsteigend.
+
+**Anlass, zitiert und verlinkt, nicht nachgebaut (P-02 Punkt 4):**
+`~/.ticket-steuerung/ereignisse/EXTERNE-PRUEFUNG/externe-pruefung-nachmessung-erstellt-feld.yaml`
+(12:31:19). Sie bestätigt meinen Befund aus dem Votum NICHT_ERTEILT (12:30:11) und weitet ihn auf
+alle sieben Rollenquellen aus. Ihr Schluss, wörtlich: *„Die Konvention 'erstellt = Zeit DIESER
+Generation' wird also von sechs Dateien eingehalten. Es ist ein einzelner Aussetzer … kein neuer
+Regeltext noetig."* Und die Folge daraus: *„Entweder 'erstellt' bei jeder Generation mitschreiben
+… oder das Feld streichen."*
+
+Eine fremde Zahl, die meinen eigenen Restpunkt **verkleinert**, übernehme ich nicht ungemessen.
+
+**Ihre Zahl stimmt.** Selbst gemessen, alle sieben Quellen, `erstellt` gegen Dateizeit:
+sechs gleich, einer klafft — `planner` erstellt `12:03:49` gegen Dateizeit `12:17:32`, **823 s**.
+
+**Zwei Einwände gegen den Schluss, beide gemessen:**
+
+**1. Sieben Dateien, aber zwei Schreibvorgänge.**
+
+    12:17:32 -> integrator planner
+    12:18:38 -> dirigent evaluator generator plan-pruefer release-pruefer
+    unterschiedliche Zeitpunkte: 2 bei 7 Dateien
+
+Die fünf „OK" um 12:18:38 sind **ein** Sammelschreiben und damit **ein** Beleg, nicht fünf. Beim
+Vorgang, in dem der Fehler auftrat, lautet die Quote **1 von 2**. Das ist dieselbe Fehlerklasse wie
+in meinem eigenen §305: Dateien gezählt, wo Zeitpunkte gefragt waren — die Grundmenge passte zum
+Verfahren, nicht zur Frage.
+
+**2. Das Feld bedeutet nicht, was geprüft wurde — Gegenbeispiel im Bestand.**
+`rollen/dirigent.yaml` trägt `generation: 1` und `erstellt: 12:18:38`. Wäre `erstellt` die Zeit
+dieser Generation, dürfte es vor 12:18:38 kein Dirigenten-Ereignis geben. Gemessen: **66** liegen
+davor, darunter `dirigent-entscheidung-kennungsmuster.yaml` (12:03:49) und
+`dirigent-antwort-zeitfehler.yaml` (10:42:26). Gen 1 ist nicht um 12:18:38 entstanden.
+
+Also wird `erstellt` beim Schreiben **blind mitgesetzt, ohne Generationswechsel**. Damit misst der
+Vergleich `erstellt` gegen Dateizeit die Selbstkonsistenz des letzten Schreibvorgangs — nicht die
+Aktualität der Generation. Die sechs „OK" belegen nicht, dass die Konvention eingehalten wird;
+sie belegen, dass das Feld beim letzten Schreiben mitlief.
+
+**Was sich dadurch an der Abhilfe ändert.** Die beiden Wege der externen Prüfung sind nicht
+gleichwertig:
+
+- *„erstellt bei jeder Generation mitschreiben"* — das ist faktisch schon der Zustand, und genau
+  deshalb trägt das Feld die Aktualität nicht. Dieser Weg heilt nichts, er stellt die Sichtbarkeit
+  des Fehlers wieder her, nicht seine Ursache.
+- *„das Feld streichen, weil generation + digest die Wahrheit ohnehin tragen"* — der einzige der
+  beiden, der wirkt.
+
+**Und was der Planner-Fall in Wahrheit ist:** nicht der einzige Aussetzer, sondern der einzige
+**sichtbare**. Bei 12:17:32 wurde `erstellt` einmal mitgesetzt (integrator) und einmal nicht
+(planner) — im selben Vorgang. Die übrigen sind nicht richtig, sie sind ununterscheidbar.
+
+**Was am Votum unverändert bleibt:** NICHT_ERTEILT und die drei Restpunkte stehen. Der
+`erstellt`-Klaffer war dort nie ein Restpunkt, sondern der erschwerende Umstand zu Restpunkt 1 —
+die Erklärung, warum der Planner gegen gen 13 lieferte, während gen 14 galt. Diese Erklärung wird
+durch §332 **nicht schwächer, sondern belastbarer**: das Feld konnte ihn nicht warnen, weil es
+Aktualität nur vorgibt.
+
+**Eigener Messausfall auf dem Weg, zweimal, und beide zählen.** Mein erster Griff meldete für alle
+sieben Dateien „KEIN FELD". Ursache: `sed 's/.*"\([0-9T:+-]*\).*/\1/'` — greedy `.*"` frisst bis
+zum letzten Anführungszeichen, danach matcht `[0-9T:+-]*` **null Zeichen**. Die Ersetzung *gelingt*
+und liefert einen leeren String; `[ -z "$E" ]` las das als fehlendes Feld. **Ein Quantor mit `*`
+kann leer matchen — dann ist „nichts gefunden" nicht dasselbe wie „nichts da".**
+
+Schlimmer war die Gegenprobe, die den Ausfall **verdeckte**: `grep -lc 'erstellt:' *.yaml | wc -l`
+gab 7 und schien den Griff zu bestätigen. Bei gewinnendem `-c` gibt grep für *jede* Datei eine
+Zeile aus, auch bei null Treffern — gezählt wurden Dateien, nicht Treffer. Eine Gegenprobe, deren
+Ergebnis von der Antwort unabhängig ist, ist keine Gegenprobe. Erst der dritte Griff, am
+Datumsmuster verankert (`[0-9]{4}-[0-9]{2}-[0-9]{2}T…`) und mit sichtbarer Extraktion
+(`[2026-08-22T12:03:49]`), trug.
+
+**Regel an mich:** eine Gegenprobe muss bei falscher Hypothese **anders ausfallen** können. Sonst
+misst sie, dass der Befehl lief, nicht dass er stimmt.
+
+**Ball: Dirigent** — die Wahl zwischen den beiden Abhilfen ist keine Prüferentscheidung. Mein
+Beitrag ist nur: sie sind nicht gleichwertig. Am Votum zu A-43 ändert sich nichts, der Ball dort
+bleibt beim **Planner** (Posten 2, drei Teile, plus die zwei Messpunkte an A-43-4).
