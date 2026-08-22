@@ -29962,3 +29962,86 @@ fehlte, war mein Halbsatz — und den liefere ich hier nach, verspätet statt ga
 
 Ball: **Planner** — derselbe Halbsatz, den der Generator um 15:35:07 bereits gemeldet hat; ich setze
 keinen zweiten Ball daneben, sondern bestätige seinen und erweitere ihn um die zwei weiteren Stellen.
+
+## §370 — DoR Z0-I1 Stufe 1: ERTEILT. Ein Halbsatz, ein Yama-Operand, und eine Grenze meiner eigenen Prüfung
+
+Messstand: HEAD `ecc180f7`, Baum 0, gemessen 15:39–15:50. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §370'` → 0). Auslöser
+`SPEZ-planner-anschlusswelle-1/planner-CODE_FERTIG-Z0-I1-stufe1.yaml`, 15:36:41, gen 19,
+`blatt_sha 57b864b9`, `mess_sha ec239609`. Alles am Basis-Stand erhoben.
+
+### Selbst gezählt — die Zahlen halten
+
+    Kriterien Z0-I1-1..11        11        Planner: 11   BESTAETIGT
+    Matrixzeilen Stufe 1          9        Planner:  9   BESTAETIGT
+    Differenz belegt              Z0-I1-7 (:290 "Folgeposten Stufe 2, braucht root")
+                                  Z0-I1-8 (:410 "gehoeren zu Stufe 2, und das ist Absicht")
+    Blatt feldlos                 kein auftrag:-Feld -> Rueckfall auf die Kopfzeile: "Z0-I1"
+    N4                            :417 "Bedienweg: keiner. Dies ist die Pruefbuehne, kein Werkzeug"
+
+Das Blatt liegt **nicht** in `docs/auftraege/aktiv/`, sondern direkt in `docs/auftraege/` — deshalb
+taucht es in meiner Blattseite der Ballortung nie auf. Kein Mangel des Blattes; eine Lücke **meiner**
+Erhebung, die ich hier festhalte.
+
+### Ein Verdacht von mir, den das Blatt selbst schon aufgelöst hatte
+
+Ich maß, dass `ticket_g1b1_testing` **nicht** auf das Muster `^ticket_testing(_[a-z]+)?$` passt (`:23`),
+und hielt einen Guard für gefunden, der die eigene Datenbank abweist. **Das Blatt behandelt es bei
+`:84`** („Der Musterkonflikt — und warum der Bestand ihn schon richtig löst") und schneidet `Z0-I1-3`
+ausdrücklich um: *„Stufe 1 kennt **eine** DB … Das Muster prüft **diesen einen Namen exakt**,
+`ticket_testing_kopie` und jeder andere bleiben abgewiesen."* Das Muster von `:23` gehört zur
+Vorarbeit für Stufe 2, hinter dem Trennstrich `:256` gilt es nicht.
+
+**Zum zweiten Mal heute** hätte ich einem Blatt vorgeworfen, was nur in dem Teil steht, den es selbst
+als überholt führt. Die Lehre aus §368 gilt verschärft: **erst den Geltungsbereich bestimmen, dann
+messen** — der Trennstrich ist Teil des Messbefehls.
+
+### Der eine Halbsatz — und er hat genau die Klasse, die der Planner sonst selbst schließt
+
+`## Rückweg` steht bei `:251`, also **vor** dem Trennstrich `:256`. Ab `:256` nennt der Stufe-1-Teil
+**keinen** Rückweg (0 Treffer auf `Rückweg|Revert|zurückdreh`). Der Planner hat die Buchstaben-Matrix
+danebengelegt und ausdrücklich als **ÜBERHOLT** gekennzeichnet — *„die Doppelung ist damit nicht
+entstanden"*. **Beim Rückweg fehlt genau diese Kennzeichnung.** Wer den Trennstrich ernst nimmt — und
+das Blatt verlangt es —, liest den Rückweg als Teil der überholten Vorarbeit.
+
+> **Halbsatz:** `## Rückweg` (`:251`) als **für Stufe 1 fortgeltend** kennzeichnen, wie die
+> Buchstaben-Matrix als überholt gekennzeichnet ist. Inhaltlich trägt er erst recht: Stufe 1 legt
+> **keine** neue Datenbank an, es bleibt bei „Config/Guard per Commit zurückdrehbar".
+
+### Was ich NICHT erteile, weil es mir nicht zusteht — ein zehnter Yama-Posten
+
+Yamas Auflage 1 vom 13.08. lautet wörtlich *„nur gegen `ticket_testing`"*; Stufe 1 arbeitet gegen
+`ticket_g1b1_testing`. Der Planner legt die Abweichung **offen** und löst sie über den Zweck auf:
+*„Gemeint war ‚die Test-DB, niemals Produktion'. Ich habe sie NICHT aufgeweicht und NICHT still
+angepasst, sondern die Abweichung benannt."*
+
+**Das Verfahren ist richtig** — CLAUDE.md verlangt, dass Datenbankentscheidungen nicht still
+automatisiert werden, und still war hier nichts. **Die Auslegung selbst steht weder ihm noch mir zu.**
+Sie blockiert den Bau nicht (es ist ein String, und Baubarkeit wie Messbarkeit sind davon unberührt),
+aber sie blockiert die **Abnahme** von Z0-I1-11, wenn Yama den Namen anders will.
+
+> **Yama-Posten 10:** Gilt Auflage 1 („nur gegen `ticket_testing`", exakt oder Abbruch) mit dem
+> heutigen Namen `ticket_g1b1_testing` als erfüllt? Eine Zeile Antwort genügt.
+
+### Die Grenze meiner eigenen Prüfung, ausdrücklich
+
+Die tragende Lage des Umschnitts — *„`ticket_user@localhost` über den SOCKET: ALL PRIVILEGES auf
+`ticket_g1b1_testing` (446 Tabellen), über TCP nur `ticket.*`"* — habe ich **nicht nachgemessen**.
+**DB-Läufe sind bis Z0-I1 gesperrt**, und diese Messung ist einer. Ich habe sie nicht als bestätigt
+verbucht und stütze das Votum nicht darauf: Sie ist der **Grund** des Umschnitts, nicht sein
+Kriterium. Fällt sie anders aus, fällt der Umschnitt — das ist dann ein Befund des Bauenden am
+`grant_beleg`, den das Blatt als **ersten** Messschritt vorschreibt.
+
+Kein Zirkel bei der Sperre: Z0-I1 ist laut Kopf *„der EINE zulässige Sicherheitsbau, bis er
+abgenommen ist"* (Yama, 21.08.).
+
+### Votum
+
+**ERTEILT.** Elf Kriterien mit Messbefehl, rotem Ist und Absage-Regel; neun Matrixzeilen mit belegter
+Differenz; N4 vorhanden; drei neue Kriterien mit Begründung statt Behauptung. `Z0-I1-11` übernimmt
+meinen Befund aus §366 (`a24` 2× verwendet, 0× angelegt) — **zitiert, nicht nachgebaut**, und der
+Dirigent hat den Posten 15:25:28 umgebucht. Damit ist der neun Tage alte Beschluss zum ersten Mal in
+einem Auftrag angekommen.
+
+Ball: **Planner** (ein Halbsatz) · **Yama** (Posten 10, der Name) · **Generator** (bauen; beides
+hindert ihn nicht). Bei mir nichts.
