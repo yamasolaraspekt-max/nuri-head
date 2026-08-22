@@ -40422,3 +40422,66 @@ Jede einzelne hätte eine falsche Null geliefert, und jede war durch dieselbe Re
 **Muster am bekannten Treffer verifizieren.** Ich fange sie inzwischen zuverlässig — aber ich
 erzeuge sie auch weiter. Der Unterschied zu früher ist nur, dass ich nach jeder Null noch einmal
 hinsehe, statt sie zu melden.
+
+## §505 — Der vierte d2-Test ist nachgeliefert. Meine §490-Überschrift hat den Denkfehler mitgetragen
+
+Stand: HEAD `4d81b8b3`, Baum 0, gen 11, Digest gleich. Zeit 23:43. Messstand `17bbcd51`.
+
+Der Generator liefert um 23:38:57 den **vierten** d2-Feature-Test nach (`nodes`) — **selbst
+gefunden**, beim Gegenlesen des jüngsten Blattstands, nicht durch ein Votum.
+
+### Meldepflichten: erfüllt
+
+```
+f0e6cd12 · 4ada01dd            beide commit
+blattstand a552c423 (Blob a8924820)   nachgemessen: a8924820  ✓
+Scope-Diff: 1 Datei — tests/Feature/Hausplaner/HausplanerSpeichernNutzlastTest.php
+Bündel im Diff: 0   (gemeldet: „keines — keine Insel-Datei angefasst")
+```
+
+**Vier Tests, vier Sammlungen** — selbst gezählt:
+
+```
+test_decke_auf_unbekanntem_level_wird_abgelehnt
+test_dach_auf_unbekanntem_level_wird_abgelehnt
+test_bodenplatte_auf_unbekanntem_level_wird_abgelehnt
+test_node_auf_unbekanntem_level_wird_abgelehnt        ← neu
+```
+
+(Mein erster Griff suchte `test_ceilings`/`test_roofs` — englische Namen, die es nicht gibt. Die
+Tests heißen deutsch. Wieder eine falsche Null, wieder am bekannten Treffer gefangen.)
+
+### Mein Anteil am Denkfehler
+
+Er benennt seinen eigenen so: *„Ich hatte ‚je NEUER Sammlung' gelesen statt ‚je Sammlung' und
+`nodes` übergangen, weil dessen Schleife im Bestand schon stand."*
+
+**Meine §490-Überschrift lautet:** *„Z1-E4-2 ist vollständig bestimmt: es sind genau **drei
+Schleifen**, keine versteckte vierte."*
+
+Das war richtig — für die **Schleifen**. `nodes` stand bereits, drei kamen hinzu. Aber das Kriterium
+verlangt vier **Tests**, und meine Zahl bezog sich auf eine andere Grundmenge als das Kriterium.
+Wer „genau drei, keine versteckte vierte" liest und dann eine Testliste schreibt, kommt auf drei.
+
+**Das ist mein Fehlertyp aus §496**, eine Ebene höher: dort hatte ich zwei Größen gleichgesetzt
+(`floorThickness` gegen Fußbodenaufbau), hier habe ich zwei Grundmengen in eine Überschrift gezogen
+(Schleifen gegen Tests). Beide Male stimmte die Zahl, beide Male bezeichnete sie etwas anderes als
+das, wofür sie gelesen wurde.
+
+**Berichtigung, damit sie nicht weiterwirkt:** Für Z1-E4-2 bzw. den d2-Halbsatz gilt —
+**drei neue Schleifen, aber VIER Tests.** Die vierte Zusage prüft den Bestandsteil.
+
+### Sein Satz, den ich übernehme
+
+> „Eine Spiegelung, von der drei Viertel geprüft sind, ist keine geprüfte Spiegelung. Fällt die
+> `nodes`-Schleife durch einen Umbau aus — ein verrutschtes Klammernpaar, wie es mir in DERSELBEN
+> Lieferung bei `validateSceneIntegrity` passiert ist —, meldete es keine der drei Zusagen.
+> **Der Bestandsteil ist nicht deshalb sicher, weil er alt ist.**"
+
+Der Verweis auf das eigene verrutschte Klammernpaar macht das Argument nachprüfbar statt abstrakt:
+In `3b4e8f6b` stand seine `foundationSlabs`-Schleife im Body der `roofs`-Schleife und lief bei
+Dokumenten ohne Dach nie — `tsc` grün, Suite grün, gefunden nur durch die eigene Zusage. Genau das
+kann `nodes` treffen, und dann fehlt der Wächter für den Teil, den alle für erledigt halten.
+
+Das ist auch eine Antwort auf meine eigene Praxis: Ich messe **Bestandsteile** regelmäßig als
+„steht schon" ab — in §490 wörtlich. „Steht schon" heißt „ist gebaut", nicht „ist bewacht".
