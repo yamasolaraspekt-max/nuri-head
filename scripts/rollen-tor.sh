@@ -341,22 +341,60 @@ steuerung_pruefen() {
 
   # Die Aktion entscheidet VOR dem ACK-Alter: pausiert die Steuerung, ist ein aktueller ACK
   # ebenso wenig eine Erlaubnis wie ein veralteter.
+  # ⚠ HIER STAND `bauen) ;;` ALLEIN — und hat den naechsten echten Auftrag gesperrt.
+  #
+  # **Gemessen am 22.08.:** die Steuerung stellte `aktion: nachbessern` (Generation 9, Evaluator-
+  # Votum NACHBESSERN). Dieses Tor gab Rueckgabe 7 — *„die Steuerung sagt 'nachbessern', nicht
+  # 'bauen'"* — und verhinderte damit genau die Arbeit, die die Steuerung soeben beauftragt hatte.
+  # **Der Auftrag selbst nennt die Bedingung anders:** *„aktion != nachbessern ... -> NICHT
+  # committen"*. Meine Positivliste kannte nur einen einzigen Wert.
+  #
+  # ***Das ist A-03 an meinem eigenen Bau:*** *eine Barriere, die richtige Arbeit sperrt, wird
+  # abgeschaltet — und schuetzt danach auch nicht mehr gegen die Pause, fuer die sie gebaut wurde.*
+  # Die Richtung ist die unangenehmere von beiden: ein Falsch-Positiv haelt die Kette an.
+  #
+  # **Jetzt zwei benannte Listen statt einer.** Arbeit laesst durch, Pause sperrt — und ein Wert,
+  # den keine der beiden kennt, sperrt ebenfalls und sagt es. *Ein Commit unter einer Anweisung,
+  # die niemand einordnen kann, ist genau der Fall, gegen den A-37-22e steht; Durchlassen waere
+  # hier die falsche Vorsicht.*
   case "$AKTION" in
-    bauen) ;;
+    bauen|nachbessern) ;;
+    pausieren|angehalten|angehalten_eingefroren|parken|warten)
+      echo "ROLLEN-TOR  VERSTOSS  die Steuerung sagt '$AKTION' — das ist keine Arbeitsanweisung." >&2
+      echo "            Quelle: $QUELLE (generation ${GEN:-?})" >&2
+      echo "            Am 22.08. fiel ein Commit 3 Minuten 43 nach einer Pause, weil das Tor" >&2
+      echo "            sie nicht gelesen hat. Diese Zeile ist die Antwort darauf." >&2
+      return 7 ;;
     "")
       echo "ROLLEN-TOR  HINWEIS  Rollenquelle nennt keine aktion — Generation UNGEPRUEFT." >&2
       return 0 ;;
     *)
-      echo "ROLLEN-TOR  VERSTOSS  die Steuerung sagt '$AKTION', nicht 'bauen'." >&2
+      echo "ROLLEN-TOR  VERSTOSS  unbekannte aktion '$AKTION' — weder Arbeit noch Pause." >&2
       echo "            Quelle: $QUELLE (generation ${GEN:-?})" >&2
-      echo "            Am 22.08. fiel ein Commit 3 Minuten 43 nach einer Pause, weil das Tor" >&2
-      echo "            sie nicht gelesen hat. Diese Zeile ist die Antwort darauf." >&2
+      echo "            Bekannt als Arbeit: bauen nachbessern" >&2
+      echo "            Bekannt als Pause:  pausieren angehalten angehalten_eingefroren parken warten" >&2
+      echo "            Ein Commit unter einer Anweisung, die niemand einordnen kann, faellt aus." >&2
       return 7 ;;
   esac
 
   # Fehlender ACK ist eine Abweisung und kein Hinweis: er ist der einzige gueltige Nachweis, dass
   # der Auftrag angekommen ist. Wer ohne ihn baut, baut gegen einen Auftrag, den er nicht gelesen hat.
-  ACKDATEI="$(ls -1 "$STEUERUNG"/ereignisse/*/"$STAMM"-ack.yaml 2>/dev/null | head -1)"
+  # ⚠ HIER STAND `ls -1 .../ereignisse/*/<rolle>-ack.yaml | head -1` — der ERSTE alphabetisch.
+  #
+  # **Gemessen am 22.08., als der zweite Auftrag kam:** es gab drei Ordner mit einem
+  # `generator-ack.yaml`. `head -1` nahm `BAU-generator-A-37` (Generation 8), waehrend die Quelle
+  # auf Generation 9 stand — das Tor haette *„ACK ist veraltet"* gemeldet und den frisch
+  # quittierten Auftrag abgewiesen. **Ein Griff, der zufaellig richtig lag, solange es genau einen
+  # Auftragsordner gab.**
+  #
+  # **Die Quelle nennt den richtigen Pfad selbst** (`ack_pfad:`) — er wird jetzt von dort gelesen
+  # statt geraten. *Wer eine Datei sucht, deren Ort in der Quelle steht, soll ihn nicht erraten.*
+  # Fehlt die Angabe, bleibt die alte Suche als Rueckfall; dann ist sie eine Naeherung und keine
+  # Auskunft, und das steht hier, damit es niemand fuer dasselbe haelt.
+  ACKDATEI="$(sed -n 's/^ack_pfad:[[:space:]]*\([^[:space:]#]*\).*/\1/p' "$QUELLE" | head -1)"
+  if [ -z "$ACKDATEI" ]; then
+    ACKDATEI="$(ls -1 "$STEUERUNG"/ereignisse/*/"$STAMM"-ack.yaml 2>/dev/null | head -1)"
+  fi
   if [ -z "$ACKDATEI" ] || [ ! -f "$ACKDATEI" ]; then
     echo "ROLLEN-TOR  VERSTOSS  kein ACK gefunden fuer Rolle '$STAMM'." >&2
     echo "            Der ACK ist der einzige Nachweis, dass der Auftrag gelesen wurde." >&2

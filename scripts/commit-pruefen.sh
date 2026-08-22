@@ -248,6 +248,53 @@ fi
 
 FEHLER=0
 
+# ── A-37-20 — JE URSACHE EIN EIGENER, WIRKLICH ERREICHBARER RUECKGABEWERT ───────────────────
+#
+# **Der Mangel, den der Evaluator gemessen hat (Votum db420cf0):** die drei Ursachen aus A-37-8
+# waren am TEXT unterscheidbar und am RUECKGABEWERT nicht — alle drei endeten in derselben
+# Sammelstelle mit `exit 1`. **`exit 4` kam im ganzen Bau null Mal vor.**
+#
+# ***Der Witz daran: die Unterscheidung war schon da.*** `yaml_bericht()` gibt intern laengst 2 fuer
+# den Syntaxfehler, 3 fuer die fehlende Modulaufloesung und alles Uebrige fuer den Laufzeitfehler
+# zurueck — der Code wurde eine Zeile spaeter auf `FEHLER=1` eingeebnet und war weg.
+# **Es fehlte kein Wissen, es fehlte die Weitergabe.**
+#
+# **Die Zuordnung stammt aus der Codetabelle des Blattes (`c11f97ac:317-323`), nicht von mir:**
+# ```text
+#   2  YAML-Syntaxfehler im Kopf      commit-pruefen.sh
+#   3  fehlende Modulaufloesung MODUL commit-pruefen.sh
+#   4  sonstiger Laufzeitfehler       commit-pruefen.sh
+# ```
+#
+# **ZU DEN KOLLISIONEN — beide benannt, keine still umetikettiert (Blatt Teil a):**
+#
+# *`2` traegt hier auch den Aufruffehler* (`:72`, `:86`, `:90`, `:241`). **Das Blatt fuehrt diese
+# Doppelbelegung selbst** — als eigene Tabellenzeile *„(2) Rollenkennung fehlt/falsche Form,
+# `commit-pruefen.sh:59-65`, unberuehrt"* — und begruendet sie: *„keine Verdopplung, sondern eine
+# zweite Eintrittstuer: wer `commit-pruefen.sh` ruft, wird von `:59-65` mit 2 abgewiesen und
+# erreicht das Tor gar nicht."* **Die beiden Bedeutungen koennen nicht im selben Lauf auftreten.**
+# Die Suite nennt den Wert dort ausdruecklich *„Aufruffehler-Klasse"* und prueft ihn dreimal;
+# ich fasse ihn nicht an.
+#
+# *`3` traegt hier auch `ENV_BLOCKED`* (sechsmal, `:514`-`:607`). **Diese Kollision steht NICHT im
+# Blatt** — sie ist nach der Tabelle entstanden. Sie ist folgenlos aus demselben Grund wie oben:
+# der Lock-Riegel liegt mehrere hundert Zeilen VOR der YAML-Pruefung, wer dort abbricht, erreicht
+# sie nie. **Ich melde sie trotzdem, statt sie stillschweigend als geloest zu behandeln** — die
+# Begruendung stammt von mir und nicht aus dem Blatt, und das ist ein Unterschied.
+#
+# **Was KEINEN eigenen Code bekommt und warum:** `VERSCHWUNDEN`, `FEHLT`, `LEER`, `UNVERAENDERT`
+# und `SYNTAX` (js/mjs) bleiben bei `1`. Sie gehoeren nicht zu den drei Ursachen aus A-37-8; die
+# Tabelle weist ihnen nichts zu, und ich erfinde keine Codes, die niemand verlangt hat.
+#
+# **Der ERSTE Fehler bestimmt den Code.** Ohne diese Regel ueberschreibt ein spaeteres `FEHLER=1`
+# aus einer zweiten Datei die spezifische Ursache der ersten — der Lauf meldete dann `1`, obwohl
+# er die Modulaufloesung gefunden hat. *Genau die Einebnung, gegen die dieses Kriterium steht,
+# nur eine Datei weiter.*
+fehler_setzen() {
+  [ "$FEHLER" -eq 0 ] && FEHLER="$1"
+  return 0
+}
+
 # ── STUFE 5 ──────────────────────────────────────────────────────────────────────────────────
 # Der Index wandert aus dem Mount. Der Pfad traegt die PID: teilen sich zwei gleichzeitige
 # Laeufe denselben externen Index, waere die Kollision nur nach draussen gewandert statt zu
@@ -780,20 +827,20 @@ for p in "$@"; do
       echo "VERSCHWUNDEN $p  — im Baum weg, aber in HEAD vorhanden." >&2
       echo "           Ist das eine Entfernung oder eine Umbenennung, dann TICKET_ENTFERNEN=1 voranstellen." >&2
       echo "           Ist es keine, dann ist die Datei verlorengegangen — erst suchen, nicht committen." >&2
-      FEHLER=1; continue
+      fehler_setzen 1; continue
     fi
-    echo "FEHLT      $p" >&2; FEHLER=1; continue
+    echo "FEHLT      $p" >&2; fehler_setzen 1; continue
   fi
   if [ ! -s "$p" ]; then
-    echo "LEER       $p  — ein leerer Schreibvorgang ist ein gescheiterter" >&2; FEHLER=1; continue
+    echo "LEER       $p  — ein leerer Schreibvorgang ist ein gescheiterter" >&2; fehler_setzen 1; continue
   fi
   if git --no-optional-locks diff --quiet -- "$p" && git --no-optional-locks diff --cached --quiet -- "$p" \
      && ! git --no-optional-locks status --porcelain -- "$p" | grep -q '^??'; then
-    echo "UNVERAENDERT $p  — der Schreibvorgang hat nichts bewirkt" >&2; FEHLER=1; continue
+    echo "UNVERAENDERT $p  — der Schreibvorgang hat nichts bewirkt" >&2; fehler_setzen 1; continue
   fi
   case "$p" in
     *.mjs|*.js)
-      node --check "$p" 2>/dev/null || { echo "SYNTAX     $p" >&2; FEHLER=1; } ;;
+      node --check "$p" 2>/dev/null || { echo "SYNTAX     $p" >&2; fehler_setzen 1; } ;;
     *.md)
       BERICHT="$(yaml_bericht "$p")"; RC=$?
       case "$RC" in
@@ -802,7 +849,7 @@ for p in "$@"; do
           # Fall 2 der Anordnung vom 14.08.: der WAHRE Grund, nicht als Kopf-Fehler getarnt.
           echo "MODUL      $p  — js-yaml nicht aufloesbar. Dieser Worktree hat kein node_modules." >&2
           echo "           Abhilfe: NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules vor den Aufruf setzen." >&2
-          FEHLER=1 ;;
+          fehler_setzen 3 ;;   # MODUL — Codetabelle c11f97ac:320
         2)
           # Fall 1: echter Syntaxfehler. ABER: die Zahl allein sagt nicht, WER ihn gemacht hat.
           # Verglichen wird gegen den committeten Stand DERSELBEN Datei — kein fester Schwellwert,
@@ -820,7 +867,7 @@ for p in "$@"; do
           if [ "${JETZT:-0}" -gt "$VORHER" ]; then
             echo "YAML-KOPF  $p  — der Kopf parst nicht ($JETZT kaputte Bloecke, am Commit waren es $VORHER)" >&2
             printf '%s\n' "$BERICHT" | grep '^  Block' >&2
-            FEHLER=1
+            fehler_setzen 2   # YAML-Syntaxfehler — Codetabelle c11f97ac:319
           else
             echo "YAML-ALTLAST  $p  — $JETZT kaputte Bloecke, gegenueber dem Commit nicht mehr geworden ($VORHER)." >&2
             echo "              Warnung, kein Abbruch: dieser Schreibvorgang hat sie nicht verursacht." >&2
@@ -828,7 +875,7 @@ for p in "$@"; do
           fi ;;
         *)
           # Fall 3: alles Uebrige, als solches benannt statt als Kopf-Fehler.
-          echo "LAUFZEIT   $p  — ${BERICHT#LAUFZEIT }" >&2; FEHLER=1 ;;
+          echo "LAUFZEIT   $p  — ${BERICHT#LAUFZEIT }" >&2; fehler_setzen 4 ;;   # Codetabelle c11f97ac:321
       esac ;;
   esac
 done
@@ -836,7 +883,9 @@ done
 if [ "$FEHLER" -ne 0 ]; then
   echo "" >&2
   echo "KEIN COMMIT. F-14: was nicht geschrieben wurde, wird auch nicht belegt." >&2
-  exit 1
+  # A-37-20: HIER stand `exit 1` — die Stelle, an der die drei Ursachen ihre Unterscheidung
+  # verloren. Der Code wird jetzt durchgereicht, statt eingeebnet zu werden.
+  exit "$FEHLER"
 fi
 
 # ── B5: EIN ZAEHLERGEBNIS, DAS EINEN BEFUND TRAEGT, BRAUCHT SEINE TREFFERZEILEN ─────────────
