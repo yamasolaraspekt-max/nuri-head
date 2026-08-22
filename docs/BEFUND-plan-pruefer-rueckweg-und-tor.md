@@ -28483,3 +28483,118 @@ Zitiert, nicht nachgebaut; der Ball liegt beim Dirigenten.
 **Ball: niemand bei mir zu P-02.** Der Auslöser für die DoR **Z2-W0-5b** liegt noch **nicht** vor:
 der einzige Treffer auf `planner-CODE_FERTIG*.yaml` im Ordner trägt `kennung: P-02`, nicht
 `Z2-W0-5b`. **Das Muster trifft, die Kennung nicht** — und mein Auftrag verlangt beides.
+
+## §346 — Werkzeug-Register gegengelesen (Auftrag gen 9): die Grundmenge ist 43, nicht 37
+
+Gewählt gegen HEAD `f3ec1ffb` (Baum sauber, 14:10:35, Rückstand 6 — **Produktcode und Register
+durchgehend aus `auto/hausplaner-integration` gemessen**, §342). §346 als Überschrift 0 Treffer.
+Rollenquelle gen 9, Dateizeit 13:58:44, Digest ok.
+
+**Anlass: beauftragt, nicht Vorrat.** Mein Auftrag gen 9 nennt als Tätigkeit *„Werkzeug-Register
+gegenlesen (Konzept, kein DoR)"*. Das Zieldokument `docs/konzept/werkzeug-register.md` **existiert
+noch nicht** — es ist Posten 1 des Planners (gen 17, 14:03:22). Gegengelesen habe ich deshalb die
+**Quelle**, auf der es aufbauen soll: `docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md` und
+`resources/planner/hausplaner/app/tools/toolRegistry.ts`.
+
+**Die Zahlen aus meinem eigenen §300, frisch nachgemessen:**
+
+    toolRegistry.ts   13 Werkzeuge · letzte Aenderung ec12e9b3, 15.08. 11:05
+                      auswahl wand fenster tuer dach decke treppe bemassen flaeche-messen
+                      kontur loeschen duplizieren trimmen
+    Register          37 BESCHRIEBEN · 2 ENTWORFEN     -> §300 EXAKT BESTAETIGT
+
+**Was §300 nicht nannte und heute dazugehört:**
+
+    Zeilen mit Kennung W-NN am Zeilenanfang        43
+      davon BESCHRIEBEN                            37
+            ENTWORFEN                               2
+            GEBAUT                                  1   (W-27 Dachkantentypen)
+            GEGENSTANDSLOS                          3   (W-19, W-24, W-32)
+      Summenprobe  37+2+1+3 = 43                        schliesst
+
+**Der Hinweis für den Planner, und er betrifft seine Grundmenge.** Sein Auftrag lautet
+*„`docs/konzept/werkzeug-register.md`: Registerzeile **(37)** ↔ Modulpfad ↔ toolRegistry-Kennung ↔
+Reife"*. **Die Registerzeilen sind 43, nicht 37.** Wer 37 verknüpft, lässt **drei aktive** Zeilen
+liegen (2 ENTWORFEN, 1 GEBAUT) — und die drei `GEGENSTANDSLOS`-Zeilen brauchen keinen Modulpfad,
+sollten aber als solche benannt sein, damit später niemand sie für vergessen hält. *Das ist kein
+Mangel am Auftrag: „37" war meine Zahl aus §300, und sie war für BESCHRIEBEN richtig. Sie ist nur
+nicht die Grundmenge.*
+
+**Zwei eigene Messfehler auf dem Weg, beide durch Gegenproben gefunden.**
+
+**(1) Wortvorkommen statt Zeilen.** Mein erster Griff gab **69 BESCHRIEBEN · 10 ENTWORFEN ·
+8 GEBAUT** — `grep -oE` über die ganze Datei zählt jedes Vorkommen, auch in Prosa: **87 Vorkommen
+gesamt, davon 23 außerhalb jeder Tabellenzeile.** Pro Reifegrad-Spalte gezählt sind es 37/2/1.
+**Dieselbe Klasse wie §337** (Zeile gegen isolierte Extraktion), und mein §300 war die ganze Zeit
+richtig — falsch war der Griff von heute.
+
+**(2) Die Grundmenge des Musters war zu klein.** Ich habe fünf Reifegrade gesucht
+(`BESCHRIEBEN|ENTWORFEN|GEBAUT|BROWSERABGENOMMEN|VERWORFEN`) und bekam 40 von 43 Zeilen — **drei
+ohne Treffer.** Gefunden habe ich sie nur, weil die **Summenprobe nicht schloss** (41 Zeilen mit
+Wort gegen 40 in der Spalte, dann 43 W-Zeilen gegen 40). Die drei tragen **`GEGENSTANDSLOS`** — ein
+sechster Reifegrad, den mein Muster nicht kannte. *Ein Muster, das die eigene Wirklichkeit nicht
+kennt — der Gegenstand von A-43, hier an meinem eigenen Griff.* **Ohne Summenprobe hätte ich „40
+Registerzeilen" gemeldet und drei stillschweigend verloren.**
+
+**Ball: niemand.** Kein DoR-Gegenstand (der Auftrag sagt ausdrücklich *„Konzept, kein DoR"*), kein
+Mangel gegen jemanden. Die Zahl **43 statt 37** geht als Hinweis an den Planner, bevor er Posten 1
+schneidet — **nach Punkt 3 der heute erteilten P-02-Fassung als eigenes Ereignis, nicht in sein
+Blatt.**
+
+## §347 — Die 27 Module ohne Ladeweg, vollständig aufgelistet: §300 exakt bestätigt, nichts bewegt
+
+Gewählt gegen HEAD `400db73b` (Baum sauber, 14:15). §347 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok.
+
+**Warum aus meinem Baum gemessen werden durfte** — die §342-Frage vorab geklärt: der Baum-Hash von
+`resources/planner/hausplaner` ist in meinem Baum und in `auto/hausplaner-integration`
+**identisch** (`81626c87705b`), und keiner der 6 fehlenden Commits berührt das Verzeichnis
+(`git log HEAD..integration -- resources/planner/hausplaner` → **0**).
+
+**Das Verfahren aus §300 wiederholt** — BFS ab `main.tsx` über **Laufzeit**-Kanten, `import type`
+zählt nicht, `export … from` als Kante mitgeführt:
+
+    Grundmenge (.ts/.tsx ohne __tests__ und __domtests__)   160
+    erreichbar ab main.tsx                                  133
+    NICHT erreichbar                                         27
+    Summenprobe 133 + 27 = 160                              schliesst
+    §300 nannte: 160 · 133 · 27                             EXAKT BESTAETIGT
+
+**Und der Baum-Hash ist derselbe wie in §300** (`81626c87`). **Seit §300 hat sich am Hausplaner
+nichts bewegt** — die Zahl ist nicht nur gleich, sie *muss* gleich sein. *Das ist der Unterschied
+zwischen „stimmt noch" und „konnte sich gar nicht ändern"; ohne den Baum-Hash hätte ich nur das
+Erste gewusst.*
+
+**Neu gegenüber §300: die vollständige Liste.** §300 nannte zwei Stichproben; hier stehen alle 27,
+weil der Planner gerade die Anschlusswelle schneidet und genau diese Menge braucht:
+
+    app/tools/       auswahlDarstellung · toolCatalogStillgelegt · toolTypes · trefferSuche
+                     werkzeugArten · werkzeugLandkarte
+    domain/          scene.types
+    geometry/        aufbautenStatus · auswechslung · dachAusschnitt · dachOeffnung · dachTopologie
+                     dachVorlage · grundriss · heizkreisVerteiler · holzBauteile · holzMengen
+                     integrationAbgleich · schifterListe · sparrenTrennung · treppeSvg
+                     treppenTypen · wandFlaeche · wandaufbau · werkzeugRegistry
+    projection/      dachProjektion · raumProjektion
+
+**Zwei Querbezüge, die die Liste sofort brauchbar machen.**
+
+**(1) Die Fachmessung der Lesesitzung ist unabhängig bestätigt.** Ihr Hinweis von 14:05:01 nennt
+fünf Dach-Module — `dachProjektion`, `dachOeffnung`, `sparrenTrennung`, `dachTopologie`,
+`schifterListe`. **Alle fünf stehen in meiner Liste.** Zwei getrennte Verfahren (ihre Fachlesung,
+mein BFS) kommen zur selben Menge; das stützt beide. *Zitiert, nicht nachgebaut — ihr Befund gehört
+ihr, meine Liste ist unabhängig entstanden.*
+
+**(2) Posten 2 des Planners betrifft zwei Einträge daraus.** Sein Auftrag gen 17 nennt
+`toolCatalogStillgelegt.ts` und `geometry/werkzeugRegistry.ts` zur Klärung — **beide sind unter den
+27.** Wer sie verwirft, verkleinert die Menge auf 25; wer sie anschließt, auf ebenfalls 25 bei
+zwei mehr erreichbaren. **Die Zahl bewegt sich also demnächst, und dann ist sie neu zu messen.**
+
+**Zum stehenden Yama-Posten.** Er trägt weiterhin *„Entscheidung zu §119/§120 (**33** Module ohne
+Ladeweg)"*. **Die 33 ist seit §300 überholt**; richtig sind **27**, und die sechs Differenz haben
+zwischen `d4ee1555` und `1ecafe28` einen Ladeweg bekommen. Ich reiche die berichtigte Zahl weiter,
+wie seit §300 in jeder Vorlage.
+
+**Ball: niemand bei mir.** Die Liste geht als eigenes Ereignis an den Planner (P-02 Punkt 3), nicht
+in sein Blatt. Der Auslöser für die DoR **Z2-W0-5b** liegt weiterhin nicht vor: Treffer mit
+`kennung: Z2-W0-5b` im Auslöser-Ordner **0**.
