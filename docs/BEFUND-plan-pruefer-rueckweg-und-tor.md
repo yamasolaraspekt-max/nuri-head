@@ -31077,3 +31077,52 @@ trug.** Dass sie es jetzt nicht mehr ist, hat den Riegel schwerer gemacht: **ein
 Anlass einen Verursacher hat, wird anders gelesen als eine, deren Anlass Pech war.**
 
 Ball: **niemand von mir aus.** Der Bau von Z0-I1 Stufe 1 schließt die Lücke; er läuft.
+
+## §387 — Alterungsprüfung Posten 3 (Tragwerk): gilt unverändert. Damit ist die Yama-Liste einmal durchgemessen
+
+Messstand: HEAD `667931e2`, Baum 0, gemessen 16:33–16:37. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §387'` → 0). Neunte und letzte Alterungsprüfung.
+
+### Posten 3, gemessen am Stand `ceb4224a`
+
+Der Befund vom 16.08. lautet: *„W-21 Sparren/Lattung — **EIN** Aufrufer, und der ist ein
+ENGINE-PANEL, keine Zeichenfläche."* Nachgemessen **über den Funktionsnamen und mit Klammer** (Lehre
+§382):
+
+    berechneSparren(   Produktivdateien: 2  — davon 1 die Definition (sparrenBerechnung.ts:105)
+                       -> EIN Aufrufer: app/dashboard/enginePanels.ts:227
+    berechneLattung(   Produktivdateien: 0  — die Funktion existiert nicht
+    Gegenprobe OHNE Klammer: 3 Dateien — eine Erwaehnung mehr, kein Aufruf
+
+**Der Aufrufer ist `app/dashboard/enginePanels.ts` — ein Engine-Panel, keine Zeichenfläche.** Der
+Befund hält nach sechs Tagen **unverändert**, in beiden Hälften.
+
+**Nebenbefund, der zwei Posten verbindet:** `sparrenBerechnung.ts:100` führt
+`export const N003_VORBEHALT = 'Vorbemessung, ersetzt keine prüffähige Statik'`. **Der N-003-Vorbehalt
+aus Posten 1 steht als Konstante genau in dem Modul, dessen Zeichenflächen-Frage Posten 3 ist.** Wer
+Tragwerk an die Zeichenfläche holt, holt den Vorbehalt mit — sichtbar für den Bediener, nicht nur im
+Panel. Das ist kein neuer Befund, aber es erklärt, warum die beiden Posten nicht unabhängig
+entschieden werden können.
+
+### Bilanz: die Liste ist einmal durch
+
+Neun Posten, neun Alterungsprüfungen. **Nur die drei von heute nenne ich mit Zahlen — die übrigen
+sechs stehen in ihren eigenen Abschnitten, und meine Dauerregel verbietet, Postenlisten aus Notizen
+statt aus frischer Messung zu bauen:**
+
+    Posten 6  Seed-Weg der Pruefbuehne   §366  ENTSCHIEDEN OHNE EMPFAENGER -> 15:25:28 umgebucht,
+                                               heute als Z0-I1-11 im Auftrag angekommen
+    Posten 9  §119/§120                  §383  38 -> 26 tote Module; Posten gilt, kleiner
+    Posten 3  Tragwerk                   §387  gilt unveraendert, 1 Aufrufer, Engine-Panel
+    (Posten 10, DB-Name, entstand 15:43 und war 15:55 positiv erfuellt — §375)
+
+Die übrigen sechs (N-003, A-13, W-21L, versatz-Quittung, raumAuswahl.ts, Regelkollision) sind in
+früheren Runden geprüft und dort belegt; **ich trage ihre Zahlen hier nicht fort, weil eine Zahl, die
+ich heute nicht gemessen habe, in einer Vorlage nichts zu suchen hat.**
+
+**Was die Durchsicht insgesamt ergeben hat:** Von neun Posten hat sich **einer als fehladressiert**
+erwiesen (6 — Yama schuldete längst nichts mehr), **einer als kleiner** (9), **einer entstand und
+verging innerhalb von zwölf Minuten** (10). **Die übrigen liegen zu Recht bei Yama** — es sind
+Entscheidungen, keine Messfragen, und keine Messung kann sie ersetzen.
+
+Ball: **niemand.** Kein Auftrag berührt.
