@@ -415,6 +415,15 @@ Grenze (Yama): Sofortlösung, noch keine unübergehbare Barriere — Durchsetzun
   Lease frei). Reihenfolge: `A-42 → A-37 vollständig aktiv → Z0-I1`.
 - **Prozessregel (Yama):** nach DoR Kriterienstand einfrieren; Beleg-/Formulierungsberichtigungen ohne
   Kriterienwirkung als **ein Errata-Ereignis**, ein Commit, ein Rückweg (README). Basis-Regel `BASE_BLOCKED`.
+- **08:01–08:12 Vollzug:** Bäume getauscht (alt → `ticket-rolle-generator-beleg-2026-08-21` /
+  `rolle/generator-beleg-2026-08-21` @ `abd1719c`; neu `ticket-rolle-generator` / `rolle/generator` @ `ab9e837c`,
+  0/0 zur Integration). Generator: `BASE_BLOCKED`-Ereignis, **ACK gen 5, Lease Token 2, Bau läuft**
+  (`scripts/rueckweg.py` in Arbeit). **Selbstmeldung Generator:** hat zum Nachweis von A-37-22 `rueckweg.py`
+  **echt gefahren** → drei fremde Bäume per Fast-Forward auf `ab9e837c` (plan-pruefer, evaluator, release; 0 offen,
+  kein Commit, nichts überschrieben; Bäume mit offenen Dateien übersprungen). Entscheidung: kein Zurückdrehen;
+  Regel „Generator fährt nie ein Transportwerkzeug"; Beleg über Probe-Repo im Scratchpad; `--trocken` als
+  Vorratsposten (Planner). Planner gen 8: 198 Z0-I1-Zeilen bleiben als **`PARKED_DRAFT`** im Worktree (nicht
+  committen/löschen/auschecken), Lease frei, ACK gen 8 — Vollzug per Takt ausstehend.
 Die fünf Negativproben gehen als Kriterien
 in das erweiterte A-37-Blatt (Planner); der Integrator transportiert nichts aufgrund der seit 22:04
 entstandenen Generator-Bauten. Das V2-Konzept (`0d897b0e`) ist bereit für die spätere unabhängige
