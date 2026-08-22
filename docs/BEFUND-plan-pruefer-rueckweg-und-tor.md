@@ -30765,3 +30765,73 @@ ist doch eine Zahl. **Meine Faustregel hätte genau diesen Fall durchgelassen.**
 aussieht.
 
 Ball: **niemand.** Kein Auftrag berührt, keine fremde Datei angefasst.
+
+## §382 — DoR Z1-W2-4 (Treppe-Vertragsprobe): ERTEILT. Drei Messfehler in einer Prüfung, alle meine
+
+Messstand: HEAD `f8801591`, Baum 0, gemessen 16:18–16:20. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §382'` → 0). **Neue Ereignisse vor dem Schreiben geprüft** (Regel §380): eines,
+`generator-zwischenstand-Z0-I1-messung.yaml` 16:19:29 — betrifft den Z0-I1-Bau, nicht dieses Votum.
+
+Auslöser `planner-CODE_FERTIG-Z1-W2-4.yaml`, 16:16:02, Blatt
+`docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md @ 6d8e819f`, Messstand
+`7791920f`.
+
+### Was das Blatt ist — und warum das die entscheidende Einordnung ist
+
+Es ist **kein Anschlussblatt, sondern eine Vertragsprobe**: *„Die Treppe ist NICHT unerreichbar,
+sondern der am besten angeschlossene Teil des Planers."* Und die Wahl des Bauteils ist nicht seine:
+*„DER VERTRAG NENNT ES SELBST, zweimal"* (`werkzeugRegistry.ts:13` „z. B. DIN 18065 bei der Treppe",
+`:27` „z. B. 'R' für Treppe"). **Zeigt der Entwurf an diesem Bauteil keinen Vorteil, zeigt er ihn
+nirgends.**
+
+### Selbst nachgemessen am Stand `7791920f`
+
+    6 Kriterien / 6 Matrixzeilen, jede Kennung genau 2x                    BESTAETIGT
+    registriereWerkzeug: 7 Treffer, ALLE im eigenen Test + 1 Definition
+      -> Produktivaufrufer 0                                              ROT-LAGE BESTAETIGT
+    berechneTreppe: 6 Produktivdateien mit '(' , davon 1 Definition
+      -> 5 Aufrufer, seine fuenf Namen exakt                              BESTAETIGT
+    TreppenErgebnis: 10 Felder — 8 Zahlen, pruefungen[], bestanden        EXAKT
+    N4 :107 · Rueckweg :284 · TMPDIR 3x · Vitest 1x (als AUSSCHLUSS)
+
+**Die tragende Formel durchgerechnet:** `Parametrik.kennwerte?: Record<string, number|string|boolean>`
+nimmt die 8 Zahlen und `bestanden` — **neun von zehn**. `pruefungen: TreppenPruefung[]` ist ein Array
+von Objekten und in einem Record von Skalaren **nicht abbildbar**. `EngineErgebnis` führt es dagegen
+ausdrücklich (`pruefungen?: TreppenErgebnis['pruefungen']`) plus `[feld: string]: unknown`. **Der
+benutzte Vertrag ist der reichere — die Aussage des Blattes hält.**
+
+### Drei Messfehler in einer Prüfung, und alle drei sind Klassen, vor denen ich selbst warne
+
+    1  Pfad GERATEN         ich suchte app/tools/werkzeugRegistry.ts — sie liegt in geometry/.
+                            Das Blatt nennt den Pfad an drei Stellen korrekt (:3, :13, :25).
+    2  Vorkommen statt Aufruf  ich zaehlte 7 Produktivdateien fuer berechneTreppe.
+                            Zwei davon: faehigkeiten.ts:84 (String in einer Deklaration) und
+                            sparrenBerechnung.ts:4 (KOMMENTAR "Muster wie berechneTreppe").
+                            Mit '(' gemessen: 5. Seine Zahl war exakt.  <- P7, meine eigene Regel
+    3  Muster zu eng        'stair' MIT Quotes -> 1 Datei · OHNE Quotes -> 17.
+                            Ich haette "1 statt 15" als Abweichung gemeldet.
+
+**Zwei davon hätten als Befund gegen das Blatt durchgehen können.** Der zweite ist der peinlichste:
+**P7 ist meine eigene Regel** — *„Verbraucher über Funktionsnamen messen"* — und ich habe sie halb
+angewandt. Über den Funktionsnamen messen genügt nicht; **ein Funktionsname im Kommentar ist kein
+Verbraucher.** Die Klammer ist der Unterschied zwischen Erwähnung und Aufruf.
+
+Der dritte fiel nur auf, weil ich die Gegenprobe am bekannten Treffer gefahren habe, wie der
+Wacheauftrag es verlangt — `scene.types.ts` existiert, mein Muster fand sie nicht.
+
+### Votum
+
+**ERTEILT.** Sechs Kriterien mit Messbefehl, rotem Ist und Absage-Regel; N4 vorhanden („bedienweg
+keiner — Vertragsprobe"); Rückweg vorhanden; Ort der Probe ist **Wegwerf unter TMPDIR** nach
+A-37-22d, und Kriterium (c) schließt **Vitest ausdrücklich aus** *(„KEIN Vitest, es existiert
+nicht")* — mein §369 ist eingearbeitet, ohne dass ich es anmahnen musste.
+
+Die Absage-Regeln sind der stärkste Teil, drei davon schneiden je einen naheliegenden Irrweg ab:
+eine **neu geschriebene** Treppen-`parametrik` erfüllt (a) nicht; **„passt im Wesentlichen"** erfüllt
+(b) nicht, verlangt ist eine Zahl und eine Liste; und (f) hält fest: **„Nichtbenutzung ist ein Anlass
+zu messen, kein Ergebnis."**
+
+**Kein Halbsatz.** Eine Beobachtung ohne Ballwechsel: seine `'stair'`-Zahl (15) hängt an der
+Zählweise — mit anderem Muster kommen 17 heraus. Sie ist Kontext, kein Kriterium, und trägt nichts.
+
+Ball: **Generator** (nach Z0-I1) · bei mir nichts.
