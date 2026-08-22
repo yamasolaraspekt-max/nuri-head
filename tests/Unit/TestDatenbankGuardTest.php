@@ -71,17 +71,47 @@ final class TestDatenbankGuardTest extends TestCase
      * würde hier nichts geschrieben: es gibt kein `RefreshDatabase`, keine Migration, kein Seed.
      * *Eine Schutzprobe, die im Fehlerfall selbst Schaden anrichtet, ist keine Probe.*
      */
-    public function test_z0i1_2_die_produktionsdatenbank_wird_abgewiesen(): void
+    public function test_z0i1_2_eine_nicht_erlaubte_datenbank_wird_abgewiesen(): void
     {
-        $this->verbindeMit('ticket');
+        // ⚠ **NICHT `ticket`.** Bis 22.08. stand hier `$this->verbindeMit('ticket')` — und das
+        // baute bei JEDEM Suite-Lauf eine echte Verbindung zur Produktionsdatenbank auf.
+        // Sie war rein lesend (kein `RefreshDatabase`, keine Migration, kein Seed), aber
+        // „Produktiv-DB" steht auf der verboten-Liste, und eine Schutzprobe, die selbst die
+        // verbotene Handlung ausfuehrt, ist der falsche Weg zum richtigen Ziel.
+        //
+        // **Das Kriterium verlangt das auch gar nicht:** Z0-I1-2 sagt woertlich „Lauf gegen
+        // `ticket` (per Env SIMULIERT)". Ich hatte die schaerfere Lesart aus Z0-I1-10
+        // („erzwungen") genommen — aus einem Kriterium, das nicht dieses ist.
+        // Gemeldet vom Plan-Pruefer (§452) und vom Planner (20:08).
+        //
+        // `information_schema` loest denselben Zweig aus: es ist NICHT `ticket_testing`,
+        // es traegt keine Produktivdaten, und es existiert auf jedem MySQL.
+        $this->verbindeMit('information_schema');
 
         try {
             TestDatenbankGuard::pruefeVerbindung();
-            $this->fail('Der Guard liess die PRODUKTIONSDATENBANK durch.');
+            $this->fail('Der Guard liess eine fremde Datenbank durch.');
         } catch (RuntimeException $e) {
-            $this->assertStringContainsString("'ticket'", $e->getMessage());
+            $this->assertStringContainsString("'information_schema'", $e->getMessage());
             $this->assertStringContainsString('ABBRUCH', $e->getMessage());
         }
+    }
+
+    /**
+     * **Und ausgerechnet die Produktionsdatenbank — ohne sie anzufassen.**
+     *
+     * Der Guard vergleicht `$gefunden !== self::ERLAUBT`. Ist `ERLAUBT` genau `ticket_testing`,
+     * dann faellt **jeder** andere Name in denselben Zweig, `ticket` eingeschlossen. Das ist
+     * keine Vermutung, sondern die Form der Bedingung — und der Zweig ist im Test darueber
+     * ausgeloest.
+     *
+     * *Zusammen ergeben die beiden, was der eine Test vorher mit einer verbotenen Verbindung
+     * zeigte: eine ausgeloeste Abweisung PLUS der Nachweis, dass `ticket` darunter faellt.*
+     */
+    public function test_z0i1_2_die_produktionsdatenbank_faellt_unter_dieselbe_abweisung(): void
+    {
+        $this->assertSame('ticket_testing', TestDatenbankGuard::ERLAUBT, 'Erlaubt ist genau EIN Name.');
+        $this->assertNotSame(TestDatenbankGuard::ERLAUBT, 'ticket', 'Die Produktionsdatenbank ist nicht der erlaubte Name.');
     }
 
     /**
