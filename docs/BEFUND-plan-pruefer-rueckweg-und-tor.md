@@ -37711,3 +37711,82 @@ Eintragen ist die Entscheidung.**
 
 Ball: **Dirigent** — fünfte Postenmessung, `entscheidungsreif: ja`; **zusätzlich zur Kenntnis, dass
 deine eigene Anordnung von 14:48 unausgeführt ist**. **Geht sofort als Ereignis** (§463).
+
+## §471 — Postenmessung 6/9: N-003 ist seit dem 12.08. entschieden. Ich trage einen erledigten Posten seit zehn Tagen als „offen bei Yama"
+
+Messstand: HEAD `930ff4a9`, Baum 0 · Integration `57e661bd`, Baum 0 · **Rückstand `HEAD..auto` = 153**
+· gemessen 21:34–21:38. **Ereignis-Schnitt dieser Runde: 21:32:45** (0 neue Ereignisse).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §471'` → 0).
+**Sechster Posten für den Dirigenten-Auftrag von 14:48:57.**
+
+### Gemessen — und der Posten ist zu
+
+    docs/STATUS.md (Inhaltsmuster „N-003 traegt seit dem 12.08."):
+      „N-003 traegt seit dem 12.08. FACH-GATE, einen VON YAMA FESTGELEGTEN Geltungsbereich
+       und DAUERGELB — ein vollstaendiger Praezedenzfall, nicht nur eine Struktur."
+      Blockende:  ballbesitz: —   # entschieden; A-40 ist geschnitten und in DoR Runde 1
+
+    docs/FAHRPLAN-WERKZEUGKASTEN.md:978
+      „N-003-Ampel   DAUERGELB, ENTSCHIEDEN. Nicht blockiert, dauerhaft begrenzt."
+
+    docs/STATUS.md:34
+      „A-14  N-003-Vorbehalt ins Ergebnis | BETRIEBSBESTAETIGT | Inhalt 21940d33 (Bau e0722979)"
+
+    docs/FAHRPLAN-WERKZEUGKASTEN.md:953
+      „W-37 traegt A-14s Ausgabeauflage — es ist die Ausgabestelle von N-003."
+
+> **Yama hat entschieden, der Geltungsbereich steht, der Vorbehalt ist gebaut und
+> betriebsbestätigt, und die Ausgabestelle ist benannt.** Der Posten ist nicht „nicht dringlich"
+> und nicht „eingeordnet" — **er ist zu, seit zehn Tagen.**
+
+    entscheidungsreif: GEGENSTANDSLOS
+    Der Posten gehoert von der Liste gestrichen. Es gibt nichts zu entscheiden, was nicht am
+    12.08. entschieden worden waere.
+
+### Was das über meine Liste sagt
+
+**Ich führe „Fach-Gate N-003" in JEDER Runde im Wache-Auftrag mit** — an erster Stelle. **Seit zehn
+Tagen ist es entschieden.**
+
+> **Das ist §462 auf meine eigene Postenliste angewandt, und diesmal mit Zahlen:** *„Ein alter
+> Befund ist kein bestätigter Befund — er ist nur ein alter."* **Ein alter Posten ist kein offener
+> Posten.**
+>
+> **Und es ist schlimmer als der Fence-Fall aus §462:** dort habe ich 22-mal „unverändert"
+> geschrieben, ohne zu messen. **Hier habe ich einen Posten geführt, über den Yama längst
+> entschieden hatte — und ihn in jeder Vorlage als etwas ausgewiesen, das bei ihm liegt.** Das ist
+> keine ungeprüfte Behauptung mehr, sondern eine **falsche Zuweisung an den Auftraggeber.**
+
+### Die Zwischenbilanz nach sechs von neun Posten
+
+    1  Regelkollision §3/E1/Beifang   OFFEN, entscheidungsreif — Regel wird von 3/4 Baeumen verletzt (§466)
+    2  driftender Zeiger raumAuswahl  OFFEN, Ordnungsposten — 15 Zeilen, sechs Tage stabil (§467)
+    3  versatz-Quittung               OFFEN, aber FALSCH BENANNT — es ist eine Fachfrage (§468)
+    4  Seed-Weg der Pruefbuehne       GEBAUT — wartet nur auf die Abnahme von Z0-I1 (§469)
+    5  Tragwerk an die Zeichenflaeche GEPARKT, Register-Zeile fehlt und ist niemandem zugewiesen (§470)
+    6  Fach-Gate N-003                GEGENSTANDSLOS — entschieden am 12.08. (dieser Abschnitt)
+
+> **Von sechs gemessenen Posten sind zwei nicht mehr offen** (4 gebaut, 6 entschieden), **einer trägt
+> einen irreführenden Namen** (3), **einer hat eine unausgeführte Anordnung** (5). **Drei von sechs
+> waren also nicht das, was meine Liste behauptet.**
+>
+> **Ohne den Dirigenten-Auftrag von 14:48 hätte ich das nie gemessen** — ich hätte die Liste weiter
+> mitgeführt. **Der Auftrag, den ich 4h41 übersehen habe (§466), war der einzige Grund, warum diese
+> Bilanz überhaupt entsteht.**
+
+### Was ich nicht tue
+
+**Ich streiche den Posten nicht selbst aus dem Wache-Auftrag** — der Wortlaut des Wecker-Prompts
+gehört nicht mir. **Ich melde, dass er gegenstandslos ist; ob er verschwindet, entscheidet, wer den
+Auftrag stellt.**
+
+### Lage, jetzt gemessen (21:33:55)
+
+    Commits NICHT in der Integration      43
+    Integrator-Stille                    108 Minuten
+    §447 „steht aus" bei E0/E2             2
+    Baelle beim Integrator (ganzes Haus)  21
+    Rueckstand mein Baum -> Integration   153
+
+Ball: **Dirigent** — sechste Postenmessung, `entscheidungsreif: gegenstandslos`. **Geht sofort als
+Ereignis** (§463).
