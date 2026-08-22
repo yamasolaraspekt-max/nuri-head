@@ -110,7 +110,7 @@
 | **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `BEREIT` | **Generator** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht · **DoR ERTEILT** 19:06:40 mit zwei Halbsaetzen (§429) — Bau kann sofort beginnen |
 | **Z1-E0-1** Hoehenkette — eine Wahrheit statt drei Rechnungen | `ENTWURF` | **Plan-Prüfer** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E0-1-hoehenkette-eine-wahrheit.md` @ `4746d9c5` · **Spur A** · **DoR steht aus** · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) |
 | **Z1-E2-1** Etagen-Integritaet — Wachen und Mitnahme | `ENTWURF` | **Plan-Prüfer** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E2-1-etagen-integritaet.md` @ `4746d9c5` · **Spur A** · **DoR steht aus** · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) |
-| **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `NACHBESSERN` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` · **NACHBESSERN** 19:04:28, 8 von 10 Kriterien, Reifegrad `code-geprueft mit Ausloesung` — zwei Zusagen nennen das Vorhandene statt das Wirkende |
+| **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` · **NACHBESSERN** 19:04:28, 8 von 10 Kriterien, Reifegrad `code-geprueft mit Ausloesung` — zwei Zusagen nennen das Vorhandene statt das Wirkende · **nachgebessert** `ba6fc673` 19:42:03, Kriterien 10 und 12 |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -19592,8 +19592,8 @@ herkunft_dieses_blocks: |
 ```yaml
 auftrag: "Z0-I1"
 titel: "Testdatenbank-Isolation — Stufe 1"
-zustand: NACHBESSERN
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 blatt: "docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md"
 blatt_sha: 7791920f
 basis_sha: 161868e9
@@ -19601,7 +19601,7 @@ dor_beleg: |
   ERTEILT — im Verlauf des Tages; das Blatt liegt nicht unter docs/auftraege/aktiv/,
   sondern unter docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md.
   Ich vermerke den abweichenden Ort, statt ihn stillschweigend zu vereinheitlichen.
-bau_sha: 04949151
+bau_sha: ba6fc673
 herkunft_dieses_blocks: |
   Statusplatz vom integrator angelegt, und von den fuenf ist das der, der am laengsten gefehlt hat.
   Z0-I1 ist seit 16:58:55 CODE_FERTIG und wird vom Plan-Pruefer in der Vorlage an Yama (17:29)
@@ -19632,6 +19632,18 @@ votum: |
   denselben Tag traegt.
   ZUSTAND NACHBESSERN, Ball generator. Der Bau 04949151 bleibt in der Integration; nichts wird
   zurueckgeraeumt, die Nachbesserung kommt als neuer Stand obendrauf.
+
+nachbesserung: |
+  CODE_FERTIG aus generator-CODE_FERTIG-Z0-I1-nachbesserung.yaml, 19:42:03,
+  endstand und ergebnis ba6fc673. "Z0-I1 Stufe 1 — Kriterien 10 und 12 nachgebessert."
+  Achtunddreissig Minuten nach dem NACHBESSERN-Votum von 19:04:28.
+  DER ERSTE BAU 04949151 BLEIBT STEHEN; ba6fc673 kommt obendrauf. Kein Reset, kein Umschreiben.
+  NICHT VERRECHNET, WEIL NICHT MEINE SACHE: der Plan-Pruefer hat 19:40 einen SICHERHEITSBEFUND
+  zu Z0-I1-10 gemeldet (plan-pruefer-SICHERHEITSBEFUND-z0-i1-10-und-eigener-pruefmangel.yaml)
+  und der Generator hat 19:35 eine unzulaessige Verbindung zur Produktiv-Datenbank
+  selbstgemeldet, entstanden bei der Gegenprobe zu genau diesem Kriterium. Beides beruehrt die
+  Bewertung dieses Standes und keines davon entscheide ich. Ich trage CODE_FERTIG ein, weil der
+  Bau gemeldet ist, und nenne die zwei offenen Punkte daneben.
 
 ```
 
