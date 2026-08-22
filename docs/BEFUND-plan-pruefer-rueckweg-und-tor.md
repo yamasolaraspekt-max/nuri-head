@@ -33022,3 +33022,87 @@ ausdrücklich nicht (Nicht-Ziel: *„Keine Änderung an der Treppe"*).
 Ball: **Planner** (ob daraus ein Blatt wird) · **Yama** (die Fachfrage, wenn es eines wird).
 Der Stillstand daneben unverändert: Integrations-Zweig `ceb4224a` seit **16:05:04**, 13
 Planner-Commits offen, `docs/STATUS.md` seit 15:56:52.
+
+## §416 — Der Integrator hat die Tafel nachgeführt, aber nichts transportiert. Zwei Zustände waren bei der Niederschrift schon überholt — einer davon 104 Minuten
+
+Messstand: HEAD `22fb6a28`, Baum 0, gemessen 18:11–18:13. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §416'` → 0).
+
+### Zuerst das Positive, und es ist echt
+
+Nach **132 Minuten** Stille hat der Integrator um **18:09:33** fünf Zustandscommits geschrieben
+(`72fabf4f` … `217fd547`). **Dabei sind zwei meiner drei Karteileichen aus §413 verschwunden:**
+
+    Z1-W2-1   ENTWURF / plan-pruefer   ->   CODE_FERTIG / evaluator
+    Z1-W2-0   ENTWURF / plan-pruefer   ->   CODE_FERTIG / evaluator
+    mein ballbesitz in STATUS.md:  3  ->  1   (geblieben: P-02, VORLAGE)
+
+Die Tafel führt mich nicht mehr für Arbeit, die ich vor Stunden erledigt habe. Das war überfällig
+und ist erledigt.
+
+### Aber: es war Zustandspflege, kein Transport
+
+    Planner-Commits nicht in der Integration:   13     (unveraendert)
+    Z1-W2-4 / -5 / -6 / Z2-W0-11b im Checkout:  FEHLEN WEITER
+    Z0-I1-Blatt im Checkout:                    ELF Kriterien, Z0-I1-12 nicht lesbar
+
+**Meine erste Lesart dieser Runde — „der Stillstand ist aufgelöst" — war falsch**, und nur die
+Messung hat sie gestoppt. Fünf Commits mit dem Wort „integrator" davor sehen nach Bewegung aus; die
+Zahl, die zählt, hat sich nicht bewegt. §414 gilt unverändert.
+
+### Fall 1: Z1-W2-3 — zitiert, nicht nachgebaut
+
+Der Generator hat es um **18:12:09** selbst gemeldet
+(`BAU-generator-Z2-W0-5b/generator-befund-status-z1-w2-3-falsch-zurueckgestellt.yaml`,
+`ball: integrator`). **Seine Zeitachse, die ich am Diff nachgemessen und bestätigt habe:**
+
+    15:52:21  Generation 16 stellt Z1-W2-2 UND Z1-W2-3 zurueck
+    15:52:42  seine Berichtigung: der Herkunftsvermerk trifft das MODUL, nicht jede Funktion
+    15:53:35  GENERATION 17 REVIDIERT — "Z1-W2-3 ist baubar"        <- 74 Sekunden spaeter
+    16:12:31  Bau d00aeece · 16:13:25 CODE_FERTIG, ball evaluator
+    18:09:33  Integrator schreibt ZURUECKGESTELLT, berufen auf 15:52:21
+
+Eigene Gegenprobe am Commit `217fd547`: `-zustand: BEREIT / -ballbesitz: generator` →
+`+zustand: ZURUECKGESTELLT / +ballbesitz: planner`. **Der Diff bestätigt ihn.**
+
+Sein Satz zur Schuldfrage trägt und ich übernehme ihn: *„Kein Vorwurf: wer Generation 16 liest und
+nicht 17, schreibt genau das."*
+
+### Fall 2: Z1-W2-1 — derselbe Mechanismus, und den hat er nicht
+
+    Tafel (geschrieben 18:09:33):   zustand: CODE_FERTIG   ballbesitz: evaluator
+    Ereignislage:
+      16:25:16  ABGENOMMEN         ball: dirigent          (evaluator-ABGENOMMEN-teil-B-Z1-W2-1)
+      16:27:41  BUENDEL_GEBAUT     ball: integrator (transportieren)
+
+**Bei der Niederschrift war der Zustand 104 Minuten überholt**, und der Ball ist **doppelt** falsch:
+weder Evaluator (der hat abgenommen) noch CODE_FERTIG (das ist ABGENOMMEN). Der wirkliche Ball liegt
+seit 16:27:41 beim **Integrator selbst** — das Bündel wartet auf Transport.
+
+**Das ist die bittere Pointe:** Die Tafelzeile, die der Integrator geschrieben hat, verdeckt einen
+Posten, der bei ihm selbst liegt.
+
+### Die Abgrenzung, ohne die der Befund zu breit wäre
+
+**Z1-W2-0 ist KEIN Fehler.** Dort steht ebenfalls `CODE_FERTIG / evaluator` — aber das `ABGENOMMEN`
+kam um **18:11:23**, also **110 Sekunden NACH** dem Tafelschreiben. Bei der Niederschrift war der
+Zustand richtig. Wer alle drei über einen Kamm schert, meldet einen Fehler, den es nicht gibt.
+
+Ebenso: **Z1-W2-2 ist zu Recht zurückgestellt** — das BASE_BLOCKED steht, die Modellfrage
+(`RoofAufbau` ohne `surfaceId`) ist offen und gehört Yama. Commit `b91ea441` ist korrekt.
+
+### Meine eigene ausgefallene Messung in dieser Runde
+
+Mein Python-Muster `kennung:\s*"?<K>"?\s*$` fand für **alle fünf** Kennungen null Ereignisse. Die
+Gegenprobe `grep -l 'kennung: Z1-W2-1'` fand **fünf Dateien**. Ich habe die Null **nicht gemeldet**,
+sondern mit dem Werkzeug neu gemessen, dessen Gegenprobe trägt. Ohne die Gegenprobe hätte ich
+geschrieben, es gebe zu keiner dieser Kennungen ein Ereignis — bei fünf laufenden Vorgängen.
+
+### Was bei mir liegt
+
+Ein Ballbesitz: **P-02**, Zustand `VORLAGE`, Blatt `docs/PRUEFAUFTRAG-P-02-parallele-instanzen.md`.
+Dazu liegen zwei Voten von mir in der Ablage (`plan-pruefer-VOTUM-P-02-vorlage.yaml`,
+`…-vollstaendig.yaml`). Kein akuter Posten; ich nehme ihn in der nächsten Runde auf.
+
+Ball: **Integrator** (Z1-W2-3 richtigstellen, Z1-W2-1 auf ABGENOMMEN, das eigene Bündel seit
+16:27:41, 13 Commits) · **Dirigent** (Z1-W2-0 ABGENOMMEN 18:11:23 liegt neu bei ihm).
