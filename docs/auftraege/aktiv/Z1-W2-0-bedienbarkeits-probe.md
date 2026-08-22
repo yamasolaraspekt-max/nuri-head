@@ -19,10 +19,10 @@ mess_sha: 39260edd
 kennung_geprueft: "Z1-W2-0 gemessen: docs/ 0 Treffer; git log --all --grep 1 Treffer, und das ist
                    die ENTSCHEIDUNG SELBST (9cea7297, WERKZEUGWEG), die die Kennung vergibt —
                    kein vergebenes Blatt. Frei und ausdruecklich zugewiesen."
-dor_beleg: "steht aus — plan-pruefer"
+dor_beleg: "ERTEILT — plan-pruefer 2026-08-22, Beleg 02629500 (plan-pruefer-DOR-Z1-W2-0-ERTEILT.yaml)"
 basis_sha: 39260edd
 prioritaet: P0
-ballbesitz: "plan-pruefer (DoR)"
+ballbesitz: "generator (DoR erteilt — baubar)"
 regelgrundlage: "WERKZEUGWEG-entscheidung-2026-08-22.md (Dirigent in Yamas Namen), Vorschlag 1:
                  'Dieses Blatt wird zum Pflicht-Messbefehl jeder Browser-/Bedienbarkeitsabnahme.'"
 zielreifegrad: "— (Messgeraet; es wird selbst nicht bedient)"

@@ -19,10 +19,10 @@ mess_sha: d3efc5c8
 kennung_geprueft: "Z1-W2-1 gemessen, nicht geraten: docs/ 0 Treffer, git log --all --grep 0,
                    Steuerungsablage nur die Auftragsschablone 'Z1-W2-<n>'. Z1-W1-1..5 existieren
                    (Welle 1), Z1-W2-* ist unbenutzt. Frei."
-dor_beleg: "steht aus — plan-pruefer"
+dor_beleg: "ERTEILT — plan-pruefer 2026-08-22, Beleg 05c26de4 (plan-pruefer-DOR-Z1-W2-1-ERTEILT.yaml)"
 basis_sha: d3efc5c8
 prioritaet: P0
-ballbesitz: "plan-pruefer (DoR)"
+ballbesitz: "generator (DoR erteilt — baubar)"
 regelgrundlage: "ANSCHLUSS-entscheidung-2026-08-22.md (Dirigent in Yamas Namen): Paket 3 zuerst.
                  Kriterium (a) zweigleisig, Praezisierung des Dirigenten 14:15:26."
 zielreifegrad: BROWSERABGENOMMEN

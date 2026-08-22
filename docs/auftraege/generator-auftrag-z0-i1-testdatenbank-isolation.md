@@ -28,14 +28,21 @@ grant_beleg: "Der Generator misst als ERSTES, ob das GRANT wirksam ist (SHOW GRA
 
 ## Ist-Beleg
 Evaluator-Bericht (Gesamtauftrag v2 Phase 3): gemeinsamer `ticket_testing`-Bestand parallel
-zurückgesetzt, Testkonto verschwand. `phpunit.xml`/Test-Bootstrap: **zu messen**, wo `DB_DATABASE`
-für Tests gesetzt wird (RefreshDatabase/DatabaseMigrations-Nutzung zählen) — Generator misst zuerst.
+zurückgesetzt, Testkonto verschwand. ~~`phpunit.xml`/Test-Bootstrap: **zu messen**, wo `DB_DATABASE`
+für Tests gesetzt wird~~ — **diese Messung liegt vor** (Errata 22.08.): `phpunit.xml:28`,
+`force="true"`, versioniert, Wert `ticket_testing`. *Der Posten „Generator misst zuerst" ist damit
+erledigt, bevor der Bau beginnt.*
 
 ## Scope · Dateien
 `phpunit.xml` (oder `.env.testing`), `tests/TestCase.php` bzw. ein Bootstrap-Guard (Namensprüfung),
 ggf. `scripts/` Wrapper (`test-als-rolle.sh`), Doku in `docs/regelwerk/` (eine Zeile: welche Rolle
 welche DB). **Nicht-Ziele:** keine Änderung an Produktiv-DB-Config; keine Migrationen am Schema;
 keine Änderung der Tests selbst (nur Bootstrap/Guard).
+
+> **Für die Stufe 1 gilt der Ort präzisiert:** **`phpunit.xml`, nicht `.env.testing`.** Die
+> Klammer *„(oder `.env.testing`)"* oben stammt aus der Vorarbeit und bleibt als Beleg stehen — sie
+> ist **überholt**. `.env.testing` ist nach `.gitignore:13` unversioniert und fehlt in **2 von 5**
+> Bäumen; `phpunit.xml:28` trägt den Namen mit `force="true"`. *Siehe Errata und `Z0-I1-12`.*
 
 ## Nachvollzugs-Matrix (Fassung 1.7, §5)
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
@@ -259,59 +266,127 @@ Config/Guard per Commit zurückdrehbar; zusätzliche Test-DBs schaden nicht (Lö
 anlass: "Entscheidung des Dirigenten in Yamas Namen, 22.08. 15:12:40
          (STEUERUNG-dirigent/dirigent-entscheidung-y13-y12-erledigt.yaml).
          Planner gen 19 Posten 8. Das Verbot 'PARKED_DRAFT anfassen' ist dafuer aufgehoben."
-mess_sha: ec239609
-stufe_1: "EINE gemeinsame Test-DB ueber den SOCKET, ohne root, ohne neue Datenbank."
+mess_sha: 8e65762e
+errata_sha: 8e65762e
+stufe_1: "EINE gemeinsame Test-DB ticket_testing ueber den KONFIGURIERTEN Weg, ohne root,
+           ohne neue Datenbank. (Errata 22.08. 15:5x — vorher stand hier faelschlich
+           'ticket_g1b1_testing ueber den SOCKET'.)"
 stufe_2: "Vier DBs ticket_testing_<rolle> — Folgeposten, braucht root. NICHT bauen."
 ```
 
-## Warum Stufe 1 überhaupt geht — die gemessene Lage
+## Warum Stufe 1 geht — die Lage, dreifach gemessen
 
-```
-ticket_user@localhost (SOCKET)     ALL PRIVILEGES auf ticket_g1b1_testing (446 Tabellen)
-ticket_testing                     existiert (451 Tabellen)
-.env.testing                       zeigt auf ticket_testing ueber 127.0.0.1:3307
-ticket_user@127.0.0.1              hat dort NUR ticket.*        <- DAS ist die ENV_BLOCKED-Ursache
-```
-
-> ## ⚠ DIESE PRÄMISSE IST STRITTIG — nicht als gemessen führen
+> ## ✔ ERRATA 22.08. — die Prämisse ist aufgelöst, und zwar gegen mich
 >
-> **Der Satz „die Sperre lag am Weg" stand hier als Messung. Er ist es derzeit nicht.**
+> **Anlass:** `STEUERUNG-dirigent/dirigent-berichtigung-db-praemisse.yaml` (15:49:53) ·
+> `yama-lesesitzung-BEFUND-db-praemisse-weicht-ab.yaml` (15:48:01) ·
+> `dirigent-praezisierung-errata-z0-i1-phpunit.yaml` (15:55:01).
 >
-> Eine **zweite, unabhängige Messung** (lesende Sitzung in Yamas Auftrag, 15:48:01) kommt über
-> **dieselbe TCP-Verbindung** zu einem anderen Ergebnis:
+> **Die dritte Messung liegt vor.** Sie ist gefahren worden, während ich sie noch als „mir verwehrt"
+> notierte — als `ticket_user`, je Weg lesen **und** temporär schreiben:
 >
 > ```
-> SHOW GRANTS (TCP, 127.0.0.1:3307)   -> USAGE ON *.*  +  ALL ON `ticket`.*
->                                        ticket_testing wird NICHT genannt
-> SELECT COUNT(*) FROM ticket_testing.migrations   -> 616      <- der Zugriff GELINGT
+> TCP 127.0.0.1:3307    ticket_testing      lesen 616   temp-schreiben 1
+>                       ticket_g1b1_testing lesen 609   temp-schreiben 1
+> SOCKET                identisch
+> Produktiv-DB 'ticket' nicht beruehrt
 > ```
 >
-> **Die Rechteliste deckt sich zeichengleich mit meiner** — der Widerspruch liegt nicht in den
-> Grants, sondern zwischen **Rechteliste** und **tatsächlichem Zugriff**. *Meine Aussage ist als
-> Rechteliste richtig und als Zugriffsaussage nicht haltbar.*
+> **Der wirksame Zugriff besteht auf BEIDEN Wegen.** Die Rechteliste je Konto zeigt DB-Rechte mit
+> **Wildcard-Host** nicht an — deshalb konnten `SHOW GRANTS` und tatsächlicher Zugriff auseinander
+> laufen, ohne dass eine der beiden Messungen falsch war.
 >
-> **Nach der Hausregel gilt damit KEINE der beiden Messungen**, bis der Unterschied aufgelöst ist.
-> **Aufzulösen durch eine dritte Messung** mit Leserecht auf `mysql.user`: welche `ticket_user`-
-> Konten existieren und welche Grants jedes trägt. *Ich kann sie nicht fahren — der Zugriff auf die
-> Zugangsdaten ist mir verwehrt, und ich habe ihn nicht umgangen.*
+> **Zugriff dreifach gemessen** — Planner 15:36, Lesesitzung 15:48, Dirigent 15:48.
+> **Eine Rechteliste ist kein Zugriffsbeleg.** *Das ist der Satz, der hier bleibt.*
 >
-> **Was das für dieses Blatt bedeutet — und was nicht:**
-> **Die Kriterien sind unberührt.** `Z0-I1-1` (Guard fragt die Verbindung), `-9` (Serialisierung),
-> `-10` (`SELECT DATABASE()` im Beleg) und `-11` (Seed) stehen unabhängig davon, *warum* die Sperre
-> entstand. **Betroffen ist die Begründung, nicht die Sache.**
-> **Offen bleibt aber:** ob Stufe 1 die Sperre wirklich auflöst. *Der Bau kann richtig sein — der
-> Beleg dafür wäre es nicht.*
+> **Was daraus folgt und was nicht:**
+> **Es fehlte nie der Zugriff — es fehlt die ISOLATION.** Serialisierung paralleler Rollenläufe,
+> `TEST_ROLLE`-Pflicht, fail-closed gegen `ticket`, Seedweg, `SELECT DATABASE()` je Lauf.
+> **Die Folgerung „Stufe 1 ohne `root` baubar" bleibt** — sie ruht jetzt auf dem gemessenen Zugriff
+> statt auf meinem Kausalsatz. **Die elf Kriterien sind unberührt.**
 >
-> **Nebenbefund derselben Messung, der die Auflagen-Frage entspannen könnte:** `.env.testing` trägt
-> `DB_DATABASE=ticket_testing` — genau den Namen aus Yamas Auflage 1 —, und über den Socket hat
-> `ticket_user@localhost` auch auf `ticket_testing` volle Rechte. **Arbeitet Stufe 1 gegen
-> `ticket_testing`, wird meine Auflagen-Klarstellung bei `Z0-I1-11` gegenstandslos.** *Das ist eine
-> Frage an Yama, nicht meine Entscheidung — aber sie gehört hierher, bevor jemand den Namen
-> festschreibt.*
+> ### Und ein eigener Fehler, den ich nicht weglasse
+>
+> Mein Satz *„`.env.testing` zeigt auf den TCP-Weg"* stand hier als Messung. **In diesem Baum gibt
+> es die Datei nicht.** Gemessen, alle fünf Bäume:
+>
+> ```
+> ticket                     .env DA     .env.testing DA
+> ticket-rolle-generator     .env DA     .env.testing DA
+> ticket-rolle-evaluator     .env DA     .env.testing DA
+> ticket-rolle-planner       .env FEHLT  .env.testing FEHLT     <- meiner
+> ticket-rolle-plan-pruefer  .env FEHLT  .env.testing FEHLT
+> git ls-files .env.testing -> 0        .gitignore:13
+> ```
+>
+> Ich habe im **Hauptbaum** gemessen und den Baum nicht genannt. **Ein Beleg ohne Standangabe ist
+> kein Beleg** — den Satz habe ich heute selbst geschrieben, und hier habe ich gegen ihn verstoßen.
+> Der Plan-Prüfer hat es gefunden (`BEFUND …env-testing-fehlt-in-zwei-baeumen`, 15:53:47), und er
+> ordnet es richtig ein: **dieselbe Klasse zum vierten Mal heute** — `$`-Anker, fehlendes `-E`,
+> Vitest, `.env.testing`. *Ein Ort in einem Messbefehl, den nicht jede Rolle fahren kann.*
 
 ~~**Die Sperre lag nie an fehlenden Rechten, sondern am Weg:** über den **Socket** hat der Nutzer
-alles, über **TCP** nichts.~~ *(Fassung vom 15:36, siehe Kasten oben — als Beleg stehengelassen,
-nicht gelöscht.)*
+alles, über **TCP** nichts.~~ *(Fassung vom 15:36 — durch das Errata oben widerlegt, als Beleg
+stehengelassen, nicht gelöscht.)*
+
+~~`.env.testing` zeigt auf `ticket_testing` über `127.0.0.1:3307`; `ticket_user@127.0.0.1` hat dort
+nur `ticket.*` — das ist die `ENV_BLOCKED`-Ursache.~~ *(Fassung vom 15:36 — Baum nicht genannt,
+Rechteliste als Zugriffsaussage gelesen. Beide Gründe stehen im Errata.)*
+
+**Der verbindliche Ort ist `phpunit.xml`, nicht `.env.testing`:**
+
+```
+phpunit.xml:27  <env name="DB_CONNECTION" value="mysql"          force="true"/>
+phpunit.xml:28  <env name="DB_DATABASE"   value="ticket_testing" force="true"/>
+git ls-files phpunit.xml -> versioniert
+Kommentar :25   "erzwingt jeden Testlauf gegen die isolierte Test-DB ticket_testing,
+                 NIE gegen die reale Dev-DB ticket. force=true schlaegt .env."
+```
+
+**`force="true"` heißt: `phpunit.xml` ist nicht nur die Quelle, wo `.env.testing` fehlt — es ist
+die Quelle *immer*.** *Der Datenbankname ist damit versioniert festgenagelt und in jedem Baum
+gleich. **Kein Messbefehl dieses Blattes darf `.env.testing` voraussetzen.***
+
+## ⚠ Der Name ist versioniert, der WEG nicht — ein Fund, der über das Errata hinausgeht
+
+**Die Präzisierung des Dirigenten sagt: *„wo die Datei fehlt, ist `phpunit.xml` die Quelle."* Das
+trifft für den Datenbank*namen* zu. Für den *Weg* steht dort nichts.** Gemessen am Stand `8e65762e`:
+
+```
+in phpunit.xml gesetzt      DB_CONNECTION · DB_DATABASE                     (force=true)
+in phpunit.xml NICHT gesetzt  DB_HOST · DB_PORT · DB_SOCKET · DB_USERNAME · DB_PASSWORD
+
+letzte versionierte Quelle: config/database.php, mysql-Block
+  :49  'host'        => env('DB_HOST',     '127.0.0.1')
+  :50  'port'        => env('DB_PORT',     '3306')        <- niemand lauscht dort
+  :52  'username'    => env('DB_USERNAME', 'forge')
+  :54  'unix_socket' => env('DB_SOCKET',   '')
+
+tatsaechlich lauschende MySQL-Instanzen (lsof, keine Zugangsdaten gelesen):
+  mysqld 78704   127.0.0.1:3307
+  mysqld 56658   127.0.0.1:3317
+  auf 3306: NICHTS
+```
+
+**Damit ist die Lage in den zwei Bäumen ohne Env-Datei schärfer, als der Befund des Plan-Prüfers
+sagt:** er hat `.env.testing` gemessen — **es fehlt auch `.env`**. Ein Testlauf dort nähme
+`ticket_testing` (aus `phpunit.xml`, richtig) auf **`127.0.0.1:3306` als `forge`** — und scheiterte
+an **Connection refused**, nicht an Rechten. *Genau die Fehlklasse, die dieses Blatt gerade
+aufgelöst hat: ein Verbindungsfehler, der wie ein Rechtefehler aussieht.*
+
+**Und ein zweiter Punkt, der die Isolation im Kern trifft:** es laufen **zwei** MySQL-Instanzen.
+Welche `ticket_testing` trägt, entscheidet eine **unversionierte** Datei, die in jedem Baum anders
+lauten kann, ohne dass es auffällt. *„Alle Rollen arbeiten auf derselben Test-DB" ist dann eine
+Annahme, keine Messung — und die Serialisierung aus `Z0-I1-9` schützt eine Datenbank, von der
+niemand belegen kann, dass es dieselbe ist.*
+
+> **Ich lege offen, dass dies ein ZWÖLFTES Kriterium ist und nicht bloß Errata.** Der Auftrag lautet
+> *„alle Isolations-Kriterien unverändert"*, und der Plan-Prüfer bestätigt *„ohne neue Runde"*.
+> **Dieser eine Punkt fällt nicht darunter** — er fügt hinzu. *Ob er die Bestätigung in einem Zug
+> noch trägt oder eine kurze Runde braucht, ist die Entscheidung des Plan-Prüfers, nicht meine.*
+> **Weglassen wäre die schlechtere Wahl:** ohne ihn ist `Z0-I1-10` in zwei von fünf Bäumen nicht
+> durchführbar, und das Blatt hätte zum fünften Mal heute einen Messbefehl, den nicht jede Rolle
+> fahren kann.
 
 ## Was von den acht Kriterien gilt, und was Folgeposten wird
 
@@ -319,7 +394,7 @@ nicht gelöscht.)*
 |---|---|---|
 | **Z0-I1-1** Guard fragt die Verbindung | **gilt** | unverändert — jetzt erst recht, der Weg ist die Ursache |
 | **Z0-I1-2** Negativprobe `ticket` | **gilt** | unverändert — Produktiv-DB nie im Testlauf |
-| **Z0-I1-3** Rollennamen zulässig | **umgeschnitten** | Stufe 1 kennt **eine** DB: `ticket_g1b1_testing`. Das Muster prüft **diesen einen Namen exakt**, `ticket_testing_kopie` und jeder andere bleiben abgewiesen |
+| **Z0-I1-3** Rollennamen zulässig | **umgeschnitten** | Stufe 1 kennt **eine** DB: **`ticket_testing`** (Errata; vorher `ticket_g1b1_testing`). Das Muster prüft **diesen einen Namen exakt**, `ticket_testing_kopie` und jeder andere bleiben abgewiesen |
 | **Z0-I1-4** `TEST_ROLLE` verpflichtend | **gilt** | unverändert — sie benennt jetzt den **Lease-Halter**, nicht die DB |
 | **Z0-I1-5** Zuordnung an EINER Stelle | **gilt** | unverändert |
 | **Z0-I1-6** vorhandene Wächter ziehen mit | **gilt** | unverändert |
@@ -331,14 +406,14 @@ nicht gelöscht.)*
 - **Z0-I1-9** · **DIE LÄUFE SIND SERIALISIERT — ÜBER EINE DB-LEASE.**
 
   **Verlangt:** Vor dem ersten Schreibzugriff zieht der Lauf eine Lease unter
-  `leases/TESTDB-ticket_g1b1_testing/` nach **V2 §8** (`counter`, `counter.lock/`, `active/lease.yaml`
+  `leases/TESTDB-ticket_testing/` nach **V2 §8** (`counter`, `counter.lock/`, `active/lease.yaml`
   mit `fencing_token`, `heartbeat_bis`, `owner`). Eine belegte, gültige Lease → **der zweite Lauf
   wartet oder bricht ab**, er läuft nicht mit.
 
   **Messbefehl:** zwei Läufe gleichzeitig starten; der zweite meldet die fremde Lease mit
   `fencing_token` und Halter, Rückgabewert ≠ 0. Danach: erster Lauf gibt frei, zweiter läuft.
 
-  **Heutiges (rotes) Ergebnis:** `leases/TESTDB-ticket_g1b1_testing/` existiert nicht; zwei Läufe
+  **Heutiges (rotes) Ergebnis:** `leases/TESTDB-ticket_testing/` existiert nicht; zwei Läufe
   setzen dieselbe DB gegenseitig zurück — **das ist der Anlassfall dieses Blattes** (Testkonto
   verschwand während einer laufenden Browserabnahme).
 
@@ -349,16 +424,23 @@ nicht gelöscht.)*
 - **Z0-I1-10** · **`SELECT DATABASE()` STEHT IN JEDEM BELEG.**
 
   **Verlangt:** Jeder Testlauf gibt den tatsächlich verbundenen Datenbanknamen aus, und der Bericht
-  zitiert ihn. **Nicht die Konfiguration, sondern die Verbindung.**
+  zitiert ihn. **Nicht die Konfiguration, sondern die Verbindung.** Der Wert stammt aus
+  `phpunit.xml:28` (`force="true"`, versioniert) — **nicht** aus `.env.testing`.
 
-  **Messbefehl:** `SELECT DATABASE()` je Lauf → `ticket_g1b1_testing`; im Bericht wörtlich.
+  **Messbefehl:**
+  ```
+  SELECT DATABASE() je Lauf  ->  ticket_testing        im Bericht woertlich
+  Gegenprobe: ein Lauf gegen 'ticket' (per Env erzwungen) -> fail closed, Rueckgabe != 0
+  ```
 
-  **Heutiges (rotes) Ergebnis:** kein Lauf gibt ihn aus. *Was in `.env.testing` steht, ist eine
-  Absicht; was `SELECT DATABASE()` sagt, ist die Tatsache — und die beiden gehen heute auseinander.*
+  **Heutiges (rotes) Ergebnis:** kein Lauf gibt ihn aus. *Was konfiguriert ist, ist eine Absicht;
+  was `SELECT DATABASE()` sagt, ist die Tatsache.* **Die beiden gingen heute auseinander — und das
+  Errata zeigt, wie leicht:** die Rechteliste sagte „kein Zugriff", der Zugriff gelang trotzdem.
+  *Genau dafür ist dieses Kriterium da.*
 
 - **Z0-I1-11** · **DER SEED STELLT SEINE VORBEDINGUNG SELBST HER.**
 
-  **Verlangt:** Ein Skript legt die Prüfvoraussetzungen **idempotent** in `ticket_g1b1_testing` an —
+  **Verlangt:** Ein Skript legt die Prüfvoraussetzungen **idempotent** in `ticket_testing` an —
   Prüfnutzer (`a24`) und Prüfobjekt, sonst nichts.
 
   **Die drei Auflagen sind Yamas, wörtlich zitiert** (`docs/VORLAGE-AN-YAMA-2026-08-12.md:1596-1613`,
@@ -393,14 +475,59 @@ nicht gelöscht.)*
   **Absage-Regel:** Ein dauerhafter Seeder erfüllt (11) **nicht** — das ist Weg A, und Yama hat ihn
   ausdrücklich verworfen: *„ein dauerhafter Seed ist eine zweite Wahrheit … und die Drift ist still."*
 
-  > **Ein Wort des Beschlusses ist nachzuziehen, und ich lege es offen:** Yamas Auflage 1 sagt
-  > *„nur gegen `ticket_testing`"*. **Stufe 1 arbeitet gegen `ticket_g1b1_testing`.** Prüft das
-  > Skript wörtlich auf `ticket_testing`, **bricht es bei der Stufe-1-Datenbank ab** — die Auflage
-  > würde den Lauf verhindern, den sie schützen soll.
-  > **Aufgelöst wie bei P-02 Punkt 3: der Zweck trägt, der Name ist jünger.** Gemeint war „die
-  > Test-DB, niemals Produktion". **Der exakte Name ist `ticket_g1b1_testing`** (Entscheidung
-  > 22.08. 15:12:40). *Die Auflage wird damit nicht aufgeweicht — sie bleibt „exakt oder Abbruch",
-  > nur mit dem heute gültigen Namen.*
+  > ## ✔ MEINE AUFLAGEN-KLARSTELLUNG IST GEGENSTANDSLOS — Yamas Auflage 1 ist **positiv erfüllt**
+  >
+  > ~~Ein Wort des Beschlusses ist nachzuziehen: Yamas Auflage 1 sagt „nur gegen `ticket_testing`",
+  > Stufe 1 arbeitet gegen `ticket_g1b1_testing`; aufgelöst wie bei P-02 Punkt 3, der Zweck trägt,
+  > der Name ist jünger.~~ *(Fassung vom 15:36 — als Beleg stehengelassen.)*
+  >
+  > **Sie war nie nötig.** Statisch nachgemessen, ohne DB-Lauf — der **versionierte** Ort trägt
+  > **genau** Yamas Namen:
+  >
+  > ```
+  > phpunit.xml:28   <env name="DB_DATABASE" value="ticket_testing" force="true"/>
+  > git ls-files phpunit.xml -> versioniert
+  > ```
+  >
+  > **Nicht gegenstandslos im Sinne von „hinfällig", sondern im Sinne von „die Frage stellte sich
+  > nie".** Die Auflage bleibt **exakt oder Abbruch** — mit **Yamas** Namen, nicht mit einem
+  > nachgezogenen. *Der Plan-Prüfer hat es gemessen und streicht seinen Posten 10 dazu.*
+  >
+  > **Was ich daraus mitnehme:** ich hatte eine Ausnahme von einer Auflage konstruiert, bevor ich
+  > den versionierten Ort gelesen hatte. **Die saubere Reihenfolge ist umgekehrt** — erst messen, ob
+  > die Auflage überhaupt kollidiert, dann klarstellen. *Eine Klarstellung, die keine braucht, ist
+  > eine Aufweichung ohne Anlass.*
+
+- **Z0-I1-12** · **DER VERBINDUNGSWEG KOMMT AUS EINER QUELLE, DIE JEDER BAUM HAT.**
+
+  **Verlangt:** Ein Testlauf erreicht `ticket_testing` **ohne** unversionierte Datei. Host, Port und
+  Zugangsweg stehen an einer Stelle, die **mit dem Repository wandert** — so wie der *Name* seit
+  jeher in `phpunit.xml` steht. **Welche Stelle das ist, entscheidet der Bau** (`phpunit.xml` neben
+  Zeile 28, oder eine versionierte, geheimnisfreie Beipackdatei); *das Blatt schreibt den Ort nicht
+  vor, es verlangt, dass es einen gibt.*
+
+  **Zugangsdaten bleiben ausdrücklich unversioniert.** Verlangt ist der **Weg**, nicht das Kennwort.
+
+  **Messbefehl:**
+  ```
+  in einem Baum OHNE .env und OHNE .env.testing (heute: ticket-rolle-planner,
+  ticket-rolle-plan-pruefer) einen Testlauf starten
+      -> SELECT DATABASE() = ticket_testing
+      -> KEIN "Connection refused", KEIN Fallback auf 127.0.0.1:3306
+  Gegenprobe der Grundmenge, mit STAND-SHA:
+      for b in <die fuenf Baeume>; do test -f $b/.env; test -f $b/.env.testing; done
+      -> das Ergebnis des Laufs haengt NICHT davon ab
+  ```
+
+  **Heutiges (rotes) Ergebnis:** **2 von 5 Bäumen** haben weder `.env` noch `.env.testing`; die
+  Laravel-Defaults zeigen auf `127.0.0.1:3306` als `forge`, und **auf 3306 lauscht nichts**
+  (gemessen: `3307`, `3317`).
+
+  **Absage-Regel:** *„Die Datei in die zwei Bäume kopieren"* erfüllt (12) **nicht**. Sie ist nach
+  `.gitignore:13` **bewusst** unversioniert — kopieren erzeugt vier Kopien, die auseinanderlaufen
+  können, **ohne dass es auffällt**. **Genau das ist der Zustand, den `Z0-I1-9` verhindern soll:**
+  eine Serialisierung schützt nichts, wenn zwei Läufe auf zwei verschiedenen Instanzen sitzen und
+  beide „`ticket_testing`" sagen.
 
 ## Folgeposten (NICHT bauen)
 
@@ -414,8 +541,12 @@ nicht gelöscht.)*
    Mit Stufe 2 werden **Z0-I1-7** (parallele Positivprobe) und die ursprüngliche Fassung von
    **Z0-I1-8** wieder wirksam; **Z0-I1-9** (Serialisierung) wird dann überflüssig, **nicht falsch**.
 
-2. **`.env.testing` und `phpunit.xml`** auf `DB_SOCKET` + `DB_DATABASE=ticket_g1b1_testing`.
-   *Das ist Teil des Baus, hier nur benannt, damit es nicht als Nebenwirkung geschieht.*
+2. ~~**`.env.testing` und `phpunit.xml`** auf `DB_SOCKET` + `DB_DATABASE=ticket_g1b1_testing`.~~
+   **ENTFÄLLT durch das Errata.** `phpunit.xml:28` trägt `ticket_testing` bereits mit `force="true"`
+   — **es ist nichts umzustellen.** *Der Posten hätte eine Änderung angeordnet, die den bestehenden,
+   richtigen Zustand zerstört hätte.* **`ticket_g1b1_testing` bleibt nur als Ausweich-Datenbank
+   benannt**, falls die gemeinsame DB einmal nicht verfügbar ist — kein Bauziel.
+   *Was stattdessen offen ist, steht in `Z0-I1-12`: der **Weg** ist nirgends versioniert.*
 
 ## Was der Umschnitt NICHT ändert
 
@@ -435,20 +566,24 @@ Beleg der Vorarbeit stehen und ist **ÜBERHOLT**.
 |---|---|---|---|
 | Z0-I1-1 Guard fragt die Verbindung | AP-1 Guard | n.U. | n.U. |
 | Z0-I1-2 Negativprobe `ticket` | AP-1 (Negativlauf) | n.U. | n.U. |
-| Z0-I1-3 nur `ticket_g1b1_testing` zulässig | AP-1 (Liste + Muster) | n.U. | n.U. |
+| Z0-I1-3 nur `ticket_testing` zulässig | AP-1 (Liste + Muster) | n.U. | n.U. |
 | Z0-I1-4 `TEST_ROLLE` verpflichtend | AP-2 Rollenpflicht | n.U. | n.U. |
 | Z0-I1-5 Zuordnung an EINER Stelle | AP-2 (eine Wahrheit) | n.U. | n.U. |
 | Z0-I1-6 vorhandene Wächter ziehen mit | AP-2 (Regressionsprobe) | n.U. | n.U. |
 | Z0-I1-9 Läufe serialisiert über DB-Lease | AP-3 Lease | n.U. | n.U. |
 | Z0-I1-10 `SELECT DATABASE()` im Beleg | AP-3 (Belegpflicht) | n.U. | n.U. |
 | Z0-I1-11 Seed stellt Vorbedingung her | AP-4 Seed, drei Auflagen | n.U. | n.U. |
+| Z0-I1-12 Weg aus versionierter Quelle | AP-3 (Verbindungsweg) | n.U. | n.U. |
 
 **Nicht in dieser Matrix, und das ist Absicht:** `Z0-I1-7` und `Z0-I1-8` gehören zu **Stufe 2**
 (Folgeposten, braucht `root`). *Ein Kriterium ohne Matrixzeile macht ein Blatt nicht BEREIT-fähig —
 ein Kriterium, das ausdrücklich einer anderen Stufe zugewiesen ist, gehört nicht in diese Matrix.*
 
+**Zählstand nach dem Errata: 12 Kriterien, 10 Matrixzeilen** (`-7` und `-8` = Stufe 2).
+*Vor dem Errata: 11 und 9. Die Differenz ist `Z0-I1-12`, und sie steht oben begründet.*
+
 **Arbeitspakete:** AP-1 Guard und Namensprüfung · AP-2 Rolle und eine Wahrheit ·
-AP-3 Serialisierung und Beleg · AP-4 Seed.
+AP-3 Serialisierung, Beleg und Verbindungsweg · AP-4 Seed.
 
 ## N4 — Bedienweg
 

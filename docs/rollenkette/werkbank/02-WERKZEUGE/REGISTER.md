@@ -604,7 +604,7 @@ messbar — die Messgröße für „wie weit sind wir".
 | `decke` | **W-10** Decke und Boden | Name + Blattnennung |
 | `treppe` | **W-09** Treppe | Name, eindeutig |
 | `bemassen` | **W-11** Maß und Bemaßung | Name, eindeutig |
-| `flaeche-messen` | **W-08** Dachfläche messen | Name, eindeutig |
+| `flaeche-messen` | ~~**W-08** Dachfläche messen~~ → **STRITTIG**, siehe Kasten unten | ~~Name, eindeutig~~ |
 | `duplizieren` | **W-14** Kopieren/Spiegeln/Drehen | Name; `art: 'aktion'` |
 | `loeschen` | **keine Registerzeile** | `art: 'aktion'`, kein Werkzeugblatt |
 | `trimmen` | **keine Registerzeile** | `art: 'aktion'`, gebaut über **A-35** statt über ein W-Blatt |
@@ -644,5 +644,38 @@ entscheiden, ob sie ein Leistenwerkzeug beschreibt (→ Anschlussvorrat) oder ni
 > offenen als offen, statt sie zu schätzen. *Eine Vorratszahl, die auf 32 Vermutungen ruht, ist
 > keine Messgröße.*
 
-**Belastbar ist damit heute:** 13 Kennungen · 10 zugeordnete Zeilen · 1 `kein_werkzeug` ·
-**3 Kennungen ohne Registerzeile** · 32 Zeilen offen.
+> ## ⚠ NACHTRAG 22.08. abends — eine der zehn Zuordnungen hält nicht
+>
+> **`flaeche-messen` → W-08 stand hier mit der Begründung „Name, eindeutig". Gemessen am Werkzeug
+> selbst ist sie es nicht:**
+>
+> ```
+> toolRegistry.ts:196-204
+>   id 'flaeche-messen' · label 'Flaeche messen' · groupId 'messen'
+>   helpText 'Geschlossene Flaeche ermitteln — Punkte klicken, letzter Punkt schliesst.'
+>   supportedViews ['2d','split']   supportedWorkspaces []
+>
+> W-08 heisst  dachflaeche-messen
+> ```
+>
+> **Das ist ein 2D-Polygon-Flächenmesser, kein Dachflächenwerkzeug.** *Die Übereinstimmung war
+> die Wortmitte „fläche … messen" — dieselbe Falle wie bei `W-16`/`grundriss.ts` und bei
+> `wandFlaeche` im Werkzeug-Register.* **Dritte Wiederholung heute; sie ist offenbar die
+> häufigste Fehlerform dieses Registers.**
+>
+> **Und meine eigene Gegenmessung von 17:5x trug die Schlussfolgerung nicht allein:** *„`flaeche-messen`
+> liegt in W-10 und W-36, nicht in W-08"* — **als Fundstellenmessung richtig, als Zuordnungsaussage
+> nicht belastbar.** Beide Treffer sind **Zitate von `toolRegistry`-Zeilennummern**
+> (`W-10/7-GRENZEN.md:63`, `W-36/3-FORMELN.md:80`), keine fachliche Zuordnung.
+> *Was die Zuordnung wirklich widerlegt, ist die Fachbeschreibung des Werkzeugs — nicht, wo sein
+> Name zufällig auftaucht.*
+>
+> **Die Zeile steht damit auf `STRITTIG`, nicht auf einer neuen Zuordnung.** *Welche Registerzeile
+> einen 2D-Flächenmesser beschreibt (oder ob es keine gibt und er `kein_werkzeug`-Gegenstück
+> braucht), ist eine Entscheidung — und ich treffe sie nicht im Vorbeigehen.*
+
+**Belastbar ist damit heute:** 13 Kennungen · **9 zugeordnete Zeilen** · 1 `kein_werkzeug` ·
+**1 strittig** (`flaeche-messen`) · **3 Kennungen ohne Registerzeile** · 32 Zeilen offen.
+
+> *Vorherige Fassung: „10 zugeordnete Zeilen". **Die Zahl sinkt durch eine Prüfung, nicht durch eine
+> Änderung am Bestand** — das ist der Normalfall, wenn ein Register zum ersten Mal gegengelesen wird.*

@@ -18,10 +18,10 @@ mess_sha: 97843380
 kennung_geprueft: "Z2-W0-5b gemessen: kein Blatt vorhanden. docs/ 2 Treffer — die Dirigenten-Vorgabe
                    im Steuerungs-Spiegel und der Meilensteinplan; git log --all 6 Treffer, saemtlich
                    Erwaehnungen in Befunden und im Gesamtkonzept. Frei, vom Dirigenten zugewiesen."
-dor_beleg: "steht aus — plan-pruefer"
+dor_beleg: "ERTEILT — plan-pruefer 2026-08-22T15:35:03, Beleg 14563070 (plan-pruefer-DOR-Z2-W0-5b-ERTEILT.yaml)"
 basis_sha: 97843380
 prioritaet: P0
-ballbesitz: "plan-pruefer (DoR)"
+ballbesitz: "generator (DoR erteilt — baubar)"
 regelgrundlage: "Vorgabe des Dirigenten 2026-08-22T13:37:19+0200
                  (auftraege/Z2-W0-5b-linked-wache.vorgabe-dirigent.md); Planner gen 19 Posten 3."
 ```
