@@ -377,6 +377,25 @@ Grenze (Yama): Sofortlösung, noch keine unübergehbare Barriere — Durchsetzun
   Zweig, `ticket-release-pruefung` nur als Ziel-Orakel (:118).
 - PID 87659 weiter `T` (Bedingungen 2–5 offen: A-37 mit Hook, fünf Negativproben, nacktes `git commit`
   gesperrt, Evaluator-Abnahme).
+
+### 22.08. 00:23–01:16 — A-37 spezifiziert, DoR in zwei Runden ERTEILT, Bau angestoßen
+- **Planner `3dde19ea`** (00:23): A-37-22…27, ein Pfad (+293/−4), jeder Rot-Beleg im eigenen Baum gefahren,
+  drei Rot-Arten getrennt; `planner-CODE_FERTIG.yaml`; Lease freigegeben. Zuschnitt „Kein Hook" als
+  ÜBERHOLT gekennzeichnet (Yama Weg a). Integrator-Rückweg `4a716da8`.
+- **Plan-Prüfer DoR Runde 1 `1568610f`: NICHT ERTEILT** (Restpunkte u. a. Sitzungs-/Lease-Identität: gemessen,
+  dass PID 88928 tot war, während die Sitzung unter 97092 weiterlief) → Yamas Zielregel wörtlich an Plan-Prüfer
+  und Planner (`dirigent-antwort-zielregel-lease-yama.yaml`) → **Planner `213edd28`** schließt Restpunkte 1+2 →
+  **DoR Runde 2 `a248eaaf`: ERTEILT** (00:49); Planner-Berichtigungen `0579727c`, Belegberichtigung `762243b9`;
+  Plan-Prüfer Auflagenprüfung `2b9cedc4`, „Anmerkungen geschlossen". Integrator transportiert Voten
+  (`f1b84c65`, `1027c8d5`, `21ea84c3`, `f4366313`, `c153a9f8`, `e1539dc7`).
+- **Generator gen 3 = `BAU-generator-A-37` (01:16): aktion bauen** — eigener Worktree, Lease, commit-pruefen mit
+  `NODE_PATH`, jede Negativprobe tatsächlich auslösen, kein Produktcode, `--no-verify` als dokumentierte Grenze;
+  Ergebnis `generator-CODE_FERTIG.yaml` → Evaluator (gen 5 bereit, alle Positiv-/Negativproben).
+- **Integrator gen 7:** Rückweg `rolle/planner` bis `762243b9` (Lücke seit 00:43, vierte Erinnerung — mein
+  Versäumnis: Planner-Blatt-Stände waren in gen 6 nicht als transportfähig gelistet; jetzt ohne Einzelweisung).
+- Headless-Takt des Planners: Läufe 1–9 (Lauf 9 mit API-Abbruch, ohne Schaden); Registrierung/Lease je Lauf
+  nachgeführt; Befunde: `paragraph8-fehlzuordnung` (Plan-Prüfer berichtigt), Z0-I2-Vorrat (§8 Schritt 6
+  `mv`/`rename`), Z0-I1-Ist-Lage Kriterium A (Plan-Prüfer). PID 87659 = `T`.
 Die fünf Negativproben gehen als Kriterien
 in das erweiterte A-37-Blatt (Planner); der Integrator transportiert nichts aufgrund der seit 22:04
 entstandenen Generator-Bauten. Das V2-Konzept (`0d897b0e`) ist bereit für die spätere unabhängige
