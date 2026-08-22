@@ -28540,3 +28540,61 @@ Registerzeilen" gemeldet und drei stillschweigend verloren.**
 Mangel gegen jemanden. Die Zahl **43 statt 37** geht als Hinweis an den Planner, bevor er Posten 1
 schneidet — **nach Punkt 3 der heute erteilten P-02-Fassung als eigenes Ereignis, nicht in sein
 Blatt.**
+
+## §347 — Die 27 Module ohne Ladeweg, vollständig aufgelistet: §300 exakt bestätigt, nichts bewegt
+
+Gewählt gegen HEAD `400db73b` (Baum sauber, 14:15). §347 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok.
+
+**Warum aus meinem Baum gemessen werden durfte** — die §342-Frage vorab geklärt: der Baum-Hash von
+`resources/planner/hausplaner` ist in meinem Baum und in `auto/hausplaner-integration`
+**identisch** (`81626c87705b`), und keiner der 6 fehlenden Commits berührt das Verzeichnis
+(`git log HEAD..integration -- resources/planner/hausplaner` → **0**).
+
+**Das Verfahren aus §300 wiederholt** — BFS ab `main.tsx` über **Laufzeit**-Kanten, `import type`
+zählt nicht, `export … from` als Kante mitgeführt:
+
+    Grundmenge (.ts/.tsx ohne __tests__ und __domtests__)   160
+    erreichbar ab main.tsx                                  133
+    NICHT erreichbar                                         27
+    Summenprobe 133 + 27 = 160                              schliesst
+    §300 nannte: 160 · 133 · 27                             EXAKT BESTAETIGT
+
+**Und der Baum-Hash ist derselbe wie in §300** (`81626c87`). **Seit §300 hat sich am Hausplaner
+nichts bewegt** — die Zahl ist nicht nur gleich, sie *muss* gleich sein. *Das ist der Unterschied
+zwischen „stimmt noch" und „konnte sich gar nicht ändern"; ohne den Baum-Hash hätte ich nur das
+Erste gewusst.*
+
+**Neu gegenüber §300: die vollständige Liste.** §300 nannte zwei Stichproben; hier stehen alle 27,
+weil der Planner gerade die Anschlusswelle schneidet und genau diese Menge braucht:
+
+    app/tools/       auswahlDarstellung · toolCatalogStillgelegt · toolTypes · trefferSuche
+                     werkzeugArten · werkzeugLandkarte
+    domain/          scene.types
+    geometry/        aufbautenStatus · auswechslung · dachAusschnitt · dachOeffnung · dachTopologie
+                     dachVorlage · grundriss · heizkreisVerteiler · holzBauteile · holzMengen
+                     integrationAbgleich · schifterListe · sparrenTrennung · treppeSvg
+                     treppenTypen · wandFlaeche · wandaufbau · werkzeugRegistry
+    projection/      dachProjektion · raumProjektion
+
+**Zwei Querbezüge, die die Liste sofort brauchbar machen.**
+
+**(1) Die Fachmessung der Lesesitzung ist unabhängig bestätigt.** Ihr Hinweis von 14:05:01 nennt
+fünf Dach-Module — `dachProjektion`, `dachOeffnung`, `sparrenTrennung`, `dachTopologie`,
+`schifterListe`. **Alle fünf stehen in meiner Liste.** Zwei getrennte Verfahren (ihre Fachlesung,
+mein BFS) kommen zur selben Menge; das stützt beide. *Zitiert, nicht nachgebaut — ihr Befund gehört
+ihr, meine Liste ist unabhängig entstanden.*
+
+**(2) Posten 2 des Planners betrifft zwei Einträge daraus.** Sein Auftrag gen 17 nennt
+`toolCatalogStillgelegt.ts` und `geometry/werkzeugRegistry.ts` zur Klärung — **beide sind unter den
+27.** Wer sie verwirft, verkleinert die Menge auf 25; wer sie anschließt, auf ebenfalls 25 bei
+zwei mehr erreichbaren. **Die Zahl bewegt sich also demnächst, und dann ist sie neu zu messen.**
+
+**Zum stehenden Yama-Posten.** Er trägt weiterhin *„Entscheidung zu §119/§120 (**33** Module ohne
+Ladeweg)"*. **Die 33 ist seit §300 überholt**; richtig sind **27**, und die sechs Differenz haben
+zwischen `d4ee1555` und `1ecafe28` einen Ladeweg bekommen. Ich reiche die berichtigte Zahl weiter,
+wie seit §300 in jeder Vorlage.
+
+**Ball: niemand bei mir.** Die Liste geht als eigenes Ereignis an den Planner (P-02 Punkt 3), nicht
+in sein Blatt. Der Auslöser für die DoR **Z2-W0-5b** liegt weiterhin nicht vor: Treffer mit
+`kennung: Z2-W0-5b` im Auslöser-Ordner **0**.
