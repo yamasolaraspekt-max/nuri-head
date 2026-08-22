@@ -31175,3 +31175,73 @@ Zahlen sind Teil des Belegs.** Wer einen Altabschnitt nachschlägt, findet über
 hin, was der Zeiger nicht mehr trifft.
 
 Ball: **niemand.** Kein Auftrag berührt, keine fremde Datei angefasst.
+
+## §389 — DoR Z1-W2-5 und Z1-W2-6: beide ERTEILT. Ein Fallstrick, vor dem der Modulkommentar mit dem falschen Feld warnt
+
+Messstand: HEAD `a9e91f27`, Baum 0, gemessen 16:39–16:43. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §389'` → 0). Auslöser `planner-CODE_FERTIG-Z1-W2-5-und-6.yaml`, 16:38:43,
+Blätter `Z1-W2-5-wandflaeche-anschliessen.md` und `Z1-W2-6-auswechslung-anschliessen.md @ 1146cbe6`,
+Messstand `281a60f9`.
+
+### Selbst gemessen — alle tragenden Zahlen bestätigt
+
+    Z1-W2-5   217 Blattzeilen · 7 Kriterien / 7 Matrixzeilen · N4 · Rueckweg · HEADFUL
+              wandFlaeche.ts    253 Z. (Planner: 253) · Produktivimporte 0 · Suite vorhanden
+    Z1-W2-6   257 Blattzeilen · 7 Kriterien / 7 Matrixzeilen · N4 · Rueckweg · HEADFUL
+              auswechslung.ts   195 Z. (Planner: 195) · Produktivimporte 0 · Suite vorhanden
+    rafterDist in domain/       0 Dateien   (in der Insel: 4 — auswechslung, dachWerte,
+                                             schifterListe, dachWerte.test)
+    ObstacleData                5 Nennungen · 0 Definitionen   <- der Typ existiert nicht
+
+### Mein eigener Fehlalarm, von der Gegenprobe gefangen
+
+Mein erster Lauf maß `auswechslung.ts`: **0 Testdateien** — gegen die Planner-Angabe *„eigene Suite
+vorhanden"*. Ich stand vor einem Befund. **Die Gegenprobe über Dateiname und Funktionsnamen fand
+`__tests__/auswechslung.test.ts` sofort.** Mein Import-Muster (`from '.*auswechslung'`) griff nicht;
+der Test importiert anders, als ich unterstellt hatte. **Zum dritten Mal heute ein zu enges Muster —
+und zum dritten Mal hat nur die Gegenprobe am bekannten Treffer den Fehlalarm verhindert.**
+
+### Der Achsen-Fallstrick — und warum er schärfer ist, als er aussieht
+
+    RoofAufbau (scene.types.ts)          Oeffnung (auswechslung.ts)
+      breiteMm  parallel Traufe      ->    breiteM   u-Richtung          PASST
+      hoeheMm   VERTIKALE Fronthoehe ->    (keine Entsprechung)
+      tiefeMm   entlang der Schraege ->    hoeheM    v-Richtung, geneigt  <- das RICHTIGE Feld
+
+**Der Modulkommentar warnt zweimal ausdrücklich vor der „Aufbau-Tiefe"** — `auswechslung.ts:11-12`:
+*„Öffnungshöhe = Maß in v-Richtung (geneigt). **Die Aufbau-TIEFE (depth, Aufbauhöhe)**…"* Er setzt
+„Tiefe" mit „Aufbauhöhe" gleich.
+
+**Im Modell heißt `tiefeMm` das Gegenteil: die Ausdehnung IN der Fläche.** Wer den Kommentar liest und
+im Modell nach „Tiefe" sucht, meidet genau das Feld, das er nehmen müsste — und greift zu `hoeheMm`,
+weil die Namen gleich klingen. **Der Kommentar führt in die Falle, vor der er warnt.** Ergebnis wäre,
+wie das Blatt sagt, *„eine plausible falsche Sparrenzahl"* — plausibel, weil eine Zahl herauskommt.
+
+**Das Blatt hat es vollständig:** Achsen-Tabelle (`:79`), der Wortgebrauchs-Konflikt (`:83-87`,
+*„Zwei Bedeutungen desselben Wortes, an der Nahtstelle, an der gemappt werden muss"*), und ein
+Probefall, der **beide** Zuordnungen fährt und die Differenz beziffert (`:134-137`). **Kein Halbsatz
+— das Blatt ist präziser als seine eigene Zusammenfassung im Ereignis.**
+
+### Votum
+
+**Beide ERTEILT.** Je sieben Kriterien mit Messbefehl, rotem Ist und Absage-Regel; N4, Rückweg und
+HEADFUL-Ort vorhanden; Rot-Lage in beiden Fällen dieselbe und selbst nachgemessen (0
+Produktivimporte).
+
+Die Absage-Regeln tragen, drei besonders:
+
+- **Z1-W2-5 (c):** *„Eine 0 anzeigen erfüllt (c) NICHT, eine leere Zelle auch nicht.
+  `WandFlaecheErgebnis` ist eine VEREINIGUNG; der Anschluss darf sie nicht auf ihren Erfolgsfall
+  zusammenziehen."*
+- **Z1-W2-6 (d):** *„`wechselAnzahl 0` als ‚0 Stück' erfüllt (d) NICHT — das Modul unterscheidet
+  ‚keine nötig' von ‚nicht bestimmbar'; eine Oberfläche, die beides als 0 zeigt, macht die
+  Unterscheidung zunichte."*
+- **Z1-W2-6 (b):** *„Kommt der Bau zu einer anderen Zuordnung, GILT SEIN BEFUND — dann ist das Blatt
+  zu ändern, nicht der Code zu biegen."* **Ein Blatt, das seine eigene Widerlegung vorsieht, ist
+  stärker als eines, das sie ausschließt.**
+
+Zur Fach-Empfehlung im Blatt (*„Zimmerer/Dachdecker empfohlen: Handwerkswissen, keine Typprüfung"*):
+**sie trägt.** Die Zuordnung `tiefeMm → hoeheM` ist typkorrekt in jeder Variante — beide sind Zahlen.
+**Was sie unterscheidet, ist das Dach, nicht der Compiler.**
+
+Ball: **Generator** (nach Z0-I1) · bei mir nichts.
