@@ -39262,3 +39262,92 @@ Der lehrreiche Teil: **Der systematische Griff war richtig, mein Handgriff war e
 als ich *einen* davon genauer ansehen wollte, habe ich den Pfad selbst getippt — und daneben
 gegriffen. Ein Verfahren, dem ich gerade 16 Verweise anvertraut habe, war mir für den siebzehnten
 nicht gut genug.
+
+## §489 — Der PHP-Integritätsbefund des Generators trägt; ich liefere die Grundmenge nach: 2 von 9
+
+Stand: HEAD `521d2cca`, Baum 0, gen 11, Digest gleich. Zeit 22:52.
+
+Der Generator hat um 22:48 gemeldet
+(`generator-BEFUND-php-integritaet-spiegelt-nicht.yaml`), dass
+`SceneDocumentValidator.php:51-52` behauptet, die PHP-Regeln „spiegeln **exakt**
+`sceneDocumentSchema` + `validateSceneIntegrity`" — und dass sie das nicht tun.
+**Zitiert, nicht nachgebaut** (P-02 Punkt 4). Was ich beitrage, ist die **Reichweite**, die er nicht
+gemessen hat.
+
+### Sein Befund, von mir nachgemessen — alles trifft
+
+| Behauptung | gemessen |
+|---|---|
+| Kommentar sagt „spiegeln exakt" | `SceneDocumentValidator.php:52` |
+| TS hat drei Level-Prüfungen | `:378` Decke · `:383` Dach · `:390` Node |
+| PHP hat eine | `:71` Node |
+| `ceilings`/`roofs` in der PHP-Datei | **je 0** |
+| nicht von E4 verursacht | Diff `c95e8c33..Integration` = **0 Zeilen**, letzte Änderung **20.07.** |
+
+Die Folge, die er benennt, ist damit belegt: Eine Decke oder ein Dach auf einem nicht existierenden
+Level wird vom Client abgelehnt und **vom Server angenommen**.
+
+### Meine Ergänzung: die Grundmenge — und eine eigene Vermutung, die dabei fiel
+
+Beim Zählen fand ich zunächst **PHP 7 Prüfungen gegen TS 6** und hielt die Abweichung für
+**zweiseitig** — PHP schien Wand-Länge und Zone-`derived` zu prüfen, die `validateSceneIntegrity`
+nicht hat. Das hätte den Befund verwässert.
+
+**Gemessen statt gemeldet.** Die drei vermeintlich fehlenden TS-Gegenstücke stehen in TS sehr wohl
+— nur im Zod-Schema statt in der Integritätsfunktion:
+
+```
+validation.ts:64    'Wand hat Länge 0.'
+validation.ts:66    'Wand kürzer als ihre Dicke.'
+validation.ts:137   "zoneType 'room' muss derived=true"
+```
+
+Damit ist die richtige Bilanz:
+
+```
+TS   6 (validateSceneIntegrity) + 3 (superRefine)  =  9 Regeln
+PHP                                                    7 Regeln
+Differenz: GENAU 2 — Decke und Dach.
+```
+
+**Die Abweichung ist einseitig, genau wie der Generator sagt.** Meine Zwischenvermutung war falsch,
+und sie ist an der Messung gestorben, nicht in einer Meldung. Das ist derselbe Griff, den die
+lesende Sitzung heute an sich selbst gelobt hat, als sie meinen Materialkatalog-Befund nachtrug:
+*„Ich hatte nur die Fundstelle, nicht die Reichweite."* Hier ist die Reichweite **2 von 9** — keine
+allgemeine Schwäche des Server-Validators, sondern eine benennbare Lücke von zwei Regeln.
+
+Das ist auch der Grund, warum die Zahl zählt: „PHP prüft weniger" klingt nach Umbau. „Es fehlen
+genau zwei Schleifen, und beide folgen einem Muster, das drei Zeilen darüber steht" klingt nach
+einer halben Stunde Arbeit.
+
+### Was ich am Generator ausdrücklich würdige
+
+Er hat den Befund **nicht im Vorbeigehen behoben**, obwohl er die Datei ohnehin offen hatte — und
+seine Begründung ist die klügere Hälfte des Befunds:
+
+> „Wäre ich in PHP für `foundationSlabs` allein streng, sähe die Datei aus wie eine, die
+> Sammlungen prüft — und Decke und Dach fielen erst recht nicht mehr auf."
+
+Er folgt also **je Sprache dem dort vorhandenen Muster**: TS bekommt die
+`foundationSlabs`-Schleife (weil es `ceilings`/`roofs` dort gibt), PHP bekommt sie **nicht** (weil es
+das Muster dort nicht gibt). Eine halbe Symmetrie hätte den Befund verdeckt, statt ihn zu beheben —
+und ein sauber aussehender Zustand ist schwerer zu finden als ein offensichtlich lückenhafter.
+
+### Einordnung, damit die Schwere nicht überzeichnet wird
+
+Dies ist ein **Integritätsbefund**, kein Sicherheitsbefund: Er betrifft, was der Server als
+konsistent annimmt, nicht wer darauf zugreifen darf. Die Belegkette Angebot → Auftrag → Rechnung ist
+nicht berührt, Produktdaten werden nicht verändert. Der Ball liegt beim Planner — entweder ein
+eigenes Blatt, oder die Kommentarzeile „spiegeln exakt" wird zurückgenommen. **Beides ist eine
+Entscheidung, keine Messfrage**, und sie gehört nicht mir.
+
+### Eigene Messausfälle in dieser Runde: zwei, beide gefangen
+
+1. `awk '/function validateSceneIntegrity/,/^}/'` gab **7 Zeilen** und „0 Prüfungen". Die Funktion
+   hat einen mehrzeiligen Parametertyp, dessen schließende `}` am Zeilenanfang steht — der Bereich
+   endete in der Signatur. **§477 wieder**: Blockstruktur zu grob gefasst.
+2. Der zweite Versuch über `NR>s && /^}/` scheiterte identisch.
+
+Erst der Schnitt bis zur **nächsten `^export`-Deklaration** (Z. 363–419, 57 Zeilen) lieferte die
+sechs Prüfungen. Beide Ausfälle sahen aus wie Ergebnisse: „0 Prüfungen" ist eine Zahl, und eine
+Zahl liest sich wie eine Messung.
