@@ -100,7 +100,7 @@
 | **Z1-W1-4** dachWerte: eine Quelle, Stilllegung statt Loeschung | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` · **DoR ERTEILT** (plan-pruefer §146) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §146), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Generator** |
 | **Z1-W1-5** insulationType: der tote Zweig sagt, dass er tot ist | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §147), offen: die Zahl · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §180), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
 | **Z1-W2-0** Bedienbarkeits-Probe: das Messgeraet fuer alle Werkzeugblaetter | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 14:5x · Basis `592df395` | **Blatt** `docs/auftraege/aktiv/Z1-W2-0-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR ERTEILT** (plan-pruefer 15:02, Pruefstand `adf03d32`) · Bau `ee6ce517` · Matrix `0d97a57c` · CODE_FERTIG 15:45:32 |
-| **Z1-W2-1** Integrationsabgleich anschliessen | `ENTWURF` | **Plan-Prüfer** | Schnitt 22.08. 14:2x · Basis `767fb730` | **Blatt** `docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR steht aus** |
+| **Z1-W2-1** Integrationsabgleich anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 14:2x · Basis `767fb730` | **Blatt** `docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR ERTEILT** (plan-pruefer 14:25, Pruefstand `4611267e`) · Bau `1c80a1d8` · Matrix `1d193535` · CODE_FERTIG 15:26:32 · **Abnahme laeuft, Teil B ENV_BLOCKED 16:01** |
 | **Z1-W2-2** Aufbautenstatus anschliessen | `BEREIT` | **generator** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-2-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae |
 | **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | `BEREIT` | **generator** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -19065,13 +19065,17 @@ zustand_nachgezogen: |
 ```yaml
 auftrag: "Z1-W2-1"
 titel: "Integrationsabgleich anschliessen"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 blatt: "docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md"
 blatt_sha: 4611267e
 basis_sha: 767fb730
-dor_beleg: "steht aus"
-bau_sha: "noch offen"
+dor_beleg: |
+  ERTEILT — plan-pruefer, Ereignis SPEZ-planner-anschlusswelle-1/plan-pruefer-DOR-Z1-W2-1-ERTEILT.yaml,
+  Pruefstand Blatt 4611267e, Messung 14:25:45, Ergebnis 05c26de4.
+  BERICHTIGUNG meines eigenen Werts wie bei Z1-W2-0: "steht aus" war beim Anlegen richtig und ist
+  es nicht mehr.
+bau_sha: 1d193535
 herkunft_dieses_blocks: |
   Angelegt vom integrator im Transportlauf, nach der Dauerregel aus gen 9 Punkt 2 und
   gen 11 Punkt 3: ein neues Blatt bekommt im SELBEN Lauf seinen Block mit ENTWURF und
@@ -19079,6 +19083,17 @@ herkunft_dieses_blocks: |
   in dem ein Auftrag existiert und in der Statuswahrheit nicht vorkommt.
   Erster Fall dieser Regel fuer eine Z-Kennung — moeglich, seit A-43 transportiert ist.
   TRANSPORT, keine Bewertung: Zustand ENTWURF ist der Anfangswert, kein Urteil.
+
+zustand_nachgezogen: |
+  CODE_FERTIG nachgezogen vom integrator aus generator-CODE_FERTIG-Z1-W2-1.yaml (15:26:32).
+  Bau 1c80a1d8, Matrix 1d193535, transportiert 15:5x. Wie bei Z1-W2-0 ohne Zwischenstand BEREIT
+  in der Tafel, aus demselben Grund und mit demselben DoR-Nachtrag.
+  DIE ABNAHME LAEUFT SCHON UND STEHT: der Evaluator meldet 16:01 ENV_BLOCKED fuer Teil B — ein
+  fremder Testlauf hat ticket_testing neu aufgesetzt und sein Anmeldekonto geloescht (users 1 -> 0,
+  gemessen). Das ist ein Umstand der Umgebung, kein Mangel dieses Baus; der Zustand bleibt deshalb
+  CODE_FERTIG und der Ball beim Evaluator. Ich vermerke es, damit CODE_FERTIG ohne Votum nicht
+  als Stillstand gelesen wird.
+
 ```
 
 ```yaml
