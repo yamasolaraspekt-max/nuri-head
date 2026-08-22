@@ -32205,3 +32205,65 @@ ich baue es nicht nach** (P-02 Punkt 4). Wenn die Zahl je tragend wird, ist der 
 einer von uns die Dateiliste des anderen gegenliest.
 
 Ball: **niemand.** Posten 9 unverändert bei Yama, mit 23 statt 26 und dem benannten Vorbehalt.
+
+## §405 — Beide Steuerungsstellen schweigen seit über 80 Minuten. Und mein `pgrep` hätte fast eine verwaiste Lease erfunden
+
+Messstand: HEAD `e6f22aa3`, Baum 0, gemessen 17:24–17:27. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §405'` → 0). Ich habe den Ball dreimal zum Dirigenten gemeldet (§398, §400,
+§401) — also messe ich, ob dort jemand ist.
+
+### Die Lage, gemessen
+
+    Rolle        Lease            PID     laeuft   heartbeat_bis        letztes Ereignis
+    evaluator    ABNAHME-Z2-W0-1  87995   JA       16:57:46 (27 min)    16:26:43
+    integrator   INT-zustand-2    91006   JA       16:25:04 (60 min)    15:58:25   -> 87 Min still
+    planner      SPEZ-anschluss   93830   JA       17:53:20 (gueltig)   17:18:19
+    dirigent     KEINE Lease      —       —        —                    16:03:05   -> 82 Min still
+
+**Alle drei Lease-Halter laufen. Keine Lease ist verwaist** — das bestätigt §400/§401 ein drittes Mal.
+
+**Neu ist die vierte Zeile:** Der Dirigent hält **keine** Lease (Steuerung braucht keine) und hat seit
+**16:03:05** nichts abgelegt — **82 Minuten**. Sein letztes Ereignis war ausgerechnet die
+**DB-Lease-Regel 6j**; die Bündel-Regel davor um 16:02:19.
+
+**Damit schweigen beide Stellen, an denen sich der Stau lösen könnte:** der Integrator seit 87, der
+Dirigent seit 82 Minuten. Planner und Evaluator arbeiten unterdessen nachweislich weiter — der
+Planner hat um 17:18:19 abgelegt und seinen Heartbeat aktiv erneuert.
+
+### Mein eigener Fehlgriff, und er wäre teuer geworden
+
+Auf dem Weg dorthin zählte ich die laufenden Prozesse mit
+`pgrep -f 'native-binary/claude'` → **6 Treffer**, und verglich sie mit den PIDs aus den Leases:
+
+    PIDs in Leases:   87995 · 91006 · 93830
+    pgrep-Liste:      5297 · 87995 · 88891 · 91006 · 91400 · 91834
+    -> 93830 FEHLT   ==>  scheinbar eine Lease auf einen toten Prozess
+
+**Ich stand vor dem Befund „verwaiste Planner-Lease".** Die Gegenprobe mit `ps -p 93830` sagt:
+**LÄUFT.** Mein `pgrep`-Muster hat sie nicht gefunden — sie trägt einen anderen Kommandozeilenpfad.
+
+**Das ist genau der Fehler, den ich in §400 bei der externen Prüfung gemessen habe** — nur diesmal
+meiner. Dort schrieb ich: *„Ein Verfahren, das den Prüfenden selbst für tot erklärt, kann über
+niemanden entscheiden."* **Ich habe dasselbe Verfahren zwölf Minuten später selbst benutzt.**
+
+> **`pgrep -f <muster>` taugt für die Frage „läuft dieser Prozess?" nicht — in keiner Variante.**
+> Die PID steht in der Lease, und `ps -p <pid>` beantwortet die Frage mit einer Gegenprobe an einer
+> PID, die es nicht gibt. **Ich hatte das in §400 selbst hingeschrieben und bin trotzdem darauf
+> zurückgefallen.**
+
+Zwölfter Grundmengen-Fall heute — und der zweite, bei dem ein zu enges Prozessmuster **fast einen
+Befund erzeugt hätte, den es nicht gibt.**
+
+### Was ich melde und was nicht
+
+**Gemessen:** vier Rollen, drei laufende Lease-Halter, zwei Stellen seit über 80 Minuten still, der
+Stau unverändert (Integration 79 Minuten alt, Bündel wartet, 30 Commits Rückstand).
+
+**Nicht gemessen und nicht behauptet:** *warum* der Dirigent schweigt. Er hält keine Lease, hat keine
+PID im System hinterlegt, und ohne PID greift mein Verfahren aus §402 nicht. **Für ihn kann ich nicht
+einmal sagen, ob ein Prozess läuft** — es gibt keinen belegten Anknüpfungspunkt. Das ist eine Grenze
+der Messbarkeit, keine Aussage über ihn.
+
+Ball: **unverändert Dirigent** — mit dem Zusatz, dass diese Meldung ihn möglicherweise so wenig
+erreicht wie die drei davor. **Wenn nach der nächsten Runde nichts geschehen ist, gehört die Lage
+Yama vorgelegt**, nicht weiter an dieselbe Stelle gemeldet.
