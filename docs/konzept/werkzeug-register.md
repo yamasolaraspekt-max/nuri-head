@@ -391,3 +391,59 @@ vor, **Weg A empfohlen** (`Z1-W2-6` um `dachOeffnung` erweitern). *Beim Dirigent
 - **Kein Reifegrad ist gestiegen.** *Sieben Blätter und drei Zuschnitte sind Spezifikation, kein
   Fortschritt am Produkt — die Unterscheidung gehört an diese Stelle, damit die Tabelle nicht
   Fortschritt behauptet, den es nicht gibt.*
+
+## 6 · Der Anschlussvorrat — die Messgröße aus Posten 6 (a)
+
+**Der Auftrag verlangt sie „als Messbefehl … ins Werkzeug-Register".** Die Zuordnung selbst steht in
+`docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md` (Abschnitt `registry_id`); **hier steht die
+Zahl und der Befehl, mit dem sie entsteht.**
+
+```
+ANSCHLUSSVORRAT = Registerzeilen, die ein Leistenwerkzeug beschreiben
+                  und KEINE registry_id tragen
+
+Stand 22.08. abends (c83066f6)
+  Registerzeilen in der Tabelle                        43
+  davon einer Kennung zugeordnet                        9
+  davon ausdruecklich kein_werkzeug (W-01)              1
+  davon STRITTIG (flaeche-messen -> W-08)               1
+  davon NOCH NICHT EINGEORDNET                         32
+  Kennungen in TOOL_DEFINITIONS                        13
+  davon OHNE Registerzeile                              3   loeschen · trimmen · teils duplizieren
+```
+
+### Drei Zählweisen, und jede hat ihren Zweck
+
+**Beim Nachmessen gingen drei Zahlen auseinander. Keine ist falsch — sie zählen Verschiedenes:**
+
+```
+43   Zeilen in der Registertabelle          <- Grundmenge des Anschlussvorrats
+41   Verzeichnisse unter 02-WERKZEUGE/      <- W-24 und W-32 haben KEINS
+42   "Zielzahl" laut W-19-Zeile             <- W-19 zaehlt nicht als offene Werkzeugkasten-Zeile
+```
+
+> **W-24 und W-32 fehlen als Verzeichnis mit Absicht** — beide sind `GEGENSTANDSLOS`, und die
+> W-24-Zeile begründet es selbst: *„Bewusst KEINE sieben Blätter geschrieben: eine vollständige
+> Werkbank-Beschreibung für einen Eintrag ohne eigenen Gegenstand sähe vollständig aus und wäre
+> leer."*
+> **Beinahe hätte ich die 43 als zu hoch „berichtigt", weil ich Verzeichnisse gezählt hatte.**
+> *Gemessen statt gerechnet — die 43 hält.*
+
+### Der Vorrat ist heute keine Zahl, sondern eine Obergrenze
+
+**Er liegt zwischen 0 und 32.** *Welcher Wert gilt, entscheidet sich erst, wenn je Zeile feststeht,
+ob sie ein Leistenwerkzeug beschreibt.* **Ich trage ihn so ein, statt eine Zahl zu nennen, die auf
+32 Vermutungen ruht.**
+
+### Zwei Befunde, die diese Messgröße mitbringt und die nicht in ihr aufgehen
+
+1. **`registry_id` ist nicht eins-zu-eins.** W-04 trägt `fenster`+`tuer`, W-07 trägt `dach`+`kontur`.
+   *Wer den Vorrat zählt, zählt Kennungen — nicht Zeilen.*
+2. **Drei Kennungen haben gar keine Registerzeile**, alle `art: 'aktion'`. **`trimmen` ist gebaut
+   und bedienbar und steht in keinem Werkzeugregister** — es entstand über `A-35`. *Eine Lücke in
+   der Gegenrichtung: nicht ein Blatt ohne Werkzeug, sondern ein Werkzeug ohne Blatt.*
+
+> **Was dieser Abschnitt ausdrücklich nicht tut:** die 32 einordnen. *Jede einzelne ist eine
+> Entscheidung („beschreibt diese Zeile ein Leistenwerkzeug?"), keine Messung — dieselbe Lage wie
+> bei `grundriss.ts` in `Z1-W2-3`.* **Eine Vorratszahl aus 32 Schätzungen wäre keine Messgröße,
+> sondern eine Behauptung mit Nachkommastelle.**
