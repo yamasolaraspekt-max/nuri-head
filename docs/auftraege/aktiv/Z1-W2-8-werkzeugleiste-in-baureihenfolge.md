@@ -90,10 +90,14 @@ IST    (kein Eintrag) wand -> fenster -> tuer -> DACH  -> decke -> treppe -> …
   ihre Folge woanders herleiten. **Beide Ansichten sind zu belegen** — *die Leiste rendert über
   `zoneTools`, das Menü über `WERKZEUG_GRUPPEN`; wer nur eine prüft, hat die halbe Zusage.*
 
-- **Z1-W2-8-b** · **DIE BODENPLATTE IST EIN EINTRAG — AUF DEM VORHANDENEN DECKENWERKZEUG.**
+- **Z1-W2-8-b** · ~~**DIE BODENPLATTE IST EIN EINTRAG — AUF DEM VORHANDENEN DECKENWERKZEUG.**~~
+  **→ ENTFÄLLT** (DoR-Halbsatz 2, `8a4ffd58`: *„Kriterium Z1-W2-8-b ENTFÄLLT — samt seiner
+  Matrixzeile. Ein Eintrag auf `bauteilKind 'ceiling'` ist ausdrücklich UNTERSAGT."*)
 
-  **Verlangt:** Neuer Registry-Eintrag `bodenplatte` mit **`bauteilKind: 'ceiling'`**, der die
-  Decke **auf der untersten Ebene** setzt. **KEIN neuer Knotentyp, keine Modelländerung.**
+  ~~**Verlangt:** Neuer Registry-Eintrag `bodenplatte` mit **`bauteilKind: 'ceiling'`**, der die
+  Decke **auf der untersten Ebene** setzt.~~ *(Überschrift und Verlangt-Satz waren bis 20:3x nicht
+  durchgestrichen — nur Messbefehl und Matrixzeile. **Wer nur die Überschrift liest, bekam die
+  gestrichene Fassung.** Nachgezogen, nicht neu entschieden.)*
 
   **Messbefehl — (b) FÄLLT, siehe Nachtrag. Was BLEIBT, ist die Sperre:**
   ```
@@ -111,9 +115,14 @@ IST    (kein Eintrag) wand -> fenster -> tuer -> DACH  -> decke -> treppe -> …
   Modelländerung setzen: MELDEN, nicht basteln** — dann liefert der Bau die Reihenfolge **ohne**
   Bodenplatte und hängt sie als Folgeposten an `GP-0`.
 
-- **Z1-W2-8-c** · **DER TOOLTIP IST EHRLICH.**
+- **Z1-W2-8-c** · **DER TOOLTIP IST EHRLICH.** — **(c) ENTFÄLLT NICHT.**
 
-  **Verlangt:** Der Bodenplatten-Tooltip sagt, was das Werkzeug **wirklich** tut:
+  > **Die DoR streicht (b), nicht (c).** *Bindend ist die Entscheidungstabelle unten (Halbsatz 1:
+  > „es gilt die Entscheidungstabelle, nicht der Kriterientext"), und die führt (c) als* **„baubar,
+  > verschoben — gilt für den Decken-Tooltip (Zwischen-/Abschlussdecke)"**. **Die erste Hälfte
+  > (Bodenplatten-Tooltip) fällt mit (b) mangels Gegenstand; die zweite Hälfte steht.**
+
+  **Verlangt:** ~~Der Bodenplatten-Tooltip sagt, was das Werkzeug **wirklich** tut:~~
   *„heute als Decke der untersten Ebene geführt; eigener Bodenplatten-Knoten `GP-0` folgt."*
   **Der Decken-Eintrag bleibt EIN Eintrag** und nennt im Tooltip **beides** (Zwischen- **und**
   Abschlussdecke).
