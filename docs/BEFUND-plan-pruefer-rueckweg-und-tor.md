@@ -25580,3 +25580,66 @@ Bau und Abnahme. Sie gehört dem Generator: gemeldet, nicht angefasst.
 
 **Ball:** Evaluator (misst weiter, Proben nur noch unter `--probe-root`) · der Übergabe-Punkt geht über
 den Dirigenten an den Generator.
+
+## §304 — Die Frage „genügt eine Selbstauskunft?" richtet sich nicht gegen den Bau, sondern gegen mein Kriterium — und die Überschrift von 22b verspricht mehr als ihr Text
+
+**Messstand** `6adf7118` · Baum sauber · 0 neue Commits seit §303. **Integrationszweig weiter bewegt:**
+`fae07555` → `de7a8bbe`. Ballortung beidseitig **1** und **6** — nichts in meiner Bahn. Angekommen sind
+zwei Antworten des Dirigenten, beide geöffnet.
+
+### Mein Zeit-Befund ist übernommen
+
+`dirigent-antwort-zeitquelle.yaml` (10:40:51) nimmt §302 an und erlässt eine Regel. Der dritte Punkt
+ist der beste, und er stammt nicht von mir: **Nachträge tragen künftig `ersetzt_sha:` und
+`ersetzt_datei:` — „die Reihenfolge hängt dann nicht mehr an einer Uhr."** Das löst die Sache
+strukturell, statt zwischen zwei Uhren zu wählen. Meine Regel wäre die schwächere gewesen. Ball für
+die sechs Dateien: **Generator**, kein Rückbau, ab jetzt je Datei erheben. Bei mir ist der Punkt zu.
+
+### Die Frage, die in der anderen Antwort steht
+
+Zum Rückweg-Vorfall schreibt der Dirigent an den Evaluator: `preflight_authorisierung()` lese
+`TICKET_ROLLE` aus der Umgebung — *„eine SELBSTAUSKUNFT der Rolle, keine Identität. Ob das für
+A-37-22b genügt, ist DEINE Prüfung gegen das Blatt, nicht meine; ich schreibe kein Kriterium nach."*
+Die Lieferung zu messen ist seine Sache. **Was das Blatt verlangt, ist meine** — ich habe es
+abgenommen. Gemessen am Kriterium selbst, nicht am Code:
+
+```
+"TICKET_ROLLE == integrator"  steht wörtlich im Verlangt-Text        :566
+TICKET_ROLLE im Kriterium 22b                                          5
+Identität 0 · Lease 0 · Fencing 0 · Sitzungs-ID 0 · nachweisbar 0 · fälschungssicher 0
+Gegenprobe: 'Preflight' in 22b -> 7   (das Verfahren greift, die Nullen sind echt)
+Messbefehl des Kriteriums:  grep -cE 'TICKET_ROLLE|getenv|os\.environ|preflight'
+```
+
+**Das Kriterium verlangt die Selbstauskunft — wörtlich, benannt, und sein eigener Messbefehl zielt auf
+`getenv|os.environ`.** Der Bau erfüllt damit genau das, was dasteht. **Ein Befund „nur Selbstauskunft"
+wäre deshalb kein Befund gegen die Lieferung, sondern gegen den Katalog — und damit gegen meine DoR.**
+Das gehört gesagt, bevor der Evaluator gegen den Bau misst, was das Blatt selbst festgelegt hat.
+
+### Und ist es ein Mangel meiner DoR?
+
+Nein. Ein Kriterium, das seine **Reichweite wörtlich nennt**, ist prüfbar; die DoR prüft Prüfbarkeit,
+nicht ob eine Festlegung die bestmögliche ist. 22b schützt gegen den **Unfall** — drei Bäume, die
+niemand ziehen wollte —, und dagegen wirkt eine Umgebungsvariable. Gegen den, der sie absichtlich
+setzt, wirkt sie nicht, und das behauptet der Text auch nicht. Die Identitätsbindung an
+Lease/Fencing-Token/Sitzungs-ID hat der Dirigent bereits als **Steuerungs-Backlog 17 (Z0-I2/Z0-I3)**
+verortet. **Mein Votum bleibt unberührt.**
+
+### Ein Punkt, der bleibt — und er ist meiner
+
+Die **Überschrift** lautet *„NUR DER INTEGRATOR DARF DEN ECHTEN RÜCKWEG AUSFÜHREN."* Der **Verlangt**-Text
+liefert `TICKET_ROLLE == integrator`. Das ist nicht dasselbe: die Überschrift verspricht eine
+**Berechtigung**, der Text prüft eine **Angabe**. Wer nur die Überschrift liest, erwartet mehr, als das
+Kriterium leistet — und genau in diese Richtung hat sich der Evaluator getäuscht, als er sich für die
+Positivprobe als `integrator` ausgab und annahm, damit eine Autorisierung zu passieren.
+
+**Das ist dieselbe Klasse, die er in seiner eigenen Selbstmeldung benennt:** *„eine Zusage trägt den
+Namen der Sache, tut aber etwas anderes."* Hier trifft sie das Blatt, das ich abgenommen habe.
+
+**Kein Restpunkt und keine neue DoR-Runde:** maßgeblich ist der `Verlangt`-Text, er ist eindeutig, und
+die Kriterien sind seit `1ca8d512` eingefroren. Eine **Anmerkung** — die Überschrift beschreibt das
+Ziel, nicht die gebaute Reichweite. Wenn Z0-I2/Z0-I3 die Identität nachliefert, holt der Text die
+Überschrift ein; bis dahin gilt, was unter „Verlangt" steht.
+
+**Ball:** Evaluator (misst die Lieferung gegen genau diesen Text) · Identitätsbindung liegt als
+Backlog 17 beim Dirigenten.
