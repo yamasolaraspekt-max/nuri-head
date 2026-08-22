@@ -39966,3 +39966,73 @@ gebaut wird.
 2. `grep -c '-180'` scheiterte, weil `-180` als Option gelesen wurde („no search PATTERN
    specified"). Mit `-e '-180'`: **0 Treffer** — dieselbe Zahl, aber jetzt gemessen statt
    abgestürzt.
+
+## §499 — Meine Sorge aus §498 war unbegründet: der Generator hat Posten 30 gebaut, bevor er im Blatt stand
+
+Stand: HEAD `87113b45`, Baum 0, gen 11, Digest gleich. Zeit 23:24. Messstand `fdc71f7d`.
+
+In §498 hatte ich gewarnt: *„Nimmt er `19a97b2b`, baut er die Fixture ohne die Werte 180 / −180 /
+250 und ohne das Pflichtfeld."* **Gemessen am Bau-Commit `3b4e8f6b` (23:17:48) — er hat alles
+gebaut.** Und zwar **drei Minuten bevor** meine Warnung um 23:20:52 abgelegt war.
+
+### Was tatsächlich im Bau steht
+
+```
++  dickeMm: 250, oberkanteMm: -180, erdberuehrt: true
++  assert.equal(…[data-feld="oberkanteMm"]…?.value, '-180')
++  import { bodenplatteOberkanteMm, fussbodenaufbauDickeMm, fussbodenaufbauErfasst } …
++  applyCommand(…, slab: platte({ oberkanteMm: -180.5 }) …)      ← Ganzzahligkeits-Probe
+```
+
+`180` 28 Treffer · `-180` 15 · `250` 24 · `aufbau` 42 · `Pflicht` 2 — alles in hinzugefügten Zeilen.
+Er hat die Werte aus dem **Ereignis** des Dirigenten genommen, nicht aus dem Blatt. Genau der Weg,
+den ich empfehlen wollte — nur hat er ihn selbst gefunden, bevor die Empfehlung geschrieben war.
+
+**Meine Warnung war richtig gedacht und überflüssig.** Das gehört gesagt: Ich habe eine Lücke
+gemeldet, die real ist (das Blatt trägt Posten 30 bis jetzt nicht), und daraus eine Gefahr
+abgeleitet, die nicht eintrat, weil der Generator nicht nur das Blatt liest.
+
+### Kriterium (e) vorgezogen geprüft — erfüllt
+
+Das Blatt verlangt: *„`git diff hoehenkette.ts` nur **additiv**."*
+
+```
+hoehenkette.ts:  62 hinzugefügt / 0 gelöscht
+```
+
+**Null Löschungen.** Die Bestandsfunktionen `deckenOberkanteMm` und `naechsteEtageElevationMm`
+sind unberührt.
+
+### Die neue Formel durchgerechnet (mein Pflichtfeld)
+
+```ts
+:77   fussbodenaufbauDickeMm(schichten) = (schichten ?? []).reduce((s, x) => s + x.dickeMm, 0)
+:88   fussbodenaufbauErfasst(schichten) = (schichten ?? []).length > 0
+:116  bodenplatteOberkanteMm(schichten, bezugshoeheMm = 0)
+        = Math.round(bezugshoeheMm − fussbodenaufbauDickeMm(schichten))
+```
+
+Eingesetzt: eine Schicht à 180 mm → `Math.round(0 − 180)` = **−180**. Das ist exakt die Kette aus
+§495/§496 und die Zahl aus Posten 30.
+
+**Drei Beobachtungen, alle positiv:**
+
+1. Der Aufbau ist als **Schichtenliste** modelliert, nicht als einzelner mm-Wert. Das ist reicher,
+   als der Dirigent verlangte („Fußbodenaufbau (mm) ist Pflichtfeld") — und **konsistent mit
+   Operand 2** (Schichtfolge außen→innen). Die Summe ist kommutativ, also kostet die Reihenfolge
+   auch hier nichts (§489).
+2. `fussbodenaufbauErfasst` ist die **Pflichtfeld-Probe** in Funktionsform: leere Liste → `false`.
+   Damit ist „ehrlich statt Null" messbar, nicht nur verlangt.
+3. `bezugshoeheMm = 0` als Default ist **Operand 1** im Code. Und `Math.round` deckt die
+   Ganzzahligkeit, die der Test mit `-180.5` gegenprobt.
+
+**Meinen §496-Punkt löst er nebenbei sauber:** `floorThickness` bleibt unangetastet, der
+Fußbodenaufbau bekommt einen **eigenen Typ**. Die zwei Größen, die ich verwechselt hatte, sind im
+Code getrennt.
+
+### Kein Votum, nur eine Zwischenmessung
+
+Der `CODE_FERTIG` liegt noch nicht vor. Dies ist eine **vorgezogene** Prüfung, kein Urteil — die
+Meldepflichten (SHA in einem Feld, Scope-Diff, Ballwechsel) prüfe ich, wenn er meldet. Offen bleibt
+für die dann fällige Prüfung: die vier PHP-Schleifen aus d2, die Tests je Sammlung, und ob
+`SceneDocumentValidator.php` (34 Zeilen im Diff) den Kommentar `:51-52` wahr macht oder streicht.
