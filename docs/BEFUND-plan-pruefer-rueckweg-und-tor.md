@@ -35126,3 +35126,88 @@ damit steht ein Blatt in der Integration, dessen Nicht-Ziel dort nicht lesbar is
 
 Ball: **Integrator** (Transport — `a7d1e9a6`, `97277281` und was der Evaluator nennt) · **Dirigent**
 (der Nachtrag liegt zur Kenntnis bei ihm).
+
+## §441 — Die Z0-I1-Nachbesserung fährt den verbotenen Messbefehl NICHT. Mein §439-Befund ist praktisch beantwortet — der Blatt-Mangel bleibt
+
+Messstand: HEAD `d38cdcc5`, Baum 0, gemessen 19:43–19:48. **Messzeit des Ereignisbefehls dieser
+Runde: 19:43:59.** Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §441'` → 0).
+**Ereignis dieses Abschnitts:** `ereignisse/BAU-generator-spur-V-1/plan-pruefer-MELDEPFLICHTEN-Z0-I1-nachbesserung.yaml`
+
+### Der Kernpunkt: der verbotene Messbefehl wurde nicht gefahren
+
+    'information_schema' in der Meldung:                  2
+    "gegen 'ticket'" / DB_DATABASE=ticket :               1   <- und das ist ein ZITAT
+
+    Zeile 67-71 der Meldung:
+      3_der_messbefehl_von_10_verlangt_eine_verbotene_handlung: |
+        Woertlich im Blatt: "Gegenprobe: ein Lauf gegen 'ticket' (per Env erzwungen) -> fail closed".
+        'ticket' ist die Produktiv-Datenbank und steht auf meiner verboten-Liste. Ich habe den
+        Messbefehl deshalb NICHT so gefahren, sondern mit information_schema — immer vorhanden,
+        keine Produktivdaten. Die Absicht des Kriteriums ist damit belegt.
+
+**Der einzige `ticket`-Treffer ist das Zitat des Mangels, den er meldet.** Die Gegenprobe lief gegen
+`information_schema`, und der Guard brach ab — wörtlich `Z0-I1-2`.
+
+**Damit ist mein §439-Befund praktisch beantwortet:** Die Absicht von Kriterium 10 ist belegbar,
+ohne die verbotene Handlung. **Der Blatt-Mangel bleibt trotzdem** — solange `:433` „erzwungen" sagt,
+fordert das Blatt beim nächsten Leser wieder dazu auf.
+
+### Meldepflichten — selbst gemessen
+
+    ausgangs_sha  a7d1e9a6   existent      endstand_sha/ergebnis_sha  ba6fc673   existent
+    ba6fc673 im Integrations-Checkout:  NEIN (auf rolle/generator) — Transportstau, §440
+    pfade: phpunit.xml · tests/CreatesApplication.php · tests/TestDbZugang.php
+           scripts/testdb-zugang-einrichten.sh
+    umfang: "10 und 12 — NICHT 9 und 10. Die Berichtigung des Evaluators (19:17:12) ist befolgt."
+
+**Der Scope liegt außerhalb der Insel** — und das ist richtig: Z0-I1 ist **Testinfrastruktur**
+(Spur A), kein Hausplaner-Blatt. V-6 gilt hier nicht.
+
+### Seine Belege, von mir nachgemessen
+
+    Behauptung: "config/database.php:51 fiel auf 'forge' zurueck"
+    gemessen:    config/database.php:52   'username' => env('DB_USERNAME', 'forge')
+                 (:51 ist 'database', :52 ist 'username' — die Aussage trifft, die Zeile ist :52)
+
+    Behauptung: "phpunit.xml trug kein DB_USERNAME"
+    gemessen im Checkout: phpunit.xml:28 traegt DB_DATABASE — kein DB_USERNAME, kein TESTDB_ZUGANG
+                 (der Stand VOR dem Transport, also genau der beschriebene Ausgangszustand)
+
+### Der Wegwerf-Klon-Nachweis ist A-37-22d in Reinform
+
+> *„`git archive HEAD | tar -x` unter `mktemp` — also nur Versioniertes, **KEINE `.env`, KEINE
+> `.env.testing`** (beide als fehlend gegengeprüft). `vendor` kopiert, nicht verlinkt.
+> **GRÜN** `TESTLAUF db=ticket_testing halter=generator quelle=SELECT_DATABASE()`
+> **ROT** `TESTDB_ZUGANG` auf einen nicht existenten Pfad → `Access denied for user 'ticket_user'`
+> und der Guard: `Z0-I1-1: … Kein Lauf, nichts geschrieben.`"*
+
+**Und der Satz, der die Rot-Probe erst wertvoll macht:** *„Die Rot-Probe belegt zugleich, **dass der
+Benutzername wirkt** — vorher hieß er ‚forge'."* **Eine Rot-Probe, die nebenbei die Wirkung der
+Änderung beweist** — nicht nur, dass es ohne sie bricht.
+
+**Dazu die Trennung, die CLAUDE.md verlangt:** *„Der **Benutzername** ist kein Geheimnis und steht
+jetzt versioniert neben Host und Port. Das **Kennwort** ist eines."* Und: *„Das Kennwort habe ich nie
+gesehen — `scripts/testdb-zugang-einrichten.sh` liest es aus der vorhandenen `.env` und schreibt es
+direkt in die Ziel[datei]."*
+
+### Drei Befunde gemeldet statt behoben — und einer davon wiegt
+
+    1  APP_KEY:  im Baum OHNE .env laufen die Tests trotz stehender DB-Verbindung nicht durch —
+       55 Errors, ALLE mit derselben Ursache ('No application encryption key'), 0x SQLSTATE.
+       "Z0-I1-12 verlangt, dass der Lauf ticket_testing ERREICHT — das tut er, belegt.
+        APP_KEY ist ein anderer Mangel und nicht mein Blatt-Umfang. ABER: ohne ihn hat der
+        erfuellte Verbindungsweg in einem Baum ohne .env keinen praktischen Nutzen."
+       "Ich baue das NICHT ungefragt ein."
+    2  artisan bootet vor phpunit — wer mit 'php artisan test' nachprueft, misst Pusher
+    3  der Messbefehl von 10 verlangt eine verbotene Handlung   (mein §439)
+
+**Befund 1 ist die ehrlichste Stelle der Meldung:** Er hat sein Kriterium erfüllt und sagt im selben
+Atemzug, dass die Erfüllung **praktisch nichts nützt**, solange APP_KEY fehlt. **Und er baut es
+nicht ein** — obwohl sein Mechanismus es könnte. *„Ich baue das NICHT ungefragt ein."*
+
+**Das ist dieselbe Grenze wie beim Bodenplatten-Blocker (§428) und bei `dachTopologie` (§433):
+lieber ein benannter Rest als eine stille Erweiterung.**
+
+Ball: **Evaluator** (10 und 12 nachprüfen, der Klon-Weg steht im Beleg) · **Integrator**
+(`ba6fc673` transportieren — der vierte Posten im Stau) · **Planner** (Messbefehl `:433`, mein
+§439-Befund bleibt offen).
