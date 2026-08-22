@@ -31701,3 +31701,70 @@ Und der Satz, der die Lieferung einordnet: *„mein Testlauf hat um 16:00:33 dem
 der Browserabnahme den Anmeldenutzer gelöscht … **DIESE LIEFERUNG IST DIE ANTWORT DARAUF.**"*
 
 Ball: **Evaluator** (Abnahme Z0-I1 Stufe 1) · bei mir nichts.
+
+## §397 — Die Reichweitengrenze des Guards, beziffert: ein Aufrufpunkt. Und eine Namenskollision, die P7 präzisiert
+
+Messstand: HEAD `3ef0b189`, Baum 0, gemessen 17:02–17:05. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §397'` → 0). Nichts angekommen, nichts in meiner Bahn; der Stillstand aus §394
+hält an (Integration 57 min, Bündel wartet). Vorratsprüfung (b): eine benannte Aussage nachzählen.
+
+### Der Anlass
+
+Der Generator hat in seinem CODE_FERTIG eine Grenze **benannt, aber nicht beziffert**:
+
+> *„Der Guard sitzt in `tests/CreatesApplication.php` und schützt TESTLÄUFE. Ein beliebiger
+> `php artisan tinker` ohne `APP_ENV=testing` geht daran vorbei — ich habe es heute selbst getan …
+> wer die Grenze nicht kennt, hält sich für geschützt, wo er es nicht ist."*
+
+**Eine Grenze ohne Zahl ist eine Warnung; mit Zahl ist sie ein Maß.**
+
+### Gemessen am Ergebnisstand `04949151`
+
+    TestDatenbankGuard::pruefeVerbindung()   definiert  :47
+    Aufrufer, mit Klammer gemessen           3 Dateien: die Definition · der Test ·
+                                             tests/CreatesApplication.php:73
+    -> EIN Produktivaufrufer, im Test-Bootstrap (createApplication, :41)
+
+**Der Guard hängt an genau einer Stelle.** Alles, was nicht durch `createApplication()` geht, umgeht
+ihn — nicht „irgendwie", sondern nachweisbar an dieser einen Naht.
+
+    Skripte mit 'php artisan'                5
+      browserBuehne.test.mjs      APP_ENV=testing bei 2 von 5 Aufrufen
+      buehnenWaechter.test.mjs                    0 von 2
+      browser-buehne.sh                           3 von 6
+      pruefstand-saeen.sh                         2 von 3
+      waechter.sh                                 0 von 1
+    Summe                                    7 von 17 Aufrufen tragen APP_ENV=testing
+
+### Was diese Zahl NICHT sagt
+
+**„10 von 17 gehen am Guard vorbei" wäre falsch gemeldet.** Nicht jeder `php artisan`-Aufruf schreibt
+in eine Datenbank — `route:list` oder `--version` sind harmlos, und ein Aufruf ohne `APP_ENV=testing`
+ist erst dann gefährlich, wenn er schreibt. **Ich habe die 10 nicht einzeln geprüft; sie ist eine
+Obergrenze, kein Befund.** Dieselbe Zurückhaltung wie in §388 bei den 45 Zeilenzeigern.
+
+**Belastbar ist der eine Satz:** der Schutz hängt an **einem** Aufrufpunkt, und `scripts/` ruft
+`php artisan` an **17** Stellen, von denen **7** die Testumgebung erzwingen. Wer wissen will, ob eine
+Stelle geschützt ist, muss sie einzeln ansehen — **es gibt keinen Schirm, sondern eine Naht.**
+
+### Die Namenskollision, und was sie an P7 präzisiert
+
+Auf dem Weg zur Messung suchte ich Aufrufer über weitere Kandidatennamen. `pruefe(` traf **7
+Dateien** — `OfferController`, `OfferWizardController`, `PlausibilityService`,
+`OfferReadinessGate` und drei weitere. **Keine davon hat mit dem Guard zu tun:**
+
+    app/Services/Form/PlausibilityService.php:46   public function pruefe(array $field, ...)
+    app/Services/Offer/OfferReadinessGate.php:37   public function pruefe(int $customerId, ...)
+
+**Hätte ich `pruefe(` als Guard-Aufruf gezählt, hätte ich 7 statt 1 gemeldet** — und der Befund wäre
+in die andere Richtung falsch gewesen: ein Schutz, der breiter aussieht, als er ist.
+
+> **P7 lautet: „Verbraucher über FUNKTIONSNAMEN messen statt über Dateinamen."** Das bleibt richtig
+> und hat mich heute mehrfach gerettet. **Es reicht nur nicht:** ein Funktionsname ist erst dann ein
+> Maß, wenn er **eindeutig** ist. `pruefe` ist im Bestand dreimal vergeben, `pruefeVerbindung` einmal.
+> **Vor dem Zählen gehört die Frage: gehört jeder Treffer zu derselben Funktion?**
+
+Das ist die neunte Grundmengenfrage heute — und die erste, bei der nicht das Muster falsch war,
+sondern **der Name selbst mehrdeutig**.
+
+Ball: **niemand.** Die Zahl steht dem Evaluator für die Abnahme zur Verfügung; ich bewerte sie nicht.
