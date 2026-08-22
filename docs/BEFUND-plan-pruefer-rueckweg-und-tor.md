@@ -39020,3 +39020,78 @@ Das ist dieselbe Grenze, die ich für mich in Anspruch nehme, von der anderen Se
 der Befund, der die Umbenennung ausgelöst hat, ist mein eigener (§460) — der Name sagte das
 Gegenteil der Größe. Der Weg vom Vorratsbefund zum beschlossenen Bauplatz hat **zwei Stunden**
 gebraucht, ohne dass jemand ihn hätte antreiben müssen.
+
+## §486 — Nachzug am E4-Blatt: kein Kriterium geändert, unabhängig belegt
+
+Stand: HEAD `ba6121d0`, Baum 0, gen 11, Digest gleich. Zeit der Messung 22:38.
+
+Der Dirigent hat die Lage geregelt (`dirigent-hinweis-e4-blattstand.yaml`, 22:35:06): Die DoR wurde
+auf `54163b25` erteilt, der Planner hat danach berichtigt (`998ff9f2`). Nach Nachtrag 1.5 bleibt die
+**DoR gültig**, der **jüngste Blattstand gilt** — unter einer Bedingung:
+
+> „Planner: im CODE_FERTIG-/Berichtigungs-Ereignis ausdrücklich ‚kein Kriterium geändert' belegen
+> (diff auf den Kriterienblock leer)."
+
+**Diesen Beleg habe ich selbst geführt, nicht übernommen.**
+
+### Der harte Beleg
+
+Der Kriterienblock läuft von `## Abnahmekriterien` (Z. 78) bis zur nächsten Überschrift (Z. 217).
+Beide Stände auf genau diesen Bereich beschnitten:
+
+```
+54163b25   Z. 78-217   140 Zeilen   6846 Bytes
+998ff9f2   Z. 78-217   140 Zeilen   6846 Bytes
+diff -q → IDENTISCH
+```
+
+**Gegenprobe gegen §450** — die Falle, in die ich selbst gelaufen bin, als zwei leere Mengen ein
+„IDENTISCH" ergaben: beide Ausschnitte tragen **6846 Bytes**, sind also nicht leer. Die Identität
+ist hier eine Aussage, keine Abwesenheit.
+
+Zusätzlich: Der Gesamt-Diff umfasst **25 Einfügungen, 5 Löschungen**; die fünf gelöschten Zeilen
+gehören sämtlich zum Überholt-Kasten (Überschrift und Einleitung), und beide Änderungsstellen
+liegen bei Z. 217 und 228 — **hinter** dem Kriterienblock. Zählstand vorher wie nachher **9 Kriterien
+/ 9 Messbefehle / 8 Absage-Regeln**.
+
+**Ergebnis: Die Bedingung des Dirigenten ist erfüllt. Die DoR Z1-E4-1 bleibt gültig; der Generator
+baut gegen `998ff9f2`.**
+
+### Die fünf Auflagen, je einzeln nachgemessen
+
+Der GP-0-Plan ist von 240 auf **275 Zeilen** gewachsen (`6e527e10`).
+
+| Auflage | Messung | |
+|---|---|---|
+| 1 Überholt-Kasten | 6 Treffer auf „überholt"/„ERWEITERUNG" | ✓ |
+| 2 `berechneHoehenkette` | Kriterium 3 berichtigt, Name **durchgestrichen** mit „0 Treffer"; `deckenOberkanteMm` 14, `naechsteEtageElevationMm` 12 | ✓ |
+| 3 Undo-Muster | `sammelBefehle` 5 Treffer | ✓ |
+| 4 Fixture-Wert | `floorThickness 180` **1** Treffer, `200` **0** | ✓ |
+| 5 Zeilendrift | 348 / 758 / `decke.test.ts:52` je 1 | ✓ |
+
+Auflage 2 ist genau in der Form umgesetzt, die ich offengelassen hatte: Der Name **bleibt** als
+Vorschlag im Modellplan stehen (Z. 121 mit dem Vermerk „gibt es nicht (0 Treffer)", Z. 153 als
+geplante Signatur), aber das **Kriterium** misst gegen die zwei gebauten Exporte. Vorschlag und
+Messgröße sind getrennt — das war der Punkt.
+
+### Anmerkung, zum zweiten Mal: `blatt_sha` ist wieder ein Commit
+
+Der Planner meldet `blatt_sha: "998ff9f2"`. Das ist ein **Commit**; der Blob des Blattes ist
+**`5a43528b`**. Dieselbe Form wie bei `54163b25`/`24bbc90f`, die ich in §484 (Anmerkung 1) gemeldet
+habe — die Meldung lag zu diesem Zeitpunkt vor.
+
+Wieder folgenlos für den Bau. Aber die Wiederholung ist der eigentliche Punkt: Eine Formanmerkung,
+die zweimal denselben Wert trifft, ist keine Nachlässigkeit, sondern eine **Gewohnheit im
+Meldeformat**. Ich melde sie deshalb ein zweites Mal — und stelle sie nicht als Fehler dar, sondern
+als das, was sie ist: `endstand_sha`, `ergebnis_sha` und `blatt_sha` tragen denselben Wert, weil der
+Planner genau einen Commit mit genau einem Blatt gemacht hat. Das ist naheliegend und trotzdem
+ungenau, sobald ein Commit zwei Dateien trägt — und `998ff9f2` trägt **zwei** (GP-0-Plan und Blatt).
+
+### Was der Planner selbst offengelegt hat
+
+> „ICH HATTE SIE NICHT GEFUNDEN. Zwei der fünf Auflagen deckten sich mit meinen eigenen Funden beim
+> Zuschnitt; DIESE DREI kamen von ihm, und Auflage 4 hätte ein grünes Kriterium erzeugt, das nichts
+> beweist."
+
+Dazu gehört seine zweite Selbstmeldung im selben Ereignis: sein eigenes Blatt war „eine Viertelstunde
+nach dem Schnitt stale". Beides hat er geschrieben, bevor jemand danach gefragt hat.
