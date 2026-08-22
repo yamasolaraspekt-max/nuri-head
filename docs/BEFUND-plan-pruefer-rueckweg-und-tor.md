@@ -32012,3 +32012,64 @@ außen nicht unterscheidbar**, und ich habe keinen Weg gefunden, sie zu trennen,
 Lauf einzugreifen. Das bleibt offen und gehört zur Lage.
 
 Ball: **Dirigent** (unverändert, dringlich) · bei mir nichts.
+
+## §402 — Die offene Frage aus §401 ist beantwortet: der Integrator wartet, er hängt nicht
+
+Messstand: HEAD `d423b38b`, Baum 0, gemessen 17:16–17:19. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §402'` → 0). Vorratsprüfung (e): den eigenen offenen Punkt schließen.
+
+### Was ich in §401 offen gelassen hatte
+
+> *„WARUM der Integrator seit 15:58:25 kein Ereignis ablegt, während sein Prozess läuft, kann ich
+> nicht sehen — ein laufender Prozess kann **warten, rechnen oder hängen**; die drei sind von außen
+> nicht unterscheidbar, und ich habe keinen Weg gefunden, sie zu trennen, ohne in einen fremden Lauf
+> einzugreifen."*
+
+**Es gibt einen Weg, und er greift nicht ein: die CPU-Zeit zweimal messen.**
+
+    PID     Rolle        Messung 1 (17:16:47)   Messung 2 (+12 s)   Zuwachs
+    91006   integrator   8:13.70                8:13.86             +0,16 s
+    87995   evaluator    9:39.31                9:39.54             +0,23 s   (%CPU sprang auf 14,4)
+    56336   planner      0:03.00                0:03.06             +0,06 s
+
+**Alle drei verbrauchen weiterhin CPU-Zeit. Keiner ist eingefroren.** Ein Prozess, der auf einem Lock
+oder in einem Deadlock hängt, zeigt **0,00** Zuwachs — das ist der Unterschied, den diese Messung
+trennt.
+
+### Was die Größenordnung sagt — und was nicht
+
+**0,16 Sekunden in 12 Sekunden sind 1,3 %.** Das ist die Signatur eines **wartenden** Prozesses, der
+regelmäßig nachsieht — nicht die eines rechnenden. Der Evaluator zeigt im selben Fenster einen Sprung
+auf 14,4 % CPU: **so sieht Arbeit aus.**
+
+**Damit ist „hängen" ausgeschlossen und „rechnen" unwahrscheinlich. Der Integrator wartet.**
+
+**Was ich nicht behaupte:** *worauf* er wartet. Die CPU-Zeit sagt, dass er lebt und lauscht; sie sagt
+nicht, welches Signal ausbleibt. **Und ich behaupte nicht, dass 1,3 % beweisend sind** — es ist ein
+starkes Indiz, kein Beleg. Beweisend ist nur die Null, die nicht kommt: **eingefroren ist er nicht.**
+
+### Warum das die Lage klärt
+
+Drei Befunde greifen jetzt ineinander:
+
+    §398   die Buendel-Regel steht in 0 Rollenquellen des Integrators — er kennt die Aufgabe nicht
+    §401   sein abgelaufener Heartbeat sagt nichts; zwei von drei Rollen haben denselben Zustand
+    §402   sein Prozess wartet, er haengt nicht
+
+**Zusammen ergibt das kein Ausfallbild, sondern ein Wartebild:** ein lebender Prozess, dessen nächste
+Aufgabe nie in seinem Auftrag angekommen ist. **Er wartet auf etwas, das ihm niemand geschickt hat.**
+
+**Damit ist der Ball beim Dirigenten dreifach belegt** — nicht als Vorwurf, sondern als einzige
+Stelle, an der sich etwas ändern kann: der Integrator kann seinen eigenen Auftrag nicht erweitern,
+und eine Lease-Übernahme scheidet nach §400/§401 aus.
+
+### Eine Bemerkung zum Verfahren
+
+Ich hatte in §401 geschrieben, ich hätte **keinen Weg gefunden**. Das war richtig gemessen und falsch
+geschlossen: **ich hatte nicht weitergesucht.** Die CPU-Zeit steht in derselben `ps`-Ausgabe, die ich
+für die PID-Prüfung schon benutzt hatte — **eine Spalte weiter rechts.**
+
+> **„Ich habe keinen Weg gefunden" ist eine Aussage über meine Suche, nicht über die Welt.** Sie
+> gehört in einen Befund, wo sie steht — aber sie ist kein Grund, die Frage liegen zu lassen.
+
+Ball: **Dirigent** (unverändert) · bei mir nichts.
