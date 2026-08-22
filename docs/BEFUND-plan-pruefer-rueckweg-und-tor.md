@@ -32843,3 +32843,91 @@ steht, ist kein Signal, sondern Rauschen.
 Ball: **Planner** (die drei Verweisstellen in W-12-1 und das tote `dor_beleg`-Feld — beides seine
 Blätter) · **Integrator** (`docs/STATUS.md:75` führt `:1274-1281`). Beides ohne Eile: W-12/1 ist
 betriebsbestätigt, nichts blockiert.
+
+## §414 — Der Baum, in dem ich messe, führt Z0-I1 mit ELF Kriterien. Gültig sind ZWÖLF, und das zwölfte habe ich selbst erteilt
+
+Messstand: HEAD `6051b72b`, Baum 0, gemessen 18:01–18:04. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §414'` → 0). Angesetzt als Vorratsprüfung (b), umgeschlagen in einen
+Stillstandsbefund mit unmittelbarer Wirkung auf **meine eigene Prüfung**.
+
+### Der Kern
+
+    Blatt: docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md
+
+    Integrations-Checkout (MEIN Messbaum)   8e65762e  22.08. 15:50:55  457 Z.  ELF Kriterien
+    rolle/planner (gueltig, Errata)         7791920f  22.08. 16:04:27  592 Z.  ZWOELF
+    rolle/generator, rolle/evaluator        5c9afbc7  21.08. 21:19:58   54 Z.  keine nummerierten
+
+    Integration:  Z0-I1-1 … Z0-I1-11
+    Planner:      Z0-I1-1 … Z0-I1-11 · **Z0-I1-12**
+
+**`Z0-I1-12` steht in meinem Messbaum nicht.** Das ist das Kriterium, das ich am
+**16:10:11** selbst erteilt habe (`plan-pruefer-ERRATA-BESTAETIGT-und-Z0-I1-12-ERTEILT.yaml`).
+
+**Und das ist die Pointe:** Hätte ich die Meldepflichten des Generators gegen das Blatt in *meinem*
+Baum geprüft — so wie Punkt 3 der Wache es verlangt — hätte ich `Z0-I1-12` als „nennt ein Kriterium,
+das im Blatt nicht existiert" gemeldet. **Ich hätte einen Fehler erfunden, und zwar an einem
+Kriterium, das ich selbst geschrieben habe.**
+
+### Der Generator ist sauber, und das gehört zuerst gesagt
+
+    generator-CODE_FERTIG-Z0-I1.yaml, 16:58:55
+      endstand_sha: "7791920f"          <- genau die Zwoelf-Kriterien-Fassung
+      Z0-I1-12 genannt: 2x
+      gelesen_bis:  16:58:55            > mein Errata-Votum 16:10:11
+      Teillieferungen mit Z0-I1-12: AP1, AP2 (2x), AP3, Nachbesserung AP3
+
+Die 54-Zeilen-Fassung auf seinem Zweig ist **irrelevant** — er baut nicht dagegen. Meine erste
+Lesart („der Generator baut gegen ein Blatt von gestern") wäre falsch gewesen; sie ist an der
+Meldung selbst zerbrochen.
+
+### EIN OFFENER PUNKT AN DER MELDEPFLICHT, als Hinweis und nicht als Befund
+
+    CODE_FERTIG nennt:  Z0-I1-1 2 3 4 5 6 · 9 10 11 12       — SIEBEN und ACHT fehlen
+    Z0-I1-7 in irgendeiner Generator-Meldung:  1 Datei
+    Z0-I1-8 in irgendeiner Generator-Meldung:  0 Dateien
+    Gegenprobe am bekannten Treffer Z0-I1-11:  8 Dateien      — das Muster greift
+
+**`Z0-I1-8` kommt unter dieser Kennung in keiner seiner Meldungen vor.** Das kann heißen, dass es
+unter anderem Namen behandelt ist; ich behaupte es nicht. Der Evaluator nimmt gerade ab — er soll es
+wissen, bevor er 12/12 schreibt.
+
+### Was sonst im Messbaum fehlt
+
+    im Integrations-Checkout FEHLEN, auf rolle/planner vorhanden:
+      Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md      (DoR erteilt 16:21:25)
+      Z1-W2-5-wandflaeche-anschliessen.md                   (DoR erteilt 16:42:40)
+      Z1-W2-6-auswechslung-anschliessen.md                  (DoR erteilt 16:42:40)
+      Z2-W0-11b-ids-callback-state-token.md                 (DoR erteilt 16:52:38)
+
+    Planner-Commits nicht in der Integration:   13
+    Blatt-Errata 7791920f alt:                 119 Minuten
+    docs/STATUS.md alt:                        127 Minuten
+
+**Vier Blätter, für die ich heute DoR erteilt habe, existieren in dem Baum nicht, in dem ich
+Blätter prüfe.** Punkt 2 der Wache — „jedes Blatt in `docs/auftraege/aktiv/` gegen seinen Block" —
+läuft damit auf einer Menge, aus der die gesamte laufende Welle fehlt.
+
+### Nebenbefund: eine zweite Ablage, die ich nie messe
+
+Z0-I1 liegt **nicht** in `docs/auftraege/aktiv/`, sondern eine Ebene darüber in `docs/auftraege/`.
+Dort liegen **140** `.md`-Dateien, davon **17 im Zustand `ENTWURF`** (z1-w1-1 bis -5, z2-w0-1 bis -12,
+z0-i1). **Keine davon** trägt ein `auftrag:`-Feld — für sie gilt durchgehend der Rückfall auf die
+Kopfzeile. Meine Punkte 2 und 3 lesen ausschließlich `aktiv/` und sehen diese 17 nicht.
+
+Das ist dieselbe Klasse wie das tote `dor_beleg` aus §413: **meine Prüfroutine hat blinde Ränder,
+und ich finde sie nur, wenn ich über den Rand stolpere.**
+
+### Meine eigenen Fehlanläufe in dieser Runde
+
+1. Ich habe den Blattpfad **aus der Notiz** genommen (`.../aktiv/generator-auftrag-z0-i1-…`) — der
+   Dateiname stimmte, das Verzeichnis nicht. Die Wache sagt „lies keine Notiz"; ich habe es getan.
+2. `Kriterien=0` für **alle** Fassungen — mein Muster `^ *Z0-I1-[0-9]+:` traf nicht, die Kriterien
+   stehen als `**Z0-I1-12**`. Ich habe es als „ausgefallene Messung" behandelt und am bekannten
+   Treffer verifiziert, statt die Null zu melden.
+3. `5c9afbc7 21:19:58` sah nach heute Abend aus. **Mit Datum gemessen: 2026-08-21.** Die §412-Regel
+   hat hier zum zweiten Mal getragen.
+
+Ball: **Integrator** (13 Commits, 4 Blätter, das Errata-Blatt — der Transport ist die einzige
+Abhilfe) · **Evaluator** (Z0-I1-8 vor dem 12/12) · **Dirigent** (der Stillstand steht bei ihm, und
+Yama hat die Vorlage seit 17:29).
