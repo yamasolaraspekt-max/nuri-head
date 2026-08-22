@@ -30380,3 +30380,80 @@ Kriterium es ohnehin verlangt.
 
 Ball: **Planner** (Errata-Bündel) · bei mir **wartend**. Sobald es vorliegt, prüfe ich (a) bis (d) in
 einem Zug und bringe diesen Abschnitt als Prämissenbeleg mit.
+
+## §376 — Vier Blätter verlangen eine Browserabnahme, keines nennt das Bündel. Und ein Nachtrag zu §374, den ich mir selbst schulde
+
+Messstand: HEAD `b1a8af9c`, Baum 0, gemessen 16:01–16:07. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §376'` → 0).
+
+### Teil 1 — Nachtrag zu §374: meine Zahl belegt weniger, als sie nahelegt
+
+`STEUERUNG-dirigent/dirigent-praezisierung-gelesen-bis.yaml`, 15:59:12, präzisiert Regel 6g:
+*„`gelesen_bis` = Zeit des letzten vollständigen Pulls, nicht die Schreibzeit. Vor dem Schreiben
+erneut pullen (dann ist `gelesen_bis ≈ zeit` **ehrlich**) ODER die frühere Pull-Zeit eintragen."*
+Sein eigenes Ereignis trägt `gelesen_bis == zeit` **mit Kommentar** *„unmittelbar vorher gepullt"*.
+
+**Damit muss ich meinen eigenen Befund entschärfen.** §374 zählte 101 von 104 Ereignissen mit
+`gelesen_bis == zeit`. **Diese Zahl belegt keine 101 Fehler.** Wer unmittelbar vor dem Schreiben
+pullt, *muss* Gleichheit eintragen — sie ist dann korrekt. Was die Zahl belegt, ist etwas anderes und
+Schmaleres:
+
+> **Am Feld ist nicht unterscheidbar, ob jemand vor dem Schreiben gepullt hat oder den Wert nur
+> mitgeschrieben hat.** Der Mangel ist die **Nichtunterscheidbarkeit**, nicht die Identität.
+
+Der Planner-Fall bleibt ein echter Fall, weil dort `prozess_start 15:48:12` gegen `gelesen_bis
+15:51:36` steht und die Berichtigung von 15:49:53 nachweislich nicht verarbeitet ist. **Aber aus 101
+Gleichheiten folgt kein einziger weiterer Fall.** Das ist dieselbe Lehre wie in §371, wo eine
+gestiegene Vitest-Zahl eine Verbesserung war: **die Zahl allein trägt die Antwort nicht.** Ich hatte
+sie in §374 stärker klingen lassen, als sie ist.
+
+### Teil 2 — der Integrator-Befund, gegengeprüft und breiter
+
+**Zitiert, nicht nachgebaut:** `INT-zustand-kette-2/integrator-befund-bundle-fehlt-im-bau.yaml`,
+15:58:25. *„Der Z1-W2-1-Transport ist vollzogen, aber das Bündel ist NICHT dabei — die
+Browserabnahme würde den alten Stand sehen."* Er baut es ausdrücklich **nicht** selbst: *„`npm run
+build` ist Bauarbeit am Produktcode … Ein Bündel, das ich erzeuge, trägt meine Marke über fremder
+Leistung."*
+
+**Selbst gegengeprüft — beide Zahlen zeichengleich:**
+
+    public/hausplaner/hausplaner.js   versioniert: ja   Bytes 1516311   (Integrator: 1516311)
+    letzter Commit  ad340caf  21.08. 21:10  "Das Buendel gebaut ..."
+
+**Breiter als gemeldet:** Seit `ad340caf` sind **nicht zwei, sondern neun** Insel-Dateien geändert —
+und darunter ist **Produktivcode**, nicht nur Testdateien:
+
+    app/ConfigWizard.tsx · app/rahmen/IntegrationsKonflikte.tsx · app/studioDaten.ts
+    geometry/wandFlaeche.ts · projection/raumProjektion.ts · hausplaner.css
+    __tests__/stilschicht.test.ts · __tests__/wandFlaeche.test.ts · __domtests__/werkzeugBedienbar…
+
+Der Rückstand des ausgelieferten Bündels betrifft also nicht nur `IntegrationsKonflikte.tsx`, sondern
+**fünf Produktivdateien aus fünf Quellcommits.**
+
+### Teil 3 — und das trifft meine eigenen Voten
+
+    Blatt      "Browserabnahme"   "Bundle"/"Buendel"
+    Z1-W2-0          2                   0
+    Z1-W2-1          4                   0
+    Z1-W2-2          3                   0
+    Z1-W2-3          3                   0
+
+**Alle vier verlangen eine Browserabnahme. Keines nennt die Voraussetzung, dass das Bündel gebaut
+sein muss.** Ich habe alle vier erteilt.
+
+**Das ist die Vitest-Klasse zum fünften Mal, und diesmal auf der Ebene darüber:** dort fehlte der
+*Ort* eines Messbefehls, hier fehlt die *Voraussetzung* einer Abnahme. Ich habe geprüft, **dass** eine
+Browserabnahme verlangt wird — nicht, **ob sie zum Zeitpunkt der Abnahme etwas Aktuelles zeigen
+kann.** Eine Abnahme, die gegen ein 18 Stunden altes Bündel läuft, misst nicht den Bau, sondern das
+Bündel; und sie meldet „Werkzeug fehlt" mit vollem Recht, ohne dass am Bau etwas falsch wäre.
+
+**Regel an mich, ab sofort:** Verlangt ein Blatt eine Browserabnahme der Insel, prüfe ich, ob es den
+**Bündelbau als Vorbedingung nennt**. Fehlt er, ist das ein Halbsatz — kein Erteilungshindernis, aber
+ein Satz, der ins Blatt gehört.
+
+**Ich ziehe kein Votum zurück**: der Mangel macht keines der vier unbaubar, und die Reihenfolge
+Bau → Bündel → Transport → Abnahme ist ohnehin die des Hauses. **Aber sie stand in keinem der vier
+Blätter**, und deshalb ist sie heute an genau der Stelle ausgefallen, an der sie hätte greifen müssen.
+
+Ball: **Generator** (Bündel bauen, wie am 21.08. in `ad340caf`) · **Planner** (der Halbsatz für die
+vier Blätter, gebündelt mit dem Z0-I1-Errata) · bei mir nichts.
