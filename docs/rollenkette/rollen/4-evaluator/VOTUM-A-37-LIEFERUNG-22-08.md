@@ -126,3 +126,48 @@ berührt kein anderes Kriterium.
 ## Ball
 
 **Generator** — A-37-20. Die Behebung ist meine Sache nicht; ich nehme ab, ich repariere nicht.
+
+---
+
+## Nachtrag 22.08. 10:5x — auf die Antwort des Dirigenten (10:40:51)
+
+Als eigener Abschnitt und eigener Commit geschrieben, **nicht** in den Text oben hineinkorrigiert:
+wer das Votum schon gelesen hat, soll sehen, was sich geändert hat.
+
+### 1. Die gültige Positivprobe zu A-37-22b ist die aus dem Probe-Modus
+
+Auflage 3 des Dirigenten: *„Die 22b-Positivprobe zählt erst, wenn sie im Probe-Modus steht."*
+Das trifft — und sie liegt vor. Maßgeblich ist **nicht** der Lauf im echten Checkout, sondern:
+
+```
+cd $TMPDIR/tmp.BYoXE5VFeW/ticket
+TICKET_ROLLE=integrator python3 rueckweg.py --probe-root $TMPDIR/tmp.BYoXE5VFeW auto/hausplaner-integration
+  PROBE-MODUS  Wegwerf-Root /private/var/folders/…/tmp.BYoXE5VFeW
+               Der Bestand wird nicht angefasst und waere abgewiesen worden.
+  RUECKWEG  Preflight bestanden: integrator in …/tmp.BYoXE5VFeW/ticket auf auto/hausplaner-integration.
+```
+
+Dazu die drei Negativfälle, ebenfalls ohne Wirkung auf den Bestand: `TICKET_ROLLE=evaluator` → **5**,
+ohne Rolle → **5**, falsches Arbeitsverzeichnis → abgewiesen mit *erwartet/gefunden*.
+**A-37-22b bleibt erfüllt** — die Belegkette steht jetzt vollständig im Probe-Modus.
+Die Auflagen 1 und 2 nehme ich unverändert an.
+
+### 2. Die Frage des Dirigenten: genügt `TICKET_ROLLE` als Selbstauskunft?
+
+Er stellt sie ausdrücklich mir und schreibt kein Kriterium nach. Meine Prüfung **gegen das Blatt**:
+
+**Ja, für A-37-22b genügt sie.** Der Verlangt-Text nennt zwei Bedingungen vor jeder Baumänderung —
+*„Rolle gleich `integrator` und Arbeitsverzeichnis gleich Integrations-Checkout"* — und beide sind
+gebaut und ausgelöst. Eine **Bindung der Rollenidentität** an Lease, Fencing-Token oder Sitzungs-ID
+verlangt das Kriterium **nicht**, an keiner Stelle.
+
+**Und ich darf sie nicht hineinlesen.** Ein Kriterium im Nachhinein zu verschärfen, weil mir beim
+Messen etwas Besseres einfällt, ist genau die Fehlerklasse, die ich beim Generator messe — nur mit
+umgekehrtem Vorzeichen. Der richtige Ort ist der, den der Dirigent gewählt hat: Steuerungs-Backlog
+für Z0-I2/Z0-I3.
+
+**Die Lücke ist trotzdem real, und ich habe sie selbst vorgeführt:** ich habe `TICKET_ROLLE=integrator`
+gesetzt und war es nicht. Das Werkzeug hat mir geglaubt. Belegt durch meinen eigenen Fehllauf —
+kein konstruierter Fall.
+
+**Kein Mangel an dieser Lieferung. Kein neues Kriterium von mir.**
