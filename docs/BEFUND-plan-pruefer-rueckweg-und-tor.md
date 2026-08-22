@@ -32931,3 +32931,94 @@ und ich finde sie nur, wenn ich über den Rand stolpere.**
 Ball: **Integrator** (13 Commits, 4 Blätter, das Errata-Blatt — der Transport ist die einzige
 Abhilfe) · **Evaluator** (Z0-I1-8 vor dem 12/12) · **Dirigent** (der Stillstand steht bei ihm, und
 Yama hat die Vorlage seit 17:29).
+
+## §415 — Vorratsprüfung (c): die Schrittmaß-Prüfung nach DIN 18065 ist im Default-Zweig mathematisch immer erfüllt. Und der Test, der sie prüft, kann nicht fehlschlagen
+
+Messstand: HEAD `fa64b041`, Baum 0, gemessen 18:06–18:09. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §415'` → 0). Tragende Formel durchgerechnet, nicht gelesen.
+
+### Die Formel
+
+    treppenBerechnung.ts:70-73
+      const auftrittExakt =
+        e.verfuegbareLauflaenge && e.verfuegbareLauflaenge > 0
+          ? e.verfuegbareLauflaenge / anzahlAuftritte
+          : 630 - 2 * steigungExakt;        // Schrittmaßregel   <- DEFAULT-ZWEIG
+    treppenBerechnung.ts:75
+      const schrittmass = 2 * steigungExakt + auftrittExakt;
+    treppenBerechnung.ts:87
+      push('schrittmass', schrittmass >= 590 && schrittmass <= 650, …)
+
+**Algebraisch:** `schrittmass = 2·s + (630 − 2·s) = 630` — für **jedes** `s`. Der Auftritt wird aus
+der Schrittmaßregel abgeleitet, und dann wird die Schrittmaßregel an ihm geprüft. **Die Prüfung
+misst ihre eigene Voraussetzung.**
+
+Acht Fälle durchgerechnet, alle exakt `630.0000`:
+
+    Geschosshoehe  ziel   n  Steigung  Auftritt  Schrittmass  Pruefung 590..650
+             2600   175  15    173,33    283,33     630,0000  BESTANDEN
+             3000   210  14    214,29    201,43     630,0000  BESTANDEN
+             3000   400   8    375,00   -120,00     630,0000  BESTANDEN   <- NEGATIVER Auftritt
+             5000   175  29    172,41    285,17     630,0000  BESTANDEN
+
+**Auch bei einem Auftritt von −120 mm** — einer physikalisch unmöglichen Stufe — meldet die
+Schrittmaßregel „bestanden". `auftritt-min` fängt den Fall (−120 < 229,5 → Fehler); die
+Schrittmaßregel, die zentrale Regel der DIN 18065, sagt grün.
+
+**Gegenprobe am anderen Zweig — dort wirkt sie:**
+
+    gh=2600 lauflaenge=3000:  Auftritt 214,3  Schrittmass 561,0  FEHLER
+    gh=2600 lauflaenge=4500:  Auftritt 321,4  Schrittmass 668,1  FEHLER
+    gh=2600 lauflaenge=1500:  Auftritt 107,1  Schrittmass 453,8  FEHLER
+
+Drei verschiedene Werte, drei Fehler. **Genau das macht den Befund belastbar:** die Prüfung ist
+nicht kaputt, sie ist im Default-Zweig **wirkungslos**.
+
+### Der Test kann nicht fehlschlagen
+
+    __tests__/treppenBerechnung.test.ts:8   test('Standard-Wohnungstreppe 2600 mm: 15 Steigungen,
+                                                  bequemes Schrittmaß, bestanden', …)
+    :9    berechneTreppe({ geschosshoehe: 2600, gewuenschteSteigung: 175 })   <- OHNE Lauflaenge
+    :13   assert.ok(r.schrittmass >= 590 && r.schrittmass <= 650, …)
+
+Der Testfall ruft **ohne** `verfuegbareLauflaenge` auf, läuft also im Default-Zweig. **Zeile 13
+prüft einen Wert, der konstruktionsbedingt 630 ist.** Der Test heißt „bequemes Schrittmaß" und misst
+es nicht. Er wäre auch grün, wenn die Steigung 375 mm betrüge.
+
+### Reichweite — über die Aufrufer gemessen, nicht geschätzt
+
+    EigenschaftenPanel.tsx:494   verfuegbareLauflaenge: Math.hypot(…) || undefined   WIRKSAM
+                                 (faellt bei Laenge 0 auf den Default zurueck)
+    geometry/treppe2D.ts:54      verfuegbareLauflaenge: len > 0 ? len : undefined    WIRKSAM
+    geometry/treppe3D.ts:44      verfuegbareLauflaenge: e.verfuegbareLauflaenge      wirksam, wenn gesetzt
+    geometry/treppenTypen.ts:48  uebergibt sie GAR NICHT                             IMMER tautologisch
+
+**Der Produktivpfad über das Eigenschaften-Panel ist in Ordnung** — dort kommt die Lauflänge aus der
+gezeichneten Treppe. **Das gehört zuerst gesagt, sonst liest sich der Befund schlimmer, als er ist.**
+Betroffen ist **einer von drei** Geometrie-Aufrufern (`treppenTypen.ts`) plus der Randfall Länge 0.
+
+### Warum das ausgerechnet hier zählt
+
+Im selben Test, **53 Zeilen weiter**, steht die gelernte Lehre, die der Planner in Z1-W2-4 als
+Begründung zitiert:
+
+> `treppenBerechnung.test.ts:66-70` — *„`berechneTreppe` prüft die lichte Durchgangshöhe **nur, wenn
+> sie übergeben wird**. Der reale Aufruf im Eigenschaften-Panel übergibt sie nicht — es gibt kein
+> Eingabefeld dafür. **Das Badge sagte trotzdem „DIN 18065 erfüllt".**"*
+
+**Das ist dieselbe Klasse, eine Ebene tiefer.** Dort fehlte eine Prüfung, und das Badge behauptete
+sie. Hier **existiert** die Prüfung, läuft mit, meldet „bestanden" — und kann im Default-Zweig gar
+nicht anders. Die Lehre wurde für den Fall „Prüfung fehlt" gezogen; der Fall „Prüfung kann nicht
+fehlschlagen" ist von ihr nicht gedeckt.
+
+### Rollengrenze
+
+Ich melde und baue nicht. Kein Vorschlag zur Abhilfe — die Formel zu ändern ist eine
+**Fachentscheidung** (soll ohne Lauflänge überhaupt ein Schrittmaß ausgewiesen werden, oder gehört
+dort „nicht geprüft"?), und Fachentscheidungen werden nach CLAUDE.md nicht still automatisiert.
+Z1-W2-4 ist davon **nicht** berührt: das Blatt ist eine Vertragsprobe und ändert die Treppe
+ausdrücklich nicht (Nicht-Ziel: *„Keine Änderung an der Treppe"*).
+
+Ball: **Planner** (ob daraus ein Blatt wird) · **Yama** (die Fachfrage, wenn es eines wird).
+Der Stillstand daneben unverändert: Integrations-Zweig `ceb4224a` seit **16:05:04**, 13
+Planner-Commits offen, `docs/STATUS.md` seit 15:56:52.
