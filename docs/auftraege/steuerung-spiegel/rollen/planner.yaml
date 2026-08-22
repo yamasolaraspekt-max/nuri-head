@@ -1,21 +1,21 @@
-auftrag_id: SPEZ-planner-spur-V-sammelblatt-1
-generation: 20           # 2026-08-22T18:29:58+0200 — YAMA 18:2x: 'ich bin sauer — du loest sofort das problem' / 'ja ich will das' (Spur V, Sammelblatt, Produkt vor Apparat). Nachtrag 1.6 in Kraft. Alle deine offenen Fragen sind entschieden (dirigent-ENTSCHEIDUNG-alle-offenen-fragen-und-spur-V.yaml, Posten 13-23). Ab jetzt zaehlt nur, was abends im Browser bedienbar ist.
+auftrag_id: SPEZ-planner-etagen-1
+generation: 21           # 2026-08-22T19:11:46+0200 — YAMA 18:4x: etagenweiser Aufbau, 'schnellstmoeglich, fundiert, jetzt auch bauen'. Konzept mit Zuschnitt: docs/konzept/etagenweiser-aufbau.md @ rolle/dirigent 8e4bb918 (Scheiben E0..E6 mit Ziel/Aufgaben/Kriterien; Operanden Posten 25). Gen 20 erledigt: Z1-V1-1 (im Bau), Z1-W2-8 (DoR erteilt, im Bau). Posten 2 (Naht-Messung) bleibt, rueckt hinter E0/E2.
 rolle: planner
 sitzung_erwartet: ef8ec540-263d-4f06-8a02-5a2f1beeb572
 worktree: /Users/yamanuri/Documents/ticket-rolle-planner
 branch: rolle/planner
 prioritaet: P0
 aktion: spezifizieren
-taetigkeit: "spezifizieren (Planner): EIN Sammelblatt nach Spur V ueber die naechste blockerfreie Klasse — HEUTE, vor jeder Steuerungsarbeit"
+taetigkeit: "spezifizieren (Planner): Etagen-Scheiben als Blaetter — HEUTE E0 + E2, morgen frueh E1 + E3 + E4 (mit Fach-Linsen), dann Naht-Messung; Dach-2 danach"
 jetzt:
-  1: "SAMMELBLATT SPUR V (Nachtrag 1.6, docs/regelwerk/ARBEITSREGELN-NACHTRAG-1-6-SPUR-V.md @ rolle/dirigent): die groesste blockerfreie Klasse aus deinem Anschlussvorrat (22 von 24 Kandidaten ohne Blocker), HOECHSTENS 8 Module je Sammelblatt (der Evaluator faehrt je Modul V-2/V-3 im Browser). Fester Kriterientext V-1..V-6 — KEINE neuen Kriterien je Blatt. Je Modul eine Zeile: Modul · Aufrufer/Komponente mit Pfad · Bedienweg N4 · Registerzeile (registry_id) · Klasse-Begruendung. Module mit Blocker (RoofAufbau/surfaceId, lambda) fallen heraus. Kennung Z1-V1-1. Heute noch DoR-faehig -> Plan-Pruefer gen 10 prueft nur Vollstaendigkeit der Belege (die DoR auf den Kriterientext erteilt er einmal)."
-  2: "Danach (nicht vorher): Paket 5 'Naht Szene->Heizlast' — Reichweite MESSEN: app/Domain/Hausplaner/Actions/UebernehmeSzeneInAuslegung.php, app/Services/Geometrie/SzeneProjektionService.php, app/Services/Heizlast/GeometrieAbleitungService.php (Aufrufer, Route, UI-Ausloeser; Energie/GrundrissController nutzt GeometrieAbleitungService). Ergebnis: ein Spur-A-Blatt mit Bedienweg 'in Heizlast uebernehmen' im Hausplaner ODER der benannte Blocker. lambda-Operand = CRM-Katalog (Posten 13), schichten innen->aussen (Posten 14)."
-  3: "Dach-2: dachOeffnung + Rechnung statt festem true ins Dach-2-Sammelblatt (Posten 16), W-30 eine Messung (17), Zuordnung W-27/W-07 gilt (18); Schrittmass als Zeile im Sammelblatt 'Pruefung ehrlich' (19) — NACH Posten 1 und 2."
-  4: "GEPARKT bis ein Modul heute angeschlossen ist (Produkt vor Apparat): Verfallsdatum-Kopfzeilen, Register-Kosmetik, W-12-1-Verweis, SCHEMA_VERSION-Backlog. Keine neuen Fragen an Yama zu Posten 13-23."
+  1: "E0 'Hoehenkette = eine Wahrheit' (Kennung Z1-E0-1, Spur A, kein Modell) und E2 'Etagen-Integritaet' (Z1-E2-1, Spur A, kein Modell) als Blaetter aus dem Konzept schneiden — Kriterien stehen dort; du ergaenzt Messbefehle, Blattstand, Nahtstellen (GP-0 §3 Signatur hoehenkette, applyCommand.ts:400-414/370-377, sammelBefehle.ts:122-134, geschossVorlage.ts:57/75), Rot-Probe 2700/2740 mit Referenzhaus-Fixture, Bedienweg N4 (E0: 'Geschoss anlegen' im Kopfrahmen; E2: Loeschen/Duplizieren im GeschossFlaeche-Menue), Registerzeilen (Werkzeug-Register: Etagen/Geschoss). EIN Takt je Blatt, heute."
+  2: "Morgen frueh (23.08., erster Takt): E1 'Wo bin ich' (Z1-E1-1, Spur W) und E3 'Decke bedienbar + Rolle abgeleitet' (Z1-E3-1) schneiden; dann E4 'Bodenplatte slab' (Z1-E4-1, Spur A mit additivem Modell) — Blatt mit den 24 Stellen (A-35 + 9cbc2026 Decke als Vorlagen), Zod + scene-document-v2.schema.json + PHP-Validator + migriereSzene, Commands ADD/UPDATE/REMOVE_SLAB, Werkzeug 'bodenplatte' Leiste Platz 1, 3D + 2D minimal, Panel, Hoehenkette (E0) als Vorbedingung; Fach-Linsen Maurer + Statiker VOR der DoR (Agenten read-only, Votum als Ereignis); Operanden aus Posten 25 (slab, Grenzflaeche abgeleitet, Index 0 = Oberseite, eigener Eintrag, 2D ja, plus-minus-0 = OKFF EG, max 1 je Gebaeude, erdberuehrt default). W-24 im Register OFFEN (Posten 25)."
+  3: "Danach Posten 2 aus gen 20 (Naht Szene->Heizlast Reichweite messen; Paket 5) und E5/E6 (Termine M2/M3). Dach-2-Sammelblatt + 'Dachaufbau setzen' erst nach E4."
+  4: "Bleibt: keine neuen Fragen an Yama zu Posten 13-25; Zahl nur mit Messmuster; Blattstand zitieren; 'Abnahme vor Zuschnitt' Deckel 6 beachten — heute sind im Vorrat Z1-V1-1, Z1-W2-8 (Bau), Z1-W2-4/6, Z2-W0-11b = 5."
 abschluss: "SPEZIFIZIERT je Blatt (planner-CODE_FERTIG-<Kennung>.yaml mit endstand_sha/ergebnis_sha/gelesen_bis=Pull-Zeit, Blatt-SHA)."
-verboten: [Produktcode, Tests aendern, Kriterien je Blatt erfinden (Spur V), Sammelblatt mit verstecktem Blocker, mehr als 8 Module je Sammelblatt, Steuerungsauftraege vor Posten 1, Zahl ohne Messmuster]
-erlaubte_pfade: [docs/auftraege/aktiv/, docs/konzept/, docs/konzept/werkzeug-register.md]
-steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
+verboten: [Produktcode, Tests aendern, Kriterien des Konzepts abschwaechen (verschaerfen erlaubt, mit Begruendung), Sammelblatt mit verstecktem Blocker, Steuerungsauftraege vor Posten 1, Zahl ohne Messmuster]
+erlaubte_pfade: [docs/auftraege/aktiv/, docs/konzept/, docs/konzept/werkzeug-register.md, docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md (nur W-24-Zeile)]
+steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung, Fach-Linsen-Agenten read-only]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/SPEZ-planner-spur-V-sammelblatt-1/planner-ack.yaml
-erstellt: "2026-08-22T18:29:58+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/SPEZ-planner-etagen-1/planner-ack.yaml
+erstellt: "2026-08-22T19:11:46+0200 Dirigent (atomar; Uhr: date)"

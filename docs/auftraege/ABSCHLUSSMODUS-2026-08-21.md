@@ -533,3 +533,15 @@ Prüfung; **die technische Schreibsperre hat Vorrang vor jeder weiteren Konzept-
 | 16:05–18:08 | **Integrator-Lücke 2 h** (Wecker?) — Bündel/Transport/Zustände standen; 18:08 von selbst wieder aktiv; Z1-W2-3 zunächst falsch ZURÜCKGESTELLT (veraltete Entscheidung), 18:14 korrigiert | Plan-Prüfer Stillstandsmeldung, Integrator `f3fc3c44` `98c18fdc` |
 | 18:1x | Evaluator Z1-W2-0 ABGENOMMEN 8/8; Planner: neun Blätter DoR-erteilt (Z1-W2-4/5/6, Z2-W0-11b, Dach-2-Zuschnitt, Register nachgeführt, Anschlussvorrat) | Evaluator `31152ef1` |
 | 18:16:15 | Integrator gen 12, Generator gen 19 (Paket 1 → Treppe-Probe → W0-11b → Dach-2), Evaluator gen 16 (Z1-W2-3 → Z0-I1 → W0-5b → W1-1/2 → Rückstand) | Spiegel |
+
+### Protokoll 18:16–22:08 (Dirigent; Uhr: `date` lokal)
+| Zeit | Ereignis | Beleg |
+|---|---|---|
+| 18:2x | Yama „ich bin sauer" → Ursache gemessen (451 Commits, 3 Produkt, 110:1) → **Nachtrag 1.6 Spur V** (Yama „ja ich will das"), elf Entscheidungen Posten 13–23, Naht Szene→Heizlast = Paket 5 | `7cf2a2ff` `9e3af598` |
+| 18:3x–18:5x | Z1-W2-3 ABGENOMMEN (BROWSER) 7/7; DoR Spur-V-Text ERTEILT (3 Halbsätze eingearbeitet); Sammelblatt Z1-V1-1 geschnitten + DoR; Z1-W2-6 Weg A; Yama: Leistenreihenfolge (Posten 24) → Z1-W2-8 | Evaluator `f76373fa`, Planner `3ab3bb88`, `262ed5c7` |
+| 18:4x–19:1x | Yama: **etagenweiser Aufbau** → Golden Path aktiviert, sechs Operanden + GP-0-Fragen (Posten 25), zwei Fach-Linsen, **Konzept E0–E6** mit Kriterien/Terminen; Planner gen 21 (E0+E2 heute, E1/E3/E4 morgen) | `57336351` `8e4bb918` |
+| 19:1x–19:4x | Z1-V1-1 CODE_FERTIG (4/5, ehrlich herausgenommen) → **ABGENOMMEN (BROWSER) 4/4**; Z1-W2-5 b per Fixture; Bündel in jeder Lieferung; Z1-W2-8 ohne Bodenplatte (Weg A Pfadgrenze); E0/E2 geschnitten + DoR | Evaluator `187e4eae` |
+| **19:45–21:55** | **Dirigenten-Lücke** (0 Ereignisse; vier Planner-Fragen, Sicherheitsvorfall, Integrator-Ursache lagen) — parallel **Integrator-Lücke 2** (275 Commits Rückstand, Taktlänge) | Planner Takt 104–110, Integrator Lage 22:0x |
+| 19:3x–20:4x (Rollen) | Generator + Evaluator je lesende Produktiv-DB-Verbindung (selbst gemeldet, kein Schreibzugriff); Z1-W2-4 ABGENOMMEN 6/6; Z1-W2-5 ABGENOMMEN (BROWSER, Vorbehalt b); Z1-W2-6 ABGENOMMEN (CODE, Fixture); Z1-W2-8, E0, E2, Z2-W0-11b, Z0-I1-Nachbesserung CODE_FERTIG; Plan-Prüfer: neun alte Posten gemessen (Schlussbilanz) | Evaluator `1567f9f9` `e3a44214`, Generator `3a4aafa1` `ad2ac724` `51b0ddfb` |
+| 22:0x | **Posten 26**: Produktiv-DB-Regel + `.env` → ticket_testing in allen Rollenbäumen; Schichtfolge Hauskonvention; Deckel Lesart 1; Vorbedingung E0; Z1-E0-2; Vorlage 43 Werkzeuge → E6; Generator gen 21; **Integrator-Taktobergrenze 10 min** (Weg 3, Rollentrennung unberührt) | `20a74116`, Ereignisse 22:0x |
+| 22:08 | Tagesbilanz Produkt: Z1-W2-1/3/5, Z1-V1-1 (4) = **7 Module für Benutzer erreichbar**, Leiste unverändert 13 (Z1-W2-8 in Abnahme); Werkstatt/Apparat weiter dominant — Messgröße im nächsten Lagebericht | Messung 21:57 `1b84911b` / Bündel `a7d1e9a6` |
