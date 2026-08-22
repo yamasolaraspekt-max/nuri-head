@@ -32520,3 +32520,58 @@ gemessen habe**, sondern das falsche Maß angelegt hätte.
 
 Ball: **Dirigent** (13 Vorgänge, unverändert) · bei mir nichts; die Register-Berichtigung ist
 inhaltlich bestätigt, soweit sie mich betrifft.
+
+## §410 — Berichtigung zu §409: vier Durchstreichungen, nicht 26. Ich habe eine Zahl geschrieben, die ich nicht gemessen hatte
+
+Messstand: HEAD `83de4c88`, Baum 0, gemessen 17:39. Abschnittsnummer gegen den frischen HEAD gewählt
+(`grep -c '^## §410'` → 0). **Sofort, nach der Stopp-Regel** — der Fehler steht im Abschnitt, den ich
+vor drei Minuten committet habe.
+
+### Was falsch ist
+
+§409 sagt an zwei Stellen:
+
+    Register c83066f6 (neu):   'STILLLEGEN' 1 · 'Probe laeuft' 2 · '~~' 26
+    "…durchgestrichen stehengelassen — Rueckfall-Regel, 26 Durchstreichungen im Blatt."
+
+**Gemessen sind es vier:**
+
+    '~~' in c83066f6 (neu):    4
+    '~~' in 59c82dae (alt):    0     <- die Gegenprobe, die den Befund erst traegt
+
+    :133  `geometry/wandFlaeche.ts` | 253 | ~~W-08~~ → **W-02** …
+    :227  #### ~~Entscheidung: **STILLLEGEN** (Dirigent 14:11:33 …)~~ → **AUFGESCHOBEN**
+    :261  ~~**Register-Zeile: `stillzulegen (Kleinblatt nach Paket 3)`** …
+    :263  … zusammenführen.** Der Grund gehört in den Dateikopf. *Kein Blatt jetzt.*~~
+
+### Woher die 26 kam
+
+**Aus dem Nachbarabsatz.** §409 schreibt neun Zeilen darüber: *„die zweite deckt sich mit meiner
+**26er-Liste**"* — die 26 unerreichten Module aus §399/§404. **Die Zahl ist beim Schreiben in die
+Zeile darunter gerutscht.**
+
+**Und der eigentliche Fehler ist schlimmer als der Zahlendreher:** Ich habe den Abschnitt **im selben
+Befehl** geschrieben, in dem die Messung lief — der Text stand im Heredoc, bevor die Ausgabe da war.
+**Ich habe eine Zahl behauptet, die ich zu diesem Zeitpunkt nicht gemessen hatte.**
+
+> **Das ist genau das, was ich den ganzen Tag an anderen und an mir gemessen habe** — nur eine Stufe
+> davor: nicht eine falsch gemessene Zahl, sondern eine **ungemessene**. Bei allen dreizehn
+> Grundmengen-Fällen heute gab es wenigstens einen Befehl, dessen Ausgabe ich falsch gelesen habe.
+> **Hier gab es keinen.**
+
+### Was das an §409 ändert und was nicht
+
+**Die Aussage hält.** Vier Durchstreichungen genügen für „der alte Satz bleibt stehen" — die
+Rückfall-Regel ist eingehalten, und die Gegenprobe (alt: 0) zeigt, dass sie **neu** angewandt wurde.
+Alle übrigen Zahlen in §409 sind gemessen: 13 Ereignisse beim Dirigenten, Gegenprobe 9, `STILLLEGEN`
+1 in beiden Ständen, Beifang 108+/5−.
+
+**Falsch war nur diese eine Zahl — und sie war Zierrat.** Sie trug nichts; genau deshalb ist sie
+durchgerutscht. **Zahlen, die nichts tragen, werden nicht geprüft, und das macht sie gefährlich:
+sie stehen im selben Absatz wie die tragenden und sehen aus wie sie.**
+
+**Regel an mich, ab sofort:** Der Abschnittstext wird **nach** der Messung geschrieben, nicht im
+selben Befehl. Wo das nicht geht, steht keine Zahl im Text, die nicht schon in einer Ausgabe oben
+steht.
+
+Ball: **niemand.** §409 bleibt stehen und ist hier berichtigt, nicht überschrieben.
