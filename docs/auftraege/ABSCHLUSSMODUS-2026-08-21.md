@@ -487,3 +487,18 @@ Prüfung; **die technische Schreibsperre hat Vorrang vor jeder weiteren Konzept-
 | 12:1x | **Integrator transportiert A-37-Bau** → Integration `f6792ec3`; `.githooks/pre-commit` liegt im Integrations-Checkout | reflog `ticket` |
 | 12:1x | **R3 eingetreten:** Tor weist `rueckweg_planner_bis_HEAD_dann_kette` ab (exit 7); Zustandscommit A-37 / STATUS.md eingefroren; vier von sechs aktion-Werten unbekannt | Integrator-Befund, Plan-Prüfer 12:06/Berichtigung, externe Prüfung B-005/B-006 |
 | 12:17–12:18 | **Weg 3:** aktion = Tor-Wort + `taetigkeit:` in allen Rollenquellen (Integrator gen 8, Planner gen 14 [+Posten 2 Aktionsvokabular], Plan-Prüfer gen 8, Evaluator gen 8 [7/7-Probe], Generator gen 10 parken, Release-Prüfer gen 3 Hinweg, **Dirigent gen 1 + ACK** = Backlog 13 geschlossen); README 6f | Spiegel dieser Commit; Backlog 23 |
+
+### Protokoll 12:19–13:05:51 (Dirigent; Uhr: `date` lokal)
+| Zeit | Ereignis | Beleg |
+|---|---|---|
+| 12:2x | Integrator Zustandscommit **A-37 ABGENOMMEN** in STATUS.md (durch das Tor) | Integration `aec713a6` |
+| 12:2x | rolle/dirigent erstmals transportiert (64 Commits) | `96643116` |
+| 12:26 | Evaluator Zwischenstand 6/7 (Planner-Baum ohne Haken, Probe-Commit sofort zurückgesetzt) | `evaluator-zwischenstand-6-von-7.yaml` |
+| 12:30/12:53 | DoR A-43: NICHT ERTEILT (3 Restpunkte) → **ERTEILT MIT AUFLAGE** (A-43-11) | Plan-Prüfer `51d26c29` → `794cd018` |
+| 12:43 | Planner-Hinweg über stash freigegeben (Patch-Beleg PARKED_DRAFT-Z0-I1-20260822-1243) | `dirigent-antwort-base-blocked-und-restpunkte.yaml` |
+| 12:45 | B-007 (externe Prüfung): „Dateiname trägt Abschlussbegriff" war keine Regel → berichtigt, README 6a additiv | `90872559` |
+| 12:53 | Dateilage **7/7** (Dirigent); Planner HEAD `7333a341`, PARKED_DRAFT 198 Zeilen unversehrt | Messung 12:53:56 |
+| 12:57 | V-003 angenommen: Pflichtfeld `gelesen_bis` (README 6g, Meldepflicht-Nachtrag) | `32787fd2` |
+| **12:59** | **Evaluator WIRKSAM 7 VON 7** — nackter `git commit` scheitert in jedem realen Baum; A-37-13 fing den Prüfer selbst (Modulstand) | rolle/evaluator `16613211`; Dirigent-Nachmessung 13:01:08 (Haken-Digest `d5062fbe` 7/7) |
+| 13:05 | Evaluator gen 9 **Abnahmewelle Posten 1 Z2-W0-5**; Integrator gen 9 (Statusplatz A-43 §5 + Regel); Generator gen 11 BAU-generator-A-43 ausgelöst durch Planner-Auflage-Nachtrag `a7035fb7` | Spiegel dieser Commit |
+| 13:10:34 | **Tor weist den Dirigenten ab** (A-37-23: Bereich nur `docs/konzept/ docs/regelwerk/ docs/auftraege/`; `docs/backlog/steuerungs-backlog-2026-08-22.md` abgewiesen, exit 1). Kein `--no-verify`. Backlog-Zeile (Posten 21 zu, Posten 24 = diese Lücke) bleibt uncommittiert bis Errata: Dirigent-Bereich += `docs/backlog/` + `docs/fortschritt/` (Yama 21.08.: Steuerungs-/Konzeptdokumente) — Planner-Posten nach A-43, Yama zur Kenntnis | dieser Eintrag |
