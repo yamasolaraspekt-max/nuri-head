@@ -112,7 +112,7 @@ import type { ObjectType, ViewType } from './tools/toolTypes';
 import { type Achse } from '../geometry/editierGeometrie';
 import { dupliziereGeschoss } from '../geometry/geschossVorlage';
 import { befehleLoeschen, befehleDuplizieren, befehleSpiegeln, befehleGeschossDuplizieren } from './sammelBefehle';
-import { deckenOberkanteMm, bodenplatteOberkanteMm } from '../geometry/hoehenkette';
+import { wandOberkanteMm, bodenplatteOberkanteMm } from '../geometry/hoehenkette';
 import { hinweisBodenplatte, istErdberuehrtVorbelegung } from '../geometry/bodenplatte';
 import { befehleTrimmen, TRIMM_MELDUNG } from './tools/trimmen';
 import { treppeZuParametern, parametereZuTreppe, type TreppeParams } from '../geometry/treppeObjekt';
@@ -1017,7 +1017,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         createdAt: jetzt, updatedAt: jetzt,
         polygon: ausKontur ? letzteKontur : gebaeudeUmriss(),
         roofType: 'sattel' as const, neigungGrad: 35, firstAzimutGrad: 0,
-        ueberstandMm: 500, traufhoeheMm: deckenOberkanteMm(level),
+        ueberstandMm: 500, traufhoeheMm: wandOberkanteMm(level),
         // Z-06-N1 (B10): der Status kommt aus der Domäne, nicht aus diesem Klick-Handler.
         ...herkunftFuerNeuesDach(ausKontur),
       };

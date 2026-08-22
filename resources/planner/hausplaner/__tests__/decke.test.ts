@@ -8,7 +8,7 @@ import { applyCommand } from '../commands/applyCommand';
 import { sceneDocumentSchema } from '../domain/validation';
 import { readFileSync } from 'node:fs';
 import { deckenNettoFlaecheM2 } from '../renderers/three-d/deckenMesh';
-import { naechsteEtageElevationMm, deckenOberkanteMm } from '../geometry/hoehenkette';
+import { naechsteEtageElevationMm, wandOberkanteMm } from '../geometry/hoehenkette';
 import { treppeZuParametern } from '../geometry/treppeObjekt';
 import { polygonFlaecheM2 } from '../geometry/polygonFlaeche';
 import { teil, ohneKommentare } from './_zerlegteApp';
@@ -248,7 +248,7 @@ test('Z-07/K-04: die L-Form bekommt ein L-DACH — 68 m², nicht die 80 der Boun
     'L-Form und Rechteck liefern dieselbe Flaeche — dann misst die Zusage nicht die Kontur');
 });
 
-// ---- K1-Anschluss: `deckenOberkanteMm` ist wieder die eine Stelle ----------------------------
+// ---- K1-Anschluss: `wandOberkanteMm` ist wieder die eine Stelle ----------------------------
 //
 // Der Wert „Decken-Unterkante = Wand-Oberkante" stand an DREI Produktivstellen inline
 // (`szene.ts:455`, `szene.ts:482`, `HausplanerApp.tsx:1007`), während die benannte Funktion
@@ -257,10 +257,10 @@ test('Z-07/K-04: die L-Form bekommt ein L-DACH — 68 m², nicht die 80 der Boun
 //
 // **Der Anschluss ist verhaltensgleich**, der Ausdruck ist identisch. Was gewonnen ist: es gibt
 // wieder eine Stelle, an der sich diese Ableitung ändern lässt.
-test('K1: deckenOberkanteMm rechnet, was die drei Inline-Stellen gerechnet haben', () => {
-  assert.equal(deckenOberkanteMm({ elevation: 0, defaultWallHeight: 2500 }), 2500);
-  assert.equal(deckenOberkanteMm({ elevation: 2700, defaultWallHeight: 2500 }), 5200);
-  assert.equal(deckenOberkanteMm({ elevation: -3000, defaultWallHeight: 2250 }), -750, 'auch unter Null');
+test('K1: wandOberkanteMm rechnet, was die drei Inline-Stellen gerechnet haben', () => {
+  assert.equal(wandOberkanteMm({ elevation: 0, defaultWallHeight: 2500 }), 2500);
+  assert.equal(wandOberkanteMm({ elevation: 2700, defaultWallHeight: 2500 }), 5200);
+  assert.equal(wandOberkanteMm({ elevation: -3000, defaultWallHeight: 2250 }), -750, 'auch unter Null');
 });
 
 test('K1: keine Produktivdatei rechnet die Decken-Oberkante mehr selbst', () => {

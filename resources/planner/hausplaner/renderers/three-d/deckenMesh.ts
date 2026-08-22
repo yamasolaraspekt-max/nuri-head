@@ -6,7 +6,7 @@
 import type { CeilingNode } from '../../domain/scene.types';
 import { polygonFlaecheM2 } from '../../geometry/polygonFlaeche';
 
-// Z1-E0-1: `deckenOberkanteMm` und `naechsteEtageElevationMm` wohnen jetzt in
+// Z1-E0-1: `wandOberkanteMm` und `naechsteEtageElevationMm` wohnen jetzt in
 // `geometry/hoehenkette.ts` — die Hoehenkette ist Fachgeometrie und gehoert keinem
 // Darstellungsweg. Diese Datei rechnet sie nicht mehr; wer sie braucht, liest sie dort.
 
