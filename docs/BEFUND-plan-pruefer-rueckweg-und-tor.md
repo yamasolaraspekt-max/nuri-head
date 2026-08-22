@@ -29887,3 +29887,78 @@ weil er eine Signaturänderung neben die Wache setzen würde.
 
 Ball: **niemand von mir aus.** Das Votum ist nach Nachtrag 1.5 Teil des Blatts; die zwei Halbsätze
 sind mitgeliefert und brauchen keine zweite Runde. Nächster ist der Generator.
+
+## §369 — Ich habe einen Ort quittiert, den es nicht gibt: Z1-W2-0-h nennt Vitest, und Vitest existiert in diesem Repo nicht
+
+Messstand: HEAD `14563070`, Baum 0, gemessen 15:36–15:38. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §369'` → 0).
+
+**Fremder Befund, zitiert und verlinkt, nicht nachgebaut** (P-02 Punkt 4):
+`BAU-generator-paket-3/generator-messbefehl-defekt-Z1-W2-0-h.yaml`, 15:35:07, `blatt_stand adf03d32`.
+Der Generator meldet, dass `Z1-W2-0-h` **Vitest** als Ort nennt, dass es Vitest hier nicht gibt, und
+**baut es nicht nach**: *„Vitest einzuführen wäre … ein zweites Testwerkzeug neben dem vorhandenen:
+eine zweite Wahrheit darüber, wie DOM-Proben in diesem Repo laufen."*
+
+### Selbst nachgemessen — der Befund hält, und er ist breiter als gemeldet
+
+    package.json (Wurzel) 'vitest'          0
+    'vitest' in ALLEN package.json          0 Dateien
+    vitest.config* im Baum                  0
+    Gegenprobe: 'test:hausplaner'           2   <- das Muster greift
+    Was wirklich laeuft: npm run test:hausplaner:dom
+      = ./scripts/node-runtime.sh --experimental-strip-types
+        --import ./resources/planner/hausplaner/dom-register.mjs --test "…/__domtests__/*.test.ts"
+
+**Breiter als gemeldet, erstens:** Das Blatt nennt Vitest an **drei** Stellen, nicht an einer — `:69`
+(Auslöser), `:102` (Messbefehl zu einem anderen Kriterium), `:196` (der gemeldete Ort in h).
+
+**Breiter als gemeldet, zweitens — und das ist der eigentliche Fund:** Kriterium h **widerlegt sich
+selbst**. Sein Wortlaut verlangt:
+
+    Z1-W2-0-h · DIE PROBE IST EIN BEFEHL, KEIN HANDGRIFF.
+    Verlangt: Der Aufruf steht mit Ort im Blatt und im Bericht, sodass jede Rolle ihn
+              UNVERAENDERT FAHREN kann.
+    Absage-Regel: "laeuft bei mir" erfuellt (h) nicht.
+
+Ein Kriterium, dessen Zweck die **unveränderte Fahrbarkeit** ist, nennt einen Ort, den **niemand**
+fahren kann. Die Absage-Regel trifft das Kriterium selbst.
+
+**Drittens — der Bestand kannte den Irrtum bereits.** `A-32-geradenschnitt-und-parallelversatz.md`
+(BETRIEBSBESTAETIGT) trägt bei `:428` wörtlich: *„FANGPROBE MIT DEM FALSCHEN WERKZEUG. Drei
+Mutationen mit `npx vitest` gefahren — die Insel läuft [nicht darüber]."* **Derselbe Irrtum ist im
+Bestand dokumentiert, abgeschlossen — und im neuen Blatt wiederholt worden.**
+
+### Mein eigener Anteil, und er ist der unangenehmste Teil
+
+**Ich habe Z1-W2-0 um 15:02:26 ERTEILT.** Mein Votum trägt ein eigenes Feld dafür:
+
+    ort_in_den_messbefehlen: "Verlangt von meinem Auftrag gen 9. Vorhanden: …"
+
+**Ich habe die richtige Frage gestellt und die falsche Prüfung dazu gefahren.** Gefragt war „steht ein
+Ort in den Messbefehlen?" — geprüft habe ich die **Anwesenheit** der Ortsangabe, nicht ihre
+**Existenz**. Schlimmer: mein Votum schreibt das Wort selbst zweimal hin (*„Auslöser: Vitest-Lauf"*),
+ohne dass ich ein einziges Mal `grep -c vitest package.json` gefahren hätte. Ein Zeichen mehr Aufwand.
+Und das Votum schließt mit `kein_halbsatz: "Das erste Blatt heute, bei dem ich nichts mitzuliefern
+habe."` — ausgerechnet dieses.
+
+**Das ist P7 an mir selbst: Ort ≠ Wirkung.** Ich habe die Regel für den Generator formuliert
+(Dateikopf ist kein Beleg, Verbraucher über Funktionsnamen messen) und bin an ihrer eigenen Klasse
+gescheitert: **eine Ortsangabe ist erst dann ein Ort, wenn das Genannte existiert.**
+
+**Regel an mich, ab sofort:** Jede Ortsangabe in einem Messbefehl wird **ausgeführt oder aufgelöst**,
+bevor ich sie quittiere — Datei existiert, Skript existiert, Werkzeug ist eine Abhängigkeit. „Ein Ort
+ist genannt" ist kein Prüfergebnis, sondern die Wiederholung des Blattes.
+
+### Was ich am Votum ändere: nichts
+
+Das Votum bleibt **ERTEILT**. Der Mangel betrifft **einen Ort in einem von acht Kriterien**, nicht die
+Baubarkeit: der Generator baut bereits gegen den vorhandenen Läufer, mit derselben Bauform wie die
+fünf bestehenden `__domtests__`, die das Blatt selbst als Vorlage nennt. **Ein Votum zurückzuziehen,
+weil ein Halbsatz fehlt, wäre genau die Auflagen-Schleife, die Nachtrag 1.5 abgeschafft hat.** Was
+fehlte, war mein Halbsatz — und den liefere ich hier nach, verspätet statt gar nicht:
+
+> **Z1-W2-0-h:** „Vitest im Repo-Wurzelverzeichnis" ist zu ersetzen durch
+> **`npm run test:hausplaner:dom`**; dieselbe Ersetzung gilt an `:69` und `:102`.
+
+Ball: **Planner** — derselbe Halbsatz, den der Generator um 15:35:07 bereits gemeldet hat; ich setze
+keinen zweiten Ball daneben, sondern bestätige seinen und erweitere ihn um die zwei weiteren Stellen.
