@@ -36702,3 +36702,89 @@ nenne die neue Zahl, weil die Wache es verlangt: jede Zahl frisch, auch die aus 
 
 Ball: **keiner von mir** · **Dirigent** (Generation 21 — dritte Leermeldung; Vorbedingung E0 aus
 §457) · **Integrator** (30 Commits, 64 Minuten) · **Yama** (§443/§444, Pfadfrage Z0-I1).
+
+## §459 — Dritte Abweichung an Kriterium (a), und sie steht im ZIELSATZ. Mein Pflichtfeld von vor fünf Minuten hätte sie nicht gefangen
+
+Messstand: HEAD `5e4c65af`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 20:52–20:56.
+**Ereignis-Schnitt dieser Runde: 20:51:24** (1 neues Ereignis). Abschnittsnummer gegen den frischen
+HEAD gewählt (`grep -c '^## §459'` → 0). Anlass:
+`planner-MANGELANZEIGE-Z1-E0-1-eine-funktion-oder-eine-stelle.yaml` (20:51:54) — **zitiert, nicht
+nachgebaut**; er zitiert seinerseits meinen §457 korrekt als fremden Befund.
+
+### Selbst nachgemessen am Blattstand `8460f98f`
+
+    'berechneHoehenkette' im BLATT          ->  0 Treffer   (Positivkontrolle 'hoehenkette': 6)
+                                                — der Name steht in der VORBEDINGUNG des Dirigenten,
+                                                  nicht im Blatt. Seine Trennung stimmt.
+    Blatt Z.3   „ZIEL: Genau EINE Funktion rechnet Etagen-Elevation, Deckenoberkante und Traufhoehe."
+    Blatt Z.56  „Z1-E0-1-a · GENAU EINE ERZEUGERFUNKTION, DREI AUFRUFER."
+
+    Der MESSBEFEHL von (a), Zeilen 7-11:
+      grep 'elevation + .*defaultWallHeight' … ohne __tests__/hoehenkette.ts   -> 0
+      grep 'naechsteEtageElevationMm(' … ohne Definitionszeile                 -> 3
+    ER ZAEHLT RECHENSTELLEN UND AUFRUFER — AN KEINER STELLE FUNKTIONEN.
+
+**Der Planner hat recht:** *„Die Zusage, die ich MESSBAR gemacht habe, ist die Stelle — die Funktion
+ist Rhetorik im Zielsatz, die ich nie in einen Messbefehl gegossen habe."*
+
+### Die Bilanz an Kriterium (a) — drei Abweichungen, alle durch meine DoR
+
+    1.  (a) verlangt 0 Treffer; das Muster faengt Kommentare, und (e) schuetzt domain/
+        -> (a) und (e) zusammen woertlich nicht erfuellbar                    §451, Planner 20:17
+    2.  (a) nennt HausplanerApp.tsx:1008 als Leser von naechsteEtageElevationMm;
+        die Zeile ruft deckenOberkanteMm                                      §451, Planner 20:17
+    3.  ZIEL (Z.3) und Ueberschrift (Z.56) sagen „EINE Funktion", gebaut sind ZWEI Exporte
+        -> woertlich nicht erfuellt                             §457 (ich), Planner 20:51
+
+### Meine Rangfolge-Antwort, weil sie meine Linse ist
+
+**Was bindet — der Zielsatz oder der Messbefehl?**
+
+> **Der Messbefehl.** Er ist das, was der Generator baut und der Evaluator misst. **Wäre der Zielsatz
+> bindend, würde jede rhetorische Zuspitzung zum Abnahmehindernis** — und kein Blatt käme mehr
+> durch. Der Blatttitel selbst sagt *„Höhenkette = EINE **Wahrheit**"*, nicht „eine Funktion". **Zwei
+> Exporte in EINEM Modul sind eine Wahrheit; zwei Rechenstellen in zwei Modulen wären es nicht.**
+
+**Das ist dieselbe Rangfolge, die ich in Z1-W2-8 schon einmal gesetzt habe** (Halbsatz 1: *„Es gilt
+die Entscheidungstabelle, nicht der Kriterientext"*). **Der Fall ist neu, die Regel nicht.**
+
+**Aber der Mangel bleibt ein Mangel:** Ein Blatt, dessen Zielsatz mehr verspricht, als sein
+Messbefehl prüft, lädt genau die Fehlmessung ein, die hier passiert ist. **Die Bewertung, ob (a)
+erfüllt ist, gehört dem Evaluator — ich liefere die Rangfolge, nicht das Urteil.**
+
+### MEIN ANTEIL, und er trifft mein fünf Minuten altes Pflichtfeld
+
+    „EINE Funktion" / „Erzeugerfunktion" in meinem DoR-Votum   ->  0 Treffer
+    „hoehenkette.ts" in meinem Votum                           ->  1 Treffer
+    (Positivkontrolle: das Votum hat 69 Zeilen)
+
+**Ich habe den Messbefehl geprüft und den Zielsatz nicht.** Und das ist der Punkt:
+
+> **Mein Pflichtfeld aus §458 lautet `zahlen_nachgerechnet: jede Zahl aus dem KRITERIENTEXT`.**
+> **Diese Zahl steht nicht im Kriterientext — sie steht im ZIELSATZ, Zeile 3, an der prominentesten
+> Stelle des ganzen Blattes.** Mein Feld hätte sie durchgelassen. **Fünf Minuten alt und schon zu
+> eng.**
+>
+> **Berichtigt:** `zahlen_nachgerechnet: jede Zahl im Blatt — Zielsatz, Überschriften UND
+> Kriterientext.` Gerade die Zahlen in Zielsatz und Überschrift sind die gefährlichen: **sie werden
+> zuerst gelesen und nie gemessen**, weil kein Messbefehl an ihnen hängt.
+
+### Was der Planner richtig macht, und es kostet ihn etwas
+
+> *„Vor einem Takt habe ich die Bitte des Generators abgelehnt, Kriterium (a) während der laufenden
+> Abnahme um einen Kommentarfilter zu ergänzen … **Derselbe Satz gilt gegen mich.** Würde ich jetzt
+> meinen ZIEL-Satz von ‚eine Funktion' auf ‚eine Stelle' glätten, hätte ich für mich getan, was ich
+> ihm verweigert habe."*
+
+**Er lässt einen Wortlaut stehen, der ihn schlecht aussehen lässt, weil das Verfahren es verlangt.**
+Das ist teurer als die Korrektur — und der Grund, warum die Korrektur später etwas wert ist.
+
+### Die Lage, frisch
+
+    Commits NICHT in der Integration   31    (26 -> 28 -> 29 -> 30 -> 31)
+    Integrator-Stille                  67 Minuten
+    §447 „steht aus" bei E0/E2         unveraendert 2
+
+Ball: **Evaluator** (drei Abweichungen an (a); meine Rangfolge-Antwort liegt vor) · **Dirigent**
+(Generation 21; Vorbedingung E0 aus §457) · **Integrator** (31 Commits, 67 Minuten) · **Yama**
+(§443/§444, Pfadfrage Z0-I1).
