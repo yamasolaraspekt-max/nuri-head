@@ -1,46 +1,30 @@
 auftrag_id: BAU-generator-A-37
-generation: 5            # 22.08. 08:1x — NEUE BASIS (Yama): frischer, isolierter Arbeitsstand von Integration ab9e837c. Alte ACK (gen 3/4) verfaellt: neu quittieren, neue Lease, dann bauen.
+generation: 6            # 22.08. 08:2x — PAUSE VOR DEM ERSTEN COMMIT (Yama): A-37 bekommt eine Nachschaerfung (Ausfuehrungsberechtigung rueckweg.py, Doppelgaenger per Aehnlichkeit, Proben nur im Wegwerf-Repo). Bau ruht bis DoR der Nachschaerfung; dann gen 7 = bauen.
 rolle: generator
-sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8   # Sitzungs-ID ist die Identitaet; pid/prozess_start je Lauf
-sitzung_gestoppt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b   # PID 87659 bleibt SIGSTOP bis A-37 gebaut, abgenommen (alle Negativproben) und Yama CONT freigibt
-worktree: /Users/yamanuri/Documents/ticket-rolle-generator        # NEU angelegt von ab9e837c — vom Tor gebundener Name (rollen-tor.sh: generator -> ticket-rolle-generator / rolle/generator)
-branch: rolle/generator                                           # NEU von ab9e837c; der alte Zweig heisst jetzt rolle/generator-beleg-2026-08-21 (Inhalt unveraendert, drei Aufbewahrungs-Commits bleiben)
-alter_baum_als_beleg: "/Users/yamanuri/Documents/ticket-rolle-generator-beleg-2026-08-21 @ abd1719c, Zweig rolle/generator-beleg-2026-08-21 — NICHT anfassen, nicht loeschen, nicht mergen; W0-5-Bau ef7a8c89 bleibt dort als Beleg bis Y-9/W0-5-Entscheidung"
+sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8
+worktree: /Users/yamanuri/Documents/ticket-rolle-generator
+branch: rolle/generator
 basis_sha: ab9e837c
 prioritaet: P0
-aktion: bauen
-vorbereitung_im_neuen_baum: "cd /Users/yamanuri/Documents/ticket-rolle-generator; git status leer; HEAD = ab9e837c; node_modules fehlt -> NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules beim Tor (Hinweis 'Modulstand unbekannt' ist zu erwarten); vendor fehlt -> fuer A-37 nicht noetig (Shell/Python/Hook-Arbeit); KEINE .env kopieren, keine DB."
-gegenstand: "A-37 vollstaendig bauen nach dem Blatt docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md (liegt in der Integration seit ab9e837c; Stand 762243b9): 27 Kriterien A-37-1..27; DoR ERTEILT a248eaaf, Anmerkungen geschlossen."
-umfang_kurz:
-  - "A-37-22 scripts/rueckweg.py: Baumauswahl ueber (Pfad, Zweig)-Paare aus fester Liste (alle sieben Rollenbaeume inkl. ticket-release-pruefung und ticket-rolle-dirigent); Namensgleiche ausserhalb der Liste (z.B. ticket-rolle-generator-beleg-2026-08-21) melden und ausschliessen"
-  - "A-37-23 scripts/rollen-tor.sh: Rolle dirigent (ticket-rolle-dirigent / rolle/dirigent) mit technisch begrenztem Schreibbereich; Dirigent-Vorgriff 5c9afbc7 uebernehmen (Planner-Entscheid im Blatt)"
-  - "A-37-24 docs/BEFUNDNOTIZEN.md unter dieselbe Schreibbarriere wie docs/STATUS.md (nur Integrator)"
-  - "A-37-25 echtes .githooks/pre-commit (core.hooksPath=.githooks; A-38s commit-msg/post-commit liegen in ab9e837c bereits vor — 'Merge-Hook bleibt wirksam'): nackter Commit im falschen Worktree / fehlende Rolle (Exit 5) / falscher Zweig abgewiesen; Integrator darf den begrenzten Integrationscommit; --no-verify als dokumentierte Grenze; Sitzungsidentitaet = Sitzungs-ID + PID/Start DES LAUFS + Heartbeat (alte PID erklaert nie eine Lease fuer verwaist)"
-  - "A-37-26/27 laut Blatt (Zustandscommit-Muster: zwei Kennungen/zwei Bauten duerfen nicht durchgehen; js-yaml direkt = Root-Eintrag in package.json (Lesart im Blatt) UND im Lockfile, reproduzierbare Installation)"
-  - "Die 21 Altkriterien bleiben gueltig"
-regeln_beim_bau:
-  - "NUR im neuen Worktree; NIE im gemeinsamen Checkout; kein nacktes git commit; Commits ausschliesslich ueber NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules TICKET_ROLLE=generator bash scripts/commit-pruefen.sh (nach Einbau des pre-commit-Hooks: beide Wege testen)"
-  - "Lease leases/BAU-generator-A-37/ VOR dem ersten Schreibzugriff (neuer Token); heartbeat_bis je Lauf auffrischen; Lease freigeben bei CODE_FERTIG"
-  - "Jede Negativprobe TATSAECHLICH ausloesen und die Rohausgabe belegen (falscher Worktree, fehlende Rolle, falscher Zweig, unerlaubter Pfad, nacktes git commit, Merge)"
-  - "Kein Produktcode; keine DB-Laeufe; Abweichungen als ereignisse/BAU-generator-A-37/generator-frage-<thema>.yaml; SPEC_BLOCKED bei unerfuellbarem Kriterium"
-  - "Nach DoR: Kriterien sind eingefroren — Nachvollzugs-Matrix (Commit-SHA/Testbeleg) darfst du im Blatt fuellen, Kriterientext nicht aendern"
-ergebnis: "ereignisse/BAU-generator-A-37/generator-CODE_FERTIG.yaml mit Ausgangs-SHA ab9e837c, Ergebnis-SHA(s), Pfaden, je Kriterium Messbefehl + Rohausgabe (rot vorher / gruen nachher), Negativproben-Belege; Ball an den Evaluator."
-erlaubte_pfade:
-  - scripts/rollen-tor.sh
-  - scripts/commit-pruefen.sh
-  - scripts/rueckweg.py
-  - .githooks/pre-commit
-  - .githooks/commit-msg
-  - package.json
-  - package-lock.json
-  - "docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md NUR Nachvollzugs-Matrix"
-  - "eigener Baubericht im Worktree"
+aktion: pausieren_bis_nachschaerfung
+jetzt: |
+  1. A-37-22-Arbeit PAUSIEREN: die offene Aenderung an scripts/rueckweg.py bleibt unangetastet im Worktree liegen
+     (kein Commit, kein checkout, kein stash); Sicherungskopie ins Scratchpad; Ereignis
+     ereignisse/BAU-generator-A-37/generator-PAUSIERT.yaml mit git diff --stat und sha256.
+  2. rueckweg.py wird NIE mehr auf realen Rollen-Worktrees ausgefuehrt — nicht als Nachweis, nicht als Test.
+  3. Lease behalten (heartbeat_bis je Lauf auffrischen) — du bist weiter der einzige Schreiber auf rolle/generator.
+  4. ERLAUBTE Vorbereitung waehrend der Pause: Wegwerf-Repo im Scratchpad aufbauen (git init; sieben Baeume mit den
+     echten (Pfad, Zweig)-Namen als Worktrees; zusaetzlich einen Doppelgaenger 'ticket-rolle-generator-beleg-2026-08-21'
+     und einen Namens-Aehnlichen), als Skript im Scratchpad, reproduzierbar fuer den Evaluator. Kein Commit im Repo.
+  5. Warten auf generation 7 (kommt nach DoR der Nachschaerfung durch den Plan-Pruefer). Dann: A-37-22 inkl. der
+     neuen Unterkriterien, A-37-23..27, alle Negativproben — Transport-/Pfad-/Zweig-/Doppelgaenger-Proben
+     AUSSCHLIESSLICH im Wegwerf-Repo; am Bestand nur die ABLEHNUNG (Exit-Code vor jeder Aenderung) messen.
+vorschau_nachschaerfung: "A-37-22b Ausfuehrungsberechtigung: rueckweg.py bricht vor jeder Aenderung ab, wenn TICKET_ROLLE != integrator oder das Arbeitsverzeichnis nicht der Integrations-Checkout ist (Exit != 0, Meldung); Negativprobe Generator-Aufruf abgelehnt, Integrator-Aufruf erlaubt. A-37-22c Doppelgaenger-Erkennung per Aehnlichkeit (Praefix/Teilstring, nicht nur exakter Name) — der Belegbaum ticket-rolle-generator-beleg-2026-08-21 MUSS in der Meldung auftauchen. A-37-22d Bau-/Abnahmeverfahren: Proben nur im Wegwerf-Repo."
 verboten:
-  - Produktcode aendern; docs/STATUS.md / docs/BEFUNDNOTIZEN.md schreiben
-  - Kriterien aendern; eigene Abnahme
-  - Commit ohne aktive Lease; Commit ausserhalb des eigenen Worktrees; nacktes git commit
-  - Datenbanklaeufe; alten Beleg-Baum anfassen
-steuerungshandlungen_erlaubt: [Registrierung in sitzungen/ (neuer Worktree!), ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
+  - rueckweg.py oder ein anderes Transport-/Integrationswerkzeug auf realen Worktrees ausfuehren
+  - Commit vor generation 7
+  - Produktcode; DB; gemeinsamer Checkout; Beleg-Baum anfassen
+steuerungshandlungen_erlaubt: [ACK, Lease-Heartbeat, Ereignisse, Scratchpad-Arbeit — keine Sacharbeit im Repo]
 status: ZUGETEILT
 ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/BAU-generator-A-37/generator-ack.yaml
-erstellt: "2026-08-22T08:1x Dirigent (atomar veroeffentlicht)"
+erstellt: "2026-08-22T08:2x Dirigent (atomar veroeffentlicht)"

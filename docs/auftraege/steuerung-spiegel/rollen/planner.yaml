@@ -1,33 +1,29 @@
-auftrag_id: PARKEN-planner-bis-A-37
-generation: 8            # 22.08. 08:2x — Praezisierung Yama: die 198 uncommittierten Z0-I1-Zeilen bleiben IM WORKTREE als PARKED_DRAFT (nicht committen, nicht loeschen, NICHT auschecken). gen 7 ('ins Scratchpad sichern und git checkout --') ist damit ueberholt.
+auftrag_id: NACHSCHAERFUNG-planner-A-37
+generation: 9            # 22.08. 08:2x — Yama: A-37 braucht eine kurze Nachschaerfung VOR dem ersten Bau-Commit (Ausfuehrungsberechtigung, Doppelgaenger, Probenverfahren). Das Parken (gen 8) gilt fuer Z0-I1 weiter; diese Arbeit ist A-37.
 rolle: planner
 sitzung_erwartet: ef8ec540-263d-4f06-8a02-5a2f1beeb572
 worktree: /Users/yamanuri/Documents/ticket-rolle-planner
 branch: rolle/planner
 basis_sha: 762243b9
-prioritaet: P1
-aktion: parken
-jetzt: |
-  1. Z0-I1-Sacharbeit STOPPEN. Die uncommittierten Aenderungen im Worktree (ca. 198 Zeilen) BLEIBEN GENAU SO LIEGEN:
-     kein Commit, kein git checkout/reset/stash, kein Loeschen. Zusaetzlich eine Kopie ins Scratchpad (reine Sicherung).
-  2. Ereignis ereignisse/PARKEN-planner-bis-A-37/planner-PARKED_DRAFT.yaml: Pfad(e), git diff --stat, sha256 der
-     geaenderten Datei(en), Kopie-Pfad im Scratchpad, Zeit — das ist die Kennzeichnung als geparkter Entwurf.
-  3. Alte Lease leases/SPEZ-planner-A-37/active/ (Token 5) freigeben -> abgelaufen/.
-  4. ACK gen 8 unter ack_pfad (Worktree/Branch/HEAD 762243b9 + Hinweis 'PARKED_DRAFT vorhanden').
-  5. Warten, bis A-37 gebaut (Generator) UND unabhaengig ABGENOMMEN (Evaluator) ist. Dann neue generation mit
-     aktion: spezifizieren fuer Z0-I1 — der PARKED_DRAFT ist der Start; dazu die Dirigent-Fassung des Z0-I1-Blatts
-     (git show rolle/dirigent:docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md) als Vorarbeit und
-     auftraege/Y-13-entscheidung-yama.md als entschiedener Operand.
-  In jedem Takt bis dahin: Auftrag ziehen, Digest pruefen, nichts am Worktree aendern, den PARKED_DRAFT mit
-  git diff --stat gegen das PARKED_DRAFT-Ereignis pruefen (unveraendert?), kurz berichten, enden.
-prozessregel_yama: "Nach erteilter DoR Kriterienstand einfrieren; Beleg-/Formulierungsberichtigungen ohne Kriterienwirkung als EIN Errata-Ereignis, ein Commit, ein Rueckweg. Kriterienaenderung nach DoR = neue DoR-Runde."
-erlaubte_pfade: []
+prioritaet: P0
+aktion: spezifizieren_nachschaerfung
+parked_draft_bleibt: "Die 198 uncommittierten Z0-I1-Zeilen (planner-PARKED_DRAFT.yaml) bleiben UNANGETASTET im Worktree. Dein Commit enthaelt NUR das A-37-Blatt (pfadbegrenzt committen: commit-pruefen.sh mit genau diesem einen Pfad)."
+gegenstand: "Kurze Nachschaerfung des A-37-Blatts (docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md) um drei Unterkriterien zu A-37-22 (Kriterienaenderung nach DoR = kurze DoR-Runde beim Plan-Pruefer):"
+neue_unterkriterien_vorgabe_yama:
+  - "A-37-22b AUSFUEHRUNGSBERECHTIGUNG: Nur der Integrator darf den echten Rueckweg ausfuehren. scripts/rueckweg.py prueft VOR jeder Aenderung: TICKET_ROLLE == integrator UND Arbeitsverzeichnis == Integrations-Checkout (/Users/yamanuri/Documents/ticket, Zweig auto/hausplaner-integration); sonst Abbruch mit Meldung und Exit != 0, ohne einen Baum zu beruehren. Negativprobe: Aufruf als generator (und ohne TICKET_ROLLE) wird abgelehnt; Positivprobe: Aufruf als integrator im Checkout laeuft. Produkt/Schutz-Rot heute: grep -c TICKET_ROLLE scripts/rueckweg.py -> 0 (kein Rollencheck)."
+  - "A-37-22c DOPPELGAENGER PER AEHNLICHKEIT: die Baumauswahl erkennt Namens-Aehnliche (Praefix/Teilstring, z.B. ticket-rolle-generator-beleg-2026-08-21, Scratchpad-Klone) und MELDET sie ausdruecklich als ausgeschlossen; ein Vergleich auf exakt gleichen Verzeichnisnamen reicht nicht. Rot heute: git worktree list zeigt ticket-rolle-generator-beleg-2026-08-21, rueckweg.py kennt keine Aehnlichkeitspruefung."
+  - "A-37-22d PROBENVERFAHREN: alle Pfad-, Zweig-, Doppelgaenger- und Transportproben fuer Bau UND Abnahme laufen ausschliesslich in einem temporaeren Wegwerf-Repository (Scratchpad; Aufbau als reproduzierbares Skript); am Bestand wird nur die Ablehnung (Exit-Code vor jeder Aenderung) gemessen. Hintergrund: Generator-Lauf von rueckweg.py am 22.08. 08:06 hat drei fremde Baeume fast-forwarded (kein Schaden, aber unzulaessig)."
+form: "Kriterien im Stil der 27 bestehenden (Messbefehl, Rot-Art, heutiges Rot, erwartetes Gruen); Yamas Anweisung als Beleg; Errata-Regel beachten: EIN Commit, keine Nebenberichtigungen."
+lease: "leases/NACHSCHAERFUNG-planner-A-37/ nach README; freigeben bei CODE_FERTIG."
+commit: "NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules TICKET_ROLLE=planner bash scripts/commit-pruefen.sh '<Botschaft>' docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md — NUR dieser Pfad."
+ergebnis: "ereignisse/NACHSCHAERFUNG-planner-A-37/planner-CODE_FERTIG.yaml mit Ergebnis-SHA; Ball an den Plan-Pruefer (kurze DoR-Runde)."
+erlaubte_pfade:
+  - docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md
 verboten:
-  - Sacharbeit an Z0-I1/Z0-I2/Z0-I3 bis A-37 ABGENOMMEN
-  - Commit, checkout, reset, stash oder Loeschen am PARKED_DRAFT
-  - Produktcode; Voten; docs/STATUS.md / docs/BEFUNDNOTIZEN.md
-  - Commit ohne aktive Lease; Commit ausserhalb des eigenen Worktrees; nacktes git commit
-steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease-Freigabe, Ereignisse, Sicherungskopie ins Scratchpad — keine Sacharbeit]
+  - jede Aenderung an den Z0-I1-Dateien (PARKED_DRAFT) oder deren Commit
+  - Produktcode; Skripte; Voten; docs/STATUS.md / docs/BEFUNDNOTIZEN.md
+  - Commit ohne Lease; nacktes git commit; Merge-Commit
+steuerungshandlungen_erlaubt: [ACK, Lease, Ereignisse]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/PARKEN-planner-bis-A-37/planner-ack.yaml
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/NACHSCHAERFUNG-planner-A-37/planner-ack.yaml
 erstellt: "2026-08-22T08:2x Dirigent (atomar veroeffentlicht)"

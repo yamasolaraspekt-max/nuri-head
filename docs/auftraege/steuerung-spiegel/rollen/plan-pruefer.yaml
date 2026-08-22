@@ -1,25 +1,22 @@
-auftrag_id: DOR-plan-pruefer-A-37
-generation: 3            # 22.08. 00:12 — A-42 ABGENOMMEN (Evaluator b1c0c2d4): Parken endet, naechste Arbeit ist die DoR fuer das erweiterte A-37-Blatt, SOBALD der Planner liefert. Bis dahin: warten.
+auftrag_id: DOR-plan-pruefer-A-37-nachschaerfung
+generation: 4            # 22.08. 08:2x — kurze DoR-Runde fuer die Nachschaerfung A-37-22b/c/d (Yama), sobald der Planner liefert
 rolle: plan-pruefer
-sitzung_erwartet: 3870df7a-b0ad-4c78-bcb2-c5aa83a4c09d   # PID 88049
+sitzung_erwartet: 3870df7a-b0ad-4c78-bcb2-c5aa83a4c09d
 worktree: /Users/yamanuri/Documents/ticket-rolle-plan-pruefer
 branch: rolle/plan-pruefer
-basis_sha: 1cd33614
+basis_sha: ab9e837c
 prioritaet: P0
-aktion: warten_auf_planner_dann_dor
-ausloeser: "ereignisse/SPEZ-planner-A-37/planner-CODE_FERTIG.yaml (Planner ef8ec540 meldet das erweiterte A-37-Blatt mit Ergebnis-SHA)"
-gegenstand: "DoR-Pruefung des erweiterten A-37-Blatts (docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md @ rolle/planner <Ergebnis-SHA>): Kriterien A-37-22..25 messbar und vorher rot (Produkt/Vergleich/Schutz differenziert), Messbefehle vorhanden und einmal gefahren, Negativproben ausloesbar, Machbarkeit belegt, Absage-Regel, Sitzungsidentitaet (Sitzungs-ID + Sitzungsprozess-PID + Startkennung), --no-verify als dokumentierte Grenze; Votum ERTEILT / NICHT ERTEILT mit Restpunkten, im eigenen Worktree committet (commit-pruefen.sh, TICKET_ROLLE=plan-pruefer), Ereignis ereignisse/DOR-plan-pruefer-A-37/plan-pruefer-<ERTEILT|NICHT_ERTEILT>.yaml."
-bis_zum_ausloeser: "Keine Sacharbeit, keine Altposten (A-39, Posten 283-298), keine 'Kein Ball'-Commits. Lesende Vorbereitung erlaubt: A-37-Blatt heute, scripts/rollen-tor.sh, scripts/commit-pruefen.sh, .githooks/, scripts/rueckweg.py, docs/konzept/agentenarchitektur-v2.md §8 (rolle/dirigent 0d897b0e)."
-danach: "DoR fuer Z0-I1-Erweiterung, Z0-I2, Z0-I3 in dieser Reihenfolge, je nach Planner-Lieferung; spaeter Konzeptpruefung agentenarchitektur-v2.md."
-lease: "Fuer die DoR-Arbeit (Schreiben des Votums) leases/DOR-plan-pruefer-A-37/ nach README ziehen."
+aktion: warten_auf_planner_dann_dor_nachschaerfung
+ausloeser: "ereignisse/NACHSCHAERFUNG-planner-A-37/planner-CODE_FERTIG.yaml"
+gegenstand: "DoR der drei neuen Unterkriterien A-37-22b (Ausfuehrungsberechtigung rueckweg.py: nur integrator im Integrations-Checkout, Abbruch vor jeder Aenderung, Negativ-/Positivprobe), A-37-22c (Doppelgaenger per Aehnlichkeit; Belegbaum ticket-rolle-generator-beleg-2026-08-21 muss in der Meldung auftauchen), A-37-22d (alle Proben nur im Wegwerf-Repo; am Bestand nur die Ablehnung messen). Pruefen: messbar, vorher rot (Art benannt), Messbefehl einmal gefahren, Negativproben ausloesbar ohne Bestand zu beruehren, keine Aenderung an den 27 eingefrorenen Kriterien ausser diesen Ergaenzungen, ein Pfad, ein Commit. Votum ERTEILT / NICHT ERTEILT mit Restpunkten; Ereignis ereignisse/DOR-plan-pruefer-A-37-nachschaerfung/plan-pruefer-<ERTEILT|NICHT_ERTEILT>.yaml."
+bis_zum_ausloeser: "Keine Sacharbeit, keine Altposten; lesende Vorbereitung erlaubt (scripts/rueckweg.py @ ab9e837c, git worktree list)."
+lease: "leases/DOR-plan-pruefer-A-37-nachschaerfung/ fuer das Votum."
 erlaubte_pfade:
-  - "eigenes DoR-/Votumsblatt im Worktree (Dokument, kein Produktcode)"
+  - "eigenes DoR-/Votumsblatt im Worktree"
 verboten:
-  - Produktcode aendern
-  - Kriterien selbst schreiben (Planner)
-  - docs/STATUS.md / docs/BEFUNDNOTIZEN.md schreiben
-  - Bauen; Commit ohne Lease; Commit ausserhalb des eigenen Worktrees
-steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
+  - Kriterien selbst schreiben; Produktcode; docs/STATUS.md / docs/BEFUNDNOTIZEN.md
+  - Commit ohne Lease; Commit ausserhalb des eigenen Worktrees
+steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/DOR-plan-pruefer-A-37/plan-pruefer-ack.yaml
-erstellt: "2026-08-22T00:12 Dirigent (atomar veroeffentlicht)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/DOR-plan-pruefer-A-37-nachschaerfung/plan-pruefer-ack.yaml
+erstellt: "2026-08-22T08:2x Dirigent (atomar veroeffentlicht)"
