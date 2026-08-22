@@ -34793,3 +34793,88 @@ jemand es anordnen musste.**
 
 Ball: **Generator** (bauen — E0 und E2 kommen laut Dirigent VOR Z1-W2-6 und Z1-W2-4) ·
 **Evaluator** (E0-Rot-Probe 2700/2740 im Browser, Bildbeleg).
+
+## §437 — Meldepflichten Z1-W2-6 erfüllt. Drei meiner Messungen sind in dieser Runde ausgefallen — alle drei vor dem Melden gefangen
+
+Messstand: HEAD `3ddf6a3e`, Baum 0, gemessen 19:31–19:36. **Messzeit des Ereignisbefehls dieser
+Runde: 19:31:13.** Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §437'` → 0).
+**Ereignis dieses Abschnitts:** `ereignisse/BAU-generator-spur-V-1/plan-pruefer-MELDEPFLICHTEN-Z1-W2-6-GEPRUEFT.yaml`
+
+### Was messbar war — und es reicht für die Meldepflichten
+
+    ausgangs_sha  a0b61ba4   commit, existent
+    endstand_sha  a7d1e9a6   commit, existent      beide in Feldern
+    ergebnis_sha  a7d1e9a6
+
+    Scope-Diff, mein Lauf an a7d1e9a6:
+      public/hausplaner/hausplaner.js
+      app/rahmen/AuswechslungAnzeige.tsx · app/rahmen/EigenschaftenPanel.tsx
+      ausserhalb Insel UND Buendel:  0
+
+    blatt: "…Z1-W2-6-auswechslung-anschliessen.md @ rolle/planner
+            · DoR c9466cc0 PLUS Achsenregel-Berichtigung b7437e8a
+              (beide zitiert, wie der Planner verlangt hat)"
+
+**Das `blatt:`-Feld nennt BEIDE DoR-Belege** — mein Votum von 16:42:40 **und** die
+Achsenregel-Berichtigung, die ich 17:20:45 bestätigt habe. **Ein Blatt mit zwei Ständen, beide
+zitiert** — genau die Form, deren Fehlen in §414 den Blattdrift erzeugte.
+
+**Und der Vorbehalt ist wörtlich übernommen:**
+`DER_VORGEGEBENE_SATZ: "Erzeugungsweg fehlt — Reifegrad höchstens ABGENOMMEN (CODE, Fixture)."`
+
+### DREI AUSGEFALLENE MESSUNGEN, alle drei vor dem Melden gefangen
+
+**Erste: falscher Baum.** Ich habe die Aufrufer im Integrations-Checkout gemessen — **`a7d1e9a6`
+liegt dort nicht** (`merge-base --is-ancestor` → nein; auf `rolle/generator` → ja). Die 0 war die
+Wahrheit über einen Baum, in dem der Bau fehlt.
+
+**Zweite: falsches Kriterium.** Ich habe **V-1** geprüft — `Z1-W2-6` ist **Spur W** mit eigenen
+Kriterien `a` bis `g`. **V-1 gilt hier gar nicht.** Ich habe ein Spur-V-Kriterium auf ein
+Spur-W-Blatt angewandt, weil beide im selben Auftragsordner liegen.
+
+**Dritte: `git grep` mit nicht-rekursivem Pfadmuster.**
+
+    git grep -nE '…' <commit> -- 'resources/planner/hausplaner/*.ts'
+    ^ matcht in git NICHT rekursiv — anders als das Shell-Glob, das ich gewohnt bin
+
+Korrigiert auf `-- resources/planner/hausplaner` kam **wieder 0** — und dann versagte auch die
+**Positivkontrolle** (`berechneTreppe(` am selben Commit: keine Ausgabe).
+
+**Damit ist die Zahl kein Ergebnis, und ich melde sie nicht.** Die Wache-Regel ist eindeutig: *„eine
+ausgefallene Messung ist KEIN Ergebnis."* **Ohne funktionierende Positivkontrolle sage ich über die
+Aufrufer nichts** — weder 0 noch mehr.
+
+> **Drei Ausfälle in einer Runde, und keiner ist gemeldet worden.** Das ist der Unterschied zu §410
+> (Zahl geschrieben, bevor gemessen war) und §431 (Befund nachgebaut): **hier hat die Gegenprobe
+> vorher gegriffen, jedes Mal.**
+
+### Die Reihenfolgenfrage — und sie geht auf
+
+Der Dirigent sagte 19:11:46: *„nach Z1-W2-8 und Z1-V1-1 kommen E0 und E2 **VOR** Z1-W2-6/Z1-W2-4."*
+Der Generator meldet Z1-W2-6 um **19:28:03** — nach dieser Anweisung.
+
+    19:11:46  Dirigent: "E0 und E2 VOR Z1-W2-6"
+    19:25:24  Planner: CODE_FERTIG E0/E2
+    19:28:03  Generator: CODE_FERTIG Z1-W2-6
+    19:30:30  ich: DoR fuer E0/E2
+
+**Vor 19:30:30 lag für E0 und E2 keine DoR vor** — er konnte sie nicht bauen. **Kein
+Reihenfolgen-Bruch: er hat gebaut, was baubar war, während E0/E2 auf mich warteten.**
+
+**Und das ist der Satz, der mich betrifft:** Zwischen dem CODE_FERTIG des Planners (19:25:24) und
+meinem Votum (19:30:30) lagen **fünf Minuten**. In dieser Zeit hat der Generator ein anderes Blatt
+fertiggebaut. **Meine DoR-Latenz bestimmt den Takt — nicht als Vorwurf, sondern als Maß:** wer
+zwischen zwei Bauten steht, ist der Engpass, und fünf Minuten sind das Fenster.
+
+### Was ich ausdrücklich NICHT sage
+
+**Nichts über die Aufrufer von `auswechslung.ts`.** Meine Messung ist ausgefallen; ob `V-1`-artige
+Anschlüsse vorliegen, prüft der Evaluator im Browser gegen die Kriterien `Z1-W2-6-a` bis `-g` — das
+ist ohnehin sein Gegenstand, nicht meiner.
+
+**Und nichts über den Transport.** `a7d1e9a6` liegt auf `rolle/generator`, nicht in der Integration.
+Das ist normal für einen frischen Bau und kein Befund — es heißt nur, dass der Evaluator dort prüfen
+muss oder auf den Integrator wartet.
+
+Ball: **Evaluator** (Abnahme, Reifegrad höchstens `ABGENOMMEN (CODE, Fixture)`) · **Integrator**
+(Transport).
