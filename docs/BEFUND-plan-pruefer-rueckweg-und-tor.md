@@ -31768,3 +31768,59 @@ Das ist die neunte Grundmengenfrage heute — und die erste, bei der nicht das M
 sondern **der Name selbst mehrdeutig**.
 
 Ball: **niemand.** Die Zahl steht dem Evaluator für die Abnahme zur Verfügung; ich bewerte sie nicht.
+
+## §398 — Der Stillstand ist aufgelöst, und mein §394 hatte den falschen Adressaten: die Bündel-Regel steht in null Rollenquellen des Integrators
+
+Messstand: HEAD `f38c0bd5`, Baum 0, gemessen 17:04–17:07. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §398'` → 0). Punkt 3 des Wacheauftrags: **Stillstand → auflösen.** Ich habe ihn
+in §394 gemeldet; hier löse ich ihn auf — gegen mich selbst.
+
+### Die Messung, die alles dreht
+
+    rollen/integrator.yaml   generation 11 · erstellt 14:11:33
+      taetigkeit:            "zustand_nachziehen + transportieren (Integrator)"   <- er DARF
+      jetzt: Punkt 3         "Transportkette weiter (Planner … Plan-Pruefer; Evaluator-Voten;
+                              Generator-Nachlieferung A-43 Posten 3 …; rolle/dirigent)"
+      'buendel'              0 Treffer
+      'hausplaner.js'        0 Treffer
+      'be4f637c'             0 Treffer
+      Gegenprobe 'transport' 2 Treffer  — das Muster greift
+
+    Buendel-Regel            16:02:19   —  1 Stunde 51 Minuten NACH seiner Rollenquelle
+    Buendel-Commit           16:27:41
+    Rollenquellen mit 'buendel':  2 von 7   (generator 5 Treffer, planner 1) — INTEGRATOR NICHT
+
+### Was das heißt
+
+**Der Integrator hat einen Transportauftrag — aber das Bündel steht nicht darin.** Seine
+Auftragsliste ist von 14:11:33 und zählt auf, was zu transportieren ist; das Bündel fehlt, **weil es
+die Aufgabe bei Erstellung der Liste noch nicht gab.** Die Regel, die ihm den Transport zuweist,
+existiert seit 16:02:19 — **als Ereignis, nicht als Auftrag.**
+
+**Damit war mein §394 im Adressaten falsch.** Ich schrieb *„Ball: Integrator (Transport von
+`be4f637c`)"*. **Richtig ist: Ball beim Dirigenten.** Der Integrator kann nichts transportieren,
+wovon seine Rollenquelle nichts weiß — und die zu ändern ist nicht seine Sache.
+
+**Was an §394 hält:** der gemessene Zustand. `hausplaner.js` trägt den Stand vom 21.08., das Bündel
+wartet, Punkt 4 der Regel ist seit 16:25 abgelaufen. **Der Befund war richtig, die Zuweisung nicht** —
+und ich hatte in §394 selbst geschrieben, ich behaupte nicht, der Integrator sei untätig. **Genau das
+hat sich jetzt bestätigt: er ist es nicht.**
+
+### Dieselbe Lücke zum dritten Mal an einem Tag
+
+    A-37-22e  eine Steuerung, die erst beim naechsten Takt wirkt, hat ein Loch
+              (Pause 08:12:54, Generator-Commit 08:16:37)
+    §386      Regel 6j steht in 0 Rollenquellen — "Handregel mit Selbstmeldungspflicht"
+    §398      Buendel-Regel steht in 0 Rollenquellen des Adressaten, seit 63 Minuten
+
+**Bei §386 war es ein Fenster; hier ist es ein Dauerzustand.** Die Regel wurde nicht übersehen — sie
+ist nie an dem Ort angekommen, an dem der Adressat seine Aufgaben liest. **Und der Unterschied ist
+messbar: Generator und Planner haben sie in ihrer Quelle (5 und 1 Treffer), weil beide seit 16:02
+neue Generationen bekamen. Der Integrator steht seit 14:11:33 auf gen 11** — bei **27
+Dirigenten-Ereignissen** in derselben Zeit.
+
+> **Eine Regel wirkt nicht, weil sie veröffentlicht ist, sondern weil sie in dem Auftrag steht, den
+> der Handelnde liest.** Für sechs Rollen war das heute dasselbe Dokument; für eine nicht.
+
+Ball: **Dirigent** (gen 12 für den Integrator, oder eine ausdrückliche Transportanweisung zum Bündel)
+· **nicht** der Integrator, wie ich in §394 geschrieben hatte.
