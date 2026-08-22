@@ -29296,3 +29296,70 @@ Dirigenten, nicht mir. Ich lege sie hin, statt sie mit einer Auslegung zu schlie
 
 **Ball: Dirigent** (die eine Regelfrage) · in der abgelegten Postenliste nachgetragen. **Stand des
 Postens: OFFEN, aber nicht mehr strukturell blockiert.**
+
+## §360 — DoR Z1-W2-0 „Bedienbarkeits-Probe": ERTEILT — das Messgerät für alle Werkzeugblätter
+
+Gewählt gegen HEAD `d5a04a6d` (Baum sauber, 15:00:30). §360 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok. **Prüfstand: Blatt `adf03d32`** — Blob-Hash gegen den
+inzwischen bewegten Planner-HEAD (`9305198b`) geprüft: **identisch** (`0098bbceb704`), der
+Zwischen-Commit betraf nur Z1-W2-1.
+
+**Ball:** `planner-CODE_FERTIG-Z1-W2-0.yaml` (14:50:58), Block in der Tafel `ENTWURF` ·
+`ballbesitz: plan-pruefer` · `dor_beleg: "steht aus"`.
+
+**Selbst gemessen:**
+
+    243 Zeilen · 8 Kriterien (a–h) · 8 N3-Matrixzeilen  deckungsgleich
+    N4 vorhanden · 10 Messbefehle · 7 Absage-Regeln · 7 Rot-Lagen · Rueckweg
+    basis_sha = mess_sha = 39260edd, beide genannt
+
+**Spur-W-Eignung (die vier Eigenschaften aus §354), diesmal vor dem Votum geprüft:**
+
+    Kriterien 8 · "<= 8"  ERFUELLT — und zwar exakt an der Grenze
+    Browserabnahme ja · Rot-Probe ja · Rueckweg = Revert ja
+    Rechte/Geld/DB/Auth mit WORTGRENZE: 0
+
+**N4 wählt die Zweitform, und hier ist sie sachlich zwingend:** *„Bedienweg **keiner**. Dies ist ein
+Messgerät, kein Werkzeug."* — mit Auslöser (Vitest-Lauf und ab Erteilung **jede**
+Bedienbarkeitsabnahme), Ort (`__domtests__/werkzeugBedienbar.dom.test.ts`), tragendes Werkzeug
+(*„keines — das Blatt trägt alle"*) und Zielreifegrad (*„entfällt, es wird nicht bedient, es
+misst"*). **Ein Blatt, das die Bedienbarkeit misst, kann selbst keine haben; das steht da und ist
+begründet.**
+
+**Der Ort steht in den Messbefehlen** — was mein Auftrag gen 9 ausdrücklich verlangt
+(*„Messbefehle mit ORT"*): *„Wegwerf-Kopie unter `TMPDIR` (A-37-22d) — die echte `toolRegistry.ts`
+wird NICHT angefasst"* und *„Vitest im Repo-Wurzelverzeichnis"*.
+
+**Die beiden tragenden Messungen des Blattes selbst nachgemessen — beide exakt:**
+
+    Eintraege in toolRegistry.ts        13
+      art: 'werkzeug'                   10      Summenprobe 10 + 3 = 13   schliesst
+      art: 'aktion'                      3      loeschen · duplizieren · trimmen
+    ohne shortcut                        3      bemassen · flaeche-messen · trimmen
+      Gegenprobe: 10 shortcut-Zeilen + 3 ohne = 13
+
+**Der Zuschnitt folgt daraus, und das ist die Stärke des Blattes.** Weil drei Einträge Aktionen sind
+(*„eine Aktion wird AUSGELÖST, nicht aktiviert; sie bleibt nicht aktiv, und Escape stellt sie nicht
+zurück"*), passt die fünfteilige Kette auf sie nicht — **die Ausnahmeklausel ist damit keine
+Formsache, sondern trifft drei reale Fälle.** *Er hat die Ausnahme nicht vorsorglich eingebaut,
+sondern gemessen, dass es sie braucht.*
+
+**Kern-Rot-Lage selbst geprüft:** `__domtests__/werkzeugBedienbar.dom.test.ts` **fehlt** (fünf
+andere DOM-Tests existieren); `TOOL_DEFINITIONS` wird in 8 Produktiv- und 12 Testdateien verwendet,
+**in keinem DOM-Test**. Griff gegengeprüft (`toolRegistry` 32 Dateien, erfundener Name 0).
+
+**Eigener Messfehler auf dem Weg.** Mein erster Griff zählte **11** `art: 'werkzeug'` — 11 + 3 = 14
+bei 13 Einträgen, die Summenprobe schloss nicht. Ursache: **Zeile 216 ist ein Kommentar**
+(*„Ein achter `art: 'werkzeug'`-Eintrag ist keine additive Zeile…"*), den mein Muster mitzählte. Mit
+Zeilenanker: 13 art-Zeilen = 13 id-Zeilen. **Ein Muster ohne Anker liest den Text über den Code
+mit** — heute die dritte Spielart derselben Klasse nach `rechteck` (§354) und den Wortvorkommen
+(§346).
+
+## Votum: ERTEILT
+
+Acht Kriterien, Matrix deckungsgleich, N4 begründet in der Zweitform, Ort in den Messbefehlen,
+beide tragenden Zahlen von mir nachgemessen, Rot-Lage bestätigt, Spur-W-Eignung erfüllt.
+**Kein Halbsatz nötig** — das erste Blatt heute, bei dem ich nichts mitzuliefern habe.
+
+**Ball: keiner bei mir.** Nach dem Nachtrag 1.5 gilt das Votum als Teil des Blatts; ein Nachtragen
+ist nicht verlangt (§354).
