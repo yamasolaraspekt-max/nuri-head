@@ -39,8 +39,50 @@ final class TestDbLease
     /** Wie lange eine Lease gilt, bevor sie als verfallen gilt (Sekunden). */
     public const LAUFZEIT = 3300;
 
-    private static ?string $gehalten = null;
-    private static ?int $token = null;
+    /**
+     * **Was dieser Prozess haelt — als LISTE, nicht als Einzelwert.**
+     *
+     * ⚠ Die erste Fassung hielt genau eine Ressource. Die Probe-Datei zieht ihre eigene Lease und
+     * ueberschrieb damit den Halter des ECHTEN Laufs; beim Prozessende war er verloren und die
+     * Lease blieb liegen. *Ein `$nur`-Parameter beim Freigeben half nicht — der Schaden entsteht
+     * beim ZIEHEN.* Gefunden, weil `active` nach der vollen Suite auf 1 stand statt auf 0, und
+     * erst im dritten Anlauf richtig zugeordnet.
+     *
+     * @var array<string,int> Ressource => fencing_token
+     */
+    private static array $gehalten = [];
+
+    /**
+     * **Zeitstempel in ORTSZEIT mit Offset — nicht UTC.**
+     *
+     * ⚠ Die erste Fassung schrieb `date(...)` direkt und lieferte `+0000`: PHP-CLI steht auf UTC,
+     * unabhaengig von `config('app.timezone')` (gemessen: `date_default_timezone_get()` = UTC,
+     * `app.timezone` = Europe/Berlin, System = CEST +0200). Eine Lease, deren `erteilt` zwei
+     * Stunden in der Vergangenheit zu liegen scheint, laedt jeden Leser zu dem Schluss ein, sie
+     * sei alt. **Die Zeitkonvention dieses Hauses verlangt Ortszeit mit Offset.**
+     */
+    private static function jetzt(int $plus = 0): string
+    {
+        // `app.timezone` ist die Wahrheit dieses Hauses (Europe/Berlin); PHP-CLI steht daneben auf
+        // UTC. **`function_exists('config')` genuegt NICHT** — der Helfer ist geladen, wirft aber
+        // ohne Anwendungs-Container, und die Probe laeuft bewusst ohne Anwendung. Deshalb der
+        // Versuch mit Auffangen; ohne Container bleibt die PHP-Zeitzone.
+        // ⚠ **Die Lease wird VOR dem Bootstrap gezogen** — es gibt dort keinen Container, `config()`
+        // wirft, und `date_default_timezone_get()` steht auf UTC. Genau deshalb trugen die ersten
+        // Leases `+0000`. Die Zeitzone kommt daher aus der VERSIONIERTEN Quelle, mit derselben
+        // Begruendung wie Host und Port in Z0-I1-12: sie muss dort stehen, wo jeder Baum sie hat.
+        $zone = (string) (getenv('APP_TIMEZONE') ?: '');
+        if ($zone === '') {
+            try {
+                $zone = function_exists('config') ? (string) (config('app.timezone') ?: '') : '';
+            } catch (\Throwable) {
+                $zone = '';
+            }
+        }
+        $ort = new \DateTimeZone($zone !== '' ? $zone : date_default_timezone_get());
+
+        return (new \DateTimeImmutable('@'.(time() + $plus)))->setTimezone($ort)->format('Y-m-d\TH:i:sO');
+    }
 
     /**
      * Die Ablage. **Aus der Umgebung, nicht hartcodiert** — die Proben laufen unter `TMPDIR`,
@@ -166,13 +208,13 @@ final class TestDbLease
             $token = $zaehler + 1;
             file_put_contents($ordner.'/counter', (string) $token);
 
-            $bis = date('Y-m-d\TH:i:sO', time() + self::LAUFZEIT);
+            $bis = self::jetzt(self::LAUFZEIT);
             $yaml = "ressource: {$ressource}\n"
                 ."fencing_token: {$token}\n"
                 ."rolle: {$rolle}\n"
                 ."owner: {$sitzung}\n"
                 .'pid: '.getmypid()."\n"
-                .'erteilt: "'.date('Y-m-d\TH:i:sO')."\"\n"
+                .'erteilt: "'.self::jetzt()."\"\n"
                 ."heartbeat_bis: \"{$bis}\"\n";
 
             // tmp + rename: eine halb geschriebene Lease waere schlimmer als keine.
@@ -183,25 +225,33 @@ final class TestDbLease
             @rmdir($sperre);
         }
 
-        self::$gehalten = $ressource;
-        self::$token = $token;
+        self::$gehalten[$ressource] = $token;
 
         return $token;
     }
 
-    /** Gibt die Lease zurück — die Datei wandert nach `freigegeben/`, der Token bleibt vergeben. */
-    public static function freigeben(): void
+    /**
+     * Gibt die Lease zurück — die Datei wandert nach `freigegeben/`, der Token bleibt vergeben.
+     *
+     * ⚠ **`$nur` ist die Lehre aus einem eigenen Fehler:** die Probe-Datei rief `freigeben()` in
+     * ihrem `tearDown()` und räumte damit den statischen Zustand des ECHTEN Laufs ab — beim
+     * Prozessende war `$gehalten` bereits `null`, und die Lease des Laufs blieb liegen. *Eine
+     * verwaiste Lease, erzeugt von genau dem Test, der Verwaisung verhindern soll.*
+     * Wer `$nur` setzt, gibt **nur** frei, wenn er diese Ressource auch hält.
+     */
+    public static function freigeben(?string $nur = null): void
     {
-        if (self::$gehalten === null) {
-            return;
+        foreach (self::$gehalten as $ressource => $token) {
+            if ($nur !== null && $ressource !== $nur) {
+                continue;
+            }
+            $ordner = self::ordner($ressource);
+            $aktiv = $ordner.'/active/lease.yaml';
+            if (is_file($aktiv)) {
+                $ziel = $ordner.'/freigegeben/lease-token'.$token.'-'.date('Y-m-d-His').'.yaml';
+                @rename($aktiv, $ziel);
+            }
+            unset(self::$gehalten[$ressource]);
         }
-        $ordner = self::ordner(self::$gehalten);
-        $aktiv = $ordner.'/active/lease.yaml';
-        if (is_file($aktiv)) {
-            $ziel = $ordner.'/freigegeben/lease-token'.self::$token.'-'.date('Y-m-d-His').'.yaml';
-            @rename($aktiv, $ziel);
-        }
-        self::$gehalten = null;
-        self::$token = null;
     }
 }

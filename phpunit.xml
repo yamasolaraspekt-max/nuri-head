@@ -38,6 +38,9 @@
              sich EINE Datenbank teilen — eine Lease im Repo saehe nur der eigene Baum und
              serialisierte nichts. `${HOME}` loest `TestDbLease::wurzel()` auf; hier steht kein
              absoluter Pfad eines einzelnen Rechners. -->
+        <!-- Z0-I1-9: die Lease wird VOR dem Bootstrap gezogen; dort gibt es keinen Container
+             und PHP steht auf UTC. Die Zeitzone kommt deshalb aus derselben versionierten Quelle. -->
+        <env name="APP_TIMEZONE" value="Europe/Berlin" force="true"/>
         <env name="TESTDB_LEASE_WURZEL" value="${HOME}/.ticket-steuerung/leases" force="true"/>
         <env name="MAIL_MAILER" value="array"/>
         <!-- Wächter-Baseline E4 (2026-07-16): ohne diesen Wert faellt config/broadcasting.php
