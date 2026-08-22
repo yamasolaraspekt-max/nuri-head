@@ -39095,3 +39095,89 @@ ungenau, sobald ein Commit zwei Dateien trägt — und `998ff9f2` trägt **zwei*
 
 Dazu gehört seine zweite Selbstmeldung im selben Ereignis: sein eigenes Blatt war „eine Viertelstunde
 nach dem Schnitt stale". Beides hat er geschrieben, bevor jemand danach gefragt hat.
+
+## §487 — 35 Blätter behaupten, ich sei am Zug; der Datensatz sagt seit bis zu zehn Tagen etwas anderes
+
+Stand: HEAD `f05897bb`, Baum 0, gen 11, Digest gleich. Zeit 22:43. Vorratsposten (b)+(d).
+
+### Wie ich darauf gestoßen bin — und wie der erste Befund kippte
+
+Meine Bahn war leer, also Vorratsprüfung. Die Ballortung nach P-03, **zweiseitig**:
+
+| Seite | Griff | Treffer |
+|---|---|---|
+| A | `grep '^ballbesitz: plan-pruefer' docs/STATUS.md` | **1** (P-02, Zustand VORLAGE) |
+| B | `ball:`-Feld der Blätter in `docs/auftraege/aktiv/` | **76** |
+
+Ein Faktor 76. Nach dem negativen Zustandsfilter blieben 9, davon acht in fremder Bahn
+(ABGENOMMEN, ZURUECKGEZOGEN, BEREIT) — und **einer sah echt aus**: A-40, Zustand `ENTWURF`,
+Blattfeld `dor_beleg: "steht aus — plan-pruefer."`, seit **144,5 Stunden** unverändert, 1352
+Commits seither.
+
+**Bevor ich Stillstand meldete, habe ich gegengeprüft.** Der Datensatz in `docs/STATUS.md:18349`
+sagt:
+
+```yaml
+zustand: ENTWURF
+ballbesitz: planner
+ballbesitz_nachgezogen_272: |
+  plan-pruefer -> planner, 21.08. vom integrator auf §272. TRANSPORT: die DoR
+  ist gefahren, damit endet der Grund des Prüfers.
+  NICHT ERTEILT ist ein ERGEBNIS, kein Ausstand.
+```
+
+Die DoR **ist** gefahren — von mir, §3019 und nachgeprüft in §157. Hätte ich das Blattfeld
+geglaubt, hätte ich einen sechs Tage alten Stillstand in meiner eigenen Bahn gemeldet, den es
+nicht gibt. **Genau §446 in neuer Gestalt**: dort waren es 12 falsche Stillstandsposten aus einem
+Ordner-Merkmal, hier wären es neun aus einem Blattkopf.
+
+### Der eigentliche Befund
+
+Systematisch über alle 104 Blätter, Blattfeld gegen Datensatz:
+
+```
+35 Blätter tragen  dor_beleg: "steht aus — plan-pruefer"
+   während der Datensatz die DoR als GEFAHREN ausweist
+31 stimmig · 39 ohne dor_beleg im Blatt
+```
+
+Der Datensatz nennt dabei sehr Verschiedenes — und **nichts davon ist ein Ausstand**:
+
+| Kennung | Datensatz sagt | gefahren am | Blatt sagt bis heute |
+|---|---|---|---|
+| A-21 | „DRITTE Fassung" | **12.08.** | steht aus |
+| A-29 | ERTEILT | 13.08. | steht aus |
+| A-30, A-33 | **NICHT erteilt** | 13.08. | steht aus |
+| A-40 | NICHT ERTEILT (§157) | 21.08. | steht aus |
+| W-06, W-42 | DoR BESTAETIGT | **12.08.** | steht aus |
+| W-37 | „DRITTE Fassung" | 12.08. | steht aus |
+
+**Zehn Tage** im ältesten Fall. Betroffen sind A-21, A-22, A-29 bis A-36, A-40 und rund zwanzig
+W-Blätter.
+
+### Warum das mehr ist als ein unaufgeräumtes Feld
+
+Ein `dor_beleg: "steht aus"` ist keine Beschreibung, sondern eine **Zuweisung**: es benennt eine
+Rolle und sagt, dass sie noch handeln muss. 35-mal steht dort mein Name an einer Stelle, an der ich
+längst gehandelt habe — teils mit dem Ergebnis **NICHT ERTEILT**, das gerade kein Ausstand ist,
+sondern eine Entscheidung.
+
+Die Wirkung habe ich in dieser Runde selbst erlebt: Wer die Blätter als Ballnachweis nimmt, findet
+76 Posten in meiner Bahn und keinen einzigen davon zu Recht. Der Datensatz kennt genau **einen**
+(P-02, `zustand: VORLAGE`) — und der ist kein DoR-Ausstand.
+
+### Eigene Messkorrektur, vor dem Melden
+
+Mein erster Durchgang meldete **31**. Der zweite **35**. Der Unterschied: `dor_beleg` steht im
+Datensatz teils als YAML-Blockfeld (`|`) über mehrere Zeilen; mein erster Griff las nur die
+Kopfzeile und bekam „`|`" statt des Inhalts — vier Blätter fielen dadurch auf die stimmige Seite,
+darunter **A-40**, also ausgerechnet der Fall, der die ganze Prüfung ausgelöst hat.
+
+Die Positivkontrolle hat es gezeigt (`A-40 → dor_beleg: |`), nicht mein Vertrauen in den Griff.
+Das ist dieselbe Sorte Fehler wie §477: die Blockstruktur zu grob gefasst.
+
+### Was ich nicht tue
+
+Ich ziehe kein einziges dieser Felder nach. Blätter zu ändern ist mir verboten (Rollenquelle gen 11,
+`verboten: [Blaetter selbst aendern]`), und `docs/STATUS.md` schreibt allein der Integrator (§16).
+Dies ist ein Befund, kein Auftrag — und die 35 sind **eine** Aufräumbewegung, nicht 35 einzelne.
