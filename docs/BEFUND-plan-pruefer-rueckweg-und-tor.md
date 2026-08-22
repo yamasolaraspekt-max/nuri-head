@@ -25804,3 +25804,87 @@ Browserfälle erst danach."* A-37 liegt beim Evaluator, Z0-I1 ist geparkt. Solan
 kann keiner der neun laufen — und die drei mit Votum warten ohnehin auf dasselbe Tor.
 
 **Ball:** Evaluator (A-37) · danach Integrator/Planner für die Punkte 2, 5, 6 der Entscheidung.
+
+## §307 — A-37 ist NACHBESSERN, und der eine offene Punkt ist mein eigener Befund vom 16.08. — den ich in meiner Datei zuerst nicht gefunden habe
+
+**Messstand** `f12c5b01` · Baum sauber · 0 neue Commits seit §306 · Integrationszweig `e8a7149e` →
+`5fde6c57` → `a42414b7`. Ballortung beidseitig **1** und **6** — nichts in meiner Bahn.
+
+### Das Votum liegt
+
+`evaluator-NACHBESSERN.yaml` (10:49:27) und ein Nachtrag (10:50:57). **30 von 31 Kriterien erfüllt,
+A-37-20 nicht.** Meldepflichten selbst gemessen:
+
+```
+db420cf0 · e39cbccc · c0dd4f83 · c11f97ac · ab9e837c   alle existent (exit 0)
+SHAs in FELDERN (nicht nur im Text)                     4
+Scope   db420cf0  128/0   e39cbccc  45/0    je EIN Pfad, das Votumsblatt
+Votumsblatt vorhanden, 128 Zeilen
+git diff --stat ab9e837c c0dd4f83 -- resources/ app/   LEER  (Produktcode unberührt)
+```
+
+**Ballwechsel bestätigt:** Ball beim Generator, ein Kriterium, `geprueft_bis_sha: c0dd4f83` —
+also gegen den Endstand und nicht gegen `561cc3d1`. Der Hinweis des Dirigenten ist angekommen.
+
+### Er bestätigt meine §304-Klarstellung, ohne sie gelesen zu haben
+
+Zur Frage, ob `TICKET_ROLLE` als Selbstauskunft für 22b genügt, kommt er auf eigenem Weg zum selben
+Ergebnis: *„A-37-22b verlangt wörtlich ZWEI Bedingungen … Eine Bindung der Rollenidentität an Lease,
+Fencing-Token oder Sitzungs-ID verlangt das Kriterium an KEINER Stelle. ALSO: 22b erfüllt, kein
+Mangel, und ich schreibe kein Kriterium nach."* Und mit einer Begründung, die ich mir merke:
+
+> *„Ein Kriterium im Nachhinein zu verschärfen, weil mir beim Messen etwas Besseres einfällt, ist
+> dieselbe Fehlerklasse, die ich beim Generator messe — nur mit umgekehrtem Vorzeichen."*
+
+§304 steht in meiner Befunddatei, nicht in der Steuerung; er hat es nicht gelesen. **Zwei Rollen, zwei
+Wege, ein Ergebnis** — das trägt mehr als eine doppelt gefahrene Messung.
+
+### Posten (e): der Mangel ist meiner
+
+A-37-20 trägt im Blatt die Herkunft: *„ZWEI BEFUNDE DES PLAN-PRÜFERS, beide zutreffend und
+zusammengehörig."* Nachverfolgt bis zur Quelle:
+
+```
+docs/BEFUNDNOTIZEN.md:7163   rolle: plan-pruefer   16.08. 18:42
+  "P5 auf A-37 selbst angewandt — Code 2 trägt im Blatt zwei Bedeutungen und im Bau mindestens vier"
+docs/BEFUNDNOTIZEN.md:7217   rolle: plan-pruefer   16.08. 18:50
+  "Meine Einschränkung von 18:42 geschlossen — die Codes 2, 3 und 4 werden im Bau gar nicht
+   vergeben, alle drei Ursachen enden bei exit 1"
+16.08. 20:42  1403e348  A-37-20 kommt ins Blatt      (41 min nach der Meldung)
+```
+
+**Unabhängig am Endstand nachgemessen**, nicht aus seinem Votum übernommen:
+
+```
+commit-pruefen.sh @ c0dd4f83, Sammelstelle:
+    if [ "$FEHLER" -ne 0 ]; then  …  exit 1  fi
+'exit 4' im GANZEN Bau:  commit-pruefen.sh 0 · rollen-tor.sh 0 · pre-commit 0 · rueckweg.py 0
+Gegenprobe 'exit 0' in commit-pruefen.sh: 2   (das Muster greift)
+```
+
+**Sechs Tage von der Meldung bis zur Bestätigung, dass sie nicht behoben ist** — und es ist der
+einzige offene Punkt einer Lieferung mit 31 Kriterien.
+
+### Und das Kriterium trägt
+
+Die Frage, die mir gehört: Ist A-37-20 klar genug, oder liegt der Streit bei mir? Es ist klar — und
+es hat die Fehlmessung sogar **vorweggenommen**:
+
+> **Verlangt:** je Ursache ein eigener, im Bau **wirklich erreichbarer** Rückgabewert … **Zählen der
+> `raus()`-Aufrufe genügt nicht, wenn kein Pfad sie erreicht.**
+
+Genau das ist passiert: Der Generator meldete *„vergeben: exit 0 5x, 1 4x, 5 1x, 6 1x — und NEU 7"*.
+Der Evaluator dazu: *„richtig gezählt, beantwortet aber die Frage nicht. Gezählt sind die Werte des
+TORS; verlangt sind die Werte der DREI URSACHEN."* **Kein Kriterien-Mangel, kein DoR-Punkt bei mir.**
+
+### Und ein Fund gegen mich
+
+**Ich habe meinen eigenen Befund in meiner Befunddatei nicht gefunden.** `grep 'A-37-20'` traf dort
+sechsmal — alle sechs über *Fertigmeldungen*, keiner über den Inhalt. Der Grund: **A-42 hat die
+Notiz aus `docs/STATUS.md` nach `docs/BEFUNDNOTIZEN.md` verschoben.** Das ist §299 an mir selbst — dort
+habe ich gemeldet, dass der Umzug 58 Zeiger ins Leere gestellt hat; hier stelle ich fest, dass er auch
+meine **Suchgewohnheit** ins Leere laufen lässt. Ich hätte um ein Haar geschrieben „das ist mein
+Befund", ohne die Fundstelle zu haben. **Zwei Ablagen, eine Suche — das ist die eigentliche Folge.**
+
+**Ball:** Generator (A-37-20, ein Kriterium). Danach erneute Abnahme nur dieses Kriteriums plus
+Gegenprobe, dass die übrigen 30 unberührt bleiben. Bei mir liegt nichts.
