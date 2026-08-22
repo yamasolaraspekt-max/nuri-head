@@ -166,24 +166,66 @@ in kleinen Schritten** — `dachVorlage` und `dachOeffnung` (130 Z.) zuerst, `da
 
 ## d) Was NICHT angeschlossen werden sollte
 
-### `geometry/werkzeugRegistry.ts` — **VERWERFEN oder zusammenführen, nicht anschließen**
+> ## ⚠ BERICHTIGUNG — beide „VERWERFEN" sind ZURÜCKGEZOGEN
+>
+> **Eine lesende Sitzung in Yamas Auftrag hat beide Empfehlungen nachgemessen (13:49) und beide
+> tragen nicht.** Ich habe selbst nachgemessen statt übernommen; **die Befunde stimmen.**
+> *Beide Empfehlungen waren unumkehrbar und lagen Yama zur Entscheidung vor — hier stand das
+> Falscheste an der falschesten Stelle.*
+> **Was unverändert gilt:** die Erreichbarkeitsanalyse (160 · 133 · 27), die drei Typmodule als
+> Falsch-Positive, die vier Pakete und ihre Empfehlungen. **Betroffen ist allein dieser Abschnitt.**
 
-**Der belegte Fall „zweiter Weg gebaut, erster liegt":**
+### `geometry/werkzeugRegistry.ts` — **KLÄREN, weder anschließen noch verwerfen**
+
+**Meine ursprüngliche Behauptung war „zwei Registries für dieselbe Frage".** Die Codebasis
+widerspricht genau dort, wo sie die Grenze zieht — `app/tools/toolTypes.ts:8`, selbst gelesen:
+
+> *„Abgrenzung: `geometry/werkzeugRegistry.ts` beschreibt **BAUTEILE** (Parametrik/Fähigkeiten).
+> Diese Datei beschreibt **WERKZEUGE** (Bedienung/Aktivierung). Ein Werkzeug KANN ein Bauteil
+> referenzieren (`bauteilKind`), **dupliziert es aber nicht**."*
+
+**Selbst gemessen:** `toolRegistry.ts` 395 Z. / 11 Exporte — `werkzeugRegistry.ts` 68 Z. / 7 Exporte,
+darunter `WerkzeugKategorie` (`bau|bauelement|haustechnik|pv`) und `Parametrik`. **Das sind
+Bauteil-Begriffe, keine Bedienbegriffe.**
+
+**Mein Fehler, benannt:** ich habe von der **Namensähnlichkeit** auf Doppelung geschlossen, ohne
+die Abgrenzung zu lesen, die zwei Verzeichnisse weiter ausdrücklich steht. *Der Name war mein
+Kriterium, nicht die Sache.* **Das widerlegt die Doppelung nicht endgültig** — ein Kommentar kann
+altern —, aber eine Empfehlung zum Verwerfen darf nicht auf einer Behauptung ruhen, der die
+Codebasis an der einschlägigen Stelle widerspricht.
+
+**Neue Empfehlung: klären, als eigener kleiner Posten.** Frage: Hält die Abgrenzung
+Werkzeug/Bauteil im Code, oder ist sie nur noch Kommentar?
+
+### `app/tools/toolCatalogStillgelegt.ts` — **NICHT VERWERFEN, stehen lassen**
+
+**Meine Zahl war falsch.** Ich schrieb *„0 Exporte, 0 Typen"*. **Gemessen sind es 1 Export:**
 
 ```
-app/tools/toolRegistry.ts    13 Werkzeuge registriert, ERREICHBAR, seit 15.08. unveraendert
-geometry/werkzeugRegistry.ts registriereWerkzeug/werkzeug/alleWerkzeuge, NICHT erreichbar
+grep -n '^export' app/tools/toolCatalogStillgelegt.ts
+  -> 20:export const STILLGELEGT_INDESIGN_KATALOG: readonly ToolDefinition[] = [
 ```
 
-**Zwei Registries für dieselbe Frage.** Wer die zweite anschließt, hat zwei Wahrheiten darüber,
-welche Werkzeuge es gibt — genau die Doppelung, gegen die A-41 und A-43 gebaut wurden.
-**Entweder** die Fähigkeiten der zweiten wandern in die erste, **oder** die zweite wird verworfen.
-*Nebeneinander anschließen ist die einzige Antwort, die falsch ist.*
+**Wie die Null entstand — der Befehl misst etwas anderes als sein Label behauptet:** mein Muster
+verlangte bei `const` eine **Funktionsform** (`= (` oder `: (`). `STILLGELEGT_INDESIGN_KATALOG` ist
+ein **Array**. Die Spalte hieß *„Funktionen/**Werte**"*, gezählt wurden nur **Funktionen**.
+*Derselbe Fehler wie beim verlorenen Dollarzeichen, nur andersherum: dort passte das Wort nicht
+zum Befehl, hier der Befehl nicht zum Wort.*
 
-### `app/tools/toolCatalogStillgelegt.ts` — **VERWERFEN**
+**Und die Folge eines Verwerfens wäre real:**
 
-**Gemessen: 0 Exporte, 0 Typen, 75 Zeilen.** Der Name sagt es selbst. Ein Modul ohne Export kann
-nichts anschließen. *Es steht nur in der 27er-Liste, weil es eine `.ts`-Datei ist.*
+| Fundstelle | Art |
+|---|---|
+| `__tests__/toolKatalog.test.ts:10` | **echter Import** — prüft `length === 54` und baut ein Set der alten IDs |
+| `app/studioDaten.ts`, `app/tools/toolCatalog.ts` | **nur im Kommentar** — als Muster für „stillgelegt, nicht gelöscht" |
+
+**Verwerfen würde einen laufenden Test brechen und den Wächter beseitigen, dass 54 alte
+Werkzeug-IDs nicht zurückkehren.** Dazu verschwände das Referenzmuster, auf das zwei Produktivdateien
+für die Hausregel verweisen.
+
+*Die Erreichbarkeitsanalyse bleibt richtig — **genannt zu werden ist nicht erreichbar zu sein**,
+und die zwei Kommentar-Fundstellen sind kein Ladeweg. Falsch war allein die Export-Zahl und die
+darauf gestützte Empfehlung.*
 
 ### Die drei Typmodule — **kein Gegenstand**
 
@@ -222,6 +264,25 @@ Werkzeugverwaltung ist.** Ich habe das nicht gemessen und behaupte es nicht.
 - **Keine Aufwandszahlen in Stunden.** „klein/mittel/groß" stützt sich auf Zeilenzahl und
   Testlage, nicht auf eine Schätzung.
 - **Die Frage zu `werkzeugLandkarte`** ist offen und oben als offen benannt.
+
+### Die Lehre aus den zwei zurückgezogenen Empfehlungen
+
+**Beide Fehler trafen ausgerechnet die zwei *unumkehrbaren* Vorschläge.** Das ist kein Zufall,
+sondern eine Ordnung, die ich vorher nicht hatte: für „anschließen" und „parken" genügt eine grobe
+Messung — man kann sie zurücknehmen. **Für „verwerfen" nicht.**
+
+| Was schiefging | Klasse |
+|---|---|
+| `toolCatalogStillgelegt`: 0 statt 1 Export | **Der Befehl maß enger als sein Label.** „Funktionen/Werte" — gezählt wurden nur Funktionen. |
+| `werkzeugRegistry`: Doppelung behauptet | **Der Name war das Kriterium, nicht die Sache.** Die Abgrenzung stand zwei Verzeichnisse weiter im Klartext. |
+
+**Regel für künftige Vorlagen dieser Art:** *Eine Empfehlung zum Verwerfen verlangt zwei
+unabhängige Messungen — was das Modul exportiert **und** wer es benutzt — und einen Blick in die
+Datei, die es abgrenzt.* Für „anschließen" reicht die Erreichbarkeitsanalyse; für „verwerfen"
+reicht sie nicht.
+
+*Gefunden hat beides eine lesende Sitzung in Yamas Auftrag, nicht ich. Meine eigenen Gegenproben
+liefen alle innerhalb desselben Messwegs — sie konnten den Fehler nicht sehen, weil sie ihn teilten.*
 
 ## Nächster Schritt
 
