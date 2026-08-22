@@ -40903,3 +40903,86 @@ mein Pfad"*; und **der Wert steht nicht im Ereignis**.
 Dazu eine Zahl, die er selbst berichtigt: *„Der Auftrag nennt 487 Commits Rückstand (Stand 23:53).
 Gemessen um 23:59: 504 […] ich nenne die Zahl meiner Messung und nicht die des Auftrags."*
 Vierte Rolle heute, die das so hält.
+
+## §513 — DoR Z1-E1-1 und Z1-E3-1: beide ERTEILT. Vier bzw. zwei Kriterien ohne Absage-Regel
+
+Stand: HEAD `d5ce42a4`, Baum 0, gen 11, Digest gleich. Zeit 00:13.
+**Basis-Stand beider Blätter: `97c610ca`**, Blätter aus `31ff1600`. Aus meinem Worktree gemessen
+(§510).
+
+Der Planner hat beide um 00:01:40 geschnitten, 11 Minuten nach der Anweisung. Ich fahre beide DoR
+in je einem Durchgang.
+
+### Votum Z1-E1-1: ERTEILT
+
+**blatt_blob** `71b16748` gemeldet, **`71b16748` gemessen** ✓ · 210 Zeilen ·
+**Zählstand 7 Kriterien / 7 Messbefehle / 7 Matrixzeilen.**
+
+**zahlen_nachgerechnet** — alle Rot-Lagen selbst am Basis-Stand:
+
+| Kriterium | gemeldet | gemessen |
+|---|---|---|
+| (a) `levels[0]` ohne Tests | 6 | **6** — ConfigWizard 228/229/244/245, HausplanerApp 373, hausplanerStore 116 |
+| (a) `aktiveEtage(` | 0 | **0** |
+| (b) `levelId: level.id` / Grundmenge | 10 / 39 | **10 / 39** |
+| (d) `PageUp\|PageDown` | 0 | **0** |
+| (e) `activeLevel.exists` | 42 | **42** |
+
+**Die tragende Behauptung trägt.** Der Titel sagt: *„der eigentliche Fund ist, dass die Ablehnung
+gebaut ist und nie auslösen kann."* Selbst gemessen:
+
+```
+vorbedingungen.ts:136   'activeLevel.exists': { …faehigkeit(FAEHIGKEIT_GESCHOSS_DA,
+                          'Kein aktives Geschoss.'), handlung: 'Lege ein Geschoss an' }
+HausplanerApp.tsx       ADD_-Aufrufe: 7
+                        regelnFuer / heuteUnerfuellbar / activeLevel.exists: 0
+```
+
+**Sieben Anlege-Wege, null Prüfungen.** Der Grundtext ist gebaut, die Fähigkeit an 42 Werkzeugen
+deklariert — und der Klick-Pfad fragt nie. Von 16 Exporten in `vorbedingungen.ts` haben **neun
+keinen einzigen Produktivverbraucher**, `regelnFuer` genau einen (`paketAdapter.ts`).
+
+**streichung_abwaerts / streichung_aufwaerts:** je keine.
+
+### Votum Z1-E3-1: ERTEILT
+
+**blatt_blob** `c7b2a4ee` gemeldet, **`c7b2a4ee` gemessen** ✓ · 257 Zeilen ·
+**Zählstand 7 / 7 / 7.**
+
+Der Planner hat meine §509-Warnung aufgenommen und den Titel geändert — statt „Decke bedienbar"
+jetzt: *„Die Decke lässt sich anlegen, aber nicht ändern, nicht löschen, und sie kennt ihre Rolle
+nicht."* Selbst nachgemessen:
+
+| | gemeldet | gemessen |
+|---|---|---|
+| `ADD_CEILING` | bedienbar, 2 Produktivaufrufer | **9 Codezeilen**, davon HausplanerApp:1120 und sammelBefehle:135 als Aufrufer |
+| `UPDATE_CEILING` | „genau zwei, beide Deklaration" | **2 Code** (`applyCommand:366`, `commands.types:30`) **+ 1 Kommentar** in `studioFixtures:205` |
+| `REMOVE_CEILING` | „genau zwei" | **2** — exakt |
+| `deckenLage` / `Abschlussdecke` | je 0 | **je 0** (Positivkontrolle `CeilingNode` 2 Dateien) |
+
+Die dritte `UPDATE_CEILING`-Zeile ist ein Kommentar, der die Lage selbst beschreibt
+(*„`EigenschaftenPanel.tsx`: 0"*) — seine Angabe „zwei **Codezeilen**" ist damit richtig.
+
+### Anmerkung zu beiden: Absage-Regeln fehlen
+
+```
+Z1-E1-1   3 von 7   ohne: (c) (d) (e) (f)
+Z1-E3-1   5 von 7   ohne: (d) (f)
+```
+
+Zum Vergleich: Z1-E4-1 trug **8 bei 9**. Das ist **kein Ablehnungsgrund** — die DoR prüft
+Messbarkeit, und alle vierzehn Kriterien haben Messbefehl und Rot-Lage. Eine Absage-Regel schärft,
+sie ist nicht die Bedingung.
+
+**Aber bei E1-(e) fehlt sie an der teuersten Stelle.** Genau dort ist das Kriterium leicht *formal*
+zu erfüllen und *sachlich* zu verfehlen: Ein Prüfaufruf irgendwo im Code erfüllt „`activeLevel.exists`
+wirkt" auf dem Papier, ohne im Klick-Pfad zu liegen — und dann ändert sich an den sieben
+`ADD_`-Wegen nichts. Das ist derselbe Mechanismus wie bei A-37-22b („ein Tor, das nach dem ersten
+Merge greift, hat den Schaden schon zugelassen").
+
+Vorschlag, ausdrücklich als Vorschlag: *„Eine Prüfung, die nicht im selben Pfad liegt wie die sieben
+`ADD_`-Aufrufe in `HausplanerApp.tsx`, erfüllt (e) nicht."* Ein Satz, und die Zahl kann nicht mehr
+allein stehen.
+
+Für E1-(c), E1-(d), E1-(f), E3-(d), E3-(f) sehe ich diese Gefahr nicht: Browserbeleg, Tastendruck
+und Suitezahl sind schwer falsch zu erfüllen.
