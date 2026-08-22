@@ -29640,3 +29640,95 @@ ich beauftragt hätte** — sie ruhen auf Zahlen, die ich nachgemessen habe. *De
 
 **Ball: niemand.** Kein Auftrag berührt. Der Abschnitt hält eine Regel fest, die von außen kam und
 auf mich anwendbar ist — **das ist der Zweck einer Prüfung, die auch die Prüfenden mitprüft.**
+
+## §366 — Alterungsprüfung Posten 6 (Seed-Weg der Prüfbühne): die Entscheidung ist da, der Empfänger fehlt — und vier von vier meiner STATUS-Zeilenzeiger zeigen auf etwas anderes
+
+Messstand: HEAD `de410ac0`, Baum 0, gemessen 15:21:52–15:22:05. Abschnittsnummer gegen den frischen
+HEAD gewählt (`grep -c '^## §366'` → 0). Siebte Alterungsprüfung, Posten 6 der Yama-Liste.
+
+### Teil 1 — der Posten selbst: entschieden am 13.08., neun Tage her, nicht gebaut
+
+Meine Tabelle führt Posten 6 als **entschieden**: *„ERLEDIGT 13.08.: Yama hat WEG C entschieden, mit
+drei Auflagen (fail closed, nur ticket_testing, idempotent)"*. Der Beschluss steht wörtlich in der
+Integration und nennt selbst die Folge:
+
+    der BAU steht aus und ist Planner- und Generator-Arbeit, nicht meine.
+
+**Selbst nachgemessen, über den Wert statt über den Dateinamen** — der Abnahme-Nutzer, an dem sich
+die Browserabnahme anmeldet:
+
+    a24-abnahme@example.test   VERWENDET  2x   scripts/a24-browserabnahme.mjs:17
+                                              scripts/w052-browserabnahme.mjs:60
+                               ANGELEGT   0x   database/ -> 0 Dateien
+    db:seed in w052-browserabnahme.mjs      0   (Zaehler am 13.08. gegengeprobt: eine
+                                                eingeschleuste Zeile wird gefunden)
+
+Zwei Verwender, null Anleger. **Alterung: 9 Tage, 2083 Commits auf der Integration seit dem Beschluss.**
+
+### Teil 2 — die Gegenprobe, die den Befund fast gekippt hätte
+
+Ein Auftrag mit passendem Namen existiert: `docs/auftraege/aktiv/A-03-browser-buehne-testdatenbank.md`.
+Hätte ich hier aufgehört, hätte ich „ist beauftragt" gemeldet. **A-03 deckt Weg C nicht ab:**
+
+    A-03   zustand: BETRIEBSBESTAETIGT   geschlossen 12.08.   Blatt zuletzt e30c7197, 05.08. 09:16
+           "ticket_testing"  11 Treffer      <- die Buehne, gebaut
+           "fail closed"      0 Treffer      <- Auflage 1, nicht enthalten
+           "idempotent"       0 Treffer      <- Auflage 3, nicht enthalten
+
+**A-03 wurde am 12.08. geschlossen — einen Tag BEVOR der Beschluss vom 13.08. fiel.** Es ist der
+Vorgänger, nicht der Empfänger. Gebaut ist die *Bühne* (`scripts/buehnen-waechter.sh`,
+`scripts/browser-buehne.sh`, beide 14.08. 22:15, dazu zwei Testdateien) — ein **Wächter**, der prüft,
+gegen welche Datenbank die Bühne läuft. Das ist Auflage 2 als eigenständiger Schutz. Der **Seed** ist
+etwas anderes, und er fehlt. Kein Blatt der 94 in `aktiv/` trägt ihn (Gegenprobe: Muster `buehne`
+trifft 23 Blätter, das Muster greift also).
+
+### Teil 3 — die Klassifikation, und warum sie den Posten von Yamas Liste nimmt
+
+Die bisherigen zwei Ausgänge trafen hier beide nicht:
+
+    N-003    Posten erledigt, Messung ueberholt          -> von der Liste
+    A-13     Posten offen, zu Recht bei Yama             -> bleibt
+    Posten 6 ENTSCHIEDEN, aber ohne Empfaenger           -> dritte Klasse
+
+**Yama schuldet hier nichts mehr.** Er hat am 13.08. entschieden, vollständig, mit drei Auflagen.
+Was fehlt, ist kein Beschluss, sondern ein **Auftrag** — Planner-Arbeit, wie der Beschluss selbst
+sagt. Ihn weiter unter „offene Posten bei Yama" zu führen, ist eine Fehladressierung: **es sieht aus,
+als warte die Kette auf Yama, während in Wahrheit die Kette auf sich selbst wartet.** Genau das ist
+die Lage, die ein Postenverzeichnis verhindern soll, und meines hat sie neun Tage lang erzeugt.
+
+### Teil 4 — der teurere Fund: meine eigene Belegform trägt nicht
+
+Beim Nachschlagen von Posten 6 zeigte `STATUS Z.3037` nicht auf den Beschluss, sondern auf
+`mein_anteil: "Ich habe geraeumt…"`. Das ist kein Einzelfall. **Vier meiner neun Posten belegen über
+eine Zeilennummer, und alle vier zeigen heute woanders hin:**
+
+    Posten  Zeiger                heute dort                        Inhalt liegt wirklich bei
+    P2      STATUS Z.7038-7047    LEERE ZEILE                       3959 / 5111
+    P5      STATUS Z.3042         "wieder weg' — im Futur…"         64 / 69 / 71
+    P5      STATUS Z.16843        "W-30 Flachdach-Aufbau…"          (dito)
+    P6      STATUS Z.3037         "mein_anteil: Ich habe geraeumt"  3058
+
+Der Grund ist **strukturell, nicht schlampig**: `docs/STATUS.md` wird nach Yamas §1-Entscheidung vom
+16.08. **erzeugt und nicht geschrieben** — sie wächst und wird umgeschrieben (heute 19.640 Zeilen).
+Eine Zeilennummer hinein ist ein Zeiger auf einen wandernden Baum, dieselbe Klasse wie mein §342.
+
+**Warum das die schlimmere Sorte Fehler ist:** P2 zeigt auf eine *leere* Zeile — das merkt man. Die
+anderen drei zeigen auf **plausibel aussehenden anderen Text**. Wer P5 nachschlägt, liest einen Satz
+über einen Futur-Fall und hält ihn für die versatz-Quittung. **Ein Zeiger, der ins Leere geht, meldet
+sich; einer, der auf etwas anderes zeigt, wird gelesen.** Das ist Punkt (a) des Vorratsauftrags,
+wörtlich, und er trifft mich selbst.
+
+**Abhilfe an mir, ab sofort:** Belege in `docs/STATUS.md` über **Inhaltsmuster** (`grep -n 'WEG C
+entschieden'`), nie über eine Zeilennummer. Für unveränderliche Dateien bleibt die Zeilennummer
+zulässig, wenn ein SHA danebensteht.
+
+### Was ich NICHT behaupte
+
+Ich habe **keinen DB-Lauf** gefahren (bis Z0-I1 gesperrt) — alles statisch am Bestand gemessen. Ob
+der Seed *fachlich* fehlt, entscheidet die Kette, nicht ich: möglich ist, dass die Browserabnahme
+bewusst gegen einen von Hand angelegten Nutzer fährt. Gemessen ist, dass sie ihn **nicht selbst
+anlegt** und dass **kein Auftrag** den Bau trägt.
+
+Ball: **niemand von mir aus.** Ich melde den Posten als fehladressiert und liefere die Messung; die
+Umbuchung von Yamas Liste auf einen Planner-Auftrag ist Sache des Dirigenten. Kein Blatt berührt,
+kein Votum geändert.
