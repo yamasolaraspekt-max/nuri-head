@@ -1,29 +1,19 @@
-auftrag_id: BAU-generator-paket-3
-generation: 15           # 2026-08-22T15:30:59+0200 — Z1-W2-1 CODE_FERTIG (1d193535, Spur-W-Mass gehalten: 2 Commits, 206 Zeilen Insel). NEU EINGESCHOBEN: Z1-W2-0 Bedienbarkeits-Probe (DoR ERTEILT, Plan-Pruefer) VOR Z1-W2-2/3 — sie ist das Messgeraet fuer deren Abnahme. Reihenfolge: Z1-W2-0 -> Z1-W2-2 -> Z1-W2-3. ACK gen 15; Lease weiterfuehren.
+auftrag_id: BAU-generator-Z2-W0-5b
+generation: 17           # 2026-08-22T15:53:35+0200 — Revision: Z1-W2-3 ist baubar (deine Berichtigung 15:52:42, einheitenfreie Winkelanalyse). Reihenfolge: Z2-W0-5b (falls begonnen: fertig bauen, sonst zuerst Z1-W2-3) -> Z1-W2-3 -> Z0-I1 Stufe 1 nach Errata. ACK gen 17; Lease weiterfuehren.
 rolle: generator
 sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8
-sitzung_gesperrt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b   # Vermerk (README 6h)
+sitzung_gesperrt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b   # Vermerk
 worktree: /Users/yamanuri/Documents/ticket-rolle-generator
 branch: rolle/generator
 prioritaet: P0
 aktion: bauen
-taetigkeit: "bauen (Generator): Z1-W2-0 (Bedienbarkeits-Probe, eine Datei) -> Z1-W2-2 -> Z1-W2-3 — je EINE Lieferung; Produktcode NUR Hausplaner-Insel"
-hinweg_zuerst: "git merge --no-edit -m 'generator: Hinweg — Integrationsstand. Herkunft: auto/hausplaner-integration @ <sha> -> rolle/generator @ <sha>' auto/hausplaner-integration (Blaetter + Register liegen in der Integration); bei Konflikt BASE_BLOCKED."
-blaetter:
-  - "Z1-W2-0 docs/auftraege/aktiv/Z1-W2-0-bedienbarkeits-probe.md @ rolle/planner adf03d32 (DoR ERTEILT, plan-pruefer-DOR-Z1-W2-0-ERTEILT.yaml) — ZUERST: __domtests__/werkzeugBedienbar.dom.test.ts, parametrisiert ueber TOOL_DEFINITIONS (Kuerzel -> aktiv -> Aktion -> Szene geaendert -> Escape), Rot-Probe Werkzeug ohne Bedienweg, 13/13 gruen oder je begruendet ausgenommen; Vorlage = die fuenf bestehenden __domtests__"
-  - "Z1-W2-1 docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md @ rolle/planner 4611267e (DoR 05c26de4, Blatt-Pruefstand 4611267e)"
-  - "Z1-W2-2 docs/auftraege/aktiv/Z1-W2-2-aufbautenstatus-anschliessen.md @ 59c82dae (DoR c2e8dd20)"
-  - "Z1-W2-3 docs/auftraege/aktiv/Z1-W2-3-grundriss-eckenanalyse-anschliessen.md @ 59c82dae (DoR c2e8dd20); Plan-Pruefer-Fruehhinweis zum Messbefehl Z1-W2-2 (plan-pruefer-frueher-hinweis-Z1-W2-2-messbefehl.yaml) beachten: Messbefehl ZITIEREN, bei Defekt melden statt nachbauen"
-spur_w_regeln: |
-  Je Blatt: EINE Lieferung (Commits <= 15 fuer alle drei zusammen anstreben; mind. 40 % Generator-Anteil ist dann automatisch), Bedienweg nach N4
-  des Blatts (Pruefung: Meldung am Objekt/Statusbereich, tragendes Werkzeug), Rot-Probe 'ohne Modul erscheint die Meldung nicht' SELBST ausloesen,
-  Tests der Insel gruen (Suite + tsc), KEIN Code ausserhalb der Hausplaner-Insel, KEIN Rechte/DB/Auth. Kein Kriterium aendern; Matrix-Bauspalten fuellen.
-  Abschluss je Blatt: generator-CODE_FERTIG-<Kennung>.yaml (Muster generator-CODE_FERTIG-Z1-W2-*) mit endstand_sha (Blatt-SHA), ergebnis_sha,
-  gelesen_bis, Browser-Hinweis fuer den Evaluator (wo klicken, was sichtbar). Reihenfolge 1 -> 2 -> 3; der Evaluator nimmt 1 ab, waehrend du 2 baust.
-  Commits NUR via commit-pruefen.sh (TICKET_ROLLE=generator, NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules); vor jedem Commit Rollenquelle+Digest lesen.
-verboten: [Code ausserhalb resources/planner/hausplaner, Rechte/DB/Auth, toolRegistry-Kennungen erfinden (nur aus dem Register), --no-verify, Rebase/Amend/Force, eigene Abnahme, rueckweg.py auf realen Baeumen]
-erlaubte_pfade: ["resources/planner/hausplaner/** (Insel)", "docs/auftraege/aktiv/Z1-W2-*.md NUR Matrix-Bauspalten", "eigener Baubericht"]
+taetigkeit: "bauen (Generator): Z2-W0-5b (Spur A) und Z1-W2-3 (Spur W, einheitenfreier Ausschnitt) — je eigene Lieferung -> Z0-I1 Stufe 1 nach Errata"
+blatt_z2_w0_5b: "blattpfad: docs/auftraege/aktiv/Z2-W0-5b-linked-ohne-wache.md ergebnis_sha: "14563070"  — docs/auftraege/aktiv/ (Kennung Z2-W0-5b) @ rolle/planner; Hinweg zuerst (Merge mit Herkunftszeile); Kriterien woertlich: linked an denselben Baustein wie link/unlink/addToPlan, fremd 403/404 bei BEIDEN Schalterstellungen, eigen 200, Vertragstest, Grundmenge api/planner/* GET mit {plannerItem} + STAND; Tests NUR gegen Test-DB (ticket_testing, TCP-Weg — Zugriff dreifach gemessen)."
+blatt_z1_w2_3: "docs/auftraege/aktiv/Z1-W2-3-grundriss-eckenanalyse-anschliessen.md @ rolle/planner 39260edd (DoR ERTEILT c2e8dd20): NUR eckenAnalyse/anzahlInnenwinkel/erwarteteInnenwinkel anschliessen (Kriterium b: Form gewaehlt, Kontur mit unpassender Innenwinkelzahl -> Meldung; passend -> keine), KEIN grundrissPolygon/FlaecheM2 (Herkunftsvermerk gilt dort weiter); Belege je Funktion; CODE_FERTIG-Ereignis generator-CODE_FERTIG-Z1-W2-3.yaml in ereignisse/BAU-generator-paket-3/ (Evaluator-Muster) — Hinweis ans Bundle wie bei Z1-W2-1."
+z0_i1_stufe_1: "ERST nach ereignisse/SPEZ-planner-anschlusswelle-1/planner-*errata*Z0-I1*.yaml bzw. planner-CODE_FERTIG-Z0-I1*nachtrag*.yaml (Muster): Blatt dann in der Errata-Fassung (DB-Ziel ticket_testing ueber TCP, DB-Lease, TEST_ROLLE, fail-closed, Seed Weg C). Kein Kausalsatz 'Sperre lag am Weg' in deinen Belegen."
+regeln: "Je Lieferung EIN CODE_FERTIG-Ereignis (generator-CODE_FERTIG-<Kennung>.yaml) mit endstand_sha/ergebnis_sha/gelesen_bis; Commits nur via commit-pruefen.sh (TICKET_ROLLE=generator, NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules); Bundle public/hausplaner/hausplaner.js NICHT committen (Bundle-Klaerung offen) — Hinweis an den Evaluator wie bei Z1-W2-1; kein Kriterium aendern; Negativproben in Test-DB/Probe-Root."
+verboten: [Produktcode ausserhalb des Blatt-Umfangs, Produktiv-DB, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Rebase/Amend/Force, eigene Abnahme, surfaceId/Pruefpflicht-Listen erfinden]
 steuerungshandlungen_erlaubt: [ACK, Lease-Heartbeat, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/BAU-generator-paket-3/generator-ack.yaml
-erstellt: "2026-08-22T14:39:32+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/BAU-generator-Z2-W0-5b/generator-ack.yaml
+erstellt: "2026-08-22T15:52:21+0200 Dirigent (atomar; Uhr: date)"
