@@ -106,7 +106,7 @@
 | **Z1-W2-4** Treppe ueber den Werkzeugregistry-Vertrag anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md` · **DoR ERTEILT** (plan-pruefer 16:21:25) · Planner-Blatt `418bcb6c` |
 | **Z1-W2-5** Wandflaeche anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` · Bau `5617dc4c` · CODE_FERTIG 18:52:39 · **die Wandflaeche erreicht den Benutzer** |
 | **Z1-W2-6** Auswechslung anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` |
-| **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | `BEREIT` | **Generator** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 |
+| **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 · Bau `1c6b7601` · CODE_FERTIG 19:14:05 · **Buendel im Bau-Commit** (V-5) |
 | **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `BEREIT` | **Generator** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht · **DoR ERTEILT** 19:06:40 mit zwei Halbsaetzen (§429) — Bau kann sofort beginnen |
 | **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `NACHBESSERN` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` · **NACHBESSERN** 19:04:28, 8 von 10 Kriterien, Reifegrad `code-geprueft mit Ausloesung` — zwei Zusagen nennen das Vorhandene statt das Wirkende |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -19316,8 +19316,8 @@ herkunft_dieses_blocks: |
 ```yaml
 auftrag: "Z1-V1-1"
 titel: "Sammelblatt Spur V — Anzeige am ausgewaehlten Objekt, fuenf Module"
-zustand: BEREIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 blatt: "docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md"
 blatt_sha: 3ab3bb88
 basis_sha: 3daf4f1e
@@ -19333,7 +19333,7 @@ dor_beleg: |
   nie die Kriterien. Ich trage sie deshalb hier ein, ohne dass es ein eigenes DoR-Ereignis fuer
   Z1-V1-1 gibt — und halte ausdruecklich fest, dass ich nach einem gesucht habe: keines
   vorhanden, und nach Nachtrag 1.6 soll auch keines entstehen.
-bau_sha: "noch offen"
+bau_sha: 1c6b7601
 herkunft_dieses_blocks: |
   Statusplatz vom integrator im Transportlauf angelegt, im selben Lauf wie der Transport des
   Blattes (Dauerregel gen 9 Punkt 2) — diesmal ohne Verspaetung: geschnitten 18:43:10,
@@ -19378,6 +19378,17 @@ berichtigung_dor: |
   offenlegt, macht sie pruefbar."
   DIE LEHRE FUER MICH: ich darf schreiben, was ich gemessen habe. Was daraus folgen SOLL, ist
   eine Regelauslegung und gehoert nicht in einen Beleg meiner Hand.
+
+zustand_nachgezogen: |
+  CODE_FERTIG aus generator-CODE_FERTIG-Z1-V1-1.yaml, 19:14:05, endstand und ergebnis 1c6b7601.
+  Sein Betreff: "vier gepruefte Module bekommen eine Anzeige am ausgewaehlten Objekt."
+  DAS ERSTE SPUR-V-SAMMELBLATT IST GEBAUT — geschnitten 18:43:10, DoR 18:49:13, gebaut 19:14:05.
+  Einunddreissig Minuten vom Zuschnitt bis zum fertigen Bau, fuer vier Module in einem Durchgang.
+  DAS BUENDEL LIEGT IM BAU-COMMIT, wie V-5 es seit 19:05:47 fuer jede Lieferung verlangt:
+  public/hausplaner/hausplaner.js, 1520902 -> 1532191 Bytes, angefasst im selben Commit wie
+  DachKennzahlen.tsx, TreppentypAnzeige.tsx und EigenschaftenPanel.tsx.
+  Das Ereignis nennt ball: [evaluator, integrator]. Mein Teil ist Transport und dieser Eintrag,
+  beides erledigt; in der Tafel steht Evaluator.
 
 ```
 
