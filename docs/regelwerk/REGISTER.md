@@ -44,6 +44,13 @@ Rollenquelle, kein Branch, kein Worktree. Yama entscheidet und gibt frei; der Di
 **Dispatcher** (Z0-I4) ist reine Zustellinfrastruktur, keine Rolle. Ein Intendant käme nur auf separate Entscheidung Yamas
 und nur strategisch (Portfolio, Priorisierung), nie mit Routing oder Freigaberecht.
 
+**Nachtrag 1.5 „Bedienweg zuerst" (in Kraft, Dirigent in Yamas Namen, 22.08.2026 14:2x):**
+[`ARBEITSREGELN-NACHTRAG-1-5-V3.md`](ARBEITSREGELN-NACHTRAG-1-5-V3.md) — N4 Bedienweg-Zeile (neben N3), Werkzeug-Register als
+Brücke, Spur W mit Eignung und harten Grenzen, Abnahme = Bedienbarkeit (Reifegrad), Eigenausrüstung nur aus drei Quellen,
+Berichtigungen stapeln nicht, Zustand aus dem Ereignis, Abnahme vor Zuschnitt (Deckel 6 / 24 h), sechs Lagebericht-Messgrößen,
+Planungsmodell Konzept → Meilenstein → Auftrag → Aufgabe → Kriterium. Einarbeitung in ARBEITSREGELN.md durch den Planner.
+Entscheidungen in Yamas Namen: [`../auftraege/YAMA-ENTSCHEIDUNGEN-2026-08-22.md`](../auftraege/YAMA-ENTSCHEIDUNGEN-2026-08-22.md).
+
 **Aufgehoben, aber erhalten:** [`docs/HAUSREGELN.md`](../HAUSREGELN.md) trägt seit 12.08.2026
 keinen Regelinhalt mehr — ihr Inhalt steht in ARBEITSREGELN §18a. Nicht gelöscht, weil der Weg
 dorthin nachvollziehbar bleiben soll.
