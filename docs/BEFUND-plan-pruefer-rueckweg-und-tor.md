@@ -39858,3 +39858,45 @@ geprüft.
 
 **Selbstbindung, zusätzlich zu §494:** Bevor ich eine Zahl aus einer Quelle in eine Rechnung
 übernehme, messe ich, **was sie bezeichnet** — nicht nur, dass sie dort steht.
+
+## §497 — Vorratsposten (d): kein Stillstand. Zwei auffällige Zahlen, beide erklärt
+
+Stand: HEAD `56aa1f9d`, Baum 0, gen 11, Digest gleich. Zeit 23:18. Messstand der Prüfung:
+`b7de5e37` (Integration).
+
+Alterung über alle Rollenzweige gemessen. Zwei Zahlen fielen auf, **keine ist ein Stillstand**:
+
+| Rolle | Zweig-Stille | Befund |
+|---|---|---|
+| `release-pruefer` | **548 Min** | **geparkt** — Rollenquelle gen 4: `aktion: parken`, „warten (Release-Prüfer)", Vermerk „weiterhin geparkt". Letzte Meldung 14:05, drei Parkordner. **Konsistent.** |
+| `generator` | **150 Min** | **arbeitet** — 43 ungetrackte Pfade im Worktree, letzte Meldung vor 28 Min. Der Zweig schweigt, weil der Bau noch nicht committet ist. |
+
+Die übrigen: Planner 11 Min, Evaluator 13, Dirigent 0, ich 1. Die Kette läuft.
+
+### Ein eigener Griff, wieder zu eng — diesmal vor dem Melden gefangen
+
+Ich hatte aus der `taetigkeit`-Zeile der Generator-Rollenquelle geschlossen, sie nenne E4 nicht:
+
+```
+taetigkeit: "bauen (Generator): STOPP-REGEL .env -> ticket_testing; Nachbesserungen aus Voten (E0, Z1-W2-8, Z0-I1-…"
+```
+
+Die Zeile ist abgeschnitten und nennt E4 tatsächlich nicht. **Die Datei schon:** `E4` 3 Treffer,
+`E4-1` 1, `Bodenplatte` 1. Hätte ich die Zeile als Beleg genommen, hätte ich gemeldet, der Generator
+baue etwas, das seine Steuerungsquelle nicht kennt — ein schwerer Vorwurf aus einem Zeilenausschnitt.
+
+Das ist derselbe Fehlertyp wie §475 („ich habe einen Zweig für die ganze Funktion genommen"), nur
+an einer YAML-Datei statt an Code: **Ausschnitt statt Grundmenge.** Punkt 7 nennt es
+„Grundmenge gegen die Frage prüfen statt gegen das Verfahren" — die Frage war „kennt die Quelle
+E4?", das Verfahren war „lies die `taetigkeit`".
+
+Und eine ausgefallene Messung im selben Durchgang: `find … | xargs ls -t` brach mit „command line
+cannot be assembled, too long" ab und lieferte eine **leere** letzte Meldung. Ersetzt durch
+`stat`-Sortierung ohne `xargs` — Ergebnis 22.08. 14:05, 550 Minuten. Die leere Ausgabe hätte als
+„keine Meldung vorhanden" durchgehen können.
+
+### Was offen bleibt
+
+Nichts in meiner Bahn. Ich warte auf den neuen Blatt-SHA von Z1-E4-1, um die Halbsätze zu
+Kriterium d und e zu quittieren — der Dirigent hat mich um 23:04 und 23:12 zweimal darum gebeten,
+ausdrücklich **ohne** neuen Durchgang (Nachtrag 1.5).
