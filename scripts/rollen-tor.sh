@@ -756,6 +756,17 @@ fi
 #
 # **Gemeldet und nicht still entschieden:** wer will, dass der halb installierte Baum SPERRT,
 # gibt A-37-14 einen Rueckgabewert. Dann ist es eine Zeile hier.
+# ⚠ Diese Funktion stand zuerst MITTEN im if/elif-Block darunter — und wurde damit nur
+# definiert, wenn der erste Zweig lief. Der elif rief sie dann ins Leere:
+# "marke_feld: command not found", und das Tor gab exit 6 fuer eine Marke, die stimmte.
+# Vom eigenen Lauf gefangen, nicht vom Nachdenken — dieselbe Klasse wie der Block, der
+# im Kopf dieser Datei einmal hinter einem exit 0 lag und deshalb unerreichbar war.
+marke_feld() {
+  # $1 = Feldname, $2 = Datei. Leer, wenn der Name fehlt. awk trennt bei Whitespace-FOLGEN,
+  # nicht bei jedem einzelnen Zeichen — genau der Unterschied zu cut.
+  awk -v n="$1" '{for (i=1; i<NF; i++) if ($i == n) { print $(i+1); exit }}' "$2" 2>/dev/null
+}
+
 MARKE="$BAUM/node_modules/.aus-lockfile"
 LOCKDATEI="$BAUM/package-lock.json"
 if [ -f "$LOCKDATEI" ]; then
@@ -771,11 +782,33 @@ if [ -f "$LOCKDATEI" ]; then
     fi
     echo "            Marke schreiben: bash scripts/module-nachziehen.sh  (faehrt npm ci)" >&2
     echo "            Durchgelassen und NICHT als gueltig verbucht — s. Kopf dieser Datei." >&2
-  elif [ "$(cut -d' ' -f2 < "$MARKE" 2>/dev/null)" != "$LOCK_HASH" ]; then
+# ── DIE MARKE WIRD UEBER DEN FELDNAMEN GELESEN, NICHT UEBER DIE POSITION ───────────────────
+#
+# **Gefunden beim Gegenpruefen von A-37-13, und der Befund stand in der eigenen Meldung:**
+# die Negativprobe gab aus `geschrieben:    zeit` — also den FELDNAMEN statt des Zeitstempels.
+#
+# **Gemessen, Feld fuer Feld:**
+# ```text
+#   Marke:  hash <sha>  zeit <stempel>  node <v>  npm <v>
+#   cut -f2 -> <sha>        f3 -> (leer)     f4 -> zeit     f5 -> <stempel>
+# ```
+# *Die Marke trennt ihre Felder mit ZWEI Leerzeichen, und `cut -d' '` zaehlt jedes einzeln.*
+# **Jedes Feld ab dem zweiten Trenner liegt um eins daneben** — `-f2` traf nur zufaellig, weil
+# davor ein einfaches Leerzeichen steht.
+#
+# ***A-37-15 verlangt die vier Feldnamen ausdruecklich.*** **Dann ist der Name auch der richtige
+# Zugriff.** Eine Position zaehlt Trennzeichen; ein Name liest, was dasteht. *Wer Feldnamen
+# schreibt und dann nach Position liest, hat die Namen umsonst.*
+#
+# **Nicht behoben, weil ausserhalb meiner erlaubten Pfade und deshalb GEMELDET:**
+# `scripts/module-nachziehen.sh:142` liest `cut -d' ' -f2` fuer den Hash — dieselbe Bauform,
+# heute richtig aus demselben Zufall. Sie bricht, sobald jemand die Feldfolge aendert.
+
+  elif [ "$(marke_feld hash "$MARKE")" != "$LOCK_HASH" ]; then
     echo "ROLLEN-TOR  MODULSTAND  die Module in $VERZ gehoeren nicht zu diesem package-lock.json." >&2
     echo "            Lockfile jetzt: $LOCK_HASH" >&2
-    echo "            Marke sagt:     $(cut -d' ' -f2 < "$MARKE" 2>/dev/null)" >&2
-    echo "            geschrieben:    $(cut -d' ' -f4 < "$MARKE" 2>/dev/null)" >&2
+    echo "            Marke sagt:     $(marke_feld hash "$MARKE")" >&2
+    echo "            geschrieben:    $(marke_feld zeit "$MARKE")" >&2
     echo "            Abhilfe: npm ci in diesem Baum — bash scripts/module-nachziehen.sh" >&2
     echo "            Ein Lauf auf fremden Modulen ist gruen oder rot aus Gruenden, die nicht" >&2
     echo "            im Code stehen. Das ist die Sorte Fehler, die beim naechsten Mal weg ist." >&2
