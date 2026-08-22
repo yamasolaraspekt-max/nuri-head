@@ -28728,3 +28728,239 @@ werde ich N4 prüfen.**
 
 **Ball: Planner** (die zwei Module ins Register, jetzt mit Sperrwirkung) · **Dirigent** (ob N4
 rückwirkend gilt — ich lege meine Auslegung offen, entscheiden muss er). Bei mir sonst nichts offen.
+
+## §350 — DoR Z1-W2-1: ERTEILT, mit dem Halbsatz statt einer Auflagen-Schleife
+
+Gewählt gegen HEAD `ff3eaae8` (Baum sauber, 14:25:45). §350 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok. **Prüfstand: Blatt `4611267e`** (= Planner-HEAD).
+
+**Wie der Ball zu mir kam.** `planner-CODE_FERTIG-Z1-W2-1.yaml` (14:23:30), `ball: [plan-pruefer,
+planner]`, im Blatt `ballbesitz: "plan-pruefer (DoR)"` und `dor_beleg: "steht aus — plan-pruefer"`.
+**Mein Auftrag gen 9 nennt als Auslöser Z2-W0-5b, nicht Z1-W2-1** — ich fahre die DoR trotzdem: DoR
+ist die Rollenaufgabe (§4/§5), der Auftrag setzt den Schwerpunkt, und das Blatt ist P0 mit
+ausstehendem `dor_beleg` in meiner Bahn. **Ich lege das offen, statt es stillschweigend zu tun.**
+
+**Der erste Testfall für N4 — und er ist bestanden.** Das Blatt ist 3 Minuten nach Inkrafttreten der
+Regel geschnitten (N4 seit 14:20:19, Blatt 14:23:30) und trägt einen eigenen Abschnitt *„## N4 —
+Bedienweg"* mit allen fünf Angaben: **Auslöser** (die Bearbeitung selbst), **Ort der Meldung** (am
+Objekt bzw. Statusbereich, Komponente im Bau zu benennen), **tragendes Werkzeug** (W-40), **kein**
+(Leisteneintrag/Menüpunkt/Registry-Kennung), **Zielreifegrad** `BROWSERABGENOMMEN`. Der Kopf trägt
+zusätzlich `registry_kennung: "KEINE … (siehe N4)"`. **Das ist die von N4 verlangte
+Zweitform — nicht „Bedienweg", sondern ausdrücklich „kein Leisteneintrag, Anschluss über W-40".**
+
+**Selbst nachgemessen, nicht übernommen:**
+
+    Kriterien Z1-W2-1-a..f            6      N3-Matrixzeilen  6      deckungsgleich
+    Messbefehle                       6      Absage-Regeln    4
+    Rot-Lagen benannt                 a, b, c, e   (d und f sind Schutzbelege am Bau-Diff)
+    Rueckweg-Abschnitt                vorhanden   Nicht-Ziele  vorhanden
+    basis_sha = mess_sha = d3efc5c8   beide genannt
+
+**Die Rot-Lage von (a), selbst gefahren — und hier sitzt der eine Mangel.** Das Blatt schreibt:
+*„`grep -rl 'pruefeOeffnungsIntegration\|pruefePaketIntegration'` über den Produktivpfad (ohne
+`__tests__`/`__domtests__`) → **0**"*. Gemessen:
+
+    Produktivpfad, beide Funktionsnamen        -> 1 Datei: geometry/integrationAbgleich.ts
+    dieselbe Menge ohne die Definitionsdatei   -> 0
+    Gegenprobe des Griffs: 'dachFlaechen' 6 Dateien · erfundener Name 0
+
+**Der Befehl trifft die Datei mit, die die Funktionen *definiert*.** Die Sache stimmt — es gibt
+**keinen Verbraucher** —, aber die Erwartung `0` verfehlt der eigene Messbefehl um genau diese eine
+Datei. **Bei der Abnahme misst der Evaluator 1 gegen 0 und müsste rot geben, obwohl der Zustand rot
+*ist* und bleiben soll.** *Dieselbe Klasse wie A-43-11 (Erwartung 1, Ergebnis 2), nur umgekehrt.*
+
+**Kein Auflagen-Pingpong — der Halbsatz steht hier.** Mein Auftrag gen 9 verlangt es wörtlich:
+*„ERTEILT/NICHT ERTEILT (keine Auflagen-Schleife: Halbsätze im Votum mitliefern)"*. Also:
+
+> **(a) Messbefehl, ergänzt:** `… über den Produktivpfad (ohne `__tests__`/`__domtests__`) **und
+> ohne die Definitionsdatei `geometry/integrationAbgleich.ts` selbst** → **0**.
+> *Alternativ ohne Änderung des Befehls: Erwartung „**1** — und zwar nur die Definitionsdatei".*
+
+## Votum: ERTEILT
+
+Sechs Kriterien, sechs Matrixzeilen, N3 und N4 vollständig, Rot-Lagen benannt und von mir an der
+tragenden Stelle nachgemessen, Rückweg und Nicht-Ziele vorhanden, `basis_sha` und `mess_sha`
+genannt. **Der eine Mangel ist ein Halbsatz am Messbefehl von (a) und steht oben** — er blockiert
+nichts und braucht keine zweite Runde.
+
+**Was gut ist und ich nicht erneut prüfe:** Die Absage-Regeln greifen die richtigen Fehlerbilder ab
+— *„Ein Konsolen-Log erfüllt (a) nicht"*, *„Ein Test, der die Funktion direkt aufruft, erfüllt (b)
+nicht"*, *„`headless` erfüllt (e) nicht — die Szene rendert dann nicht"*. **Das ist Bedienbarkeit
+als Abnahmemaßstab, genau wie N4 sie verlangt**, und die (c)-Rotprobe verhindert, dass (b) nur
+belegt, *dass irgendetwas* erscheint.
+
+**Ball: Planner** (Halbsatz eintragen, keine neue DoR nötig) · die zwei Geschwisterblätter folgen
+laut seiner Meldung und sind strukturgleich — **wenn sie denselben Messbefehl tragen, tragen sie
+denselben Mangel.**
+
+## §351 — Blätter gegen Blöcke: 34 Blätter melden einen DoR-Beleg als ausstehend, den der Block trägt
+
+Gewählt gegen HEAD `05c26de4` (Baum sauber, 14:34). §351 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok. **Statuswahrheit aus `auto/hausplaner-integration`** (§342).
+
+**Wache-Punkt 2, den ich heute nur oberflächlich gefahren habe.** Gemessen:
+
+    Blaetter in docs/auftraege/aktiv/ mit  dor_beleg: "steht aus"      39
+      davon Blockzustand BETRIEBSBESTAETIGT                            32
+                         ABGENOMMEN                                     2
+                         BEREIT                                         2
+                         ZURUECKGEZOGEN                                  1
+                         ENTWURF                                        1
+                         (noch kein Block)                              1   <- Z1-W2-1, 11 min alt
+      davon MIT dor_beleg im BLOCK                                     37
+      davon Block hat Beleg UND Zustand ist durch                      34
+
+**Ein einziges der 39 ist der legitime Fall** (`ENTWURF`, Beleg steht wirklich aus) — dazu mein
+eigenes Z1-W2-1, das seit 11 Minuten erteilt ist und dessen Block noch entsteht. **Bei 34 sagt das
+Blatt „steht aus", während der Block den Beleg führt und der Auftrag betriebsbestätigt oder
+abgenommen ist.**
+
+**Kein Mangel gegen jemanden — die Regel erklärt es.** §5/A-20: *„Wer danach prüft oder baut,
+**ÄNDERT Felder in diesem einen Block**. Er legt keinen zweiten an. Nie."* **Der Block ist der
+maßgebliche Ort; das Blattfeld ist der Anfangszustand und wird bewusst nicht nachgezogen.**
+
+**Was es trotzdem zu einem Befund macht: die Pflege ist uneinheitlich.** A-37 trägt im Blatt gerade
+**nicht** „steht aus", sondern *„NICHT ERTEILT — 3. Runde, **siehe `docs/STATUS.md`**. Restpunkte
+16.08. behoben."* — der Block dazu sagt *„BEREIT — 2. Runde 15.08."*, Zustand `ABGENOMMEN`.
+**Manche Blätter werden nachgezogen, 39 nicht.** Wer ein Blatt liest, weiß also nicht, ob das Feld
+den Anfangszustand oder den aktuellen meint.
+
+*Das ist dieselbe Klasse wie die Zeilennummern in A-34 („zeigen auf die falsche Formel") und wie
+mein §346: **ein Feld, das mal gepflegt wird und mal nicht, ist unzuverlässiger als eines, das nie
+gepflegt wird** — denn beim zweiten weiß man wenigstens, dass man es nicht lesen darf.*
+
+**Warum es gerade jetzt zählt.** N4 ist seit 14:20:19 in Kraft und verlangt eine **Blattangabe** vor
+dem DoR (*„Jedes Produkt-Blatt nennt vor dem DoR …"*). **Damit gewinnen Blattfelder an Gewicht, und
+die Frage, welche davon gepflegt werden, ist nicht mehr nur Ordnung.** A-37s eigenes Blattfeld zeigt
+den Ausweg schon: es trägt den Zeiger *„siehe `docs/STATUS.md`"* mit.
+
+**Zwei eigene Messfehler, beide gefunden und behoben.**
+
+**(1) Blockgrenze zu früh.** Mein erster Griff brach den Block bei der ersten Leerzeile ab und
+meldete für A-21 *„kein `dor_beleg` im Block"*. **Falsch** — der A-37-Block allein enthält **5**
+Leerzeilen, und A-21 trägt den Beleg sehr wohl. Mit der Blockgrenze *„bis zur nächsten
+`auftrag:`-Zeile"* neu gefahren: 105 Blöcke, 65 mit Beleg, 40 ohne. **Eine Grenze, die aus dem
+Augenschein stammt statt aus der Struktur, misst das Falsche.**
+
+**(2) Die Stichprobe hätte mich fast in die Irre geführt.** Aus A-37 (Blatt sagt „NICHT ERTEILT",
+Block sagt „BEREIT") wäre beinahe der Befund *„zwei Wahrheiten über denselben Beleg"* geworden.
+Erst der Blick in das Blattfeld selbst zeigte den Zusatz *„siehe `docs/STATUS.md`"* — **es ist ein
+Zeiger, kein Duplikat.** Der Befund ist dadurch kleiner und richtiger geworden.
+
+**Ball: niemand.** Keine Forderung, kein DoR-Gegenstand. Die Zahl **34 von 39** geht als Lesewarnung
+weiter: **`dor_beleg` im Blatt ist kein Statusträger — maßgeblich ist der Block.** Wer das Blatt
+liest, muss den Block dazunehmen; das gilt für mich zuerst.
+
+## §352 — Früher Hinweis, kein Votum: das zweite Geschwisterblatt trägt einen Messbefehl, der immer 0 gibt
+
+Gewählt gegen HEAD `43e80cbb` (Baum sauber, 14:34). §352 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok.
+
+**Lage und Grenze zuerst.** `Z1-W2-2-aufbautenstatus-anschliessen.md` liegt im Planner-Worktree als
+**ungetrackte** Datei (`??`), der Planner-HEAD ist unverändert (`4611267e`), **keine Meldung liegt
+vor**. **Das Blatt ist damit nicht in meiner Bahn — kein Auslöser, kein `CODE_FERTIG`, kein Ball.
+Dies ist ausdrücklich kein Votum und keine DoR.** Lesen steht mir frei; prüfen und votieren werde
+ich erst, wenn es gemeldet ist.
+
+**Warum ich trotzdem melde.** In §350 habe ich zu den Geschwisterblättern geschrieben: *„wenn sie
+denselben Messbefehl tragen, tragen sie denselben Mangel."* Nachgesehen — **sie tragen einen
+anderen, und er ist schwerer.**
+
+    Z1-W2-1 (gemeldet, ERTEILT):
+      grep -rl 'pruefeOeffnungsIntegration\|pruefePaketIntegration'   -> 1   BRE-Alternative, korrekt
+      Mangel: Erwartung "0", tatsaechlich 1 (die Definitionsdatei)    -> Halbsatz, §350
+
+    Z1-W2-2 (ungetrackt, nicht gemeldet):
+      grep -rl 'aufbautenOhneFlaeche|istAufbauPruefpflichtig|AUFBAUTEN_WARNUNG'  -> 0
+      dieselbe Menge mit -E                                                      -> 1
+      Gegenprobe: die Zeichenfolge mit literalem '|' kommt im Baum 0 mal vor
+      Gegenprobe des Griffs: 'dachFlaechen' mit -E -> 9 Dateien
+
+**Ohne `-E` ist `|` in `grep` kein Alternativ-Zeichen, sondern ein gewöhnliches Zeichen.** Der
+Befehl sucht die *Zeichenfolge* `aufbautenOhneFlaeche|istAufbauPruefpflichtig|AUFBAUTEN_WARNUNG` —
+die es nirgends gibt und nie geben wird. **Er gibt 0, und zwar immer.**
+
+**Das ist gefährlicher als der Mangel in Z1-W2-1, weil die Zahl richtig aussieht.** Die Rot-Lage
+erwartet 0 und bekommt 0 — **der Befund scheint bestätigt.** Aber nach dem Bau, wenn Verbraucher
+existieren, gibt derselbe Befehl **weiterhin 0**; die Abnahme läse die Rot-Lage als unverändert und
+müsste den Bau für wirkungslos halten. **Ein Messbefehl, der jede Rot-Lage bestätigt und keine
+widerlegen kann, misst nichts.**
+
+*Es ist dieselbe Metazeichen-Klasse wie heute schon zweimal: §334 (`$` als Zeilenend-Anker statt
+Dollarzeichen) und A-43-11 (`\|` als literales Pipe statt Alternative). **Drittes Mal an einem Tag,
+drittes Zeichen, dieselbe Ursache** — ein Muster, das in einer anderen Grammatik gelesen wird als
+gedacht. Und das Geschwisterblatt zeigt, dass es nicht an einer Person hängt: **Z1-W2-1 macht
+denselben Fall richtig** (`\|` in BRE), zwanzig Minuten früher geschrieben.*
+
+**Abhilfe, ein Zeichen:** `grep -rlE` — oder `\|` wie im Schwesterblatt. **Und wenn das Blatt
+gemeldet wird, gehört zusätzlich der Halbsatz aus §350 hinein:** die Erwartung ist dann **1** (die
+Definitionsdatei `geometry/aufbautenStatus.ts`), nicht 0.
+
+**Ball: niemand — das Blatt ist nicht gemeldet.** Der Hinweis geht als eigenes Ereignis an den
+Planner (P-02 Punkt 3), damit er es vor der Meldung anfassen kann statt danach. **Ein Hinweis vor
+der Meldung spart die Runde, die eine Auflage kosten würde** — und genau das verlangt mein Auftrag
+gen 9 mit *„keine Auflagen-Schleife"*.
+
+## §353 — DoR Z1-W2-2 und Z1-W2-3: ERTEILT, ein Zeichen als Halbsatz
+
+Gewählt gegen HEAD `69b8f443` (Baum sauber, 14:35:41). §353 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok. **Prüfstand: Blatt `59c82dae`** (= Planner-HEAD).
+
+**Ball:** `planner-CODE_FERTIG-Z1-W2-2-und-3.yaml` (14:34:02), `ball: [plan-pruefer, planner]`,
+*„Plan-Prüfer: DoR für Z1-W2-2 und Z1-W2-3 (strukturgleich mit dem erteilten Z1-W2-1)."* Damit ist
+Paket 3 vollständig spezifiziert.
+
+**Beide Blätter, selbst gemessen:**
+
+    Z1-W2-2  174 Zeilen · 7 Kriterien · 7 N3-Matrixzeilen · N4-Abschnitt (8 Zeilen) · 7 Messbefehle
+             5 Absage-Regeln · Rueckweg · basis_sha 4611267e · Zielreifegrad BROWSERABGENOMMEN
+    Z1-W2-3  196 Zeilen · 7 Kriterien · 7 N3-Matrixzeilen · N4-Abschnitt (7 Zeilen) · 7 Messbefehle
+             5 Absage-Regeln · Rueckweg · basis_sha 4611267e · Zielreifegrad BROWSERABGENOMMEN
+
+Kriterien und Matrixzeilen sind in beiden **deckungsgleich**; N4 ist in beiden vorhanden — das ist
+der zweite und dritte Testfall der neuen Regel, beide bestanden.
+
+**Mein §350-Halbsatz ist bereits eingearbeitet.** Beide Rot-Lagen tragen ihn wörtlich:
+*„ohne `__tests__`/`__domtests__` **und die Datei selbst** → 0"*. **Die Erwartungsfrage aus Z1-W2-1
+stellt sich hier nicht mehr** — er hat sie mitgenommen, ohne dass es eine zweite Runde gekostet hat.
+*Das ist genau, wofür die Vorgabe „keine Auflagen-Schleife" da ist.*
+
+**Der eine verbliebene Mangel ist ein Zeichen — und er steht in beiden Blättern.** Selbst gefahren:
+
+    Blatt      wie im Blatt (grep -rl)   mit -E   mit -E ohne Definitionsdatei
+    Z1-W2-2            0                    1                 0
+    Z1-W2-3            0                    1                 0
+    Gegenprobe: bekannter Name mit -E -> 9 Dateien · erfundener -> 0
+
+**Ohne `-E` ist `|` in `grep` kein Alternativ-Zeichen.** Der Befehl sucht die Zeichenfolge *samt
+Pipes* und findet sie nie. **Er gibt 0 — und zwar auch nach dem Bau, wenn Verbraucher existieren.**
+Die Rot-Lage sähe dann unverändert aus, und die Abnahme müsste den Bau für wirkungslos halten.
+**Mit `-E` und dem bereits vorhandenen Ausschluss trifft die Erwartung `0` dagegen exakt** — die
+Zahl bleibt gleich, aber sie misst dann etwas.
+
+> **Halbsatz für beide Blätter:** `grep -rl` → **`grep -rlE`**. *(Alternativ `\|` statt `|`, wie es
+> Z1-W2-1 macht.)* Sonst nichts.
+
+## Votum: ERTEILT für Z1-W2-2 und Z1-W2-3
+
+Sieben Kriterien je Blatt, Matrix deckungsgleich, N4 vollständig, Rot-Lagen von mir an der tragenden
+Stelle nachgemessen, Rückweg und `basis_sha` vorhanden. **Der Mangel ist ein Zeichen und steht
+oben** — keine zweite Runde.
+
+**Was ich mir selbst zuschreibe: mein Hinweis kam zu spät.** Ich habe den Pipe-Fehler um **14:33:56**
+als frühen Hinweis abgelegt (§352, ausdrücklich ohne Votum, weil das Blatt damals ungetrackt war).
+Seine Meldung fiel um **14:34:02** — **sechs Sekunden später**, und sein Lauf hatte um 14:27:52
+begonnen. **Der Hinweis konnte nicht mehr wirken.** *Das ist derselbe Zustellabstand, den ich heute
+viermal bei anderen gemessen habe (B-008, Lesesitzung, §341, N4-Regel) — jetzt an mir, und in der
+Richtung, die ich nicht bedacht hatte: nicht zu spät gelesen, sondern zu spät geschrieben.*
+**Ein früher Hinweis nützt nur, wenn er vor dem Prozessstart des anderen liegt, nicht vor seiner
+Meldung.**
+
+**Was er aufgenommen hat, und das gehört gewürdigt.** Meinen §349-Befund hat er nachgemessen und
+die Registerlücke geschlossen — mit eigener Tabelle *„Typmodul — kein Anschluss, kein Rückstand"*.
+Und er benennt die Ursache der Zahlendifferenz selbst: *„er maß 0 über den vollen Pfad, ich 1 über
+den bloßen Namen. Eine Nennung im Fließtext ist keine Registerzeile. Ort ist nicht Wirkung."*
+**Das ist P7 in seinen Worten, an seiner eigenen Zahl.**
+
+**Ball: Planner** (ein Zeichen in zwei Blättern) · Paket 3 ist damit aus meiner Sicht vollständig
+spezifiziert und baureif.
