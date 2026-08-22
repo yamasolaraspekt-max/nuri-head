@@ -1,30 +1,27 @@
 auftrag_id: BAU-generator-A-37
-generation: 6            # 22.08. 08:2x — PAUSE VOR DEM ERSTEN COMMIT (Yama): A-37 bekommt eine Nachschaerfung (Ausfuehrungsberechtigung rueckweg.py, Doppelgaenger per Aehnlichkeit, Proben nur im Wegwerf-Repo). Bau ruht bis DoR der Nachschaerfung; dann gen 7 = bauen.
+generation: 7            # 22.08. 08:2x — PAUSE ERSETZT (Yama): die Pause gen 6 wurde ueberlaufen (Commit 1155709d 08:16:37 nach Veroeffentlichung 08:12). Deine Sitzung ist deshalb TECHNISCH angehalten (SIGSTOP, reversibel). Eingefroren: HEAD 1155709d + zwei offene Skriptaenderungen. Beim Weiterlauf (CONT) ZUERST diesen Auftrag lesen.
 rolle: generator
-sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8
+sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8   # PID 88088 — SIGSTOP seit 08:2x; CONT erst nach DoR der Nachschaerfung und neuer Baugeneration
 worktree: /Users/yamanuri/Documents/ticket-rolle-generator
 branch: rolle/generator
 basis_sha: ab9e837c
 prioritaet: P0
-aktion: pausieren_bis_nachschaerfung
-jetzt: |
-  1. A-37-22-Arbeit PAUSIEREN: die offene Aenderung an scripts/rueckweg.py bleibt unangetastet im Worktree liegen
-     (kein Commit, kein checkout, kein stash); Sicherungskopie ins Scratchpad; Ereignis
-     ereignisse/BAU-generator-A-37/generator-PAUSIERT.yaml mit git diff --stat und sha256.
-  2. rueckweg.py wird NIE mehr auf realen Rollen-Worktrees ausgefuehrt — nicht als Nachweis, nicht als Test.
-  3. Lease behalten (heartbeat_bis je Lauf auffrischen) — du bist weiter der einzige Schreiber auf rolle/generator.
-  4. ERLAUBTE Vorbereitung waehrend der Pause: Wegwerf-Repo im Scratchpad aufbauen (git init; sieben Baeume mit den
-     echten (Pfad, Zweig)-Namen als Worktrees; zusaetzlich einen Doppelgaenger 'ticket-rolle-generator-beleg-2026-08-21'
-     und einen Namens-Aehnlichen), als Skript im Scratchpad, reproduzierbar fuer den Evaluator. Kein Commit im Repo.
-  5. Warten auf generation 7 (kommt nach DoR der Nachschaerfung durch den Plan-Pruefer). Dann: A-37-22 inkl. der
-     neuen Unterkriterien, A-37-23..27, alle Negativproben — Transport-/Pfad-/Zweig-/Doppelgaenger-Proben
-     AUSSCHLIESSLICH im Wegwerf-Repo; am Bestand nur die ABLEHNUNG (Exit-Code vor jeder Aenderung) messen.
-vorschau_nachschaerfung: "A-37-22b Ausfuehrungsberechtigung: rueckweg.py bricht vor jeder Aenderung ab, wenn TICKET_ROLLE != integrator oder das Arbeitsverzeichnis nicht der Integrations-Checkout ist (Exit != 0, Meldung); Negativprobe Generator-Aufruf abgelehnt, Integrator-Aufruf erlaubt. A-37-22c Doppelgaenger-Erkennung per Aehnlichkeit (Praefix/Teilstring, nicht nur exakter Name) — der Belegbaum ticket-rolle-generator-beleg-2026-08-21 MUSS in der Meldung auftauchen. A-37-22d Bau-/Abnahmeverfahren: Proben nur im Wegwerf-Repo."
+aktion: angehalten_eingefroren
+eingefroren:
+  head: 1155709d            # 49972884 (A-37-22) + 1155709d (A-37-23) = VOR-NACHSCHAERFUNGSSTAND, nicht abnahmefaehig, bleiben (kein Reset)
+  offen: "scripts/commit-pruefen.sh, scripts/rollen-tor.sh (zuletzt 08:18) — bleiben unangetastet liegen bis zur neuen Baugeneration; NICHT committen, NICHT verwerfen"
+beim_weiterlauf:
+  1: "rollen/generator.yaml + Digest lesen; ACK fuer die dann aktuelle Generation; Lease-Heartbeat auffrischen"
+  2: "KEIN Commit, bis aktion wieder 'bauen' lautet (kommt nach DoR der Nachschaerfung 22b/22c/22d/22e)"
+  3: "generator-PAUSIERT.yaml schreiben: HEAD, git diff --stat der offenen Dateien, sha256, Zeit"
+  4: "Wegwerf-Repo im Scratchpad aufbauen (reproduzierbares Skript) — erlaubt, kein Repo-Commit"
+neue_anforderung_yama_a_37_22e: "Vor jedem schreibenden Schritt und unmittelbar im Commit-Gate (commit-pruefen.sh / pre-commit) wird die aktuelle Generation samt Digest erneut gegen /Users/yamanuri/.ticket-steuerung/rollen/<rolle>.yaml geprueft; ist der lokale ACK aelter, fehlt er oder lautet die Aktion pausieren/angehalten, wird der Commit vor jeder Aenderung bzw. spaetestens vor dem Commit abgewiesen. 'Beim naechsten Takt lesen' reicht nicht. — Das spezifiziert der Planner (gen 11), du baust es mit der naechsten Baugeneration."
+dirigent_schreibbereich: "Bleibt docs/konzept, docs/regelwerk, Steuerungsblaetter — scripts/ wird NICHT freigegeben (Yama); 5c9afbc7 war eine offengelegte Rollenueberschreitung; Governance-Skripte spezifiziert der Planner, baut der Generator. Der Evaluator aendert keine Rollenentscheidung."
 verboten:
-  - rueckweg.py oder ein anderes Transport-/Integrationswerkzeug auf realen Worktrees ausfuehren
-  - Commit vor generation 7
+  - jeder Commit vor der neuen Baugeneration
+  - rueckweg.py oder andere Transportwerkzeuge auf realen Baeumen
   - Produktcode; DB; gemeinsamer Checkout; Beleg-Baum anfassen
-steuerungshandlungen_erlaubt: [ACK, Lease-Heartbeat, Ereignisse, Scratchpad-Arbeit — keine Sacharbeit im Repo]
+steuerungshandlungen_erlaubt: [ACK, Lease-Heartbeat, Ereignisse, Scratchpad-Arbeit]
 status: ZUGETEILT
 ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/BAU-generator-A-37/generator-ack.yaml
 erstellt: "2026-08-22T08:2x Dirigent (atomar veroeffentlicht)"

@@ -1,5 +1,5 @@
 auftrag_id: DOR-plan-pruefer-A-37-nachschaerfung
-generation: 4            # 22.08. 08:2x — kurze DoR-Runde fuer die Nachschaerfung A-37-22b/c/d (Yama), sobald der Planner liefert
+generation: 5            # 22.08. 08:3x — DoR erst auf der VOLLSTAENDIGEN Nachschaerfung: 22b/22c/22d (99ea9183) PLUS 22e (Generations-/Digest-Pruefung im Commit-Gate, Yama) im ergaenzenden Planner-Commit. Nicht vorher voten.
 rolle: plan-pruefer
 sitzung_erwartet: 3870df7a-b0ad-4c78-bcb2-c5aa83a4c09d
 worktree: /Users/yamanuri/Documents/ticket-rolle-plan-pruefer
@@ -7,9 +7,9 @@ branch: rolle/plan-pruefer
 basis_sha: ab9e837c
 prioritaet: P0
 aktion: warten_auf_planner_dann_dor_nachschaerfung
-ausloeser: "ereignisse/NACHSCHAERFUNG-planner-A-37/planner-CODE_FERTIG.yaml"
-gegenstand: "DoR der drei neuen Unterkriterien A-37-22b (Ausfuehrungsberechtigung rueckweg.py: nur integrator im Integrations-Checkout, Abbruch vor jeder Aenderung, Negativ-/Positivprobe), A-37-22c (Doppelgaenger per Aehnlichkeit; Belegbaum ticket-rolle-generator-beleg-2026-08-21 muss in der Meldung auftauchen), A-37-22d (alle Proben nur im Wegwerf-Repo; am Bestand nur die Ablehnung messen). Pruefen: messbar, vorher rot (Art benannt), Messbefehl einmal gefahren, Negativproben ausloesbar ohne Bestand zu beruehren, keine Aenderung an den 27 eingefrorenen Kriterien ausser diesen Ergaenzungen, ein Pfad, ein Commit. Votum ERTEILT / NICHT ERTEILT mit Restpunkten; Ereignis ereignisse/DOR-plan-pruefer-A-37-nachschaerfung/plan-pruefer-<ERTEILT|NICHT_ERTEILT>.yaml."
-bis_zum_ausloeser: "Keine Sacharbeit, keine Altposten; lesende Vorbereitung erlaubt (scripts/rueckweg.py @ ab9e837c, git worktree list)."
+ausloeser: "ereignisse/NACHSCHAERFUNG-planner-A-37/planner-CODE_FERTIG*.yaml mit BEIDEN SHAs (99ea9183 + ergaenzender Commit mit 22e und der Kennzeichnung der Vorab-Commits 49972884/1155709d). Das gen-9-Ereignis (nur 99ea9183) ist unvollstaendig — lesen ja, voten nein."
+gegenstand: "DoR ueber A-37-22b (Preflight-Autorisierung nur integrator im kanonischen Checkout; am Bestand nur nebenwirkungsfreie Pruefung/Ablehnung), 22c (Doppelgaenger per Aehnlichkeit inkl. Belegbaum), 22d (positiver Transportlauf nur im Wegwerf-Repo unter Probe-Root; Probe-Modus lehnt reale Worktrees ab), 22e (Generation/Digest/ACK-Alter/Aktionsstatus direkt im Commit-Gate — commit-pruefen.sh UND pre-commit; Negativproben veraltete/fehlende ACK, aktion pausieren -> abgelehnt). Pruefen: messbar, vorher rot, Messbefehle gefahren, Negativproben im Wegwerf-Repo ausloesbar (Probe-Steuerungsstelle), 22b/22d widerspruchsfrei, Kriterien 1-27 unveraendert, Vorab-Commits korrekt gekennzeichnet. Votum ERTEILT/NICHT ERTEILT; Ereignis ereignisse/DOR-plan-pruefer-A-37-nachschaerfung/plan-pruefer-<...>.yaml."
+bis_zum_ausloeser: "Keine Sacharbeit; lesende Vorbereitung erlaubt (99ea9183, scripts/rueckweg.py@1155709d auf rolle/generator, git worktree list)."
 lease: "leases/DOR-plan-pruefer-A-37-nachschaerfung/ fuer das Votum."
 erlaubte_pfade:
   - "eigenes DoR-/Votumsblatt im Worktree"
@@ -19,4 +19,4 @@ verboten:
 steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse]
 status: ZUGETEILT
 ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/DOR-plan-pruefer-A-37-nachschaerfung/plan-pruefer-ack.yaml
-erstellt: "2026-08-22T08:2x Dirigent (atomar veroeffentlicht)"
+erstellt: "2026-08-22T08:3x Dirigent (atomar veroeffentlicht)"
