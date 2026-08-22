@@ -77,15 +77,34 @@ DIE VORLAGEN, die kopiert werden:
 
 ## Abnahmekriterien (aus Konzept E4 berichtigt; Messbefehle ergänzt, nichts abgeschwächt)
 
-- **Z1-E4-1-a** · **DIE LEISTE BEGINNT MIT „BODENPLATTE", UND EIN KLICK ERZEUGT SIE.**
+- **Z1-E4-1-a** · **DIE BAUTEIL-FOLGE BEGINNT MIT „BODENPLATTE" — NACH DEM MARKIEREN.**
 
-  **Verlangt:** Registry-Eintrag `bodenplatte` an **Platz 1** der Fix-Zone; ein Klick aus der
-  Grundfläche erzeugt die Platte auf der **untersten** Etage. **Bildbeleg 2D und 3D.**
+  > *(**Halbsatz, Dirigent 2026-08-23T00:03:53 in Yamas Namen.** Berichtigung ohne
+  > Kriterienänderung — die DoR bleibt gültig, Nachtrag 1.5, kein neuer Durchgang.
+  > **Yama wörtlich 00:0x:** „warum ist bodenplatte in der navi ganz oben und dazwischen die
+  > markieren, das ist nicht richtig: markieren ganz oben, dann bodenplatte, dann wand usw."*
+  >
+  > **„Platz 1" heißt: erster BAUTEIL-Eintrag — nicht vor dem Markieren.**
+  > *`auswahl` (Markieren) bleibt ganz oben und rückt **nicht** nach.* Die frühere Fassung
+  > dieses Kriteriums verlangte das Gegenteil (~~„`bodenplatte` trägt ordnung 1, `auswahl`
+  > rückt nach"~~) — **sie ist überholt, steht aber hier, damit die Änderung sichtbar bleibt.**
+
+  **Verlangt:** `bodenplatte` steht in der Fix-Zone **zwischen `auswahl` und `wand`**; ein Klick
+  aus der Grundfläche erzeugt die Platte auf der **untersten** Etage. **Bildbeleg 2D und 3D.**
+
+  **Soll-Folge der Fix-Zone (Posten 24/27, präzisiert):**
+  ```
+  Markieren -> Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach
+  dahinter Messen / Bearbeiten / CAD unveraendert
+  Menue werkzeugThemen.ts: Markieren ist dort KEIN Eintrag -> Bodenplatte vor Wand
+  ```
 
   **Messbefehl:**
   ```
-  grep -nE "zone: 'fix'" app/tools/toolPresentation.ts  -> bodenplatte traegt ordnung 1
-                                                           (auswahl rueckt nach, Soll-Folge Z1-W2-8 bleibt)
+  grep -nE "zone: 'fix'" app/tools/toolPresentation.ts
+     -> auswahl bleibt VORN; bodenplatte folgt UNMITTELBAR danach, vor wand
+     -> Soll-Folge oben, ordnung aufsteigend, keine Luecke und keine Doppelung
+  awk 'NR>=132 && NR<=151' app/tools/werkzeugThemen.ts   -> bodenplatte vor wand
   Browser: Klick in die Grundflaeche -> Platte in 2D UND 3D sichtbar, Bildbeleg beide
   ```
 

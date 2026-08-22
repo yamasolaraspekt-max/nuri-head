@@ -163,6 +163,35 @@ das nicht.*
   > **Das ist der Kern von E1.** *Eine Ablehnung, die nie ausgelöst werden kann, ist keine
   > Ablehnung.* **Erst wenn (a) den Rückfall entfernt, kann (e) überhaupt rot werden.**
 
+  **Absage-Regel** *(Halbsatz 2026-08-23T00:0x — **Verschärfung** nach dem ausdrücklichen
+  Vorschlag des Plan-Prüfers in §513; DoR bleibt gültig, Nachtrag 1.5, kein neuer Durchgang)*:
+  **Eine Prüfung, die nicht im selben Pfad liegt wie die Befehls-Absetzungen in
+  `app/HausplanerApp.tsx`, erfüllt (e) nicht.**
+
+  > **Warum diese Regel nötig ist — selbst nachgemessen am Stand `97c610ca`:**
+  > ```
+  > type: 'ADD_  in app/HausplanerApp.tsx  ->  6 Absetzungen
+  >   :949 ADD_NODE · :992 ADD_NODE · :1052 ADD_ROOF · :1080 ADD_FOUNDATION_SLAB
+  >   :1120 ADD_CEILING · :1150 ADD_NODE
+  > regelnFuer · heuteUnerfuellbar · activeLevel.exists  ->  je 0 in dieser Datei
+  > FAEHIGKEIT_GESCHOSS_DA  ->  1 Treffer, und der ist die IMPORTZEILE (:87)
+  > handlungZuGrund         ->  1 Treffer, und der ist die IMPORTZEILE (:48)
+  > Verwendung innerhalb 40 Zeilen vor einer Absetzung:  KEINE
+  > Positivkontrolle: 'ADD_' in derselben Datei -> 7 (die 7. ist ein Kommentar, :1116)
+  > ```
+  > **Die Datei importiert die Fähigkeit und benutzt sie nie.** *Wer nur zählt, ob
+  > `vorbedingungen` in `HausplanerApp.tsx` vorkommt, bekommt 2 und hält den Pfad für geprüft —
+  > beide Treffer sind Importe.* **Ort ist nicht Wirkung.**
+  >
+  > **Ohne diese Regel ist (e) formal erfüllbar und sachlich verfehlt:** ein Prüfaufruf
+  > irgendwo im Code erfüllt „`activeLevel.exists` wirkt" auf dem Papier, und an den sechs
+  > Absetzungen ändert sich nichts.
+
+  > **Eine Zahl des Plan-Prüfers habe ich berichtigt, die Sache trägt trotzdem:** er nennt
+  > **sieben** `ADD_`-Aufrufe. Es sind **sechs Absetzungen** — der siebte Treffer ist ein
+  > Kommentar (`:1116`). *Sein tragender Befund — null Prüfungen im Klick-Pfad — ist damit
+  > nicht schwächer, sondern genauer belegt.*
+
 - **Z1-E1-1-f** · **`tsc` 0, Suite grün, Bündel in der Lieferung.**
 
   **Messbefehl:** `npm run build:hausplaner` · `npm run test:hausplaner` (beide hinter dem
