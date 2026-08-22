@@ -25404,3 +25404,89 @@ Zahl im weitergereichten Posten, jetzt der überholte Stand): **der Beleg ist da
 steht die alte Fassung.** Bei den ersten beiden war ich der Melder; hier bin ich der Verursacher.
 
 **Ball:** Evaluator — Abnahme auf `c0dd4f83`, nicht auf `561cc3d1`.
+
+## §302 — Sechs Steuerungsdateien datieren sich selbst in die Zukunft, bis zu 425 Sekunden; und meine „elf Minuten" aus §301 hängen an der Quelle, die ich nicht genannt habe
+
+**Messstand** `d088dee9` · Baum sauber · 0 neue Commits seit §301. **Integrationszweig wieder bewegt:**
+`435c086a` → `fae07555`. Ballortung beidseitig **1** und **6** — nichts in meiner Bahn. Angekommen
+sind zwei Dateien, und diesmal habe ich beide **geöffnet**.
+
+### Der Planner hat denselben Fehler unabhängig gefunden
+
+`planner-richtigstellung-endstand-und-eigener-messausfall.yaml` (10:29:29, an mich adressiert). Er
+stellt den abgelösten Auslöser-SHA in seinem Errata-Ereignis richtig — **additiv**, nicht chirurgisch.
+Drei Dinge daran gehören festgehalten, weil sie meine eigene Runde ergänzen:
+
+1. Seine Regel aus Lauf 28 („Ordner am Anfang **und** vor der Abschlussmeldung prüfen") war **zu eng
+   gefasst** — sie galt nur seinem *eigenen* Auftragsordner, nicht dem **Auslöser**-Ordner. *„Eine
+   Regel, die nur den halben Weg abdeckt, fällt an der anderen Hälfte."* Bei mir war es dieselbe
+   Lücke in anderer Form: Liste erzeugt, Datei nicht geöffnet.
+2. Er meldet seinen **dritten Messausfall derselben Bauart**: eine Schleife, die für mehrere Stände
+   dieselbe Zwischendatei beschreibt, gab 0 statt 9 — **gegen die Warnung, die er selbst in dieses
+   Blatt geschrieben hat**. *„Eine Warnung im Text schützt den, der sie liest, nicht den, der sie
+   geschrieben hat."*
+3. Er bestätigt unabhängig, was ich in §301 gemessen habe: die 22c-Zahl **9** gilt für beide Stände.
+   Sein Weg war `cmp` der beiden Dateien, meiner der Blob-Hash `b01a039a`. **Zwei Verfahren, ein
+   Ergebnis** — das ist mehr wert als eine doppelt gefahrene Messung.
+
+### Der Nebenbefund, den er ausdrücklich nicht gewertet hat
+
+Er schreibt: *„Ich werte das nicht; ich nenne es."* — das `zeit:`-Feld des Nachtrags (`08:08:30Z` =
+**10:08:30** Ortszeit) liegt **nach seiner eigenen mtime** (10:01:24). Ausgemessen über die ganze
+Ablage, zonenbewusst geparst:
+
+```
+168  Dateien mit lesbarem zeit-Feld      0 unparsbar
+150  |diff| <= 60 s                      plausibel
+ 12  Feld ÄLTER als Datei (< -60 s)      bekannt: mv erbt die mtime der Quelle
+  6  Feld SPÄTER als Datei (> 60 s)      <- das hier
+
+   425 s  UTC   08:08:30Z   BAU-generator-A-37/generator-CODE_FERTIG-nachtrag.yaml
+   188 s  UTC   07:58:40Z   BAU-generator-A-37/generator-CODE_FERTIG.yaml
+   169 s  UTC   07:58:40Z   BAU-generator-A-37/generator-AUFTRAG_ABGESCHLOSSEN.yaml
+   155 s  UTC   07:16:40Z   BAU-generator-A-37/generator-ack.yaml
+   143 s  Orts  08:14:00    PARKEN-planner-bis-A-37/planner-berichtigung-angenommen-und-schutzlage.yaml
+   115 s  UTC   07:12:30Z   BAU-generator-A-37/generator-nachtrag-erkennungsregel-laufwechsel.yaml
+```
+
+**Das ist nicht die Zonenfrage.** Die hat der Evaluator bereits vollständig gemeldet und geschlossen
+(`LAGE-2026-08-22/evaluator-zwei-zeitkonventionen-utc-gegen-ortszeit.yaml`: 13 UTC, 131 Ortszeit,
+*„KEIN REGELBRUCH — der Generator datiert korrekt, nur in einer anderen Zone"*). Ich baue das nicht
+nach. Hier bleibt die Abweichung **nach** korrekter Umrechnung stehen.
+
+**Zusatzbeleg zur Ursache:** zwei Dateien tragen denselben Feldwert bei verschiedenen mtimes —
+
+```
+generator-CODE_FERTIG.yaml               Feld 07:58:40Z   mtime 09:55:32
+generator-AUFTRAG_ABGESCHLOSSEN.yaml     Feld 07:58:40Z   mtime 09:55:51
+```
+
+Der Wert wird also **nicht je Datei frisch erhoben**. Damit ist `zeit:` kein Schreibzeitpunkt, sondern
+eine im Lauf einmal gesetzte Marke. Das erklärt beides — die Gleichheit *und* den Vorlauf.
+
+### Und damit gegen mich selbst
+
+§301 sagt, der Nachtrag habe **elf Minuten** vor meinem BESTAETIGT gelegen. Nachgerechnet gegen beide
+Quellen:
+
+```
+nach mtime:      11 min      (10:01:24 -> 10:12:46)
+nach zeit-Feld:   4 min      (10:08:30 -> 10:12:46)
+Vorzeichen in beiden Lesarten gleich: der Nachtrag lag vorher
+```
+
+**Die Aussage hält, die Zahl war quellenabhängig — und ich habe die Quelle nicht genannt.** Das ist
+dieselbe Form wie §300, wo eine Zahl ohne ihre Grundmenge stand: hier fehlt der Zahl ihre *Uhr*. Ab
+hier nenne ich bei jeder Zeitangabe, ob sie aus der mtime oder aus dem Feld stammt.
+
+### Was daraus folgt
+
+Der Dirigent hat um 10:24 eine **Regeländerung auf eine Zeitfolge gestützt** (welches Ereignis welches
+ablöst). Der Planner hat für seine Reihenfolge bewusst die mtime gewählt, *„weil das der belastbarere
+Wert ist"*. Beides ist richtig entschieden — aber es ist **je Rolle einzeln entschieden**, und drei
+Rollen haben in derselben Stunde Zeitabstände aus verschiedenen Quellen gerechnet. Solange `zeit:` ein
+Lauf-Wert und keine Schreibzeit ist, gilt: **wer eine Reihenfolge behauptet, nennt seine Uhr.** Ob
+daraus eine Regel wird, entscheidet nicht der Prüfer.
+
+**Ball:** Dirigent (ob die Zeitquelle geregelt wird) · der Befund selbst geht den **Generator** an,
+dessen fünf Dateien betroffen sind — gemeldet, nicht angefasst.
