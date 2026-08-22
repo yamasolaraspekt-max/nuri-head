@@ -26031,3 +26031,76 @@ Steuerungsablage — und die Antwort wird **ordnerübergreifend über die Zeit**
 Ordner des Absenders gesucht.
 
 **Ball:** keiner. A-37-20 liegt beim Generator, die Nachprüfung beim Evaluator.
+
+## §310 — Posten (b): meine eigene Zahl wandert gerade in eine Spezifikation, und ihr Titel ordnet sie der falschen Grundmenge zu
+
+**Messstand** `bc36d613` · Baum sauber · 0 neue Commits seit §309 · Integrationszweig `1c14579a`
+unverändert. Ballortung jetzt **dreiseitig** (Lehre aus §309): STATUS.md **1** · Blätter **6** ·
+Steuerung **14**, davon 13 beantwortet und einer quittiert. **Keine neuen Bälle** seit 11:04.
+
+### Der Planner hat denselben blinden Fleck gefunden — unabhängig und zur selben Minute
+
+`planner-eigener-anteil-zeitformate.yaml` (11:02:51). Er schreibt: *„Beim Zählen offener Bälle fiel
+auf, dass 13 Ereignisse `ball: planner` tragen. In Lauf 34 hatte ich 0 gemeldet — andere Grundmenge:
+damals nur mein Auftragsordner, jetzt alle."* Das ist §309 aus seiner Sicht, zwei Minuten vor meiner
+Quittung geschrieben. **Dabei fand er einen Vorratsposten, den er nie gelesen hatte: meinen
+Zeitformat-Befund von 08:12** — *„Er lag seit dreieinhalb Stunden mit meinem Ball darauf."*
+
+Seinen eigenen Anteil misst er ohne Beschönigung: `30x +0200 · 7x +02:00` in den Ereignissen,
+**in sich inkonsistent**, und er sieht die Ursache im eigenen Vorgehen nach statt sie zu raten — zwei
+Variablen nebeneinander, *„keine Entscheidung, sondern ein Zufall der Textform."*
+
+### Posten (b): meine Zahl, frisch nachgezählt
+
+Meine Angabe *„meine 16 Ereignisdateien tragen durchgehend +02:00"* ist gewachsen und hält:
+
+```
+heute: 43 eigene Ereignisdateien mit zeit-Feld  ->  +02:00: 43 · +0200: 0 · Z: 0 · andere: 0
+```
+
+**Der Rest hält nicht.** Mein Befund trägt den Titel *„`heartbeat_bis` wird in VIER Formaten
+geschrieben"* — und darunter das Feld **`gemessen_ueber_leases_und_ereignisse`**. Die Zahlen stammen
+also aus **allen Zeitfeldern** in Leases und Ereignissen, der Titel schreibt sie **einem Feld** zu:
+
+```
+alte Grundmenge (alle Zeitfelder, leases/ + ereignisse/), heute:
+  309 Werte · +0200 195 · +02:00 63 · Z 23 · ohne Zone 28      (08:12 waren es 128)
+
+heartbeat_bis ALLEIN, wie der Titel behauptet:
+   49 Werte · +0200  44 · +02:00  0 · Z  5 · ohne Zone  0      -> DREI Formate, nicht vier
+```
+
+**Für `heartbeat_bis` gibt es kein einziges `+02:00` und keinen einzigen Wert ohne Zone.** Das ist
+nicht kosmetisch: *„ohne Zone"* ist der **gefährlichste** Fall, weil er mehrdeutig ist — und genau der
+kommt in dem Feld, um das es geht, **gar nicht vor**. Mein Befund lässt die Lage an der Stelle
+bedrohlicher aussehen, als sie ist, und zugleich die 25 mehrdeutigen Werte an ihrem *wahren* Ort
+(andere Felder) unadressiert.
+
+**Das ist P5, auf meinen eigenen Befund angewandt** — dieselbe Klasse, die ich in A-37-20 gegen das
+Blatt gemeldet habe: *eine Überschrift verspricht etwas über die Sache, die Messung darunter zählt
+etwas anderes.* Der Titel trägt den Namen des Feldes, die Zahl kommt aus der Ablage.
+
+### Und die Zahl „1 kaputt" ist heute 2
+
+```
+'x' in Zeitwerten, 3 Treffer:
+  PARKEN-release-pruefer/release-pruefer-rollenbestaetigung.yaml:5   "…T08:5x+02:00"
+  PARKEN-release-pruefer/release-pruefer-standmeldung.yaml:5         "…T00:2x+02:00"
+  VORRAT-Z0-I2/plan-pruefer-befund-zeitformate.yaml:36               <- mein eigenes ZITAT
+Gegenprobe je Wert: alle drei NICHT PARSBAR (Date.parse -> NaN)
+```
+
+**Zwei echte, beide vom Release-Prüfer** — mein Befund nannte einen. Der dritte Treffer ist mein
+eigenes Zitat des ersten; wer die 3 ohne diese Trennung meldete, zählte einen Beleg als Fall.
+
+### Warum das jetzt zählt und nicht später
+
+Der Planner nimmt meine Zahl **gerade** in den Z0-I2-Vorrat auf und schreibt sie wörtlich fort:
+*„heartbeat_bis liegt in VIER Formaten vor (+0200 68x · keine Zone 25x · +02:00 24x · Z 11x)."*
+**Er hat korrekt zitiert — die Zuordnung war schon in meiner Quelle falsch.** Seine daraus gezogene
+Forderung (*„das Lesewerkzeug muss ALLE VIER vorhandenen Formen verstehen"*) bleibt richtig und ist
+sogar sicherer als nötig; falsch würde erst, wer aus den 25 zonenlosen Werten auf `heartbeat_bis`
+schlösse. Das ist meine Korrektur am **Gebrauchsort** — dieselbe Lehre wie §300, diesmal rechtzeitig.
+
+**Ball:** Planner (Z0-I2-Spezifikation, mit berichtigter Zuordnung) · Release-Prüfer nachrichtlich für
+den **zweiten** kaputten Zeitstempel.
