@@ -62,12 +62,19 @@ IST    (kein Eintrag) wand -> fenster -> tuer -> DACH  -> decke -> treppe -> …
   *(~~`bodenplatte` als achter Eintrag an erster Stelle~~ — gestrichen mit dem Nachtrag unten:
   sie braucht `GP-0`. DoR gegen `dbaa6b4d` erteilt: „SIEBEN Einträge, KEIN `bodenplatte`-Eintrag".)*
 
-  **Messbefehl:**
+  **Messbefehl** *(Orte berichtigt 19:4x — siehe Nachtrag WEG A; die Folge selbst ist unverändert)*:
   ```
-  grep -nE "^    id: '" app/tools/toolRegistry.ts        -> die acht in dieser Folge
+  ERZEUGUNGSORT Leiste: grep -nE "zone: 'fix'" app/tools/toolPresentation.ts
+                        -> die SIEBEN in Soll-Folge (ordnung aufsteigend, 'auswahl' bleibt vorn)
+  ERZEUGUNGSORT Menue:  awk NR>=132,NR<=151 app/tools/werkzeugThemen.ts  (Thema 07-architektur)
+                        -> die SIEBEN zuerst, die uebrigen NEUN unveraendert dahinter
+  ZIEHT GLEICH:         grep -nE "^    id: '" app/tools/toolRegistry.ts  -> dieselbe Folge
   Leiste:  app/HausplanerApp.tsx:493 zoneTools('fix')    -> gerenderte Folge im Browser
   Menue:   app/dashboard/WerkzeugGruppenMenue.tsx        -> dieselbe Folge
   ```
+  ~~`grep -nE "^    id: '" app/tools/toolRegistry.ts -> die acht in dieser Folge`~~ *(Fassung 18:46
+  — „acht" war ein Rest der gestrichenen Bodenplatte, und die Registry allein erzeugt die Folge
+  nicht.)*
 
   **Heutiges (rotes) Ergebnis:** `dach` steht auf `:114` **vor** `decke` (`:132`) und `treppe`
   (`:150`); `bodenplatte` hat **0 Treffer**.
@@ -118,7 +125,8 @@ IST    (kein Eintrag) wand -> fenster -> tuer -> DACH  -> decke -> treppe -> …
   ```
   ORT: die im Repo vorhandene Puppeteer-Buehne, Chrome HEADFUL
   ALT (Stand <basis>):  Bildbeleg Leiste + Menue  ->  Dach VOR Decke/Treppe, keine Bodenplatte
-  NEU (Stand <bau>):    Bildbeleg Leiste + Menue  ->  die acht in Soll-Folge
+  NEU (Stand <bau>):    Bildbeleg Leiste + Menue  ->  die SIEBEN in Soll-Folge
+                        (~~"die acht"~~ — Rest der gestrichenen Bodenplatte, berichtigt 19:4x)
   ```
 
   **Heutiges (rotes) Ergebnis:** ist die Rot-Lage selbst — der alte Stand zeigt `dach` vor
@@ -137,17 +145,29 @@ IST    (kein Eintrag) wand -> fenster -> tuer -> DACH  -> decke -> treppe -> …
   **Absage-Regel:** *Eine Reihenfolgeänderung ohne Bündel erreicht den Browser nicht* — der Fall ist
   eingetreten (Befund `db64c7ca`, zehn Commits ohne Bündel).
 
-- **Z1-W2-8-f** · **DER DIFF BLEIBT AUF ZWEI DATEIEN UND IHRE TESTS.**
+- **Z1-W2-8-f** · **DER DIFF BLEIBT AUF DEN DREI DATEIEN UND IHREN TESTS.**
 
-  **Verlangt:** Geändert werden **nur** `app/tools/toolRegistry.ts` und
-  `app/dashboard/werkzeugGruppen.ts` — **plus die nachziehenden Tests**. **Fachlogik leer.**
+  > **BERICHTIGT 22.08. 19:4x nach Dirigenten-Entscheidung WEG A** (`dirigent-entscheidung-Z1-W2-8-weg-A-pfadgrenze.yaml`, 19:44:38). *Die Zusage ist unverändert — nur die Orte
+  > stimmten nicht.* **Kein neues Kriterium, keine zweite DoR** (`8a4ffd58` bleibt gültig).
+
+  **Verlangt:** Geändert werden **nur** diese drei — **plus die nachziehenden Tests**:
+
+  | Datei | Rolle | gemessen am Stand `97277281` |
+  |---|---|---|
+  | `app/tools/toolPresentation.ts` | **erzeugt die Leisten-Folge** | `:72-81` `zone: 'fix'`, `ordnung` 1–8 |
+  | `app/tools/werkzeugThemen.ts` | **erzeugt die Menü-Folge** | `:130-151` Thema `07-architektur`, 16 Werkzeuge |
+  | `app/tools/toolRegistry.ts` | **zieht gleich** | die Sammlung, damit sie nicht widerspricht |
+  | ~~`app/dashboard/werkzeugGruppen.ts`~~ | **UNBERÜHRT — reine Ableitung** | `:47` `WERKZEUG_GRUPPEN = WERKZEUG_THEMEN.map(…)`, `:53` mappt `t.werkzeuge` |
 
   **Messbefehl:**
   ```
   git diff --name-only <basis_sha>..<endstand_sha>
-      -> nur die zwei Dateien + __tests__/* + public/hausplaner/hausplaner.js
-  git diff <basis_sha>..<endstand_sha> -- geometry/ domain/ commands/   -> LEER
+      -> nur die DREI Dateien + __tests__/* + public/hausplaner/hausplaner.js
+  git diff <basis_sha>..<endstand_sha> -- app/dashboard/werkzeugGruppen.ts   -> LEER
+  git diff <basis_sha>..<endstand_sha> -- geometry/ domain/ commands/        -> LEER
   ```
+  ~~„nur `app/tools/toolRegistry.ts` und `app/dashboard/werkzeugGruppen.ts`"~~ *(Fassung 18:46 —
+  benannte eine Datei, die die Folge gar nicht erzeugen kann, und übersah die beiden, die es tun.)*
 
   **Heutiges (grünes) Ergebnis:** Schutzbeleg.
 
@@ -170,12 +190,12 @@ IST    (kein Eintrag) wand -> fenster -> tuer -> DACH  -> decke -> treppe -> …
 
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
-| Z1-W2-8-a Reihenfolge in Leiste **und** Menü | AP-1 Registry + Gruppen | n.U. | n.U. |
+| Z1-W2-8-a Reihenfolge in Leiste **und** Menü | AP-1 `toolPresentation` + `werkzeugThemen` (+ Registry zieht gleich) — ~~Registry + Gruppen~~ | n.U. | n.U. |
 | ~~Z1-W2-8-b `bodenplatte` als Eintrag~~ **FÄLLT** — braucht `GP-0` (Nachtrag) | — | — | — |
 | Z1-W2-8-c Tooltips ehrlich | AP-1 (Texte) | n.U. | n.U. |
 | Z1-W2-8-d Rot-Probe + Bildbeleg alt/neu | AP-2 Browserabnahme | n.U. | n.U. |
 | Z1-W2-8-e `tsc` 0, Suite grün, Bündel | AP-2 (Lieferung) | n.U. | n.U. |
-| Z1-W2-8-f Diff auf zwei Dateien | AP-2 (Schutzbeleg) | n.U. | n.U. |
+| Z1-W2-8-f Diff auf **drei** Dateien (~~zwei~~, WEG A) | AP-2 (Schutzbeleg) | n.U. | n.U. |
 
 ## N4 — Bedienweg
 
@@ -267,3 +287,64 @@ Bodenplatte als Folgeposten an `GP-0` hängen."*
 > **Beide Sätze waren richtig, beide Zahlen zählten eine andere Menge als sie benannten.** *Das ist
 > die Fehlerklasse, die ich heute selbst mehrfach gemeldet habe — diesmal an mir.* **Die Sperre
 > bleibt unverändert: zwei echte Aufrufstellen genügen, und das Höhenfeld fehlt im Block.**
+
+---
+
+# ⚠ NACHTRAG 22.08. 19:4x — WEG A: die Pfadgrenze sitzt jetzt am Erzeugungsort
+
+```yaml
+anlass: "dirigent-entscheidung-Z1-W2-8-weg-A-pfadgrenze.yaml (19:44:38), auf
+         generator-bauentscheid-Z1-W2-8-pfadgrenze.yaml (19:19:34)."
+art: "BERICHTIGUNG DER ORTE. Kriterium (f) nennt drei Dateien statt zwei.
+      KEIN neues Kriterium, KEINE Kriterienaenderung — die DoR 8a4ffd58 bleibt gueltig,
+      der Plan-Pruefer hat ausdruecklich KEINEN zweiten Durchgang angesetzt."
+selbst_gegengemessen: "ja, am Stand 97277281 — nicht uebernommen."
+```
+
+**Mein Kriterium (f) nannte zwei Dateien. Eine davon kann die Reihenfolge gar nicht erzeugen, und
+die beiden, die es tun, standen nicht darin.**
+
+```
+GEMESSEN am Stand 97277281:
+
+toolPresentation.ts:72-81   zone: 'fix', ordnung 1..8
+  auswahl 1 · wand 2 · fenster 3 · tuer 4 · DACH 5 · decke 6 · treppe 7 · kontur 8
+  -> HIER entsteht die Leisten-Folge.               War in (f) NICHT genannt.
+
+werkzeugThemen.ts:130-151   Thema '07-architektur', 16 Werkzeuge
+  -> HIER entsteht die Menue-Folge.                 War in (f) NICHT genannt.
+
+werkzeugGruppen.ts:47       WERKZEUG_GRUPPEN = WERKZEUG_THEMEN.map(...)
+             :53            werkzeuge: t.werkzeuge.map(id => NACH_ID.get(id))
+  -> REINE ABLEITUNG. Kann die Folge nicht aendern. War in (f) als Aenderungsort genannt.
+```
+
+> **Das ist P7 an mir selbst: „Ort ist nicht Wirkung".** *Ich habe die benannte Sammlung
+> (`toolRegistry`) und die Gesamtsicht (`werkzeugGruppen`) als Änderungsorte gesetzt — gemessen habe
+> ich sie nicht.* **Eine Pfadgrenze, die den Erzeugungsort ausschließt, macht das Kriterium
+> unerfüllbar**, und (a) hätte scheitern müssen, damit (f) hält.
+
+## Die Auslegungsfrage — beantwortet, mit einer Warnung zur Reihenfolge
+
+**Der Dirigent entscheidet:** die sieben in Soll-Folge nach vorn, **die übrigen neun unverändert in
+ihrer heutigen relativen Folge dahinter.** *Nichts stillschweigend umsortieren, nichts entfernen.*
+
+```
+16 im Thema  =  7 Soll  +  9 Rest        (gemessen: 16 / 7 / 9)
+
+DIE NEUN — in der Folge, in der sie HEUTE in werkzeugThemen.ts stehen:
+  boden · dachfenster · aufriss · gaube · raum · schnitt · stuetze · unterzug · oeffnung
+```
+
+> **⚠ Die Entscheidung zählt die neun in einer anderen Folge auf** (`boden, dachfenster, gaube,
+> raum, stuetze, unterzug, oeffnung, aufriss, schnitt`). **Die Menge ist identisch — die Reihenfolge
+> nicht.** *Bindend ist der Wortlaut „unverändert in ihrer heutigen relativen Folge", also der
+> Dateistand oben; die Aufzählung benennt, WELCHE neun, nicht in welcher Folge sie zu stehen haben.*
+> **Wer die Aufzählung abschreibt, sortiert drei Werkzeuge um, die niemand umsortieren wollte.**
+
+## Lehre für künftige Blätter
+
+**Die Pfadgrenze wird am gemessenen Erzeugungsort der Wirkung festgemacht** — `zoneToolsIn` /
+`TOOL_PRESENTATION_RULES`, `WERKZEUG_THEMEN` — **nicht an der Datei, die den Gegenstand im Namen
+trägt.** *Vor jedem `(f)`-Kriterium gilt ab jetzt: erst messen, wo der Wert entsteht, dann die
+Grenze ziehen.* **Sonst schützt die Grenze nicht den Bestand, sondern den Fehler.**
