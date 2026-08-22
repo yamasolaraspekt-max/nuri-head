@@ -25,7 +25,11 @@ dor_beleg: "ERTEILT auf den KRITERIENTEXT — plan-pruefer §421, Beleg f443f057
             Je Blatt prueft der Plan-Pruefer nur Vollstaendigkeit der Belege."
 basis_sha: 3daf4f1e
 prioritaet: P0
-ballbesitz: "plan-pruefer (Belegvollstaendigkeit)"
+ballbesitz: "integrator (Transport, bau_sha 1c6b7601) — VIER der fuenf Module ABGENOMMEN (BROWSER)
+             durch den Evaluator 2026-08-22T19:33:20, plan-pruefer gewuerdigt 19:37:00.
+             Das fuenfte Modul (dachTopologie) war MIT Blocker-Begruendung herausgenommen (§433) —
+             keine stille Kuerzung, es ist NICHT abgenommen und bleibt offen.
+             (~~'plan-pruefer (Belegvollstaendigkeit)'~~ — Kopf hing bis 19:5x nach.)"
 regelgrundlage: "ARBEITSREGELN-NACHTRAG-1-6-SPUR-V.md (in Kraft 22.08. 18:3x) ·
                  Planner gen 20 Posten 1"
 zielreifegrad: "ABGENOMMEN (BROWSER) je Modul"

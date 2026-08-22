@@ -13,10 +13,17 @@ heimat_code: resources/planner/hausplaner
 mess_sha: 3ab3bb88
 kennung_geprueft: "Z1-W2-8: docs/ 0 Treffer, git log --all --grep 0 (ausser dem Auftrag selbst).
                    Z1-W2-0..6 vergeben, -7 frei gelassen, -8 vom Dirigenten zugewiesen."
-dor_beleg: "steht aus — plan-pruefer (EIN Durchgang, direkt nach Z1-V1-1)"
+dor_beleg: "ERTEILT — plan-pruefer 2026-08-22T19:06:40, Beleg 8a4ffd58 (§429), geprueft gegen
+            dbaa6b4d. MIT ZWEI HALBSAETZEN, beide hier eingearbeitet:
+              1) (a) verlangt SIEBEN Eintraege OHNE bodenplatte — es gilt die
+                 Entscheidungstabelle, NICHT der alte Kriterientext.
+              2) (b) ENTFAELLT samt Matrixzeile; ein Eintrag auf bauteilKind 'ceiling' ist
+                 ausdruecklich UNTERSAGT, die Bodenplatte gehoert zu GP-0.
+            Dirigenten-Entscheidung WEG A 19:44:38: kein zweiter Durchgang, DoR bleibt gueltig.
+            (Kopf hing bis 19:5x auf 'steht aus'.)"
 basis_sha: 3ab3bb88
 prioritaet: "P0 — Yamas ausdrueckliche Anweisung 18:4x (Posten 24)"
-ballbesitz: "plan-pruefer (DoR)"
+ballbesitz: "generator (DoR erteilt — baubar; WEG A eingearbeitet, f5cfc933)"
 regelgrundlage: "dirigent-auftrag-Z1-W2-8-leiste-baureihenfolge.yaml (18:46:18)"
 zielreifegrad: BROWSERABGENOMMEN
 ```

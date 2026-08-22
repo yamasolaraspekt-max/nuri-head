@@ -13,10 +13,13 @@ heimat_code: resources/planner/hausplaner
 mess_sha: fd2575ce
 konzept: "docs/konzept/etagenweiser-aufbau.md @ 8e4bb918 (Dirigent, 19:1x) — Scheibe E0, Luecke L1"
 kennung_geprueft: "Z1-E0-1: docs/ 0 Treffer, git log --all --grep 0. Kennungsraum Z1-E* neu."
-dor_beleg: "steht aus — plan-pruefer"
+dor_beleg: "ERTEILT — plan-pruefer 2026-08-22T19:30:30, Beleg 3ddf6a3e
+            (plan-pruefer-DOR-Z1-E0-1-und-Z1-E2-1-ERTEILT.yaml, §436), OHNE Halbsaetze.
+            Geprueft gegen mess_sha = basis_sha = fd2575ce, Blob identisch auf HEAD und
+            rolle/planner — kein Drift. (Kopf hing bis 19:5x auf 'steht aus'.)"
 basis_sha: fd2575ce
 prioritaet: P0
-ballbesitz: "plan-pruefer (DoR)"
+ballbesitz: "generator (DoR erteilt — baubar; laut Dirigent 19:11:46 VOR Z1-W2-6 und Z1-W2-4)"
 zielreifegrad: "ABGENOMMEN (BROWSER)"
 ```
 
@@ -131,7 +134,11 @@ Rechenquelle weniger.
 ```yaml
 anlass: "yama-lesesitzung-BEFUNDE-maurer-oeffnung-und-deckenanschluss.yaml (19:32:05), Befund 2 —
          am Code gegengeprueft, nicht uebernommen."
-art: "NICHT-ZIEL ergaenzt. Die Kriterien a..e sind seit der DoR (19:30:48) UNVERAENDERT."
+art: "NICHT-ZIEL ergaenzt. Die Kriterien a..e sind seit der DoR (19:30:30) UNVERAENDERT."
+zeitangabe_berichtigt: "Ich hatte hier zweimal 19:30:48 geschrieben. Das Votum traegt zweimal
+                        19:30:30 (zeit und gelesen_bis), der Hinweis des Plan-Pruefers vom
+                        19:49:40 nennt es zweimal ebenso. VIER Nennungen gegen meine zwei —
+                        19:30:30 gilt. Meine Zahl hatte keine Quelle, nur eine Erinnerung."
 ```
 
 **Die Höhenkette hat zwei Hälften. E0 vereinheitlicht nur die eine.**
@@ -154,7 +161,7 @@ GEMESSEN AN DIESEM BLATT:  'defaultWallHeight' 4x  ·  'wand.height'/'node.heigh
 > schneidet hinein** — und E0 ändert daran nichts. *Das ist kein Mangel dieses Blattes, sondern
 > seine Grenze; sie steht hier, damit niemand nach der Abnahme glaubt, die Höhenkette sei ganz.*
 
-**Warum ich die Kriterien NICHT erweitere:** die DoR ist seit 19:30:48 erteilt und der
+**Warum ich die Kriterien NICHT erweitere:** die DoR ist seit **19:30:30** (~~19:30:48~~) erteilt und der
 Kriterienstand eingefroren; eine Erweiterung wäre eine neue Runde, und der Generator baut bereits.
 **Ein Nicht-Ziel zu benennen ist keine Kriterienänderung** — es sagt, was das Blatt nicht zusagt.
 
