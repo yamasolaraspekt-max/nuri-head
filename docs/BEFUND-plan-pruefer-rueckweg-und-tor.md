@@ -27689,3 +27689,50 @@ Momentaufnahme. **Auch eine richtige Beobachtung braucht ihren Zeitstempel.**
 in dieser Form in die Abnahme geht. Zum Statusplatz A-43: seine Frage (13:05:27) legt die
 Regelkollision §5 gegen §16 sauber vor, drei Wege ohne Empfehlung — **Ball dort Dirigent, bei mir
 nichts offen.**
+
+## §335 — Vorratsprüfung (b): die Grundmenge der Kennungen gemessen — das A-43-Blatt hält stand
+
+Gewählt gegen HEAD `9b230f42` (Baum sauber, 13:11:34). §335 als Überschrift 0 Treffer, frei.
+**Kein Mangel-Befund** — eine Bestätigung mit einer Zahl, die vor der Abnahme noch niemand hat.
+
+**Anlass.** Mein Auftrag (Rollenquelle gen 8) nennt *„Kennungsmuster **7** Formen"*, das Blatt
+A-43-1 heißt *„**ACHT** FORMEN"* und listet 4 neue (`Z0-I1`, `Z1-W1-1`, `Z2-W0-1`, `A-37-22b`)
+gegen 4 bestehende (`A-42`, `A-37`, `W-17/1`, `P-05`). Die Abweichung geht **zugunsten** des
+Blattes; sie erklärt sich daraus, dass gen 8 (12:18:38) vor dem Blatt (12:21:27) entstand. Kein
+Mangel — aber Anlass zur eigentlichen Frage: **Trifft „acht" die Grundmenge?**
+
+**Gemessen, mit dem Muster aus der Quelle statt nachgebaut** (Absage-Regel von A-43-1). Grundmenge:
+alle `auftrag:`-Felder der 90 aktiven Blätter **plus** alle Kennungen aus Zustandscommits, isoliert
+extrahiert:
+
+    Grundmenge                    90 verschiedene Kennungen
+    vom heutigen Muster erkannt   87
+    NICHT erkannt                  3   ->  Z1-W1-1..5 · Z2-W0-1 · Z2-W0-5
+
+**Alle drei sind im Blatt namentlich als ausgeschlossen benannt** — Zeile 159 *„`Z1-W1-1..5` ←
+Bereichsangabe, keine Kennung"*, Zeilen 160/161 *„← Mehrfachkennung"*. Das deckt sich mit A-43-4
+(*„3 tragen Mehrfach- bzw. Bereichskennungen und bleiben auch nach dem Bau abgewiesen"*) und mit
+A-43-5. **Es gibt im Bestand keine nicht erkannte Kennungsform, die das Blatt nicht kennt.**
+
+**Warum `Z0-I1` und `A-37-22b` in meiner Grundmenge fehlen — und das kein Widerspruch ist.** Beide
+sind **keine Auftragskennungen**: `Z0-I1` liegt nicht in `docs/auftraege/aktiv/` (0 Blattköpfe,
+0 Zustandscommits; es erscheint in 11 Dateien nur als Verweis), `A-37-22b` ist ein
+**Unterkriterium** von A-37. Eine Grundmenge aus Blattköpfen und Zustandscommits kann sie
+strukturell nicht enthalten. A-43-1 nennt sie zu Recht **zusätzlich** — sie treten als
+Betreff-Bestandteil auf, nicht als Auftragskennung. **Die acht Formen des Blattes sind also weiter
+gefasst als meine Grundmenge, nicht enger.**
+
+**Methodenkritik an der eigenen Messung, und sie begrenzt das Ergebnis.** Ich habe aus
+`scripts/status-erzeugen.sh` nur den **Kennungsteil** ausgelesen
+(`(?P<kennung>…)\s+·\s+`), nicht das vollständige `KERN`, das mit `r"zustand:\s+"` beginnt.
+A-43-1 verlangt ausdrücklich den **ganzen** Ausleseweg. **Meine Zahl ist damit ein Hinweis auf die
+Grundmenge, kein A-43-1-Nachweis** — sie ersetzt die Abnahmeprobe des Evaluators nicht und soll es
+nicht.
+
+**Nutzen für die Abnahme:** Wer nach dem Bau prüft, kann gegen **87 zu 3** messen statt gegen
+„acht Formen" — und die drei müssen abgewiesen **bleiben**. Eine Erweiterung, die auch nur eine
+der drei plötzlich erkennt, wäre ein Rückschritt und kein Fortschritt.
+
+**Ball: niemand bei mir.** Der Dirigent hat meinen §334 um 13:11:11 an den Generator
+weitergegeben (*„den KORRIGIERTEN Befehl aus dem Planner-Nachtrag zitieren, nicht den defekten"*),
+der Bau läuft seit 13:09:41, der Planner trägt ein Zeichen nach.
