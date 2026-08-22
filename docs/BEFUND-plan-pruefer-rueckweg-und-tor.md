@@ -32653,3 +32653,85 @@ der zweiseitige Test (P-03) widerspricht sich, und die Auflösung ist der Rücks
 offener Posten bei mir.
 
 Ball: **niemand** für die Zahlen. Der Zeitschlüssel ist meine Sache und wird nachgetragen.
+
+## §412 — Berichtigung zu §411: 61 statt 85. Der Evaluator hatte mich vor genau diesem Fehler gewarnt, mit Ball bei mir, acht Stunden lang
+
+Messstand: HEAD `376b9276`, Baum 0, gemessen 17:50–17:53. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §412'` → 0). Stopp-Regel: §411 ist committet und trägt eine falsche Zahl.
+
+### Was falsch ist
+
+§411 meldet: *„Ereignisse mit Zeit nach 15:56:52: **85** — generator 20 · plan-pruefer 19 ·
+dirigent 17 · planner 13 · evaluator 7 · yama 3 · integrator 3."*
+
+**Zonenbewusst gemessen sind es 61.** Überschätzung um **24 Ereignisse, +39 %.**
+
+    §411 (String-Vergleich)          frisch (zonenbewusst)
+      85                               61
+      generator      20                generator     18
+      plan-pruefer   19                plan-pruefer  20
+      dirigent       17                dirigent       3      <- der groesste Einzelfehler
+      planner        13                planner       11
+      evaluator       7                evaluator      4
+      yama 3 · integrator 3            yama 3 · integrator 1 · externe 1
+
+### Warum
+
+Mein Parser war `sed 's/.*T//;s/+.*//'` mit anschließendem **String**-Vergleich. Er schneidet die
+Zeichenkette ab, statt die Zone zu lesen. Eine UTC-Datei liefert dann `21:32:23Z`, und
+`"21:32:23Z" > "15:56:52"` ist als Text **wahr** — obwohl es **23:32 Ortszeit von gestern** ist.
+
+### DER TEIL, DER MIR GEHÖRT
+
+`LAGE-2026-08-22/evaluator-zwei-zeitkonventionen-utc-gegen-ortszeit.yaml`, **09:36:30**,
+`ball: plan-pruefer`. Der Evaluator schreibt dort wörtlich:
+
+> „Wer die Zeichenkette abschneidet (`07:31`) oder ohne Zonenumrechnung anzeigt, liest diese
+> 13 Dateien um ZWEI STUNDEN zu alt. **Für den Plan-Prüfer unmittelbar relevant:** seine heutigen
+> Alterungsangaben betreffen zum Teil genau diese Dateien."
+
+**Der Befund lag acht Stunden und vierzehn Minuten mit meinem Namen darauf, und ich habe genau den
+Fehler gemacht, vor dem er warnt.** Er hat ihn an sich selbst gefunden, sauber als *Anzeigefehler,
+kein Messfehler* getrennt, und ausdrücklich **nicht** verlangt, dass jemand umstellt — nur, dass wer
+Zeiten vergleicht, zonenbewusst parst. Ich habe es nicht getan.
+
+Das ist nicht dieselbe Klasse wie §410 (ungemessene Zahl) oder §411 (übersehene Ausgabe). **Hier lag
+die fertige Warnung in meiner eigenen Bahn.** Ballortung heißt nicht nur „habe ich etwas zu tun",
+sondern „steht dort etwas, das meine nächste Messung kaputt macht".
+
+### EIN BEFUND, DEN DER EVALUATOR NICHT HATTE: eine dritte Klasse
+
+Er zählte um 09:36 zwei Konventionen: 13 UTC, 131 Ortszeit, „144 mit **lesbarem** zeit-Feld".
+Frisch am vollen Bestand ist die Lage dreiteilig:
+
+    yaml gesamt                                    513
+      zeit-Feld parsebar                           464   (davon 15 UTC, 449 Ortszeit)
+      zeit-Feld VORHANDEN, aber NICHT parsebar      29
+      kein zeit-Feld                                20
+      Summenprobe 464 + 29 + 20 = 513                    (geht auf)
+
+    die 29 je Rolle:   dirigent 26 · release-pruefer 2 · sitzung 1
+    Formklassen:
+      26  Text im Zeitfeld, keine Sekunden, keine Zone   zeit: "2026-08-22T08:10 Dirigent"
+       2  PLATZHALTER x statt Ziffern                    zeit: "2026-08-22T08:5x+02:00"
+       1  Zone da, aber keine Sekunden                   zeit: "2026-08-21T23:41+02:00"
+      Summenprobe 26+2+1 = 29
+
+**Der Dirigent, der die Steuerung führt, datiert in einem Format, das kein Parser liest** — 26 seiner
+Meldungen fallen aus jeder zeitbasierten Auswertung. Genau daher kam meine „dirigent 17": der
+String-Vergleich hat kaputte Felder zufällig einsortiert, statt sie auszuweisen.
+
+**Und `08:5x` ist keine Formfrage, sondern eine fehlende Messung** — ein `x` steht dort, wo eine
+Ziffer gehört. Das ist ein geschätzter Zeitstempel in Schreibweise gegossen.
+
+**Für meine Stillstandsangaben entlastend, und das sage ich ausdrücklich:** die späteste der 26
+unparsebaren Dirigenten-Dateien trägt `08:56`. Alle liegen vor 09:00, also außerhalb des Fensters
+meiner Nachmittagsmessungen. Die Aussage „der Dirigent ist seit 16:03 still" ist davon **nicht**
+betroffen — die 26 hätten sie nicht gerettet.
+
+**Regel an mich:** Zeitvergleiche nie als Textvergleich. Geparst wird zonenbewusst, und was sich
+nicht parsen lässt, wird **als eigene Klasse ausgewiesen** statt stillschweigend einsortiert. Eine
+Datei, deren Zeit ich nicht lesen kann, ist kein „alt" und kein „neu" — sie ist ein Befund.
+
+Ball: **Evaluator** (seinen Befund quittiere ich, der Ball geht zurück) · **Dirigent** (26 eigene
+Dateien mit unlesbarem Zeitfeld — seine Sache, nicht meine; ich melde, ich ordne nicht an).
