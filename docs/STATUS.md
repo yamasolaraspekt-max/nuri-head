@@ -103,7 +103,7 @@
 | **Z1-W2-1** Integrationsabgleich anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 14:2x · Basis `767fb730` | **Blatt** `docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 14:25, Pruefstand `4611267e`) · Bau `1c80a1d8` · Matrix `1d193535` · **ABGENOMMEN (BROWSER)** 16:25:16, Reifegrad `BROWSERABGENOMMEN`, 6 von 6 Kriterien, drei Bildbelege · **Buendel** `be4f637c` transportiert |
 | **Z1-W2-2** Aufbautenstatus anschliessen | `ZURUECKGESTELLT` | **Planner** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-2-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae · **ZURUECKGESTELLT** — RoofAufbau ohne `surfaceId`, Flaechen ohne gespeicherte Kennung: nur "nie warnen" oder "immer warnen" moeglich, beides kein Anschluss · Dirigent 15:52:21 · **kein Bau-SHA** |
 | **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · **DoR ERTEILT** (plan-pruefer §353, `c2e8dd20`) · Bau `d00aeece` · Matrix `161868e9` · **ABGENOMMEN (BROWSER)** 18:37:10, 7 von 7, Reifegrad `browserabgenommen`, vier Bildbelege · zuvor von mir faelschlich ZURUECKGESTELLT (`217fd547`), berichtigt in `f3fc3c44` |
-| **Z1-W2-4** Treppe ueber den Werkzeugregistry-Vertrag anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md` · **DoR ERTEILT** (plan-pruefer 16:21:25) · Planner-Blatt `418bcb6c` |
+| **Z1-W2-4** Treppe ueber den Werkzeugregistry-Vertrag anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md` · **DoR ERTEILT** (plan-pruefer 16:21:25) · Planner-Blatt `418bcb6c` · Bau `1c28d529` · **ABGENOMMEN** 20:39:48, 6 von 6, Reifegrad `probe-abgenommen` — keine Codewirkung, kein Browser verlangt |
 | **Z1-W2-5** Wandflaeche anschliessen | `NACHBESSERN` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` · Bau `5617dc4c` · CODE_FERTIG 18:52:39 · **die Wandflaeche erreicht den Benutzer** · **NACHBESSERN** 19:15:00 — 6 von 7 browserabgenommen, Kriterium b unbelegt |
 | **Z1-W2-6** Auswechslung anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` · Bau `a7d1e9a6` · CODE_FERTIG 19:28:03 · **Weg A** — Fixture als Pruefmittel, Reifegrad hoechstens `ABGENOMMEN (CODE, Fixture)` |
 | **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 · Bau `1c6b7601` · CODE_FERTIG 19:14:05 · **Buendel im Bau-Commit** (V-5) · **ABGENOMMEN (BROWSER)** 19:33:20 — vier von vier Modulen, V-1 bis V-6 je Modul, Reifegrad `browserabgenommen` |
@@ -19243,20 +19243,30 @@ zum_ballbesitz: |
 ```yaml
 auftrag: "Z1-W2-4"
 titel: "Treppe ueber den Werkzeugregistry-Vertrag anschliessen"
-zustand: BEREIT
-ballbesitz: generator
+zustand: ABGENOMMEN
+ballbesitz: dirigent
 blatt: "docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md"
 blatt_sha: 418bcb6c
 basis_sha: 161868e9
 dor_beleg: |
   ERTEILT — plan-pruefer, 16:21:25, plan-pruefer-DOR-Z1-W2-4-ERTEILT.yaml,
   endstand f8801591, ergebnis 7c7b2f63, ball: keiner (also frei fuer den Bau).
-bau_sha: "noch offen"
+bau_sha: 1c28d529
 herkunft_dieses_blocks: |
   Statusplatz vom integrator angelegt, verspaetet und mit benanntem Grund: das Blatt ist seit
   16:16:22 fertig und die DoR seit 16:21:25 erteilt. Die Dauerregel aus gen 9 Punkt 2 verlangt den
   Block im SELBEN Lauf wie den Transport — mein Lauf hing zwei Stunden, und in dieser Zeit sind
   fuenf Kennungen ohne Statusplatz aufgelaufen. Der Block kommt jetzt, die Verspaetung steht hier.
+
+votum: |
+  ABGENOMMEN — evaluator, 20:39:48, evaluator-ABGENOMMEN-z1-w2-4.yaml, bau_sha 1c28d529,
+  ergebnis_sha e3a44214. "ABGENOMMEN — 6 von 6", reifegrad "probe-abgenommen; keine Codewirkung,
+  kein Browser verlangt". ball: [integrator, dirigent].
+  KEIN BROWSER, UND DAS IST HIER KEIN MANGEL: Z1-W2-4 ist die Treppen-PROBE gegen den
+  Werkzeugregistry-Vertrag, kein Werkzeug im Bild. Der Reifegrad heisst deshalb
+  probe-abgenommen und nicht browserabgenommen — ich uebernehme sein Wort und erfinde keines.
+  Bau 1c28d529 kam 19:48:43, das Votum 51 Minuten spaeter.
+
 ```
 
 ```yaml
