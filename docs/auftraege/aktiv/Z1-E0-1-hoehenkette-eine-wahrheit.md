@@ -168,3 +168,60 @@ Kriterienstand eingefroren; eine Erweiterung wäre eine neue Runde, und der Gene
 **Ob die zweite Hälfte in E0 gehört oder ein eigenes Blatt wird, entscheidet der Dirigent.**
 *Der Vorrat steht heute bei 7 bei einem Deckel von 6 — ein achtes Blatt schneide ich nicht von
 selbst.*
+
+---
+
+## ⚠ NACHTRAG 22.08. 20:1x — zwei Mängel in Kriterium (a), beide meine
+
+```yaml
+anlass: "generator-CODE_FERTIG-Z1-E0-1.yaml (20:09:51, ergebnis_sha ad2ac724) meldet ZWEI
+         Zahlenabweichungen gegen (a). Ich habe beide selbst am Stand d2890e85 nachgemessen."
+art: "MANGELANZEIGE gegen das eigene Blatt. KEINE Kriterienaenderung: a..e bleiben fuenf,
+      und ich setze KEINE neue Zielzahl — das waere ein nachtraegliches Verschieben des Ziels
+      auf die gelieferte Zahl."
+entscheidung_liegt_bei: "evaluator (Abnahme), plan-pruefer (ob der Kriterienstand traegt)."
+```
+
+### Mangel 1 — (a) und (e) sind zusammen nicht erfüllbar
+
+Der Messbefehl von (a) verlangt **0**, schließt aber nur `__tests__` und `hoehenkette.ts` aus.
+**Gemessen am Stand `d2890e85` trifft das Muster auch reine Kommentare:**
+
+```
+domain/scene.types.ts:327   traufhoeheMm: number;   // Default: level.elevation + defaultWallHeight
+renderers/three-d/szene.ts:453                      // (level.elevation + defaultWallHeight). …
+geometry/geschossVorlage.ts:41                      // Neue Höhenlage = elevation + defaultWallHeight …
+```
+
+> **Der Treffer in `domain/` ist ein Kommentar hinter einem Feld — keine Rechnung.** *Und (e)
+> verlangt `git diff -- domain/` **LEER**.* **Wer (a) wörtlich erfüllt, verletzt (e); wer (e) hält,
+> kann (a) nicht auf 0 bringen.** Mein Muster unterscheidet Code nicht von Kommentar — **das ist
+> der Mangel, nicht die Lieferung.**
+
+### Mangel 2 — (a) nennt einen Aufrufer, der zur anderen Funktion gehört
+
+(a) verlangt, dass `Kopfrahmen.tsx:172`, `geschossVorlage.ts:54` **und `HausplanerApp.tsx:1008`**
+aus `naechsteEtageElevationMm` lesen — Zielzahl **3**. **Gemessen:**
+
+```
+app/HausplanerApp.tsx:1008   ueberstandMm: 500, traufhoeheMm: deckenOberkanteMm(level),
+                                                            ^^^^^^^^^^^^^^^^^^
+deckenOberkanteMm(       Aufrufer: szene.ts:456 · szene.ts:483 · HausplanerApp.tsx:1008
+naechsteEtageElevationMm( Aufrufer: KEINE (nur die Definition deckenMesh.ts:32)
+```
+
+> **Zeile 1008 setzt die Traufhöhe — das ist `deckenOberkanteMm`, nicht die nächste Etage.**
+> *Und mein eigener Lücken-Block sagt es oben auf Zeile 42 korrekt:* „`deckenOberkanteMm` … 3
+> Aufrufstellen: `szene.ts:456`, `:483`, `HausplanerApp.tsx:1008`". **Mein Kriterium hat den
+> dritten Aufrufer der einen Funktion der anderen zugeschrieben.** *Dasselbe Blatt, zwei Aussagen,
+> und das Kriterium hat die falsche genommen.*
+
+### Was ich ausdrücklich NICHT tue
+
+**Ich setze keine neue Zielzahl.** *Ob „1 statt 0" und „2 statt 3" die Zusage erfüllen, entscheidet
+der Evaluator* — hätte ich die Zahlen jetzt auf die gelieferten geändert, wäre jede Lieferung
+nachträglich richtig. **Was ich liefere, ist die Messung, die zeigt, woher die Abweichung kommt:
+aus meinem Text, nicht aus dem Bau.**
+
+**Lehre:** ein Messbefehl über Quelltext muss sagen, ob Kommentare zählen — und ein Kriterium darf
+keinen Aufrufer nennen, ohne die Funktion mitzumessen, zu der er gehört.
