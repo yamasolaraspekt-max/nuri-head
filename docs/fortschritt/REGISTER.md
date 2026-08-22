@@ -48,6 +48,7 @@ Mindestens: **Befehl**, **Rohausgabe**, **Commit-SHA**, **Datum**.
 
 | Blatt | Mess-SHA · Datenzeitpunkt | Ansicht |
 |---|---|---|
+| [`inventur-bilanz-2026-08-22.md`](inventur-bilanz-2026-08-22.md) | `eb304cf5` · 22.08.2026 08:40 | Bilanz der Inventur: 27 Produktbefunde (2 belegt behoben, 12 gebaut ohne Votum, 13 offen) + 16 Steuerungsbefunde (2 behoben, 2 Regel, 12 technisch offen), je Befund Auftrag/Korrigierender/Stand/Wirkung |
 | [`lagebericht-2026-08-22-3b2e5334.md`](lagebericht-2026-08-22-3b2e5334.md) | `3b2e5334` · 22.08.2026 00:20:51 | Plattform/Rechte/Steuerung: A-42 ABGENOMMEN (11/11), A-37 begonnen (Planner-Lease), Rollen-Tabelle je Generation, Pull-Betrieb SOFT-AKTIV, eine nächste Handlung |
 
 ## Vorhandene Fortschrittsquellen (noch nicht migriert)
