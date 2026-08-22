@@ -37409,3 +37409,72 @@ habe — **und dass ich sie in 25 Abschnitten über Messdisziplin nicht ein Mal 
 
 Ball: **Dirigent** — Postenmessung nachgeholt, `entscheidungsreif: ja`. **Dies ist ein Ball und geht
 sofort als eigenes Ereignis** (§463).
+
+## §467 — Postenmessung 2/9: der driftende Zeiger steht seit sechs Tagen still. Und mein Fehlschlag beim Messen war ein geratener Pfad
+
+Messstand: HEAD `a66d7167`, Baum 0 · Integration `57e661bd`, Baum 0 · **Rückstand `HEAD..auto` = 153**
+(ARBEITSREGELN:1863, ab jetzt jede Runde mitgeführt) · gemessen 21:21–21:26.
+**Ereignis-Schnitt dieser Runde: 21:19:31** (0 neue Ereignisse). Abschnittsnummer gegen den frischen
+HEAD gewählt (`grep -c '^## §467'` → 0). **Zweiter Posten für den Dirigenten-Auftrag von 14:48:57.**
+
+### Der Posten: „driftender Zeiger `raumAuswahl.ts`"
+
+**Der alte Stand** (mein Abschnitt vom 16.08., gegen `fcd007a1`): *„Die Drift beträgt fünfzehn Zeilen
+und sie ist STABIL."* — `raumAuswahl.ts:7` verweist auf `Buehne.tsx:147`, tatsächlich steht die
+Stelle auf `:162`.
+
+**Frisch gemessen, sechs Tage später:**
+
+    raumAuswahl.ts:7-8   „Ihre heutige Identitaet ist der Index in der Liste (`Buehne.tsx:147`,
+                          `key={`raum${i}`}`)."
+    tatsaechlich          app/rahmen/Buehne.tsx:162   <Group key={`raum${i}`} listening={…}>
+    Drift heute           15 Zeilen        Drift am 16.08.: 15 Zeilen
+    Buehne.tsx zuletzt    13.08. 00:56 (83d6e108, „W-05/2 gebaut")
+    raumAuswahl.ts zuletzt 13.08. 07:40
+
+> **Der Posten ist seit sechs Tagen unverändert — und diesmal ist das gemessen, nicht behauptet**
+> (§462). Beide beteiligten Dateien wurden seit dem 13.08. nicht mehr angefasst. **Die Drift wächst
+> nicht, weil nichts sich bewegt.**
+
+    entscheidungsreif: JA
+    Vorlage: Ordnungsposten, wie der Dirigent ihn am 14:48 eingeordnet hat („Generator nach Welle 1,
+    mit den Verfallsdatum-Kopfzeilen"). Die Messung stuetzt die Einordnung: 15 Zeilen Drift, seit
+    sechs Tagen stabil, kein Wachstum, kein Schaden. KEIN Blocker fuer irgendetwas.
+
+### Mein Fehlschlag beim Messen — und er hat einen Namen
+
+Meine erste Messung schlug fehl: **`Buehne.tsx` gab es unter `app/` nicht.** Ich hatte den Pfad
+`resources/planner/hausplaner/app/Buehne.tsx` gebildet — **aus dem alten Befund, der nur
+`Buehne.tsx:147` sagt, ohne jedes Verzeichnis.** Die Datei liegt seit dem 13.08. unter
+`app/rahmen/Buehne.tsx`.
+
+    Mein Befehl gab:   „No such file or directory", Drift „-147 Zeilen", Aenderungen „0"
+    Alle drei Zahlen waren KEIN Ergebnis — sie waren die Folge eines Pfades, den ich ERGAENZT habe.
+
+> **Das ist die Falle aus §436: der geratene Pfad.** Und sie ist hier besonders lehrreich, weil
+> **der ursprüngliche Verweis KEINEN Pfad nennt — und deshalb den Umzug überlebt hat.**
+> `Buehne.tsx` ist im Bestand eindeutig; wer nach dem Namen sucht, findet sie. **Ich habe einen
+> Pfad hinzugefügt, den der Verweis nicht hatte, und damit einen Fehler erzeugt, den er nicht
+> hatte.**
+
+**Die Lehre kehrt §449 um:** Dort war die Standangabe die Rettung — ein Verweis *mit* Stand bleibt
+richtig. **Hier ist die fehlende Pfadangabe die Rettung:** ein Verweis über den *Dateinamen* überlebt
+einen Umzug, ein Verweis über den *Pfad* nicht. **Beides zusammen ergibt die Regel: nenne, was
+stabil ist, und nichts darüber hinaus.**
+
+### Was ich am Posten NICHT ändere
+
+**Die 15 Zeilen Drift bleiben stehen.** Sie zu beheben hieße, `raumAuswahl.ts` anzufassen —
+Produktcode, außerhalb meiner Rolle, und der Dirigent hat ihn dem Generator nach Welle 1 zugeordnet.
+**Meine Aufgabe war die Messung, und die liegt vor.**
+
+### Lage, jetzt gemessen (21:20:58)
+
+    Commits NICHT in der Integration      39
+    Integrator-Stille                     95 Minuten
+    §447 „steht aus" bei E0/E2             2
+    Baelle beim Integrator (ganzes Haus)  21
+    Rueckstand mein Baum -> Integration   153
+
+Ball: **Dirigent** — zweite Postenmessung, `entscheidungsreif: ja`. **Geht sofort als Ereignis**
+(§463: alles mit Ball einzeln).
