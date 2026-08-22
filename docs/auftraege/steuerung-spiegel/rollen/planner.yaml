@@ -1,5 +1,5 @@
 auftrag_id: PARKEN-planner-bis-A-37
-generation: 7            # 22.08. 08:12 — Yama: Z0-I1 begann zu frueh (Lease unter SPEZ-planner-A-37 fuer Z0-I1-Erweiterung). WIP-Reihenfolge wiederhergestellt: A-42 -> A-37 VOLLSTAENDIG AKTIV -> Z0-I1. Planner parkt.
+generation: 8            # 22.08. 08:2x — Praezisierung Yama: die 198 uncommittierten Z0-I1-Zeilen bleiben IM WORKTREE als PARKED_DRAFT (nicht committen, nicht loeschen, NICHT auschecken). gen 7 ('ins Scratchpad sichern und git checkout --') ist damit ueberholt.
 rolle: planner
 sitzung_erwartet: ef8ec540-263d-4f06-8a02-5a2f1beeb572
 worktree: /Users/yamanuri/Documents/ticket-rolle-planner
@@ -8,20 +8,26 @@ basis_sha: 762243b9
 prioritaet: P1
 aktion: parken
 jetzt: |
-  1. Z0-I1-Arbeit STOPPEN. Die offene Aenderung im Worktree (1 Datei) ins Scratchpad sichern (kein Verlust), dann
-     git checkout -- <datei>, Worktree sauber. Kein Commit.
-  2. Lease leases/SPEZ-planner-A-37/active/ (Token 5) freigeben -> abgelaufen/.
-  3. ACK gen 7 unter dem neuen ack_pfad; Ereignis ereignisse/PARKEN-planner-bis-A-37/planner-geparkt.yaml (was gesichert wurde, Lease frei, Worktree sauber).
-  4. Warten, bis A-37 gebaut (Generator) UND unabhaengig ABGENOMMEN (Evaluator) ist. Dann neue generation mit aktion: spezifizieren fuer Z0-I1 (dein gesicherter Entwurf ist dann der Start).
-  Lesende Vorbereitung bleibt erlaubt (Z0-I1-Blatt, Y-13-Entscheidung in auftraege/, Plan-Pruefer-Messungen VORRAT-Z0-I1/*), Schreiben nein.
-prozessregel_neu_yama: "Nach erteilter DoR wird der Kriterienstand EINGEFROREN. Reine Beleg-/Formulierungsberichtigungen ohne Kriterienwirkung werden nicht einzeln committet, sondern als EIN Errata-Ereignis (ereignisse/<auftrag>/planner-errata.yaml) gesammelt und spaeter mit EINEM Commit und EINEM Rueckweg transportiert. Kriterienaenderungen nach DoR = neue DoR-Runde."
+  1. Z0-I1-Sacharbeit STOPPEN. Die uncommittierten Aenderungen im Worktree (ca. 198 Zeilen) BLEIBEN GENAU SO LIEGEN:
+     kein Commit, kein git checkout/reset/stash, kein Loeschen. Zusaetzlich eine Kopie ins Scratchpad (reine Sicherung).
+  2. Ereignis ereignisse/PARKEN-planner-bis-A-37/planner-PARKED_DRAFT.yaml: Pfad(e), git diff --stat, sha256 der
+     geaenderten Datei(en), Kopie-Pfad im Scratchpad, Zeit — das ist die Kennzeichnung als geparkter Entwurf.
+  3. Alte Lease leases/SPEZ-planner-A-37/active/ (Token 5) freigeben -> abgelaufen/.
+  4. ACK gen 8 unter ack_pfad (Worktree/Branch/HEAD 762243b9 + Hinweis 'PARKED_DRAFT vorhanden').
+  5. Warten, bis A-37 gebaut (Generator) UND unabhaengig ABGENOMMEN (Evaluator) ist. Dann neue generation mit
+     aktion: spezifizieren fuer Z0-I1 — der PARKED_DRAFT ist der Start; dazu die Dirigent-Fassung des Z0-I1-Blatts
+     (git show rolle/dirigent:docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md) als Vorarbeit und
+     auftraege/Y-13-entscheidung-yama.md als entschiedener Operand.
+  In jedem Takt bis dahin: Auftrag ziehen, Digest pruefen, nichts am Worktree aendern, den PARKED_DRAFT mit
+  git diff --stat gegen das PARKED_DRAFT-Ereignis pruefen (unveraendert?), kurz berichten, enden.
+prozessregel_yama: "Nach erteilter DoR Kriterienstand einfrieren; Beleg-/Formulierungsberichtigungen ohne Kriterienwirkung als EIN Errata-Ereignis, ein Commit, ein Rueckweg. Kriterienaenderung nach DoR = neue DoR-Runde."
 erlaubte_pfade: []
 verboten:
   - Sacharbeit an Z0-I1/Z0-I2/Z0-I3 bis A-37 ABGENOMMEN
+  - Commit, checkout, reset, stash oder Loeschen am PARKED_DRAFT
   - Produktcode; Voten; docs/STATUS.md / docs/BEFUNDNOTIZEN.md
   - Commit ohne aktive Lease; Commit ausserhalb des eigenen Worktrees; nacktes git commit
-steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease-Freigabe, Ereignisse — keine Sacharbeit]
+steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease-Freigabe, Ereignisse, Sicherungskopie ins Scratchpad — keine Sacharbeit]
 status: ZUGETEILT
 ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/PARKEN-planner-bis-A-37/planner-ack.yaml
-anerkennung: "A-37-Spezifikation mit DoR in zwei Runden: gute Arbeit. Die Lehre daraus ist die Errata-Regel, nicht ein Vorwurf."
-erstellt: "2026-08-22T08:12 Dirigent (atomar veroeffentlicht)"
+erstellt: "2026-08-22T08:2x Dirigent (atomar veroeffentlicht)"
