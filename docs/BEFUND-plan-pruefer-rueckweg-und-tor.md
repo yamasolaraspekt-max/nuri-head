@@ -29415,3 +29415,62 @@ Auskunft — **er muss nichts tun, und es liegt nicht still.**
 
 **Ball: niemand.** Keine Forderung; der Posten hat einen Platz in einer Reihenfolge, und die gehört
 dem Dirigenten. In der abgelegten Postenliste nachgetragen.
+
+## §362 — Alterungsprüfung „Regelkollision §3/E1/Beifang": unverändert nach 14 Dateiänderungen — und das Tor hat vorhergesagt, was ich heute viermal gemessen habe
+
+Gewählt gegen HEAD `90358925` (Baum sauber, 15:06:34). §362 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok.
+
+**Vierte Alterungsprüfung nach §358.** Gewählt: der Posten mit dem eigentümlichsten Zustand —
+*„praktisch geschlossen, formal offen"*.
+
+**Beide Seiten stehen unverändert, aber ihre Zeiger sind gewandert.** Mein Befund vom 16.08. nannte
+`ARBEITSREGELN.md` Z.409 und Z.692; die Datei hat heute **1925** Zeilen, dort steht anderes. Über
+den Inhalt gesucht (§357):
+
+    Seite A  jetzt Z.423  "unmittelbar nach dem Merge wird dessen SHA in einem Statusuebergang
+                           auf dem Zielbranch festgehalten; erst dieser Uebergang darf
+                           VEROEFFENTLICHT setzen"
+    Seite B  jetzt Z.707  "Nur ausdruecklich gepruefte Pfade werden gestaged; niemals git add -A."
+
+**Beide im Wortlaut identisch — und sie haben seit dem 16.08. vierzehn Änderungen an dieser Datei
+überstanden**, darunter die Einarbeitung der Fassung 1.7. *Eine Kollision, die vierzehn
+Bearbeitungen überlebt, wird nicht übersehen — sie wird umgangen.*
+
+**Der Nachtrag 1.5 von heute berührt sie nicht.** Gemessen: `Merge` **0**, `add -A` **0**,
+`Beifang` **0**, `Statusübergang` **0**. Er regelt anderes (*„Zustand aus dem Ereignis"*,
+*„Berichtigungen stapeln nicht"*). **Der Posten ist also nicht durch die heutige Regeländerung
+erledigt** — er steht so, wie er stand.
+
+**Der eigentliche Fund liegt im Werkzeug, nicht in der Regel.** `scripts/rollen-tor.sh:535`
+kommentiert die verwandte Umstellung (A-37 Teil 2, ein Schreiber für die Statuswahrheit) mit einem
+Satz, den ich vor heute nicht gelesen hatte:
+
+> *„Die Umstellung hat die Kollision nicht gelöst, sondern **verwandelt**: vorher Beifang beim
+> gleichzeitigen Schreiben, **sofort sichtbar** — heute divergente Wahrheit, **unsichtbar bis
+> jemand vergleicht**. Nicht schlimmer, aber leiser, und **leise Fehler sind die teuren**."*
+
+**Genau diese leisen Fehler habe ich heute viermal gemessen, ohne den Satz zu kennen:**
+
+    §333  A-43 hatte keinen Platz in der Statuswahrheit          (behoben)
+    §337  A-39: Zustandscommit da, Block nicht nachgezogen        (offen, UNGEKLAERT im Werkzeug)
+    §341/§342  A-43-Zustand — und ich las den falschen Baum       (berichtigt)
+    §355  Z1-W2-1 ENTWURF, waehrend der Bau laeuft                (nachgezogen inzwischen)
+
+**Vier Fälle an einem Tag, alle vom Typ „unsichtbar, bis jemand vergleicht".** Der Kommentar ist vom
+**16.08.** — er hat sechs Tage vorher beschrieben, was heute eingetreten ist. *Das ist die stärkste
+Form eines Befundes: eine Vorhersage im Bestand, die eine unabhängige Messung einholt.*
+
+**Was das für den Posten heißt.** Sein Zustand *„praktisch geschlossen, formal offen"* trägt weiter:
+Seite B ist maschinell erzwungen (das Tor stagt nur benannte Pfade, `git add -A` kommt in
+`commit-pruefen.sh` **0** mal vor), Seite A steht als Text. **Offen ist nach wie vor nur die
+Regeländerung** — und die ist eine Textentscheidung, kein Bau.
+
+**Neu ist die Begründung, warum sie sich lohnt.** Bisher hieß es: die Kollision kostet nichts, weil
+das Tor die eine Seite erzwingt. **Heute weiß ich, was sie stattdessen kostet** — nicht Beifang,
+sondern vier leise Divergenzen an einem Tag. *Der Preis ist nicht verschwunden, er hat die Form
+gewechselt.*
+
+**Ball: niemand.** Keine Forderung; die Regeländerung gehört Yama, und die Messung liegt jetzt bei.
+In der abgelegten Postenliste nachgetragen. **Stand: formal offen, praktisch erzwungen, Kosten
+messbar.**
