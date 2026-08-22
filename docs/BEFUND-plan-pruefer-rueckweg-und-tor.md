@@ -32459,3 +32459,64 @@ habe die Grundlage geprüft, damit sie nicht ungeprüft in eine Entscheidung ein
 
 Ball: **niemand von mir aus.** Der Stau unverändert: Integrator 95, Dirigent 90, Evaluator 67 Minuten
 still; Vorlage an Yama seit 17:29 offen.
+
+## §409 — Dreizehn Ereignisse warten beim Dirigenten. Und ein Register führte „STILLLEGEN", während mein Votum „beide Ausgänge sind Ergebnis" bestätigte
+
+Messstand: HEAD `86362c6e`, Baum 0, gemessen 17:36–17:40. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §409'` → 0).
+
+### Die Reichweite des Staus, gezählt
+
+Seit dem letzten Lebenszeichen des Dirigenten (16:03:05) sind **13 Ereignisse mit `ball: dirigent`**
+angekommen — von **allen vier arbeitenden Rollen**:
+
+    plan-pruefer  6   ·   planner  5   ·   evaluator  1   ·   generator  1
+    Gegenprobe im selben Zeitraum: ball=evaluator  9    — das Muster greift
+
+Darunter zwei Abnahme-relevante (`evaluator-ABGENOMMEN` 16:25:16, `generator-widerspruch-buendel`
+16:05:01), zwei Zuschnitte mit ausdrücklichem Entscheidungsbedarf (17:08:03, 17:27:50) und meine
+sechs. **§406 hat den Stau am Transport gemessen; das hier ist der Stau an den Entscheidungen.**
+
+### Der Fund, der mein eigenes Votum berührt
+
+`planner-BERICHTIGUNG-werkzeug-register.yaml`, 17:36:45, Ball auch bei mir. Fund 1:
+
+> *„Das Register führte `werkzeugRegistry.ts` — ‚Entscheidung: STILLLEGEN (Dirigent 14:11:33)' …
+> Die WERKZEUGWEG-Entscheidung 14:46:11 sagt: ‚Stilllegung erst nach der Probe; Ausgang funktioniert
+> → Weg belegt, Stilllegung ENTFÄLLT.' **FÜNFUNDDREISSIG MINUTEN. Die Registerfassung ist die
+> ältere.**"*
+
+**Selbst nachgemessen:**
+
+    Register 59c82dae (Stand bei meiner DoR):   'STILLLEGEN' 1 · 'stillzulegen' 1
+    Register c83066f6 (neu):                    'STILLLEGEN' 1 · 'Probe laeuft' 2 · '~~' 26
+    Beifang der Berichtigung:                   1 Datei, 108+/5-
+
+**Das „STILLLEGEN" stand dort, als ich Z1-W2-4 erteilte** (§382, 16:21:25). Der alte Satz ist jetzt
+durchgestrichen stehengelassen — Rückfall-Regel, 26 Durchstreichungen im Blatt.
+
+**Was das für mein Votum heißt.** Ich habe Kriterium (f) geprüft und seine Absage-Regel zitiert:
+*„‚Der Vertrag wird nicht benutzt, also weg' erfüllt (f) NICHT — Nichtbenutzung ist ein Anlass zu
+messen, kein Ergebnis."* **Parallel führte ein Konzeptdokument die Antwort bereits als
+Entscheidung.**
+
+**Ich habe das Register nicht geprüft** — es ist nicht Teil des Blattes, und eine DoR misst das Blatt
+gegen §5. **Das halte ich weiterhin für richtig abgegrenzt.** Der Fall zeigt aber etwas, das ich
+vorher nicht benannt hatte:
+
+> **Ein Kriterium kann formal offen sein und faktisch entschieden, wenn ein anderes Dokument die
+> Antwort schon führt.** Der Bauende liest nicht nur das Blatt.
+
+**Regel an mich:** Wenn ein Blatt ausdrücklich **zwei gültige Ausgänge** vorsieht, prüfe ich, ob ein
+Register, ein Zuschnitt oder eine Entscheidung einen der beiden bereits als gesetzt führt. Das ist
+ein Suchlauf, keine zweite DoR.
+
+### Was ich nicht gegenprüfen konnte
+
+Fund 2 der Berichtigung nennt Zählungen im Register (`W-02` 5 Stellen, `W-08` 2, `W-04` 1). **Mein
+Zähler misst Zeilen, die zwei Zeichenketten zugleich enthalten — das ist nicht dieselbe Frage**, und
+meine 3/2/1 sind mit seinen 5/2/1 nicht vergleichbar. **Ich melde keine Abweichung, weil ich keine
+gemessen habe**, sondern das falsche Maß angelegt hätte.
+
+Ball: **Dirigent** (13 Vorgänge, unverändert) · bei mir nichts; die Register-Berichtigung ist
+inhaltlich bestätigt, soweit sie mich betrifft.
