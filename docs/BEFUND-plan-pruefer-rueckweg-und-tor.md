@@ -35552,3 +35552,75 @@ sich einlesen lässt, ist nicht dieselbe wie eine, die das Richtige enthält"* �
 nicht einmal einlesen, und ohne Rücklesen wäre sie für jeden Empfänger unsichtbar gewesen.
 
 Ball: **keiner** — Z1-W2-4 bleibt bei `[evaluator, planner]`, Meldepflichten bestätigt.
+
+## §446 — Ein Fehlalarm über 12 Posten, gefangen von der Positivkontrolle. Und: `an:` ist nicht `ball:`
+
+Messstand: HEAD `8de985b0`, Baum 0, gemessen 20:03–20:05. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §446'` → 0). Vorratsprüfung Posten (e) — eigene Befunde und eigenes Verfahren
+verfolgen.
+
+### Was mein Ballortungs-Filter gemeldet hat — und es war falsch
+
+    OFFEN  00:25  SPEZ-planner-A-37/planner-CODE_FERTIG.yaml
+    OFFEN  08:20  NACHSCHAERFUNG-planner-A-37/planner-CODE_FERTIG.yaml
+    OFFEN  10:02  ERRATA-planner-A-37/planner-CODE_FERTIG.yaml
+    … 12 Posten, der älteste 20 Stunden alt
+
+**Zwölf unbeantwortete Bälle bei mir wäre der größte Stillstandsbefund des Tages gewesen.** Er war
+ein Werkzeugfehler.
+
+### Die Positivkontrolle hat ihn gefangen — sie ist der einzige Grund, warum hier kein Fehlurteil steht
+
+    Frage: Listet der Filter eine BEKANNT beantwortete Sache als offen?
+    Z1-W2-6 (von mir 19:34 geprüft, §-Beleg vorhanden)  ->  JA, als OFFEN gelistet
+    Damit ist der Filter widerlegt, BEVOR ein einziger Posten gemeldet wurde.
+
+### Zwei Fehler, und der zweite steckte in der Kontrolle selbst
+
+**Fehler 1 — Ordnerzugehörigkeit als Zuordnungsmerkmal.** Der Filter suchte meine Antwort im Ordner
+des Ereignisses. **Meine A-37-Voten liegen aber in `DOR-plan-pruefer-A-37/`** — der Ordner ist nach
+dem *Auftrag* benannt, meine Voten liegen im *DOR-Ordner meiner Rolle*:
+
+    DOR-plan-pruefer-A-37/plan-pruefer-ERTEILT.yaml         00:49
+    DOR-plan-pruefer-A-37/plan-pruefer-NICHT_ERTEILT.yaml   00:42
+    DOR-plan-pruefer-A-37/plan-pruefer-anmerkungen-geschlossen.yaml  01:14
+
+**A-37 ist vollständig beantwortet und längst durch** (der Integrator hat vier Nachschärfungen
+transportiert). Kein einziger der zwölf Posten war offen.
+
+**Fehler 2 — die Grundmenge meiner eigenen Gegenprobe.** `grep -rl 'Z1-W2-6'` traf **sechs** Dateien
+— jede, die die Zeichenkette irgendwo erwähnt, nicht die, die davon handelt. Mein `head -1` griff
+davon `SPEZ-planner-anschlusswelle-1/planner-CODE_FERTIG-paket-2-zuschnitt.yaml`, also **einen
+anderen Ordner**, und verglich Zeiten über Kreuz.
+
+> **Vierte Instanz derselben Klasse in einer Runde — und die folgenreichste:**
+> 1. Muster `BEGRUENDET` gegen Text `BEGRÜNDET` → 0 (§445)
+> 2. `|`-Block mit 4 statt 2 Leerzeichen Basis → nicht einlesbar (§445)
+> 3. Schlüssel `DIE_NEUE_…` gegen tatsächlich `DIE NEUE …` → `undefined` (§445)
+> 4. **Ordner als Zuordnung + `head -1` auf 6 Treffern → 12 falsche Stillstandsposten**
+>
+> **Alle vier sahen aus wie Befunde. Alle vier waren Werkzeugfehler.** Und alle vier fielen erst
+> auf, als ich **eine Ebene tiefer** gemessen habe, statt das Testergebnis zu glauben.
+
+### Der stehende Satz daraus
+
+> **Ordnerzugehörigkeit ist kein Zuordnungsmerkmal.** Zugeordnet wird über `auftrag:`/`kennung:` und
+> das `ball:`-Feld — nie über den Ablageort. Wer nach dem Ordner sucht, findet die Antwort nicht,
+> die eine Rolle in ihrem eigenen Ordner abgelegt hat, **und meldet dann Stillstand, wo Arbeit
+> geleistet wurde.** Das ist die schädlichste Fehlerform: sie beschuldigt.
+
+### `an:` ist nicht `ball:` — die richtige Ballortung dieser Runde
+
+Die drei Ereignisse seit 19:58, über das **`ball:`-Feld** statt über den Verteiler gemessen:
+
+    generator-CODE_FERTIG-Z1-W2-8.yaml              ball [evaluator, integrator]   an: … plan-pruefer …
+    planner-BERICHTIGUNG-vier-blattkoepfe-dor-beleg ball [integrator, generator]   an: … plan-pruefer …
+    generator-AUFTRAG_GESTARTET-Z1-E0-1.yaml        ball [generator]               an: … plan-pruefer …
+
+**In allen dreien stehe ich im Verteiler — in keinem liegt der Ball bei mir.** Wer `an:` für `ball:`
+nimmt, zieht drei Aufgaben an sich, die anderen gehören, und hält drei Rollen auf.
+
+**Ergebnis der Ballortung: bei mir liegt nichts offen.** Die drei `ballbesitz: plan-pruefer`-Zeilen
+in `docs/STATUS.md` sind die bekannten und in §442 gemeldeten.
+
+Ball: **keiner** — Befund am eigenen Verfahren.
