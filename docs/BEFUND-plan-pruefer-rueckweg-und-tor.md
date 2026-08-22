@@ -38111,3 +38111,78 @@ Code.
 Ball: **keiner** — Berichtigung am eigenen Befund. **Kein Ereignis** (§463: Vorratsbefunde und
 Berichtigungen ohne Ball werden gesammelt); geht in die nächste Sammelmeldung, zusammen mit den
 Posten aus §464/§465.
+
+## §476 — `git grep` kennt kein `\b`: unabhängig bestätigt. Ich bin nicht betroffen — und der Grund dafür ist kein Verdienst
+
+Messstand: HEAD `1e7974ed`, Baum 0 · Integration `57e661bd`, Baum 0 · **Rückstand `HEAD..auto` = 153**
+· gemessen 21:50–21:54. **Ereignis-Schnitt dieser Runde: 21:47:55** (1 neues Ereignis).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §476'` → 0). Anlass:
+`planner-BEFUND-git-grep-kennt-kein-wortgrenzen-b.yaml` (21:49:25, `dringlichkeit: hoch`) —
+**zitiert, und die Bestätigung selbst gemessen** (P-02 Punkt 4).
+
+### Der Befund, unabhängig nachgemessen
+
+    git grep -nE '\bIdsController\b'  auto/hausplaner-integration   ->   0 Dateien
+    git grep -nE   'IdsController'    auto/hausplaner-integration   ->  37 Dateien
+    git grep -nwE  'IdsController'    auto/hausplaner-integration   ->  37 Dateien
+    Positivkontrolle: 'IdsController' in routes/web.php  ->  7 Treffer
+
+**Der Befund stimmt.** `git grep` bringt seine eigene Regex-Maschine mit; `\b` wird nicht als
+Wortgrenze gelesen, sondern **fällt still durch**. Das Äquivalent ist `-w` / `--word-regexp`, und es
+liefert dieselbe Zahl wie ohne Muster.
+
+**Und die Gegenprobe, die der Befund nicht nennt:** Das normale `grep` **kennt** `\b` einwandfrei —
+`grep -rlE '\bIdsController\b' app/` und `grep -rl 'IdsController' app/` geben beide 1. **Der Fehler
+ist auf `git grep` beschränkt; wer im Arbeitsbaum misst, ist sicher.** Das ist wichtig, weil sonst
+jede `\b`-Messung des Hauses unter Verdacht stünde.
+
+### Bin ich betroffen? Gemessen: nein
+
+    „git grep" in meiner Befunddatei:                9 Zeilen
+    davon mit '\b':                                  0
+
+**Ich habe `git grep` nie mit `\b` gefahren.** Wortgrenzen habe ich mit expliziten Zeichenklassen
+gemessen — in §466 etwa `(^|[^0-9])§3([^0-9]|$)`. **Die funktionieren in beiden Regex-Maschinen.**
+
+> **Und das ist kein Verdienst.** Ich habe die Zeichenklassen genommen, **weil `§` kein Wortzeichen
+> ist und `\b` dort ohnehin nicht greift** — nicht, weil ich die Falle kannte. **Ich bin an ihr
+> vorbeigelaufen, nicht um sie herum.** Wäre der Posten aus §466 `E1` statt `§3` gewesen, hätte ich
+> vermutlich `\b` geschrieben.
+
+### Was der Planner richtig macht, und der Satz gehört aufgehoben
+
+> *„In Lauf 107 habe ich gemeldet, meine E1-Zahlen seien gegen den Integrationsstand BESTÄTIGT. Zwei
+> davon habe ich mit `\b` gemessen … **Die Schlussfolgerung war richtig, die Bestätigung war es
+> nicht. Ich hatte die richtige Antwort aus dem falschen Grund.** Das ist kein glimpflicher Ausgang,
+> sondern derselbe Mangel, den ich heute dreimal bei anderen gemeldet habe — nur mit Glück im
+> Ergebnis."*
+
+**Das benennt eine Klasse, die heute noch keinen Namen hatte:** *eine richtige Aussage mit einem
+kaputten Beleg.* Sie ist schwerer zu finden als ein falsches Ergebnis, **weil das Ergebnis stimmt
+und niemand nachsieht.**
+
+### Die Familie ist jetzt vollständig — vier Wege zu einer falschen Null
+
+    1  Umlaut gegen ASCII                    §445   grep 'BEGRUENDET' vs. 'BEGRÜNDET'      -> 0
+    2  relativer Pfad nach cd                §448   Datei nicht gefunden                   -> 0
+    3  geratener Pfad                        §467   app/ statt app/rahmen/                 -> 0
+    4  git grep mit \b                       hier   eigene Regex-Maschine                  -> 0
+
+> **Alle vier melden keinen Fehler. Alle vier liefern eine Null. Und eine Null liest sich im
+> Prüfgeschäft wie ein Befund:** „kein Aufrufer", „keine Fundstelle", „nicht vorhanden".
+>
+> **Der einzige Schutz, der bei allen vieren greift, ist derselbe: die Positivkontrolle am bekannten
+> Treffer.** Sie steht in meinem Wache-Auftrag, und sie hat heute jeden dieser vier Fälle gefangen —
+> **außer dem, den ich nicht hatte.**
+
+### Lage, jetzt gemessen (21:50:26)
+
+    Commits NICHT in der Integration      48
+    Integrator-Stille                    124 Minuten
+    §447 „steht aus" bei E0/E2             2
+    Baelle beim Integrator (ganzes Haus)  21
+    Rueckstand mein Baum -> Integration   153
+
+Ball: **keiner** — aber **dies geht sofort als Ereignis**, nicht in die Sammelmeldung: der Befund
+trägt `dringlichkeit: hoch`, betrifft das Messwerkzeug dreier Rollen, und eine **unabhängige
+Bestätigung ist für die anderen mehr wert als eine späte.**
