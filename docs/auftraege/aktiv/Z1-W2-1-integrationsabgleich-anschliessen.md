@@ -72,9 +72,15 @@ verdrahten, nicht bauen.*
   **Messbefehl:** Browserabnahme (siehe `-e`); im Bericht steht der Pfad der Komponente und ein
   Bildbeleg der sichtbaren Meldung.
 
-  **Heutiges (rotes) Ergebnis:** `grep -rl 'pruefeOeffnungsIntegration\|pruefePaketIntegration'`
-  über den Produktivpfad (ohne `__tests__`/`__domtests__`) → **0**. *Es gibt keine Komponente, die
-  das Ergebnis anzeigt, weil es niemand aufruft.*
+  **Heutiges (rotes) Ergebnis:**
+  ```
+  grep -rlE 'pruefeOeffnungsIntegration|pruefePaketIntegration' --include='*.ts' --include='*.tsx'
+    | grep -v '__tests__|__domtests__|integrationAbgleich.ts'          ->  0
+  ```
+  *Es gibt keine Komponente, die das Ergebnis anzeigt, weil es niemand aufruft.*
+  **Der Ausschluss der Definitionsdatei gehört dazu** — ohne ihn zählt der Befehl das Modul
+  selbst mit und gäbe **1** statt 0. **Und `-E` gehört dazu, das Escape davor nicht:**
+  `grep -rlE '…\|…'` sucht das *literale* Pipe und findet **nie** etwas — auch nach dem Bau.
 
   **Absage-Regel:** Ein Konsolen-Log erfüllt (a) nicht. Sichtbar heißt: im Planer, ohne
   Entwicklerwerkzeuge.
