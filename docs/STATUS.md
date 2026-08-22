@@ -99,7 +99,7 @@
 | **Z1-W1-3** Eine Formel, eine Stelle: polygonM2-Kopie zusammenfuehren | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md` · **DoR NICHT ERTEILT** (plan-pruefer §145), offen: Kriterien A und D · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §179, 21.08.), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
 | **Z1-W1-4** dachWerte: eine Quelle, Stilllegung statt Loeschung | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` · **DoR ERTEILT** (plan-pruefer §146) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §146), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Generator** |
 | **Z1-W1-5** insulationType: der tote Zweig sagt, dass er tot ist | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §147), offen: die Zahl · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §180), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
-| **Z1-W2-0** Bedienbarkeits-Probe: das Messgeraet fuer alle Werkzeugblaetter | `ENTWURF` | **Plan-Prüfer** | Schnitt 22.08. 14:5x · Basis `592df395` | **Blatt** `docs/auftraege/aktiv/Z1-W2-0-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR steht aus** |
+| **Z1-W2-0** Bedienbarkeits-Probe: das Messgeraet fuer alle Werkzeugblaetter | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 14:5x · Basis `592df395` | **Blatt** `docs/auftraege/aktiv/Z1-W2-0-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR ERTEILT** (plan-pruefer 15:02, Pruefstand `adf03d32`) · Bau `ee6ce517` · Matrix `0d97a57c` · CODE_FERTIG 15:45:32 |
 | **Z1-W2-1** Integrationsabgleich anschliessen | `ENTWURF` | **Plan-Prüfer** | Schnitt 22.08. 14:2x · Basis `767fb730` | **Blatt** `docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR steht aus** |
 | **Z1-W2-2** Aufbautenstatus anschliessen | `BEREIT` | **generator** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-2-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae |
 | **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | `BEREIT` | **generator** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae |
@@ -19032,13 +19032,17 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z1-W2-0"
 titel: "Bedienbarkeits-Probe — das Messgeraet fuer alle Werkzeugblaetter"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 blatt: "docs/auftraege/aktiv/Z1-W2-0-..."
 blatt_sha: adf03d32
 basis_sha: 592df395
-dor_beleg: "steht aus"
-bau_sha: "noch offen"
+dor_beleg: |
+  ERTEILT — plan-pruefer, Ereignis SPEZ-planner-anschlusswelle-1/plan-pruefer-DOR-Z1-W2-0-ERTEILT.yaml,
+  Pruefstand Blatt adf03d32, Messung 15:00:30, Ergebnis 02629500.
+  BERICHTIGUNG meines eigenen Werts: hier stand "steht aus". Das war beim Anlegen richtig — die DoR
+  lag 15:02 vor, mein Block entstand davor. Jetzt ist es unrichtig geworden und wird nachgezogen.
+bau_sha: 0d97a57c
 herkunft_dieses_blocks: |
   Angelegt vom integrator im Transportlauf (gen 11 Punkt 3). Regelfall: Blatt neu, DoR noch
   nicht erteilt, also ENTWURF und "dor_beleg: steht aus".
@@ -19047,6 +19051,15 @@ herkunft_dieses_blocks: |
   selbst, in dem das Wort DoR vorkommt, kein Votum des Plan-Pruefers. Ein Muster, das mehr
   trifft als die Frage. Nachgesehen und verworfen; hier steht der Anfangswert zu Recht.
   TRANSPORT, keine Bewertung.
+
+zustand_nachgezogen: |
+  CODE_FERTIG nachgezogen vom integrator aus generator-CODE_FERTIG-Z1-W2-0.yaml (15:45:32).
+  Spur W, also ist der Bau bereits in der Integration; transportiert im Lauf 15:57 (93ebc442).
+  Der Zustand sprang von ENTWURF auf CODE_FERTIG, ohne dass BEREIT je in der Tafel stand. Das
+  ist kein uebersprungener Schritt, sondern ein nicht nachgezogener: die DoR wurde 15:02 erteilt,
+  mein Block entstand 15:2x mit dem Anfangswert und wurde seither nicht angefasst. Ich trage
+  beide Belege ein, damit die Leiter nachvollziehbar bleibt.
+
 ```
 
 ```yaml
