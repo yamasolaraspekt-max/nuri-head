@@ -1,26 +1,33 @@
-auftrag_id: EVAL-bereitschaft-A-37
-generation: 5            # 22.08. 00:30 — A-42 abgeschlossen (dein b1c0c2d4, 11/11, eingetragen 3b2e5334). Neue Kennung: Bereitschaft fuer die A-37-Abnahme + zwei kleine, lesende Aufgaben.
+auftrag_id: ABNAHME-evaluator-A-37
+generation: 6            # Ausloeser-gebunden: NACH generator-CODE_FERTIG (BAU-generator-A-37) UND plan-pruefer-BESTAETIGT (DOR-plan-pruefer-A-37-errata). Bis dahin: bereit, lesende Vorbereitung, keine Sacharbeit.
 rolle: evaluator
-sitzung_erwartet: 303cefb6-35fd-4c36-9aca-ed10515f59b3   # Sitzungs-ID ist die Identitaet; pid/prozess_start gelten je Lauf (README 2)
+sitzung_erwartet: 303cefb6-35fd-4c36-9aca-ed10515f59b3
 worktree: /Users/yamanuri/Documents/ticket-rolle-evaluator
 branch: rolle/evaluator
-basis_sha: b1c0c2d4
-prioritaet: P1
-aktion: aufraeumen_vergleichen_dann_bereit
-aufgabe_1_aufraeumen: "Den Scratchpad-Worktree-Klon /private/tmp/claude-501/-Users-yamanuri-Documents-ticket/303cefb6-.../scratchpad/ticket-rolle-generator (detached f374c73a; Planner-Befund 'doppelter Generatorbaum') mit git worktree remove entfernen, damit kein Namensdoppelgaenger in der Worktree-Liste bleibt; Ergebnis: git worktree list --porcelain zaehlt 'ticket-rolle-generator' genau 1x. Ereignis: ereignisse/EVAL-bereitschaft-A-37/evaluator-aufgeraeumt.yaml."
-aufgabe_2_w0_5_vergleich: "W0-5-Doppelbau FACHLICH VERGLEICHEN, read-only, KEIN Votum auf einen der beiden, nichts ueberschreiben: 28ca0834 (app/Support/Planner, im gemeinsamen Checkout entstanden) vs ef7a8c89 (app/Traits/PlannerZustaendigkeit, rolle/generator). Vergleichen: Kriterium A drei Faelle (fremd 403 / eigen 200 / Vorgesetzter 200), Vorgesetztenkette (employees.supervisor mit Zyklen-/Tiefenschutz vs hasPermission), Testdatei-Pfade und Konfliktlage beim Transport, Wortlaut-Abweichungen zum Blatt. Bericht als ereignisse/EVAL-bereitschaft-A-37/evaluator-w0-5-vergleich.yaml mit Empfehlung, Entscheidung folgt vom Dirigenten/Planner. Keine DB-Laeufe (Verbot bis Z0-I1)."
-aufgabe_3_bereitschaft: "Danach bereit fuer die A-37-Abnahme: sobald der Generator (aa0cddd3, eigener Worktree) A-37 nach DoR gebaut und ereignisse/<A-37-Auftrag>/generator-CODE_FERTIG.yaml gemeldet hat, kommt eine neue generation dieser Datei mit aktion: abnehmen (21 alte + 6 neue Kriterien A-37-22..27; ALLE Positiv- UND Negativproben selbst ausloesen: falscher Worktree, fehlende Rolle, falscher Zweig, abgelaufene Generation, doppelte Lease, unerlaubter Pfad, nacktes git commit, Merge; --no-verify als dokumentierte Grenze). Bis dahin lesende Vorbereitung: docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md @ rolle/planner 3dde19ea."
-lease: "Fuer Aufgabe 1 und 2 keine Lease noetig (kein Repo-Commit); falls du Berichte im Worktree committest: Lease leases/EVAL-bereitschaft-A-37/ nach README."
+basis_sha: e6af5693
+prioritaet: P0
+aktion: warten_dann_abnehmen
+ausloeser:
+  - "ereignisse/BAU-generator-A-37/generator-CODE_FERTIG.yaml (alle A-37-Commits: 49972884, 1155709d, d64465b0, folgende)"
+  - "ereignisse/DOR-plan-pruefer-A-37-errata/plan-pruefer-BESTAETIGT.yaml (Errata geschlossen)"
+gegenstand: "Unabhaengige Abnahme von A-37 als EINE Lieferung: alle Commits auf rolle/generator seit ab9e837c (einschliesslich der Vorab-Commits 49972884/1155709d). Blatt: docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md @ rolle/planner (Errata-Stand) — 27 Kriterien + 22b/22c/22d/22e = 31. Generatorbericht ERST nach eigener Pruefung lesen."
+pruefen_vollstaendig:
+  - "Jedes Kriterium mit dem Messbefehl des Blatts: vorher rot (gegen ab9e837c) / nachher gruen (gegen Ergebnis-SHA)"
+  - "ALLE Negativproben SELBST ausloesen: falscher Worktree, fehlende Rolle (Exit 5), falscher Zweig, abgelaufene/veraltete Generation, fehlende ACK, aktion pausieren, doppelte Lease, unerlaubter Pfad, nacktes git commit, Merge ohne Berechtigung; Integrator darf begrenzten Integrationscommit; --no-verify als dokumentierte Grenze"
+  - "Transport-/Pfad-/Zweig-/Doppelgaenger-Proben AUSSCHLIESSLICH im Wegwerf-Repo unter Probe-Root (Aufbauskript des Generators reproduzieren oder eigenes bauen); am Bestand nur Preflight-/Gate-Ablehnung (nebenwirkungsfrei). NIE rueckweg.py auf realen Worktrees."
+  - "22e: Commit-Gate (commit-pruefen.sh UND .githooks/pre-commit) gegen eine Probe-Steuerungsstelle: veraltete ACK -> abgelehnt; fehlende ACK -> abgelehnt; aktion pausieren -> abgelehnt; aktuelle ACK + bauen -> erlaubt"
+  - "Keine DB-Laeufe (Verbot bis Z0-I1); Produktcode unveraendert (git diff --stat ab9e837c..HEAD -- resources/ app/ -> leer)"
+  - "Beide Altkriterien-Belege A-37-1..21 erneut (21/21) auf dem Ergebnisstand"
+meldepflicht: "Startmeldung + evaluator-AUFTRAG_GESTARTET.yaml vor der Arbeit; Abschluss 'ABGENOMMEN' oder 'NACHBESSERN' + evaluator-AUFTRAG_ABGESCHLOSSEN.yaml; Votum im eigenen Worktree committen (commit-pruefen.sh, TICKET_ROLLE=evaluator); Ereignis ereignisse/ABNAHME-evaluator-A-37/evaluator-<ABGENOMMEN|NACHBESSERN>.yaml mit Befehl, Rohausgabe, SHA je Kriterium. Zeiten nur gemessen."
+lease: "leases/ABNAHME-evaluator-A-37/ VOR der Pruefung; freigeben nach Votum."
 erlaubte_pfade:
-  - "eigenes Votums-/Befundblatt im Worktree (Dokument, kein Produktcode)"
+  - "eigenes Votumsblatt im Worktree (Dokument, kein Produktcode)"
 verboten:
-  - Produktcode aendern
-  - Voten zu W0-5 (nur Vergleich)
+  - Produktcode aendern; Reparaturen am Bau (NACHBESSERN geht an den Generator)
   - docs/STATUS.md / docs/BEFUNDNOTIZEN.md schreiben
-  - Datenbanklaeufe (bis Z0-I1)
+  - Datenbanklaeufe; rueckweg.py auf realen Baeumen
   - Commit ohne Lease; Commit ausserhalb des eigenen Worktrees
-steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
+steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/EVAL-bereitschaft-A-37/evaluator-ack.yaml
-anerkennung: "A-42: drei Voten, zwei eigene Berichtigungen, 11/11 — Massstab."
-erstellt: "2026-08-22T00:30 Dirigent (atomar veroeffentlicht)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/ABNAHME-evaluator-A-37/evaluator-ack.yaml
+erstellt: "2026-08-22T09:30:24+02:00 Dirigent (gemessen)"

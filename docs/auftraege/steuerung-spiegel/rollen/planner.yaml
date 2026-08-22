@@ -1,37 +1,24 @@
-auftrag_id: NACHSCHAERFUNG-planner-A-37
-generation: 11           # 22.08. 08:2x — VIERTE Nachschaerfung (Yama): A-37-22e Generations-/Digest-Pruefung direkt im Commit-Gate. Gen 10 (22b/22d-Aufloesung, Vorab-Commits) bleibt gueltig und ist hier enthalten. Dein Gen-9-ACK reicht nicht: gen 11 quittieren; dein Commit 99ea9183 (22b/c/d) bleibt, ergaenzender Commit folgt.
+auftrag_id: ERRATA-planner-A-37
+generation: 12           # Ausloeser-gebunden: erst NACH ereignisse/BAU-generator-A-37/generator-CODE_FERTIG.yaml (Yama: Errata nach dem Bau buendeln). Bis dahin gilt Parken weiter (PARKED_DRAFT unangetastet).
 rolle: planner
 sitzung_erwartet: ef8ec540-263d-4f06-8a02-5a2f1beeb572
 worktree: /Users/yamanuri/Documents/ticket-rolle-planner
 branch: rolle/planner
-basis_sha: 99ea9183
+basis_sha: 96b24ca3
 prioritaet: P0
-aktion: spezifizieren_nachschaerfung
-parked_draft_bleibt: "Die 198 uncommittierten Z0-I1-Zeilen bleiben UNANGETASTET. Commit NUR docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md."
-enthalten_aus_gen_10:
-  widerspruch_22b_22d_aufgeloest: "Im echten Integrationscheckout NUR nebenwirkungsfreie Autorisierungspruefungen (Preflight) und die Ablehnung fuer Nicht-Integratoren; der vollstaendige positive Transportlauf AUSSCHLIESSLICH im Wegwerf-Repo unter einem ausdruecklich begrenzten Probe-Root; Produktivbetrieb akzeptiert nur den kanonischen Checkout. Trennung: preflight_authorisierung() (Rolle, Checkout, Zweig, ohne Aenderung) / Transportkern mit temporaerem Root / Produktiv-Einstieg nur nach echtem Preflight / Probe-Modus nur unter temporaerem Verzeichnis, lehnt reale Rollen-Worktrees ab."
-  vorab_commits: "49972884 (A-37-22) und 1155709d (A-37-23) auf rolle/generator = VOR-NACHSCHAERFUNGSSTAND, nicht abnahmefaehig; bleiben; ergaenzender Bau-Commit nach dieser DoR; Evaluator prueft alle A-37-Commits als EINE Lieferung."
-neu_a_37_22e_yama_woertlich: |
-  Vor jedem schreibenden Schritt und unmittelbar im Commit-Gate muss die aktuelle Generation samt Digest erneut
-  gegen die zentrale Rollenquelle (/Users/yamanuri/.ticket-steuerung/rollen/<rolle>.yaml + .sha256) geprueft werden.
-  Ist der lokale ACK aelter, fehlt er oder lautet die Aktion `pausieren` (bzw. angehalten/parken), muss der Commit
-  vor jeder Aenderung beziehungsweise spaetestens vor dem Commit abgewiesen werden. Nur "beim naechsten Takt lesen"
-  reicht nicht. Beleg: Pause gen 6 veroeffentlicht 08:12:54, Generator-Commit 1155709d trotzdem 08:16:37.
-  Kriterium fuer commit-pruefen.sh UND .githooks/pre-commit: Generation/Digest-Abgleich, ACK-Alter, Aktionsstatus;
-  Negativproben: veraltete ACK -> abgelehnt; fehlende ACK -> abgelehnt; aktion pausieren -> abgelehnt; aktueller ACK
-  + aktion bauen -> erlaubt. Messbar im Wegwerf-Repo mit einer Probe-Steuerungsstelle (Probe-Root fuer rollen/).
-dirigent_schreibbereich_bleibt: "docs/konzept, docs/regelwerk, Steuerungsblaetter — scripts/ NICHT freigeben (Yama). Der Evaluator aendert keine Rollenentscheidung; Governance-Skripte: Planner spezifiziert, Generator baut."
-form: "Kriterien im Stil der bestehenden; Yamas Anweisung als Beleg; EIN ergaenzender Commit; Kriterien 1-27 + 22b/c/d sonst unveraendert."
-lease: "leases/NACHSCHAERFUNG-planner-A-37/ (haeltst du, Token 1) — Heartbeat auffrischen; freigeben bei CODE_FERTIG."
-commit: "NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules TICKET_ROLLE=planner bash scripts/commit-pruefen.sh '<Botschaft>' docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md"
-ergebnis: "ereignisse/NACHSCHAERFUNG-planner-A-37/planner-CODE_FERTIG.yaml mit beiden Ergebnis-SHAs (99ea9183 + ergaenzender); Ball an den Plan-Pruefer (kurze DoR ueber 22b/c/d/e)."
+aktion: warten_dann_errata_buendeln
+ausloeser: "ereignisse/BAU-generator-A-37/generator-CODE_FERTIG.yaml existiert (Generator hat A-37 Gen 8 fertig gemeldet)"
+gegenstand: "EIN gebuendelter Errata-Commit am A-37-Blatt (docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md), ohne Kriterienwirkung: (1) Zahl 15 -> 16 Treffer, (2) fehlende Rot-Belegzeile 'aktion -> 0/0' im 22e-Rot-Block (Plan-Pruefer-Nachtrag 'nachgetragener Restpunkt'), (3) ggf. weitere gesammelte Errata aus planner-errata-sammlung.yaml. KEINE Kriterienaenderung; Kriterien 1-27 + 22b/c/d/e bleiben Wort fuer Wort."
+meldepflicht: "Vor der Arbeit: Startmeldung + ereignisse/ERRATA-planner-A-37/planner-AUFTRAG_GESTARTET.yaml; zum Schluss Abschlussmeldung 'SPEZIFIZIERT' (hier: Errata) + planner-AUFTRAG_ABGESCHLOSSEN.yaml mit Ergebnis-SHA. Zeiten nur gemessen (date), nie geschaetzt."
+lease: "leases/ERRATA-planner-A-37/ nach README; freigeben nach Commit."
+commit: "NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules TICKET_ROLLE=planner bash scripts/commit-pruefen.sh '<Botschaft>' docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md — NUR dieser Pfad; PARKED_DRAFT (Z0-I1) bleibt unangetastet."
+ergebnis: "ereignisse/ERRATA-planner-A-37/planner-CODE_FERTIG.yaml (Errata-SHA) -> Ball an den Plan-Pruefer (kurze Bestaetigung), danach Evaluator."
 erlaubte_pfade:
   - docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md
 verboten:
-  - jede Aenderung an den Z0-I1-Dateien (PARKED_DRAFT) oder deren Commit
-  - Produktcode; Skripte; Voten; docs/STATUS.md / docs/BEFUNDNOTIZEN.md
-  - Commit ohne Lease; nacktes git commit; Merge-Commit
-steuerungshandlungen_erlaubt: [ACK, Lease, Ereignisse]
+  - Kriterien aendern; Z0-I1/PARKED_DRAFT anfassen; Produktcode; Skripte; Voten
+  - Commit ohne Lease; nacktes git commit
+steuerungshandlungen_erlaubt: [ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/NACHSCHAERFUNG-planner-A-37/planner-ack.yaml
-erstellt: "2026-08-22T08:2x Dirigent (atomar veroeffentlicht)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/ERRATA-planner-A-37/planner-ack.yaml
+erstellt: "2026-08-22T09:30:24+02:00 Dirigent (gemessen)"

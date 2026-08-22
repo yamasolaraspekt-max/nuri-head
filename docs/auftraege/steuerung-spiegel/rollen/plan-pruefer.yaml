@@ -1,23 +1,23 @@
-auftrag_id: DOR-plan-pruefer-A-37-nachschaerfung
-generation: 6            # 22.08. 08:5x — Yama: DoR AUSSCHLIESSLICH ueber die VOLLSTAENDIGE Nachschaerfung — drei Planner-SHAs 99ea9183 + fdc8d7d5 + 96b24ca3 (CODE_FERTIG, -2, -3). Kein Generator-CONT und keine neue Baugeneration vor belegtem ERTEILT.
+auftrag_id: DOR-plan-pruefer-A-37-errata
+generation: 7            # Ausloeser-gebunden: NACH ereignisse/ERRATA-planner-A-37/planner-CODE_FERTIG.yaml. Dein nachgetragener Restpunkt (22e-Rot-Beleg 'aktion') wird damit geschlossen — kurze Bestaetigung, keine neue DoR-Runde.
 rolle: plan-pruefer
 sitzung_erwartet: 3870df7a-b0ad-4c78-bcb2-c5aa83a4c09d
 worktree: /Users/yamanuri/Documents/ticket-rolle-plan-pruefer
 branch: rolle/plan-pruefer
-basis_sha: 2832bdd4
+basis_sha: e6af5693
 prioritaet: P0
-aktion: dor_nachschaerfung_jetzt
-pruefgegenstand: "docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md @ rolle/planner 96b24ca3 (enthaelt 99ea9183 = 22b/c/d, fdc8d7d5 = 22e + 22b/22d-Aufloesung + Vorab-Commits gekennzeichnet, 96b24ca3 = 22b-Messbefehl auf Wirkung). Integration 2832bdd4 traegt erst die ersten beiden — lies direkt aus rolle/planner."
-pruefen: "A-37-22b (Preflight-Autorisierung nur integrator im kanonischen Checkout; am Bestand nur nebenwirkungsfreie Pruefung/Ablehnung; Wirkungs-Messbefehl), 22c (Doppelgaenger per Aehnlichkeit inkl. Belegbaum ticket-rolle-generator-beleg-2026-08-21), 22d (positiver Transportlauf nur im Wegwerf-Repo unter Probe-Root; Probe-Modus lehnt reale Worktrees ab), 22e (Generation/Digest/ACK-Alter/Aktionsstatus direkt im Commit-Gate: commit-pruefen.sh UND pre-commit; Negativproben veraltete/fehlende ACK, aktion pausieren -> abgelehnt); 22b/22d widerspruchsfrei; Kriterien 1-27 unveraendert; Vorab-Commits 49972884/1155709d als nicht abnahmefaehig gekennzeichnet; Messbefehle vorher rot, einmal gefahren; Negativproben im Wegwerf-Repo ausloesbar."
-planner_standmeldung: "ereignisse/NACHSCHAERFUNG-planner-A-37/planner-standmeldung-22e-belegluecke.yaml — der Planner hat eine Beleg-Luecke zu 22e gemeldet und nach der Errata-Regel NICHT erneut committet; du entscheidest im Votum, ob das ein Restpunkt ist."
-votum: "ERTEILT oder NICHT ERTEILT mit Restpunkten — Ereignis ereignisse/DOR-plan-pruefer-A-37-nachschaerfung/plan-pruefer-<ERTEILT|NICHT_ERTEILT>.yaml mit allen drei SHAs; Votum im eigenen Worktree committen (commit-pruefen.sh, TICKET_ROLLE=plan-pruefer). Bei NICHT ERTEILT geht es NUR an den Planner; bei ERTEILT folgt die Generator-Baugeneration."
-lease: "leases/DOR-plan-pruefer-A-37-nachschaerfung/ (Token 1 hattest du gezogen; erneuern oder neu ziehen)."
+aktion: warten_dann_errata_bestaetigen
+ausloeser: "ereignisse/ERRATA-planner-A-37/planner-CODE_FERTIG.yaml (gebuendelter Errata-Commit des Planners: 15->16, 'aktion -> 0/0'-Belegzeile in 22e, ggf. weitere ohne Kriterienwirkung)"
+gegenstand: "Kurze Bestaetigung: (1) Errata-Commit aendert KEIN Kriterium (Kriterien 1-27 + 22b/c/d/e wortgleich zu 96b24ca3 — diff auf Kriterienzeilen leer), (2) die Rot-Belegzeile fuer 'aktion' steht jetzt im 22e-Rot-Block, (3) 15->16 berichtigt; dein DoR ERTEILT 1ca8d512 bleibt und der nachgetragene Restpunkt ist geschlossen. Ereignis ereignisse/DOR-plan-pruefer-A-37-errata/plan-pruefer-BESTAETIGT.yaml (oder -NICHT_BESTAETIGT mit Restpunkt). Votum-Nachtrag im eigenen Worktree committen."
+meldepflicht: "Start-/Abschlussmeldung nach docs/regelwerk/MELDEPFLICHT-AUFTRAG.md (Abschlussbegriff ERTEILT bzw. hier BESTAETIGT als Nachtrag zum ERTEILT). Zeiten nur gemessen."
+bis_zum_ausloeser: "Keine Sacharbeit, keine weiteren Vorratsmessungen (Begleitverkehr begrenzen — Yama)."
+lease: "leases/DOR-plan-pruefer-A-37-errata/ fuer den Votum-Nachtrag."
 erlaubte_pfade:
   - "eigenes DoR-/Votumsblatt im Worktree"
 verboten:
   - Kriterien selbst schreiben; Produktcode; docs/STATUS.md / docs/BEFUNDNOTIZEN.md
   - Commit ohne Lease; Commit ausserhalb des eigenen Worktrees
-steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse]
+steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/DOR-plan-pruefer-A-37-nachschaerfung/plan-pruefer-ack.yaml
-erstellt: "2026-08-22T08:5x Dirigent (atomar veroeffentlicht)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/DOR-plan-pruefer-A-37-errata/plan-pruefer-ack.yaml
+erstellt: "2026-08-22T09:30:24+02:00 Dirigent (gemessen)"
