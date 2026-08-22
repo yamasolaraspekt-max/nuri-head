@@ -105,7 +105,7 @@
 | **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · **DoR ERTEILT** (plan-pruefer §353, `c2e8dd20`) · Bau `d00aeece` · Matrix `161868e9` · **ABGENOMMEN (BROWSER)** 18:37:10, 7 von 7, Reifegrad `browserabgenommen`, vier Bildbelege · zuvor von mir faelschlich ZURUECKGESTELLT (`217fd547`), berichtigt in `f3fc3c44` |
 | **Z1-W2-4** Treppe ueber den Werkzeugregistry-Vertrag anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md` · **DoR ERTEILT** (plan-pruefer 16:21:25) · Planner-Blatt `418bcb6c` · Bau `1c28d529` · **ABGENOMMEN** 20:39:48, 6 von 6, Reifegrad `probe-abgenommen` — keine Codewirkung, kein Browser verlangt |
 | **Z1-W2-5** Wandflaeche anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` · Bau `5617dc4c` · CODE_FERTIG 18:52:39 · **die Wandflaeche erreicht den Benutzer** · **NACHBESSERN** 19:15:00 — 6 von 7 browserabgenommen, Kriterium b unbelegt · **ABGENOMMEN (BROWSER, Vorbehalt b)** 20:19:27 — b per Pruefmittel `?fixture=wand-schichten`, Schichten-Erzeugungsweg fehlt (AUF-76) · **zaehlt als angeschlossenes Modul** |
-| **Z1-W2-6** Auswechslung anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` · Bau `a7d1e9a6` · CODE_FERTIG 19:28:03 · **Weg A** — Fixture als Pruefmittel, Reifegrad hoechstens `ABGENOMMEN (CODE, Fixture)` |
+| **Z1-W2-6** Auswechslung anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` · Bau `a7d1e9a6` · CODE_FERTIG 19:28:03 · **Weg A** — Fixture als Pruefmittel, Reifegrad hoechstens `ABGENOMMEN (CODE, Fixture)` · **ABGENOMMEN (CODE, Fixture)** 20:19:27 — **zaehlt NICHT als angeschlossenes Modul**, der Erzeugungsweg fehlt (Dirigent 18:33:35) |
 | **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 · Bau `1c6b7601` · CODE_FERTIG 19:14:05 · **Buendel im Bau-Commit** (V-5) · **ABGENOMMEN (BROWSER)** 19:33:20 — vier von vier Modulen, V-1 bis V-6 je Modul, Reifegrad `browserabgenommen` |
 | **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `BEREIT` | **Generator** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht · **DoR ERTEILT** 19:06:40 mit zwei Halbsaetzen (§429) — Bau kann sofort beginnen |
 | **Z1-E0-1** Hoehenkette — eine Wahrheit statt drei Rechnungen | `BEREIT` | **Generator** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E0-1-hoehenkette-eine-wahrheit.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) |
@@ -19338,8 +19338,8 @@ votum: |
 ```yaml
 auftrag: "Z1-W2-6"
 titel: "Auswechslung anschliessen"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: dirigent
 blatt: "docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md"
 blatt_sha: e1c3f425
 basis_sha: 161868e9
@@ -19366,6 +19366,15 @@ zustand_nachgezogen: |
   angeschlossen", weil der Erzeugungsweg fehlt: ein Nutzer kann den Aufbau noch nicht selbst
   setzen. Der Reifegrad steigt erst mit dem Dach-2-Blatt "Dachaufbau setzen".
   Das Ereignis nennt ball: [evaluator, integrator]; mein Teil ist erledigt.
+
+votum: |
+  ABGENOMMEN (CODE, Fixture) — evaluator, 20:19:27, dasselbe Ereignis wie Z1-W2-5,
+  ergebnis_sha 1567f9f9.
+  DIE GRENZE HAELT, die der Dirigent 18:33:35 gesetzt hat und die ich beim Nachzug auf
+  CODE_FERTIG schon vermerkt hatte: Votum "(CODE, Fixture)", NICHT "(BROWSER)". Es zaehlt
+  NICHT als heute angeschlossenes Modul — ein Nutzer kann den Dachaufbau noch nicht selbst
+  setzen. Der Reifegrad steigt erst mit dem Dach-2-Blatt "Dachaufbau setzen".
+  Zwei Kennungen, ein Votum, zwei Reifegrade — genau deshalb zwei Statusplaetze.
 
 ```
 
