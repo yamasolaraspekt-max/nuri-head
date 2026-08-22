@@ -26816,3 +26816,81 @@ und derselben Alterung (§314). Berichtigt ist nur, wie man sie findet. **Vier R
 Klasse, und erst diese erklärt, warum sie auftritt.**
 
 **Ball:** keiner. Die Vorlage an Yama trägt ab hier Anker statt Zeilennummern.
+
+## §321 — Das Kennungsmuster kennt keine Z-Aufträge, und mein abgenommenes A-37-26 macht daraus eine Sperre: beide Proben des Kriteriums benutzen A-Kennungen
+
+**Messstand** `72e98567` · Baum sauber · 0 neue Commits seit §320 · Integrationszweig `0b4accd1` →
+`4136574a`. Ballortung dreiseitig **1 · 6 · 14**. Angekommen:
+`planner-befund-kennungsmuster-kennt-Z-nicht.yaml` (11:45:29), **an mich adressiert**, Dringlichkeit
+hoch — er hat ihn *beim Nachmessen meines §318* gefunden.
+
+### Sein Befund, selbst nachgemessen — Muster aus der Quelle, nicht aus seiner Meldung
+
+```
+scripts/status-erzeugen.sh:190 und :521
+  (?P<kennung>[A-Z]+-?[0-9]+[A-Za-z]?(?:/[0-9A-Za-z]+)?)
+
+nur der Kennungsteil:      A-42 · A-37 · W-17/1 · P-05 · A-09   vollständig erkannt
+                           Z2-W0-1 -> "Z2"   Z0-I1 -> "Z0"   A-37-22b -> "A-37"   TEILWEISE
+
+volles Muster KERN gegen echte Betreffs:
+  "…zustand: A-37 · ABGENOMMEN · evaluator · …"       TREFFER, kennung=A-37
+  "…zustand: Z0-I1 · ABGENOMMEN · evaluator · …"      KEIN TREFFER
+  "…zustand: Z2-W0-1 · CODE_FERTIG · evaluator · …"   KEIN TREFFER
+```
+
+**Seine Formulierung ist die richtige, meine erste Verschärfung war falsch.** Ich hatte aus dem
+Teiltreffer geschlossen, das Muster liefere eine *falsche* Kennung (`Z2` statt `Z2-W0-1`) — das wäre
+die schlimmere Klasse gewesen. Es tritt nicht ein: nach der Kennung verlangt `KERN` ein `\s+·\s+`, und
+nach `Z2` folgt `-W0-1`. **Kein Treffer, keine Falschzuordnung.** Der Fehler fällt durch, statt still
+etwas Falsches einzutragen.
+
+**Und das schließt §318 vollständig:** Der leere Commit war die eine Ursache; die zweite ist, dass
+**auch ein nicht-leerer Commit mit derselben Kennung nichts bewirkt hätte.** Wer den leeren repariert
+und die Meldung mit Inhalt wiederholt, behebt den Fall nicht.
+
+### Mein Anteil, und er wiegt
+
+`A-37-26` habe ich in der DoR abgenommen. Es verlangt wörtlich:
+
+> *„Trägt ein Commit-Betreff `zustand:`, so wird er gegen das Muster aus `scripts/status-erzeugen.sh`
+> geprüft. Passt er nicht …, wird der Commit abgewiesen."*
+> **Absage-Regel:** *„verlangt ist die Prüfung gegen **dasselbe** Muster … Zwei Muster für dieselbe
+> Frage sind eine zweite Wahrheit und driften auseinander."*
+
+**Die Bindung ans vorhandene Muster ist richtig** — sie verhindert genau die zweite Wahrheit. Sie hat
+aber eine **Voraussetzung**, die niemand geprüft hat: *dass das Muster alle gültigen Kennungsformen
+kennt.* Sobald A-37-26 gebaut ist, weist das Tor jeden formal korrekten `Z0-I1`- oder
+`Z2-W0-1`-Zustandscommit ab. **Z0-I1 ist der nächste Auftrag der Kette.**
+
+**Und der Beleg dafür steht im Kriterium selbst:**
+
+```
+Rot-Beleg:      e9e6ee5b  "zustand: A-38 · A-42 · …"        zwei A-Kennungen  -> nicht erkannt
+Negativprobe:   Betreff mit zwei Kennungen                  -> abgewiesen
+Positivprobe:   Betreff mit einer Kennung und einem SHA     -> durchgelassen
+```
+
+**Alle drei benutzen A-Kennungen.** Der Rot-Beleg zeigt „zwei Kennungen scheitern", die Positivprobe
+zeigt „eine Kennung geht durch" — und beide Male ist die Kennung von der Form, die das Muster kennt.
+**Eine einzige Probe mit `Z0-I1` hätte die Lücke gezeigt.** Ich habe die Proben geprüft und für
+schlüssig befunden; geprüft habe ich, *ob sie auslösen*, nicht, *ob sie die Vielfalt herstellen*.
+
+**Das ist §311 an mir selbst.** Dort schrieb ich über die ACK-Suche: *„Wer im Wegwerf-Root probt, muss
+die Vielfalt des Bestands selbst herstellen — sonst prüft man ein Werkzeug in einer Welt, in der der
+Fehler nicht vorkommen kann."* Genau das ist hier passiert, eine Ebene höher: **nicht die Probe-Umgebung
+war einwertig, sondern die Kennungsform in allen drei Proben.**
+
+### Was ich nicht tue
+
+**Kein Widerruf, keine Kriterienänderung.** A-37 ist eingefroren, 30 von 31 sind abgenommen, die
+Nachprüfung läuft gerade. Die drei Wege, die der Planner ohne Empfehlung vorlegt — **A** Muster
+erweitern, **B** Kennungsform vereinheitlichen (89 Blätter), **C** Z-Aufträge ohne maschinellen
+Zustandswechsel führen und das im Blatt sagen — betreffen die Kennungssystematik des ganzen Hauses.
+**Das entscheidet Yama oder der Dirigent, nicht der Prüfer, der die Lücke übersehen hat.**
+
+**Zwei ungeprüfte Voraussetzungen in vier Stunden** — §308 die Nachvollzugs-Matrix, jetzt die
+Musterabdeckung. Beide derselben Bauart: das Kriterium verweist auf etwas Vorhandenes, und ob das
+Vorhandene trägt, hat niemand gemessen. **Der Verweis war jedes Mal richtig; geprüft war er nie.**
+
+**Ball:** Dirigent (Entscheidung A/B/C) · mein Anteil ist hiermit gemeldet, nicht abgewälzt.
