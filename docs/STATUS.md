@@ -111,7 +111,7 @@
 | **Z1-E0-1** Hoehenkette — eine Wahrheit statt drei Rechnungen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E0-1-hoehenkette-eine-wahrheit.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) · Bau `ad2ac724` · CODE_FERTIG 20:09:51 · **drei Mangelanzeigen offen** (Planner 20:26 und 20:51, Evaluator 20:56) · **ABGENOMMEN (BROWSER)** 22:26:14, fuenf von fuenf — die drei Mangelanzeigen sind damit erledigt |
 | **Z1-E2-1** Etagen-Integritaet — Wachen und Mitnahme | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E2-1-etagen-integritaet.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) · Bau `51b0ddfb` · CODE_FERTIG 20:18:30 · **ABGENOMMEN (BROWSER)** 22:47:41 — sechs von sechs, Reifegrad `browserabgenommen` |
 | **Z1-E4-1** Bodenplatte als eigenes Bauteil (GP-0) | `BEREIT` | **Generator** | Schnitt 22.08. 22:25:33 · Basis `54163b25` | **Blatt** `docs/auftraege/aktiv/Z1-E4-1-bodenplatte-als-eigenes-bauteil.md` @ `54163b25` · **auf Yamas Anweisung vorgezogen** (22:08) · neun Kriterien, acht rot · **DoR ERTEILT** 22:32:20 |
-| **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` · **NACHBESSERN** 19:04:28, 8 von 10 Kriterien, Reifegrad `code-geprueft mit Ausloesung` — zwei Zusagen nennen das Vorhandene statt das Wirkende · **nachgebessert** `ba6fc673` 19:42:03, Kriterien 10 und 12 |
+| **Z0-I1** Testdatenbank-Isolation — Stufe 1 | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` · **NACHBESSERN** 19:04:28, 8 von 10 Kriterien, Reifegrad `code-geprueft mit Ausloesung` — zwei Zusagen nennen das Vorhandene statt das Wirkende · **nachgebessert** `ba6fc673` 19:42:03, Kriterien 10 und 12 · **ABGENOMMEN** 23:00:11 — **zehn von zehn**, Reifegrad `code-geprueft mit Ausloesung` |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -19756,8 +19756,8 @@ herkunft_dieses_blocks: |
 ```yaml
 auftrag: "Z0-I1"
 titel: "Testdatenbank-Isolation — Stufe 1"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: dirigent
 blatt: "docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md"
 blatt_sha: 7791920f
 basis_sha: 161868e9
@@ -19808,6 +19808,21 @@ nachbesserung: |
   selbstgemeldet, entstanden bei der Gegenprobe zu genau diesem Kriterium. Beides beruehrt die
   Bewertung dieses Standes und keines davon entscheide ich. Ich trage CODE_FERTIG ein, weil der
   Bau gemeldet ist, und nenne die zwei offenen Punkte daneben.
+
+votum_nachpruefung: |
+  ABGENOMMEN — evaluator, 23:00:11, evaluator-ABGENOMMEN-z0-i1-nachpruefung.yaml.
+  "zehn von zehn. Mein NACHBESSERN (6916a567) ist erledigt."
+  reifegrad: "code-geprueft mit Ausloesung"
+  bau_sha: ba6fc673 (Kriterien 10 und 12) und 5820cc7d (Belegweg -2)
+  DER HOECHSTE TECHNISCHE BLOCKER IST DAMIT WEG. Der Plan-Pruefer hatte Z0-I1 Stufe 1 in der
+  Vorlage an Yama um 17:29 so bezeichnet; es ist die Kennung, gegen die der Datenbankvorfall
+  von 16:00:33 gebaut wurde, bei dem ein fremder Testlauf den Pruefstand des Evaluators
+  geleert hat.
+  DER WEG DIESER KENNUNG AN EINEM TAG: CODE_FERTIG 16:58 · NACHBESSERN 19:04 (8 von 10) ·
+  nachgebessert 19:42 · zweiter Bau 20:36 nach der Produktiv-DB-Selbstmeldung des Generators ·
+  ABGENOMMEN 23:00. Zwei Selbstmeldungen und ein Sicherheitsbefund liegen dazwischen, und
+  keiner davon wurde stillschweigend verrechnet.
+  Ball laut Ereignis: integrator — gemeint ist dieser Eintrag; danach dirigent.
 
 ```
 
