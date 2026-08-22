@@ -29026,3 +29026,50 @@ genügt.
 
 **Ball: niemand.** Keine Nachforderung, keine neue Runde. Die drei Voten stehen, ergänzt um die
 Feststellung, dass sie keinen Ball tragen.
+
+## §355 — Zwei von drei Blöcken nachgezogen: Z1-W2-1 steht als ENTWURF, während der Bau schon läuft
+
+Gewählt gegen HEAD `830356d7` (Baum sauber, 14:44). §355 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok. **Statuswahrheit aus `auto/hausplaner-integration`** (§342).
+
+**Zuerst das Erledigte.** Der Planner hat um **14:41:54** die Messbefehle berichtigt
+(`planner-CODE_FERTIG-messbefehle-berichtigt.yaml`, Blatt `39260edd`). Selbst nachgemessen:
+
+    Z1-W2-1  'grep -rlE' 2x · unescaptes Pipe in grep -rl: 0
+    Z1-W2-2  'grep -rlE' 1x · unescaptes Pipe: 0     Z1-W2-3  'grep -rlE' 1x · unescaptes Pipe: 0
+    beide berichtigten Befehle gefahren -> je 1 Datei (die Definitionsdatei), mit dem im Blatt
+    stehenden Ausschluss also 0 — die Erwartung trifft jetzt.
+
+**Mein §353-Halbsatz ist umgesetzt, und mein §352-Frühhinweis steht sogar im Generator-Auftrag**
+(*„Plan-Prüfer-Frühhinweis"* bei Z1-W2-3). Der Hinweis, der zu spät kam, um die Meldung zu
+verhindern, hat auf dem Umweg über die Steuerung doch gewirkt.
+
+**Der Befund: ein Block von dreien hinkt.** Der Generator hat um **14:41:32** den Bau begonnen
+(`BAU-generator-paket-3`, gen 14, alle drei Blätter mit DoR-SHAs im Auftrag). Die Tafel dazu:
+
+    Z1-W2-1   zustand: ENTWURF   ballbesitz: plan-pruefer   dor_beleg: "steht aus"
+    Z1-W2-2   zustand: BEREIT    ballbesitz: generator      dor_beleg: gefuellt
+    Z1-W2-3   zustand: BEREIT    ballbesitz: generator      dor_beleg: gefuellt
+    Zustandscommits fuer Z1-W2-*: 0   (alle drei Bloecke von Hand angelegt)
+
+**Ausgerechnet das zuerst erteilte Blatt ist das einzige nicht nachgezogene.** Mein Votum liegt seit
+**14:27:31** im selben Ordner wie die anderen beiden (14:37:41) — beide wurden nachgezogen, das
+frühere nicht.
+
+**Die Kette selbst ist intakt, und das ist der Unterschied zu §337.** Der Generator-Auftrag zitiert
+*„Z1-W2-1 … (DoR `05c26de4`, Blatt-Prüfstand …)"* — mein Votum ist erfasst, der Bau läuft für alle
+drei. **Falsch ist allein die Tafel.** Wer sie liest, sieht: zwei Blätter beim Generator, eines
+beim Plan-Prüfer mit ausstehender DoR — **für ein Paket, das seit drei Minuten gebaut wird.**
+
+*Das ist die dritte Variante derselben Klasse an einem Tag, und die mildeste: §333 sagte gar nichts,
+§337 sagte etwas Falsches und niemand handelte danach, hier sagt sie etwas Falsches, während die
+Kette daneben richtig läuft.* **Genau deshalb fällt es niemandem auf** — der Bau geht seinen Weg,
+und die Tafel wird erst beim nächsten Erzeugungslauf gelesen.
+
+**Was ich NICHT tue:** Ich ändere `docs/STATUS.md` nicht (Integrator, §16) und setze keinen
+Zustandscommit. **Und ich fordere nichts nach** — der Rückstand ist drei Minuten alt und der
+Integrator zieht laufend nach; ich halte nur fest, dass er beim **frühesten** der drei Voten
+entstanden ist, nicht beim spätesten.
+
+**Ball: Integrator** (ein Block nachziehen) — zur Kenntnis, ohne Dringlichkeit. Bei mir nichts
+offen: Paket 3 ist erteilt, die Halbsätze sind umgesetzt, der Bau läuft.
