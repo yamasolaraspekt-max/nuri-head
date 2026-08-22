@@ -107,6 +107,7 @@
 | **Z1-W2-5** Wandflaeche anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` |
 | **Z1-W2-6** Auswechslung anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` |
 | **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | `BEREIT` | **Generator** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 |
+| **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `ENTWURF` | **Planner** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt noch nicht geschnitten** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR |
 | **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
@@ -19354,6 +19355,42 @@ berichtigung_dor: |
   DIE LEHRE FUER MICH: ich darf schreiben, was ich gemessen habe. Was daraus folgen SOLL, ist
   eine Regelauslegung und gehoert nicht in einen Beleg meiner Hand.
 
+```
+
+```yaml
+auftrag: "Z1-W2-8"
+titel: "Werkzeugleiste in Baureihenfolge"
+zustand: ENTWURF
+ballbesitz: planner
+blatt: "noch nicht geschnitten — der Planner schneidet es aus diesem Auftrag"
+blatt_sha: "keiner"
+basis_sha: 06956916
+dor_beleg: "steht aus — der Plan-Pruefer prueft in EINEM Durchgang direkt nach Z1-V1-1"
+bau_sha: "noch offen"
+herkunft_dieses_blocks: |
+  Statusplatz vom integrator angelegt aus dirigent-auftrag-Z1-W2-8-leiste-baureihenfolge.yaml,
+  18:46:18, AUFTRAG_EINSCHUB, P0 auf Yamas ausdrueckliche Anweisung (Posten 24 der
+  YAMA-ENTSCHEIDUNGEN).
+  ICH LEGE DEN PLATZ AN, OBWOHL ES NOCH KEIN BLATT GIBT, und begruende das, weil es von der
+  Dauerregel abweicht: die Regel knuepft an ein neues BLATT an. Hier liegt eine P0-Anweisung
+  Yamas, die vor Posten 2 gezogen wird und dem bereits freigegebenen Sammelblatt im Bau
+  vorgeht. Ein Auftrag dieser Dringlichkeit, der im einzigen Statustraeger nicht vorkommt,
+  waere genau die Luecke, die die Regel schliessen soll — nur eine Stufe frueher.
+  ZUSTAND ENTWURF UND BALL PLANNER sind der belegte Anfangswert, kein Urteil.
+  WAS DER AUFTRAG VERLANGT, damit der Platz ohne das Blatt lesbar ist:
+    Reihenfolge in Leiste UND WerkzeugGruppenMenue: Bodenplatte, Wand, Fenster, Tuer, Treppe,
+    Decke (ein Eintrag, Tooltip nennt Zwischen- und Abschlussdecke), Kontur, Dach; die uebrigen
+    Gruppen unveraendert dahinter.
+    Neuer Registry-Eintrag "bodenplatte" ueber das VORHANDENE Deckenwerkzeug auf der untersten
+    Ebene (bauteilKind ceiling), KEIN neuer Knotentyp, Tooltip ehrlich: "heute als Decke der
+    untersten Ebene gefuehrt; eigener Bodenplatten-Knoten GP-0 folgt".
+    Rot-Probe gegen den alten Stand (zeigt Dach vor Decke/Treppe), Browser-Bildbeleg alt/neu,
+    tsc 0, Suite gruen, Buendel Teil der Lieferung, Diff nur in app/tools/toolRegistry.ts und
+    app/dashboard/werkzeugGruppen.ts samt Tests.
+  DIE AUSSTIEGSKLAUSEL STEHT IM AUFTRAG und gehoert in den Beleg: kann das Deckenwerkzeug die
+  unterste Ebene nicht ohne Modellaenderung setzen, wird das GEMELDET und nicht gebastelt —
+  dann Reihenfolge ohne Bodenplatte, Bodenplatte als Folgeposten an GP-0.
+  TRANSPORT UND EINTRAG, KEINE BEWERTUNG.
 ```
 
 ```yaml
