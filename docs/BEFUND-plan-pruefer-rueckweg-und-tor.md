@@ -29474,3 +29474,59 @@ gewechselt.*
 **Ball: niemand.** Keine Forderung; die Regeländerung gehört Yama, und die Messung liegt jetzt bei.
 In der abgelegten Postenliste nachgetragen. **Stand: formal offen, praktisch erzwungen, Kosten
 messbar.**
+
+## §363 — Alterungsprüfung „Fach-Gate N-003": entschieden, gebaut, betriebsbestätigt — und seit zehn Tagen als offen weitergereicht
+
+Gewählt gegen HEAD `e8a6da5a` (Baum sauber, 15:14). §363 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok.
+
+**Fünfte Alterungsprüfung nach §358** — gewählt: der erste der drei Posten, die meine eigene Tabelle
+als **entschieden** führt. Die Frage dahinter: *warum steht ein entschiedener Posten noch auf der
+Liste?*
+
+**Der Beleg stimmt exakt — und mein erster Griff war falsch.** Meine Tabelle nennt
+*„FORMELSAMMLUNG Z.784"*. Mein `find -iname '*FORMELSAMMLUNG*' | head -1` nahm
+`docs/BEFUND-FORMELSAMMLUNG-GEGEN-INSEL.md` (217 Zeilen) — dort kann es keine Z.784 geben. **`head -1`
+bei zwei Treffern.** Die richtige Datei ist
+`docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md` (1187 Zeilen), und **Z.784 trägt exakt
+`### N-003 · Geltungsbereich — von Yama festgelegt 12.08., DAUERGELB`.** *Diesmal war nicht der
+Zeiger gewandert, sondern mein Griff zu grob — der umgekehrte Fall zu §357.*
+
+**Die Entscheidung, im Wortlaut und vollständig:**
+
+> *„**Yamas Bestätigung liegt vor, in der strengeren Fassung und ohne Einschränkung.** Er hat den
+> Geltungsbereich vorher selbst im Wortlaut gelesen. **Und er hat meine 🟢-Zeile aufgehoben.**"*
+
+    ERLAUBT       Vorbemessung im Entwurf · Angebot und Kalkulation · Plausibilitaet · Variantenvergleich
+    NICHT ERLAUBT Ausfuehrungsnachweis · Genehmigungsunterlage · Freigabe zur Ausfuehrung · Sonderlasten
+
+**Alterung: null.** Der Text wurde **einmal** geschrieben — `1e09280d`, **12.08. 00:48** — und seither
+nicht angefasst; `DAUERGELB` kommt in der Datei in genau **einem** Commit vor. Die Datei selbst
+wurde seit dem 12.08. **achtmal** geändert, **die N-003-Stelle nicht**. *Ein Fachgate, das zehn Tage
+und acht Bearbeitungen unverändert übersteht, ist keine offene Frage.*
+
+**Und er ist nicht nur entschieden, sondern gebaut.** `A-14 — N-003-Vorbehalt ins Ergebnis`:
+
+    Blatt      docs/auftraege/aktiv/A-14-n003-vorbehalt-ins-ergebnis.md
+    Titel      "Vorbehalt als Pflichtfeld · grundlage traegt die Grenze · die Plakette hoert auf,
+                einen Nachweis zu behaupten"
+    Zustand    BETRIEBSBESTAETIGT · ballbesitz: —  # Kette vollstaendig
+    Release    release-pruefer 12.08., §10 an der Abnahme 2d8592ab/21940d33 — PRODUKTIVCODE
+
+**Dreifach erledigt: entschieden (12.08.), gebaut (A-14), betriebsbestätigt.** Der Vorbehalt steht
+nicht nur in einer Formelsammlung, er ist ein **Pflichtfeld im Ergebnis** — die Grenze, die Yama
+gezogen hat, ist im Produkt.
+
+**Warum er trotzdem auf meiner Liste steht.** Meine eigene Tabelle führt ihn seit dem 16.08. korrekt
+als *„entschieden"*. **Die Liste in meiner Wache-Anweisung nennt ihn weiter als offenen Posten** —
+und ich habe sie in jeder Runde so weitergereicht. *Nicht meine Messung ist veraltet, sondern das,
+was ich unbesehen wiederhole.* **Das ist derselbe Mechanismus wie in §356/§358, nur eine Ebene
+höher:** dort hatte ich den Messstand falsch behauptet, hier reiche ich einen erledigten Posten als
+offen weiter.
+
+**Für eine Vorlage an Yama ist das die brauchbare Auskunft:** Von den neun Posten sind **drei
+entschieden** (N-003, A-13-Veröffentlichungsbedingung, Seed-Weg der Prüfbühne) — und **N-003 ist
+darüber hinaus produktiv umgesetzt.** *Er muss dort nichts mehr lesen.*
+
+**Ball: niemand.** Keine Forderung. In der abgelegten Postenliste nachgetragen; der Posten wandert
+von *„entschieden"* nach **„entschieden und umgesetzt"**.
