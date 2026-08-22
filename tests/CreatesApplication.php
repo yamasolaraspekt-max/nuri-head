@@ -19,6 +19,13 @@ trait CreatesApplication
     /** Die Lease wird EINMAL je Prozess gezogen, nicht je Testfall. */
     private static bool $leaseGezogen = false;
 
+    /**
+     * Der Name wird EINMAL je Lauf gemeldet — aus demselben Grund wie die Lease.
+     * Bei 1778 Testfaellen waeren es sonst 1778 Zeilen, und eine Meldung, die man wegscrollt,
+     * ist keine Meldung (A-03).
+     */
+    private static bool $nameGemeldet = false;
+
     /** Eine Kennung fuer diesen Lauf — sie steht als `owner` in der Lease. */
     private static function sitzung(): string
     {
@@ -57,6 +64,11 @@ trait CreatesApplication
             register_shutdown_function(static fn () => TestDbLease::freigeben());
         }
 
+        // Z0-I1-12: fehlende Zugangswerte aus der gemeinsamen Quelle nachlegen — VOR dem
+        // Bootstrap, denn danach steht die Verbindung und `config()` ist eingefroren. Ein Baum
+        // mit eigener `.env` wird nicht angefasst; die Klasse fuellt nur Luecken.
+        TestDbZugang::herstellen();
+
         // Der Name wird VOR dem Bootstrap gesetzt — danach steht die Verbindung.
         $db = TestDatenbank::BASIS;
         putenv('DB_DATABASE='.$db);
@@ -71,6 +83,30 @@ trait CreatesApplication
         // eine Absicht; erst `SELECT DATABASE()` sagt, wohin die Verbindung wirklich zeigt.
         // Der gefundene Name wird gemerkt, damit ihn jeder Beleg zitieren kann (Z0-I1-10).
         self::$verbundeneDatenbank = TestDatenbankGuard::pruefeVerbindung();
+
+        // ── Z0-I1-10 — DER LAUF SAGT, WOHIN ER VERBUNDEN IST ────────────────────────────────
+        //
+        // **Bis hierher war der Name nur GEMERKT.** Die Zeile darueber steht seit Stufe 1 im
+        // Code und traegt sogar den Vermerk „damit ihn jeder Beleg zitieren kann" — aber sie
+        // legte ihn in eine statische Variable, die **niemand liest**. Der Evaluator hat genau
+        // das gemessen: `echo`/`fwrite`/`print` im Bootweg 0, `printer`/`extension` in der
+        // phpunit.xml 0. *Ein Wert, den man abrufen KANN, ist kein Beleg; ein Beleg ist einer,
+        // der im Lauf STEHT.*
+        //
+        // **STDERR, nicht STDOUT:** PHPUnit schreibt sein eigenes Ergebnis (TAP, JUnit, Testdox)
+        // nach STDOUT; eine Fremdzeile darin bricht maschinenlesbare Formate. STDERR erscheint
+        // im Terminal und in jedem Protokoll, ohne das Ergebnis zu verunreinigen.
+        //
+        // **Die Form folgt dem eigenen Bestand** — `scripts/pruefstand-saeen.sh` meldet
+        // `SAAT ok db=ticket_testing …`. Kein zweites Format fuer dieselbe Sache.
+        if (! self::$nameGemeldet) {
+            self::$nameGemeldet = true;
+            fwrite(STDERR, sprintf(
+                'TESTLAUF db=%s halter=%s quelle=SELECT_DATABASE()'.PHP_EOL,
+                self::$verbundeneDatenbank,
+                self::$halter,
+            ));
+        }
 
         return $app;
     }

@@ -34,6 +34,14 @@
              Weg, nicht das Kennwort. -->
         <env name="DB_HOST" value="127.0.0.1" force="true"/>
         <env name="DB_PORT" value="3307" force="true"/>
+        <!-- Z0-I1-12: der BENUTZER ist kein Geheimnis und gehoert in dieselbe Klasse wie Host,
+             Port und Datenbankname. Ohne ihn faellt config/database.php:51 auf 'forge'. -->
+        <env name="DB_USERNAME" value="ticket_user" force="true"/>
+        <!-- Der ZEIGER auf die gemeinsame Quelle des Kennworts. Die Datei selbst bleibt
+             unversioniert und liegt EINMAL ausserhalb aller Baeume — kein Kopieren in vier
+             Baeume, das die Absage-Regel des Blattes verbietet. Kein force: ein Baum, der
+             DB_PASSWORD selbst setzt, behaelt seinen Weg. -->
+        <env name="TESTDB_ZUGANG" value="${HOME}/.ticket-steuerung/testdb-zugang.env"/>
         <!-- Z0-I1-9: die Ablage der DB-Lease. Sie liegt AUSSERHALB des Repos, weil fuenf Baeume
              sich EINE Datenbank teilen — eine Lease im Repo saehe nur der eigene Baum und
              serialisierte nichts. `${HOME}` loest `TestDbLease::wurzel()` auf; hier steht kein
