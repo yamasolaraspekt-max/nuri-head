@@ -34115,3 +34115,88 @@ sie sauber abgrenzt.
 
 Ball: **Integrator** (`dbaa6b4d` transportieren, Tafel auf den gültigen `blatt_sha`) · **Dirigent /
 Yama** (die Bodenplatte, GP-0) · bei mir: **DoR gegen `dbaa6b4d`, ein Durchgang**.
+
+## §429 — DoR Z1-W2-8: ERTEILT mit zwei Halbsätzen. Das Blatt widerspricht sich an drei Stellen — und löst den Widerspruch selbst am Ende auf
+
+Messstand: HEAD `ad4f0bdf`, Baum 0, gemessen 19:03–19:05. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §429'` → 0).
+**Ereignis dieses Abschnitts:** `ereignisse/SPEZ-planner-spur-V-sammelblatt-1/plan-pruefer-DOR-Z1-W2-8-ERTEILT.yaml`
+
+**Die Drift aus §428 ist behoben:** `dbaa6b4d` liegt jetzt im Checkout, Blob `877ea752` identisch auf
+`HEAD` und `rolle/planner`. Ich prüfe gegen den gültigen Stand.
+
+### VOTUM: ERTEILT, mit zwei Halbsätzen
+
+### Der Widerspruch — drei Stellen, die sich nicht einig sind
+
+    Z. 59   Kriterium a:  "In beiden Ansichten exakt: bodenplatte → wand → … → dach"   ACHT
+    Z. 84   Kriterium b:  grep -c "id: 'bodenplatte'"  ->  0 -> 1                      VERLANGT
+    Z. 171  Matrix:       "Z1-W2-8-b bodenplatte als Eintrag, ceiling | AP-1"          GEFUEHRT
+    -------------------------------------------------------------------------------
+    Z. 230  Entscheidung: "(a) baubar — OHNE bodenplatte, mit SIEBEN statt acht"
+    Z. 231  Entscheidung: "(b) FAELLT — braucht GP-0 (eigener Knotentyp)"
+
+**Ein Generator, der oben liest, baut `bodenplatte` auf `bauteilKind: 'ceiling'` — genau das, was der
+Blocker als schädlich belegt** (§428: sperrt die Zwischendecke desselben Levels oder ist von ihr
+ununterscheidbar). Und er baut **sofort nach der DoR**, 30-Minuten-Bau.
+
+### Warum trotzdem ERTEILT
+
+**Das Blatt löst den Widerspruch selbst auf** — die Entscheidungstabelle Z. 228–233 ist die
+**jüngste** Stelle, geschrieben nach dem eigenen Blocker-Befund des Planners (18:58:46). **Ich
+entscheide nichts**; ich benenne, welche der drei Stellen gilt. Das ist ein Halbsatz nach
+Nachtrag 1.5, kein Zuschnitt.
+
+Ein NICHT ERTEILT kostete hier einen vollen Rollenpass für etwas, das im Blatt bereits entschieden
+ist.
+
+**Halbsatz 1 zu (a):** *„Verlangt sind **SIEBEN** Einträge ohne `bodenplatte`:
+`wand → fenster → tuer → treppe → decke → kontur → dach`. Es gilt die Entscheidungstabelle Z. 230,
+nicht der Kriterientext Z. 59."*
+
+**Halbsatz 2 zu (b):** *„Kriterium `Z1-W2-8-b` **entfällt** (Z. 231) — samt seiner Matrixzeile
+Z. 171. Die Bodenplatte gehört zu `GP-0` (`FoundationSlabNode`) und ist **nicht** Gegenstand dieses
+Blattes. Ein Eintrag auf `bauteilKind: 'ceiling'` ist ausdrücklich untersagt."*
+
+### Rot-Lagen selbst nachgemessen
+
+    TOOL_DEFINITIONS, Reihenfolge im Bestand:
+      :39 auswahl · :59 wand · :78 fenster · :96 tuer · :114 dach · :132 decke · :150 treppe
+      :182 bemassen · :196 flaeche-messen · :230 kontur · :249 loeschen · :273 duplizieren · :298 trimmen
+
+    Behauptung des Blattes:  "dach :114 steht VOR decke :132 und treppe :150"   TRIFFT
+    Behauptung des Blattes:  "'bodenplatte' hat 0 Treffer"                      TRIFFT (0)
+    Registry-Eintraege gesamt: 13 — deckt sich mit §423 (10 werkzeug + 3 aktion)
+
+**Die Rot-Lage ist echt:** Das Dach steht in der Leiste vor Decke und Treppe, gebaut wird es zuletzt.
+
+### Kriterium f trägt, und es widerspricht V-6 nicht
+
+    "Geaendert werden nur toolRegistry.ts und werkzeugGruppen.ts — plus die nachziehenden Tests"
+    Messbefehl: git diff --name-only <basis_sha>..<endstand_sha>
+       -> nur die zwei Dateien + __tests__/* + public/hausplaner/hausplaner.js
+
+**Das Bündel ist ausdrücklich in der erlaubten Liste** — Z1-W2-8 ist **Spur W**, nicht Spur V, also
+gilt die Bündel-Regel von 16:02 und nicht V-5/V-6. Der Widerspruch, den ich in §421 für Spur V
+schließen musste, entsteht hier gar nicht erst. **Und der Messbefehl nennt beide SHA** — genau die
+Form, die ich in §421 als Halbsatz 1 zu V-4 erzwingen musste. Hier steht sie von selbst da.
+
+### DIE TEILSTRING-FALLE ZUM FÜNFTEN MAL HEUTE — vorbeugend gefangen
+
+    grep -oE 'Z1-W2-8-[a-z]'  ->  a b c d e f  UND  l
+    Z. 20:  regelgrundlage: "dirigent-auftrag-Z1-W2-8-leiste-baureihenfolge.yaml"
+                                                 ^^^^^^ das 'l' von "leiste"
+
+**Sechs Kriterien, nicht sieben.** Nach A-37-22e, §422 (`dor_beleg` im Fließtext), §423 (`art:` im
+Kommentar) und §424 (`DACH` in Kommentaren) ist das der fünfte Fall an einem Tag — und der dritte in
+Folge, den ich **vor** dem Melden fange.
+
+### Was ich ausdrücklich NICHT tue
+
+**Die Bodenplatte bleibt außen vor.** Sie ist eine Modellentscheidung (`GP-0`,
+`FoundationSlabNode`), der Ball liegt bei **[dirigent, yama]**, und CLAUDE.md ist eindeutig:
+Fachentscheidungen werden nicht still automatisiert. **Mein Halbsatz 2 streicht das Kriterium nicht
+— er stellt fest, dass das Blatt es bereits gestrichen hat.**
+
+Ball: **Generator** (bauen, SIEBEN Einträge) · **Planner** (Kriterientext Z. 59/84 und Matrix Z. 171
+nachziehen, damit das Blatt nicht dreistimmig bleibt) · **Dirigent/Yama** (GP-0).
