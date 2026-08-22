@@ -1,30 +1,23 @@
-auftrag_id: KONZEPT-planner-anschluss
-generation: 15           # 2026-08-22T13:29:42+0200 — gen 14 (A-43 spezifiziert, Auflage + Befehl 2 erledigt; Errata-Posten 3 Dirigent-Bereich bleibt als NACHTRAG zu A-43 offen — siehe unten) . Yama 13:2x: 'die fuenf Z1-Bauten abnehmen und die Anschlussentscheidung treffen'. Du bereitest die Anschlussentscheidung als VORLAGE vor; Yama entscheidet.
+auftrag_id: SPEZ-planner-anschlusswelle-1
+generation: 17           # 2026-08-22T14:03:22+0200 — ANSCHLUSSENTSCHEIDUNG getroffen (auftraege/ANSCHLUSS-entscheidung-2026-08-22.md, Dirigent in Yamas Namen): Paket 3 -> 1 -> 2 anschliessen, 4 parken, nichts verwerfen. gen 16 Inhalt (Register, Klaerung, Z2-W0-5b) bleibt, Posten 4 kommt dazu. ACK gen 17.
 rolle: planner
 sitzung_erwartet: ef8ec540-263d-4f06-8a02-5a2f1beeb572
 worktree: /Users/yamanuri/Documents/ticket-rolle-planner
 branch: rolle/planner
-basis_sha: 1e5ac476
+basis_sha: 7b430d16
 prioritaet: P0
-aktion: bauen            # TOR-WORT = Arbeit erlaubt (README 6f)
-taetigkeit: "konzipieren (Planner): Anschluss-Vorlage fuer Yama — KEIN Blatt, KEIN Bau, KEINE Produktaenderung"
-posten_1_zuerst_kurz: "A-43 Errata-Posten 3 (dirigent-errata-posten3-dirigent-bereich.yaml 13:25): ein Nachtrag ins A-43-Blatt (Dirigent-Bereich += docs/backlog/ docs/fortschritt/, Rot/Gruen + Negativprobe STATUS.md), ersetzt_sha 1e5ac476; Abschlussereignis planner-CODE_FERTIG-nachtrag-posten3.yaml. Danach Posten 2."
-posten_2_anschluss_vorlage: |
-  Gegenstand: 'Werkzeugkasten kommt nicht beim Benutzer an' (Bewertung 22.08. 10:39, Abschnitt 3.2; Plan-Pruefer §300: 27 von 160
-  Hausplaner-Modulen ohne Ladeweg, toolRegistry.ts 13 Werkzeuge seit 15.08. unveraendert, Register 37 BESCHRIEBEN / 2 ENTWORFEN).
-  Liefern: docs/konzept/anschluss-entscheidung-2026-08-22.md (ENTWURF, Mess-SHA nennen) mit
-    a) frischer Messung: Liste der Module ohne Ladeweg (Pfad, Zeilen, was es tut, Zielwerkzeug/Menue, vorhandene Tests), Befehl + STAND;
-    b) Gruppierung in 3-5 Anschlusspakete (z. B. 'Massenermittlung', 'Dach', 'Treppe', 'Pruefungen/Badges') mit je: Nutzerwert, Aufwand
-       (klein/mittel/gross, Zeilen), Risiko, Abhaengigkeit (Z0-I1, Browserabnahme), Reihenfolge;
-    c) je Paket ein Vorschlag 'anschliessen / parken / verwerfen' mit Begruendung — EMPFEHLUNG ausgesprochen, Entscheidung bei Yama;
-    d) was NICHT angeschlossen werden sollte und warum (zweiter Weg gebaut, erster liegt — deckenMesh.ts-Fall);
-    e) das Erledigt-Kriterium je Paket (bedienbar im Browser, Browserabnahme, Reifegrad 'BROWSERABGENOMMEN').
-  Kein Bau, keine toolRegistry-Aenderung, kein Produktcode. Abschluss: planner-CODE_FERTIG.yaml (SPEZIFIZIERT-Aequivalent 'KONZIPIERT'
-  als abschlussbegriff-Feld) mit ergebnis_sha, gelesen_bis. Zeitrahmen: diese Stunde; lieber 80 % gemessen als 100 % geschaetzt.
-z0_i1: "bleibt geparkt (PARKED_DRAFT unberuehrt) bis Yamas Y-13-GRANT als root vorliegt — dann gen 16."
-verboten: [Produktcode, toolRegistry aendern, Blatt-Kriterien fuer Anschluss schreiben (kommt nach Yamas Entscheidung), PARKED_DRAFT anfassen, --no-verify]
+aktion: spezifizieren
+taetigkeit: "spezifizieren (Planner): 1 Werkzeug-Register -> 4 Anschluss-Blaetter Paket 3 (Spur W, je Werkzeug) -> 3 Z2-W0-5b -> danach Paket 1"
+hinweg_zuerst: "ZUERST Hinweg: git merge --no-edit -m "<rolle>: Hinweg — A-43-Stand" auto/hausplaner-integration im EIGENEN Worktree (kein Rebase/Force; Konflikt -> BASE_BLOCKED melden). Erst danach ist das Rollenverb in deinem Tor bekannt; <rolle>-BASIS_NACHGEZOGEN.yaml mit HEAD."
+posten_1_werkzeug_register: "docs/konzept/werkzeug-register.md: Registerzeile (37) ↔ Modulpfad ↔ toolRegistry-Kennung ↔ Reifegrad (CODE/PRODUKTWEG/BROWSER) ↔ Blatt/Paket aus deiner Vorlage (1-4) ↔ Zielmenue (die benannte Luecke: jetzt messen, wo messbar; sonst 'offen'). Grundmenge: alle 160 Module + 37 Registerzeilen, STAND-SHA. Kein Bau."
+posten_2_klaerung_verwerfen: "toolCatalogStillgelegt.ts (1 Export, 3 Verbraucher, Test length==54) und geometry/werkzeugRegistry.ts (Bauteile vs Werkzeuge, toolTypes.ts:8) — je eine Zeile im Register: 'behalten als Waechter/Muster' bzw. 'Abgrenzung belegt, kein Doppel' ODER begruendeter Gegenbefund. Keine VERWERFEN-Empfehlung ohne Verbrauchermessung (Ort ist nicht Wirkung)."
+posten_3_z2_w0_5b: "Kleinblatt nach auftraege/Z2-W0-5b-linked-wache.vorgabe-dirigent.md (Spur A — Rechte; Kriterien: linked an denselben Baustein wie link/unlink/addToPlan, fremd 403/404 bei beiden Schalterstellungen, Vertragstest, Grundmenge api/planner/* GET mit {plannerItem} und STAND); N3-Matrix; N4: bedienweg keiner — API-Wache, Anschluss ueber Z2-W0-5. Statusplatz: Kennung+Blattpfad+SHA im SPEZIFIZIERT-Ereignis (Integrator legt Block an)."
+posten_4_anschlusswelle_1: "NACH Posten 1 (Register mit Kennungen): Paket 3 Pruefungen/Warnungen als Spur-W-Blaetter, EIN Werkzeug = EIN Blatt (Kennung: naechste freie Z1-W2-<n> — Z1 Hausplaner, Welle 2 — Freiheit messen): ZIEL je Blatt ein Satz; N4 Bedienweg (toolRegistry-Kennung aus dem Register, Menue/Ausloeser, Zielreifegrad BROWSERABGENOMMEN); <= 8 Kriterien inkl. (a) Werkzeug in der Leiste sichtbar, (b) Ausloesen im Browser erzeugt das Ergebnis, (c) Rot-Probe ohne Werkzeug, (d) kein Produktcode ausserhalb der Hausplaner-Insel, (e) Browserabnahme (Puppeteer, headful) als Messbefehl mit Ort; N3-Matrix; Rueckweg = Revert; Heimat resources/planner/hausplaner. Reihenfolge danach: Paket 1 (je Werkzeug), dann Paket 2. Paket 4 parken (Register-Eintrag). Abschluss je Blatt: planner-CODE_FERTIG*.yaml mit kennung/blattpfad/blatt_sha (Integrator legt Block an)."
+vorrang: "Diese Welle geht dem alten BEREIT-Vorrat vor (Entscheidung); BEREIT-Deckel gilt fuer andere neue Zuschnitte."
+z0_i1: "geparkt bis Y-13 GRANT (Yama)."
+verboten: [Produktcode, toolRegistry aendern, PARKED_DRAFT anfassen, andere neue Produkt-Blaetter ausser Anschlusswelle und Z2-W0-5b (Deckel), --no-verify]
 steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
-meldepflicht: "AUFTRAG_GESTARTET mit endstand_sha + gelesen_bis; Abschluss mit ergebnis_sha + gelesen_bis; Commit via commit-pruefen.sh (TICKET_ROLLE=planner, NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules) im eigenen Worktree (docs/konzept/ ist dein Pfad)"
+meldepflicht: "AUFTRAG_GESTARTET mit endstand_sha + gelesen_bis; Abschluss je Posten als planner-CODE_FERTIG*.yaml (abschlussbegriff SPEZIFIZIERT/KONZIPIERT) mit ergebnis_sha + gelesen_bis + kennung/blattpfad/blatt_sha"
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/KONZEPT-planner-anschluss/planner-ack.yaml
-erstellt: "2026-08-22T13:29:42+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/SPEZ-planner-anschlusswelle-1/planner-ack.yaml
+erstellt: "2026-08-22T13:58:44+0200 Dirigent (atomar; Uhr: date)"

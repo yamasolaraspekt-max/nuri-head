@@ -1,14 +1,14 @@
 auftrag_id: STEUERUNG-dirigent
-generation: 1            # 2026-08-22T12:18:38+0200 — Backlog 13: der Dirigent unterliegt jetzt selbst dem Pull-/ACK-/Digest-Verfahren und dem Tor. Auftrag = Steuerung unter Vollmacht (docs/regelwerk/VOLLMACHT-DIRIGENT.md).
+generation: 2            # 2026-08-22T13:58:44+0200 — Ruecknahme des Tor-Worts: aktion = Rollenverb (A-43 Posten 2 transportiert, Hinweg gefahren)
 rolle: dirigent
 sitzung_erwartet: ed7ac3c9-90f3-4bf0-b7e1-50ef1603e579
 worktree: /Users/yamanuri/Documents/ticket-rolle-dirigent
 branch: rolle/dirigent
 prioritaet: P0
-aktion: bauen            # TOR-WORT (befristet, README 6f): Arbeit erlaubt. Der Dirigent baut keinen Produktcode, schreibt keine Kriterien, Voten, Status.
-taetigkeit: "steuern (Dirigent): Rollenquellen, Entscheidungen, Protokoll, Backlog, Regelwerk (Steuerungsregeln), Spiegel-Snapshots"
-schreibbereich: [docs/auftraege/, docs/backlog/, docs/regelwerk/, docs/fortschritt/, docs/konzept/, docs/REGISTER.md]
+aktion: steuern
+taetigkeit: "steuern (Dirigent): Rollenquellen, Entscheidungen, Protokoll, Konzept, Regelwerk-Steuerungsregeln, Spiegel"
+schreibbereich: [docs/auftraege/, docs/konzept/, docs/regelwerk/, "docs/backlog/ + docs/fortschritt/ nach A-43 Posten 3 (Tor)"]
 verboten: [Produktcode, scripts/, .githooks/, Kriterien, Voten, docs/STATUS.md, docs/BEFUNDNOTIZEN.md, Abnahme, --no-verify]
 ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/STEUERUNG-dirigent/dirigent-ack.yaml
 status: ZUGETEILT
-erstellt: "2026-08-22T12:18:38+0200 Dirigent (atomar; Uhr: date)"
+erstellt: "2026-08-22T13:58:44+0200 Dirigent (atomar; Uhr: date)"

@@ -502,3 +502,17 @@ Prüfung; **die technische Schreibsperre hat Vorrang vor jeder weiteren Konzept-
 | **12:59** | **Evaluator WIRKSAM 7 VON 7** — nackter `git commit` scheitert in jedem realen Baum; A-37-13 fing den Prüfer selbst (Modulstand) | rolle/evaluator `16613211`; Dirigent-Nachmessung 13:01:08 (Haken-Digest `d5062fbe` 7/7) |
 | 13:05 | Evaluator gen 9 **Abnahmewelle Posten 1 Z2-W0-5**; Integrator gen 9 (Statusplatz A-43 §5 + Regel); Generator gen 11 BAU-generator-A-43 ausgelöst durch Planner-Auflage-Nachtrag `a7035fb7` | Spiegel dieser Commit |
 | 13:10:34 | **Tor weist den Dirigenten ab** (A-37-23: Bereich nur `docs/konzept/ docs/regelwerk/ docs/auftraege/`; `docs/backlog/steuerungs-backlog-2026-08-22.md` abgewiesen, exit 1). Kein `--no-verify`. Backlog-Zeile (Posten 21 zu, Posten 24 = diese Lücke) bleibt uncommittiert bis Errata: Dirigent-Bereich += `docs/backlog/` + `docs/fortschritt/` (Yama 21.08.: Steuerungs-/Konzeptdokumente) — Planner-Posten nach A-43, Yama zur Kenntnis | dieser Eintrag |
+
+### Protokoll 13:05–14:14:57 (Dirigent; Uhr: `date` lokal)
+| Zeit | Ereignis | Beleg |
+|---|---|---|
+| 13:08 | Tor weist den Dirigenten für `docs/backlog/` ab (A-37-23) → Errata A-43 Posten 3 | Tor-Ausgabe; `dirigent-errata-posten3-dirigent-bereich.yaml` |
+| 13:2x | Z2-W0-5 ABGENOMMEN 8/8; A-43 CODE_FERTIG | Evaluator `639a7a32`; Generator `8a08d625` |
+| 13:3x | **A-43 ABGENOMMEN 12/12**; Weg-3-Tor-Wörter: Rücknahme vorbereitet | Evaluator `fbb8a73a` |
+| 13:3x | Yama: Bewertung 13:28 + „Gesamtkonzept umstellen" + Planungsmodell → **V3 + Meilensteinplan** | `26a2bd62` |
+| 13:4x | Z1-W1-5 ABGENOMMEN; A-43 Posten 3 CODE_FERTIG; Z-Zustandscommits (A-43, Z2-W0-5, Z1-W1-3/4, Z2-W0-1/3/7/8/9) | Evaluator `cf49113b`; Integration bis `b45f0814` |
+| 13:5x | Planner Anschluss-Vorlage (`a3a67336`, berichtigt `7b430d16`); Lesesitzung-Hinweise (Urheber-ID strittig, s. 14:1x) | `docs/konzept/anschluss-entscheidung-2026-08-22.md` |
+| 13:58–14:11 | **Tor-Wörter zurückgenommen** (7 Rollenverben, Hinweg zuerst); **ANSCHLUSSENTSCHEIDUNG in Yamas Namen** (3 → 1 → Dach 2 Module; 4 parken; stilllegen statt verwerfen) | `1be2a63e`; `auftraege/ANSCHLUSS-entscheidung-2026-08-22.md` |
+| 14:0x | **A-43 Posten 3 ABGENOMMEN → A-43 vollständig 13/13**; Werkzeug-Register (Planner `4f4bbc6e`) | Evaluator `71a75985` |
+| 14:13 | Externe Prüfung: Zuschreibung „lesesitzung-6b369768" falsch — berichtigt | `dirigent-berichtigung-zuschreibung-lesesitzung.yaml` |
+| 14:14:57 | Evaluator gen 13 Z2-W0-7; Integrator gen 11 (zustand_nachziehen); Planner gen 17 Paket-3-Blätter | Spiegel |
