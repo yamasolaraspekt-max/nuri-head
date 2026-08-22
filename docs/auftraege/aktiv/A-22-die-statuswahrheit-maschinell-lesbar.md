@@ -7,7 +7,7 @@ art: "DATENFORM. Fasst ausschließlich docs/STATUS.md an — keine Regelwerksän
       Drei Befunde eines Tages an derselben Datei, zwei davon hier behebbar."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "FREIGABE BLEIBT — plan-pruefer 12.08. (FUENFTE Fassung) gemessen an 74b2fa09. Quelle: docs/STATUS.md, Kennung "A-22" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: e1a478fb
 prioritaet: P1

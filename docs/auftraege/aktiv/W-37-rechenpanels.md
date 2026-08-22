@@ -7,7 +7,7 @@ art: "STUFE 6 — Blatt schneiden, Ziel BESCHRIEBEN (Ablesung). Der Code EXISTIE
       app/EngineFlaeche.tsx 199 Z. + app/dashboard/enginePanels.ts 540 Z."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 12.08. (DRITTE Fassung). Quelle: docs/STATUS.md, Kennung "W-37" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: a94d91ac
 prioritaet: P2

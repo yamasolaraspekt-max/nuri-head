@@ -7,7 +7,7 @@ art: "STUFE 6 — Blatt schneiden, Ziel BESCHRIEBEN (Ablesung). Der Code EXISTIE
       app/FaehigkeitenNavi.tsx 76 Z. + app/tools/faehigkeiten.ts 129 Z."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 12.08. (ZWEITE Fassung) gemessen an e5285913. Quelle: docs/STATUS.md, Kennung "W-36" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: 08b264cc
 prioritaet: P2

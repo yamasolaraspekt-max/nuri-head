@@ -7,7 +7,7 @@ art: "STUFE B — Blatt schneiden, Ziel BESCHRIEBEN (Ablesung). Die Einordnung i
       sechs Routen, Controller, Modell, zwei Migrationen, drei Insel-Dateien, zwei gruene Tests."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 13.08. gemessen an d5296fe7. Quelle: docs/STATUS.md, Kennung "W-16/1" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: 86f94d98
 prioritaet: P2

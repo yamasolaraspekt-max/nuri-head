@@ -7,7 +7,7 @@ art: "BAU — ein Pruefskript fuer Auftragsblaetter (acht Innenpruefungen). Es l
       es misst ein BLATT, keinen Commit. KEINE Aenderung an docs/STATUS.md, KEIN Hausplaner-Code."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 21.08. (Runde 2). Quelle: docs/STATUS.md, Kennung "A-39" (Feld dor_beleg)."
 dor_schnitt_sha: "99add90f"
 status_steht_in: docs/STATUS.md
 basis_sha: 99add90f

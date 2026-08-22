@@ -7,7 +7,7 @@ art: "BAU — eine Sammel-Ausfuehrung im Store plus fuenf Aufrufstellen umstelle
       Produktivcode der Insel, kein Schema, keine Norm."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 13.08. gemessen an 5f6517b5. Quelle: docs/STATUS.md, Kennung "A-31" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: c3d2b527
 prioritaet: P1

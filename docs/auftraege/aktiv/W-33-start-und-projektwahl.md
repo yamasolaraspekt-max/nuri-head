@@ -7,7 +7,7 @@ art: "STUFE 6 — Blatt schneiden, Ziel BESCHRIEBEN (Ablesung). Der Code EXISTIE
       app/StartView.tsx, 267 Zeilen. Unstrittig: W-39 importiert und rendert es."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "BESTANDEN — plan-pruefer 12.08. gemessen an 5e9c8b08. Quelle: docs/STATUS.md, Kennung "W-33" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: 75ad92eb
 prioritaet: P2

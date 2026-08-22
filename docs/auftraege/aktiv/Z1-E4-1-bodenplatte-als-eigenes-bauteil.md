@@ -19,7 +19,7 @@ modellplan: "docs/konzept/golden-path-gp0-modellplan-bodenplatte.md (Planner, 32
              Typ, Zod-Stellen, Command-Plan, Abhaengigkeitsmatrix. DREI STELLEN UEBERHOLT, s.u."
 kennung_geprueft: "Z1-E4-1: docs/ 0 Treffer. git log --all --grep 1 Treffer — 0c8dedb6, eine
                    ERWAEHNUNG in der GP-0-Pruefung des Plan-Pruefers, keine Vergabe. Frei."
-dor_beleg: "steht aus — plan-pruefer (ein Durchgang, unmittelbar nach diesem CODE_FERTIG)"
+dor_beleg: "ERTEILT — plan-pruefer 2026-08-22T22:32:20, Votum plan-pruefer-DOR-ERTEILT-Z1-E4-1.yaml, ergebnis_sha bc61ed71, Blatt-Blob 24bbc90f. (Datensatz noch nicht nachgezogen.)"
 basis_sha: c95e8c33
 prioritaet: "P0 — VORGEZOGEN auf Yamas Anweisung 22:08: 'ich moechte dass die bodenplatte
              verfuegbar ist, kannst du dafuer sorgen und das vorziehen'. Vor E1 und E3."

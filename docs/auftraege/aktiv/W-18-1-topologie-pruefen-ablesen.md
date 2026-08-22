@@ -7,7 +7,7 @@ art: "STUFE B — Blatt schneiden, Ziel BESCHRIEBEN (Ablesung). Die Einordnung i
       nicht angenommen: beide genannten Formeln sind gebaut und angeschlossen."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 13.08.. Quelle: docs/STATUS.md, Kennung "W-18/1" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: 8c920624
 prioritaet: P2

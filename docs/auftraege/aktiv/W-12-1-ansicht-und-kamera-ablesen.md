@@ -7,7 +7,7 @@ art: "STUFE B — Blatt schneiden, Ziel BESCHRIEBEN (Ablesung). Die Einordnung i
       Zustand, Kamera, Raster und F-032 sind gebaut."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 13.08. (Runde 2) gemessen an c23a3b8b. Quelle: docs/STATUS.md, Kennung "W-12/1" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: b778152b
 prioritaet: P2

@@ -7,7 +7,7 @@ art: "STUFE B — Blatt schneiden, Ziel BESCHRIEBEN (Ablesung). Die Einordnung i
       Registry-Werkzeug, Schema-Knoten, drei Befehle, automatische Treppendurchbrueche, 242 Z. Test."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 13.08. gemessen an 1045c5a7. Quelle: docs/STATUS.md, Kennung "W-10/1" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: 18fe2deb
 prioritaet: P2

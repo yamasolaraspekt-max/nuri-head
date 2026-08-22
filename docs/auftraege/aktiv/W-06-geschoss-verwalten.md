@@ -8,7 +8,7 @@ art: "STUFE 6 — Blatt schneiden, Ziel BESCHRIEBEN (Ablesung). Der Code EXISTIE
       app/dashboard/GeschossFlaeche.tsx 173 Z. — zusammen 355 Zeilen, zehn Exporte."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 12.08.. Quelle: docs/STATUS.md, Kennung "W-06" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: acb3d494
 prioritaet: P2

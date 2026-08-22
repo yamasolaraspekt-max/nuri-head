@@ -7,7 +7,7 @@ art: "UMZUG — Bloecke ohne zustand-Feld wandern aus docs/STATUS.md in eine eig
       KEIN Loeschen, KEIN Hausplaner-Code, KEINE Migration."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "NICHT ERTEILT — plan-pruefer 21.08.. Quelle: docs/STATUS.md, Kennung "A-42" (Feld dor_beleg)."
 dor_schnitt_sha: "e802c1f8"
 status_steht_in: docs/STATUS.md
 basis_sha: e802c1f8

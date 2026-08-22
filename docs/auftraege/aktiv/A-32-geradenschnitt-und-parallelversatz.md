@@ -7,7 +7,7 @@ art: "BAU — zwei Funktionen reiner Geradenmathematik plus Tests. Kein Modellbe
       kein Schema, keine Oberflaeche."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 13.08. gemessen an 5b1a0cdb. Quelle: docs/STATUS.md, Kennung "A-32" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: 8233cf6e
 prioritaet: P2

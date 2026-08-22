@@ -6,7 +6,7 @@ werkzeug: "W-05 Raum erkennen"
 art: "BAU — die erkannten Räume anwählbar machen. Kein Name, kein Schema, keine Migration."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 13.08.. Quelle: docs/STATUS.md, Kennung "W-05/2" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: c09dcb93
 prioritaet: P2

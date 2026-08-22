@@ -7,7 +7,7 @@ art: "STUFE 6 — Blatt schneiden, Ziel BESCHRIEBEN (Ablesung). Der Code EXISTIE
       app/ConfigWizard.tsx, 271 Zeilen. Unstrittig, denn W-42 hat gerade daraus abgelesen."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "BESTANDEN — plan-pruefer 12.08.. Quelle: docs/STATUS.md, Kennung "W-35" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: 0474f53b
 prioritaet: P2

@@ -7,7 +7,7 @@ art: "BAU — eine neue Barriere in scripts/commit-pruefen.sh und ein Sichtbarke
       scripts/a26-ball-drift.sh. Kein Produktivcode der App."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "NICHT ERTEILT — plan-pruefer 13.08. gemessen an 18fe2deb. Quelle: docs/STATUS.md, Kennung "A-30" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: d8fd395d
 prioritaet: P1
