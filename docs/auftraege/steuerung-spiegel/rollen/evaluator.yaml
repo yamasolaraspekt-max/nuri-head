@@ -1,29 +1,27 @@
-auftrag_id: ABNAHME-evaluator-Z2-W0-5
-generation: 9            # 2026-08-22T13:05:19+0200 — gen 8 abgeschlossen (WIRKSAM 7/7, 16613211). Abnahmewelle beginnt: Posten 1 des Abnahmerueckstands (docs/backlog/abnahmerueckstand-2026-08-22.md, Risikoreihenfolge; Yama: 'Abnahmeseite ist der Engpass').
+auftrag_id: ABNAHME-evaluator-A-43
+generation: 10           # 2026-08-22T13:26:42+0200 — gen 9 abgeschlossen (Z2-W0-5 ABGENOMMEN 8/8, 639a7a32). A-43 VOR Posten 2 des Rueckstands: A-43 entsperrt die Z-Zustandscommits (auch fuer W0-5) und die Ruecknahme der Tor-Woerter.
 rolle: evaluator
 sitzung_erwartet: 303cefb6-35fd-4c36-9aca-ed10515f59b3
 worktree: /Users/yamanuri/Documents/ticket-rolle-evaluator
 branch: rolle/evaluator
-basis_sha: 16613211
+basis_sha: 639a7a32
 prioritaet: P0
-aktion: bauen            # TOR-WORT = Arbeit erlaubt (README 6f). Du baust nichts.
-taetigkeit: "abnehmen (Evaluator): Z2-W0-5 (A-1..A-4 IDOR GPS/Fotos/Master-Sets/Material)"
+aktion: bauen            # TOR-WORT = Arbeit erlaubt
+taetigkeit: "abnehmen (Evaluator): A-43 Posten 1 (Kennungsmuster mehrgliedrig) + Posten 2 (Aktionsvokabular) als EINE Lieferung"
+ausloeser: "ereignisse/BAU-generator-A-43/generator-CODE_FERTIG*.yaml — liegt vor (ergebnis_sha 8a08d625)"
 gegenstand: |
-  Unabhaengige Abnahme von Z2-W0-5 am Stand, den Yama entschieden hat (auftraege/W0-5-entscheidung-doppelbau.md): Bau A = 28ca0834
-  (im Checkout, BLEIBT); Bau B = ef7a8c89 (Worktree-Belegzweig) ist NUR Beleg/Vorrat, wird nicht abgenommen. Dein eigener Vergleich
-  (evaluator-w0-5-vergleich.yaml, Empfehlung A) ist Vorarbeit, kein Votum. Blatt: docs/auftraege/aktiv/Z2-W0-5*.md am
-  Integrationsstand (SHA im Startereignis nennen); Kriterien des Blatts wortwoertlich, Messbefehle ZITIEREN (P-02/4).
-pruefen_vollstaendig:
-  - "Jedes Kriterium rot (vor 28ca0834) -> gruen (28ca0834 bzw. Integrationsstand, der ihn enthaelt) mit Rohausgabe; IDOR-Faelle je Ressource: fremde Org/fremder Kunde -> 403/404, eigener -> 200; Negativprobe SELBST ausloesen"
-  - "Grundmenge: alle Routen/Controller der vier Ressourcen (GPS, Fotos, Master-Sets, Material) mit STAND-SHA; keine Route ohne Pruefung"
-  - "RECHTE_ALLE_FUER_ALLE (Schalter, Yama-Entscheidung): Integritaet/Auth-Luecken bleiben Befund, Rechte-Luecken bei true sind KEIN Mangel — beide Schalterstellungen messen, wo das Blatt es verlangt"
-  - "Datenbanklaeufe: NUR gegen eindeutig benannte Test-DB; ist die Isolation nicht gegeben (Z0-I1 offen, Y-13 GRANT steht aus) -> betroffene Kriterien als ENV_BLOCKED mit Befehl+Ausgabe fuehren, NICHT raten, Rest voll messen; Votum dann 'ABGENOMMEN unter ENV_BLOCKED-Liste' oder NACHBESSERN je nach Blatt"
-  - "Kein Produktcode, keine Reparatur; nichts im Integrations-Checkout aendern; Probe-Daten nur in Test-DB"
-meldepflicht: "AUFTRAG_GESTARTET mit endstand_sha (28ca0834) + gelesen_bis; Abschluss ABGENOMMEN/NACHBESSERN + evaluator-AUFTRAG_ABGESCHLOSSEN.yaml mit endstand_sha, ergebnis_sha (Votum-Commit), gelesen_bis (README 6g); Votum im eigenen Worktree (commit-pruefen.sh, TICKET_ROLLE=evaluator, NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules)"
-lease: "leases/ABNAHME-evaluator-Z2-W0-5/ VOR der Pruefung; freigeben nach Votum."
-danach: "Posten 2 (Z2-W0-7, S-1 61 Routen) folgt als gen 10 nach deinem Votum — nicht vorgreifen."
-verboten: [Produktcode, Reparaturen, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Commit ausserhalb des eigenen Worktrees, Produktiv-DB]
+  Unabhaengige Abnahme von A-43 (Blatt docs/auftraege/aktiv/A-43-kennungsmuster-mehrgliedrig.md @ rolle/planner 1e5ac476 — juengster
+  Stand per SHA; DoR ERTEILT_MIT_AUFLAGE 794cd018, Auflage erfuellt a7035fb7, Befehl 2 repariert 1e5ac476): Generator-Endstand
+  8a08d625 auf rolle/generator, Basis c82df498. 12 Kriterien A-43-1..12, je rot (c82df498) -> gruen (Endstand)
+  mit dem Messbefehl DES BLATTES (zitieren, nicht nachbauen; Plan-Pruefer-Hinweis Grundmenge 87/90 zur Kenntnis), Negativproben selbst
+  ausloesen (im Wegwerf-Repo/--probe-root, wo Baeume beruehrt wuerden), Produktcode leer, EINE Musterquelle / EINE Aktionsliste, A-37-26
+  weiter gebunden. Posten 3 (Dirigent-Bereich docs/backlog/+docs/fortschritt/, Errata 13:25) ist NICHT Teil dieser Lieferung — er kommt
+  als Nachlieferung (wie A-37-20) und wird getrennt nachgeprueft.
+meldepflicht: "AUFTRAG_GESTARTET mit endstand_sha (Generator-Endstand) + gelesen_bis; Abschluss ABGENOMMEN/NACHBESSERN + AUFTRAG_ABGESCHLOSSEN mit endstand_sha, ergebnis_sha, gelesen_bis; Votum im eigenen Worktree (commit-pruefen.sh, TICKET_ROLLE=evaluator)"
+lease: "leases/ABNAHME-evaluator-A-43/ VOR der Pruefung; freigeben nach Votum."
+danach: "gen 11 = Abnahmerueckstand Posten 2 (Z2-W0-7), es sei denn A-43 geht in NACHBESSERN."
+verboten: [Produktcode, Reparaturen, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Commit ausserhalb des eigenen Worktrees]
 steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/ABNAHME-evaluator-Z2-W0-5/evaluator-ack.yaml
-erstellt: "2026-08-22T13:05:19+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/ABNAHME-evaluator-A-43/evaluator-ack.yaml
+erstellt: "2026-08-22T13:26:42+0200 Dirigent (atomar; Uhr: date)"
