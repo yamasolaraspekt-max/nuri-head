@@ -32337,3 +32337,70 @@ deren beide Weiterleitungsstellen seit über 80 Minuten schweigen — während d
 liefern, weiterarbeiten.**
 
 Ball: **Yama** · nachrichtlich Dirigent und Integrator · bei mir nichts.
+
+## §407 — §119 war richtig und ist überholt: `polygonFlaeche` lebt, weil jemand sie angeschlossen hat
+
+Messstand: HEAD `93a8cf5e`, Baum 0, gemessen 17:30–17:34. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §407'` → 0). Vorratsprüfung (d) + (e): Alterung meines ältesten noch stehenden
+Befundes.
+
+### Der Anlass
+
+`planner-CODE_FERTIG-paket-2-zuschnitt.yaml`, 17:27:50, nennt beiläufig: *„Vorleistungen AUSSERHALB
+des Pakets, **alle ERREICHBAR**: `aufbauPlatzierung`, `polygonFlaeche`, `linienBauteile`,
+`gaubeGeometrie`."*
+
+**`polygonFlaeche` ist das Modul aus meinem §119** — dort hatte ich gemessen: *„Es ist nicht einer von
+vieren, es sind **alle vier** [Aufrufer tot]."*
+
+### Erst die Übereinstimmung, dann der Widerspruch
+
+    aufbauPlatzierung · polygonFlaeche · linienBauteile · gaubeGeometrie    alle ERREICHBAR
+    dachAusschnitt · dachOeffnung · dachVorlage                             alle unerreicht
+
+**Beide Aussagen des Planners bestätigt** — und die zweite deckt sich mit meiner 26er-Liste.
+
+**Die erste widerspricht meinem §119.** Also nachgemessen, wer `polygonFlaeche` heute importiert:
+
+    heute:      deckenMesh · dachAusschnitt · dachformVorlagen · grundriss · dachGeometrie   = 5
+    §119-Stand: deckenMesh · dachAusschnitt · dachformVorlagen · grundriss                   = 4
+
+    Erreichbarkeit heute:
+      renderers/three-d/deckenMesh.ts    ERREICHBAR    (§119: Produktivverbraucher 0)
+      geometry/dachformVorlagen.ts       ERREICHBAR    (§119: 0, "51 Laufzeit-Exporte, alle 0")
+      geometry/dachGeometrie.ts          ERREICHBAR    <- neu in der Liste
+      geometry/dachAusschnitt.ts         unerreicht    (unveraendert)
+      geometry/grundriss.ts              unerreicht    (unveraendert)
+
+### Die Frage, die ich mir stellen musste: hat §119 einen übersehen?
+
+`dachGeometrie.ts` existiert seit **18.07.**, also **lange vor** §119. Wäre der Import damals schon
+dagewesen, hätte §119 fünf Importeure nennen müssen und vier gezählt — **ein Grundmengenfehler, wie
+ich sie heute zwölfmal hatte.**
+
+**Am §119-Stand `f06dd124` gemessen:**
+
+    'polygonFlaeche' in geometry/dachGeometrie.ts:   0 Treffer   (Datei existierte, 153 Zeilen)
+    Importeure von polygonFlaeche gesamt:            6, davon 2 Tests  ->  4 produktiv
+                                                     genau die vier, die §119 nennt
+
+**§119 hat nichts übersehen. Die Messung war vollständig und richtig.** Der Import kam später dazu,
+und `dachGeometrie` hängt fest im Produktivpfad (`app/HausplanerApp.tsx`, `renderers/three-d/szene.ts`,
+`dachMesh.ts`).
+
+### Warum dieser Abschnitt hier steht
+
+Heute waren **zwölf** Grundmengen- und Musterfehler zu berichtigen, die meisten meine. **Dieser hier
+ist der Gegenpol:** ein Befund, der gemessen wurde wie er sollte, der sechs Tage hielt — und der
+heute nicht durch einen Messfehler fällt, **sondern weil jemand das Modul angeschlossen hat.**
+
+> **Ein überholter Befund ist kein falscher Befund.** §119 beschrieb einen Zustand, den es gab; er
+> beschreibt ihn heute nicht mehr, weil der Zustand sich geändert hat. **Das ist der Unterschied
+> zwischen „ich habe falsch gemessen" und „es ist etwas geschehen"** — und er ist nur zu sehen, wenn
+> man am alten Stand nachmisst statt am neuen zu zweifeln.
+
+**Für Yama-Posten 9 heißt das:** `polygonFlaeche` gehört nicht mehr zur Frage. Die 23 aus §399/§404
+sind davon unberührt — sie ist dort ohnehin nicht enthalten, weil sie erreichbar ist.
+
+Ball: **niemand.** §119 bleibt stehen und ist hier als überholt gekennzeichnet, nicht berichtigt —
+die Zahlen von damals waren richtig.
