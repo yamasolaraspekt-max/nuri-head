@@ -30887,3 +30887,62 @@ feststeht, dass sie laufen, kann man immer gegenprüfen. §120 hat sie eingefüh
 übernommen — und sie hat beim ersten Lauf gegriffen.
 
 Ball: **niemand.** Posten 9 bleibt bei Yama, mit berichtigter Größenordnung.
+
+## §384 — Der Rückstand, den ich als Mangel meldete, ist der Rot-Beleg geworden. §376 ist damit vollständig aufgelöst
+
+Messstand: HEAD `31eb8f1c`, Baum 0, gemessen 16:25–16:29. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §384'` → 0). Nichts in meiner Bahn; Ball liegt beim Dirigenten.
+
+**Zitiert, nicht nachgebaut:** `evaluator-ABGENOMMEN-teil-B-Z1-W2-1.yaml`, 16:25:16 — **Z1-W2-1 ist
+BROWSER-abgenommen**, 6 von 6, *„Der Bedienweg wurde gefahren, nicht behauptet."*
+
+### Wie sich §376 auflöst — dreifach, und keine Stufe davon war mein Verdienst
+
+    §376 (16:03)  ich melde: das ausgelieferte Buendel ist 18 Stunden aelter als der Quellcode,
+                  neun Insel-Dateien seit ad340caf, fuenf davon Produktivcode
+    16:02         die Buendel-Regel macht daraus eine ABSICHT (§380)
+    16:03 (Gen.)  der Generator schreibt "npm run build:hausplaner <- NOETIG, sonst falsch-rot"
+                  in seine CODE_FERTIG-Meldung
+    16:25 (Eval.) "Ich stand vor dem Befund 'die Meldung existiert im Browser nicht'.
+                   Der Generator hatte die Falle woertlich benannt … Diese Meldung hat eine
+                   Runde gespart."
+
+**Und die dritte Stufe ist die, die ich nicht kommen sah:** Der Evaluator hat den veralteten
+Bündelstand **als Rot-Beleg benutzt.** Kriterium (c) verlangt den Nachweis, dass die Meldung ohne das
+Modul nicht erscheint — und *„da das Bündel nicht Teil des Bau-Commits ist, ist es der Stand vor dem
+Bau — an beiden Markern gemessen, nicht angenommen."*
+
+**Der Zustand, den ich als Mangel gemeldet habe, ist das Messmittel geworden.**
+
+### Der Rot-Beleg gegengeprüft — meine Sorge, und warum sie nicht trägt
+
+Mein Einwand wäre gewesen: Ein Rot-Lauf gegen ein Bündel vom 21.08. isoliert **nicht das Modul**,
+sondern den ganzen Stand seit dann — neun Dateien, nicht eine. Gemessen:
+
+    'integrationsabgleich'  in Produktivdateien der Insel:  1   (app/rahmen/IntegrationsKonflikte.tsx)
+                            davon Tests:                    0
+    'data-pruefung'         Gegenprobe, dasselbe Ergebnis:  1
+    im ausgelieferten Buendel (1516311 B, ad340caf 21.08.): 0x
+
+**Der Marker stammt aus genau einer Datei und fehlt im Bündel vollständig.** Damit kann keine der
+acht anderen Änderungen ihn erzeugt haben — **der Rot-Beleg isoliert das Modul, obwohl der Stand mehr
+als das Modul unterscheidet.** Ein Marker, der nur an einer Stelle entsteht, trägt eine Rot-Probe auch
+über einen unsauberen Standunterschied hinweg. Das ist der Grund, warum die Wahl des Markers hier
+mehr wiegt als die Sauberkeit des Vergleichsstands.
+
+### Was ich daraus für mich mitnehme
+
+**Ein gemessener Zustand ist noch kein Mangel — was er ist, entscheidet der Zweck.** Ich hatte den
+Bündelrückstand korrekt gemessen und falsch eingeordnet: als Lücke, wo eine Absicht war, und als
+Hindernis, wo ein Messmittel entstand. **Die Messung hielt in allen Zahlen; die Deutung hielt in
+keiner.**
+
+Bemerkenswert daneben: Der Evaluator führt **vier eigene Messfehler** auf, darunter *„Räume: 0 als
+Beleg für ‚keine Wand' (eine Wand IST kein Raum)"* und *„ein grep-Zähler ohne `-v grep`, der die
+eigene Pipeline als fremde Testläufe zählte"*. **Drei hätten beinahe zu einem Falschbefund geführt.**
+Zusammen mit meinen dreien aus §382 und dem des Planners sind das an einem Nachmittag acht
+Messfehler in vier Rollen — **und keiner ist in einen Befund gelangt, weil jede Rolle ihre eigene
+Gegenprobe gefahren hat.**
+
+Ball: **Dirigent** (Z1-W2-1 browserabgenommen), dann **Generator** (Bündel-Commit nach der Regel) ·
+bei mir nichts.
