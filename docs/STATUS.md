@@ -106,6 +106,7 @@
 | **Z1-W2-4** Treppe ueber den Werkzeugregistry-Vertrag anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md` · **DoR ERTEILT** (plan-pruefer 16:21:25) · Planner-Blatt `418bcb6c` |
 | **Z1-W2-5** Wandflaeche anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` |
 | **Z1-W2-6** Auswechslung anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` |
+| **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | `BEREIT` | **Generator** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT auf den Kriterientext** (plan-pruefer 18:37:20, Nachtrag 1.6 V-1..V-6) — **nicht je Blatt**, das ist der Punkt von Spur V · erstes Blatt nach Yamas Entscheidung 18:27 |
 | **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
@@ -19296,6 +19297,41 @@ herkunft_dieses_blocks: |
   Dieses Blatt hat sich nach der DoR noch bewegt (Achsenregel 17:18/17:21); ich trage den
   JUENGSTEN Blattstand ein, e1c3f425, und nicht den, der zur DoR gehoerte. Nach dem Fehler bei
   Z1-W2-3 ist das die Regel: das juengste Ereignis entscheidet, nicht das erstgefundene.
+```
+
+```yaml
+auftrag: "Z1-V1-1"
+titel: "Sammelblatt Spur V — Anzeige am ausgewaehlten Objekt, fuenf Module"
+zustand: BEREIT
+ballbesitz: generator
+blatt: "docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md"
+blatt_sha: 3ab3bb88
+basis_sha: 3daf4f1e
+dor_beleg: |
+  ERTEILT AUF DEN KRITERIENTEXT, nicht auf dieses Blatt — plan-pruefer, 18:37:20,
+  DOR-plan-pruefer-spur-V/plan-pruefer-DOR-SPUR-V-KRITERIENTEXT.yaml, generation 10.
+  Gegenstand: docs/regelwerk/ARBEITSREGELN-NACHTRAG-1-6-SPUR-V.md @ 3ad5e4cc.
+  VOTUM: "ERTEILT mit DREI HALBSAETZEN. Nach Nachtrag 1.5 gelten sie als Teil des Textes,
+  nicht als Auflage — keine Schleife, der Bau kann sofort beginnen."
+  SEINE EIGENE GEGENPROBE, die ich hier festhalte, weil sie das Blattdrift-Problem aus 414
+  ausschliesst: Blob 3ad5e4cc identisch auf rolle/dirigent, HEAD und auto/hausplaner-integration.
+  DAS IST DIE NEUERUNG: eine DoR fuer eine ganze Klasse. Je Modul aendern sich nur die Belege,
+  nie die Kriterien. Ich trage sie deshalb hier ein, ohne dass es ein eigenes DoR-Ereignis fuer
+  Z1-V1-1 gibt — und halte ausdruecklich fest, dass ich nach einem gesucht habe: keines
+  vorhanden, und nach Nachtrag 1.6 soll auch keines entstehen.
+bau_sha: "noch offen"
+herkunft_dieses_blocks: |
+  Statusplatz vom integrator im Transportlauf angelegt, im selben Lauf wie der Transport des
+  Blattes (Dauerregel gen 9 Punkt 2) — diesmal ohne Verspaetung: geschnitten 18:43:10,
+  transportiert und eingetragen unmittelbar danach.
+  DAS ERSTE BLATT NACH YAMAS ENTSCHEIDUNG von 18:27:43. Fuenf Module in einem Zuschnitt statt
+  fuenf Blaettern: geometry/treppenTypen.ts, geometry/dachVorlage.ts und drei weitere der
+  Klasse "Anzeige am ausgewaehlten Objekt". Der Eingang liegt vollstaendig im SceneDocument
+  bzw. an dem Knoten, den app/rahmen/EigenschaftenPanel.tsx bereits haelt (selectedWall,
+  selectedOpening, selectedRoof, selectedStair, selectedStairParams, Zeilen 66-70); die
+  Komponente existiert und ruft berechneTreppe schon an Zeile 494.
+  TRANSPORT UND EINTRAG, KEINE BEWERTUNG: ob der Zuschnitt traegt, entscheiden Plan-Pruefer
+  und Generator, nicht ich.
 ```
 
 ```yaml
