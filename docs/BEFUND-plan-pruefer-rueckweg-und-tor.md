@@ -31429,3 +31429,80 @@ Ergebnis grün, und beide Male fängt es nur eine Probe, die von außen kommt.**
 
 Ball: **Generator** (der Bau läuft) · bei mir nichts. Meine DoR zu Z0-I1 bleibt unberührt: die
 Nachbesserung betrifft die Umsetzung, kein Kriterium.
+
+## §393 — DoR Z2-W0-11b: ERTEILT. Ein Halbsatz zum Identitätsschutz, der die Rot-Probe entwerten könnte
+
+Messstand: HEAD `e654c2d5`, Baum 0, gemessen 16:49–16:54. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §393'` → 0). Auslöser `planner-CODE_FERTIG-Z2-W0-11b.yaml`, 16:49:38, Blatt
+`docs/auftraege/aktiv/Z2-W0-11b-ids-callback-state-token.md @ 05d7f04a`, Messstand `1146cbe6`.
+
+**Einordnung des Planners geprüft und richtig:** Kategorie 2 der Regel `RECHTE_ALLE_FUER_ALLE` — eine
+Integritäts-/Auth-Lücke bleibt Befund, auch bei offenem Schalter, *„der Pfad folgt dem Schalter nicht
+— er umgeht ihn"*. Dieselbe Klasse wie Z2-W0-5b.
+
+### Selbst gemessen am Basis-Stand
+
+    VerifyCsrfToken::$except      6 Eintraege · davon Rueckwege in except: 3
+    vierte Route derselben Bauart admin/offer-template-supplier/{sc}/return
+                                  in $except: 0 Treffer · Route existiert (web.php: 4 Treffer)
+    IdsController (434 Z.)    :35  Log::info("IDS CALLBACK HIT", ['query' => $request->query()])
+                              :70  $auto = $request->query('auto') == '1'
+                              :75  ImportedIdsItem::create([...])
+    autoPromoteItem           :107 Distributor::firstOrCreate(...)   <- Lieferant
+                              :112 app(ProductIdentityService::class) <- Produkt
+    Query-Frage               OfferSupplierSearchController:103  $hookUrl .= '?' . http_build_query
+                              IdsSearchController:157             route('ids.callback')  OHNE Query
+    Blatt                     251 Zeilen · 6 Kriterien / 6 Matrixzeilen · N4 (:238) · Rueckweg (:246)
+
+**Alle tragenden Zahlen bestätigt.** Der Fund trägt: ein POST mit gültigem XML legt heute Zeilen an,
+ohne Token — und mit `?auto=1` werden Lieferant und Produkt angefasst.
+
+### Ein Einwand von mir, den die Tabelle sofort erledigt hat
+
+Der Satz `:53` lautet *„Sechs Pfade stehen in `VerifyCsrfToken::$except`. **Vier davon** sind
+Rückwege von Fremdsystemen"* — ich zählte in `$except` nach und fand **drei**. Die Tabelle direkt
+darunter hat eine eigene Spalte **„in `$except`"** mit `ja · ja · ja · **NEIN**`, und die Überschrift
+sagt es auch: *„ein vierter Rückweg, **der ohne Ausnahme läuft**"*.
+
+**Mein „davon" war zu eng gelesen.** Fünfte zu enge Lesart heute — die vier davor waren
+Suchmuster (§382, §383, §389, §390), diese ist ein **Satz**. **Dieselbe Wurzel: ich habe eine
+Grundmenge unterstellt, statt die danebenstehende zu lesen.**
+
+### Der Halbsatz — und er macht die Rot-Probe schärfer, nicht schwächer
+
+`autoPromoteItem` prüft heute schon `IdentityMatch::KONFLIKT` und bricht ab:
+
+    Log::warning('IDS autoPromote: Identitätskonflikt — kein Import', [...])
+
+    im Blatt:  'autoPromote'  5 Treffer  ·  'KONFLIKT' 0  ·  'IdentityMatch' 0
+
+**Kriterium (c) verlangt drei Zählungen** (`imported_ids_items`, Produkt, Lieferant) — genau richtig,
+denn nur eine zu zählen erfüllt es nicht. **Aber wenn die Probe zufällig einen Artikel nimmt, bei dem
+der Identitätsdienst einen Konflikt meldet, bleiben Produkt und Lieferant unberührt — und die Probe
+sieht grün aus, obwohl die CSRF-Lücke offen ist.** Sie hätte dann den Identitätsschutz gemessen, nicht
+das Token.
+
+> **Halbsatz:** In (c) den Probefall festlegen als *„ein Artikel, der **keinen** Identitätskonflikt
+> auslöst"* — nachzuweisen daran, dass die Warnung `IDS autoPromote: Identitätskonflikt` im Lauf
+> **nicht** erscheint. Sonst misst die Rot-Probe den falschen Riegel.
+
+**Das ist genau die Klasse von heute Nachmittag, eine Ebene tiefer:** grün, weil ein anderer Schutz
+griff — nicht, weil der geprüfte wirkte. Der Generator hat es in §392 für seinen Lease-Riegel selbst
+formuliert: *„Eine grüne Suite ist kein Beleg dafür, dass der Riegel im Betrieb tut, was er soll."*
+
+### Votum
+
+**ERTEILT.** Sechs Kriterien mit Messbefehl, rotem Ist und Absage-Regel; N4 und Rückweg vorhanden;
+Y-12 als Operand benannt. Zwei Teile ragen heraus:
+
+- **(b) verlangt die Prüfung VOR dem ersten `create`** — *„ein zurückgerollter Import ist kein
+  verhinderter Import."* Dieselbe Reihenfolge-Schärfe wie bei Z2-W0-5b (Wache vor der Query).
+- **(e) macht aus der vierten Route einen Messpunkt mit zwei gültigen Ausgängen:** läuft sie, ist
+  *„der Rückweg braucht eine Ausnahme"* widerlegt; läuft sie nicht, ist eine zweite Lücke gefunden.
+  **Beides ist ein Ergebnis** — und es ist der billigste Messpunkt des Blattes.
+- **(f) verbietet, die Partnerfrage vor der Messung zu stellen.** Der Beleg liegt im Haus:
+  `OfferSupplierSearchController:103` hängt bereits eine Query an, und `IdsController:35` loggt sie
+  seit jeher. *„Die Messung ist mit vorhandenem Werkzeug machbar, sie wurde nur nie gefahren."*
+
+Ball: **Planner** (ein Halbsatz zu (c)) · **Generator** (bauen; der Halbsatz hindert ihn nicht) ·
+bei mir nichts.
