@@ -32,6 +32,36 @@ Anzeigeort der Leiste                    app/rahmen/GruppenzeileUndSchiene.tsx
 > *Beim ersten Griff gab mein Zähler **49** statt 37 — er zählte die Worterklärungen im Kopf des
 > Registers mit. Erst die Zählung über die isolierte Reifegrad-Spalte trifft.*
 
+## Der Bezugsrahmen: **26 von 110** (WERKZEUGWEG #6, entschieden)
+
+**Die Grundgesamtheit des Bauplaners ist die Auswahl in `app/tools/faehigkeiten.ts`** — DTP bewusst
+ausgeschlossen, begründet im Dateikopf. **Gemessen, Stand `9305198b`:**
+
+```
+FAEHIGKEITEN = werkzeugFaehigkeiten + engineFaehigkeiten + werkzeugKatalogFaehigkeiten
+  werkzeugFaehigkeiten      TOOL_DEFINITIONS.map(...)        13
+  engineFaehigkeiten        fester Block, art:'engine'       13
+  werkzeugKatalogFaehigk.   []  — leer                        0
+  SUMME                                                      26
+Grundgesamtheit Paketeintraege                              110
+```
+
+**Ab jetzt ist „wie weit sind wir" eine Zahl: 26 von 110.**
+
+> **Diese Zahl war zwei Anläufe lang nicht belastbar, und das gehört dazu.** Mein erster Griff gab
+> `grep -c "id: '"` → **22**, mein zweiter eine Zerlegung, die **9 von 22** fand und den
+> Fähigkeiten-Block verfehlte. **Zwei Verfahren, zwei Antworten — also galt keine, und die Zahl ging
+> nicht ins Register.**
+> **Aufgelöst durch Lesen statt Zählen:** die 22 sind **9 Gruppen + 13 Engines**; die **13
+> Werkzeuge kommen per `.map()` und stehen im Quelltext nirgends als `id: '…'`**. *Ein Zähler, der
+> Literale sucht, findet keine Ableitung.* Gegenprobe über die Zustandsfelder: 14 = 13 Engines + 1
+> im `map` ✓.
+
+**Was die 26 nicht sagt:** wie viele davon **bedienbar** sind. `werkzeugFaehigkeiten` setzt
+pauschal `zustand: 'verfuegbar'` — das ist eine Zusage der Registry, keine Messung am Bedienweg.
+**Diese Messung liefert erst `Z1-W2-0`** (Bedienbarkeits-Probe, DoR erteilt). *Bis dahin ist 26 die
+Menge der **registrierten**, nicht der **erreichbaren** Fähigkeiten.*
+
 ---
 
 ## Wie die Zuordnung Modul → Registerzeile entstanden ist
