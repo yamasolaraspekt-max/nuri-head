@@ -15,6 +15,23 @@ Read-only gemessen am HEAD von `/Users/yamanuri/Documents/ticket` (Integrationsc
 
 ## (1) IST-Höhenkette — gemessen, mit der "zweiten Wahrheit"
 
+> ## ⚠ AUFLAGE 1 — DIESER ABSCHNITT BESCHREIBT DEN STAND **VOR** `ad2ac724`
+>
+> **Der Plan ist vom 21.08. 21:42. `geometry/hoehenkette.ts` kam am 22.08. 20:09 durch
+> `ad2ac724` (Z1-E0-1) — zweiundzwanzig Stunden später.** *Der Abschnitt bleibt als Befund
+> stehen; was er beschreibt, gilt nicht mehr.* **Drei Aussagen sind überholt** (Plan-Prüfer §483,
+> über den Funktionsnamen gemessen):
+>
+> | Plan sagt | gemessen nach `ad2ac724` |
+> |---|---|
+> | „neue Datei `geometry/hoehenkette.ts`" | **Erweiterung** — die Datei existiert, 59 Zeilen, zwei Exporte |
+> | „`naechsteEtageElevationMm` ist TOT" | **4 Produktivverbraucher**: `deckenMesh.ts`, `Kopfrahmen.tsx`, `hoehenkette.ts`, `geschossVorlage.ts` |
+> | „`Kopfrahmen.tsx:172`-Inline ab jetzt verlagert" | **ist bereits verlagert** |
+>
+> **NICHT überholt:** `HoehenkettenErgebnis` und alle fünf Feldnamen — je **0 Treffer**, also
+> weiterhin ungebaut. *Die zweite Wahrheit Nr. 3 (`WallNode.height`) bleibt ebenfalls offen und
+> ist als `Z1-E0-2` eigenes Blatt (Dirigent 22:01, Punkt 5).*
+
 **Die Kette besteht heute aus DREI unabhängigen Rechnungen, nicht einer:**
 
 | # | Funktion/Stelle | Formel | Aufrufer | Status |
@@ -37,7 +54,7 @@ Read-only gemessen am HEAD von `/Users/yamanuri/Documents/ticket` (Integrationsc
 
 ## (2) Modellplan additiv — `FoundationSlabNode`
 
-### Typ (analog `CeilingNode`, `scene.types.ts:342-358`)
+### Typ (analog `CeilingNode`, `scene.types.ts:348-358`)  <!-- Auflage 5: 342 -> 348, Drift durch Z1-E2-1 -->
 
 ```ts
 // domain/scene.types.ts — additiv, NEBEN nodes[]/roofs[]/ceilings[] (Muster :46-54)
@@ -85,7 +102,7 @@ Zwei Optionen, keine selbst entschieden:
 | `pruefeGanzzahlig` | `applyCommand.ts:28-32` | **R1 teilbar** | generisch |
 | `pruefeDeckeGanzzahlig`/`pruefeDeckeProLevel` | `applyCommand.ts:104-116` | **R2 Muster kopieren**, nicht Funktion selbst | eigene Feldmenge (`oberkanteMm`, `erdberuehrt`) |
 | `herkunftFuerNeueDecke`/`herkunftFuerNeuesDach` | `geometry/freigabe.ts:85-107` | **R1/R2** | `MitFreigabe`-Typ ist bereits generisch (`freigabe.ts:23-28`), `herkunftFuerNeueBodenplatte(ausKontur)` kann dieselbe Form direkt übernehmen |
-| `gebaeudeUmriss()` | `HausplanerApp.tsx:753-763` | **R1 teilbar** | liefert Default-Polygon für `polygonQuelle: 'aus_grundflaeche'`-Fall unverändert |
+| `gebaeudeUmriss()` | `HausplanerApp.tsx:758-768` (Auflage 5: war 753) | **R1 teilbar** | liefert Default-Polygon für `polygonQuelle: 'aus_grundflaeche'`-Fall unverändert |
 | `treppenDurchbrueche` | `applyCommand.ts:119-137` | **NICHT teilbar, bewusst** | Auftrag verlangt für Bodenplatte NUR ausdrückliche Durchbrüche, keine Automatik — Abgrenzung zur Decke ist fachlich gewollt, nicht technische Schwäche |
 | `deckenOberkanteMm` | `deckenMesh.ts:10-12` | **NICHT direkt teilbar** | Bedeutung differiert: Decke = Unterkante auf Wand-OK (abgeleitet), Bodenplatte = eigene, von Wandhöhe unabhängige Bezugsgröße |
 | Decken-Render-Block | `szene.ts:477-506` | **R2 Struktur kopieren** | eigene Sammlung `dokument.foundationSlabs`, eigene Höhe (`oberkanteMm` statt `deckenOberkanteMm`), eigene Farbe — kein Renderer-Umbau (Nicht-Ziel), additiver neuer Block |
@@ -98,6 +115,16 @@ Fixture-Bestandsdokument (analog `__tests__/fixtures/a01-bestandsdokument-l-dach
 ---
 
 ## (3) Command-Plan
+
+> ## ⚠ AUFLAGE 1 — auch dieser Abschnitt ist teilweise überholt
+>
+> **Die vorgeschlagene gebündelte Funktion `berechneHoehenkette(...)` gibt es nicht** (0 Treffer).
+> *Der Dirigent hat den Namen 22:01 ausdrücklich als **GP-0-Vorschlag** eingeordnet, nicht als
+> Kriterium.* **Gebaut sind durch Z1-E0-1 zwei Exporte in `geometry/hoehenkette.ts`:**
+> `deckenOberkanteMm` (`:37`) und `naechsteEtageElevationMm` (`:49`).
+>
+> **Der Vorschlag bleibt hier stehen** — er ist die Vorlage, falls die Kette später gebündelt wird.
+> **Wer misst, misst gegen die zwei gebauten Exporte**, nicht gegen den Vorschlagsnamen.
 
 ### Neue Commands (Muster `ADD/UPDATE/REMOVE_CEILING`, `commands.types.ts:29-31`, `applyCommand.ts:288-330`)
 
@@ -186,13 +213,16 @@ Fixture-Vorschlag im Stil von `fixtures/studioFixtures.ts:63-92` (`deckeTreppe()
 
 ```
 EG-Umriss (Rechteck):        10.000 × 8.000 mm  (Muster RECHTECK_UMRISS, studioFixtures.ts:54-56)
-Level EG:  elevation 0, defaultWallHeight 2.500, floorThickness 200  (Muster EG, :23-30)
+Level EG:  elevation 0, defaultWallHeight 2.500, floorThickness 180  (Muster EG, :23-30)
+           ^^^ AUFLAGE 4: war 200 und damit GLEICH der Zwischendecke (200). naechsteEtageElevationMm
+               waehlt genau zwischen beiden (hoehenkette.ts:49-56) — bei gleichem Wert liefern BEIDE
+               Zweige 2700, die Fixture kann den richtigen nicht nachweisen. 180 macht sie unterscheidbar.
 Bodenplatte: dickeMm 250, oberkanteMm 0 (= Bezugshöhe, Fachfrage 8 offen), erdberuehrt true
 Treppe:      Lauflinie (2.000,2.000)→(5.000,2.000), Laufbreite 1.000 (Muster :68, treppeZuParametern)
 Zwischendecke EG→OG: dickeMm 200, Treppenauge automatisch (treppenDurchbrueche)
-Level OG:  elevation = berechneHoehenkette(...).naechstesGeschossElevationMm, defaultWallHeight 2.500
+Level OG:  elevation = naechsteEtageElevationMm(level, decke)   (Auflage 2: berechneHoehenkette gibt es nicht)
 OG-Kontur: aus EG abgeleitet (befehleGeschossDuplizieren-Muster), 1 Innenwand verschoben (Abweichungs-Testfall)
-Dach:      sattel, neigungGrad 35, ueberstandMm 500, firstAzimutGrad 0, traufhoeheMm = berechneHoehenkette(...).traufhoeheMm
+Dach:      sattel, neigungGrad 35, ueberstandMm 500, firstAzimutGrad 0, traufhoeheMm = deckenOberkanteMm(level)
 Dachaufbau: 1 Dachfenster (Muster RoofAufbau)
 Dachschichten: 5 Schichten nach dachschichten-reuse-matrix.md (2), Reihenfolge tragwerk→…→deckung
 ```
@@ -203,9 +233,14 @@ Fixture-Datei: neuer Eintrag `'referenzhaus-golden-path'` in `STUDIO_FIXTURES` (
 
 ## (7) Abnahmekriterien Slice "Bodenplatte + Höhenkette" (messbar)
 
-1. `ADD_FOUNDATION_SLAB` erhöht `foundationSlabs.length` um 1; Undo entfernt sie (ein Schritt) — Muster `decke.test.ts:50`.
+1. `ADD_FOUNDATION_SLAB` erhöht `foundationSlabs.length` um 1; Undo entfernt sie (ein Schritt).
+   **Muster (Auflage 3, berichtigt):** Anlegen und Zweit-Ablehnung nach `decke.test.ts:52` (war `:50`);
+   **das Undo steht dort NICHT** — `decke.test.ts` hat 0 Treffer auf `undo`. Undo-Muster:
+   `sammelBefehle.test.ts` (und neun weitere Testdateien).
 2. Zweite Bodenplatte im selben Gebäude wird abgelehnt (`'bodenplatte_pro_level_vorhanden'` oder gebäudeweite Variante, je nach Fachantwort (8)) — Dokument bleibt unverändert.
-3. `berechneHoehenkette(...)` liefert für das Referenzhaus-Fixture (6) exakt die Werte, die heute `deckenOberkanteMm`/`naechsteEtageElevationMm`/`Kopfrahmen.tsx:172` GETRENNT liefern (Rot-Probe: drei alte Werte gegen einen neuen Rückgabewert vergleichen).
+3. **(Auflage 2, berichtigt)** Die gebündelte Höhenkette liefert für das Referenzhaus-Fixture (6) exakt die Werte, die vor `ad2ac724` `deckenOberkanteMm`/`naechsteEtageElevationMm`/`Kopfrahmen.tsx:172` GETRENNT lieferten.
+   ~~`berechneHoehenkette(...)`~~ — **diesen Namen gibt es nicht** (0 Treffer). Gebaut sind durch Z1-E0-1 in `geometry/hoehenkette.ts`: `deckenOberkanteMm` (`:37`) und `naechsteEtageElevationMm` (`:49`).
+   *Der Dirigent hat den Namen 22:01 als GP-0-**Vorschlag** eingeordnet, nicht als Kriterium.* **Gemessen wird gegen die zwei gebauten Exporte.**
 4. `traufhoeheMm` ändert sich NACH `UPDATE_LEVEL` auf `defaultWallHeight` nur über einen bestätigten Commit-Command (`executeCommands`), NICHT automatisch beim bloßen `UPDATE_LEVEL` — Test für "Vorschau ≠ Commit".
 5. Bestandsprojekt ohne `foundationSlabs` lädt unverändert (kein 422), `migriereSzene`-Diff zeigt NUR das neue leere Array, sonst nichts.
 6. Speichern/Laden: Dokument mit befüllter Bodenplatte ist nach Neuladen bytegleich (bis auf `updatedAt`/`revision`).
