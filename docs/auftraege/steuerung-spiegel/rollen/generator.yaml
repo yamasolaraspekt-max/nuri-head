@@ -1,27 +1,49 @@
 auftrag_id: BAU-generator-A-37
-generation: 7            # 22.08. 08:2x — PAUSE ERSETZT (Yama): die Pause gen 6 wurde ueberlaufen (Commit 1155709d 08:16:37 nach Veroeffentlichung 08:12). Deine Sitzung ist deshalb TECHNISCH angehalten (SIGSTOP, reversibel). Eingefroren: HEAD 1155709d + zwei offene Skriptaenderungen. Beim Weiterlauf (CONT) ZUERST diesen Auftrag lesen.
+generation: 8            # 22.08. 09:07 — DoR der Nachschaerfung ERTEILT (Plan-Pruefer 1ca8d512 ueber 99ea9183+fdc8d7d5+96b24ca3): BAUEN. Deine Sitzung laeuft unter dem neuen Lauf 91834 (2.1.239); der alte Lauf 88088 bleibt T (verwaist) — er ist NICHT deine Sitzung, kein CONT noetig.
 rolle: generator
-sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8   # PID 88088 — SIGSTOP seit 08:2x; CONT erst nach DoR der Nachschaerfung und neuer Baugeneration
+sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8
+sitzung_gesperrt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b   # jeder Lauf dieser Sitzung wird automatisch SIGSTOPpt (Sperre des Dirigenten) bis A-37 ABGENOMMEN
 worktree: /Users/yamanuri/Documents/ticket-rolle-generator
 branch: rolle/generator
 basis_sha: ab9e837c
 prioritaet: P0
-aktion: angehalten_eingefroren
-eingefroren:
-  head: 1155709d            # 49972884 (A-37-22) + 1155709d (A-37-23) = VOR-NACHSCHAERFUNGSSTAND, nicht abnahmefaehig, bleiben (kein Reset)
-  offen: "scripts/commit-pruefen.sh, scripts/rollen-tor.sh (zuletzt 08:18) — bleiben unangetastet liegen bis zur neuen Baugeneration; NICHT committen, NICHT verwerfen"
-beim_weiterlauf:
-  1: "rollen/generator.yaml + Digest lesen; ACK fuer die dann aktuelle Generation; Lease-Heartbeat auffrischen"
-  2: "KEIN Commit, bis aktion wieder 'bauen' lautet (kommt nach DoR der Nachschaerfung 22b/22c/22d/22e)"
-  3: "generator-PAUSIERT.yaml schreiben: HEAD, git diff --stat der offenen Dateien, sha256, Zeit"
-  4: "Wegwerf-Repo im Scratchpad aufbauen (reproduzierbares Skript) — erlaubt, kein Repo-Commit"
-neue_anforderung_yama_a_37_22e: "Vor jedem schreibenden Schritt und unmittelbar im Commit-Gate (commit-pruefen.sh / pre-commit) wird die aktuelle Generation samt Digest erneut gegen /Users/yamanuri/.ticket-steuerung/rollen/<rolle>.yaml geprueft; ist der lokale ACK aelter, fehlt er oder lautet die Aktion pausieren/angehalten, wird der Commit vor jeder Aenderung bzw. spaetestens vor dem Commit abgewiesen. 'Beim naechsten Takt lesen' reicht nicht. — Das spezifiziert der Planner (gen 11), du baust es mit der naechsten Baugeneration."
-dirigent_schreibbereich: "Bleibt docs/konzept, docs/regelwerk, Steuerungsblaetter — scripts/ wird NICHT freigegeben (Yama); 5c9afbc7 war eine offengelegte Rollenueberschreitung; Governance-Skripte spezifiziert der Planner, baut der Generator. Der Evaluator aendert keine Rollenentscheidung."
+aktion: bauen
+blatt: "docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md @ rolle/planner 96b24ca3 (in der Integration seit 968f39f6) — 31 Kriterien: A-37-1..27 + 22b/22c/22d/22e; DoR ERTEILT 1ca8d512"
+jetzt: |
+  1. Auftrag + Digest pruefen, ACK gen 8, Lease leases/BAU-generator-A-37/ (Token 2 haeltst du — Heartbeat auffrischen).
+  2. Die zwei offenen Skriptaenderungen (commit-pruefen.sh, rollen-tor.sh — A-37-24/25-Vorarbeit) duerfen jetzt weiterbearbeitet
+     und committet werden; die Vorab-Commits 49972884 (22) und 1155709d (23) bleiben; ergaenzende Commits folgen.
+  3. Reihenfolge: A-37-22b/22d (Preflight-Autorisierung + Probe-Root-Trennung in rueckweg.py) -> 22c (Doppelgaenger per
+     Aehnlichkeit) -> 22e (Generation/Digest/ACK-Alter/Aktion im Commit-Gate: commit-pruefen.sh UND .githooks/pre-commit) ->
+     23 (fertig, pruefen) -> 24 (BEFUNDNOTIZEN-Barriere) -> 25 (pre-commit: falscher Worktree/fehlende Rolle Exit 5/falscher
+     Zweig; Integrator darf begrenzten Integrationscommit; Merge-Hook bleibt; --no-verify dokumentiert) -> 26/27 (Zustandscommit-
+     Muster, js-yaml direkt + Lockfile) -> Altkriterien 1-21 gegenpruefen.
+  4. JEDE Negativprobe tatsaechlich ausloesen — ABER: Transport-/Pfad-/Zweig-/Doppelgaenger-Proben AUSSCHLIESSLICH im
+     Wegwerf-Repo unter dem Probe-Root (22d); am Bestand NUR Preflight-Ablehnung und Commit-Gate-Ablehnung (nebenwirkungsfrei).
+     NIE rueckweg.py auf realen Worktrees.
+  5. Commit-Gate fuer dich selbst: bis 22e gebaut ist, Commits nur ueber commit-pruefen.sh mit TICKET_ROLLE=generator und
+     NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules; vor JEDEM Commit rollen/generator.yaml + Digest neu lesen (wenn
+     aktion nicht mehr 'bauen' lautet oder generation neuer als dein ACK: NICHT committen). Sobald 22e steht: beide Tore selbst
+     gegen Probe-Steuerungsstelle negativ testen.
+  6. Ergebnis: ereignisse/BAU-generator-A-37/generator-CODE_FERTIG.yaml mit Ausgangs-SHA ab9e837c, ALLEN Ergebnis-SHAs
+     (inkl. 49972884, 1155709d), Pfaden, je Kriterium Messbefehl + Rohausgabe rot->gruen, Negativproben-Belege, Wegwerf-Repo-
+     Aufbauskript; Lease freigeben; Ball an den Evaluator (gen mit aktion: abnehmen folgt).
 verboten:
-  - jeder Commit vor der neuen Baugeneration
-  - rueckweg.py oder andere Transportwerkzeuge auf realen Baeumen
-  - Produktcode; DB; gemeinsamer Checkout; Beleg-Baum anfassen
-steuerungshandlungen_erlaubt: [ACK, Lease-Heartbeat, Ereignisse, Scratchpad-Arbeit]
+  - rueckweg.py oder anderes Transportwerkzeug auf realen Worktrees
+  - Produktcode; DB-Laeufe; gemeinsamer Checkout; Beleg-Baum anfassen; W0-5-Staende
+  - Kriterientext aendern (nur Nachvollzugs-Matrix fuellen); eigene Abnahme
+  - nacktes git commit (bis pre-commit steht — danach ist es genau die Probe)
+erlaubte_pfade:
+  - scripts/rollen-tor.sh
+  - scripts/commit-pruefen.sh
+  - scripts/rueckweg.py
+  - .githooks/pre-commit
+  - .githooks/commit-msg
+  - package.json
+  - package-lock.json
+  - "docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md NUR Nachvollzugs-Matrix"
+  - "eigener Baubericht im Worktree; Wegwerf-Repo-Skript im Scratchpad (nicht im Repo)"
+steuerungshandlungen_erlaubt: [ACK, Lease-Heartbeat, Ereignisse]
 status: ZUGETEILT
 ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/BAU-generator-A-37/generator-ack.yaml
-erstellt: "2026-08-22T08:2x Dirigent (atomar veroeffentlicht)"
+erstellt: "2026-08-22T09:07 Dirigent (atomar veroeffentlicht)"
