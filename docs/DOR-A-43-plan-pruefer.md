@@ -132,3 +132,57 @@ in der naheliegenden Form schaltet das Tor ab.
 **Planner** — Posten 2 (Aktionsvokabular) nachtragen, gen 14 lesen, Hinweg fahren; dazu die zwei
 Messpunkte an A-43-4. **Danach neue DoR-Runde.** Die sieben Kriterien zu Posten 1 sind aus meiner
 Sicht tragfähig und müssen nicht neu geschrieben werden.
+
+---
+
+## Nachtrag zum Votum — zwei Dirigenten-Antworten, die ich vor dem Schreiben nicht gelesen habe
+
+**Das Votum NICHT ERTEILT und seine drei Restpunkte bleiben unverändert.** Nachgetragen wird, was
+zwischen meiner Ereignismessung und meinem Votum eingegangen ist:
+
+```
+12:26:03  dirigent-antwort-kennungsmaximum.yaml
+12:26:27  dirigent-antwort-kennungsmaximum-berichtigung.yaml
+12:30:11  mein Votum
+```
+
+**Beide lagen vor.** Meine Ereignisliste war die von 12:23:11; zwischen Messung und Schreiben habe ich
+nicht erneut gelesen. **Das ist §301 an mir selbst** — dort war es der Bau-Nachtrag des Generators,
+hier sind es zwei Antworten zum geprüften Blatt.
+
+### Was sich dadurch ändert — und was nicht
+
+**Restpunkt 1 wächst.** Der Dirigent ergänzt Posten 2 um einen Punkt, den mein Votum nicht nennt:
+
+> *„WICHTIG für Posten 2: ins Blatt gehört auch die **Rückabwicklung der Übergangsregel README 6f**
+> (Tor-Wörter zurücknehmen, sobald das Vokabular transportiert ist) — als Folgeposten für den
+> Dirigenten, nicht als Kriterium."*
+
+Das trifft mich unmittelbar: **mein eigenes `aktion: bauen` ist so ein Tor-Wort.** Solange die
+Rückabwicklung nicht im Blatt steht, gibt es keinen benannten Weg zurück — und eine „befristete"
+Regel ohne Rücknahmepunkt ist eine dauerhafte. **Posten 2 umfasst damit: Aktionsvokabular je Rolle
+*und* die Rücknahme der Übergangswörter.**
+
+**Der Kennungsvorbehalt ist gegenstandslos geworden** — und zwar durch eine Messung, nicht durch eine
+Entscheidung. Der Dirigent hat die Zählung des Planners nachgemessen:
+
+```
+A-42 in docs/STATUS.md @ Integration 96643116 -> ABGENOMMEN (Zustandscommit 3b2e5334, 11/11)
+offen: A-38 BEREIT · A-39 BEREIT · A-40 ENTWURF = DREI
+A-43 ist die VIERTE -> Yamas Maximum (43771e3b) NICHT überschritten
+```
+
+**Kein Governance-Konflikt, kein Vorbehalt nötig, Weg A ohne Bedingung.** Das Blatt trägt den
+Vorbehalt trotzdem — **kein Mangel**: der Planner hat richtig gehandelt, als er die Frage stellte
+statt sie still zu lösen, und die Antwort kam nach seinem Blatt. Beim nächsten Anfassen kann der
+Vorbehalt entfallen; ein Restpunkt ist er nicht.
+
+**Und es ist bemerkenswert, wie die Antwort zustande kam:** die erste Fassung (12:26:03) übernahm die
+Zählung des Planners und sprach von einem Vorbehalt; die Berichtigung 24 Sekunden später misst nach
+und hebt ihn auf. *„gemessen statt übernommen"* steht im Bezugsfeld. **Vier Rollen haben heute in
+derselben Stunde eine eigene Zahl nachgemessen statt sie zu übernehmen** — Planner, Evaluator,
+Integrator, Dirigent. Das ist die Gewohnheit, um die es die ganze Zeit geht.
+
+**Ball unverändert: Planner** — Posten 2 jetzt mit drei Teilen (Aktionsvokabular je Rolle,
+`warten*` = Pause / unbekannt = 7 in EINER Liste, Rücknahme der Tor-Wörter), dazu die zwei Messpunkte
+an A-43-4.
