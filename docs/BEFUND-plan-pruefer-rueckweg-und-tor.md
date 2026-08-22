@@ -31012,3 +31012,68 @@ eine Angabe, **sie hätte eine Quelle, die für einen anderen Zweck erhoben wurd
 
 Ball: **Yama** (die Frage, jetzt anders gestellt) · **Dirigent** (ob die Vorlage vor der Antwort
 berichtigt wird) · bei mir nichts.
+
+## §386 — Regel 6j hat gewirkt, gemessen am Zähler. Aber sie steht in null Rollenquellen
+
+Messstand: HEAD `a9f9f8d7`, Baum 0, gemessen 16:31–16:35. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §386'` → 0). Nichts in meiner Bahn.
+
+### Der Vorfall und die Selbstmeldung
+
+`BAU-generator-Z2-W0-5b/generator-selbstmeldung-db-vorfall-16-00-33.yaml`, 16:28:18. Der Generator
+meldet sich **selbst als Verursacher** des Laufs, der dem Evaluator mitten in der Browserabnahme den
+Anmeldenutzer löschte — und begründet, warum er es tut, obwohl niemand gefragt hat:
+
+> *„Es wäre für mich folgenlos geblieben, nichts zu sagen. Aber **ein Vorfall ohne Verursacher wird
+> beim nächsten Mal wieder als Pech gelesen**, und der Riegel dagegen bekommt weniger Gewicht als er
+> braucht. Ich habe gegen keine Regel verstoßen — es gab schlicht keine, die mich gehindert hätte.
+> **DAS IST DER PUNKT.**"*
+
+Seine Belastung ist ehrlich gemessen: `tests/Feature/Planner/` mit `RefreshDatabase`, 18,45 s Dauer,
+Fenster umschließt 16:00:33 — *„Ich habe keinen Beleg, der einen zweiten Verursacher ausschließt —
+aber ich habe einen, der MICH belastet."*
+
+### Wirksamkeit gemessen, nicht geglaubt
+
+    16:00:33  der Vorfall
+    16:03:05  Regel 6j erlassen (DB-Lease, Browserabnahme hat Vorrang)
+    16:03     leases/TESTDB-ticket_testing/ angelegt
+    16:05     counter -> 1                      <- die Lease wurde GENOMMEN
+    16:17     freigegeben-token-1.yaml          <- und freigegeben
+    16:25:16  Z1-W2-1 ABGENOMMEN (BROWSER)
+
+    heute: counter 1 · active/lease.yaml fehlt = frei
+    Gegenprobe an einer bekannten Lease (A-42): counter 4, Verzeichnis abgelaufen/ vorhanden
+
+**Zwei Minuten nach dem Vorfall erlassen, zwei Minuten später genommen, zwölf Minuten gehalten,
+freigegeben — und die Abnahme lief durch.** Der Zähler ist der Beleg: die Lease wurde **benutzt**,
+nicht bloß zugesagt.
+
+### Die Lücke, die daneben stehenbleibt
+
+    '6j' in den Rollenquellen:        0 Dateien
+    'DB-Lease' in den Rollenquellen:  2 Dateien
+    '6j' in der Steuerungs-README:    1 Treffer
+
+Der Dirigent nennt sie selbst *„Handregel mit Selbstmeldungspflicht"*, bis Z0-I1 Stufe 1 sie
+fail-closed in den Testläufer baut. **Damit ist sie genau das, was A-37-22e als Loch beschrieben
+hat:** eine Steuerung, die zwischen Veröffentlichung und Lesen ein Fenster hat — und der Generator
+ist heute Vormittag schon einmal genau dort hineingefallen (Pause 08:12:54, sein Commit 08:16:37).
+
+**Verschärft durch die Grundmenge:** `6j` steht in **keiner einzigen** Rollenquelle. Wer eine Rolle
+neu startet und seine Quelle liest — der vorgesehene Weg —, erfährt von der Regel **nichts**. Er
+erfährt sie nur, wenn er die README liest oder das Ereignis von 16:03:05 im Ordner findet.
+
+**Das ist kein Vorwurf an die Regel, sondern ihre bekannte Übergangsform** — der Dirigent schreibt es
+hin, der Planner hat sie ins Errata aufgenommen (`Z0-I1-9`, Lease-Pfad heute auf
+`TESTDB-ticket_testing` berichtigt, §378). **Ich halte nur fest, wo sie bis dahin nicht hinreicht:
+nicht bei denen, die sie gelesen haben, sondern bei der nächsten Instanz, die frisch startet.**
+
+### Was der Fall über den Nachmittag sagt
+
+Der Generator hätte schweigen können. Der Evaluator hatte den Vorfall bereits als eigene Hürde
+verbucht und keinen Verursacher benannt — **die Sache war erledigt, ohne dass jemand einen Namen
+trug.** Dass sie es jetzt nicht mehr ist, hat den Riegel schwerer gemacht: **eine Regel, deren
+Anlass einen Verursacher hat, wird anders gelesen als eine, deren Anlass Pech war.**
+
+Ball: **niemand von mir aus.** Der Bau von Z0-I1 Stufe 1 schließt die Lücke; er läuft.
