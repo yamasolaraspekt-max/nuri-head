@@ -29,12 +29,30 @@
 import type { CeilingNode, Level } from '../domain/scene.types';
 
 /**
- * Höhe der Decken-Unterkante = **Wand-Oberkante** des Levels (mm).
+ * **Wandoberkante des Levels (mm) — das Auflager der Decke.**
  *
- * Auch die Traufhöhe eines Dachs liest hier — `scene.types.ts:327` nennt sie als Vorgabe
- * „`level.elevation + defaultWallHeight`", und das ist genau diese Größe.
+ * *`level.elevation + defaultWallHeight`.* Auch die Traufhöhe eines Dachs liest hier:
+ * `scene.types.ts` nennt genau diesen Ausdruck als Vorgabe für `traufhoeheMm`.
+ *
+ * ---
+ *
+ * **Z1-E0-1b — bis zum 22.08. war diese Funktion nach der Decken-Oberkante benannt, und der
+ * Name sagte das Gegenteil.** Die zurückgegebene Höhe ist die Wandoberkante, auf der die Decke
+ * AUFLIEGT — also ihre **Unterkante**. *Der alte Name lag um eine Deckendicke daneben.*
+ *
+ * **Warum das kein Schönheitsfehler war:** die Größe hat drei Leser — den Deckenrenderer, die
+ * Traufhöhe und (seit Z1-E4-1) die Gegenprobe der Bodenplatte nach oben. Wer beim vierten Leser
+ * dem Namen glaubt und die Decke auf die vermeintliche Decken-Oberkante legt, legt sie eine
+ * Dicke zu hoch — und das Bild sieht dabei richtig aus. **Genau in diese Falle wären E4 (unteres
+ * Ende) und Z1-E0-2 (Wandhöhe) als nächste gelaufen**, deshalb die Umbenennung vor ihrem Bau.
+ *
+ * *Der alte Bezeichner steht hier bewusst nicht ausgeschrieben:* Kriterium `Z1-E0-1b-a` zählt
+ * seine Zeichenkette auf 0, und eine Erinnerung an ihn wäre von seinem Fortleben nicht zu
+ * unterscheiden. **Die Sache ist erzählt, ohne das Wort zu setzen.**
+ *
+ * **Die Rechnung ist unverändert.** Umbenannt wurden Bezeichner, sonst nichts.
  */
-export function deckenOberkanteMm(level: Pick<Level, 'elevation' | 'defaultWallHeight'>): number {
+export function wandOberkanteMm(level: Pick<Level, 'elevation' | 'defaultWallHeight'>): number {
   return level.elevation + level.defaultWallHeight;
 }
 
@@ -55,12 +73,12 @@ export function naechsteEtageElevationMm(
   decke: Pick<CeilingNode, 'dickeMm'> | undefined,
 ): number {
   const deckeDickeMm = decke ? decke.dickeMm : level.floorThickness;
-  return Math.round(deckenOberkanteMm(level) + deckeDickeMm);
+  return Math.round(wandOberkanteMm(level) + deckeDickeMm);
 }
 
 // ---------------------------------------------------------------- Z1-E4-1: das untere Ende
 //
-// **Bis hierher rechnete die Kette nur nach oben.** `deckenOberkanteMm` und
+// **Bis hierher rechnete die Kette nur nach oben.** `wandOberkanteMm` und
 // `naechsteEtageElevationMm` beantworten „wie hoch liegt das Geschoss darüber" — was UNTEN
 // abschließt, kannte die Datei nicht. Die drei folgenden Funktionen ergänzen genau das, **additiv:
 // keine der beiden bestehenden Funktionen ist angefasst.**

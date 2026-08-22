@@ -35,7 +35,7 @@ import { erkenneRaeume } from '../../geometry/roomDetection';
 import { dachMeshWelt, dachflaechen, type DachFlaeche } from './dachMesh';
 import { nichtDarstellbareDaecher, type NichtDarstellbar } from './nichtDarstellbar';
 import { flaecheZuFrame, aufbauKoerper, type AufbauFrame } from './dachAufbautenMesh';
-import { deckenOberkanteMm } from '../../geometry/hoehenkette';
+import { wandOberkanteMm } from '../../geometry/hoehenkette';
 import { DachGeometrieUngueltig } from '../../geometry/dachGeometrie';
 
 /**
@@ -457,7 +457,7 @@ export class HausplanerDreiDSzene implements RendererAdapter {
     // (level.elevation + defaultWallHeight). RÜCKSEITEN-CULLING (side: BackSide) ⇒ nur von UNTEN/
     // innen sichtbar; von oben durchsichtig, damit die Draufsicht nicht verdeckt wird. Kein
     // userData.nodeId (dekorativ, nicht selektierbar — der Boden trägt die Raum-Selektion).
-    const deckenHoehe = deckenOberkanteMm(level);
+    const deckenHoehe = wandOberkanteMm(level);
     // Feature A: existiert eine MODELLIERTE Geschossdecke für dieses Level, ersetzt sie die dekorative
     // Raum-Decke (eine Wahrheit je Level) — sonst bleibt der dekorative Raumabschluss.
     const hatModellDecke = (dokument.ceilings ?? []).some((c) => c.levelId === level.id && c.visible !== false);
@@ -484,15 +484,15 @@ export class HausplanerDreiDSzene implements RendererAdapter {
       if (decke.polygon.length < 3) {
         continue;
       }
-      const oberkante = deckenOberkanteMm(level);
-      const aussen = bodenPunkteThree(decke.polygon, oberkante);
+      const wandOberkante = wandOberkanteMm(level);
+      const aussen = bodenPunkteThree(decke.polygon, wandOberkante);
       const form = new THREE.Shape();
       aussen.punkte.forEach((p, i) => (i === 0 ? form.moveTo(p.x, -p.z) : form.lineTo(p.x, -p.z)));
       for (const oeff of decke.oeffnungen ?? []) {
         if (oeff.polygon.length < 3) {
           continue;
         }
-        const loch = bodenPunkteThree(oeff.polygon, oberkante);
+        const loch = bodenPunkteThree(oeff.polygon, wandOberkante);
         const pfad = new THREE.Path();
         loch.punkte.forEach((p, i) => (i === 0 ? pfad.moveTo(p.x, -p.z) : pfad.lineTo(p.x, -p.z)));
         pfad.closePath();
@@ -514,7 +514,7 @@ export class HausplanerDreiDSzene implements RendererAdapter {
     // Struktur wie die Geschossdecke — Shape mit Löchern, selektierbar über `userData.nodeId`.
     // **Zwei Unterschiede, beide fachlich:**
     //   1. Die Höhe kommt aus `slab.oberkanteMm` und wird NICHT aus dem Level abgeleitet. Die
-    //      Platte liegt unter ±0,00 (Yama 22.08. 22:08); ein `deckenOberkanteMm` hier wäre die
+    //      Platte liegt unter ±0,00 (Yama 22.08. 22:08); ein `wandOberkanteMm` hier wäre die
     //      Wandoberkante und damit rund 2,5 m zu hoch.
     //   2. `durchbrueche` statt `oeffnungen`, und es gibt keine Treppen-Automatik — unter der
     //      Platte liegt nichts, in das eine Treppe führen könnte.
