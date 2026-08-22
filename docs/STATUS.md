@@ -107,7 +107,7 @@
 | **Z1-W2-5** Wandflaeche anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` · Bau `5617dc4c` · CODE_FERTIG 18:52:39 · **die Wandflaeche erreicht den Benutzer** · **NACHBESSERN** 19:15:00 — 6 von 7 browserabgenommen, Kriterium b unbelegt · **ABGENOMMEN (BROWSER, Vorbehalt b)** 20:19:27 — b per Pruefmittel `?fixture=wand-schichten`, Schichten-Erzeugungsweg fehlt (AUF-76) · **zaehlt als angeschlossenes Modul** |
 | **Z1-W2-6** Auswechslung anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` · Bau `a7d1e9a6` · CODE_FERTIG 19:28:03 · **Weg A** — Fixture als Pruefmittel, Reifegrad hoechstens `ABGENOMMEN (CODE, Fixture)` · **ABGENOMMEN (CODE, Fixture)** 20:19:27 — **zaehlt NICHT als angeschlossenes Modul**, der Erzeugungsweg fehlt (Dirigent 18:33:35) |
 | **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 · Bau `1c6b7601` · CODE_FERTIG 19:14:05 · **Buendel im Bau-Commit** (V-5) · **ABGENOMMEN (BROWSER)** 19:33:20 — vier von vier Modulen, V-1 bis V-6 je Modul, Reifegrad `browserabgenommen` |
-| **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `CODE_FERTIG` | **Evaluator** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht · **DoR ERTEILT** 19:06:40 mit zwei Halbsaetzen (§429) — Bau kann sofort beginnen · Bau `3a4aafa1` · CODE_FERTIG 19:59:36 · **Kriterium (c) nachgeliefert** `7500bb7d` 20:43 · Weg A nach der Pfadgrenzen-Entscheidung 19:44:38 |
+| **Z1-W2-8** Werkzeugleiste in Baureihenfolge | **`ABGENOMMEN`** | **Dirigent** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht · **DoR ERTEILT** 19:06:40 mit zwei Halbsaetzen (§429) — Bau kann sofort beginnen · Bau `3a4aafa1` · CODE_FERTIG 19:59:36 · **Kriterium (c) nachgeliefert** `7500bb7d` 20:43 · Weg A nach der Pfadgrenzen-Entscheidung 19:44:38 · **ABGENOMMEN (BROWSER)** 22:13 — fuenf von fuenf gueltigen, gegen den berichtigten Blattstand `8460f98f` gemessen |
 | **Z1-E0-1** Hoehenkette — eine Wahrheit statt drei Rechnungen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E0-1-hoehenkette-eine-wahrheit.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) · Bau `ad2ac724` · CODE_FERTIG 20:09:51 · **drei Mangelanzeigen offen** (Planner 20:26 und 20:51, Evaluator 20:56) |
 | **Z1-E2-1** Etagen-Integritaet — Wachen und Mitnahme | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E2-1-etagen-integritaet.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) · Bau `51b0ddfb` · CODE_FERTIG 20:18:30 |
 | **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` · **NACHBESSERN** 19:04:28, 8 von 10 Kriterien, Reifegrad `code-geprueft mit Ausloesung` — zwei Zusagen nennen das Vorhandene statt das Wirkende · **nachgebessert** `ba6fc673` 19:42:03, Kriterien 10 und 12 |
@@ -19481,8 +19481,8 @@ votum: |
 ```yaml
 auftrag: "Z1-W2-8"
 titel: "Werkzeugleiste in Baureihenfolge"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: dirigent
 blatt: "docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md"
 blatt_sha: 6549ab61
 basis_sha: 06956916
@@ -19591,6 +19591,19 @@ zustand_nachgezogen: |
   hatte 20:35 gemeldet, dass (c) NICHT faellt — der Generator hat nachgeliefert statt zu
   streiten.
   SIEBEN EINTRAEGE STATT ACHT, weil die Bodenplatte GP-0 braucht; das steht seit 18:58 fest.
+
+votum: |
+  ABGENOMMEN (BROWSER) — evaluator, 22:13, evaluator-ABGENOMMEN-z1-w2-8.yaml,
+  Bau 3a4aafa1, ergebnis_sha 9e822152. Fuenf von fuenf gueltigen Kriterien.
+  GEGEN DEN BERICHTIGTEN BLATTSTAND 8460f98f gemessen. Sein Satz dazu, der eine Falle des
+  Tages vermeidet: "Mit dem alten Stand haette ich (f) als verletzt gemeldet — gegen einen
+  Bau, der die Dirigenten-Anordnung befolgt." Seine fruehere Angabe f5cfc933 hatte er
+  21:16 selbst berichtigt.
+  FUENF VON FUENF GUELTIGEN, nicht sechs von sechs: Kriterium b ist am 18:58 gestrichen
+  worden (Bodenplatte braucht GP-0). Ich uebernehme seine Zaehlweise.
+  EINEN TAKT LANG NICHT EINGETRAGEN, und das mit Absicht: um 22:13 lag der Votum-Commit auf
+  seinem Zweig, das Ereignis aber noch nicht. Ein Commit-Betreff ist kein Zustellnachweis,
+  und "Voten erfinden" steht in meiner verboten-Liste. Jetzt liegt das Ereignis.
 
 ```
 
