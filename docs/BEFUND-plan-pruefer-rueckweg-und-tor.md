@@ -30656,3 +30656,71 @@ richtig: *„An den Zahlen ändert sich nichts; nur ist jetzt nachfahrbar, WO si
 Nachzieh-Mangel; ich halte es fest, damit die Zahl beim nächsten Blick eine Vorgeschichte hat.
 
 Ball: **Dirigent** (Standangabe zur dritten Messung, ein Zweizeiler) · bei mir nichts.
+
+## §380 — Mein Anker-Fix verhindert Verlust, nicht Veralterung: die Bündel-Regel lag 53 Sekunden vor meinem §376, und ich hatte sie nicht gelesen
+
+Messstand: HEAD `8337aba3`, Baum 0, gemessen 16:13–16:22. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §380'` → 0).
+
+### Teil 1 — Z1-W2-3 gebaut, Meldepflichten geprüft
+
+`BAU-generator-paket-3/generator-CODE_FERTIG-Z1-W2-3.yaml`, 16:13:25, gen 18. Selbst gemessen:
+
+    SHAs existent    39260edd · b593357c · d00aeece · 161868e9      alle: commit
+    Scope d00aeece   EigenschaftenPanel.tsx · GrundrissformHinweis.tsx      2 Dateien
+    Scope 161868e9   Z1-W2-3-…md                                            1 Datei
+    Buendel im Commit   0 und 0    <- regelkonform, s.u.
+
+**Ballwechsel bestätigt:** Ball beim Evaluator.
+
+### Teil 2 — die Bündel-Regel, und was sie an meinem §376 richtigstellt
+
+`INT-zustand-kette-2/dirigent-entscheidung-buendel.yaml`, **16:02:19**, in Yamas Namen. Kern:
+
+    1  Werkzeug-Commits (Spur W) enthalten das Buendel NICHT
+    2  Der EVALUATOR baut es in SEINEM Worktree und faehrt die Buehne von dort —
+       die Abnahme haengt NICHT am Integrations-Buendel
+    3  NACH jedem ABGENOMMEN (BROWSER) baut der GENERATOR es als EIGENEN Commit
+    4  Bis dahin zeigt ticket.test den Stand 21.08. — "das ist RICHTIG so
+       (kein unabgenommenes Werkzeug beim Benutzer)"
+
+**Punkt 4 stellt meinen §376 richtig.** Ich schrieb: *„Eine Abnahme gegen ein 18 Stunden altes Bündel
+misst nicht den Bau, sondern das Bündel."* Das gilt weiter — **aber die Abnahme läuft gar nicht gegen
+das Integrations-Bündel.** Was ich als Lücke las, ist eine Entscheidung: der Benutzer soll
+ausdrücklich **keine unabgenommenen Werkzeuge** sehen.
+
+**Mein Halbsatz war falsch verortet.** Ich verlangte, das *Blatt* solle den Bündelbau als Vorbedingung
+nennen. Richtig ist: der *Bericht* nennt den Bauschritt — und der Generator tut es, wörtlich als
+Schritt 2 seines Evaluator-Hinweises: *„`npm run build:hausplaner` ← NÖTIG, das Bündel ist nach der
+Bündel-Regel nicht im Commit."* **Eine Regel an einer Stelle schlägt vier Halbsätze in vier Blättern.**
+
+### Teil 3 — und das ist mein eigener §374-Fall
+
+    16:01:12   meine Ereignismessung dieser Runde
+    16:02:19   die Buendel-Regel wird abgelegt
+    16:03:12   ich committe §376 — gegen einen Stand, der 53 Sekunden alt ueberholt war
+
+**In §368 habe ich den Anker umgestellt** (auf den Zeitpunkt der Ereignismessung statt des
+Rundenendes) und damit erreicht, dass **nichts mehr verlorengeht** — die Regel tauchte in dieser Runde
+korrekt auf. **Aber sie kam zu spät für den Abschnitt, der sie gebraucht hätte.**
+
+> **Der Anker-Fix verhindert Verlust, nicht Veralterung.** Was zwischen Messung und Commit ankommt,
+> ist beim nächsten Mal sichtbar — und beim aktuellen Mal bereits wirksam.
+
+Das ist **exakt der Planner-Fall aus §374**, den ich dort gemessen habe: `prozess_start 15:48:12`,
+Berichtigung 15:49:53, Ablage 15:51:36. Ich habe ihn beschrieben und drei Runden später selbst
+wiederholt. Der Wacheauftrag sagt: *„VOR dem Schreiben den Messstand NEU messen."* **Ich messe seither
+zuverlässig den git-HEAD neu — die Ereignisse nicht.**
+
+**Regel an mich, ab sofort:** Vor dem Commit **beide** Stände neu messen — HEAD **und** Ereignisse seit
+der Rundenmessung. Kommt dabei etwas an, das den Abschnitt berührt, gehört es hinein oder der
+Abschnitt wartet.
+
+### Was ich an §376 nicht zurücknehme
+
+Der gemessene Zustand stimmt: neun Insel-Dateien seit `ad340caf`, fünf davon Produktivcode, und die
+vier Blätter nennen das Bündel nicht. **Falsch war die Abhilfe, nicht der Befund** — und der Befund
+hat, wie der Verlauf zeigt, seinen Zweck erfüllt: der Integrator meldete 15:58, der Dirigent
+entschied 16:02.
+
+Ball: **Evaluator** (Z1-W2-3, `npm run build:hausplaner` vorher) · bei mir nichts.
