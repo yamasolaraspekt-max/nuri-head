@@ -210,7 +210,11 @@ if [ "$PHP" -eq 1 ]; then
   # §9: Blade- oder app/-Änderung ⇒ die PHP-Suite. Genau die Regel, die nach AUF-64 entstand und
   # bis heute von nichts durchgesetzt wurde.
   if command -v php >/dev/null 2>&1; then
-    fahre phpsuite php artisan test tests/Feature/Hausplaner
+    # Z0-I1-4: `TEST_ROLLE` ist seit dem 22.08. Pflicht — ein Lauf ohne benannten Halter bricht
+    # ab. Der Waechter faehrt als `generator`, weil er im Generator-Baum laeuft; wer ihn woanders
+    # startet, setzt die Variable vorher. *Ohne diese Zeile meldete der Waechter ab sofort einen
+    # Fehler, den es nicht gibt — und genau das ist die Falsch-Positive, die Z0-I1-6 verbietet.*
+    fahre phpsuite env TEST_ROLLE="${TEST_ROLLE:-generator}" php artisan test tests/Feature/Hausplaner
   else
     nicht_gelaufen phpsuite php-fehlt
   fi

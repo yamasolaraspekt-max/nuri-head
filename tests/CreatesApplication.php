@@ -13,6 +13,9 @@ trait CreatesApplication
      */
     public static string $verbundeneDatenbank = '';
 
+    /** Wer diesen Lauf haelt — aus TEST_ROLLE, geprueft. Z0-I1-4 und Grundlage fuer Z0-I1-9. */
+    public static string $halter = '';
+
     /**
      * Creates the application.
      */
@@ -26,7 +29,14 @@ trait CreatesApplication
      */
     public function createApplication(): Application
     {
-        $db = TestDatenbank::name(getenv('TEST_ROLLE') ?: null);
+        // Z0-I1-4: die Rolle ist PFLICHT. Sie benennt in Stufe 1 den Lease-Halter, nicht die
+        // Datenbank — die ist die eine aus `phpunit.xml:28` (`force="true"`, versioniert).
+        // `TestDatenbank::name()` bleibt unangetastet: sie beantwortet die Stufe-2-Frage, welche
+        // DB eine Rolle bekaeme, und ihre Zusage gilt weiter.
+        self::$halter = TestDatenbank::verlangeRolle(getenv('TEST_ROLLE') ?: null);
+
+        // Der Name wird VOR dem Bootstrap gesetzt — danach steht die Verbindung.
+        $db = TestDatenbank::BASIS;
         putenv('DB_DATABASE='.$db);
         $_ENV['DB_DATABASE'] = $db;
         $_SERVER['DB_DATABASE'] = $db;
