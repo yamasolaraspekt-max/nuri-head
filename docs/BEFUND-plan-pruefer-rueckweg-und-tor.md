@@ -30457,3 +30457,74 @@ Blätter**, und deshalb ist sie heute an genau der Stelle ausgefallen, an der si
 
 Ball: **Generator** (Bündel bauen, wie am 21.08. in `ad340caf`) · **Planner** (der Halbsatz für die
 vier Blätter, gebündelt mit dem Z0-I1-Errata) · bei mir nichts.
+
+## §377 — Z2-W0-5b gebaut: Meldepflichten geprüft, Ballwechsel bestätigt. Und ein SHA, der nicht falsch war, sondern falsch danebenstand
+
+Messstand: HEAD `ec570f18`, Baum 0, gemessen 16:04–16:14. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §377'` → 0).
+
+`BAU-generator-Z2-W0-5b/generator-CODE_FERTIG-Z2-W0-5b.yaml`, 16:03:25, gen 17. Das ist das Blatt,
+dessen DoR ich um 15:35 erteilt habe (§368) — **28 Minuten von der Erteilung bis zum fertigen Bau.**
+
+### Meldepflichten und Scope-Diff, selbst gemessen
+
+    SHAs existent   ec239609 · 0d97a57c · 48b52294 · b593357c · 14563070      alle: commit
+    Scope 48b52294  PlannerMasterSetController.php +15 · PlannerApiZustaendigkeitTest.php +60
+                    2 Dateien, 75 Einfuegungen, KEIN Beifang
+    Scope b593357c  Z2-W0-5b-linked-ohne-wache.md, 5+/5-    1 Datei (die Matrixzeilen)
+    Insel-Dateien   48b52294: 0 · b593357c: 0
+
+**Die Behauptung *„KEIN Browser, KEIN Bundle-Bau — dieses Blatt berührt die Hausplaner-Insel nicht
+(0 Dateien im Diff)"* hält** — und sie ist nach §376 kein Nebensatz mehr, sondern genau die Angabe,
+deren Fehlen ich an den vier Z1-W2-Blättern beanstandet habe. **Hier steht sie.**
+
+**Kriterium a am Ergebnisstand nachgemessen:**
+
+    verlangeZustaendigkeitFuerItem   3   (Blatt: 2 -> 3)   :177 linked · :197 link · :210 unlink
+    Reihenfolge:  :177 Aufruf   ->   :179 Query          Wache VOR dem Datenbankzugriff
+
+Der Kommentar im Code sagt es selbst: *„Eine Wache hinter der Query hätte die Daten schon gelesen."*
+
+**Meine beiden Halbsätze aus §368 sind eingelöst** — Kriterium c gegen
+`PlannerApiZustaendigkeitTest.php` (17/17, keine zweite Datei) und der Schalter über
+`config(['rechte.alle_fuer_alle' => true])`. **Ballwechsel bestätigt:** Ball beim Evaluator, korrekt.
+
+### Der SHA, der nicht falsch war, sondern falsch danebenstand
+
+Der Generator meldet einen Punkt über **meine** Meldung:
+
+> *„Die Rollenquelle nennt für das Blatt `ergebnis_sha 14563070`. Selbst nachgesehen: das ist der
+> PLAN-PRÜFER-Commit mit dem DoR-Votum (15:35) … Hätte ich `14563070` als Blattstand gelesen, hätte
+> ich einen Diff gesehen, in dem **das ganze Blatt fehlt** — und daraus den falschen Schluss
+> gezogen."*
+
+**Nachgemessen, wo der Irrtum entsteht.** Mein Ereignis:
+
+    blattpfad:                docs/auftraege/aktiv/Z2-W0-5b-linked-ohne-wache.md
+    geprueft_gegen_blatt_sha: ec239609        <- der Blattstand, eigens benannt
+    endstand_sha:             cfaa391b
+    ergebnis_sha:             14563070        <- mein Befund-Commit, wie die Meldepflicht verlangt
+
+Die Generator-Rollenquelle, Zeile 11:
+
+    blatt_z2_w0_5b: "blattpfad: …/Z2-W0-5b-linked-ohne-wache.md  ergebnis_sha: "14563070" …"
+
+**Mein Feld war richtig befüllt und sogar präziser als verlangt** — ich hatte den Blattstand in einem
+eigenen Feld. **Der Irrtum entsteht in der Weitergabe:** `blattpfad` und `ergebnis_sha` werden
+nebeneinandergestellt, und aus der Nachbarschaft entsteht eine Bedeutung, die keines der beiden Felder
+hat. Wer das liest, nimmt `ergebnis_sha` für den Stand des daneben genannten Blattes.
+
+**Das ist eine eigene Klasse und sie gehört neben §374 gestellt:**
+
+    §374   das Feld heisst anders, als sein Wert bedeutet          (gelesen_bis)
+    §377   das Feld bedeutet richtig — bis es neben ein anderes tritt   (ergebnis_sha)
+
+**Ein Feld kann korrekt sein und trotzdem täuschen, wenn es umzieht.** Beim Zitieren wandert der Wert,
+die Bedeutung bleibt zurück. Der Fall ist heute abgewendet worden, weil der Generator nicht
+übernommen, sondern **nachgesehen** hat, was `14563070` wirklich ändert.
+
+**Regel an mich:** Wenn ein Votum einen Blattstand hat, nenne ich ihn **im selben Satz wie den
+Blattpfad** — nicht in einem eigenen Feld weiter unten. Die Meldepflicht verlangt `endstand_sha` und
+`ergebnis_sha`; sie verbietet nicht, den Blattstand dorthin zu schreiben, wo er nicht verrutschen kann.
+
+Ball: **Evaluator** (Abnahme Z2-W0-5b) · bei mir nichts.
