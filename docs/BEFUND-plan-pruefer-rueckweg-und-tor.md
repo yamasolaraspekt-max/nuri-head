@@ -29239,3 +29239,60 @@ nicht Erstmessung** — und dafür genügt je Runde einer.
 
 **Ball: niemand.** Kein Auftrag berührt, keine fremde Rolle betroffen. Der Fehler war meiner, er
 stand vier Minuten in der Steuerung und wird jetzt dort berichtigt.
+
+## §359 — Alterungsprüfung „versatz-Quittung": mein Widerspruch steht, aber der Posten hat sich heute verändert, ohne dass ihn jemand angefasst hat
+
+Gewählt gegen HEAD `1720f098` (Baum sauber, 14:56:37, Hinweg gefahren: 16 Commits, Konfliktprobe
+vorher 0). §359 als Überschrift 0 Treffer. Rollenquelle gen 9, Dateizeit 13:58:44, Digest ok.
+**Statuswahrheit aus `auto/hausplaner-integration`.**
+
+**Zweite Alterungsprüfung nach §358** — gewählt: `versatz-Quittung`, der einzige Posten, bei dem ich
+einer Schließung **widerspreche**.
+
+**Zuerst: meine eigenen Zeiger sind gewandert.** Mein Befund nannte `STATUS.md` Z.3042 und Z.16843.
+Die Datei hat heute **19.628** Zeilen; an Z.3042 steht jetzt Fließtext, an Z.16843 eine
+W-30-Zeile. **Über den Inhalt gesucht** (die Lehre aus §357), finden sich beide Stellen wieder — und
+eine dritte, die ich nicht kannte.
+
+**Die Lage, dreistellig:**
+
+    Z.3064   "VERTRETUNGSENTSCHEID versatz (Release-Pruefer in Yamas Namen, 13.08.) — ERZEUGEND"
+    Z.16771  "versatz-Quittung OFFEN — ... 'Yama kann sie mit einem Satz umdrehen.'
+              Eine Quittung liegt nicht vor."                        Umfeld datiert: 12.08.
+    Z.17554  "Er nennt darin zwei als OFFEN, die es nicht mehr sind: die versatz-Quittung
+              ... Er hat einen aelteren Stand gelesen."               Umfeld datiert: 13.08.
+
+**Zur Datierung gebe ich Stelle B recht.** Der Vertretungsentscheid ist vom **13.08.**, die
+OFFEN-Liste in Stelle A vom **12.08.** — sie konnte ihn nicht kennen. *Wer zwei Stellen findet, die
+sich widersprechen, muss zuerst prüfen, ob es ein Widerspruch ist oder ein Zeitversatz. Hier ist es
+Zeitversatz.*
+
+**Mein eigener Widerspruch steht davon unberührt, und er ist ein anderer.** Ich bestreite nicht,
+dass **entschieden** wurde — ich bestreite, dass *„entschieden"* dasselbe ist wie *„quittiert"*.
+**Der Posten trägt das zweite Wort im Namen**, und der Entscheid selbst sagt: *„Diese Entscheidung
+ist eine Vertretung, kein Fachurteil. **Yama kann sie mit einem Satz umdrehen.**"* Stelle B setzt
+beides gleich (*„Beide sind entschieden, der Ball ist gegenstandslos"*) — **das ist die Gleichsetzung,
+gegen die der Posten benannt wurde.**
+
+**Was sich heute geändert hat, ohne dass jemand den Posten angefasst hätte.** Yama hat um **14:1x**
+delegiert: *„Anweisungen, Aufgaben und Fragen, die an mich gerichtet sind, übernehmen, beantworten,
+erledigen und ausführen"*, mit **vier** Grenzen (Geheimnisse/Operanden · Produktion/Deploy · Löschen
+von Daten · physische Handlungen). Ausdrücklich bei Yama bleiben **vier** Posten (Y-13 GRANT · Y-12
+IDS-Partnerfrage · A-08 main-Veröffentlichung · die Herkunft-Zeile seiner Lesesitzung).
+
+    'versatz' in den Delegationsgrenzen:        0
+    'versatz' in "bleibt_bei_yama":             0
+
+**Die Quittung ist damit delegierbar.** Der Posten war bisher strukturell blockiert — er wartete auf
+eine Person. **Seit 14:1x wartet er auf eine Entscheidung, die auch der Dirigent treffen kann.**
+*Das ist der Ertrag einer Alterungsprüfung: nicht die Messung hat sich geändert, sondern die Lage um
+sie herum.*
+
+**Eine Frage, die ich benenne und nicht entscheide.** Der Vertretungsentscheid wurde **vom
+Release-Prüfer in Yamas Namen** getroffen. Eine Quittung **durch den Dirigenten in Yamas Namen**
+wäre eine Vertretung, die eine Vertretung bestätigt. **Ob das die Quittung ist, die der Posten
+meint, oder ob er gerade deshalb bei Yama bleiben muss, ist eine Regelfrage** — sie gehört dem
+Dirigenten, nicht mir. Ich lege sie hin, statt sie mit einer Auslegung zu schließen.
+
+**Ball: Dirigent** (die eine Regelfrage) · in der abgelegten Postenliste nachgetragen. **Stand des
+Postens: OFFEN, aber nicht mehr strukturell blockiert.**
