@@ -39485,3 +39485,83 @@ Auch der Griff war unsauber: `ls-tree | grep -i 'TestDatenbankGuard' | head -1` 
 meldete „0 Treffer" — ein sauberes, beruhigendes, **falsches** Ergebnis. Gefangen nur, weil die
 Gegenprobe über den ganzen Baum eine Datei fand, die es nach der ersten Messung nicht hätte geben
 dürfen.
+
+## §492 — Posten 28 erweitert Kriterium d, steht aber noch in keinem Blatt — und Yamas Migrationsregel greift genau an der Naht, die E4 überschreitet
+
+Stand: HEAD `0f6786ac`, Baum 0, gen 11, Digest gleich. Zeit 23:01.
+
+Um **22:53:20** hat der Dirigent Posten 28 abgelegt (`cfd7e52e`, in
+`YAMA-ENTSCHEIDUNGEN-2026-08-22.md`): Das Folgeblatt **Z1-E4-2 von 22:52 entfällt**, die
+PHP-Spiegelung geht stattdessen **in Z1-E4-1** — „Halbsatz zu Kriterium d: 422 bei unbekanntem
+Level für `nodes`/`ceilings`/`roofs`/`foundationSlabs`, je Sammlung ein PHP-Test, Kommentar
+`:51-52` durch Tests wahr oder gestrichen." Begründung: „Fenster offen nur während E4 das Schema
+anfasst; ein Durchlauf statt eines neuen Blatts (Nachtrag 1.6)."
+
+Damit ist **mein DoR-Gegenstand betroffen** — Kriterium d ist genau das, wogegen ich am
+22:32 erteilt habe. Drei Feststellungen.
+
+### 1. Der Halbsatz steht noch in keinem Blatt, und niemand hat den Ball
+
+Gemessen am Integrationsstand:
+
+```
+Blatt-Blob @ Integration      5a43528b
+Blob bei meiner DoR-Bestätigung  5a43528b   ← identisch, 298 Zeilen
+'Spiegel' im Blatt: 0 Treffer · 'ceilings': 1
+```
+
+Kriterium d lautet dort unverändert: „Dokument **mit** Platte speichert und lädt (PHP 200, nicht
+422); Bestandsdokument **ohne** Platte lädt unverändert."
+
+Und: **kein Ereignis seit 22:53 trägt den Auftrag für den Halbsatz.** Die Anordnung steht in einem
+Entscheidungsdokument, nicht in der Ereigniskette — der Planner, der sie einarbeiten müsste, hat
+sie nicht zugestellt bekommen.
+
+**Der Generator baut seit 22:37 gegen `998ff9f2`.** Solange der Halbsatz nicht im Blatt steht, baut
+er gegen ein Kriterium d, das eine Stufe kleiner ist als das beschlossene. Das ist kein Fehler von
+ihm — er kann nur bauen, was zugestellt ist.
+
+### 2. Die Erweiterung ist messbar — und deckt sich mit meiner Zahl
+
+Als DoR-Prüfung der Erweiterung, vorgezogen, damit sie beim Einarbeiten nicht erst gestellt wird:
+
+| Anordnung | messbar? |
+|---|---|
+| 422 für vier Sammlungen | **ja** — vier Testfälle, zählbar |
+| je Sammlung ein PHP-Test | **ja** — zählbar |
+| Kommentar `:51-52` wahr **oder** gestrichen | **ja** — per Diff prüfbar |
+
+Und sie deckt sich mit §490: `nodes` steht bereits, **drei** kommen hinzu. Meine dortige Aussage
+(„es sind genau drei Schleifen, keine versteckte vierte") gilt unverändert — sie ist nur nicht mehr
+Zuarbeit für ein Folgeblatt, sondern für den Halbsatz selbst.
+
+**Ein Punkt, den der Halbsatz sauber trennen muss:** Kriterium d spricht heute vom **Laden**
+(„Bestandsdokument lädt unverändert"), die Anordnung vom **Speichern** („bekäme beim Speichern
+422 — gewollt"). Das ist kein Widerspruch, solange beide Wörter im Halbsatz stehen. Fehlt die
+Trennung, entsteht einer.
+
+### 3. Yamas eigene Regel greift genau an der Naht, die E4 überschreitet
+
+Yamas Wortlaut, den der Dirigent zitiert:
+
+> „eine Zeile, solange gebaut wird — **eine Migration, sobald das Schema auf 4 steht**; ein Test,
+> der die Spiegelung prüft, statt eines Kommentars, der sie behauptet"
+
+Gemessen: `SCHEMA_VERSION = 3 as const`. **Und E4 setzt es auf 4** — das ist Kriterium d selbst
+(„Schema 3→4"). Das Fenster, in dem „eine Zeile" genügt, wird also **von genau dem Bau geschlossen,
+in dem die Zeile eingebaut wird.**
+
+Daraus folgt eine Frage, die ich stellen, aber nicht beantworten kann: **Wie viele
+Bestandsdokumente tragen heute eine verwaiste Decke oder ein verwaistes Dach?** Sie bekämen nach
+E4 beim nächsten Speichern ein 422. Die Anordnung hält das für unproblematisch („gewollt, Client
+lehnt es heute schon ab") — das ist plausibel, aber **ungemessen**.
+
+Ich darf es nicht messen: Die Dirigenten-Entscheidung vom 22:01:46 verbietet jeden Zugriff auf
+`ticket`, und CLAUDE.md hält fest, dass Produktdaten nicht als Nebenwirkung verändert werden.
+**Ich melde die Frage, ich messe sie nicht.** Wer sie beantworten will, braucht Yamas Auftrag und
+einen lesenden Weg, der nicht über eine Testverbindung läuft.
+
+Zwei Migrationen mit Hausplaner-Bezug existieren
+(`2026_07_16_…create_hausplaner_foundation_tables`,
+`2026_07_26_…configurator_packages`) — die Bauform für den Fall, dass Yamas Migrationssatz greift,
+ist also vorhanden und muss nicht erfunden werden.
