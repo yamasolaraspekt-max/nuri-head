@@ -26894,3 +26894,64 @@ Musterabdeckung. Beide derselben Bauart: das Kriterium verweist auf etwas Vorhan
 Vorhandene trägt, hat niemand gemessen. **Der Verweis war jedes Mal richtig; geprüft war er nie.**
 
 **Ball:** Dirigent (Entscheidung A/B/C) · mein Anteil ist hiermit gemeldet, nicht abgewälzt.
+
+## §322 — Posten (c): die Lease-Frist ist nirgends geregelt, sie streut von 20 bis 151 Minuten — und der Gesperrte bestimmt sie selbst
+
+**Messstand** `9fb6dd24` · Baum sauber · 0 neue Commits seit §321 · Integrationszweig `1d50aaae`.
+Ballortung dreiseitig **1 · 6 · 14**, nichts angekommen außer meinem eigenen Ereignis von 11:49.
+Die Evaluator-Lease läuft um **11:55:50** ab; die Nachprüfung dauert dann 40 Minuten.
+
+### Die tragende Formel
+
+`heartbeat_bis − erteilt = Frist`. Sie trägt Yamas Zielregel Punkt 4 (*Übernahme nur bei abgelaufenem
+Heartbeat*) und §8 der Agentenarchitektur (*„`active/` darf nur entfernt werden, wenn `heartbeat_bis`
+verstrichen ist"*). Über alle Leases, zonenbewusst geparst:
+
+```
+60 Dateien mit beiden Feldern  ->  59 VERSCHIEDENE Leases (1 Kopie)
+0 ohne erteilt-Feld · 0 unparsbar
+
+  20 min  37        30 min  10        45 min   7
+  33 min   1        37 min   1        40 min   1        56 min   1       151 min   1
+```
+
+**Acht verschiedene Fristen.** Drei tragen 91 % (20/30/45), fünf sind Einzelfälle. Der längste ist
+`151 min` — das Siebeneinhalbfache des häufigsten.
+
+**Eigene Korrektur auf dem Weg:** Mein erster Lauf zählte **zwei** 151er. Es ist **eine** Lease in
+zwei Dateien (`lease-token2-…yaml` und `.entfernt-aus-active.yaml`, identische Werte). Dieselbe
+Zitat-Falle wie in §310 — diesmal beim ersten Blick erkannt, weil ich die Grundmenge auf
+*verschiedene Paare* umgestellt habe statt auf Dateien.
+
+### Und es ist kein Verstoß, weil es keine Regel gibt
+
+```
+agentenarchitektur-v2.md §8   "begrenzte Laufzeit" · "heartbeat_bis vollständig schreiben"  — keine Zahl
+docs/ARBEITSREGELN.md         'heartbeat' / 'Lease … Minuten'                                0 Treffer
+README der Steuerung          nennt das Feld, nicht die Frist
+```
+
+**Die Streuung bricht keine Regel — es gibt keine, gegen die sie verstoßen könnte.** Das ist die
+Feststellung, nicht der Befund. Der Befund liegt eine Ebene tiefer.
+
+### Der Punkt: die Sperrdauer bestimmt der Gesperrte
+
+Wer eine Lease zieht, schreibt sein `heartbeat_bis` **selbst** — dieselbe Rolle, die von der Sperre
+profitiert, legt fest, wie lange sie gilt. Bei 20 Minuten ist das harmlos. Bei **151** blockiert eine
+Rolle die Übernahme zweieinhalb Stunden lang, ohne dass irgendetwas widerspricht.
+
+**Das ist dieselbe Bauform wie `TICKET_ROLLE` in §304:** eine Barriere, deren Parameter der
+Beaufsichtigte selbst setzt. Dort war es die Rolle, hier die Dauer. Gegen den **Unfall** wirkt beides;
+gegen den, der den Wert bewusst wählt, keines von beiden. Und wie dort gilt: **das behauptet auch
+niemand** — §8 verlangt „begrenzte Laufzeit", und 151 Minuten sind begrenzt.
+
+**Für Z0-I2 gehört es in den Vorrat**, zusammen mit dem Zeitformat-Befund: Yamas Zielregel Punkt 4
+hängt an einem Feld, das **in vier Schreibweisen** vorliegt (§302/§310/§313) und dessen Wert die
+gesperrte Rolle **frei wählt**. Beides einzeln ist harmlos; zusammen ist die Übernahmeregel weder
+maschinell lesbar noch inhaltlich gebunden.
+
+**Was ich nicht tue:** keine Frist vorschlagen. Ob 20 Minuten die richtige Zahl sind, ob sie je
+Auftragsart variieren darf und wer sie setzt, ist eine Entscheidung über das Lease-Verfahren — und die
+gehört zu Z0-I2, nicht zu einer Wache-Runde.
+
+**Ball:** Vorrat Z0-I2 (Planner) · nachrichtlich Dirigent, weil die Zielregel daran hängt.
