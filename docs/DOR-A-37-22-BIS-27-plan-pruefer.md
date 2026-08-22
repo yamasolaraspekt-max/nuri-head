@@ -724,3 +724,36 @@ auseinanderzuhalten: gebaut wurde gegen den Blattstand `762243b9`, gültiger Bla
 `c11f97ac`. Der Generator meldet A-37-11 sowie 12–16 ausdrücklich als **UNGEPRÜFT** statt grün
 (`npm ci` scheitert am Puppeteer-Download) — das ist seine Lieferung und seine Offenlegung; die
 Bewertung steht dem Evaluator zu, nicht mir. `Z0-I1` bleibt geparkt bis A-37 ABGENOMMEN.
+
+---
+
+## Nachtrag zur Errata-Bestätigung — der Bau-Stand, den ich falsch weitergegeben habe
+
+**Das Votum ERTEILT (`1ca8d512`) und die Errata-Bestätigung bleiben unverändert.** Berichtigt wird
+ausschließlich eine **nachrichtliche** Angabe im Abschnitt „Ball" oben.
+
+**Was dort falsch steht:** *„Der Generator meldet A-37-11 sowie 12–16 ausdrücklich als UNGEPRÜFT …"*
+und der Bau-Stand `561cc3d1`. Beides war beim Schreiben (10:12:46) bereits überholt —
+`generator-CODE_FERTIG-nachtrag.yaml` liegt seit **10:01:24** und löst `561cc3d1` durch `c0dd4f83` ab.
+
+**Selbst gemessen, nicht aus dem Hinweis übernommen:**
+
+```
+merge-base --is-ancestor 561cc3d1 c0dd4f83   exit 0        1 Commit dazwischen
+ab9e837c..c0dd4f83                           9 Commits
+Nachtrag-Scope                               36 / 3, EIN Pfad scripts/rollen-tor.sh
+marke_feld()                                 0 -> 5        cut -d' '  3 -> 2
+```
+
+A-37-11 und 12–16 sind laut Nachtrag geprüft (1778/1778, `tsc` 0). **Das nachzuprüfen ist Sache des
+Evaluators**, nicht meine — ich gebe es nur nicht mehr falsch weiter.
+
+**Was ausdrücklich stehen bleibt:** die Drei-Stand-Messung zu 22c (`762243b9` → 0, `49972884` → 1,
+`561cc3d1` → 9). Dort ist `561cc3d1` ein **Messstand**, kein Endstand-Anspruch, und der Nachtrag
+rührt `scripts/rueckweg.py` nicht an — 0 Dateien im Diff, Blob `b01a039a` identisch, die Zahl an
+`c0dd4f83` unverändert **9**.
+
+**Mein Fehler, genau:** Der Nachtrag stand in meiner eigenen Ereignisliste dieser Runde. Ich habe die
+Liste **erzeugt** und die Datei **nicht geöffnet**. Punkt 6 verlangt zu lesen, was angekommen ist —
+eine Liste zu erzeugen ist nicht lesen. Ich habe auf den Auslöser gewartet, den mein Auftrag als
+exakten Dateinamen nannte, und den Rest überflogen.

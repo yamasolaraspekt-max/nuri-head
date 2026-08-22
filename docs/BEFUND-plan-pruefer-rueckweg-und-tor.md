@@ -25332,3 +25332,75 @@ Korrektur. Das ist dieselbe Form wie §299: der Beleg existiert, der Weg dorthin
 §120 zählte 38 von 165, weil die fünf `__domtests__` darin enthalten waren)."*
 
 **Ball:** Yama — die Entscheidung selbst steht weiter aus, jetzt mit der richtigen Zahl und ihrer Menge.
+
+## §301 — Ich habe die Ereignisliste erzeugt und die Datei nicht geöffnet: der Endstand war seit elf Minuten ein anderer
+
+**Messstand** `6cb8d703` · Baum sauber · 0 neue Commits seit §300. **Integrationszweig bewegt:**
+`05fc2bab` → `435c086a`. Ballortung beidseitig **1** (P-02) und **6** — nichts in meiner Bahn.
+Diese Runde ist deshalb kein Vorratsposten, sondern die Stopp-Regel: der Fehler zuerst.
+
+### Was angekommen ist
+
+Zwei Zustellungen des Dirigenten, beide 10:22–10:24. **Erstens** die Bekanntmachung, dass Yama eine
+**externe Prüfung** eingesetzt hat — außerhalb der Rollenkette, ohne ACK/Lease/Generation, prüft in
+letzter Instanz, *„die Prüfenden sind ausdrücklich mitgeprüft"*, schreibt nirgends bei uns. Für meine
+Arbeitsweise ändert sich nichts; ich habe nichts zu melden und nichts zu quittieren. **Zweitens** ein
+dringender Hinweis an den Evaluator — und der nennt mich beim Namen.
+
+### Der Fehler
+
+`generator-CODE_FERTIG-nachtrag.yaml` liegt seit **10:01:24** und löst `561cc3d1` durch `c0dd4f83`
+als Endstand ab. Mein `BESTAETIGT` ist von **10:12:46**. Ich habe darin weitergegeben, der Generator
+melde A-37-11 und 12–16 als **UNGEPRÜFT** — elf Minuten nachdem er das Gegenteil gemeldet hatte.
+
+**Der Nachtrag stand in meiner eigenen Ereignisliste dieser Runde**, Zeile
+`10:01:24  BAU-generator-A-37/generator-CODE_FERTIG-nachtrag.yaml`. Ich habe die Liste **erzeugt**
+und die Datei **nicht geöffnet**. Punkt 6 meiner Anweisung verlangt zu lesen, was angekommen ist —
+*eine Liste zu erzeugen ist nicht lesen.* Ich habe auf den Auslöser gewartet, den mein Auftrag als
+**exakten Dateinamen** nannte, und alles daneben überflogen. Genau dagegen richtet sich die Regel,
+die der Dirigent im selben Atemzug erlassen hat: **Auslöser sind Muster, nicht Dateinamen**, und ein
+`*-nachtrag*.yaml` ist die Fortschreibung desselben Ereignisses.
+
+### Selbst gemessen, nicht aus dem Hinweis übernommen
+
+```
+c0dd4f83 · 561cc3d1 · ab9e837c        alle drei existent (exit 0)
+merge-base --is-ancestor 561cc3d1 c0dd4f83   exit 0
+ab9e837c..c0dd4f83                    9 Commits (49972884 1155709d d64465b0 582232e9
+                                      c3391e35 782ff44d 5f76c2dc 561cc3d1 c0dd4f83)
+561cc3d1..c0dd4f83                    1 Commit · 36 / 3 · EIN Pfad scripts/rollen-tor.sh
+marke_feld()   0 -> 5                 cut -d' '   3 -> 2
+```
+
+Die Ursache im Nachtrag ist von der Bauart, die diese Reihe kennt: die Marke trennt ihre Felder mit
+**zwei** Leerzeichen, `cut -d' '` zählt jedes einzeln — `f2` traf nur zufällig. Der Generator hat den
+Befund beim Gegenprüfen der **eigenen** Meldung gefunden und einen Nebenbefund
+(`module-nachziehen.sh:142`, dieselbe Bauform, *„heute richtig, aus demselben Zufall"*) als außerhalb
+seiner Pfade gemeldet statt angefasst. **Ob die Behebung trägt, prüft der Evaluator** — dass
+`cut -d' '` von 3 auf 2 und nicht auf 0 steht, ist seine Messung, nicht meine.
+
+### Reichweite — ein Satz an zwei Orten
+
+```
+plan-pruefer-BESTAETIGT.yaml   Z.76    betroffen
+Votumsblatt                    Z.724   betroffen
+plan-pruefer-AUFTRAG_ABGESCHLOSSEN.yaml   0 Treffer   nicht betroffen
+```
+
+**Das Votum ist nicht betroffen.** Prüfgegenstand war der Errata-Commit `c11f97ac` am *Blatt*, nicht
+der Bau-Stand; die drei Punkte wurden dort gemessen und gelten wortgleich. Auch die Drei-Stand-Messung
+zu 22c bleibt richtig — dort ist `561cc3d1` ein **Messstand**, kein Endstand-Anspruch, und
+`scripts/rueckweg.py` ist im Nachtrag unberührt (0 Dateien im Diff, Blob `b01a039a` identisch, Zahl an
+`c0dd4f83` unverändert 9). Falsch war die **nachrichtliche Weitergabe**, nicht die Prüfung.
+
+### Berichtigt in der Form, die gerade Regel geworden ist
+
+`plan-pruefer-BESTAETIGT-nachtrag.yaml` als **eigene Datei**, nicht in die Bestätigung
+hineinkorrigiert — wie der Generator es vorgemacht hat: *„wer sie gelesen hat, soll sehen, was sich
+seither geändert hat, statt eine stillschweigend andere Fassung vorzufinden."*
+
+**Das ist zum dritten Mal in drei Runden dieselbe Form** (§299 der tote Zeiger, §300 die veraltete
+Zahl im weitergereichten Posten, jetzt der überholte Stand): **der Beleg ist da, aber am Gebrauchsort
+steht die alte Fassung.** Bei den ersten beiden war ich der Melder; hier bin ich der Verursacher.
+
+**Ball:** Evaluator — Abnahme auf `c0dd4f83`, nicht auf `561cc3d1`.
