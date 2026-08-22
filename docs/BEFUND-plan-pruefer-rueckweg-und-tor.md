@@ -31245,3 +31245,63 @@ Zur Fach-Empfehlung im Blatt (*„Zimmerer/Dachdecker empfohlen: Handwerkswissen
 **Was sie unterscheidet, ist das Dach, nicht der Compiler.**
 
 Ball: **Generator** (nach Z0-I1) · bei mir nichts.
+
+## §390 — Zwei unabhängige Wege, dieselbe Antwort: der Materialkatalog ist normbelegt. Und meine vierte Anführungszeichen-Falle an einem Nachmittag
+
+Messstand: HEAD `c9466cc0`, Baum 0, gemessen 16:43–16:47. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §390'` → 0).
+
+### Die Konvergenz, und warum sie zählt
+
+`STEUERUNG-dirigent/yama-lesesitzung-hinweis-materialkatalog-existiert.yaml`, **16:40:53** — zehn
+Minuten nach meinem §385, und **unabhängig davon**: ihr `bezug` nennt nur die Planner-Frage,
+`plan-pruefer` kommt in ihrem Hinweis **0 mal** vor. Ihr Kern: *„Der Materialkatalog muss nicht
+angelegt werden — er existiert im ticket-Bestand, mit Daten und Quellenangabe, und ein U-Wert-Dienst
+liegt daneben."*
+
+**Zwei Verfahren, eine Antwort.** Die Hausregel kennt den umgekehrten Fall („zwei Verfahren, zwei
+Antworten, dann gilt keine"); hier gilt sie in die andere Richtung. Sie hat gemessen, was ich nicht
+durfte — die Datenbank —, ich habe gemessen, was sie nicht brauchte — die Repo-Seite. **Meine
+Gegenprobe auf ihre Zahl:**
+
+    ticket.materials (ihre DB-Messung)               23 Zeilen
+    'lambda_w_mk' in database/data/b2a_referenz.php  23 Treffer     <- Repo und DB stimmen ueberein
+    UWertService.php                                 200 Zeilen (ihre Angabe: 200)   exakt
+
+### Der Katalog ist nicht nur da — er ist normbelegt
+
+    create_materials_table.php:20  decimal('lambda_w_mk', 6, 4)
+                                     comment '[W/mK] Bemessungswert Waermeleitfaehigkeit'
+                              :22  string('quelle')->default('DIN 4108-4 / ISO 10456')
+                              :23  string('verifikations_status')  'din_belegt | impor...'
+                              :24  string('imported_from')         "Herkunfts-Marker, z.B. 'w...'"
+    b2a_referenz.php               'quelle' => 'DIN 4108-4'   53 Treffer auf 'quelle'
+
+**Damit ist auch der zweite Teil der Planner-Frage beantwortet.** Er fragte *„anlegen — und woraus?"*.
+Die Antwort steht in der Migration: **aus DIN 4108-4 / ISO 10456, mit Verifikationsstatus je
+Eintrag.** Ein Katalog mit `verifikations_status: din_belegt` ist genau das Gegenteil der Sorge, vor
+der `scene.types.ts:123` warnt (*„Eine erfundene Schichtung wäre schlimmer als keine"*) — hier steht
+je Wert, woher er stammt und ob er belegt ist.
+
+### Meine vierte Anführungszeichen-Falle an diesem Nachmittag
+
+    'quelle' MIT Quotes im Muster   ->   0 Treffer
+    quelle   OHNE Quotes            ->  53 Treffer
+
+Ich hätte „keine Quellenangabe" gemeldet — in genau dem Abschnitt, der belegt, dass es eine gibt.
+
+    §382  'stair' mit Quotes                    1 statt 17
+    §383  Importgraph nur mit "…"               160 tote Module statt 26
+    §389  Import-Muster fuer auswechslung       0 Testdateien statt 1
+    §390  'quelle' mit Quotes                   0 statt 53
+
+**Viermal an einem Nachmittag dieselbe Wurzel, und jedes Mal in die gefährliche Richtung: zu wenig
+Treffer, was wie ein Befund aussieht.** Ein zu weites Muster meldet Rauschen, das man prüft; ein zu
+enges meldet eine Null, die man glaubt. **Alle vier wurden nur von der Gegenprobe am bekannten
+Treffer gefangen** — nicht von Nachdenken, nicht von Erfahrung, sondern von einem zweiten Befehl.
+
+**Regel an mich, verschärft:** Bei jedem `grep` auf einen Feldnamen in strukturierten Daten wird das
+Muster **ohne Anführungszeichen** gefahren und die Differenz betrachtet. Ist sie groß, war meine
+Annahme über die Schreibweise falsch — nicht der Bestand.
+
+Ball: **niemand von mir aus.** Die Frage liegt bei Yama; sie ist jetzt aus zwei Richtungen belegt.
