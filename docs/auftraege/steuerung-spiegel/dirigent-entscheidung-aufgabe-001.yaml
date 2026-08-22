@@ -1,0 +1,26 @@
+rolle: dirigent
+an: [yama, externe-pruefung, integrator, planner, generator]
+zeit: "2026-08-22T10:48:55+0200"               # Quelle: date beim Schreiben
+bezug: "/Users/yamanuri/.ticket-externe-pruefung/vorschlaege/AUFGABE-001-dirigent.md sha256 0734099f (geprueft)"
+art: ENTSCHEIDUNG_UNTER_VOLLMACHT
+punkt_0: "Angenommen. A-37 wird nicht angefasst; Evaluator-Lease bis 11:11:28 auf c0dd4f83."
+punkt_1_halt_an_pid:
+  entscheidung: "TEILWEISE ANGENOMMEN — der Halt haengt bereits NICHT allein an einer PID."
+  gemessen: |
+    rollen/generator.yaml gen 8 (seit 09:07) traegt 'sitzung_gesperrt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b' und
+    'sitzung_erwartet: aa0cddd3-...'; die Dauersperre des Dirigenten matcht '--resume=7df19ed4' (Sitzung), nicht PIDs —
+    gestoppte Laeufe 40704/41372/78836 wurden vom Aufrufer abgeraeumt; dauerhaft in T stehen nur 87659/88088, und das ist
+    Yamas ausdrueckliche Entscheidung (Weg a), kein technischer Halt.
+  offen: "Nach A-37-Votum: gen 9 fuer den Generator mit 'aktion: warten' (heute steht 'bauen' nach CODE_FERTIG — ueberholt); bis dahin keine Generationsaenderung in der A-37-Kette. Nach den fuenf Bedingungen Yamas: Freigabe oder Ende der Sitzung 7df19ed4 — die entscheidet Yama."
+punkt_2_verwaiste_aenderung:
+  entscheidung: "ANGENOMMEN in zwei Schritten. Schritt 1 JETZT: als Beleg gesichert. Schritt 2 NACH A-37: Integrator verwirft die Arbeitskopie (sein Baum), Planner routet den Inhalt als kleinen Generator-Auftrag in rolle/generator."
+  beleg: "/Users/yamanuri/.ticket-steuerung/belege/verwaist-2026-08-21-2236-FACHPRUEFUNG-DREI-LINSEN.patch (33+/2-, mtime 21.08. 22:36:37) sha256 bc8069f3b93fd49e839dcaa75d81816da5f1b31660c3a9cfbd983805097cb3aa; Spiegel docs/auftraege/steuerung-spiegel/belege/ im Branch rolle/dirigent"
+  inhalt: "M-2- und M-6-Nachmessungen (wandFlaeche.ts :174/:180/:207 am Stand 4e02c273), Fachfragen als hartes Gate benannt — wertvoll, gehoert in rolle/generator, nicht in die Integration per Fremdcommit."
+  warum_nicht_sofort_verwerfen: "Loeschen im Integrations-Checkout ist eine Schreibhandlung im Baum des Integrators und ein Eingriff waehrend der A-37-Kette (Punkt 0). Der Beleg macht die Handlung reversibel (git apply)."
+punkt_3_rueckweg_schalter: "ANGENOMMEN — bereits Steuerungs-Backlog 18 (10:41), Planner nach A-37, Kriterien von A-37 bleiben eingefroren."
+punkt_4_endstand_sha_in_meldepflicht: "ANGENOMMEN — README Meldepflicht + docs/regelwerk/MELDEPFLICHT-AUFTRAG.md: jede Start- und Abschlussmeldung nennt 'endstand_sha' (Eingang, woran gearbeitet wurde) und 'ergebnis_sha' (Ausgang). Gilt ab dem naechsten Pull; das Evaluator-Votum zu A-37 nennt c0dd4f83 als endstand_sha."
+punkt_5_zwoelf_ohne_votum: "ANGENOMMEN als Plan — identisch mit docs/backlog/abnahmerueckstand-2026-08-22.md (12) und der Reihenfolge (W0-5 zuerst, dann S-1/S-5/A-1..A-4). Nach A-37 ABGENOMMEN: Abnahmewelle = Evaluator-Auftraege in Risikoreihenfolge, KEINE neuen Bauten. Erledigt-Kriterium uebernommen: je Befund Votum ODER datierte Entscheidung."
+punkt_6_status_r1_r2: "ANGENOMMEN — Steuerungs-Backlog 12; Integrator-Zustandscommits R-1 (b9fe55c0) / R-2 (36eb8b63) im ersten Integrator-Auftrag nach A-37 ABGENOMMEN (zusammen mit A-37 selbst)."
+punkt_7_rueckweg_dirigent: "Zur Kenntnis — gemeldet wird, sobald rueckweg.py (A-37-22) transportiert ist."
+abgelehnt: "nichts ganz; Punkt 1 nur als 'schon erfuellt' korrigiert."
+ball: evaluator (A-37), danach integrator/planner (Punkte 2/5/6)

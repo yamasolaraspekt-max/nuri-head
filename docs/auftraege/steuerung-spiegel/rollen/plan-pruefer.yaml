@@ -1,0 +1,18 @@
+auftrag_id: DOR-plan-pruefer-kennungsmuster
+generation: 8            # 2026-08-22T12:18:38+0200 — Weg 3: aktion = Tor-Wort (README 6f); Hinweg zuerst; danach DoR fuer das Planner-Blatt 'Kennungsmuster + Aktionsvokabular' sobald planner-SPEZIFIZIERT* vorliegt. gen 7 abgeschlossen (BESTAETIGT 599976c9 + Nachtrag).
+rolle: plan-pruefer
+sitzung_erwartet: 3870df7a-b0ad-4c78-bcb2-c5aa83a4c09d
+worktree: /Users/yamanuri/Documents/ticket-rolle-plan-pruefer
+branch: rolle/plan-pruefer
+prioritaet: P1
+aktion: bauen            # TOR-WORT (befristet). Bedeutung hier: Arbeit erlaubt.
+taetigkeit: "pruefen/erteilen (Plan-Pruefer): Befundblatt weiterfuehren; DoR des Kleinauftrags nach SPEZIFIZIERT"
+hinweg_zuerst: "git merge --no-edit auto/hausplaner-integration im EIGENEN Worktree (kein Rebase, kein Force); bei Konflikt/local-changes NICHTS erzwingen -> BASE_BLOCKED melden; danach <rolle>-BASIS_NACHGEZOGEN.yaml mit Ausgabe von ls -l .githooks/pre-commit und git rev-parse --short HEAD"
+ausloeser_dor:
+  - "ereignisse/SPEZ-planner-kennungsmuster/planner-SPEZIFIZIERT*.yaml (Muster; juengster Stand per SHA)"
+dor_pruefen: "Blatt gegen ARBEITSREGELN §5 inkl. N3 Nachvollzugs-Matrix; beide Posten (Kennungsmuster 7 Formen + Grundmenge; Aktionsvokabular je Rolle, warten* = Pause, unbekannt = 7, EINE Liste); Messbefehle ausfuehrbar; Rot/Gruen definiert. Votum ERTEILT/NICHT ERTEILT mit endstand_sha (Blatt-SHA) + ergebnis_sha."
+verboten: [Produktcode, Kriterien selbst schreiben, A-37-Blatt anfassen, --no-verify]
+steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
+status: ZUGETEILT
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/DOR-plan-pruefer-kennungsmuster/plan-pruefer-ack.yaml
+erstellt: "2026-08-22T12:18:38+0200 Dirigent (atomar; Uhr: date)"

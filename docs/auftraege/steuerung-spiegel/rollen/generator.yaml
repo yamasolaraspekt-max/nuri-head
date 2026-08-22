@@ -1,0 +1,16 @@
+auftrag_id: WARTEN-generator-nach-A-37
+generation: 10           # 2026-08-22T12:18:38+0200 — A-37 ABGENOMMEN (0a18446a) und transportiert (f6792ec3). Kein Bauauftrag offen. gen 9 abgeschlossen (CODE_FERTIG c82df498).
+rolle: generator
+sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8
+sitzung_gesperrt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b   # unveraendert; Freigabe/Ende entscheidet Yama (fuenf Bedingungen)
+worktree: /Users/yamanuri/Documents/ticket-rolle-generator
+branch: rolle/generator
+basis_sha: c82df498
+prioritaet: P2
+aktion: parken           # TOR-WORT Pause: keine Commits. Naechster Bau (Kennungsmuster + Aktionsvokabular) kommt als eigene Generation NACH DoR.
+taetigkeit: "warten (Generator); lesend vorbereiten erlaubt"
+hinweis: "Dein Baum traegt den Haken bereits; Hinweg nicht noetig (c82df498 ist in der Integration). Keine Sacharbeit, keine Commits, Lease nicht noetig."
+steuerungshandlungen_erlaubt: [ACK, Ereignisse]
+status: ZUGETEILT
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/WARTEN-generator-nach-A-37/generator-ack.yaml
+erstellt: "2026-08-22T12:18:38+0200 Dirigent (atomar; Uhr: date)"
