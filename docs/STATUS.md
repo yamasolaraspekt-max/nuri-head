@@ -111,7 +111,7 @@
 | **Z1-E0-1** Hoehenkette — eine Wahrheit statt drei Rechnungen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E0-1-hoehenkette-eine-wahrheit.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) · Bau `ad2ac724` · CODE_FERTIG 20:09:51 · **drei Mangelanzeigen offen** (Planner 20:26 und 20:51, Evaluator 20:56) · **ABGENOMMEN (BROWSER)** 22:26:14, fuenf von fuenf — die drei Mangelanzeigen sind damit erledigt |
 | **Z1-E2-1** Etagen-Integritaet — Wachen und Mitnahme | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E2-1-etagen-integritaet.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) · Bau `51b0ddfb` · CODE_FERTIG 20:18:30 · **ABGENOMMEN (BROWSER)** 22:47:41 — sechs von sechs, Reifegrad `browserabgenommen` |
 | **Z1-E4-1** Bodenplatte als eigenes Bauteil (GP-0) | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 22:25:33 · Basis `54163b25` | **Blatt** `docs/auftraege/aktiv/Z1-E4-1-bodenplatte-als-eigenes-bauteil.md` @ `54163b25` · **auf Yamas Anweisung vorgezogen** (22:08) · neun Kriterien, acht rot · **DoR ERTEILT** 22:32:20 · Bau `3b4e8f6b` · CODE_FERTIG 23:18 |
-| **Z1-E0-1b** Umbenennung `deckenOberkanteMm` -> `wandOberkanteMm` | `CODE_FERTIG` | **Evaluator** | Bauplatz 22.08. 22:32:23 · Basis `3b4e8f6b` | **KEIN Blatt, kein DoR-Durchgang** — Kriterien a-d stehen im Bauplatz selbst, so ausdruecklich verfuegt · Bau `d5e88f15` · CODE_FERTIG 23:23:20 |
+| **Z1-E0-1b** Umbenennung `deckenOberkanteMm` -> `wandOberkanteMm` | **`ABGENOMMEN`** | **Dirigent** | Bauplatz 22.08. 22:32:23 · Basis `3b4e8f6b` | **KEIN Blatt, kein DoR-Durchgang** — Kriterien a-d stehen im Bauplatz selbst, so ausdruecklich verfuegt · Bau `d5e88f15` · CODE_FERTIG 23:23:20 · **ABGENOMMEN** 23:28 |
 | **Z0-I1** Testdatenbank-Isolation — Stufe 1 | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` · **NACHBESSERN** 19:04:28, 8 von 10 Kriterien, Reifegrad `code-geprueft mit Ausloesung` — zwei Zusagen nennen das Vorhandene statt das Wirkende · **nachgebessert** `ba6fc673` 19:42:03, Kriterien 10 und 12 · **ABGENOMMEN** 23:00:11 — **zehn von zehn**, Reifegrad `code-geprueft mit Ausloesung` |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
@@ -19768,8 +19768,8 @@ zustand_nachgezogen: |
 ```yaml
 auftrag: "Z1-E0-1b"
 titel: "Umbenennung deckenOberkanteMm -> wandOberkanteMm"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: dirigent
 blatt: "KEINES — dirigent-BAUPLATZ-umbenennung-wandOberkanteMm.yaml (22:32:23), Posten 0b"
 blatt_sha: "keiner"
 basis_sha: 3b4e8f6b
@@ -19793,6 +19793,13 @@ herkunft_dieses_blocks: |
   baut darauf auf.
   ZUR KENNUNG: sie ist mit "b" an Z1-E0-1 gehaengt, obwohl es kein Blatt gibt. Ich uebernehme
   sie so, wie der Generator sie fuehrt, und erfinde keine eigene.
+
+votum: |
+  ABGENOMMEN — evaluator, 23:28, evaluator-ABGENOMMEN-z1-e0-1b.yaml, Bau d5e88f15.
+  Fuenf Minuten nach der Fertigmeldung. Der Vorratsbefund des Plan-Pruefers, dass die Formel
+  stimmt und der Name nicht, ist damit abgearbeitet: die Funktion heisst jetzt so, wie sie
+  rechnet.
+
 ```
 
 ```yaml
