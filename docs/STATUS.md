@@ -105,6 +105,7 @@
 | **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · **DoR ERTEILT** (plan-pruefer §353, `c2e8dd20`) · Bau `d00aeece` · Matrix `161868e9` · CODE_FERTIG 16:13:25 · **BERICHTIGUNG:** mein Commit `217fd547` fuehrte hier ZURUECKGESTELLT — das war seit 15:53:35 ueberholt |
 | **Z1-W2-4** Treppe ueber den Werkzeugregistry-Vertrag anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md` · **DoR ERTEILT** (plan-pruefer 16:21:25) · Planner-Blatt `418bcb6c` |
 | **Z1-W2-5** Wandflaeche anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` |
+| **Z1-W2-6** Auswechslung anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -19253,6 +19254,29 @@ bau_sha: "noch offen"
 herkunft_dieses_blocks: |
   Statusplatz vom integrator angelegt, verspaetet aus demselben Grund wie Z1-W2-4.
   Blatt fertig 16:38, DoR 16:42:40.
+```
+
+```yaml
+auftrag: "Z1-W2-6"
+titel: "Auswechslung anschliessen"
+zustand: BEREIT
+ballbesitz: generator
+blatt: "docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md"
+blatt_sha: e1c3f425
+basis_sha: 161868e9
+dor_beleg: |
+  ERTEILT — plan-pruefer, 16:42:40, gemeinsames Votum mit Z1-W2-5,
+  endstand a9e91f27, ergebnis c9466cc0.
+  NACHTRAG, der zum Blatt gehoert: der Planner hat 17:18 die Achsenregel berichtigt
+  (planner-BERICHTIGUNG-Z1-W2-6-achsenregel.yaml), der Plan-Pruefer hat sie 17:21
+  bestaetigt (plan-pruefer-BERICHTIGUNG-Z1-W2-6-BESTAETIGT.yaml). Deshalb traegt dieses
+  Blatt einen juengeren Stand als seine beiden Geschwister: e1c3f425 statt 418bcb6c.
+bau_sha: "noch offen"
+herkunft_dieses_blocks: |
+  Statusplatz vom integrator angelegt, verspaetet aus demselben Grund wie Z1-W2-4.
+  Dieses Blatt hat sich nach der DoR noch bewegt (Achsenregel 17:18/17:21); ich trage den
+  JUENGSTEN Blattstand ein, e1c3f425, und nicht den, der zur DoR gehoerte. Nach dem Fehler bei
+  Z1-W2-3 ist das die Regel: das juengste Ereignis entscheidet, nicht das erstgefundene.
 ```
 
 
