@@ -187,7 +187,25 @@ MODUS = os.environ["MODUS"]
 # Rollenmarke entfallen soll oder Teil des Wortlauts wird, entscheidet nicht dieses Skript.
 KERN = (
     r"zustand:\s+"
-    r"(?P<kennung>[A-Z]+-?[0-9]+[A-Za-z]?(?:/[0-9A-Za-z]+)?)\s+·\s+"
+    # ── A-43 POSTEN 1 — DIE KENNUNG IST MEHRGLIEDRIG ──────────────────────────────────
+    # Neu ist die Gruppe `(?:-[A-Z]*[0-9]+[A-Za-z]?)*`: beliebig viele WEITERE Glieder, jedes
+    # eingeleitet von einem Bindestrich und mit mindestens einer Ziffer. Damit passen Z0-I1,
+    # Z1-W1-1, Z2-W0-1 und A-37-22b; A-42, A-37, W-17/1 und P-05 passen unveraendert weiter.
+    #
+    # **Die Ziffernpflicht je Glied ist der Schutz, nicht Zierde.** Ohne sie wuerde `A-37-xyz`
+    # passen — und schlimmer: das Muster wuerde bei einer laschen Fassung nur das PRAEFIX greifen
+    # (`Z0` statt `Z0-I1`), der Rest fiele in den Beleg-Teil, und docs/STATUS.md bekaeme einen
+    # Zustandswechsel fuer einen Auftrag, DEN ES NICHT GIBT. *Heute faellt ein Wechsel aus, was
+    # beim Zaehlen auffaellt; ein falscher Wechsel saehe aus wie ein richtiger.*
+    #
+    # **Warum hier keine gemeinsame Konstante steht, obwohl das Muster zweimal vorkommt:**
+    # `commit-pruefen.sh` fuehrt fuer A-37-26 nicht diese Datei aus, sondern nur den TEXTAUSSCHNITT
+    # vom Beginn dieser Zuweisung bis zur Zeile, die das Muster uebersetzt. Eine Konstante DAVOR
+    # laege ausserhalb — das Tor
+    # meldete dann *„Muster nicht auswertbar — UNGEPRUEFT"* bei Rueckgabe 0 und liesse alles durch.
+    # **Ein still abgeschaltetes Tor faellt niemandem auf.** A-43-2 laesst zwei wortgleiche Kopien
+    # ausdruecklich zu; die zweite steht bei BEINAHE und traegt denselben Hinweis.
+    r"(?P<kennung>[A-Z]+-?[0-9]+[A-Za-z]?(?:-[A-Z]*[0-9]+[A-Za-z]?)*(?:/[0-9A-Za-z]+)?)\s+·\s+"
     r"(?P<zustand>[A-Z_]+)\s+·\s+"
     r"(?P<rolle>[a-z-]+(?:-[0-9]+)?)"
     r"(?:\s+·\s+(?P<beleg>.*))?"
@@ -518,7 +536,11 @@ def blatt_gefunden(kennung):
 # der Leser in einer Sekunde; bei zweihundert entscheidet niemand mehr.**
 BEINAHE = re.compile(
     r"^[a-z-]+(?:-[0-9]+)?:\s+"
-    r"(?P<kennung>[A-Z]+-?[0-9]+[A-Za-z]?(?:/[0-9A-Za-z]+)?)\s+"
+    # A-43-2: WORTGLEICHE Kopie des Musters aus KERN. Keine gemeinsame Konstante — die Begruendung
+    # steht dort: sie laege ausserhalb des Textausschnitts, den commit-pruefen.sh ausfuehrt, und
+    # schaltete A-37-26 still ab. **Wer die eine Stelle aendert, aendert die andere mit**; A-43-2
+    # misst genau das, indem es dieselben acht Formen gegen BEIDE Muster faehrt.
+    r"(?P<kennung>[A-Z]+-?[0-9]+[A-Za-z]?(?:-[A-Z]*[0-9]+[A-Za-z]?)*(?:/[0-9A-Za-z]+)?)\s+"
     r"(?P<zustand>ENTWURF|BEREIT|IN_ARBEIT|CODE_FERTIG|ABGENOMMEN|BETRIEBSBESTAETIGT"
     r"|SPEC_BLOCKED|NACHBESSERN|RELEASE_FREI)\b"
 )

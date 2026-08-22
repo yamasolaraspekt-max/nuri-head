@@ -27378,3 +27378,581 @@ Wegen, die der Integrator nennt, ist der zweite (*„die aktion auf ein Wort set
 ausdrücklich als **Anpassung der Steuerung ans Werkzeug** gekennzeichnet — er nennt ihn und empfiehlt
 ihn nicht. Das halte ich für richtig und schließe mich an: die Entscheidung gehört nicht dem, der
 gesperrt wird.
+
+## §330 — Nur zwei von sechs Bäumen tragen das neue Tor: gesperrt ist genau einer, und drei weitere werden es beim nächsten Rückweg, ohne es zu merken
+
+**Messstand** `1fe9311d` · Baum sauber · 0 neue Commits seit §329 · Integrationszweig `56094e40`.
+Ballortung dreiseitig **1 · 6 · 14**. A-37 im Datensatz weiter `CODE_FERTIG`, Votum ABGENOMMEN seit
+**11 Minuten**.
+
+### Der Integrator berichtigt sich selbst — und die Berichtigung trägt
+
+`integrator-BEFUND-nachtrag-merge-laeuft-durch.yaml` (12:13:27). Er hatte *„vier von sechs können
+nicht committen"* geschrieben und misst nach: **Merges laufen durch.** Nachgeprüft:
+
+```
+.githooks/pre-merge-commit          existiert NICHT — weder bei mir noch am Endstand c82df498
+.githooks am Endstand               commit-msg · post-commit · pre-commit
+56094e40                            zwei Eltern (f6792ec3 + 4fb4ebfe) -> Merge, durchgelaufen
+```
+
+**Seine Berichtigung stimmt.** Und sein Grund dafür, sie selbst zu melden, ist der richtige: *„Ein
+Befund, der mehr behauptet als er misst, ist derselbe Fehler wie eine Zahl ohne Gegenprobe."*
+
+### Die Lage ist enger, als beide Zahlen sagen
+
+Weder *„vier von sechs"* noch *„gewöhnliche Commits fallen aus"* trifft, was heute gilt. Entscheidend
+ist nicht die Aktion, sondern **wer das Tor überhaupt hat**:
+
+```
+ticket (Integrations-Checkout)   pre-commit JA    'unbekannte aktion' 1   aktion rueckweg_… -> GESPERRT
+ticket-rolle-generator           pre-commit JA    1                       aktion nachbessern -> kommt durch
+ticket-rolle-planner             pre-commit nein  0                       altes Tor
+ticket-rolle-plan-pruefer        pre-commit nein  0                       altes Tor  (meiner)
+ticket-rolle-evaluator           pre-commit nein  0                       altes Tor
+ticket-release-pruefung          pre-commit nein  0                       altes Tor
+```
+
+**Zwei von sechs Bäumen tragen das neue Tor. Gesperrt ist genau einer: der Integrator.** Die drei
+Rollen mit unbekannter Aktion — Planner, Evaluator und ich — sind **arbeitsfähig, weil ihre Bäume
+den Bau nicht haben.** Der Generator hat ihn, kommt aber durch, weil seine Aktion `nachbessern` heißt.
+
+### Und warum die Bäume alt sind
+
+Der Rückweg fließt **beidseitig**, nur gerade nicht: `735` Merges liegen in meinem Zweig, der letzte
+vom Integrator aber um **07:54** (`ab9e837c`). Seither hat er nur **von** den Rollen gemerged, nicht
+**zu** ihnen — und genau seit dem Transport um 12:1x kann er den Rückweg zwar fahren (Merges laufen
+durch), aber den Zustandscommit nicht setzen.
+
+**Daraus folgt die eigentliche Warnung:** Sobald der Integrator das nächste Mal in die Rollenbäume
+zurückmerged, tragen Planner, Evaluator und ich das neue Tor — und **drei weitere Rollen sind still
+gesperrt**, ohne dass jemand etwas anderes getan hätte als seine Arbeit. Die Sperre wächst mit jedem
+Rückweg, und sie kündigt sich nicht an.
+
+**Das ist die ungünstige Kombination, die der Integrator benennt** — *„die Kette bewegt sich sichtbar
+weiter, während der Statusträger einfriert"* — um eine Stufe schärfer: **die Bewegung selbst verteilt
+die Sperre.**
+
+### Was ich nicht tue
+
+Ich merge nichts, ich ändere kein Tor, ich rühre meine Aktion nicht an. Ich melde, dass meine
+Arbeitsfähigkeit an einem Zufall hängt — dem Stand meines Baums — und nicht an einer Entscheidung.
+
+**Ball:** Dirigent. Die Frist ist enger als gedacht: nicht *„bevor jemand committet"*, sondern **bevor
+der nächste Rückweg in die Rollenbäume läuft.**
+
+## §332 — Die Entlastung zum `erstellt`-Feld hält nicht: das Feld trägt die behauptete Bedeutung nachweislich nicht
+
+Gewählt gegen HEAD `51d26c29` (Baum sauber, 12:39:37). §331 ist als Überschrift nicht belegt;
+332 ist frei. Nummern eindeutig, nicht aufsteigend.
+
+**Anlass, zitiert und verlinkt, nicht nachgebaut (P-02 Punkt 4):**
+`~/.ticket-steuerung/ereignisse/EXTERNE-PRUEFUNG/externe-pruefung-nachmessung-erstellt-feld.yaml`
+(12:31:19). Sie bestätigt meinen Befund aus dem Votum NICHT_ERTEILT (12:30:11) und weitet ihn auf
+alle sieben Rollenquellen aus. Ihr Schluss, wörtlich: *„Die Konvention 'erstellt = Zeit DIESER
+Generation' wird also von sechs Dateien eingehalten. Es ist ein einzelner Aussetzer … kein neuer
+Regeltext noetig."* Und die Folge daraus: *„Entweder 'erstellt' bei jeder Generation mitschreiben
+… oder das Feld streichen."*
+
+Eine fremde Zahl, die meinen eigenen Restpunkt **verkleinert**, übernehme ich nicht ungemessen.
+
+**Ihre Zahl stimmt.** Selbst gemessen, alle sieben Quellen, `erstellt` gegen Dateizeit:
+sechs gleich, einer klafft — `planner` erstellt `12:03:49` gegen Dateizeit `12:17:32`, **823 s**.
+
+**Zwei Einwände gegen den Schluss, beide gemessen:**
+
+**1. Sieben Dateien, aber zwei Schreibvorgänge.**
+
+    12:17:32 -> integrator planner
+    12:18:38 -> dirigent evaluator generator plan-pruefer release-pruefer
+    unterschiedliche Zeitpunkte: 2 bei 7 Dateien
+
+Die fünf „OK" um 12:18:38 sind **ein** Sammelschreiben und damit **ein** Beleg, nicht fünf. Beim
+Vorgang, in dem der Fehler auftrat, lautet die Quote **1 von 2**. Das ist dieselbe Fehlerklasse wie
+in meinem eigenen §305: Dateien gezählt, wo Zeitpunkte gefragt waren — die Grundmenge passte zum
+Verfahren, nicht zur Frage.
+
+**2. Das Feld bedeutet nicht, was geprüft wurde — Gegenbeispiel im Bestand.**
+`rollen/dirigent.yaml` trägt `generation: 1` und `erstellt: 12:18:38`. Wäre `erstellt` die Zeit
+dieser Generation, dürfte es vor 12:18:38 kein Dirigenten-Ereignis geben. Gemessen: **66** liegen
+davor, darunter `dirigent-entscheidung-kennungsmuster.yaml` (12:03:49) und
+`dirigent-antwort-zeitfehler.yaml` (10:42:26). Gen 1 ist nicht um 12:18:38 entstanden.
+
+Also wird `erstellt` beim Schreiben **blind mitgesetzt, ohne Generationswechsel**. Damit misst der
+Vergleich `erstellt` gegen Dateizeit die Selbstkonsistenz des letzten Schreibvorgangs — nicht die
+Aktualität der Generation. Die sechs „OK" belegen nicht, dass die Konvention eingehalten wird;
+sie belegen, dass das Feld beim letzten Schreiben mitlief.
+
+**Was sich dadurch an der Abhilfe ändert.** Die beiden Wege der externen Prüfung sind nicht
+gleichwertig:
+
+- *„erstellt bei jeder Generation mitschreiben"* — das ist faktisch schon der Zustand, und genau
+  deshalb trägt das Feld die Aktualität nicht. Dieser Weg heilt nichts, er stellt die Sichtbarkeit
+  des Fehlers wieder her, nicht seine Ursache.
+- *„das Feld streichen, weil generation + digest die Wahrheit ohnehin tragen"* — der einzige der
+  beiden, der wirkt.
+
+**Und was der Planner-Fall in Wahrheit ist:** nicht der einzige Aussetzer, sondern der einzige
+**sichtbare**. Bei 12:17:32 wurde `erstellt` einmal mitgesetzt (integrator) und einmal nicht
+(planner) — im selben Vorgang. Die übrigen sind nicht richtig, sie sind ununterscheidbar.
+
+**Was am Votum unverändert bleibt:** NICHT_ERTEILT und die drei Restpunkte stehen. Der
+`erstellt`-Klaffer war dort nie ein Restpunkt, sondern der erschwerende Umstand zu Restpunkt 1 —
+die Erklärung, warum der Planner gegen gen 13 lieferte, während gen 14 galt. Diese Erklärung wird
+durch §332 **nicht schwächer, sondern belastbarer**: das Feld konnte ihn nicht warnen, weil es
+Aktualität nur vorgibt.
+
+**Eigener Messausfall auf dem Weg, zweimal, und beide zählen.** Mein erster Griff meldete für alle
+sieben Dateien „KEIN FELD". Ursache: `sed 's/.*"\([0-9T:+-]*\).*/\1/'` — greedy `.*"` frisst bis
+zum letzten Anführungszeichen, danach matcht `[0-9T:+-]*` **null Zeichen**. Die Ersetzung *gelingt*
+und liefert einen leeren String; `[ -z "$E" ]` las das als fehlendes Feld. **Ein Quantor mit `*`
+kann leer matchen — dann ist „nichts gefunden" nicht dasselbe wie „nichts da".**
+
+Schlimmer war die Gegenprobe, die den Ausfall **verdeckte**: `grep -lc 'erstellt:' *.yaml | wc -l`
+gab 7 und schien den Griff zu bestätigen. Bei gewinnendem `-c` gibt grep für *jede* Datei eine
+Zeile aus, auch bei null Treffern — gezählt wurden Dateien, nicht Treffer. Eine Gegenprobe, deren
+Ergebnis von der Antwort unabhängig ist, ist keine Gegenprobe. Erst der dritte Griff, am
+Datumsmuster verankert (`[0-9]{4}-[0-9]{2}-[0-9]{2}T…`) und mit sichtbarer Extraktion
+(`[2026-08-22T12:03:49]`), trug.
+
+**Regel an mich:** eine Gegenprobe muss bei falscher Hypothese **anders ausfallen** können. Sonst
+misst sie, dass der Befehl lief, nicht dass er stimmt.
+
+**Ball: Dirigent** — die Wahl zwischen den beiden Abhilfen ist keine Prüferentscheidung. Mein
+Beitrag ist nur: sie sind nicht gleichwertig. Am Votum zu A-43 ändert sich nichts, der Ball dort
+bleibt beim **Planner** (Posten 2, drei Teile, plus die zwei Messpunkte an A-43-4).
+
+## §333 — A-43 hat keinen Platz in der Statuswahrheit, und §5 verlangt ihn seit dem Schnitt
+
+Gewählt gegen HEAD `f3e7336f` (Baum sauber, 12:58:14, Hinweg gefahren: 80 Commits, Konfliktprobe
+vorher 0). §333 als Überschrift 0 Treffer, frei. Eindeutig, nicht aufsteigend.
+
+**Der Befund, gemessen am frischen Stand.** `docs/auftraege/aktiv/` führt **90** Blätter. Genau
+**eines** hat keinen Datensatz-Block in `docs/STATUS.md`:
+
+    grep -c 'A-43' docs/STATUS.md                     -> 0     (die ganze Datei, nicht nur Bloecke)
+    Blaetter ohne zustand-Block, alle 90 geprueft     -> nur A-43
+    Tafelzeile 'A-43 · '                              -> 0
+    Zustandscommits, isoliert extrahiert              -> 0
+
+Das Blatt liegt seit **12:21:27** vor, seither sind zwei DoR-Runden gelaufen (NICHT ERTEILT 12:30,
+ERTEILT MIT AUFLAGE 12:53). Der Generator hat um **12:57:36** den Bau-Auftrag quittiert
+(`BAU-generator-A-43/generator-ack.yaml`, gen 11) und wartet nur noch auf den Auslöser.
+
+**Die Regel steht in §5 — also in genau dem Paragrafen, den ich prüfe.** `docs/ARBEITSREGELN.md`,
+Überschrift *„Wer den Auftrag schneidet, legt seinen Platz in der Statuswahrheit an (A-20, 12.08.)"*:
+
+> **„Wer ein Auftragsblatt schneidet, legt im SELBEN Commit Tafelzeile UND Datensatz-Block in
+> `docs/STATUS.md` an** — Zustand `ENTWURF`, `dor_beleg: steht aus`."
+
+Und die Begründung nennt den Präzedenzfall wörtlich:
+
+> *„würde der Block erst bei der DoR entstehen, gäbe es ein Fenster zwischen Schnitt und Prüfung,
+> in dem der Auftrag in der Statuswahrheit **nicht existiert**. Genau das ist am 12.08. bei W-38
+> eingetreten — Blatt committet, null Blöcke, null Tafelzeilen."* **„Die Statuswahrheit sagte dort
+> nicht das Falsche, sie sagte gar nichts."**
+
+Bei A-43 ist dasselbe Bild wieder da: Blatt committet, null Blöcke, null Tafelzeilen.
+
+**Die konkrete Folge, nicht die abstrakte.** §5 verlangt im Block das Feld `dor_beleg: steht aus`.
+Genau dort gehört mein Votum hin — bei A-42 ist es so belegt (*„ARBEITSREGELN.md:253 bindet diesen
+Schritt an den Beleg des Plan-Prüfers; er steht seit `5ccc707f` im Feld `dor_beleg`"*). **Mein
+Votum von 12:53 hat derzeit keinen Ort in der Statuswahrheit.** Es liegt in meinem Votumsblatt und
+in einem Ereignis — beides ist Beleg, keines ist der Statusträger.
+
+**Mein eigener Anteil, und er ist der größere.** Ich habe **zwei vollständige DoR-Runden** gefahren
+— zwölf Kriterien, N3-Matrix, jede Rot-Lage selbst nachgemessen — und **nicht geprüft, ob der
+Auftrag überhaupt einen Platz in der Statuswahrheit hat.** Der Prüfschritt steht namentlich in dem
+Paragrafen, gegen den ich prüfe.
+
+Das ist **§308 in zweiter Auflage**: dort war es die N3-Nachvollzugs-Matrix, die §5 dem Plan-Prüfer
+namentlich zuweist und die ich nie geprüft hatte. Hier ist es der Platz in der Statuswahrheit, den
+§5 an derselben Stelle regelt. Beide Male habe ich den Gegenstand geprüft und den **Paragrafen
+nicht zu Ende gelesen**. Ein Vorsatz hat das beim ersten Mal nicht behoben; deshalb notiere ich es
+als Prüfliste, nicht als Vorsatz: **DoR beginnt mit der Frage, ob der Auftrag in `docs/STATUS.md`
+existiert — vor dem ersten Kriterium.**
+
+**Zwei Beinahe-Fehler auf dem Weg, beide gefangen.**
+
+**(1) Fast die falsche Rolle beschuldigt.** A-42s ENTWURF-Zustandscommit lautet
+`planner: zustand: A-42 · ENTWURF · plan-pruefer · blatt e802c1f8`. Ich las das dritte Feld als
+Urheber und hielt den Schritt für **meine** Pflicht. Die Rollenmarke ist aber das **erste** Feld;
+das dritte nennt den Zuständigen für den nächsten Schritt. Gegenprobe über alle ENTWURF-Commits:
+geschrieben von `generator` 2×, `planner` 4×, `release-pruefer` 1× — **vom `plan-pruefer` nie.**
+Dieselbe Klasse wie P7: *Ort ≠ Wirkung*, hier *Feldposition ≠ Urheberschaft*.
+
+**(2) Dieselbe Zählfalle, die der Planner heute gemeldet hat — bei mir zwei Stunden später.**
+Meine erste Zählung der Zustandscommits griff die **Zeile**:
+
+    A-41   Zeile 12   isoliert 6    UEBERZAEHLT (Faktor 2)
+    A-42   Zeile  3   isoliert 2    UEBERZAEHLT
+    A-43   Zeile  0   isoliert 0    gleich
+
+Für A-43 ändert es nichts (0 bleibt 0), für die Vergleichszahlen alles. Ich hatte die isolierte
+Extraktion in derselben Runde als richtig **abgenommen** (DoR A-43-4) und sie eine halbe Stunde
+später selbst nicht angewandt. **Ein Verfahren, das ich abnehme und nicht benutze, habe ich nicht
+verstanden, sondern nur durchgewinkt.**
+
+**Was ich NICHT tue:** Ich lege den Block nicht an. `docs/STATUS.md` schreibt allein der Integrator
+(CLAUDE.md §16), und §5 weist das Anlegen dem Schneidenden zu — beides nicht ich.
+
+**Ball: Planner** (Schnitt) **und Dirigent** (Zuweisung). Der Bau ist ausgelöst-gebunden und wartet
+ohnehin auf den Auflagen-Nachtrag; der Block sollte davor stehen, nicht danach — sonst schreibt der
+erste Bau-Commit einen Zustand in einen Datensatz, den es nicht gibt.
+
+## §334 — Die Auflage an A-43-11 ist erfüllt gedacht und defekt gemessen: `$` ist im regulären Ausdruck ein Anker
+
+Gewählt gegen HEAD `df064cab` (Baum sauber, 13:06:08). §334 als Überschrift 0 Treffer, frei.
+
+**Lage.** Der Planner hat meine Auflage aus DoR-Runde 2 umgesetzt (`a7035fb7`, 13:03:15) und um
+13:04:45 den Auslöser gemeldet (`planner-CODE_FERTIG-nachtrag-auflage.yaml`). **Der Generator baut
+ab jetzt gegen dieses Blatt.** Die Umsetzung ist sachlich richtig gedacht: gezählt werden nicht
+mehr Fundstellen, sondern *Dateien* und *`case`-Anweisungen* — genau die Unterscheidung, die
+gefehlt hat. Sein Satz trifft: *„Gemeint war nie eine ZEILE, sondern eine DEFINITION."*
+
+**Der zweite der drei neuen Messbefehle kann seine Erwartung nicht erreichen.** Selbst gefahren,
+im Wortlaut des Blattes:
+
+    1) grep -rlE 'bauen\|nachbessern|pausieren\|angehalten' scripts/ .githooks/ | wc -l
+         -> 1   (scripts/rollen-tor.sh)          Erwartung "genau 1 Datei"       ERFUELLT
+    2) grep -c 'case "$AKTION" in' scripts/rollen-tor.sh
+         -> 0                                    Erwartung "genau 1 Anweisung"   VERFEHLT
+    3) grep -rnE '<Wortliste>' scripts/ .githooks/
+         -> :361 Arbeit, :362 Pause               Erwartung "Zeilen benennen"     ERFUELLT
+
+**Die Ursache ist der Klassiker, den dieses Blatt selbst behandelt.** In einem regulären Ausdruck
+ist `$` der **Zeilenend-Anker**. `case "$AKTION" in` liest sich als: `case "` **gefolgt vom
+Zeilenende**, danach `AKTION" in` — das kann nie treffen. Belegt an einem künstlichen Positivfall:
+eine Datei, die die Zeile wörtlich enthält, gibt mit demselben Muster **0**.
+
+Nur als **fixed string** oder mit escaptem `$` trifft es:
+
+    grep -cF 'case "$AKTION" in'      -> 1
+    grep -c  'case "\$AKTION" in'     -> 1
+    grep -cE 'case "[$]AKTION" in'    -> 1
+
+**Der Planner meldet für denselben Befehl „gemessen: 1".** Der Widerspruch ist geklärt und liegt
+nicht am Stand: `scripts/rollen-tor.sh` ist in seinem Baum (`a7035fb7`) und meinem (`df064cab`)
+**zeichengleich** (sha256 `3d159b05…`), Zeile 360 trägt den Text. Derselbe Befehl gegen **seinen**
+Stand gibt 0, mit `-F` gibt er 1. Er hat also entweder mit `-F` gemessen und ohne `-F` ins Blatt
+geschrieben, oder das Ergebnis aus der Absicht gelesen. Welches von beidem, kann ich nicht messen —
+**dass der Befehl im Blatt 0 liefert, kann ich messen.**
+
+**Warum das mehr ist als ein Tippfehler.** Der erste der drei Befehle macht es **richtig**: dort
+steht `bauen\|nachbessern` mit escaptem Pipe, weil das Pipe-Zeichen sonst als Alternative gelesen
+würde. Im selben Block, drei Zeilen tiefer, bleibt `$` unescapt. **Dieselbe Sorgfalt, die den einen
+Metazeichen-Fall erkannt hat, hat den anderen übersehen** — und beide sind dieselbe Klasse:
+*ein Muster, das die eigene Wirklichkeit nicht kennt*, also genau der Gegenstand von A-43.
+
+**Abhilfe:** ein Zeichen. `grep -cF` oder `case "\$AKTION" in`. **Der Bau ist davon nicht
+betroffen** — A-43-11 ist Regressionsschutz, der Bau muss dafür nichts tun. Betroffen ist die
+**Abnahme**: der Evaluator fährt den Befehl, misst 0 gegen die Erwartung 1 und müsste rot geben.
+**Es ist derselbe Mangel wie in Runde 2, an derselben Stelle, in neuer Form.**
+
+## Zweiter Teil — Vorratsprüfung (d): zwei eigene Messausfälle und was daraus folgt
+
+Der Evaluator schreibt in seinem Votum `WIRKSAM_7_VON_7` (13:00:26): *„Zwischen Abnahme und
+Transport steht jeder Baum ungeschützt … Die Barriere ist so alt wie ihr TRANSPORT, nicht wie ihre
+ABNAHME."* Das bestätigt meinen §330. Ich wollte es quantifizieren — **zweimal falsch.**
+
+**Ausfall 1 — `ancestry-path` beantwortet die Frage nicht.** `git rev-list --ancestry-path H..<zweig>
+| tail -1` gab für **alle sieben** Zweige denselben Punkt (`c3391e35`, 09:41:32) und damit „10 min
+Lücke". Das widersprach dem Evaluator, der um 12:26 im Planner-Baum **keinen** Hook fand. Der
+Widerspruch löste sich gegen mich auf: `352900f3` enthält `.githooks/pre-commit` **nicht**
+(`merge-base --is-ancestor` → NEIN, `cat-file -e` → FEHLT). Gemessen hatte ich, wann der Hook
+**erstmals irgendwo auf dem Pfad** lag — gefragt war, wann der **Zweig** ihn bekam.
+
+**Ausfall 2 — die First-Parent-Kette lügt nach einem Fast-Forward.** Der zweite Anlauf gab
+plausible Zahlen (Generator 0 min, übrige 157 min, mein Baum 172 min). Aber fünf der sechs
+Rollenzweige haben einen **linearen** Tip: nach einem Fast-Forward *ist* ihre First-Parent-Kette
+die der Integration, und der Hook erscheint darin rückwirkend ab 12:07 — obwohl der Planner-Baum
+um 12:26 messbar keinen hatte.
+
+**Was daraus folgt, und das ist der eigentliche Ertrag:** **Eine Schutzlücke ist aus der Historie
+nicht rekonstruierbar.** Fast-Forward und Merge schreiben die Vergangenheit so um, dass der Schutz
+früher dazustehen scheint, als er im Baum war. Belastbar bleibt allein der Zweig, der per **echtem
+Merge** nachzieht — bei mir: Hinweg `78357f85` (12:22:38), dessen erster Elternteil den Hook
+nachweislich **nicht** trug. **Mein eigener Baum war von 09:30:36 bis 12:22:38 ungeschützt, 172
+Minuten** — die längste der messbaren Lücken.
+
+Und daraus für die Bewertung fremder Arbeit: **Der Befund „6 von 7" des Evaluators um 12:26 ist
+nicht nachträglich herstellbar.** Er existiert nur, weil er im Moment gemessen und sofort
+festgehalten wurde. Wer ihn heute aus der Historie nachprüfen wollte, bekäme „7 von 7, schon seit
+09:41" — und hielte ihn für falsch.
+
+**Eine eigene Zwischenaussage war schon beim Schreiben überholt:** ich notierte „der Planner-Tip
+ist identisch mit dem Integrationsstand" (beide `7333a341`); fünf Minuten später standen sie auf
+`a7035fb7` gegen `1bc0d415`. Der Schluss (Fast-Forward) hält, die Gleichheit war eine
+Momentaufnahme. **Auch eine richtige Beobachtung braucht ihren Zeitstempel.**
+
+**Ball: Planner** (ein Zeichen an A-43-11) **und Generator** zur Kenntnis, damit der Befehl nicht
+in dieser Form in die Abnahme geht. Zum Statusplatz A-43: seine Frage (13:05:27) legt die
+Regelkollision §5 gegen §16 sauber vor, drei Wege ohne Empfehlung — **Ball dort Dirigent, bei mir
+nichts offen.**
+
+## §335 — Vorratsprüfung (b): die Grundmenge der Kennungen gemessen — das A-43-Blatt hält stand
+
+Gewählt gegen HEAD `9b230f42` (Baum sauber, 13:11:34). §335 als Überschrift 0 Treffer, frei.
+**Kein Mangel-Befund** — eine Bestätigung mit einer Zahl, die vor der Abnahme noch niemand hat.
+
+**Anlass.** Mein Auftrag (Rollenquelle gen 8) nennt *„Kennungsmuster **7** Formen"*, das Blatt
+A-43-1 heißt *„**ACHT** FORMEN"* und listet 4 neue (`Z0-I1`, `Z1-W1-1`, `Z2-W0-1`, `A-37-22b`)
+gegen 4 bestehende (`A-42`, `A-37`, `W-17/1`, `P-05`). Die Abweichung geht **zugunsten** des
+Blattes; sie erklärt sich daraus, dass gen 8 (12:18:38) vor dem Blatt (12:21:27) entstand. Kein
+Mangel — aber Anlass zur eigentlichen Frage: **Trifft „acht" die Grundmenge?**
+
+**Gemessen, mit dem Muster aus der Quelle statt nachgebaut** (Absage-Regel von A-43-1). Grundmenge:
+alle `auftrag:`-Felder der 90 aktiven Blätter **plus** alle Kennungen aus Zustandscommits, isoliert
+extrahiert:
+
+    Grundmenge                    90 verschiedene Kennungen
+    vom heutigen Muster erkannt   87
+    NICHT erkannt                  3   ->  Z1-W1-1..5 · Z2-W0-1 · Z2-W0-5
+
+**Alle drei sind im Blatt namentlich als ausgeschlossen benannt** — Zeile 159 *„`Z1-W1-1..5` ←
+Bereichsangabe, keine Kennung"*, Zeilen 160/161 *„← Mehrfachkennung"*. Das deckt sich mit A-43-4
+(*„3 tragen Mehrfach- bzw. Bereichskennungen und bleiben auch nach dem Bau abgewiesen"*) und mit
+A-43-5. **Es gibt im Bestand keine nicht erkannte Kennungsform, die das Blatt nicht kennt.**
+
+**Warum `Z0-I1` und `A-37-22b` in meiner Grundmenge fehlen — und das kein Widerspruch ist.** Beide
+sind **keine Auftragskennungen**: `Z0-I1` liegt nicht in `docs/auftraege/aktiv/` (0 Blattköpfe,
+0 Zustandscommits; es erscheint in 11 Dateien nur als Verweis), `A-37-22b` ist ein
+**Unterkriterium** von A-37. Eine Grundmenge aus Blattköpfen und Zustandscommits kann sie
+strukturell nicht enthalten. A-43-1 nennt sie zu Recht **zusätzlich** — sie treten als
+Betreff-Bestandteil auf, nicht als Auftragskennung. **Die acht Formen des Blattes sind also weiter
+gefasst als meine Grundmenge, nicht enger.**
+
+**Methodenkritik an der eigenen Messung, und sie begrenzt das Ergebnis.** Ich habe aus
+`scripts/status-erzeugen.sh` nur den **Kennungsteil** ausgelesen
+(`(?P<kennung>…)\s+·\s+`), nicht das vollständige `KERN`, das mit `r"zustand:\s+"` beginnt.
+A-43-1 verlangt ausdrücklich den **ganzen** Ausleseweg. **Meine Zahl ist damit ein Hinweis auf die
+Grundmenge, kein A-43-1-Nachweis** — sie ersetzt die Abnahmeprobe des Evaluators nicht und soll es
+nicht.
+
+**Nutzen für die Abnahme:** Wer nach dem Bau prüft, kann gegen **87 zu 3** messen statt gegen
+„acht Formen" — und die drei müssen abgewiesen **bleiben**. Eine Erweiterung, die auch nur eine
+der drei plötzlich erkennt, wäre ein Rückschritt und kein Fortschritt.
+
+**Ball: niemand bei mir.** Der Dirigent hat meinen §334 um 13:11:11 an den Generator
+weitergegeben (*„den KORRIGIERTEN Befehl aus dem Planner-Nachtrag zitieren, nicht den defekten"*),
+der Bau läuft seit 13:09:41, der Planner trägt ein Zeichen nach.
+
+## §336 — Die Regelkollision §5 gegen §16 ist keine Kollision: Yama hat sie am 16.08. entschieden
+
+Gewählt gegen HEAD `5f435f6c` (Baum sauber, 13:16:21). §336 als Überschrift 0 Treffer, frei.
+
+**Lage.** Der Planner hat zu meinem §333 eine Regelkollision vorgelegt
+(`planner-frage-statusplatz-a43.yaml`, 13:05:27) und drei Wege ohne Empfehlung genannt; **Ball
+Dirigent**. Seine beiden Zitate habe ich geprüft — **beide stimmen wörtlich**:
+
+- `docs/ARBEITSREGELN.md:231-236` (§5, Herkunft *„A-20, 12.08."*): *„Wer ein Auftragsblatt
+  schneidet, legt im SELBEN Commit Tafelzeile UND Datensatz-Block in `docs/STATUS.md` an."*
+- `docs/ARBEITSREGELN.md:1280`: *„… und ist **alleiniger Schreiber von `docs/STATUS.md`** —
+  ausnahmslos, auch für eine einzelne Tafelzeile."* Gegenprobe: die Formulierung kommt in der
+  Datei **genau einmal** vor, in `CLAUDE.md:26` als Schutzgrenze wiederholt.
+
+**Die Auflösung steht im selben Regelwerk, 231 Zeilen weiter, und sie ist neuer.**
+`docs/ARBEITSREGELN.md:1509-1511`:
+
+> **„Nachtrag vom 16.08. — Der Zustandswechsel IST der Commit.** Yamas §1-Entscheidung zu
+> `e521bd98`. `docs/STATUS.md` wird ab sofort **erzeugt, nicht geschrieben**."
+
+Und der Nachtrag beantwortet die Frage des Planners **wörtlich vorweg**:
+
+> **„Damit fällt die Frage ‚wer darf schreiben' weg, statt beantwortet zu werden"** — derselbe
+> Griff wie bei den getrennten Worktrees: *der Fall kann nicht mehr entstehen.*
+
+Was daraus folgt, `:1555-1556`:
+
+> **„Niemand bearbeitet `docs/STATUS.md` von Hand.** Der **Integrator** lässt
+> `scripts/status-erzeugen.sh` laufen und schreibt die Tafel daraus."
+
+**Damit ist die Kollision eine Altersfrage, keine Sachfrage.** §5 stammt aus **A-20, 12.08.** — aus
+der Zeit, als die Tafel von Hand geschrieben wurde. Der Nachtrag ist vom **16.08.**, trägt Yamas
+§1-Entscheidung und ist damit die jüngere Regel. **Die Sache von §5 bleibt** (ein Auftrag braucht
+seinen Platz sofort, sonst entsteht das W-38-Fenster); **die Form ändert sich**: nicht Datei-Edit,
+sondern **Zustandscommit**.
+
+**Gegenprobe an der gelebten Praxis — sie bestätigt es:**
+
+    planner: zustand: A-41 · ENTWURF · planner      · blatt e521bd98
+    planner: zustand: A-42 · ENTWURF · plan-pruefer · blatt e802c1f8
+    A-43 desgleichen: 0
+
+**Beide Nachbarn haben ihren Platz per Zustandscommit bekommen, beide vom Planner geschrieben** —
+das dritte Feld nennt nur den Zuständigen (§333, Beinahe-Fehler 1). Bei A-43 fehlt genau dieser
+eine Commit. **Es fehlt kein Datei-Edit, es fehlt eine Meldung.**
+
+**Was das für die drei Wege des Planners heißt** — als Messung, nicht als Entscheidung:
+
+- **Weg A** (Integrator legt an) und **Weg B** (Planner legt an mit Einzelfreigabe) setzen beide
+  einen **Datei-Edit** voraus. Beide stoßen gegen *„niemand bearbeitet `docs/STATUS.md` von Hand"*.
+- **Weg C** (Block entsteht erzeugt aus einem Zustandscommit) ist der einzige, der **beide** Regeln
+  erfüllt — und er ist zugleich die gelebte Praxis bei A-41 und A-42.
+
+Sein Vorbehalt zu Weg C (*„dann muss aber erst A-43 selbst gebaut sein, sonst erkennt das Muster
+die Kennung"*) trägt hier **nicht**: `A-43` ist **einteilig**. Selbst gemessen mit dem Muster aus
+der Quelle: `A-43 · ENTWURF · planner · blatt …` wird vom heutigen `KERN` **erkannt** (§335: 87 von
+90 Kennungen erkannt, die drei Ausnahmen sind Bereichs- und Mehrfachkennungen). **Weg C ist ohne
+den Bau gangbar** — er hätte es die ganze Zeit gewesen sein können.
+
+**Was ich NICHT tue.** Ich entscheide nichts und schreibe keinen Zustandscommit für A-43. Die
+Zuweisung liegt beim Dirigenten, und ob eine 12.08.-Regel durch einen 16.08.-Nachtrag als abgelöst
+gilt, ist eine Regelfrage — nicht meine. **Mein Beitrag ist nur: die Frage ist im Regelwerk bereits
+beantwortet, und die Antwort steht 231 Zeilen unter der Regel, die sie ablöst.**
+
+**Nebenbefund zur Regelpflege, ohne Auftrag:** §5 trägt die alte Form unverändert weiter, ohne
+Verweis auf den Nachtrag vom 16.08. Wer §5 liest und dort aufhört — so wie ich in §333 —, bekommt
+eine Anweisung, die eine andere Stelle desselben Dokuments verbietet. **Das ist genau die zweite
+Wahrheit, die A-41 beseitigt hat, nur eine Ebene höher: nicht im Status, sondern in der Regel
+darüber.**
+
+**Ball: Dirigent** (unverändert). Bei mir nichts offen. Zur Kenntnis auch an den Planner, weil
+seine Frage damit beantwortbar ist, ohne dass jemand neu entscheiden muss.
+
+## §337 — Das Erzeugnis kennt 5 von 105 Kennungen, und eine Abweichung meldet das Werkzeug selbst als UNGEKLÄRT: A-39
+
+Gewählt gegen HEAD `4aadcfb8` (Baum sauber, 13:22:30, Hinweg gefahren: 15 Commits, Konfliktprobe
+vorher 0). §337 als Überschrift 0 Treffer, frei.
+
+**Zuerst: §333 ist erledigt.** Der Integrator hat den Statusplatz für A-43 um **13:07:47** angelegt
+(`2f87f647`, *„Statusplatz A-43 angelegt — Tafelzeile und Datensatz, damit das Blatt nicht länger
+ohne Ort"*). Tafelzeile Z.94, Datensatz ab Z.18659, `zustand: BEREIT`, `ballbesitz: generator`, und
+mein Votum steht im vorgesehenen Feld: *„`dor_beleg`: ERTEILT MIT AUFLAGE — plan-pruefer, Votum
+`794cd018`"*. Er hat **Weg A** gewählt, und zwar bevor meine §336-Analyse vorlag. Alle 90 aktiven
+Blätter haben jetzt einen Block; ohne Block: **0**.
+
+**Berichtigung an meinem eigenen §336 — die Zahl relativiert meinen Schluss.** Ich hatte
+geschrieben, Weg A und B *„stoßen gegen ‚niemand bearbeitet `docs/STATUS.md` von Hand'"*. Gemessen
+mit `scripts/status-erzeugen.sh --vergleich` (belegt gefahrlos: **null Schreibstellen** im Skript,
+`grep -n 'open(\|\.write\|write_text'` → 0 Treffer; ohne Argument läuft der Modus, *„der nichts
+schreibt"* — der Integrator nimmt die Ausgabe):
+
+    aus dem Commit-Log erzeugt:      5 Kennungen
+    im heutigen Bestand vorhanden:  105 Kennungen
+    NUR IM BESTAND, nicht im Log:  100
+    Baum nach dem Lauf: 0 geaenderte Dateien
+
+**100 von 105 Blöcken stammen nicht aus dem Log.** Das Skript nennt die Ursache selbst und führt
+sie als eigene Kategorie: *„Wortlaut neu — kein Zustands-Commit: 100"*, mit dem Hinweis *„ohne
+Bootstrap hat die Erzeugung keine Eingabe"*. **Das ist Altbestand aus der Erstbefüllung (A-41), kein
+Regelbruch** — und mein Satz war insofern zu scharf. Für **neue** Aufträge hält er: A-41 hat 6
+Zustandscommits, A-42 hat 2, A-43 hatte **0**. Wer aus §336 liest, hundert Blöcke seien
+regelwidrig, liest zu viel hinein.
+
+**Der eigentliche Fund, und das Werkzeug markiert ihn selbst so:**
+
+    BEIDE kennen sie, ZUSTAND weicht ab: 3
+      A-37   Log: ABGENOMMEN    Bestand: ABGENOMMEN, CODE_FERTIG    -> K3 verdraengter Stand
+      A-42   Log: ABGENOMMEN    Bestand: ABGENOMMEN, BEREIT         -> K3 verdraengter Stand
+      A-39   Log: CODE_FERTIG   Bestand: BEREIT                     -> UNGEKLAERT
+    ⚠ 1 UNGEKLAERT — das ist ein Fund und keine Nebensache.     RUECKGABE 1
+
+**A-39 selbst nachgemessen.** Genau **ein** Zustandscommit existiert:
+`generator: zustand: A-39 · CODE_FERTIG · evaluator · bau 824f8512` vom **21.08. 22:17**. Der
+Bestand trägt `zustand: BEREIT` mit dem Beleg *„Nachgezogen 21.08. vom integrator auf Zustellung
+§272. TRANSPORT."* — also **vor** dem Bau-Commit. Der spätere `CODE_FERTIG` wurde nie in den Block
+übernommen. **Es gibt keinen zweiten Commit, der `BEREIT` sagt**; der Bestandswert hat keine
+Log-Grundlage.
+
+**Warum das zählt:** Tafelzeile Z.90 führt A-39 als `BEREIT` mit **Ballbesitz Generator** — ein
+Auftrag, der seit **rund fünfzehn Stunden gebaut ist**, steht in der Statuswahrheit als *noch zu
+bauen*, und der Ball liegt bei der Rolle, die ihn schon gebaut hat. Das ist nicht die Lage aus
+§333 (*„die Statuswahrheit sagt gar nichts"*), sondern die schärfere: **sie sagt etwas Falsches, und
+zwar an der Stelle, die den nächsten Schritt zuweist.**
+
+Es ist zugleich der Fall, den A-43 Posten 1 beschreibt — nur ohne Musterfehler: die Kennung `A-39`
+wird vom Muster **erkannt**, der Zustandscommit existiert, er ist bloß nie in den Block gewandert.
+**Ein erkannter Zustandswechsel, der trotzdem nicht ankommt.**
+
+**Eigener Messausfall.** Mein erster Lauf des Vergleichs stand vor `timeout`, das es unter macOS
+nicht gibt: **Exit 127, `command not found`** — und weil ich den Code hinter einer Pipe gelesen
+hatte, sah der erste Versuch nach „Exit 0" aus. Erst der Lauf ohne Pipe zeigte die 127. **Eine
+ausgefallene Messung ist kein Ergebnis**; wiederholt ohne `timeout`, Rückgabe 1, Baum unverändert.
+
+**Nicht nachgebaut (P-02 Punkt 4):** Dass die zwei SHAs im frischen A-43-Block eine Viertelstunde
+zu alt sind (`blatt_sha 47dfbfb2` gegen `1e5ac476`), hat der Planner um 13:21:06 selbst gemeldet
+(`planner-hinweis-blocksha-veraltet.yaml`). Sein Befund, nicht meiner.
+
+**Ball: Integrator** — A-39 ist der einzige `UNGEKLAERT` im Vergleich, und `docs/STATUS.md` schreibt
+er allein. **Zur Kenntnis an den Dirigenten**, weil der Ball dieses Auftrags derzeit auf eine Rolle
+zeigt, die ihre Arbeit gemeldet hat.
+
+## §338 — Ich ziehe mein eigenes Abnahmekriterium aus §335 zurück: es vermischt Form und Betreff
+
+Gewählt gegen HEAD `2306d0ea` (Baum sauber, 13:26:34). §338 als Überschrift 0 Treffer, frei.
+**Dringlich, weil die Abnahme bevorsteht und der Fehler in MEINER Vorgabe liegt.**
+
+**Der Bau ist gefallen.** `generator` hat Posten 2 um **13:14:39** (`1b5611b4`) und Posten 1 um
+**13:22:11** (`8a08d625`) gebaut. Das Muster in `scripts/status-erzeugen.sh` lautet jetzt an beiden
+Stellen (`:208`, `:543`):
+
+    [A-Z]+-?[0-9]+[A-Za-z]?(?:-[A-Z]*[0-9]+[A-Za-z]?)*(?:/[0-9A-Za-z]+)?
+
+**Selbst gemessen, altes gegen neues Muster** — die acht Formen aus A-43-1:
+
+    Z0-I1     alt: I1              neu: Z0-I1          Z1-W1-1   alt: KEIN TREFFER   neu: Z1-W1-1
+    Z2-W0-1   alt: KEIN TREFFER    neu: Z2-W0-1        A-37-22b  alt: KEIN TREFFER   neu: A-37-22b
+    A-42 · A-37 · W-17/1 · P-05    alt = neu, alle vier unveraendert
+
+**Acht von acht.** Das ist eine Messung, keine Abnahme — die liegt beim Evaluator.
+
+## Der Rückzug: mein §335-Kriterium ist irreführend
+
+In §335 habe ich für die Abnahme angeboten: *„Wer nach dem Bau prüft, kann gegen **87 zu 3** messen
+… und die drei müssen abgewiesen **bleiben**. Eine Erweiterung, die auch nur eine der drei plötzlich
+erkennt, wäre ein Rückschritt."* **Das ist falsch, und zwar so, dass es zu einem
+Falsch-Rot führt.** Gemessen am gebauten Stand:
+
+    Mehrfachbetreff  "Z2-W0-1 · Z2-W0-3 · Z2-W0-7 · CODE_FERTIG · …"  ->  ERKANNT als Z2-W0-1
+    Bereichsbetreff  "Z1-W1-1..5 · CODE_FERTIG · …"                    ->  NICHT ERKANNT
+
+**Ich habe zwei Ebenen vermischt.** Meine drei „nicht erkannten" waren **Betreffe**, gewonnen aus
+Zustandscommits; A-43-1 spricht von **Formen**. Die Form `Z2-W0-1` **soll** künftig erkannt werden —
+genau das verlangt A-43-1. Abgewiesen bleiben muss der **Betreff mit mehreren Kennungen**, und das
+entscheidet **A-37-26 auf der Wortlaut-Ebene** (`WORTLAUT = ^(?:rolle:\s+)?KERN$` in
+`status-erzeugen.sh:213`, plus die Sperre in `commit-pruefen.sh`, dort 2 Treffer auf
+`A-37-26|Mehrfachkennung`) — **nicht das Kennungsmuster.**
+
+Wer nach meinem §335-Satz misst, sieht `Z2-W0-1` jetzt erkannt, liest „Rückschritt" und meldet rot,
+wo der Bau genau das Verlangte tut. **Ich ziehe den Satz in dieser Form zurück.** Was von §335
+bleibt: die Grundmenge (90 Kennungen) und der Befund, dass das Blatt keine Kennungsform übersieht.
+Was fällt: die Richtungsvorgabe „die drei müssen abgewiesen bleiben".
+
+**Richtig gestellt lautet der Maßstab:** die **Formen** werden erkannt (8 von 8, oben gemessen);
+die **Betreffe** mit Mehrfach- oder Bereichskennung bleiben auf der **Wortlaut-Ebene** abgewiesen —
+zwei getrennte Prüfungen, die man nicht mit demselben Lauf beantwortet.
+
+*Das ist dieselbe Klasse wie mein §337-Ausfall und wie A-43 selbst: **Grundmenge gegen die Frage
+prüfen statt gegen das Verfahren.** Ich hatte Betreffe zur Hand, weil ich sie aus dem Log gezogen
+hatte, und habe sie für Formen genommen.*
+
+## Präzisierung an einem Rot-Beleg des Blattes — A-43-1, `Z0-I1`
+
+A-43-1 schreibt: *„… `Z0-I1` **NICHT ERKANNT** · `Z1-W1-1` NICHT ERKANNT · `Z2-W0-1` NICHT ERKANNT
+· `A-37-22b` NICHT ERKANNT — **4 zu 4**."* Am genannten Stand `c82df498` selbst nachgemessen:
+
+    Z0-I1     -> I1              <- ERKANNT, aber FALSCH: eine Kennung, die es nicht gibt
+    Z1-W1-1   -> KEIN TREFFER    Z2-W0-1 -> KEIN TREFFER    A-37-22b -> KEIN TREFFER
+
+**Drei von vier sind richtig beschrieben, einer nicht** — und die Abweichung geht in die
+**harmlosere** Richtung. `Z0-I1` war nicht unsichtbar, es wurde auf die Phantom-Kennung `I1`
+**abgebildet**: `I1` erfüllt `[A-Z]+-?[0-9]+` und wird von ` · ` gefolgt.
+
+**Der Unterschied ist genau der zwischen meinen letzten beiden Befunden:** „nicht erkannt" ist die
+§333-Lage — *die Statuswahrheit sagt gar nichts*. „Als `I1` erkannt" ist die §337-Lage — *sie sagt
+etwas Falsches*, und zwar unter einer Kennung, die in keinem Blatt existiert.
+
+**Wirkung: nie eingetreten.** Gegenprobe: `zustand: Z0-I1` im Log **0 mal**, `auftrag: "I1"` in
+`docs/STATUS.md` **0**, `I1` mit Wortgrenze irgendwo in der Datei **0**. **Die Falschzuordnung war
+möglich, aber sie ist nie passiert** — weil für Z0-I1 nie ein Zustandscommit geschrieben wurde. Der
+Rot-Beleg trägt also; nur seine Beschreibung ist eine Stufe zu mild.
+
+**Kein Mangel am Bau und keine neue Auflage.** Der gebaute Stand erkennt `Z0-I1` korrekt; der
+Fehler wäre behoben, gleich wie man ihn benennt. Ich melde es, weil der Evaluator den Rot-Beleg
+nachmisst und dann `I1` sehen wird, wo das Blatt „NICHT ERKANNT" sagt — **eine Abweichung, die ohne
+diese Zeile wie ein Widerspruch aussieht.**
+
+**Ball: Evaluator** (zur Kenntnis vor der Abnahme) und **Planner** (eine Wortkorrektur am
+Rot-Beleg, wenn er das Blatt ohnehin anfasst — kein Auftrag von mir). Ein Votum gebe ich hier
+nicht ab: der Bau wird vom Evaluator abgenommen, nicht von mir.
