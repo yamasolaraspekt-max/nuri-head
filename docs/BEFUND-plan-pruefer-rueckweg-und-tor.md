@@ -25182,3 +25182,89 @@ selbst prüft oder darauf vertraut, dass es drei Schichten weiter jemand tut.**
 
 **Unverändert offen:** die sechs Posten aus §293, die zwei aus §295, und der zweite Punkt aus §297
 (`:158` könnte die geschützte Fassung rufen).
+
+## §299 — Posten (a): der A-42-Umzug hat 58 Zeilenzeiger ins Leere gestellt, einer davon zeigte auf mein eigenes Votum
+
+Messstand `599976c9`, Baum sauber, nichts angekommen seit §298. Ballortung beidseitig **1** (P-02,
+`VORLAGE`) und **6** Blattfelder — alle sechs sind Altstände: A-08/A-09/A-11 tragen
+`BETRIEBSBESTAETIGT`, A-37 steht auf `evaluator` (mein Ballwechsel von heute), A-38 auf `generator`.
+Nichts Neues in meiner Bahn. Der Posten stammt deshalb aus der Verfolgung des einen Balls.
+
+### Der Anlass
+
+P-02 trägt seit dem 15.08. `ballbesitz: plan-pruefer`. Der Zeiger auf die Erledigung steht in meiner
+eigenen Zeile 5719: *„P-02 VORLAGE **Votum liegt Z.20993** sachlich erledigt"*. Der Zeiger ist tot:
+
+```
+docs/STATUS.md heute          19397 Zeilen
+Zeiger zeigt auf              20993        -> Zeile existiert nicht
+```
+
+Das Votum selbst gibt es (§116, *„P-02 geprüft: vier von fünf Punkten hätten den heutigen Fall nicht
+verhindert"*, mit der ausdrücklich erbetenen Machtfrage). Nur der Weg dorthin ist abgerissen.
+
+### Die Ursache, auf den Commit genau
+
+```
+7d32c055  21.08. 21:15   STATUS.md 28555 Zeilen   BEFUNDNOTIZEN.md      0 (existiert nicht)
+26c46f31  21.08. 21:37   STATUS.md 19376 Zeilen   BEFUNDNOTIZEN.md   9470
+```
+
+A-42 hat 172 Befundnotizen aus `docs/STATUS.md` ausgezogen — **9179 Zeilen in einem Commit**. Jeder
+Zeilenzeiger oberhalb der neuen Länge zeigte danach ins Leere. Das ist kein Fehler des Umzugs: der
+Umzug war beauftragt und ist abgenommen. Es ist die *Folge*, die niemand mitgezählt hat.
+
+### Klasse, nicht Einzelfall
+
+```
+Datei                                            ins Leere / gesamt
+ANTWORTEN-YAMA-POSTEN-16-08.md                        8 /   8
+BEFUND-plan-pruefer-rueckweg-und-tor.md              30 / 167
+FUENF-EIGENE-POSTEN-UND-FEHLER-8.md                   4 /   6
+ZUSTELLUNG-plan-pruefer-39-baelle-abgeben.md          1 /   3
+ZWOELF-YAMA-POSTEN-ABGEARBEITET.md                    1 /   8
+handoff-status.md                                    13 /  40
+kundenprofil-zerlegung-schnittplan.md                 1 /  12
+GESAMT                                               58 / 362
+```
+
+**Die Mehrzahl davon ist meine eigene Arbeit** — 30 in meiner Befunddatei, dazu die vier
+Yama-Vorlagen. Ich melde hier zuerst gegen mich selbst.
+
+**Gegenprobe, die die naheliegende Alternative ausschließt:** Die hohen Zahlen könnten auf die neue
+`docs/BEFUNDNOTIZEN.md` gemünzt sein statt auf `STATUS.md`. Sie können es nicht — die Datei hat
+**9470** Zeilen, jeder Zeiger über 19397 liegt auch dort außerhalb. Und der Text nennt das Ziel
+selbst: *„steht als meine eigene Lehre in `docs/STATUS.md` im Block `P-08` (Z.27311)"*.
+
+**58 ist eine Untergrenze, keine Schadenssumme.** Gemessen ist nur, was *ins Leere* zeigt. Ein Zeiger
+unterhalb 19397 kann genauso falsch sein und zeigt dann auf **etwas anderes** — die schlimmere Hälfte,
+weil sie sich wie ein Treffer liest. Für die habe ich kein Verfahren, das ohne Einzelprüfung auskommt.
+
+### Was daraus folgt — und was ausdrücklich nicht
+
+Nicht: 58 Zahlen nachziehen. Sie wandern beim nächsten Umzug wieder, und dann ist die Korrektur
+selbst der neue Fehler. Dieselbe Lehre steht bereits dreifach im Bestand: A-37-19, Restpunkt 3 der
+ersten DoR, und heute im Errata `c11f97ac`, wo der 22c-Messbefehl einen **Standbezug** bekam statt
+einer nachgezogenen Zahl. Ein Zeiger, der Wochen überdauern soll, gehört an einen **Anker** — Kennung,
+Blocküberschrift, SHA — nicht an eine Zeilennummer. Das ist ein Kriterium und gehört dem Planner;
+ich schreibe es nicht.
+
+### P-02 selbst
+
+Sachlich erledigt (Votum §116). Der Ball steht trotzdem auf mir: die Zeile `ballbesitz: plan-pruefer`
+stammt von **Yama** (`086b48bd9`, 15.08. 13:02). Meine Zustellung `18bf83bc` (16.08. 21:36) hat
+gemeldet, dass die P-02-Blöcke auf `ballbesitz: yama` gehören — sie ist unvollzogen, bei **34**
+STATUS.md-Commits seither. Ich baue sie nicht nach (P-02 Punkt 4, die eigene Regel), ich verweise
+darauf. `docs/STATUS.md` schreibt allein der Integrator.
+
+### Zwei eigene Fehlalarme, in dieser Runde abgefangen
+
+1. *„P-02 Punkt 4 existiert nicht"* — mein Muster `^ *[0-9]+\.` traf nichts, weil die Punkte als
+   `4  VERLINKEN` in einem `text`-Block stehen. Punkt 4 trägt die zitierte Aussage wörtlich.
+2. *„P-03 zeigt ins Leere"* — kein Blatt, keine Kennung in `STATUS.md`. Falsch: P-03 ist **mein
+   eigener Selbstbefund** vom 16.08. 18:27, aus dem die Vorschrift „Ballortung zweiseitig" stammt.
+
+Beide hätten als Befund getaugt und wären beide falsch gewesen. Erkannt, weil ein leerer Treffer
+kein Ergebnis ist, solange das Verfahren nicht am bekannten Treffer geprüft wurde.
+
+**Ball:** Yama (ob die Zeiger-Klasse ein eigener Auftrag wird) · P-02-Feld beim Integrator.
