@@ -109,7 +109,7 @@
 | **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 · Bau `1c6b7601` · CODE_FERTIG 19:14:05 · **Buendel im Bau-Commit** (V-5) · **ABGENOMMEN (BROWSER)** 19:33:20 — vier von vier Modulen, V-1 bis V-6 je Modul, Reifegrad `browserabgenommen` |
 | **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `CODE_FERTIG` | **Evaluator** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht · **DoR ERTEILT** 19:06:40 mit zwei Halbsaetzen (§429) — Bau kann sofort beginnen · Bau `3a4aafa1` · CODE_FERTIG 19:59:36 · **Kriterium (c) nachgeliefert** `7500bb7d` 20:43 · Weg A nach der Pfadgrenzen-Entscheidung 19:44:38 |
 | **Z1-E0-1** Hoehenkette — eine Wahrheit statt drei Rechnungen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E0-1-hoehenkette-eine-wahrheit.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) · Bau `ad2ac724` · CODE_FERTIG 20:09:51 · **drei Mangelanzeigen offen** (Planner 20:26 und 20:51, Evaluator 20:56) |
-| **Z1-E2-1** Etagen-Integritaet — Wachen und Mitnahme | `BEREIT` | **Generator** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E2-1-etagen-integritaet.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) |
+| **Z1-E2-1** Etagen-Integritaet — Wachen und Mitnahme | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E2-1-etagen-integritaet.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) · Bau `51b0ddfb` · CODE_FERTIG 20:18:30 |
 | **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` · **NACHBESSERN** 19:04:28, 8 von 10 Kriterien, Reifegrad `code-geprueft mit Ausloesung` — zwei Zusagen nennen das Vorhandene statt das Wirkende · **nachgebessert** `ba6fc673` 19:42:03, Kriterien 10 und 12 |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
@@ -19635,8 +19635,8 @@ zustand_nachgezogen: |
 ```yaml
 auftrag: "Z1-E2-1"
 titel: "Etagen-Integritaet — Wachen und Mitnahme"
-zustand: BEREIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 blatt: "docs/auftraege/aktiv/Z1-E2-1-etagen-integritaet.md"
 blatt_sha: 4746d9c5
 basis_sha: fd2575ce
@@ -19645,7 +19645,7 @@ dor_beleg: |
   endstand 3ddf6a3e. VOTUM: "BEIDE ERTEILT, ohne Halbsaetze. EIN Durchgang, wie der
   Dirigenten-Hinweis 19:11:46 verlangt." ball: [generator, evaluator].
   Sechs Minuten nach dem Schnitt, ein Votum fuer beide Kennungen.
-bau_sha: "noch offen"
+bau_sha: 51b0ddfb
 herkunft_dieses_blocks: |
   Statusplatz vom integrator im selben Lauf wie der Transport angelegt (Dauerregel gen 9 Punkt 2).
   Geschnitten 19:24:44, gemeldet 19:25:24, transportiert und eingetragen unmittelbar danach.
@@ -19665,6 +19665,12 @@ nachtrag_planner: |
   19:43 geprueft und als REIN ADDITIV gewuerdigt (Paragraf 440): sein Votum traegt weiter.
   Ich fuehre den DoR-Beleg deshalb unveraendert und vermerke den Nachtrag, statt eine zweite
   DoR zu erfinden.
+
+zustand_nachgezogen: |
+  CODE_FERTIG aus generator-CODE_FERTIG-Z1-E2-1.yaml, 20:18:30, endstand und ergebnis 51b0ddfb,
+  ball [evaluator, integrator]. Neun Minuten nach dem Schwesterblatt Z1-E0-1.
+  Spur A: der Bau liegt zwar durch den Rueckweg in der Integration, der ZUSTAND bleibt aber
+  bis zum Votum CODE_FERTIG — Transport und Abnahme sind zweierlei.
 
 ```
 
