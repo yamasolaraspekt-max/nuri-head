@@ -188,3 +188,63 @@ IST    (kein Eintrag) wand -> fenster -> tuer -> DACH  -> decke -> treppe -> …
 **Revert dieses einen Commits.** Es entsteht kein Zustand: keine Migration, kein Knotentyp, keine
 Fachlogik — nur Anordnung und ein Eintrag. *Der Rückweg muss das Bündel mit zurücknehmen, sonst
 zeigt der Browser die neue Leiste ohne die Registry dahinter.*
+
+---
+
+# ⚠ NACHTRAG 22.08. 18:5x — Kriterium (b) fällt: die Bodenplatte geht NICHT ohne Modelländerung
+
+```yaml
+anlass: "Fachlinsen-Vorlage der lesenden Sitzung (18:52:21, maurer/statiker/software-architekt)
+         — am Code nachgeprueft, nicht uebernommen."
+folge: "Die ABSAGE-REGEL von (b) greift: 'MELDEN, nicht basteln'."
+```
+
+**Ich habe die drei Gründe selbst am Code geprüft. Zwei davon sind harte Sperren:**
+
+```
+1  CeilingNode HAT KEIN HOEHENFELD                     domain/scene.types.ts
+     type · polygon · dickeMm · oeffnungen? · schichten?   —  KEINE elevation
+     Eine Bodenplatte auf der untersten Ebene waere von einer Zwischendecke
+     NICHT UNTERSCHEIDBAR.
+
+2  MAX. EINE DECKE JE LEVEL                            commands/applyCommand.ts:112-116
+     function pruefeDeckeProLevel(draft, ceiling) {
+       if ((draft.ceilings ?? []).some(c => c.id !== ceiling.id && c.levelId === ceiling.levelId))
+         throw new CommandAbgelehnt('... hat bereits eine Decke (max. 1 je Level).');
+     }
+     DREI Aufrufstellen (u. a. :296).
+     -> Wer die Bodenplatte als 'ceiling' auf das EG-Level setzt, SPERRT DORT DIE ZWISCHENDECKE.
+
+3  DER CRM TRENNT SIE BEREITS                          app/Services/Heizlast/UWertService.php:26-27
+     'decke' => [0.10, 0.04]   'boden' => [0.17, 0.00]   — getrennte Bauteiltypen
+```
+
+> **Kriterium (b) ist damit in seiner heutigen Form nicht erfüllbar.** *Ein Registry-Eintrag
+> `bodenplatte` auf `bauteilKind: 'ceiling'` würde entweder die Zwischendecke desselben Geschosses
+> verhindern oder von ihr ununterscheidbar sein. Beides ist schlechter als kein Eintrag.*
+
+**Was baubar bleibt und was nicht:**
+
+| Kriterium | Stand |
+|---|---|
+| **(a)** Reihenfolge in Leiste und Menü | **baubar** — ohne `bodenplatte`, mit sieben statt acht Einträgen |
+| **(b)** `bodenplatte` als Eintrag | **FÄLLT** — braucht `GP-0` (eigener Knotentyp) |
+| **(c)** Tooltip ehrlich | **baubar, verschoben** — gilt für den Decken-Tooltip (Zwischen-/Abschlussdecke) |
+| **(d)–(f)** Rot-Probe, Lieferung, Diff | **baubar, unverändert** |
+
+**Die Soll-Reihenfolge ohne Bodenplatte:**
+
+```
+wand -> fenster -> tuer -> treppe -> decke -> kontur -> dach
+uebrige Gruppen unveraendert dahinter
+```
+
+> **Yamas eigene Modellentscheidung liegt bereits vor** (`docs/konzept/golden-path-bauwerksprozess.md:33-41`,
+> 21.08.): *`CeilingNode` bleibt die Zwischendecke; additive `FoundationSlabNode`; fachlich getrennte
+> Bauteile; Bestandsprojekte ohne Bodenplatte müssen unverändert laden.* **Dazu ein Planner-Konzept
+> von heute 12:23** (`golden-path-gp0-modellplan-bodenplatte.md`, 240 Z.).
+> **Es muss nichts neu erfunden werden — die Bodenplatte braucht GP-0, nicht dieses Blatt.**
+
+**Was der Bau NICHT tun darf:** die Bodenplatte trotzdem auf `ceiling` legen. *Der Auftrag des
+Dirigenten sagt es wörtlich: „MELDEN, nicht basteln — dann Reihenfolge ohne Bodenplatte liefern und
+Bodenplatte als Folgeposten an `GP-0` hängen."*
