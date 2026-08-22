@@ -7,8 +7,8 @@ blatt_sha: 352900f3
 pruefer: plan-pruefer
 auftrag_id: DOR-plan-pruefer-kennungsmuster
 generation: 8
-votum: NICHT_ERTEILT
-restpunkte: 3
+votum: ERTEILT_MIT_AUFLAGE   # Runde 2 gegen 47dfbfb2; Runde 1 war NICHT_ERTEILT gegen 352900f3
+restpunkte: 0   # alle drei behoben; eine Auflage neu (A-43-11)
 zeit: "22.08.2026, Runde nach A-37-ABGENOMMEN"
 ```
 
@@ -186,3 +186,115 @@ Integrator, Dirigent. Das ist die Gewohnheit, um die es die ganze Zeit geht.
 **Ball unverändert: Planner** — Posten 2 jetzt mit drei Teilen (Aktionsvokabular je Rolle,
 `warten*` = Pause / unbekannt = 7 in EINER Liste, Rücknahme der Tor-Wörter), dazu die zwei Messpunkte
 an A-43-4.
+
+---
+
+# DoR-Runde 2 — A-43 gegen `47dfbfb2`
+
+**Prüfstand:** Blatt `47dfbfb2` (639 Zeilen, 12 Kriterien), mein HEAD `675bf079`, Baum sauber,
+gemessen 12:44–12:51. Auslöser: `planner-CODE_FERTIG-nachtrag-restpunkte.yaml` (12:47:33) —
+gelesen nach der Berichtigung des Dirigenten (12:45:37), dass mein Auslöser die 6a-Musterliste
+ist und `*-CODE_FERTIG*.yaml` trifft; **kein** `*-SPEZIFIZIERT*`-Dateiname wird erwartet.
+
+## Votum: ERTEILT MIT AUFLAGE
+
+Alle drei Restpunkte aus Runde 1 sind behoben. Eine Auflage kommt neu hinzu; sie betrifft die
+**Abnahme** von A-43-11, nicht den Bau, und blockiert ihn deshalb nicht.
+
+## Restpunkt 1 — Posten 2 (Aktionsvokabular): BEHOBEN
+
+Fünf Kriterien A-43-8…12. **Ich habe jede Rot-Lage selbst gefahren**, nicht übernommen: die
+`case`-Anweisung `scripts/rollen-tor.sh:360-378` extrahiert (19 Zeilen, Gegenprobe auf `esac`)
+und isoliert als Funktion gefahren, je Wort Rückgabewert **und** Meldung.
+
+| geprüft | Ergebnis |
+|---|---|
+| A-43-8 · neun Arbeitsverben | **9 von 9 → RC 7 `unbekannte aktion`**; `bauen`/`nachbessern` → 0 ohne Meldung |
+| A-43-9 · Zwillingsfalle | `warten` → 7 *keine Arbeitsanweisung* · `warten_dann_nachpruefen` → 7 *unbekannte aktion* — am RC ununterscheidbar |
+| A-43-10 · unbekannt/Leerfall | `quatsch`·`bauenX`·`rueckweg_x` → 7 · Leerfall `""` → **RC 0** mit `HINWEIS … UNGEPRUEFT` |
+| A-43-12 · Grundmenge | `aktion` 5× `bauen` (0), 2× `parken` (7, korrekt als Pause) · **`taetigkeit` 7 von 7 abgewiesen**, davon 5× *unbekannte aktion*, 2× *keine Arbeitsanweisung* |
+
+Die Zwillingsfalle ist real und die Begründung für A-43-3/A-43-9 trägt: **zweimal in einem Auftrag
+trägt der Rückgabewert allein die Antwort nicht.**
+
+## Restpunkte 2 und 3 — A-43-4: BEHOBEN
+
+Drei Zählweisen, je mit ihrem Befehl, plus Stand. **Mit den Befehlen des Blattes nachgemessen,
+nicht nachgebaut:**
+
+    A ungeankert     grep -c 'zustand: '                             -> 71   (Blatt 71)  OK
+    B halb geankert  grep -cE '(^|: )zustand:'                       -> 30   (Blatt 30)  OK
+    C Grundmenge     grep -cE '^([a-z-]+(-[0-9]+)?: )?zustand: '     -> 23   (Blatt 23)  OK
+    Aufteilung isoliert extrahiert: A- 14 · W-17/1 6 · Z 3 = 23      (Blatt identisch)  OK
+
+Die von ihm gemeldete Zählfalle ist reproduzierbar: `grep -c 'zustand: A-'` auf der **Zeile**
+gibt **15**, die **isolierte** Extraktion **14** — eine Zeile trägt die Kennung zusätzlich im
+Belegteil. Dass die isolierte Extraktion jetzt **im Messbefehl** steht und nicht nur in der
+Warnung daneben, ist die richtige Konsequenz; sein Satz *„eine Warnung im Text verhindert nichts,
+ein geänderter Messweg tut es"* trifft.
+
+Zu Restpunkt 2 hatte ich in Runde 1 gemessen, dass **keine** von fünf Lesarten × vier Bereichen
+die Zahl 29 trifft (Bereiche: Planner-Zweig 21/69, `--all` 23/71, Integration 23/71, `5c9afbc7`
+18/66 — die Differenz ist überall konstant **48**, im Blatt stand **7**). Seine Auflösung erklärt
+das vollständig: 29 war **halb geankert** gezählt und als *ungeankert* bezeichnet. Damit ist meine
+Zahl 71 und seine 29 dieselbe Messung unter zwei Namen — **kein Rechenfehler, ein Benennungsfehler.**
+
+## Auflage (neu) — A-43-11: der Messbefehl verfehlt seine eigene Erwartung
+
+Selbst gefahren, mit dem **Rohbefehl des Blattes**:
+
+    grep -rnE 'bauen\|nachbessern|pausieren\|angehalten' scripts/ .githooks/
+      scripts/rollen-tor.sh:361:    bauen|nachbessern) ;;
+      scripts/rollen-tor.sh:362:    pausieren|angehalten|angehalten_eingefroren|parken|warten)
+      ---- Fundstellen: 2        Erwartung im Blatt: "-> genau 1 Fundstelle"
+
+Das grüne Ergebnis des Blattes nennt **selbst beide Zeilen** (`:361` und `:362`). Gemeint ist
+offensichtlich *eine `case`-Anweisung*; der Befehl zählt aber **Fundstellen**, und davon gibt es
+zwei — eine je Alternative. **Ein Kriterium, dessen eigener Messbefehl heute die eigene Erwartung
+verfehlt, ist bei der Abnahme nicht entscheidbar:** der Evaluator misst 2, liest „genau 1" und
+müsste rot geben, obwohl das Blatt denselben Stand grün nennt.
+
+**Auflage:** Erwartung an den Befehl angleichen (etwa *„genau eine `case`-Anweisung, hier zwei
+Zeilen: `:361` Arbeit, `:362` Pause"*) oder den Befehl auf die Anweisung zählen lassen. **Ein
+Satz, kein neues Kriterium.**
+
+**Warum das den Bau nicht blockiert:** A-43-11 ist ausdrücklich **Regressionsschutz** und heute
+grün. Der Bau muss dafür **nichts tun** — er darf nur keine zweite Liste anlegen. Der Mangel wirkt
+erst im Abnahmeschritt. Deshalb Auflage und nicht Restpunkt.
+
+*Eigene Berichtigung dazu:* Mein erster Lauf an A-43-11 war falsch, weil ich das Muster
+**nachgebaut** habe (`grep -rnE 'bauen|nachbessern'` — die Wörter) statt den Rohbefehl zu nehmen
+(`bauen\|nachbessern` — das **literale Pipe-Zeichen**, also die Wortliste selbst). Meine Fassung
+gab 13 Fundstellen, darunter Meldungstexte und zwei fremde Dateien. Gegenprobe des echten Musters:
+`echo 'bauen nachbessern'` → 0 Treffer, `echo 'bauen|nachbessern'` → 1. **P-02 Punkt 4 gilt auch
+für Messbefehle: zitieren, nicht nachbauen.**
+
+## Hinweis, ausdrücklich KEIN Mangel — die Abdeckungsgrenze desselben Musters
+
+`scripts/rollen-tor.sh:374-375` wiederholt **beide Wortlisten** als Meldungstext, mit Leerzeichen
+statt Pipe. Der Rohbefehl trifft dort **0**. Gemessen stimmen die Listen heute überein:
+
+    case :361 [bauen nachbessern]                                        text :374 [identisch]  GLEICH
+    case :362 [pausieren angehalten angehalten_eingefroren parken warten] text :375 [identisch]  GLEICH
+
+Ich führe das **nicht** als Mangel: Meldungstexte steuern nichts, und das Kriterium spricht von
+*Definition*. Aber die Absage-Regel des Kriteriums reicht weiter als sein Messbefehl — *„die
+zweite altert unbemerkt, weil niemand sie liest"* trifft auf `:374-375` genau zu. Wer `:361` um
+ein Wort erweitert und `:374` vergisst, bekommt eine Fehlermeldung, die eine falsche Liste nennt.
+Zur Kenntnis, nicht zur Behebung in A-43.
+
+## Weiteres selbst geprüft
+
+- **N3-Matrix:** 12 Zeilen, 12 distinct IDs, deckungsgleich mit den 12 Kriterien. **Vollständig.**
+- **Messbefehle:** alle 12 Kriterien tragen einen. **Keine Lücke.**
+- **Absage-Regeln:** 11 von 12; **A-43-7** hat keine. Kein Mangel — es ist ein Schutzbeleg, dessen
+  Rot/Grün über *„Diff leer / nicht leer"* eindeutig definiert ist.
+- **README 6f:** die Rückabwicklung steht im **Blatt** (Folgeposten 4, Zeile 547), nicht nur in
+  der Meldung — der Prüfauftrag des Dirigenten (12:43:07) ist damit erfüllt.
+- **Kennungsmaximum:** A-42 ist ABGENOMMEN, offen A-38/A-39/A-40 = drei, A-43 die vierte.
+  Maximum erreicht, nicht überschritten.
+
+## Ball: Planner
+
+Die Auflage an A-43-11 eintragen. Danach ist das Blatt aus meiner Sicht baureif; ein erneutes
+DoR-Votum ist dafür **nicht** nötig, die Bestätigung der Auflage genügt.
