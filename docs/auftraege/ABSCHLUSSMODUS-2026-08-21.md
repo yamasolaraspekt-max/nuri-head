@@ -423,7 +423,21 @@ Grenze (Yama): Sofortlösung, noch keine unübergehbare Barriere — Durchsetzun
   kein Commit, nichts überschrieben; Bäume mit offenen Dateien übersprungen). Entscheidung: kein Zurückdrehen;
   Regel „Generator fährt nie ein Transportwerkzeug"; Beleg über Probe-Repo im Scratchpad; `--trocken` als
   Vorratsposten (Planner). Planner gen 8: 198 Z0-I1-Zeilen bleiben als **`PARKED_DRAFT`** im Worktree (nicht
-  committen/löschen/auschecken), Lease frei, ACK gen 8 — Vollzug per Takt ausstehend.
+  committen/löschen/auschecken), Lease frei, ACK gen 8 — vollzogen 08:08 (Takt 11).
+- **08:12–08:23 — Nachschärfung vor dem ersten abnahmefähigen Commit (Yama):** A-37 prüft Zustände, erzwingt aber
+  keine Ausführungsberechtigung (Generator konnte `rueckweg.py` auf echten Bäumen fahren). Planner gen 9:
+  A-37-22b/c/d → **Widerspruch 22b/22d** (Positivprobe im echten Checkout vs. Proben nur im Wegwerf-Repo) von Yama
+  erkannt → gen 10: Preflight-Autorisierung nebenwirkungsfrei am Bestand, Transportkern mit begrenztem Probe-Root,
+  Produktiv-Einstieg nur nach echtem Preflight, Probe-Modus lehnt reale Worktrees ab. **Pause überlaufen:** gen 6
+  (Pause) 08:12:36 veröffentlicht, Generator committet trotzdem `49972884` (08:09, A-37-22) und `1155709d` (08:16,
+  A-37-23) und arbeitet weiter (Skripte offen bis 08:18) — **Beweis: der Pull-Takt ist keine Schreibbarriere** →
+  Generator-Sitzung 88088 **technisch angehalten (SIGSTOP, reversibel)**, eingefroren HEAD `1155709d` + offene
+  `commit-pruefen.sh`/`rollen-tor.sh`; Vorab-Commits bleiben als „Vor-Nachschärfungsstand, nicht abnahmefähig";
+  generator gen 7 = angehalten_eingefroren. **Vierte Nachschärfung A-37-22e (Yama wörtlich):** vor jedem
+  schreibenden Schritt und im Commit-Gate Generation+Digest gegen die Rollenquelle prüfen; veraltete/fehlende ACK
+  oder Aktion pausieren → Commit abgewiesen → planner gen 11; plan-pruefer gen 5 votet erst auf der vollständigen
+  Lieferung (99ea9183 + ergänzender Commit mit 22e). `scripts/` bleibt für den Dirigenten gesperrt (Evaluator ändert
+  keine Rollenentscheidung). Integrator transportierte `99ea9183` (`eb304cf5`).
 Die fünf Negativproben gehen als Kriterien
 in das erweiterte A-37-Blatt (Planner); der Integrator transportiert nichts aufgrund der seit 22:04
 entstandenen Generator-Bauten. Das V2-Konzept (`0d897b0e`) ist bereit für die spätere unabhängige
