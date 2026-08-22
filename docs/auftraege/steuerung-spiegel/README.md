@@ -75,6 +75,30 @@ frischen, isolierten Arbeitsstand vom Integrations-HEAD bereit (alter Zweig unve
 - Technische Commit-Barriere (Rolle, Sitzung, Worktree, Branch, aktiver Auftrag, erlaubte Pfade, Voraussetzungen; auch nackter `git commit` und Merge)
   ist **Bauauftrag** (A-37-Erweiterung / Z0-I2 / Z0-I3), spezifiziert vom Planner — siehe `auftraege/Z0-I3-pull-steuerung.vorgabe-yama.md`.
 
+## Meldepflicht je Rolle und Auftrag (Yama 22.08., verbindlich ab sofort — ohne Generationswechsel)
+**Vor jeder Sacharbeit (nach Auftrag + Digest, vor der Lease):** menschenlesbar „Ich habe den Auftrag `<ID>` in Generation
+`<N>` über die zentrale Rollenquelle vom Dirigenten erhalten. Ich bearbeite diesen Auftrag als `<Rolle>` im Worktree
+`<Worktree>` auf dem Zweig `<Branch>`." + Ereignis `ereignisse/<auftrag_id>/<rolle>-AUFTRAG_GESTARTET.yaml`
+(ereignis, auftrag_id, generation, rolle, quelle: dirigent, digest, sitzungs_id, worktree, branch, ausgangs_sha,
+fencing_token, zeit, erklaerung).
+**Beim Abschluss:** nur der eigene Rollenanteil, mit rollenspezifischem Begriff — Planner `SPEZIFIZIERT` · Plan-Prüfer
+`ERTEILT/NICHT ERTEILT` · Generator `CODE_FERTIG` · Evaluator `ABGENOMMEN/NACHBESSERN` · Integrator
+`TRANSPORTIERT/ZUSTAND_NACHGEZOGEN` · Release-Prüfer `RELEASE_FREI/NICHT RELEASE_FREI` · Dirigent `ZUGEWIESEN/ENTSCHIEDEN`;
+Wortlaut „Ich habe meinen Anteil an diesem Auftrag als `<Rolle>` abgeschlossen." + Ereignis
+`<rolle>-AUFTRAG_ABGESCHLOSSEN.yaml` (plus abschlussbegriff, ergebnis_sha). Nie „alles erledigt"; Generator behauptet keine
+Abnahme, Planner keinen Bau, Evaluator keine Reparatur, Integrator keine Fachentscheidung. Vollständiger Wortlaut:
+`docs/regelwerk/MELDEPFLICHT-AUFTRAG.md` (rolle/dirigent). Technische Prüfung: Z0-I3/Z0-I4.
+
+## Wecker, Takte, Dispatcher (Yama 22.08.)
+Monitore, Crons und ein künftiger Dispatcher dürfen **ausschließlich**: Änderung erkennen · Digest prüfen · die
+registrierte Sitzung wecken · eine Zustellmeldung erzeugen. Sie dürfen **niemals**: ACK schreiben · Lease nehmen · Dateien
+ändern · committen · einen zweiten Rollenprozess starten, wenn einer aktiv ist (Single-Flight je Rolle). Kein detached
+Prozess je Rolle; Ziel ist **ein** zentraler, `launchd`-überwachter Dispatcher (Folgeauftrag **Z0-I4**, nach A-37).
+**Unterbrechung bei neuer Generation derselben Kennung:** laufende atomare Dateioperation beenden → vor dem nächsten
+Schreibzugriff stoppen → keinen alten Commit erzwingen → Dirty-State (Pfade, Diff-Stat, Hash) dokumentieren → Lease
+freigeben → Unterbrechungsereignis schreiben → neuen Auftrag lesen und quittieren. Kein Reset, kein Verwerfen, kein Amend.
+Bei anderer Kennung setzt ausschließlich der Dirigent `vorrang: nach_abschluss | sofort_unterbrechen`.
+
 ## Aktueller Stopp
 Generator-Sitzung `7df19ed4` (PID 87659, committete direkt im gemeinsamen Checkout) ist per `SIGSTOP` angehalten. Stopp-SHA `4e02c273`.
 Kein `CONT`, bis A-42 abgeschlossen, A-37 mit `pre-commit` fertig, fünf Negativproben bestanden, nacktes `git commit` gesperrt, Evaluator-Abnahme vorliegt.

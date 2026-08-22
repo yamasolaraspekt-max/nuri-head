@@ -38,6 +38,21 @@ je Lauf Prozess-ID + Startkennung; dazu aktuelle Generation + Digest; atomarer H
 ausschließlich unter gültiger Lease. Transkript-mtime ist nur Aktivitätshinweis. Bis A-37 umgesetzt und negativ
 abgenommen ist, gilt der Pull-Betrieb als `SOFT-AKTIV — organisatorisch wirksam, technisch noch umgehbar`.
 
+## Ergänzung Yama 22.08. (09:2x) — Dispatcher (Z0-I4) und Meldepflicht
+- **Z0-I4, nach A-37, Planner spezifiziert:** genau **ein** zentraler, `launchd`-überwachter Dispatcher unter stabilem Pfad
+  (nicht Scratchpad): beobachtet `rollen/*.yaml`, prüft Digest, entprellt, Single-Flight je Rolle, weckt ausschließlich die
+  registrierte Sitzung, erzeugt eine Zustellmeldung. Wecker/Cron/Dispatcher dürfen **nie** ACK schreiben, Lease nehmen,
+  Dateien ändern, committen oder einen zweiten Rollenprozess starten. Keine detached Prozesse je Rolle.
+- **Unterbrechungsregel:** höhere Generation derselben Kennung → A-37-22e stoppt vor dem nächsten Schreibzugriff; laufende
+  atomare Dateioperation beenden, keinen alten Commit erzwingen, Dirty-State (Pfade, Diff-Stat, Hash) dokumentieren, Lease
+  freigeben, Unterbrechungsereignis, neuen Auftrag quittieren; kein Reset/Verwerfen/Amend. Andere Kennung → nur der
+  Dirigent setzt `vorrang: nach_abschluss | sofort_unterbrechen`. Bestehende Rollen nicht allein wegen des neuen Feldes
+  hochzählen; Schema gilt ab dem nächsten regulären Auftrag.
+- **Meldepflicht technisch prüfen:** Start-/Abschlussmeldung je Rolle und Auftrag (Wortlaut `docs/regelwerk/MELDEPFLICHT-AUFTRAG.md`);
+  der Monitor erkennt Start/Ende nur bei Rollenname, `TICKET_ROLLE`-Übereinstimmung, aktueller Auftrag-ID + Generation,
+  stimmendem Digest, passender Sitzung/Worktree/Branch, zuordenbarer Start- und Abschlussmeldung, existierendem Ergebnis-SHA,
+  rollenpassendem Zustandsbegriff — sonst Ablehnung (z. B. Generator schreibt `ABGENOMMEN`).
+
 ## Einordnung (Dirigent)
 Heute als **Sofortlösung von Hand** betrieben (Dateien in `rollen/`, README). Die technische Durchsetzung (Hook, Lease-Werkzeug, ACK-Prüfung) ist
 Bauauftrag in der Folge A-37-Erweiterung → Z0-I2 → Z0-I3, Kriterien durch den Planner, DoR durch den Plan-Prüfer, Bau durch den Generator
