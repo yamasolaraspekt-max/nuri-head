@@ -396,6 +396,25 @@ Grenze (Yama): Sofortlösung, noch keine unübergehbare Barriere — Durchsetzun
 - Headless-Takt des Planners: Läufe 1–9 (Lauf 9 mit API-Abbruch, ohne Schaden); Registrierung/Lease je Lauf
   nachgeführt; Befunde: `paragraph8-fehlzuordnung` (Plan-Prüfer berichtigt), Z0-I2-Vorrat (§8 Schritt 6
   `mv`/`rename`), Z0-I1-Ist-Lage Kriterium A (Plan-Prüfer). PID 87659 = `T`.
+
+### 22.08. 01:16 → 07:54 — Stillstand; 08:0x — zwei Korrekturen Yamas
+- **Stillstand 01:14–07:51:** Dirigent-Prozess (und damit Takt, Veröffentlichung) stand; generator gen 3 /
+  integrator gen 7 wurden erst 07:54 wirksam (Integrator reagierte sofort: `ab9e837c`, drei Planner-Blattstände
+  transportiert; Plan-Prüfer Vorlage an Yama „Kette steht seit sieben Stunden", gemessen vor dem Wirksamwerden).
+  **Y-13** war in der Steuerungsstelle nicht vermerkt (nur auf `rolle/dirigent`) → `auftraege/Y-13-entscheidung-yama.md`;
+  offen allein die GRANT-Ausführung mit root (Yama), messbar per `SHOW GRANTS`.
+- **Generator-Basis:** `rolle/generator` 3 voraus / 98 zurück, `--ff-only` unmöglich (Generator meldete richtig,
+  zog keine Schreibarbeit vor). Meine Entscheidung „Bauen auf `abd1719c`, Integrationsfassung der Hooks übernehmen,
+  W0-5-Konflikte beim Rückweg auflösen" (`dirigent-antwort-nicht-ff.yaml`) **von Yama verworfen und zurückgenommen**:
+  kein Merge mit Altarbeit, kein Reset, kein Bau auf veraltetem Stand → **frischer, isolierter Arbeitsstand von
+  `ab9e837c`**, alter Zweig unverändert als Beleg. Umsetzung (Tor bindet `generator` an `ticket-rolle-generator` /
+  `rolle/generator`): alten Baum und Zweig **umbenennen und erhalten**, neuen Baum/Zweig unter dem gebundenen Namen
+  von `ab9e837c` anlegen; generator gen 4 = `BASE_BLOCKED`/Stopp (Lease frei, nichts schreiben), gen 5 = neue Basis.
+- **Z0-I1 zu früh:** Planner zog unter `SPEZ-planner-A-37` eine Lease (Token 5) für die Z0-I1-Erweiterung, Worktree
+  1 Datei offen → planner gen 7 = **Parken** bis A-37 gebaut und ABGENOMMEN (Entwurf ins Scratchpad, Worktree sauber,
+  Lease frei). Reihenfolge: `A-42 → A-37 vollständig aktiv → Z0-I1`.
+- **Prozessregel (Yama):** nach DoR Kriterienstand einfrieren; Beleg-/Formulierungsberichtigungen ohne
+  Kriterienwirkung als **ein Errata-Ereignis**, ein Commit, ein Rückweg (README). Basis-Regel `BASE_BLOCKED`.
 Die fünf Negativproben gehen als Kriterien
 in das erweiterte A-37-Blatt (Planner); der Integrator transportiert nichts aufgrund der seit 22:04
 entstandenen Generator-Bauten. Das V2-Konzept (`0d897b0e`) ist bereit für die spätere unabhängige
