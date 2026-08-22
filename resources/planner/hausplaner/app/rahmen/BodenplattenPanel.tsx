@@ -20,6 +20,9 @@
  * 3. **Ein fehlender Aufbau wird als fehlend gezeigt**, nicht als 0. *Eine Summe von 0 über eine
  *    leere Liste sieht aus wie eine Messung.* Deshalb `fussbodenaufbauErfasst` neben der Summe —
  *    die beiden Fragen sind getrennt (siehe `geometry/hoehenkette.ts`).
+ *    **Seit 22.08. 23:12 ist bei ERDBERÜHRTEN Platten daraus ein Mangel geworden**, kein
+ *    hinnehmbarer Zustand: der Aufbau ist Pflicht, und der Command lässt eine solche Platte gar
+ *    nicht erst entstehen. Bei nicht erdberührten Platten bleibt „nicht erfasst" zulässig.
  *
  * **Bewehrung kommt hier nicht vor** — kein Feld, kein Platzhalter, keine Zeile „folgt später".
  * *Ein leeres Bewehrungsfeld ist eine Einladung, es auszufüllen, und was jemand hineinschreibt,
@@ -100,8 +103,19 @@ export function BodenplattenPanel({ platte, aendere }: BodenplattenPanelEigensch
               {platte.schichten?.length} Schicht(en) · Summe · Reihenfolge außen → innen (erdseitig zuerst)
             </span>
           </>
+        ) : platte.erdberuehrt ? (
+          // **Seit der Entscheidung vom 22.08. 23:12 ist das ein MANGEL, kein Zustand.**
+          // Der Command laesst eine erdberuehrte Platte ohne Aufbau gar nicht erst entstehen;
+          // erreicht dieser Zweig trotzdem den Bildschirm — Altbestand, Import, fremder
+          // Schreibweg —, dann ist die Hoehenlage der Platte unbekannt und das muss dastehen.
+          // *Frueher stand hier „nicht erfasst" als hinnehmbarer Zustand. Posten 25.6 ist
+          // aufgehoben: „Wer den Aufbau nicht kennt, setzt die Platte erst, wenn er ihn kennt."*
+          <span className="hp-feld-wert hp-feld-wert--mangel" data-zustand="pflicht-fehlt">
+            Fußbodenaufbau fehlt — Pflichtangabe, die Höhenlage ist unbestimmt
+          </span>
         ) : (
-          // Kriterium (e): solange nichts erfasst ist, steht hier der Vermerk und KEINE Zahl.
+          // Nicht erdberuehrt: hier ist ein fehlender Aufbau zulaessig. Eine Platte ueber einer
+          // Tiefgarage hat keine Bezugshoehe zum Erdreich, und ±0,00 ist fuer sie kein Massstab.
           <span className="hp-feld-wert hp-feld-wert--fehlt" data-zustand="nicht-erfasst">
             Aufbau nicht erfasst
           </span>

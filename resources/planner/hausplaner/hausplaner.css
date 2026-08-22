@@ -675,6 +675,17 @@
 .hp-fu-fueller { flex: 1; }
 .hp-fu-befehlshinweis { color: var(--hp-muted); }
 
+/* Z1-E4-1 — der Fussbodenaufbau in der Fusszeile. Pflichtfeld vor dem Setzen der Bodenplatte;
+   erscheint nur, solange das Werkzeug aktiv ist. Tokens, keine rohen Farbwerte. */
+.hp-fu-aufbau { display: inline-flex; align-items: center; gap: 4px; color: var(--hp-ink); }
+.hp-fu-aufbau input { width: 72px; }
+/* Der fehlende Pflichtwert ist eine WARNUNG, kein Fehler: nichts ist kaputt, es fehlt nur etwas,
+   ohne das die Platte nicht gesetzt werden kann. */
+.hp-fu-aufbau-fehlt { color: var(--hp-warn-ink); font-weight: 600; }
+/* Der Plausibilitaetsbereich ist ein HINWEIS und kein Zwang (Dirigent 23:12) — deshalb gedaempft
+   und nicht in Warnfarbe. Wer 40 mm baut, baut 40 mm. */
+.hp-fu-aufbau-hinweis { color: var(--hp-muted); }
+
 /* Die Befehlspalette. `position: fixed` liegt ausserhalb des Flusses, damit die Studio-Schale
  * nicht ueberlaeuft — das war Kante 10 und bleibt so. */
 .hp-fu-palette-flaeche { position: fixed; inset: 0; z-index: 60; background: var(--hp-canvas-wall-ghost); display: flex; align-items: flex-start; justify-content: center; padding-top: 12vh; }

@@ -47,6 +47,9 @@ export interface FussEigenschaften {
   pausenHinweis: string | null;
   /** Z-05: was beim Konturzeichnen in der Leiste steht — Fortschritt oder Ablehnungsgrund. */
   konturHinweis: string | null;
+  /** Z1-E4-1: der Fussbodenaufbau in mm — PFLICHT, bevor eine erdberuehrte Platte gesetzt wird. */
+  bodenplatteAufbauMm: number | null;
+  setzeBodenplatteAufbauMm: (mm: number | null) => void;
   /** Z-03: WAS der Fang zuletzt gefangen hat, im Klartext. Leer heisst: nichts. */
   fangHinweis: string;
   /** Z-10: die laufende Masseingabe im Klartext. Leer heisst: es laeuft keine. */
@@ -70,6 +73,7 @@ export interface FussEigenschaften {
 
 export function FussUndUeberlagerungen({
   cursor, zoom, raeume, werkzeug, wandStart, treppeStart, letzteAblehnung, pausenHinweis, konturHinweis, fangHinweis, massHinweis,
+  bodenplatteAufbauMm, setzeBodenplatteAufbauMm,
   paletteOffen, paletteFilter, setPaletteFilter, setPaletteIndex,
   paletteGruppen, paletteListe, paletteMarkiert, schliessePalette, aktivierePaletteEintrag,
   offeneEngine, setOffeneEngine,
@@ -99,6 +103,38 @@ export function FussUndUeberlagerungen({
     {massHinweis && <span className="hp-fu-mass">✎ {massHinweis}</span>}
     {fangHinweis && <span className="hp-fu-fang">⌖ {fangHinweis}</span>}
     {konturHinweis && <span className="hp-kontur-hinweis">{konturHinweis}</span>}
+    {/* **Z1-E4-1 — der Fussbodenaufbau, bevor die Platte gesetzt wird.**
+
+        *Dirigent 23:12:40 in Yamas Namen:* „Wer den Aufbau nicht kennt, setzt die Platte erst,
+        wenn er ihn kennt — ehrlich statt Null." Deshalb steht das Feld HIER, im Bedienweg, und
+        nicht erst im Panel: im Panel waere die Platte schon gesetzt und ihre Hoehenlage schon
+        falsch. **Kein Vorgabewert** — ein vorbelegtes Feld waere derselbe erfundene Wert, nur mit
+        besserem Gewissen. Die Ablehnung selbst kommt aus dem Command und erscheint rechts als
+        `letzteAblehnung`; diese Zeile erklaert nur, wo man den Wert eintraegt. */}
+    {werkzeug === 'bodenplatte' && (
+      <label className="hp-fu-aufbau" data-feld="bodenplatte-aufbau">
+        Fußbodenaufbau
+        <input
+          type="number" min={1} step={10}
+          value={bodenplatteAufbauMm ?? ''}
+          placeholder="mm"
+          onChange={(e) => {
+            const roh = e.target.value.trim();
+            if (roh === '') { setzeBodenplatteAufbauMm(null); return; }
+            const n = Math.round(Number(roh));
+            setzeBodenplatteAufbauMm(Number.isFinite(n) && n > 0 ? n : null);
+          }}
+        />
+        mm
+        {bodenplatteAufbauMm === null
+          ? <span className="hp-fu-aufbau-fehlt"> — ohne Aufbau keine Platte</span>
+          /* Plausibilitaetsbereich als HINWEIS, kein Zwang (Dirigent 23:12). Wer 40 mm baut,
+             baut 40 mm; die Zeile sagt nur, dass es ungewoehnlich ist. */
+          : (bodenplatteAufbauMm < 80 || bodenplatteAufbauMm > 400)
+            ? <span className="hp-fu-aufbau-hinweis"> — üblich sind 80–400 mm</span>
+            : null}
+      </label>
+    )}
     {pausenHinweis && <span className="hp-pause-hinweis">{pausenHinweis}</span>}
     <span className="hp-fu-fueller" />
     {letzteAblehnung && <span style={{ color: FARBEN.warnung, fontWeight: 600 }}>✋ {letzteAblehnung}</span>}

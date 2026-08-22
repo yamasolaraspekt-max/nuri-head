@@ -54,14 +54,30 @@ test('Z1-E4-1-g: das Panel rendert ohne Wurf und zeigt Dicke, Kote und erdberueh
   el.remove();
 });
 
-test('Z1-E4-1-g/e: ohne erfassten Aufbau steht der Vermerk — und KEINE Zahl', () => {
+test('Z1-E4-1: fehlt der Aufbau bei ERDBERUEHRTER Platte, steht dort ein MANGEL — keine Zahl', () => {
+  // **Seit der Entscheidung vom 22.08. 23:12 ist das kein hinnehmbarer Zustand mehr.** Der
+  // Command laesst eine solche Platte nicht entstehen; erreicht sie den Bildschirm trotzdem
+  // (Altbestand, Import), muss dastehen, dass die Hoehenlage unbestimmt ist.
   const { el, wurzel } = rendere(platte({ schichten: undefined }));
   const text = el.textContent ?? '';
-  assert.match(text, /Aufbau nicht erfasst/);
-  assert.ok(el.querySelector('[data-zustand="nicht-erfasst"]'), 'der Zustand ist nicht ausgezeichnet');
+  assert.match(text, /Pflichtangabe/);
+  assert.match(text, /Höhenlage ist unbestimmt/);
+  assert.ok(el.querySelector('[data-zustand="pflicht-fehlt"]'), 'der Mangel ist nicht ausgezeichnet');
+  assert.equal(el.querySelector('[data-zustand="nicht-erfasst"]'), null, 'der alte, hinnehmbare Zustand steht noch da');
   // **Eine 0 hier wäre die Lüge, um die es geht:** sie sähe aus wie eine Messung.
   const aufbau = el.querySelector('[data-feld="aufbau"]')?.textContent ?? '';
   assert.doesNotMatch(aufbau, /0 mm/, `der leere Aufbau zeigt eine Zahl: ${aufbau}`);
+  act(() => wurzel.unmount());
+  el.remove();
+});
+
+test('Z1-E4-1: OHNE Erdberuehrung bleibt „nicht erfasst" zulaessig — kein Mangel', () => {
+  // Die Gegenprobe zur Regel: sie haengt an der Erdberuehrung, nicht am Bauteil. Eine Platte
+  // ueber einer Tiefgarage hat keine Bezugshoehe zum Erdreich.
+  const { el, wurzel } = rendere(platte({ schichten: undefined, erdberuehrt: false, oberkanteMm: 0 }));
+  assert.match(el.textContent ?? '', /Aufbau nicht erfasst/);
+  assert.ok(el.querySelector('[data-zustand="nicht-erfasst"]'));
+  assert.equal(el.querySelector('[data-zustand="pflicht-fehlt"]'), null, 'ein Mangel, wo keiner ist');
   act(() => wurzel.unmount());
   el.remove();
 });
