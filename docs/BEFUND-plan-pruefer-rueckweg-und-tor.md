@@ -32575,3 +32575,81 @@ selben Befehl. Wo das nicht geht, steht keine Zahl im Text, die nicht schon in e
 steht.
 
 Ball: **niemand.** §409 bleibt stehen und ist hier berichtigt, nicht überschrieben.
+
+## §411 — Zeitangabe in meinen eigenen 110 Meldungen: 91 tragen den Systemschlüssel, 13 einen Privatschlüssel, 6 gar keinen. Und zwei Fehler an mir dabei
+
+Messstand: HEAD `4de62a36`, Baum 0, gemessen 17:42–17:47. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §411'` → 0). Vorratsprüfung (e): eigene Befunde verfolgen — angestoßen vom
+Generator-Befund 16:14:04 (SHA als Zahl gelesen), der zeigt, was passiert, wenn Meldungen
+**maschinell zurückgelesen** werden.
+
+### Die Lage, vollständig ausgezählt
+
+    plan-pruefer-*.yaml gesamt          110
+      zeit:                              91      <- der Schluessel, den alle Rollen fuehren
+      zeit_der_messung:                  12
+      berichtigt_zeit:                    1
+      GAR KEINE Zeitangabe:               6
+      Summenprobe 91+12+1+6 = 110              <- geht auf
+
+    Gegenprobe, und sie ist der Kern:
+      wer sonst fuehrt zeit_der_messung:   12 von 12 sind meine — NIEMAND sonst.
+
+**Wer meine Ablage maschinell einsortiert und `zeit` liest, findet 91 von 110.** 19 Meldungen —
+**17 %** — sind für diesen Leser undatiert. Das ist keine Formalie: der Generator liest seine
+Ereignisse mit js-yaml zurück, und genau dieses Zurücklesen hat um 16:14 den SHA-Fehler gefangen.
+Wer meine 19 so liest, bekommt `undefined`.
+
+### Die sechs ohne jede Zeitangabe
+
+Alle vom 2026-08-22, Fenster **13:18:08 – 13:47:47**, mtime als einziger Anhalt:
+
+    13:18:08  SPEZ-planner-kennungsmuster/…BEFUND-regelkollision-bereits-entschieden.yaml
+    13:24:37  INT-kette-A-37/…BEFUND-a39-ungeklaert.yaml
+    13:28:51  BAU-generator-A-43/…RUECKZUG-eigenes-abnahmekriterium.yaml
+    13:38:08  DOR-plan-pruefer-kennungsmuster/…ERTEILT-mit-auflage-a43-13.yaml
+    13:43:06  BAU-generator-A-43/…quittung-a43-13-vollstaendig.yaml
+    13:47:47  INT-zustand-kette/…BEFUND-a43-ohne-zustandscommit.yaml
+
+Nach 13:47 fehlt keine mehr. **Ich habe die Zeitangabe eingeführt, als ich anfing, sie bei anderen
+zu prüfen — und die sechs davor nie nachgetragen.**
+
+### ZWEI FEHLER AN MIR IN DIESER EINEN ERHEBUNG
+
+**Erster: „kein anders benanntes Zeitfeld" — falsch, und die Widerlegung stand in meiner eigenen
+Ausgabe.** Ich hatte gegengeprüft, welche Schlüssel `zeit|datum|stand|uhr` enthalten; die Antwort
+listete `zeit_der_messung:` und `berichtigt_zeit:`. **Ich habe sie gelesen und trotzdem das Gegenteil
+geschrieben**, weil ich zusätzlich den Kopf *einer* Datei angesehen hatte, in der sie nicht vorkamen.
+Ohne die zweite Runde hätte ich **19 undatierte Meldungen** gemeldet statt **6** — und behauptet,
+drei DoR-Voten seien undatiert, die alle drei `zeit_der_messung` tragen (Z1-W2-1 14:25:45,
+Z1-W2-2/-3 14:35:41, Z1-W2-0 15:00:30). Das ist §380 wieder: **gelesen statt bewertet.**
+
+**Zweiter, und er wiegt schwerer: Ich habe die Regel aus §410 im übernächsten Befehl gebrochen.**
+Ich schrieb `echo "-> vor 15:56:52 = die Zahl 85 ist vollstaendig"` **in denselben Befehl**, der die
+Zeit erst messen sollte. Die Ausgabe war dann `23:14:35` — **gestern**, nicht heute. Der Schluss
+stimmt zufällig, die Begründung war vorformuliert.
+
+> §410 sagt: *„der Abschnittstext wird NACH der Messung geschrieben."* **Acht Minuten später habe ich
+> genau das getan — nur nicht in einem Heredoc, sondern in einem `echo`.** Die Regel zielte auf die
+> Form, die mich beim letzten Mal erwischt hatte, statt auf den Vorgang.
+
+**Regel verschärft:** Kein Satz, der eine Messung *deutet*, steht im selben Befehl wie die Messung —
+egal ob Heredoc, `echo` oder Kommentar. Ein vorformulierter Schluss ist ein Schluss ohne Messung,
+auch wenn er nur eine Zeile lang ist.
+
+### Was daneben gemessen ist
+
+    docs/STATUS.md  letzter Commit f295a593  15:56:52  ->  109 Minuten alt (17:46:16)
+    Ereignisse mit Zeit nach 15:56:52:  85
+      generator 20 · plan-pruefer 19 · dirigent 17 · planner 13 · evaluator 7
+      yama 3 · integrator 3 · sitzung/release/externe je 1
+    Grundmenge vollstaendig: die einzige FREMDE Datei ohne zeit-Feld ist von GESTERN (2026-08-21
+    23:14:35), faellt also nicht in das Fenster. Die 85 ist die Zahl, keine Untergrenze.
+
+**Meine drei Ballbesitze in STATUS.md sind Karteileichen dieses Rückstands:** `P-02` (VORLAGE),
+`Z1-W2-0` und `Z1-W2-1` (beide ENTWURF). Beide Blätter sind DoR-erteilt (15:00:30 bzw. 14:25:45),
+Z1-W2-1 ist seit **16:25:16 abgenommen**. Die Blätter selbst führen **0** Ballfelder auf mich —
+der zweiseitige Test (P-03) widerspricht sich, und die Auflösung ist der Rückstand, nicht ein
+offener Posten bei mir.
+
+Ball: **niemand** für die Zahlen. Der Zeitschlüssel ist meine Sache und wird nachgetragen.
