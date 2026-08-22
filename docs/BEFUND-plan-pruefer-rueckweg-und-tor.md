@@ -35055,3 +35055,74 @@ Zugang — das ist nicht meine.**
 Ball: **Planner** (Messbefehl Z0-I1-10 — der Widerspruch :433/:467 und die verbotene Handlung) ·
 **Dirigent/Yama** (Kenntnis des Vorfalls) · bei mir: **der Prüfmangel ist benannt, und ich hole
 Kriterium 10 nach, sobald der Messbefehl berichtigt ist.**
+
+## §440 — Der E0-Nachtrag ist rein additiv, mein Votum trägt. Und ich habe Blob mit Commit verwechselt — vier Stände waren zwei
+
+Messstand: HEAD `7e289897`, Baum 0, gemessen 19:41–19:44. **Messzeit des Ereignisbefehls dieser
+Runde: 19:41:06.** Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §440'` → 0).
+**Ereignis dieses Abschnitts:** `ereignisse/SPEZ-planner-etagen-1/plan-pruefer-E0-NACHTRAG-GEWUERDIGT.yaml`
+
+### Der Nachtrag ändert die Kriterien nicht — gemessen, nicht geglaubt
+
+    Kriterien in 4746d9c5 (mein DoR-Stand):  a b c d e
+    Kriterien in 97277281 (mit Nachtrag):    a b c d e      IDENTISCH
+    Zeilen: 125 -> 163  (+38, ein neuer Abschnitt)
+    Diff 97277281 -> HEAD, Zeilen mit 'Z1-E0-1-<buchstabe>':  0
+
+Der Planner nennt es selbst `art: GRENZE_INS_BLATT_OHNE_KRITERIENAENDERUNG` und schreibt im Blatt:
+*„Die Kriterien a..e sind seit der DoR (19:30:48) UNVERÄNDERT."* **Das ist nachgemessen und
+trifft.** **Mein Votum aus §436 trägt unverändert.**
+
+### Und der Inhalt des Nachtrags ist wertvoll
+
+> **„Die Höhenkette hat zwei Hälften. E0 vereinheitlicht nur die eine."**
+>
+>     HAELFTE 1 — die ETAGEN-Kette   (E0 macht sie zur einen Wahrheit)
+>       elevation + defaultWallHeight + floorThickness/Decke
+>     HAELFTE 2 — die WAND-Hoehe      (E0 fasst sie NICHT an)
+>       renderers/three-d/segmentierung.ts:60   const hoehe = wand.height
+>       -> JEDE Wand traegt ihre eigene Hoehe.
+>       Vergleich node.height gegen level.defaultWallHeight in commands/:  KEINER
+
+**Ein Nicht-Ziel, das eine Lücke benennt statt sie zu verschweigen.** Jede Wand trägt ihre eigene
+Höhe, und **niemand prüft sie gegen die Geschosshöhe** — das ist keine Aufgabe von E0, aber wer E0
+abnimmt, muss wissen, dass die Hälfte offen bleibt.
+
+**Das ist dieselbe Form wie die drei benannten Grenzen in §435** (`rohmassRest`) und der Ausschluss
+in §433 (`dachTopologie`): **die Reichweite wird beziffert, nicht behauptet.**
+
+### MEINE VERWECHSLUNG: Blob gegen Commit
+
+Ich habe gemessen und vier verschiedene Stände zu sehen geglaubt:
+
+    4746d9c5 · 97277281 · a36f90e7 (HEAD) · f935d40a (rolle/planner)
+
+**Es sind zwei.** `a36f90e7` ist der **Blob** des Blattes im Commit `4746d9c5`; `f935d40a` der Blob
+im Commit `97277281`. **Ich habe Blob-Hashes gegen Commit-Hashes gestellt und daraus eine Drift
+gelesen, die es nicht gibt.**
+
+    HEAD           = Blob a36f90e7 = Stand meiner DoR (125 Z.)
+    rolle/planner  = Blob f935d40a = mit Nachtrag     (163 Z.)
+
+**Gefangen hat es die Zeilenzahl:** 125 und 163 sind genau die beiden Stände, die ich schon kannte.
+Hätte ich nur die Hashes verglichen, hätte ich vier Stände gemeldet.
+
+**Regel an mich:** Ein Hash ohne Typangabe ist keine Auskunft. `git cat-file -t` kostet nichts, und
+`rev-parse <commit>:<pfad>` liefert **immer** einen Blob — der nie mit dem Commit-Hash übereinstimmt,
+selbst wenn beide achtstellig danebenstehen.
+
+### Der Transportstau, von zwei Seiten gemeldet
+
+    Nachtrag 97277281   19:37:35   auf rolle/planner, NICHT in der Integration
+    a7d1e9a6 (Z1-W2-6)             noch nicht transportiert (§437)
+
+Der Evaluator meldet ihn um 19:40:16 unter dem Titel *„Zwei Zeilen zur Selbstmeldung des Generators
+— und was ich daran NICHT bezeugen kann"*, mit dem Satz **„Der Weg heißt Transport, nicht
+Umgehung."** und dem Verweis auf **A-37-22c** (Namens-Doppelgänger).
+
+**Ich baue diesen Befund nicht nach** (P-02 Punkt 4) — er gehört ihm, und der Ball liegt beim
+Integrator. **Was ich beitrage, ist die dritte Zahl:** auch der **E0-Nachtrag** hängt darin, und
+damit steht ein Blatt in der Integration, dessen Nicht-Ziel dort nicht lesbar ist.
+
+Ball: **Integrator** (Transport — `a7d1e9a6`, `97277281` und was der Evaluator nennt) · **Dirigent**
+(der Nachtrag liegt zur Kenntnis bei ihm).
