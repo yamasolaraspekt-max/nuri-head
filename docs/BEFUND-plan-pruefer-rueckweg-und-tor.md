@@ -30045,3 +30045,57 @@ einem Auftrag angekommen.
 
 Ball: **Planner** (ein Halbsatz) · **Yama** (Posten 10, der Name) · **Generator** (bauen; beides
 hindert ihn nicht). Bei mir nichts.
+
+## §371 — Ballwechsel Z1-W2-0 bestätigt, und die Grundmenge meiner eigenen Ballortung: 94 gegen 140
+
+Messstand: HEAD `49030100`, Baum 0, gemessen 15:45–15:49. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §371'` → 0).
+
+### Teil 1 — der Halbsatz aus §369 ist umgesetzt, selbst nachgemessen
+
+`planner-CODE_FERTIG-Z1-W2-0-laeufer.yaml`, 15:43:53, `blatt_sha c2c8abe2`, ersetzt `adf03d32`. Der
+Planner behauptet: *„Kein Kriterium berührt, nur der Ort im Messbefehl. Die DoR für Z1-W2-0 bleibt."*
+**Gemessen statt geglaubt:**
+
+    Beifang (c2c8abe2 gegen Elternteil 57b864b9)     1 Datei, 17+/4-        KEIN BEIFANG
+    Kriterien vorher / nachher                       8 / 8                  UNVERAENDERT
+    Matrixzeilen vorher / nachher                    8 / 8                  UNVERAENDERT
+    'test:hausplaner:dom' vorher / nachher           0 / 3                  drei Stellen
+    'vitest' vorher / nachher                        3 / 4                  <- gestiegen!
+      davon in einer ANWEISUNG                       0
+      davon im Zitatblock der Berichtigung           4                      :204 :205 :206 :210
+
+**Die Vitest-Zahl ist gestiegen, und das ist richtig so** — sie steht jetzt vollständig in der
+Berichtigung, keine einzige Nennung mehr in einer Anweisung. Wer nur die Zahl gezählt hätte, hätte
+eine Verschlechterung gemeldet. **Die Zahl allein trägt die Antwort nicht; erst die Frage, *wo* sie
+steht.**
+
+Die Behauptung hält vollständig. **Ballwechsel bestätigt:** kein neues DoR nötig, mein Votum zu
+Z1-W2-0 bleibt unberührt, der Ball liegt beim Generator. Der volle Läufer steht jetzt in (h), sodass
+das Kriterium seine eigene Zusage („jede Rolle kann ihn unverändert fahren") zum ersten Mal einlöst.
+
+Der Planner ordnet den Fall selbst ein — dritter Messbefehl heute, den niemand ausführen konnte
+(`$`-Anker · fehlendes `-E` · Vitest), *„dreimal dieselbe Wurzel: ich habe den Befehl GESCHRIEBEN
+statt ihn zu FAHREN"* — und benennt die Lücke seiner eigenen Gegenprobe: sie deckt Metazeichen ab,
+**nicht die Existenz des genannten Werkzeugs.** Das ist genau die Lücke, an der ich in §369 selbst
+gescheitert bin.
+
+### Teil 2 — die Lücke aus §370, jetzt gezählt
+
+In §370 fiel auf, dass das Z0-I1-Blatt in `docs/auftraege/` liegt und meine Ballortung nur
+`docs/auftraege/aktiv/` liest. Die Grundmenge dazu:
+
+    Blaetter in docs/auftraege/aktiv/       94
+    Blaetter in docs/auftraege/ (flach)    140
+    davon mit ball plan-pruefer              0
+
+**Sechzig Prozent aller Blätter liegen außerhalb des Ortes, den meine Ballortung prüft** — und die
+Ballortung heißt „zweiseitig", weil sie beide *Wahrheiten* vergleicht, nicht beide *Orte*. Heute ist
+die Lücke **folgenlos**: keines der 140 trägt meinen Ball. Das ist der ehrliche Befund und nicht
+mehr — ich habe eine Lücke belegt, keinen übersehenen Ball. **Ein Loch, durch das heute nichts fällt,
+ist trotzdem ein Loch**; Z0-I1 wäre gestern hindurchgefallen, wenn der Ball nicht über das Ereignis
+gekommen wäre.
+
+**Ab sofort messe ich beide Orte.** Die Prüfung kostet einen Befehl.
+
+Ball: **niemand von mir aus.** Kein Votum geändert, kein Blatt berührt.
