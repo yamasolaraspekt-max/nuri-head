@@ -30528,3 +30528,78 @@ Blattpfad** — nicht in einem eigenen Feld weiter unten. Die Meldepflicht verla
 `ergebnis_sha`; sie verbietet nicht, den Blattstand dorthin zu schreiben, wo er nicht verrutschen kann.
 
 Ball: **Evaluator** (Abnahme Z2-W0-5b) · bei mir nichts.
+
+## §378 — Errata Z0-I1 bestätigt, Z0-I1-12 in einem Zug erteilt. Und eine Prüfsumme von mir, die vier Fehlalarme erzeugte
+
+Messstand: HEAD `b962df8d`, Baum 0, gemessen 16:07–16:17. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §378'` → 0). Mein wartender Ball aus §373 ist eingelöst.
+
+`SPEZ-planner-anschlusswelle-1/planner-CODE_FERTIG-Z0-I1-errata.yaml`, 16:05:24, `blatt_sha
+7791920f`, ersetzt `8e65762e`.
+
+### Zählstand und die vier Punkte, selbst gemessen
+
+    Zeilen 592 (Planner: 589)  ·  Kriterien 12 (12)  ·  Matrixzeilen 10 (10)  ·  Beifang 1 Datei
+    (b) ticket_g1b1_testing  6 Treffer — alle in Berichtigung, Messbeleg, Ausweich-DB
+        ticket_testing      32 Treffer (Wortgrenze)         KEINE Anweisung mehr auf g1b1
+    (d) Belegzeile vorhanden
+
+**Die drei Zeilen Abweichung** (592 gegen 589) sind meine Zählung mit `wc -l` gegen seine — kein
+Befund, sondern zwei Zählweisen am selben Text.
+
+### Meine eigene Prüfsumme erzeugte vier Fehlalarme
+
+Ich prüfte (c) *„Z0-I1-1,2,4,5,6,9,11 zeichengleich"* über `grep -A3 "Z0-I1-K\*\*" | shasum` und
+bekam **vier Abweichungen**. Der echte Diff zeigt: die geänderten Zeilen sind **Fließtext, der die
+Kriterien nennt** — *„Die Kriterien sind unberührt. `Z0-I1-1` (Guard fragt die Verbindung)…"* und der
+neue Kasten zu `Z0-I1-9`. **Mein Fenster fing Erwähnungen statt Kriterien.** Grundmenge gegen das
+Verfahren geprüft statt gegen die Frage — die Falle steht wörtlich in meinem Wacheauftrag.
+
+**Eine echte Unschärfe bleibt, und sie ist harmlos:**
+
+    leases/TESTDB-ticket_g1b1_testing   ->   leases/TESTDB-ticket_testing
+
+`Z0-I1-9` **ist** geändert. Der Planner nennt es in **(b)** korrekt („Lease-Pfad in Z0-I1-9") und in
+**(c)** zugleich als „zeichengleich". Beides zusammen geht nicht. **Gewollt ist es trotzdem:** (b) ist
+die Anordnung, (c) meint erkennbar die *Zusagen*, nicht die *Namen* darin. Ich halte (c) für
+sprachlich zu weit gefasst, nicht für falsch gearbeitet — **die Zusage von Z0-I1-9 ist unverändert,
+nur ihr Ziel heißt jetzt richtig.**
+
+### Z0-I1-12 — selbst nachgemessen, und der Befund ist schärfer als meiner
+
+Der Planner fügt ein zwölftes Kriterium hinzu und **zeichnet es als Zusatz aus, statt es
+einzuschmuggeln**: *„Ob die Bestätigung in einem Zug ihn noch trägt, ist die Entscheidung des
+Plan-Prüfers — nicht meine."* Vollständig nachgemessen:
+
+    phpunit.xml setzt      DB_CONNECTION · DB_DATABASE
+    phpunit.xml setzt NICHT DB_HOST · DB_PORT · DB_SOCKET · DB_USERNAME     (je 0 Treffer)
+    config/database.php    host 127.0.0.1 · port 3306 · username forge · unix_socket ''
+    lauschend (lsof)       3307 · 3317 · 33060        auf 3306 lauscht NICHTS
+    .env je Baum           ticket/generator/evaluator: DA · planner + plan-pruefer: WEDER NOCH
+
+**Sein Befund trifft, und er ist schärfer als mein §373.** Ich maß `.env.testing`; **auch `.env`
+fehlt** — in denselben zwei Bäumen. Damit greifen die versionierten Defaults, und ein Testlauf dort
+scheitert nicht an Rechten, sondern an **CONNECTION REFUSED auf 3306**. Genau die Fehlklasse, die
+dieses Errata gerade aufgelöst hat: **eine Fehlermeldung, die nach Rechten aussieht und am Weg liegt.**
+
+Und der Kern: **Es laufen zwei MySQL-Instanzen.** Welche `ticket_testing` trägt, entscheidet eine
+unversionierte Datei, die in jedem Baum anders lauten kann. **Dann serialisiert `Z0-I1-9` Zugriffe auf
+eine Datenbank, von der niemand belegen kann, dass es dieselbe ist.**
+
+### Meine Entscheidung
+
+**Z0-I1-12 ist erteilt, in einem Zug, ohne zweite Runde.** Begründung, damit sie prüfbar bleibt:
+
+1. **Kein neues Ziel, sondern eine Voraussetzung der bestehenden.** Ohne (12) ist (9) nicht belegbar —
+   ein Kriterium, dessen Nachweis von einer unversionierten Datei abhängt, ist kein Nachweis.
+2. **Vollständig belegt und von mir nachgemessen**, jede Zahl oben. Eine zweite Runde prüfte nichts,
+   was hier nicht schon geprüft ist — sie wäre die Auflagen-Schleife, die Nachtrag 1.5 abgeschafft hat.
+3. **Die Absage-Regel trägt:** *„Die Datei in die zwei Bäume KOPIEREN erfüllt (12) NICHT"* — sie
+   verhindert die naheliegende Scheinlösung, die vier auseinanderlaufende Kopien erzeugt hätte.
+
+**Was ich ausdrücklich NICHT entscheide:** ob (12) **jetzt** gebaut wird oder Folgeposten ist. Das ist
+Umfang und Reihenfolge — **Sache des Dirigenten, nicht meine.** Ich prüfe Reife, nicht Priorität. Ich
+sage nur: reif ist es.
+
+Ball: **Dirigent** (baut (12) jetzt mit oder später?) · **Generator** (Stufe 1 nach Errata) · bei mir
+nichts.
