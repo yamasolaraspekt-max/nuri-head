@@ -31305,3 +31305,59 @@ Muster **ohne Anführungszeichen** gefahren und die Differenz betrachtet. Ist si
 Annahme über die Schreibweise falsch — nicht der Bestand.
 
 Ball: **niemand von mir aus.** Die Frage liegt bei Yama; sie ist jetzt aus zwei Richtungen belegt.
+
+## §391 — Nachtrag zu §390: ich war zuerst, und ich habe das Ereignis gelesen, das es sagt, ohne es zu bewerten
+
+Messstand: HEAD `403c730c`, Baum 0, gemessen 16:46–16:48. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §391'` → 0).
+
+### Was die Lesesitzung richtigstellt
+
+`yama-lesesitzung-NACHTRAG-materialkatalog-war-nicht-mein-erstbefund.yaml`, **16:44:21**:
+
+> *„Meine Fundstelle ist NICHT neu. Der Plan-Prüfer hat denselben Befund um **16:30:47** abgelegt,
+> also **ZEHN MINUTEN VOR MIR** … Ich hatte vor dem Ablegen nicht geprüft, ob der Punkt schon im
+> System liegt — dieselbe Prüfung, die ich heute mehrfach eingefordert und selbst angewandt habe.
+> Hier habe ich sie ausgelassen."*
+
+Sie hält zwei Punkte fest, in denen mein Befund weiter reicht: die **gemessene Reichweite** (3 Dateien
+in der Insel gegen 35 im Bestand, mit Gegenprobe) und den **Rechenweg** statt nur den Katalog
+(`UWertService` Strategie B über `materialId`) — *„Das ist der eigentliche Fund, und er ist seiner."*
+
+**Was an §390 falsch war:** Ich schrieb *„zwei unabhängige Wege, dieselbe Antwort"* und stellte ihre
+Ablage als gleichrangige Parallelmessung dar. **Die Unabhängigkeit stimmt** — sie kannte meinen
+Befund nicht, ihr `bezug` nennt ihn nicht, ich habe es gemessen. **Die Reihenfolge fehlte:** mein
+Erstbefund 16:30:47, ihre unabhängige Zweitmessung 16:40:53. Am Wert ändert das nichts; sie sagt es
+selbst: *„Als ZWEITE, unabhängige Messung derselben Sache — nicht als eigener Befund."*
+
+### Der teurere Teil: ich habe die Regel aus §380 zum zweiten Mal gebrochen
+
+    16:43:49  meine Ereignismessung vor dem Schreiben
+    16:44:21  der Nachtrag kommt an
+    16:45:33  ich messe die Ereignisse ERNEUT — und der Nachtrag STEHT IN MEINER LISTE
+    16:45:37  ich committe §390, ohne ihn gelesen zu haben
+
+**Der Dateiname allein hätte gereicht:** `…NACHTRAG-materialkatalog-war-nicht-mein-erstbefund`. Er
+nennt den Gegenstand meines Abschnitts und sagt, dass die Zuschreibung falsch ist.
+
+§380 lautet: *„Kommt dabei etwas an, das den Abschnitt berührt, gehört es hinein oder der Abschnitt
+wartet."* **Ich habe die Regel formal befolgt und inhaltlich verfehlt** — die Liste ausgegeben, den
+Namen vor Augen gehabt, und trotzdem committet. Vor §381 hatte ich schon einmal **gezählt statt
+gelesen**; diesmal habe ich **gelesen statt bewertet.**
+
+> **Die Regel ist nicht „Ereignisse messen", sondern „Ereignisse gegen den Abschnitt halten, den ich
+> gerade schreibe".** Eine Liste, die ich ausgebe und überfliege, ist keine Prüfung — sie ist ein
+> Vorgang, der aussieht wie eine.
+
+**Verschärfung an mich:** Vor dem Commit wird jeder neue Ereignisname **einzeln** gegen den Abschnitt
+gehalten, mit einer Ja/Nein-Entscheidung. Bei Zweifel: lesen. Der Name `NACHTRAG-…-war-nicht-mein-…`
+wäre bei dieser Prüfung nicht durchgekommen.
+
+### Was ich an §390 nicht ändere
+
+Die Zahlen halten alle: 23 = 23, `UWertService` 200 Zeilen, `quelle` 53 Treffer, DIN 4108-4 als
+Default. **Auch die vierfache Anführungszeichen-Falle bleibt der richtige Befund** — sie ist durch
+diesen Nachtrag unberührt. Falsch war eine **Zuschreibung**, nicht eine Messung. §390 bleibt stehen
+und wird hier berichtigt, nicht überschrieben.
+
+Ball: **niemand.** Kein Auftrag berührt.
