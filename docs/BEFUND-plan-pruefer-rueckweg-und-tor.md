@@ -28662,3 +28662,69 @@ Kategorien stehen.
 **Ball: Planner** — zwei Sätze: `GEBAUT` und den zusammengesetzten Reifegrad in die Aufzählung
 aufnehmen (41 → 43), und die zwei fehlenden Module einordnen (25 + 2 = 27). Als eigenes Ereignis
 gemeldet, nicht in sein Dokument (P-02 Punkt 3).
+
+## §349 — N4 ist in Kraft und erweitert meine Prüfpflicht; ihre Brücke ist ein Dokument mit zwei Lücken
+
+Gewählt gegen HEAD `6ed897a6` (Baum sauber, 14:23). §349 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok.
+
+**Angekommen 14:20:16:** `dirigent-entscheidungen-in-yamas-namen.yaml`, an alle Rollen. Grundlage
+ist Yamas Delegation von 14:1x. Drei der zwölf Posten betreffen mich unmittelbar.
+
+**(1) P-02 ist ANGENOMMEN** — wörtlich: *„P-02 ANGENOMMEN (Plan-Prüfer `f3ec1ffb`: alle fünf Punkte
+erteilbar) → Planner arbeitet es in das Z0-I2-Blatt ein."* Damit ist der Vorgang, der 15 Tage auf
+`VORLAGE` stand (§343) und heute in zwei Runden geprüft und nachgebessert wurde, abgeschlossen.
+
+**(2) Meine §308-Regelfrage ist beantwortet** — *„N3 Nachvollzugs-Matrix: Pflicht für neue Blätter;
+Alt-Blätter nur beim nächsten Anfassen."* Die Frage stand seit heute früh offen: **ob die Matrix
+rückwirkend für 90 Altblätter gilt.** Antwort: nein, nur beim nächsten Anfassen.
+
+**(3) N4 ist neu und trifft direkt meine Rolle.** `ARBEITSREGELN-NACHTRAG-1-5-V3.md`, Abschnitt
+*„N4 · Bedienweg-Zeile (Pflichtteil der BEREIT-Liste, neben N3)"*:
+
+> *„Jedes Produkt-Blatt nennt vor dem DoR **entweder** den Bedienweg … **oder** ausdrücklich
+> `bedienweg: keiner — Anschluss über <Kennung>`. Ein Blatt ohne N4 ist nicht BEREIT; **der
+> Plan-Prüfer prüft N4 wie N3.**"*
+
+**Mein Auftrag hat es vorweggenommen:** gen 9 (13:58:44) verlangt bereits *„Blatt Z2-W0-5b gegen §5
+inkl. **N3 + N4**"* — die Regel wurde 22 Minuten später veröffentlicht. Kein Widerspruch, aber
+bemerkenswert: **der Auftrag war vor der Regel da.**
+
+**Der Befund, und er hängt an meinem §348.** Der Nachtrag benennt die Brücke selbst:
+
+> *„Die Brücke ist das **Werkzeug-Register** (`docs/konzept/werkzeug-register.md` → Regelwerk):
+> Registerzeile ↔ Modul ↔ Kennung ↔ Reifegrad ↔ Blatt; **eine Kennung, die dort nicht steht, kann
+> kein Blatt anschließen.**"*
+
+**Genau dieses Dokument hat nach meiner Messung von 14:18 zwei Lücken** (§348): `app/tools/
+werkzeugArten.ts` und `domain/scene.types.ts` kommen darin **0 mal** vor — weder als Kandidat noch
+als ausdrücklich ausgeschlossenes Typmodul. **Mit N4 wird aus einer Zähl-Unschärfe eine Sperre:**
+*was nicht im Register steht, kann kein Blatt anschließen.* Zwei Module sind damit nicht bloß
+ungezählt, sondern **anschlussunfähig, ohne dass jemand das entschieden hätte.**
+
+*Das ist die Bauart, die ich heute mehrfach gemessen habe — eine Zahl wird zur Regel, und die Lücke
+in der Zahl wird zur Lücke in der Regel. Der Unterschied: hier ist sie noch offen und in zwei
+Sätzen zu schließen.*
+
+**Zweiter Punkt: die Regel liegt nur auf einem Zweig.** Gemessen, alle Zweige:
+
+    docs/regelwerk/ARBEITSREGELN-NACHTRAG-1-5-V3.md
+      enthalten in : rolle/dirigent          (Commit 585294b7, 14:20:19)
+      Integration  : NEIN     mein Baum: NEIN
+      auf fork     : JA (rolle/dirigent lokal 585294b7 = remote 585294b7)
+
+**Gesichert ja, transportiert nein.** Eine Regel, die *„ab sofort in Kraft"* ist, steht im
+Integrationsstand nicht — wer sie dort sucht, findet sie nicht. **Kein Vorwurf:** sie ist eine
+Minute alt, und der Rückweg läuft. Ich halte es fest, weil es **derselbe Zustellabstand** ist, den
+heute schon B-008 (falscher Ordner), die Lesesitzung (Chatfenster statt Steuerung) und mein §341
+(falsches Zeitfenster) getroffen haben — **vierter Fall an einem Tag, diesmal am Regelwerk selbst.**
+
+**Dritter Punkt, gemessen ohne Wertung:** von **90** aktiven Blättern trägt **keines** eine
+N4-Zeile; drei nennen das Wort *Bedienweg*. Für N3 ist die Rückwirkung ausdrücklich geregelt
+(*„Alt-Blätter nur beim nächsten Anfassen"*), **für N4 steht das nicht dabei.** Der Nachtrag sagt
+nur *„vor dem DoR"*. Ich lese das als: **N4 gilt ab dem nächsten DoR, nicht rückwirkend** — und
+melde die Auslegung, statt sie stillschweigend anzuwenden. **Mein nächster DoR ist Z2-W0-5b; dort
+werde ich N4 prüfen.**
+
+**Ball: Planner** (die zwei Module ins Register, jetzt mit Sperrwirkung) · **Dirigent** (ob N4
+rückwirkend gilt — ich lege meine Auslegung offen, entscheiden muss er). Bei mir sonst nichts offen.
