@@ -40114,3 +40114,84 @@ unsagbar. Wo das zählt — etwa bei einem Verbot, das seine eigene Begründung 
 — ist es dieselbe Frage wie in §491/Posten 29 (**verbinden gegen nennen**). Dort wurde sie durch
 Trennung gelöst; hier war sie durch Umformulieren billiger zu haben. Beim nächsten Mal ist sie es
 vielleicht nicht.
+
+## §501 — Meldepflicht Z1-E4-1: bestätigt. Und ich habe das CODE_FERTIG zwei Runden übersehen
+
+Stand: HEAD `07d41649`, Baum 0, gen 11, Digest gleich. Zeit 23:33. Messstand `44d63bcc`.
+
+### Zuerst mein eigener Fehler
+
+Das `generator-CODE_FERTIG-Z1-E4-1.yaml` liegt seit **23:18:56** vor. Ich habe es **zwei Runden
+lang nicht gesehen**, weil mein Ereignis-Schnitt in beiden Runden **hinter** diesem Zeitpunkt lag
+(23:20 und 23:23). In der Zwischenzeit habe ich §499 (vorgezogene Prüfung desselben Baus) und §500
+(Z1-E0-1b) geschrieben — beides nützlich, aber die **fällige Pflicht** lag daneben.
+
+Der Schnitt war jedes Mal korrekt gemessen (nicht geraten, §485 ist gelernt). Er war nur **zu eng**:
+Ich schneide auf „seit meiner letzten Ablage", und was **davor** eintrifft, während ich schreibe,
+fällt heraus. Bei Taktzeiten unter einer Minute ist das kein Randfall.
+
+**Abhilfe ab sofort:** Der Schnitt liegt auf dem **Beginn** meiner letzten Runde, nicht auf ihrem
+Ende. Lieber dieselbe Meldung zweimal sehen als eine gar nicht.
+
+### Meldepflichten: erfüllt
+
+| Pflicht | gemessen |
+|---|---|
+| SHA existent | `3b4e8f6b`, `7500bb7d`, `998ff9f2` — alle **commit** |
+| SHA in einem Feld | `ausgangs_sha`, `endstand_sha`, `ergebnis_sha` — gequotet |
+| **Blattstand mit Blob** | `„998ff9f2 (Blob 5a43528b)"` — **Blob selbst nachgemessen: `5a43528b` ✓** |
+| Scope-Diff | 43 Dateien; `.env` **0**; nichts außerhalb `resources/`, `app/`, `public/`, `tests/`, `docs/` |
+| Ballwechsel | `ball: [evaluator]` — passt |
+
+**Der Blob im `blattstand`-Feld ist neu.** Ich hatte in §484 und §486 zweimal angemerkt, dass
+`blatt_sha` einen Commit statt eines Blobs trägt. Hier nennt der Generator **beides** — Commit *und*
+Blob, und der Blob stimmt. Die Anmerkung ist angekommen, ohne dass jemand sie zur Auflage machen
+musste.
+
+### Kriterium (e) und die Fixture nachgerechnet
+
+```
+hoehenkette.ts:  +62 / -0        rein additiv ✓
+Fixture: schichten [{120}, {60}] → Summe 180
+         bodenplatteOberkanteMm(schichten, 0) = round(0 − 180) = −180  ✓
+         dickeMm 250 → UK −430
+         OG elevation 2700 = 0 + 2500 + 200  ✓ (die Kette aus §483)
+```
+
+Der Test führt zusätzlich ein **Kellergeschoss** mit `elevation: -2800` — ein Fall, den weder Blatt
+noch GP-0 verlangen.
+
+### Meine Auflage 4 steht als ausführbare Zusage im Code
+
+```js
+// **Der vierte Befund des Plan-Prüfers, als Zusage:** keine zwei Groessen duerfen gleich sein,
+// sonst kann eine Verwechslung zufaellig gruen werden.
+const werte = [b.dickeMm, fussbodenaufbauDickeMm(b.schichten), doc.levels[0].floorThickness, …];
+assert.equal(new Set(werte).size, werte.length, …);
+assert.equal(b.oberkanteMm, -fussbodenaufbauDickeMm(b.schichten), 'Kote und Aufbau widersprechen…');
+```
+
+Das ist die stärkste Form, in der ein Prüfbefund landen kann: nicht als Vermerk, sondern als
+**Zusage, die bei Verletzung rot wird**. Aus „die Fixture kann den Zweig nicht unterscheiden" ist
+eine Invariante geworden.
+
+### Eine Präzisierung, kein Befund
+
+`nicht_angefasst` nennt `CeilingNode`. Gemessen ist der Typ **nicht** unverändert — er hat eine
+Zeile mehr:
+
+```
+< /** Fußbodenaufbau (Feature B) — … feldgleich mit wandaufbau.Schicht. */
+> /** Fußbodenaufbau (Feature B) — … feldgleich mit wandaufbau.Schicht.
+>  *  Reihenfolge: siehe SCHICHT_REIHENFOLGE — unten (Geschoss darunter) → oben. */
+```
+
+Ein **Kommentar**, der Operand 2 festhält. Struktur, Felder und Verhalten sind identisch — die
+Aussage stimmt in der Sache, die Formulierung ist eine Spur zu absolut. „CeilingNode-Struktur
+unverändert, ein Kommentar ergänzt" wäre genau gewesen.
+
+Bemerkenswert ist der Kommentar selbst: Er sagt „**feldgleich mit `wandaufbau.Schicht`**" — genau
+die Zwei-Typen-Frage aus meiner §484-Anmerkung 2. Dort hatte ich gemeldet, dass `dicke` und
+`dickeMm` verschiedene Domänen sind und es keinen Konverter gibt. Der neue Kommentar behauptet
+Feldgleichheit. **Das ist zu prüfen, sobald der Evaluator durch ist** — nicht jetzt, weil es kein
+Kriterium von E4 berührt.
