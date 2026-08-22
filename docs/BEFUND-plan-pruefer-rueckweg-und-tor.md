@@ -29363,3 +29363,55 @@ beide tragenden Zahlen von mir nachgemessen, Rot-Lage bestätigt, Spur-W-Eignung
 
 **Ball: keiner bei mir.** Nach dem Nachtrag 1.5 gilt das Votum als Teil des Blatts; ein Nachtragen
 ist nicht verlangt (§354).
+
+## §361 — Alterungsprüfung W-21L: mein Befund vom 16.08. ist übernommen, der Posten ist jetzt terminiert statt blockiert
+
+Gewählt gegen HEAD `02629500` (Baum sauber, 15:05). §361 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok. **Statuswahrheit aus `auto/hausplaner-integration`.**
+
+**Dritte Alterungsprüfung nach §358.** Gewählt: **W-21L** — der Posten, den der Dirigent heute
+ausdrücklich aufgegriffen hat.
+
+**Der Posten trägt seine eigene Ausstiegsbedingung.** Datensatz-Kommentar:
+*„`ballbesitz: —`  # bis Yama die Fachdaten liefert **ODER** W-23 sie erzeugt"*, Zustand
+`DECISION_BLOCKED`. Mein Befund vom **16.08.** (gegen `74c997c7`) lautete: *„die zweite Bedingung ist
+eingetreten — der erste Schritt liegt nicht mehr bei Yama."*
+
+**Er ist übernommen worden.** Der Dirigent hat heute um **14:20:16** in Yamas Namen entschieden:
+
+> *„W-21L (DECISION_BLOCKED): **Planner prüft, ob W-23 die Fachdaten erzeugt**; sonst präzise
+> Operandenfrage an Yama."*
+
+**Das ist wörtlich der Weg, den mein Befund benannt hat** — die Oder-Bedingung wird geprüft, statt
+weiter auf Yama zu warten. *Ein Posten, der acht Tage als „bei Yama" geführt wurde, obwohl seine
+eigene Ausstiegsbedingung eine zweite Tür nennt.*
+
+**Gemessen, ob der Auftrag ausgeführt ist — und warum das kein Rückstand ist.**
+
+    'W-23' in Planner-Meldungen        0
+    'W-23' in rollen/planner.yaml      0     (gen 18, Dateizeit 14:46:11)
+    'W-23' in Ereignissen gesamt       3     -> 2x Dirigent (14:20:16), 1x meine eigene Liste
+
+**Der Planner hat es nicht getan, und er soll es auch noch nicht.** Der Dirigent hat es im selben
+Zug terminiert (`dirigent-hinweis-folgeposten-nach-welle-1.yaml`, 14:20:16):
+
+> *„In dieser Reihenfolge, je als eigener Posten/Generation, **NICHT jetzt**: (1) Paket 1 Blätter;
+> (2) Einarbeitung Nachtrag 1.5; (3) Ue-1 Messung; **(4) W-21L: erzeugt W-23 die Fachdaten?**;
+> (5) Z0-I2-Blatt mit P-02."*
+
+**W-21L steht auf Platz 4 von fünf, drei Posten liegen davor.** *Kein Rückstand — Reihenfolge. Und
+das ist der Unterschied, den eine Alterungsprüfung leisten muss: „noch nicht erledigt" ist kein
+Befund, solange „noch nicht dran" die Erklärung ist.*
+
+**Der Zustand des Postens hat sich damit zweimal verschoben, ohne dass jemand die Fachfrage
+beantwortet hätte:**
+
+    16.08.  blockiert bei Yama            -> mein Befund: die zweite Tuer steht offen
+    22.08.  erster Schritt beim Planner   -> Dirigent uebernimmt den Weg (14:20:16)
+    22.08.  eingereiht als Vormerkung 4   -> terminiert, drei Posten davor
+
+**Stand: OFFEN, nicht blockiert, terminiert.** Für eine Vorlage an Yama ist das die brauchbare
+Auskunft — **er muss nichts tun, und es liegt nicht still.**
+
+**Ball: niemand.** Keine Forderung; der Posten hat einen Platz in einer Reihenfolge, und die gehört
+dem Dirigenten. In der abgelegten Postenliste nachgetragen.
