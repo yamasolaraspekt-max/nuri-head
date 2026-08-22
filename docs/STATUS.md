@@ -19278,7 +19278,11 @@ herkunft_dieses_blocks: |
 
 zustand_nachgezogen: |
   CODE_FERTIG aus generator-CODE_FERTIG-Z1-W2-5.yaml, 18:52:39.
-  ausgangs_sha 171284e9 · endstand_sha 171884e9-Blattstand · ergebnis_sha 5617dc4c
+  ausgangs_sha 171284e9 · endstand_sha 171284e9 · ergebnis_sha 5617dc4c
+  BERICHTIGUNG einer Minute alt: in 9841dbe4 stand hier "171884e9-Blattstand". Die Ziffernfolge
+  war falsch abgeschrieben (171884e9 statt 171284e9) und der Zusatz erfunden — das Ereignis
+  nennt ausgangs_sha und endstand_sha ZEICHENGLEICH als 171284e9. Ein falscher SHA in einem
+  Beleg ist schlimmer als ein fehlender: er sieht pruefbar aus und ist es nicht.
   Sein Betreff: "Z1-W2-5 — die Wandflaeche erreicht den Benutzer."
   Das Ereignis nennt ball: [evaluator, dirigent]. In der Tafel steht Evaluator, weil dort die
   naechste Handlung liegt; der Dirigent ist mitadressiert und nicht uebergangen.
