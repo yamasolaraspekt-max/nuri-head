@@ -37790,3 +37790,71 @@ Auftrag stellt.**
 
 Ball: **Dirigent** — sechste Postenmessung, `entscheidungsreif: gegenstandslos`. **Geht sofort als
 Ereignis** (§463).
+
+## §472 — Postenmessung 7/9: die A-13-Bedingung ist echt und gehört Yama. Und sie ist der Präzedenzfall, den §443 gesucht hat
+
+Messstand: HEAD `87a66114`, Baum 0 · Integration `57e661bd`, Baum 0 · **Rückstand `HEAD..auto` = 153**
+· gemessen 21:37–21:41. **Ereignis-Schnitt dieser Runde: 21:35:48** (0 neue Ereignisse).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §472'` → 0).
+**Siebter Posten für den Dirigenten-Auftrag von 14:48:57.**
+
+### Der Posten, gemessen
+
+    A-13 selbst:  zustand BETRIEBSBESTAETIGT · ballbesitz: —  # Kette vollstaendig
+    A-08 (soll mit vorgelegt werden): ebenso BETRIEBSBESTAETIGT · ballbesitz: —
+
+**Der Auftrag ist durch. Der Posten ist die BEDINGUNG davor** — und die steht wörtlich im Blatt
+(`A-13-roof-azimuth-absichern.md:442-447`):
+
+> **„Betriebsauflage (bindend vor der Veröffentlichung, nicht vor `RELEASE_FREI`):** Yamas drei
+> `SELECT`s gegen `ticket` — wie viele `p_v_roofs`-Sätze tragen `roof_azimuth` außerhalb
+> `0 ≤ x < 360`. *Das Blatt weist diese Messung ausdrücklich Yama zu („der Fall gehört ihm, nicht dem
+> Code"), und **§15 verbietet mir das Messen an Produktivdaten. Ich habe sie deshalb NICHT gefahren,
+> sondern als Bedingung eingetragen.*** **Bei Ergebnis 0 ist die Auflage erledigt; bei > 0 gehört die
+> Entscheidung Yama, bevor deployt wird."**
+
+    entscheidungsreif: JA
+    Die Bedingung ist praezise: drei SELECTs, ein Zaehlkriterium (roof_azimuth ausserhalb [0,360)),
+    zwei Ausgaenge (0 -> erledigt, >0 -> Yamas Entscheidung vor dem Deploy).
+    SIE KANN NUR YAMA FAHREN. Der Posten liegt zu Recht bei ihm — und er ist offen.
+
+### Und hier steht die Antwort auf die Regelfrage aus §443 — vom 12.08.
+
+**§443 hat heute gefragt:** *„Darf eine Schutzprobe die verbotene Handlung ausführen, um zu beweisen,
+dass sie abgewiesen wird?"* Ich habe die Frage an Yama gegeben, weil ich sie nicht entscheiden darf.
+
+> **Der Bestand hat sie längst beantwortet — und zwar genau so, wie ein Prüfer es tun sollte:**
+>
+>     „§15 verbietet mir das Messen an Produktivdaten. ICH HABE SIE DESHALB NICHT GEFAHREN,
+>      SONDERN ALS BEDINGUNG EINGETRAGEN."
+>
+> **Die Rolle fährt die verbotene Messung nicht. Sie trägt sie als Bedingung ein und gibt sie an
+> den ab, dem die Daten gehören.** Das ist die Auflösung, die §443/§444 gesucht haben — und sie
+> liegt seit dem 12.08. im Blatt.
+
+**Der Unterschied, der alles trägt:** Die Regel verbietet es **den Rollen**, nicht dem Eigentümer.
+Yama darf gegen `ticket` messen; ich darf es nicht, der Generator darf es nicht, der Test darf es
+nicht. **`TestDatenbankGuardTest.php:76` (§443) hat genau das getan, was A-13 ausdrücklich
+unterlassen hat.**
+
+> **Damit ist mein §443-Befund nicht mehr nur eine offene Regelfrage, sondern eine Abweichung von
+> einem Verfahren, das im selben Haus bereits schriftlich steht.** Das ändert nichts an Yamas
+> Entscheidungsrecht — **es ändert, was ihm vorliegt: nicht eine offene Frage, sondern eine Frage
+> mit einem Präzedenzfall.**
+
+### Was ich ausdrücklich nicht tue
+
+**Ich fahre die drei SELECTs nicht.** Weder um den Posten zu schließen noch um zu prüfen, ob die
+Auflage schon erfüllt ist. **§15, CLAUDE.md und das Blatt selbst sagen dasselbe — und §443/§444
+wären hohl, wenn ich sie in derselben Stunde bräche, in der ich sie melde.**
+
+### Lage, jetzt gemessen (21:37:01)
+
+    Commits NICHT in der Integration      44
+    Integrator-Stille                    111 Minuten
+    §447 „steht aus" bei E0/E2             2
+    Baelle beim Integrator (ganzes Haus)  21
+    Rueckstand mein Baum -> Integration   153
+
+Ball: **Yama** (die drei SELECTs — nur er kann sie fahren) · **Dirigent** (siebte Postenmessung,
+`entscheidungsreif: ja`). **Geht sofort als Ereignis** (§463).
