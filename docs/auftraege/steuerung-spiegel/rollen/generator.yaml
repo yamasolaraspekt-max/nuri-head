@@ -1,46 +1,29 @@
 auftrag_id: BAU-generator-A-37
-generation: 3            # 22.08. 01:16 — DoR A-37 ERTEILT (Plan-Pruefer a248eaaf auf 213edd28; Anmerkungen geschlossen; Blatt-Stand 762243b9). WARTEN endet: BAUEN.
+generation: 4            # 22.08. 08:12 — STOPP VOR DEM ERSTEN SCHREIBZUGRIFF (Yama): BASE_BLOCKED. Kein Bau auf abd1719c. Meine Antwort 'dirigent-antwort-nicht-ff.yaml' (Bauen auf abd1719c) ist ZURUECKGENOMMEN.
 rolle: generator
-sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8   # PID 88088 — die Sitzung im RICHTIGEN Worktree; Sitzungs-ID ist die Identitaet, pid je Lauf
-sitzung_gestoppt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b   # PID 87659 bleibt SIGSTOP bis A-37 gebaut, abgenommen (alle Negativproben) und Yama CONT freigibt
+sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8
 worktree: /Users/yamanuri/Documents/ticket-rolle-generator
 branch: rolle/generator
 basis_sha: abd1719c
 prioritaet: P0
-aktion: bauen
-gegenstand: "A-37 vollstaendig bauen nach dem erweiterten Blatt docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md @ rolle/planner 762243b9 (27 Kriterien A-37-1..27; DoR ERTEILT a248eaaf, Anmerkungen geschlossen 2b9cedc4 ff.). Zuerst rolle/generator --ff-only auf den Integrationsstand nachziehen (das Blatt liegt dort nach dem Integrator-Rueckweg; sonst direkt aus rolle/planner lesen)."
-umfang_kurz:
-  - "A-37-22 scripts/rueckweg.py: Baumauswahl ueber (Pfad, Zweig)-Paare aus fester Liste (alle sieben Rollenbaeume inkl. ticket-release-pruefung und ticket-rolle-dirigent); Namensgleiche ausserhalb der Liste melden und ausschliessen"
-  - "A-37-23 scripts/rollen-tor.sh: Rolle dirigent (ticket-rolle-dirigent / rolle/dirigent) mit technisch begrenztem Schreibbereich; Dirigent-Vorgriff 5c9afbc7 uebernehmen (Planner-Entscheid im Blatt)"
-  - "A-37-24 docs/BEFUNDNOTIZEN.md unter dieselbe Schreibbarriere wie docs/STATUS.md (nur Integrator)"
-  - "A-37-25 echtes .githooks/pre-commit (core.hooksPath=.githooks): nackter Commit im falschen Worktree / fehlende Rolle (Exit 5) / falscher Zweig abgewiesen; Integrator darf den begrenzten Integrationscommit; Merge-Hook bleibt; --no-verify als dokumentierte Grenze; Sitzungsidentitaet = Sitzungs-ID + PID/Start DES LAUFS + Heartbeat (alte PID erklaert nie eine Lease fuer verwaist)"
-  - "A-37-26/27 laut Blatt (u.a. Zustandscommit-Muster: Betreff mit zwei Kennungen/zwei Bauten darf nicht durchgehen; js-yaml direkt = Root-Eintrag in package.json (devDependencies zulaessig, Lesart im Blatt) UND im Lockfile, reproduzierbare Installation)"
-  - "Die 21 Altkriterien bleiben gueltig (A-37-5 Exit 5, A-37-6 STATUS-Sperre usw.)"
-regeln_beim_bau:
-  - "NUR im eigenen Worktree; NIE im gemeinsamen Checkout /Users/yamanuri/Documents/ticket; kein nacktes git commit; Commits ausschliesslich ueber NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules TICKET_ROLLE=generator bash scripts/commit-pruefen.sh (bis der pre-commit-Hook steht — danach beide Wege)"
-  - "Lease leases/BAU-generator-A-37/ VOR dem ersten Schreibzugriff; heartbeat_bis je Lauf auffrischen; Lease freigeben bei CODE_FERTIG"
-  - "Jede Negativprobe TATSAECHLICH ausloesen und die Rohausgabe im Baubericht belegen (falscher Worktree, fehlende Rolle, falscher Zweig, unerlaubter Pfad, nacktes git commit, Merge) — 'im Code gefunden' zaehlt nicht"
-  - "Kein Produktcode (resources/, app/ usw.) — A-37 ist Werkzeug-/Skript-/Hook-Arbeit; W0-5-Staende (28ca0834, ef7a8c89) NICHT anfassen"
-  - "Keine DB-Laeufe (Verbot bis Z0-I1)"
-  - "Abweichungen vom Blatt: melden als ereignisse/BAU-generator-A-37/generator-frage-<thema>.yaml, nicht still ersetzen; SPEC_BLOCKED wenn ein Kriterium unerfuellbar ist"
-ergebnis: "ereignisse/BAU-generator-A-37/generator-CODE_FERTIG.yaml mit Ausgangs-SHA, Ergebnis-SHA(s), geaenderten Pfaden, je Kriterium Messbefehl + Rohausgabe (vorher rot / nachher gruen), Negativproben-Belege; danach Ball an den Evaluator (rollen/evaluator.yaml bekommt aktion: abnehmen)."
-erlaubte_pfade:
-  - scripts/rollen-tor.sh
-  - scripts/commit-pruefen.sh
-  - scripts/rueckweg.py
-  - .githooks/pre-commit
-  - .githooks/commit-msg
-  - package.json
-  - package-lock.json
-  - "docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md NUR fuer die Nachvollzugs-Matrix (Commit-SHA/Testbeleg je Kriterium), keine Kriterien aendern"
-  - "eigener Baubericht im Worktree"
+aktion: base_blocked_warten
+jetzt: |
+  1. NICHTS schreiben, nichts committen. Falls du in diesem Lauf schon Dateien geaendert hast: Aenderungen in dein
+     Scratchpad sichern (cp), dann den Worktree mit git checkout -- <pfade> wieder sauber machen (der Inhalt bleibt im
+     Scratchpad; er ist kein Verlust, du baust ihn auf dem neuen Stand nach).
+  2. Lease leases/BAU-generator-A-37/active/ freigeben (nach abgelaufen/ verschieben).
+  3. Ereignis ereignisse/BAU-generator-A-37/generator-BASE_BLOCKED.yaml schreiben (Messung: 3 voraus / 98 zurueck,
+     --ff-only unmoeglich; nichts geschrieben; Lease frei).
+  4. Warten. Der Dirigent stellt einen FRISCHEN, ISOLIERTEN Arbeitsstand von Integration ab9e837c bereit:
+     der heutige Baum wird als Beleg UMBENANNT (ticket-rolle-generator-beleg-2026-08-21, Zweig rolle/generator-beleg-2026-08-21,
+     Inhalt unveraendert, deine drei Aufbewahrungs-Commits bleiben), und unter dem vom Tor gebundenen Namen
+     (/Users/yamanuri/Documents/ticket-rolle-generator, Zweig rolle/generator) entsteht ein neuer Baum von ab9e837c.
+     Danach kommt Generation 5 (neue Basis, neue ACK, neue Lease) — erst dann bauen.
 verboten:
-  - Produktcode aendern
-  - docs/STATUS.md / docs/BEFUNDNOTIZEN.md schreiben
-  - Kriterien aendern (Planner) oder eigene Abnahme aussprechen (Evaluator)
-  - Commit ohne aktive Lease; Commit ausserhalb des eigenen Worktrees; nacktes git commit
-  - Datenbanklaeufe
-steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
+  - jeder Schreibzugriff im Worktree bis Generation 5
+  - Merge, Reset, Rebase, Cherry-pick, Bau auf abd1719c
+  - Produktcode; gemeinsamer Checkout
+steuerungshandlungen_erlaubt: [ACK in ereignisse/, Lease-Freigabe, Ereignis BASE_BLOCKED, Sicherung ins Scratchpad — keine Sacharbeit]
 status: ZUGETEILT
 ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/BAU-generator-A-37/generator-ack.yaml
-erstellt: "2026-08-22T01:16 Dirigent (atomar veroeffentlicht)"
+erstellt: "2026-08-22T08:12 Dirigent (atomar veroeffentlicht)"

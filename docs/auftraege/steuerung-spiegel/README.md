@@ -52,6 +52,16 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
 7. Zustände: `ZUGETEILT → GELESEN → GECLAIMT → IN_ARBEIT → CODE_FERTIG → ABGENOMMEN` — jeder Übergang mit SHA, Zeit, Rolle, Beleg
    (Übergänge schreibt die Rolle als `ereignisse/<auftrag_id>/<rolle>-<zustand>.yaml`; der Dirigent spiegelt nach STATUS über den Integrator).
 
+## Prozessregel nach DoR (Yama 22.08.)
+Nach erteilter DoR wird der **Kriterienstand eingefroren**. Reine Erläuterungs-/Beleg-/Formulierungsberichtigungen
+ohne Kriterienwirkung werden **nicht** einzeln committet, geprüft und transportiert, sondern als **ein Errata-Ereignis**
+(`ereignisse/<auftrag>/<rolle>-errata.yaml`) gesammelt und mit **einem** Commit und **einem** Rückweg transportiert.
+Kriterienänderung nach DoR = neue DoR-Runde. Grund: nach der DoR um 00:49 folgten mehrere Berichtigungs-Commits,
+Prüfzyklen und Rückwege; der vollständige Transport lag erst 07:54 vor.
+**Basis-Regel für Bauten:** ist der Rollenzweig nicht Fast-Forward-fähig auf die Integration (divergiert), meldet die
+Rolle `BASE_BLOCKED`; kein Merge mit Altarbeit, kein Reset, kein Bau auf veraltetem Stand. Der Dirigent stellt einen
+frischen, isolierten Arbeitsstand vom Integrations-HEAD bereit (alter Zweig unverändert als Beleg, umbenannt).
+
 ## Für den Dirigenten
 - Änderung eines Auftrags = `generation` +1, Datei neu schreiben, Digest neu berechnen (`shasum -a 256`), alte ACKs verfallen.
 - **Atomar veröffentlichen** (Befund Integrator 23:44 — er las gen 4 mit dem Digest von gen 3, weil Datei und

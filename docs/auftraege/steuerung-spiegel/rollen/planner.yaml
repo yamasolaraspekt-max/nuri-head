@@ -1,42 +1,27 @@
-auftrag_id: SPEZ-planner-A-37
-generation: 6            # 22.08. 00:12 — A-42 ABGENOMMEN (Evaluator b1c0c2d4, 11/11): aktion wechselt auf SPEZIFIZIEREN. Vorherige Kennung WARTEN-planner-A-37 ist damit abgeschlossen; ACK fuer gen 6 unter der neuen Kennung.
+auftrag_id: PARKEN-planner-bis-A-37
+generation: 7            # 22.08. 08:12 — Yama: Z0-I1 begann zu frueh (Lease unter SPEZ-planner-A-37 fuer Z0-I1-Erweiterung). WIP-Reihenfolge wiederhergestellt: A-42 -> A-37 VOLLSTAENDIG AKTIV -> Z0-I1. Planner parkt.
 rolle: planner
-sitzung_erwartet: ef8ec540-263d-4f06-8a02-5a2f1beeb572          # einzige zulaessige Planner-Sitzung (PID 88928, Start 2026-08-22 00:00:48)
-takt: "Der Dirigent stoesst die Sitzung alle 4 Minuten headless an (claude -p --resume). Jeder Lauf: Auftrag ziehen, Digest pruefen, bei neuer generation ACK, Antworten lesen, innerhalb aktion handeln, kurz berichten, enden. Laengere Arbeit ueber mehrere Laeufe ist normal — Zwischenstand im eigenen Scratchpad halten, Repo-Dateien nur unter Lease aendern."
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/SPEZ-planner-A-37/planner-ack.yaml
+sitzung_erwartet: ef8ec540-263d-4f06-8a02-5a2f1beeb572
 worktree: /Users/yamanuri/Documents/ticket-rolle-planner
 branch: rolle/planner
-basis_sha: 1cd33614
-prioritaet: P0
-aktion: spezifizieren
-gegenstand: "Das A-37-Blatt docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md um die Kriterien A-37-22 bis A-37-25 (und Folgekriterien) erweitern, so dass es der Plan-Pruefer als DoR erteilen und der Generator (aa0cddd3, eigener Worktree) bauen kann. Kriterien gehoeren dem Planner: messbar, vorher rot (differenziert Produkt/Vergleich/Schutz), jeder Messbefehl einmal gefahren, Absage-Regel, Machbarkeit gemessen nicht geschaetzt."
-lease: "VOR dem ersten Schreibzugriff: leases/SPEZ-planner-A-37/ nach README (counter, counter.lock/, active/lease.yaml mit fencing_token, owner = Sitzungs-ID + Sitzungsprozess-PID + Startkennung, heartbeat_bis); nach jedem Lauf heartbeat_bis verlaengern oder Lease freigeben (active/ -> abgelaufen/)."
-commit: "Nur im eigenen Worktree, nur ueber: cd /Users/yamanuri/Documents/ticket-rolle-planner && NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules TICKET_ROLLE=planner bash scripts/commit-pruefen.sh '<Botschaft>' <pfade> — (der Worktree hat kein node_modules; NODE_PATH ist der vom Werkzeug vorgesehene Rueckfall; der Tor-Hinweis 'Modulstand unbekannt' ist zu erwarten und zu nennen). Kein nacktes git commit. Kein Merge-Commit; Nachziehen nur --ff-only."
-ergebnis: "Ereignis ereignisse/SPEZ-planner-A-37/planner-CODE_FERTIG.yaml mit Ergebnis-SHA, geaenderten Pfaden, Liste der neuen Kriterien, je Kriterium dem Messbefehl und seinem heutigen (roten) Ergebnis; dann Ball an den Plan-Pruefer (dessen Auftrag sieht DoR vor)."
-vorgaben_yama_fuer_A-37-erweiterung:
-  - "A-37-22 scripts/rueckweg.py kennt ALLE Rollenbaeume ueber (Pfad, Zweig)-Paare aus fester Liste inkl. ticket-release-pruefung (heute Sonderfall :118) und ticket-rolle-dirigent; Namensgleiche ausserhalb der Liste (z.B. Scratchpad-Klon ticket-rolle-generator, detached f374c73a) werden gemeldet und ausgeschlossen"
-  - "A-37-23 Rollen-Tor kennt dirigent (Worktree ticket-rolle-dirigent, Zweig rolle/dirigent) mit technisch begrenztem Schreibbereich docs/konzept/, docs/regelwerk/, Steuerungsblaetter in docs/auftraege/; kein Produktcode, kein docs/STATUS.md, kein docs/BEFUNDNOTIZEN.md; Dirigent-Vorgriff 5c9afbc7 uebernehmen ODER ersetzen"
-  - "A-37-24 docs/BEFUNDNOTIZEN.md unter dieselbe Schreibbarriere wie docs/STATUS.md (nur Integrator) — Messbeleg Evaluator 3f7f61d6: in rollen-tor.sh und commit-pruefen.sh 0x"
-  - "A-37-25 echtes pre-commit-Tor (.githooks/pre-commit; core.hooksPath=.githooks; commit-msg prueft heute nur Merges): nackter Commit im falschen Worktree abgewiesen; fehlende Rolle abgewiesen (Exit 5); falscher Zweig abgewiesen; Integrator darf den begrenzten Integrationscommit; Merge-Hook bleibt wirksam; --no-verify als nicht technisch verhinderbare Grenze dokumentiert; jede Negativprobe tatsaechlich ausgeloest; Sitzungsidentitaet = Sitzungs-ID + PID des Sitzungsprozesses + Prozess-Startkennung (nicht Shell-PID, Befund 79285cf2)"
-  - "js-yaml direkt in package.json + Lockfile, reproduzierbare Installation; Tor in allen Baeumen; 21/21 plus neue Kriterien"
-  - "Vorratsposten (Evaluator, ohne Wertung): a26-ball-drift, a30-datensatz-paar, a33-kennungen-nachziehen, status-erzeugen kennen BEFUNDNOTIZEN 0x — heute wirkungslos (104 = 104)"
-  - "Zustandscommit-Muster: ein Betreff mit zwei Kennungen/zwei Bauten (e9e6ee5b) wird vom Statusmuster still uebergangen — als Negativprobe/Kriterium aufnehmen: ein nicht erkennbarer Zustandscommit darf nicht durchgehen"
-danach_in_dieser_reihenfolge:
-  - "Z0-I1 vervollstaendigen (docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md erweitern): TEST_ROLLE verpflichtend, kein Rueckfall auf gemeinsames ticket_testing; Rollen evaluator, generator, security, browser; SELECT DATABASE() vor Migration/Seed/Truncate; vier dauerhafte Testdatenbanken auf der normalen MySQL-Instanz (Y-13); parallele Positiv- und Kollisionsprobe"
-  - "Z0-I2 Claim-Sperre spezifizieren (nicht bauen): docs/konzept/agentenarchitektur-v2.md §8 (rolle/dirigent 0d897b0e)"
-  - "Z0-I3 Pull-Auftragssteuerung mit technischer Auftragsbarriere spezifizieren (nicht bauen): /Users/yamanuri/.ticket-steuerung/auftraege/Z0-I3-pull-steuerung.vorgabe-yama.md"
-erlaubte_pfade:
-  - docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md
-  - "docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md (Erweiterung, erst nach A-37)"
-  - "docs/auftraege/generator-auftrag-z0-i2-*.md, -z0-i3-*.md (neu, ENTWURF, erst nach A-37)"
+basis_sha: 762243b9
+prioritaet: P1
+aktion: parken
+jetzt: |
+  1. Z0-I1-Arbeit STOPPEN. Die offene Aenderung im Worktree (1 Datei) ins Scratchpad sichern (kein Verlust), dann
+     git checkout -- <datei>, Worktree sauber. Kein Commit.
+  2. Lease leases/SPEZ-planner-A-37/active/ (Token 5) freigeben -> abgelaufen/.
+  3. ACK gen 7 unter dem neuen ack_pfad; Ereignis ereignisse/PARKEN-planner-bis-A-37/planner-geparkt.yaml (was gesichert wurde, Lease frei, Worktree sauber).
+  4. Warten, bis A-37 gebaut (Generator) UND unabhaengig ABGENOMMEN (Evaluator) ist. Dann neue generation mit aktion: spezifizieren fuer Z0-I1 (dein gesicherter Entwurf ist dann der Start).
+  Lesende Vorbereitung bleibt erlaubt (Z0-I1-Blatt, Y-13-Entscheidung in auftraege/, Plan-Pruefer-Messungen VORRAT-Z0-I1/*), Schreiben nein.
+prozessregel_neu_yama: "Nach erteilter DoR wird der Kriterienstand EINGEFROREN. Reine Beleg-/Formulierungsberichtigungen ohne Kriterienwirkung werden nicht einzeln committet, sondern als EIN Errata-Ereignis (ereignisse/<auftrag>/planner-errata.yaml) gesammelt und spaeter mit EINEM Commit und EINEM Rueckweg transportiert. Kriterienaenderungen nach DoR = neue DoR-Runde."
+erlaubte_pfade: []
 verboten:
-  - Produktcode aendern
-  - Skripte aendern (scripts/, .githooks/) — das ist Generator-Arbeit nach DoR
-  - Voten erteilen
-  - docs/STATUS.md / docs/BEFUNDNOTIZEN.md schreiben
-  - Bauen
+  - Sacharbeit an Z0-I1/Z0-I2/Z0-I3 bis A-37 ABGENOMMEN
+  - Produktcode; Voten; docs/STATUS.md / docs/BEFUNDNOTIZEN.md
   - Commit ohne aktive Lease; Commit ausserhalb des eigenen Worktrees; nacktes git commit
-steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
-vorarbeit: "ereignisse/WARTEN-planner-A-37/*.yaml (Befunde 20c9c319 + Antworten), ereignisse/SITZUNG-70499-ROLLENWECHSEL/ (PID-Befund), ereignisse/A-42/ (Votum 3f7f61d6, Nachpruefungen b193f72e/b1c0c2d4, Integrator d17d2ddf/9e5f1ff5) — alles gilt."
+steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease-Freigabe, Ereignisse — keine Sacharbeit]
 status: ZUGETEILT
-erstellt: "2026-08-22T00:12 Dirigent (atomar veroeffentlicht)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/PARKEN-planner-bis-A-37/planner-ack.yaml
+anerkennung: "A-37-Spezifikation mit DoR in zwei Runden: gute Arbeit. Die Lehre daraus ist die Errata-Regel, nicht ein Vorwurf."
+erstellt: "2026-08-22T08:12 Dirigent (atomar veroeffentlicht)"
