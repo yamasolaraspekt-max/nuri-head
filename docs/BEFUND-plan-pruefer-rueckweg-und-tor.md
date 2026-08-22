@@ -37940,3 +37940,94 @@ Gate nicht geschlossen, sondern umgangen.
 
 Ball: **Yama** (die Fachdaten) · **Dirigent** (achte Postenmessung; **und die Einordnung von 14:48
 ist unvollständig — W-21L und §119/§120 fehlen darin**). **Geht sofort als Ereignis** (§463).
+
+## §474 — Postenmessung 9/9: die Grundlage ist veraltet. Erster Posten mit `entscheidungsreif: NEIN` — und die Liste ist einmal vollständig durchgemessen
+
+Messstand: HEAD `f22ff284`, Baum 0 · Integration `57e661bd`, Baum 0 · **Rückstand `HEAD..auto` = 153**
+· gemessen 21:44–21:49. **Ereignis-Schnitt dieser Runde: 21:42:55** (0 neue Ereignisse).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §474'` → 0).
+**Neunter und letzter Posten für den Dirigenten-Auftrag von 14:48:57.**
+
+### Was der Posten ist — und er verweist auf mich selbst
+
+**§119 und §120 sind meine eigenen Abschnittsnummern**, nicht fremde Paragraphen:
+
+    §119  „F-011 ist aus der laufenden Anwendung nicht erreichbar: alle vier Aufrufer sind tot"
+          (gegen HEAD f06dd124 gemessen)
+    §120  „misst den GANZEN Baum: den Importgraphen"
+    S-1-ANSCHLUSSMESSUNG.md:660   33 Module unerreichbar · 6.044 Zeilen toter Laufzeitcode
+    S-1:831                       „die 33 Module waren eine Untergrenze — die schaerfere Zahl ist 7"
+                                  Gemessen 21.08.2026 am Stand 7eaab966
+
+**Die Entscheidung, die bei Yama liegt: was geschieht mit unerreichbarem Code?** Und sie berührt
+die Dauerregel *„kein Löschen ohne Freigabe, Original erhalten"*.
+
+### Frisch gemessen — und die Grundlage trägt nicht mehr
+
+    §119 sagte:  dachformVorlagen.ts   Produktivverbraucher 0
+    HEUTE, ueber IMPORT gemessen (nicht ueber Dateinamen, §451):
+      renderers/three-d/dachMesh.ts:13   import TYPE { EngineRoofShape }      <- Typ, kein Laufzeitweg
+      geometry/dachGeometrie.ts:17       import { walmIstKonsistent }         <- WERTIMPORT
+      Produktivimporteure: 2   ·   Testimporteure: 0
+
+    §119 sagte:  polygonFlaeche.ts   Importeure ausserhalb der Tests 4
+    HEUTE:                          5   (neu: geometry/dachGeometrie.ts:18)
+
+> **Mindestens ein echter Wertimport ist dazugekommen** (`walmIstKonsistent`), und die
+> Importeurszahl von `polygonFlaeche` ist von 4 auf 5 gestiegen. **Die Zahlen von §119 gelten nicht
+> mehr** — vermutlich durch die Dacharbeit der letzten Tage.
+
+**Und die Grenze meiner Messung, ausdrücklich:** Ob `dachGeometrie.ts` seinerseits erreichbar ist,
+habe ich **nicht** gemessen. **Ein Verbraucher, der selbst tot ist, belebt nichts** — genau das war
+der Kern von §119 (*„es sind alle vier"*). **Ohne die Kettenmessung kann ich nicht sagen, ob aus 33
+Modulen 32 geworden sind oder ob sich nur die Kante verschoben hat.**
+
+    entscheidungsreif: NEIN
+    NICHT weil die Frage unklar waere, sondern weil DIE GRUNDLAGE VERALTET IST.
+    S-1 wurde am 21.08. 22:24 zuletzt geaendert; seither ist mindestens ein Wertimport
+    entstanden. Eine Entscheidung ueber „33 Module / 6.044 Zeilen" wuerde heute auf Zahlen
+    beruhen, die keiner mehr nachgemessen hat.
+    ERFORDERLICH VOR DER VORLAGE: Neumessung des Importgraphen am aktuellen Stand.
+
+> **Das ist §462 zum vierten Mal, jetzt an der wichtigsten Stelle:** *„Ein alter Befund ist kein
+> bestätigter Befund."* **Hier hätte er eine Löschentscheidung getragen.**
+
+### Die Schlussbilanz — neun von neun gemessen
+
+    1  Regelkollision §3/E1/Beifang   OFFEN, entscheidungsreif JA — Regel von 3/4 Baeumen verletzt   §466
+    2  driftender Zeiger raumAuswahl  OFFEN, entscheidungsreif JA — 15 Zeilen, sechs Tage stabil     §467
+    3  versatz-Quittung               OFFEN, entscheidungsreif JA — FALSCH BENANNT, ist Fachfrage    §468
+    4  Seed-Weg der Pruefbuehne       GEBAUT — wartet auf die Abnahme von Z0-I1                       §469
+    5  Tragwerk an die Zeichenflaeche GEPARKT — Register-Zeile fehlt, niemandem zugewiesen            §470
+    6  Fach-Gate N-003                GEGENSTANDSLOS — entschieden am 12.08.                          §471
+    7  A-13-Veroeffentlichungsbedingung OFFEN bei Yama, entscheidungsreif JA — drei SELECTs           §472
+    8  W-21L                          OFFEN bei Yama, entscheidungsreif JA — Operanden-Gate steht     §473
+    9  §119/§120                      entscheidungsreif NEIN — Grundlage veraltet                     §474
+
+    Von neun Posten:
+      real offen und entscheidungsreif   5   (1, 2, 3, 7, 8)
+      nicht mehr offen                   2   (4 gebaut, 6 entschieden)
+      offen, aber nicht entscheidbar     1   (9 — Neumessung noetig)
+      offen mit unausgefuehrter Anordnung 1  (5)
+      davon FALSCH BENANNT               1   (3)
+      davon von der Dirigenten-Antwort
+        NICHT eingeordnet                2   (8, 9 — §473)
+
+> **Vier von neun waren nicht das, was meine Liste behauptet** (2 erledigt, 1 falsch benannt, 1 nicht
+> entscheidbar). **Ich habe sie in jeder Runde als „offene Posten bei Yama" mitgeführt.**
+>
+> **Und die Serie hat mehr als die Posten geliefert:** den Präzedenzfall zu §443 (§472), den
+> Nachweis, dass eine Regel von 3 von 4 Bäumen verletzt wird (§466), und drei geratene Pfade an mir
+> selbst (§467, §473, sowie §436 früher). **Nichts davon wäre gemessen worden, hätte ich den Ball
+> vom 14:48 nicht doch noch gefunden.**
+
+### Lage, jetzt gemessen (21:44:11)
+
+    Commits NICHT in der Integration      46
+    Integrator-Stille                    118 Minuten
+    §447 „steht aus" bei E0/E2             2
+    Baelle beim Integrator (ganzes Haus)  21
+    Rueckstand mein Baum -> Integration   153
+
+Ball: **Dirigent** (neunte Messung + Schlussbilanz) · **Yama** (die fünf entscheidungsreifen Posten
+liegen jetzt vollständig vor). **Geht sofort als Ereignis** (§463).
