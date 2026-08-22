@@ -107,7 +107,7 @@
 | **Z1-W2-5** Wandflaeche anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` · Bau `5617dc4c` · CODE_FERTIG 18:52:39 · **die Wandflaeche erreicht den Benutzer** |
 | **Z1-W2-6** Auswechslung anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` |
 | **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | `BEREIT` | **Generator** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 |
-| **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `ENTWURF` | **Plan-Prüfer** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `262ed5c7`, geschnitten 18:51:32 — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR |
+| **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `ENTWURF` | **Plan-Prüfer** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht |
 | **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
@@ -19387,7 +19387,7 @@ titel: "Werkzeugleiste in Baureihenfolge"
 zustand: ENTWURF
 ballbesitz: plan-pruefer
 blatt: "docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md"
-blatt_sha: 262ed5c7
+blatt_sha: dbaa6b4d
 basis_sha: 06956916
 dor_beleg: "steht aus — der Plan-Pruefer prueft in EINEM Durchgang direkt nach Z1-V1-1"
 bau_sha: "noch offen"
@@ -19426,6 +19426,28 @@ blatt_nachgetragen: |
   SEINE EIGENE KENNUNGSPROBE, die ich uebernehme statt sie nachzubauen: "docs/ 1 Treffer
   (dieses Blatt), git log 1 Treffer (der Auftrag selbst). Z1-W2-0..6 vergeben, -7 frei
   gelassen, -8 vom Dirigenten zugewiesen." Die Kennung ist also nicht doppelt vergeben.
+
+blocker_kriterium_b_faellt: |
+  planner-BEFUND-Z1-W2-8-bodenplatte-braucht-GP-0.yaml, 18:58:46, BEFUND_BLOCKER.
+  Blatt dbaa6b4d ersetzt 262ed5c7 — mein Eintrag von vor sieben Minuten trug den alten Stand.
+  DIE AUSSTIEGSKLAUSEL IST GEZOGEN, und zwar die, die ich in c14db2b3 ausdruecklich in den
+  Datensatz geschrieben hatte: "kann das Deckenwerkzeug die unterste Ebene nicht ohne
+  Modellaenderung setzen, wird gemeldet und nicht gebastelt". Genau das ist geschehen.
+  SEINE DREI MESSUNGEN, die ich uebernehme und nicht nachbaue:
+    1  CeilingNode fuehrt type, polygon, dickeMm, oeffnungen?, schichten? — Treffer auf "eleva"
+       gleich 0. Eine Bodenplatte waere von einer Zwischendecke nicht unterscheidbar.
+    2  applyCommand.ts:112-116, pruefeDeckeProLevel wirft CommandAbgelehnt bei mehr als einer
+       Decke je Level, drei Aufrufstellen. Wer die Bodenplatte als ceiling auf das EG-Level
+       setzt, SPERRT dort die Zwischendecke.
+    3  UWertService.php:26-27 trennt "decke" [0.10, 0.04] von "boden" [0.17, 0.00] — der CRM
+       fuehrt sie als verschiedene Bauteile.
+  SEINE FOLGERUNG: ein Registry-Eintrag bodenplatte auf bauteilKind ceiling wuerde entweder die
+  Zwischendecke desselben Geschosses verhindern oder von ihr ununterscheidbar sein — beides
+  schlechter als kein Eintrag.
+  BAUBAR BLEIBT: a Reihenfolge mit SIEBEN Eintraegen (wand, fenster, tuer, treppe, decke,
+  kontur, dach), c Tooltip fuer die Decke, d/e/f unveraendert. Es faellt allein b.
+  ZUSTAND UNVERAENDERT ENTWURF, Ball unveraendert plan-pruefer: die DoR steht weiterhin aus,
+  und ob der verkleinerte Zuschnitt traegt, entscheidet er — nicht ich.
 
 ```
 
