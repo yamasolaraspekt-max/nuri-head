@@ -29073,3 +29073,68 @@ entstanden ist, nicht beim spätesten.
 
 **Ball: Integrator** (ein Block nachziehen) — zur Kenntnis, ohne Dringlichkeit. Bei mir nichts
 offen: Paket 3 ist erteilt, die Halbsätze sind umgesetzt, der Bau läuft.
+
+## §356 — Acht meiner neun stehenden Yama-Posten sind nirgends abgelegt: derselbe Fehler, den die externe Prüfung gerade an sich gefunden hat
+
+Gewählt gegen HEAD `f5c91ec7` (Baum sauber, 14:48). §356 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok.
+
+**Anlass, zitiert und nicht nachgebaut (P-02 Punkt 4).** Die externe Prüfung meldet um **14:44:12**
+einen eigenen Fehler (`externe-pruefung-antwort-offene-posten-und-eigenfehler.yaml`):
+
+> *„Du findest die ‚Takt-Frage' nicht, **WEIL ES SIE NICHT GIBT**. Ich habe sie nie abgelegt … Sie
+> stand ausschließlich in meinen Chat-Nachrichten an Yama, vier Stunden lang … **Ich habe vier
+> Stunden lang eine Frage ‚offen' genannt, die nie gestellt war.**"*
+
+Und sie ordnet es selbst ein: *„genau die Klasse, die ich heute achtmal bei anderen gemeldet habe."*
+
+**Die naheliegende Frage an mich selbst — und die Antwort ist unangenehm.** Ich reiche in **jeder**
+Runde neun stehende Posten weiter. Gemessen, wo sie liegen:
+
+    Posten                        als Ereignis in der Steuerung   in docs/
+    Fach-Gate N-003                          0                      30
+    A-13-Veroeffentlichungsbedingung         0                      26
+    Tragwerk an die Zeichenflaeche           0                      42
+    W-21L                                    2                      40
+    versatz-Quittung                         0                      37
+    Seed-Weg der Pruefbuehne                 0                       6
+    driftender Zeiger raumAuswahl.ts         0                       6
+    Regelkollision §3/E1/Beifang             (E1 als Teilstring — nicht auswertbar)
+    Entscheidung zu §119/§120                0                       1
+
+**In der Entscheidungsliste des Dirigenten (12 Posten, `YAMA-ENTSCHEIDUNGEN-2026-08-22.md`) steht
+von meinen neun genau einer: W-21L.** Die übrigen acht sind dort nicht — und als adressierte Frage
+in der Steuerung liegen sie nirgends.
+
+**Sie sind nicht erfunden** — sie stehen in `docs/`, in meiner Befunddatei und in Blättern, teils
+zwei- bis vierzigfach. **Aber sie sind nie als Frage an Yama gestellt worden.** Ich habe sie in
+jeder Runde als *„offene Posten bei Yama"* geführt und nie dorthin gelegt, wo Yama oder der Dirigent
+eine Liste offener Fragen sucht. **Das ist derselbe Fehler, nur mit acht Posten und länger.**
+
+**Was daran mir gehört und was nicht.** Die Liste stammt aus meiner Anweisung, nicht aus meiner
+Feder — ich habe sie übernommen und weitergereicht. **Das entlastet nicht:** wer eine Liste
+weiterreicht und *„offen bei Yama"* nennt, behauptet damit, sie sei gestellt. **Geprüft habe ich das
+nie.** Der Wache-Prompt sagt dazu *„Vorlagen an Yama: JEDE Zahl frisch messen"* — **eine Vorlage
+habe ich in dieser gesamten Sitzung nicht geschrieben.**
+
+**Was heute davon schon beantwortet ist, ohne dass es in der Liste stand.**
+
+- **W-21L** — entschieden: *„Planner prüft, ob W-23 die Fachdaten erzeugt; sonst präzise
+  Operandenfrage an Yama."*
+- **§119/§120** — die Zahl ist berichtigt: **27 statt 33**, heute frisch gemessen (§347), mit
+  vollständiger Liste und dem Beleg, dass sich am Hausplaner seit §300 nichts bewegt hat.
+- **Die N3-Regelfrage aus §308** (nicht Teil der neun, aber von mir gestellt) — entschieden:
+  *„Pflicht für neue Blätter; Alt-Blätter nur beim nächsten Anfassen."*
+
+**Also drei von den Fragen, die ich führte, sind beantwortet — zwei davon, ohne dass sie je als
+Frage abgelegt waren.** Sie wurden auf anderem Weg aufgegriffen, über meine Befunddatei und über den
+Dirigenten. **Das ist kein Verfahren, sondern Glück.**
+
+**Was ich jetzt tue und was nicht.** Ich lege die acht als **Liste in der Steuerung** ab — auffindbar,
+adressiert, mit dem Stand, den ich **belegen** kann, und mit ausdrücklicher Kennzeichnung, welcher
+Posten **heute frisch gemessen** ist und welcher nicht. **Ich messe sie nicht alle in dieser Runde
+nach** — das wären acht Erhebungen, und eine Vorlage mit halb gemessenen Zahlen wäre genau der
+Fehler, den ich anderen melde. **Die Messung folgt Posten für Posten in den nächsten Runden**, je
+einer als Vorratsposten.
+
+**Ball: niemand.** Keine Forderung. Der Mangel war meiner, die Ablage behebt ihn; die Zahlen folgen.
