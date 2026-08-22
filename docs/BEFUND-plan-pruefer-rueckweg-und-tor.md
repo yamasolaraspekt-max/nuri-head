@@ -37226,3 +37226,85 @@ die ohne die Angabe, woraus sie stammt, nicht überprüfbar ist.
     Baelle beim Integrator (ganzes Haus) 20
 
 Ball: **keiner** · **kein Ereignis zu diesem Abschnitt** (§463).
+
+## §465 — Vorratsprüfung (b): meine §449-Zahlen stimmen, aber 62 % der Grundmenge war ich selbst. Und mein falscher Verweis steht inzwischen in der Tafel
+
+Messstand: HEAD `82798f4f`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 21:12–21:16.
+**Ereignis-Schnitt dieser Runde: 21:10:21** (0 neue Ereignisse, nichts in meiner Bahn).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §465'` → 0).
+Vorratsprüfung **Posten (b) — Zahlen mit dem genannten Muster nachzählen**, angesetzt an **meiner
+eigenen Zahl aus §449**, nachdem §462 gezeigt hat, wem der häufigste Verweis gehört.
+
+### Die Zahlen aus §449 stimmen — die Grundmenge war eine andere als behauptet
+
+    Verweise 'STATUS.md:<Zeile>' in docs/ GESAMT      147   §449 sagte 147   ✓
+    verschiedene Zeilennummern                          74   §449 sagte  74   ✓
+    davon in MEINER Befunddatei                         92
+    davon in FREMDEN Dateien                            55   verteilt auf 23 Dateien
+    Anteil meiner                                    62 %
+
+> **§449 hat gemessen, was es zu messen behauptete — und dabei nicht gesagt, dass fast zwei Drittel
+> der Grundmenge aus meiner eigenen Datei stammen.** Ein Befund über „den Bestand" liest sich wie
+> einer über andere. **Tatsächlich war es überwiegend einer über mich.**
+>
+> **Das ist genau der Satz, den ich in §449 selbst geschrieben habe** — *„Grundmenge gegen die Frage
+> prüfen statt gegen das Verfahren"* — **und er trifft den Abschnitt, in dem er steht.** §462 fand
+> 31 Vorkommen einer Nummer; die vollständige Zahl ist **92**, dreimal so viel.
+
+### Die gefährdetste Teilmenge: 13 Selbstverweise IN `STATUS.md`
+
+Die Tafel verweist mit Zeilennummern auf sich selbst — in der Datei, die in neun Tagen von 9790 auf
+20199 Zeilen gewachsen ist. **Alle dreizehn nachgesehen:**
+
+    2 zeigen auf eine Tafel-/Auftragszeile        (:36, :31)      plausibel richtig
+    1 zeigt auf eine LEERZEILE                    (:5071)
+    10 zeigen auf Fliesstext
+
+> **Die zehn melde ich NICHT als Fehler.** Ein Verweis auf einen Befundtext kann beabsichtigt sein,
+> und ich kenne die Absicht nicht. **Das ist die Lehre aus §449, diesmal von Anfang an angewandt
+> statt hinterher.**
+
+**Der harte Fall ist die Leerzeile:**
+
+    Z.2752   zettel_5_prozesspruefung_03: "STATUS.md:5071/:5093, §4-Vertretungsfrage."
+    Z.5071   Laenge 1 Zeichen — leer, zwischen einem schliessenden ``` und einer Ueberschrift
+    Gemeint war offenbar ein Prozesspruefungs-Inhalt. Er steht dort nicht.
+
+### Und der Befund, der mich betrifft: mein falscher Verweis steht in der Tafel
+
+    docs/STATUS.md:12860
+      „vergeben — STATUS.md:1621 traegt W-05/1 als BETRIEBSBESTAETIGT, Die sieben Blaetter von W-05…"
+
+**Das ist wörtlich der Satz aus meinem Umleitungsblatt** (`W-05-1-raum-anwaehlen.md`, 13.08.), **in
+die Tafel übernommen.** Und `STATUS.md:1621` ist genau der Verweis, den §462 als gewandert belegt
+hat: dort steht heute ein Text über Prüfnutzer und Seeder; W-05/1 liegt auf Zeile 3622.
+
+> **Mein ungeprüfter Verweis hat sich fortgepflanzt.** Nicht nur 22-mal in meiner eigenen Datei
+> (§462), sondern einmal in den einzigen Statusträger des Hauses — von dort aus liest ihn jeder, der
+> die Kennungshistorie von W-05 nachschlägt.
+>
+> **Das ist die Antwort auf eine Frage, die §462 offen ließ:** *Was kostet ein ungeprüfter Verweis?*
+> **Er kostet nicht nur die eigene Glaubwürdigkeit — er wandert.** Wer ihn übernimmt, prüft ihn
+> nicht, denn er stammt ja aus einer Quelle, die ihn geprüft haben müsste.
+
+### Was ich damit tue — und was die Zusage aus §463 hier bedeutet
+
+**Beides sind Vorratsbefunde** (die Leerzeile und die Verweiskopie in der Tafel): kein
+Sicherheitsbefund, kein Blocker, keine laufende Abnahme betroffen.
+
+> **Also KEIN eigenes Ereignis. Sie gehen in die nächste Sammelmeldung** — zusammen mit der
+> Regelübernahme aus §464. **Zweite Runde in Folge ohne Ereignis, und diesmal mit zwei echten
+> Befunden in der Hand.** Genau dafür war die Zusage gedacht: nicht weniger prüfen, sondern anders
+> verpacken.
+
+**Die Tafel schreibt allein der Integrator** (§16). Der Verweis in `STATUS.md:12860` ist damit sein
+Ball, sobald er zurück ist — **nicht meiner, obwohl der Fehler meiner ist.**
+
+### Lage, jetzt gemessen (21:12:39)
+
+    Commits NICHT in der Integration     37
+    Integrator-Stille                    87 Minuten
+    §447 „steht aus" bei E0/E2            2
+    Baelle beim Integrator (ganzes Haus)  20
+
+Ball: **keiner** · **kein Ereignis** (§463) · zwei Posten in der Sammelmeldung vorgemerkt.
