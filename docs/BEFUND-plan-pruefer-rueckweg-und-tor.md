@@ -35788,3 +35788,99 @@ aussieht.**
 
 Ball: **keiner von mir** — Z1-E0-1 bleibt bei `[evaluator, integrator]`, Meldepflichten bestätigt.
 Der offene Ball aus §447 (**Integrator**, Tafelfelder) bleibt offen und ist jetzt gravierender.
+
+## §449 — Vorratsprüfung (a): ein Verweis, der um 2001 Zeilen gewandert ist. Er zeigt nicht ins Leere, er zeigt auf etwas Fremdes — und er ist meiner
+
+Messstand: HEAD `1981c5d4`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 20:15–20:19.
+**Ereignis-Schnitt dieser Runde: 20:13:42** (0 neue Ereignisse, nichts in meiner Bahn).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §449'` → 0).
+Vorratsprüfung **Posten (a)** — gewanderte Verweise, dazu **(e)** eigene Befunde verfolgen.
+
+### Der bewiesene Fall, zwei Stände, derselbe Verweis
+
+`docs/auftraege/aktiv/W-05-1-raum-anwaehlen.md` ist ein **Umleitungsblatt** von mir (13.08.,
+`fb893d1c`). Es belegt die Umbenennung W-05/1 → W-05/2 mit:
+
+> *„Die Kennung war vergeben: **`docs/STATUS.md:1621`** trägt `W-05/1` als `BETRIEBSBESTAETIGT`."*
+
+**Gemessen an beiden Ständen:**
+
+    STATUS.md:1621 @ fb893d1c (13.08.)   ->  auftrag: "W-05/1"                            RICHTIG
+    STATUS.md:1621 @ 57e661bd (heute)    ->  „DAS IST KEIN FEHLER DER SUITE, sondern eine
+                                              fehlende Absprache: ein Pruefnutzer, der einen…"
+    W-05/1 steht heute auf Zeile         ->  3622   (zustand: BETRIEBSBESTAETIGT, unveraendert)
+
+**Der Verweis ist um 2001 Zeilen gewandert.** STATUS.md wuchs in neun Tagen von **9790 auf 20199
+Zeilen** — sie hat sich mehr als verdoppelt.
+
+> **Das ist Posten (a) in Reinform: der Verweis zeigt nicht ins Leere.** Zeile 1621 existiert, ist
+> lesbar und sieht nach einer gültigen Fundstelle aus — **sie trägt nur etwas völlig Fremdes**, einen
+> Befund über Prüfnutzer und Seeder. Wer ihm folgt, bekommt keine Fehlermeldung. Er bekommt eine
+> falsche Antwort.
+
+### Und das Blatt sagt selbst, wogegen es gebaut wurde
+
+> *„Wer dem alten Pfad folgt, soll den Grund finden **und nicht ins Leere laufen** — genau das war
+> heute die Ursache mehrerer teurer Runden."*
+
+**Das Blatt, das verhindern soll, dass jemand ins Leere läuft, führt selbst auf eine falsche Zeile.**
+Das ist kein Spott — es ist der Beleg, dass die Klasse jeden trifft, auch den, der sie kennt und
+gerade dagegen anschreibt.
+
+### Die Größenordnung — gemessen, und mit ausdrücklicher Grenze
+
+    'STATUS.md:<Zeile>'-Verweise in docs/     147 Vorkommen auf 74 verschiedenen Zeilennummern
+    haeufigster                               STATUS.md:3220  (31x)
+    von 40 geprueften zeigen heute auf
+      eine auftrag:- oder Tafelzeile           8
+      auf etwas anderes                       32
+
+> **WAS ICH DAMIT NICHT SAGE: dass 32 Verweise falsch sind.** Meine Kategorie fragt „zeigt es auf
+> eine `auftrag:`-Zeile?" — aber manche Verweise zielen bewusst auf ein Feld (`code_fertig:`,
+> `dor_beleg:`) oder auf eine Tabellenzeile. **Die Absicht kenne ich nicht, also messe ich sie
+> nicht.** *Grundmenge gegen die Frage prüfen statt gegen das Verfahren* — die 32 sind die Menge,
+> die eine Prüfung verdient, nicht die Menge der Fehler.
+
+**Belegt ist genau eines:** ein Verweis, an zwei Ständen gemessen, mit verschiedenem Inhalt. Und die
+strukturelle Ursache, die alle 147 betrifft.
+
+### Der stehende Satz
+
+> **Ein Zeilenverweis in eine wachsende Datei hat ein Verfallsdatum.** Er wird nicht ungültig — er
+> wird **still falsch**. Ein Verweis auf eine Datei, die verschwindet, meldet sich; ein Verweis auf
+> eine Zeile, die weiterrückt, meldet sich nie.
+>
+> **Die Abhilfe steht schon im Bestand und wird nur nicht überall angewandt:** die Standangabe. Das
+> Blatt Z1-E0-1 macht es vor — `mess_sha: fd2575ce`, `basis_sha: fd2575ce`, Überschrift *„am Stand
+> `fd2575ce` selbst nachgemessen"*. Und der Generator zieht sie in den Code hinein:
+> *„Die Lücke L1, **am Stand `fd2575ce`** gemessen"* (`hoehenkette.ts:6`). **Ein Verweis MIT
+> Standangabe bleibt richtig, auch wenn er wandert — er ist dann eine historische Aussage. Ohne sie
+> wird er zur Behauptung über einen Zustand, den es nicht mehr gibt.**
+
+### Die Blatt-Gegenprobe, und sie fällt erfreulich aus
+
+**103 Blätter in `docs/auftraege/aktiv/` geprüft**, jedes auf Zeilenverweise **und** Standangabe:
+
+    Blaetter mit Verweisen UND Standangabe     alle bis auf eines
+    Blaetter mit Verweisen OHNE Standangabe    1  — und das ist das Umleitungsblatt W-05/1,
+                                                   das gar kein Auftrag ist
+
+**Die Disziplin steht.** Der Ausreißer ist kein Auftragsblatt, sondern ein Wegweiser — und genau
+dort schlägt die Falle zu, weil ein Wegweiser per Natur auf etwas außerhalb seiner selbst zeigt.
+
+### Zwei Zahlen, die sich zu widersprechen schienen — sie tun es nicht
+
+Meine erste Messung an Z1-E0-1 gab **11** Verweise, die Gegenprobe **15**. Aufgelöst:
+
+    grep -oE | sort -u   EINDEUTIGE Verweise  -> 11
+    grep -oE | wc -l     TREFFER gesamt       -> 15
+    grep -coE            ZEILEN mit Treffer   -> 15
+
+**Drei Fragen, drei Zahlen, kein Widerspruch.** Notiert, weil genau hier sonst ein Scheinbefund
+entsteht: *„die Zahl hat sich geändert, also stimmt etwas nicht"* — sie hat sich nicht geändert, ich
+habe etwas anderes gefragt.
+
+Ball: **keiner** — Vorratsbefund. Nachrichtlich an **Dirigent/Integrator**: wer künftig auf
+`STATUS.md` verweist, sollte die Kennung nennen (`auftrag: "W-05/1"`) statt der Zeilennummer, oder
+die Zeilennummer mit einem Stand versehen. Der offene Ball aus §447 (**Integrator**, Tafelfelder
+E0/E2) steht unverändert; Stille dort inzwischen **29 Minuten**.
