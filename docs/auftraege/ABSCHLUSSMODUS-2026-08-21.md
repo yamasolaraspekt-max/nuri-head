@@ -458,3 +458,20 @@ Die fünf Negativproben gehen als Kriterien
 in das erweiterte A-37-Blatt (Planner); der Integrator transportiert nichts aufgrund der seit 22:04
 entstandenen Generator-Bauten. Das V2-Konzept (`0d897b0e`) ist bereit für die spätere unabhängige
 Prüfung; **die technische Schreibsperre hat Vorrang vor jeder weiteren Konzept- oder Produktarbeit.**
+
+### Protokoll 09:07–10:41 (Dirigent, gemessen; Uhr: `date` lokal)
+| Zeit | Ereignis | Beleg |
+|---|---|---|
+| 09:55 | Generator CODE_FERTIG A-37 (Endstand zunächst 561cc3d1; A-37-11/12–16 als UNGEPRÜFT gemeldet) | `BAU-generator-A-37/generator-CODE_FERTIG.yaml` |
+| 10:01:24 (mtime) | Generator **Nachtrag**: Endstand **c0dd4f83**, 12–16 geprüft (1778/1778, tsc 0) | `generator-CODE_FERTIG-nachtrag.yaml` |
+| 10:02 | Planner Errata SPEZIFIZIERT `c11f97ac` — nennt noch 561cc3d1 | `ERRATA-planner-A-37/planner-CODE_FERTIG.yaml` |
+| 10:12 | Plan-Prüfer BESTÄTIGT `599976c9` — nennt 561cc3d1 | `DOR-plan-pruefer-A-37-errata/plan-pruefer-BESTAETIGT.yaml` |
+| 10:14 | Evaluator Lease T1 + AUFTRAG_GESTARTET ABNAHME-evaluator-A-37 | `leases/ABNAHME-evaluator-A-37/active/lease.yaml` |
+| bis 10:20 | Regelbestätigung 6/6 (README `4c4554f3`), Wecker-Einzelbestätigung 6/6 | `ereignisse/*/*-ack-regeln*.yaml`, `*-wecker*.yaml` |
+| 10:22:30 | Bekanntmachung externe Prüfung in 7 Auftragsordner (Quelle `af4074f1`) | `dirigent-bekanntmachung-externe-pruefung.yaml` |
+| 10:24:03 | Dirigent Hinweis Endstand c0dd4f83 an Evaluator; README 6a Auslöser = Muster | `dirigent-hinweis-endstand-c0dd4f83.yaml`, Spiegel `dc6588da` |
+| 10:28:42 / 10:29:04 | Planner Richtigstellung, Plan-Prüfer BESTÄTIGT-Nachtrag → c0dd4f83 | `planner-richtigstellung-*.yaml`, `plan-pruefer-BESTAETIGT-nachtrag.yaml` |
+| 10:22–10:37 | Integrator transportiert Plan-Prüfer §300–302: Integration 435c086a → fae07555 → de7a8bbe | reflog `ticket` |
+| 10:32:5x | **Evaluator-Regelbruch, selbst gemeldet 10:34:28:** `rueckweg.py --preflight` (Kopie aus /tmp) als `TICKET_ROLLE=integrator` im realen Checkout; Kern brach rc 2 ab; **Wirkung null** (reflogs 6 Bäume, Dirigent nachgemessen) | `evaluator-selbstmeldung-rueckweg-auf-bestand.yaml`; Antwort 10:40:51 mit 3 Auflagen; Backlog 17/18 |
+| 10:35:50 | Plan-Prüfer §302 Zeitquelle (zeit-Feld = Laufmarke, 6 Dateien bis 425 s nach mtime) → README 6c' | `plan-pruefer-hinweis-zeitquelle.yaml`, Antwort `dirigent-antwort-zeitquelle.yaml`; Backlog 19 |
+| 10:41:31 | README-Digest `99fd2f80`; Evaluator hat Endstand-Hinweise noch nicht zitiert | dieser Eintrag |

@@ -51,6 +51,15 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
     Ergebnis-SHA; wer ein Ereignis zitiert, zitiert den jüngsten Stand (per SHA, nicht per Wort). Nachträge nennen ausdrücklich,
     welchen SHA sie ablösen.
 6b. **Antworten des Dirigenten** stehen unter `ereignisse/<auftrag_id>/dirigent-*.yaml` — bei jedem Pull mitlesen.
+6c'. **Zeitquelle je Datei (Plan-Prüfer §302, 22.08. 10:35):** `zeit:` ist die Ausgabe von `date` **im Moment des Schreibens dieser
+    Datei** — je Datei neu erhoben, nie eine einmal im Lauf gesetzte Marke (Befund: sechs Generator-Dateien bis 425 s *nach* ihrer
+    mtime, identischer Feldwert bei verschiedenen mtimes). Wer eine Reihenfolge behauptet, **nennt seine Uhr** (Feld oder mtime);
+    weichen beide um > 60 s ab, ordnet die mtime und die Abweichung wird benannt. Nachträge tragen zusätzlich `ersetzt_sha:` und
+    `ersetzt_datei:`, damit die Reihenfolge nicht an einer Uhr hängt.
+6d. **Werkzeuge nie auf dem Bestand proben (Evaluator-Selbstmeldung 22.08. 10:34):** Rückweg-/Transport-Proben ausschließlich mit
+    `--probe-root <wegwerf-verzeichnis>`; keine Kopie eines Werkzeugs aus `/tmp` gegen reale Bäume; `TICKET_ROLLE=<fremde Rolle>` wird in
+    keinem realen Checkout gesetzt, auch nicht für eine Positivprobe. Die Argumentverarbeitung eines fremden Skripts wird **gelesen,
+    bevor** es aufgerufen wird. Rollenangabe per Umgebungsvariable ist eine Selbstauskunft, keine Identität (→ Z0-I2/Z0-I3, Backlog 17).
     Eine Antwort ändert den Auftrag nicht; ändert sich der Auftrag, steigt `generation` (dann neues ACK).
 6c. **Nachziehen** des eigenen Worktrees gegen `auto/hausplaner-integration` nur als **Fast-Forward**
     (`git merge --ff-only`); ein Merge-Commit ist ein Commit und braucht Auftrag + Lease. Nicht-FF → melden.
