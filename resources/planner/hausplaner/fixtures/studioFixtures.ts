@@ -110,9 +110,92 @@ function uDach(): SceneDocument {
   };
 }
 
+/**
+ * **Prüfmittel für Z1-W2-5-(b)** — eine Szene, in der das Bezugsmaß `fertig` etwas ANDERES ergibt
+ * als `roh`.
+ *
+ * **Warum es sie braucht:** `wandMengen` rechnet `fertig` einzig über `wand.schichten` (AUF-76) auf
+ * die Dicke, also aufs Volumen. **Gemessen am Bestand:** keine Fixture trägt `schichten` (0), und
+ * kein Ort im App-Code setzt sie (0) — es gibt keinen Erzeugungsweg. Ohne Schichten ist `fertig`
+ * gleich `roh`, und das Modul sagt das auch ehrlich an. **Der Zahlenwechsel war damit nicht
+ * zeigbar**, obwohl die Wahl längst wirkt. Dirigenten-Entscheidung 19:05, Punkt 3.
+ *
+ * **Alle vier Wände tragen dieselben Schichten**, damit die Abnahme nicht davon abhängt, welche
+ * Wand angeklickt wird. *Den Gegenfall „ohne Schichten" liefern `u-dach` und `decke-treppe`
+ * unverändert mit — er muss nicht in dieselbe Fixture.*
+ *
+ * ```text
+ * Dicke roh     240 mm                    Schichten 15 + 25 = 40 mm
+ * Dicke fertig  200 mm                    Wand 10 m × 2,8 m = 28,00 m²
+ * Volumen roh   28,00 × 0,240 = 6,720 m³  Volumen fertig  28,00 × 0,200 = 5,600 m³
+ * ```
+ * **Die Fläche bleibt gleich, das Volumen ändert sich** — das ist fachlich richtig und genau der
+ * Unterschied, den (b) beziffert sehen will.
+ */
+function wandSchichten(): SceneDocument {
+  const waende = umrissZuWaenden(RECHTECK_UMRISS, EG.id).map((w) => ({
+    ...w,
+    schichten: [
+      { materialId: 'putz-innen', dickeMm: 15 },
+      { materialId: 'putz-aussen', dickeMm: 25 },
+    ],
+  }));
+  return {
+    id: 'fixture-wand-schichten', projectId: 1, schemaVersion: 3, revision: 1, units: 'mm',
+    settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
+    levels: [EG], nodes: waende, materials: [], roofs: [],
+    metadata: { createdAt: ISO, updatedAt: ISO },
+  };
+}
+
+/**
+ * **Prüfmittel für Z1-W2-6** — ein Dach mit Aufbauten, damit die Auswechslungs-Anzeige einen
+ * Gegenstand hat.
+ *
+ * **Warum es sie braucht:** `analysiereAuswechslung` setzt einen `RoofAufbau` voraus, und **den
+ * kann heute niemand erzeugen** — es gibt kein Werkzeug, das `ADD_ROOF_AUFBAU` auslöst. Das ist
+ * der Befund, auf den der Dirigent 18:33 mit Weg A geantwortet hat: *Fixture als Prüfmittel, und
+ * der Reifegrad bleibt höchstens `ABGENOMMEN (CODE, Fixture)`, bis ein Nutzer den Aufbau selbst
+ * setzen kann.*
+ *
+ * **Zwei Aufbauten, wie beauftragt — einer in der Flächenmitte, einer in der Randzone:**
+ * ```text
+ * dachfenster-mitte   window       x 0.50  y 0.50   1000 × 1200 × 1200 mm   -> trennbar erwartet
+ * gaube-rand          giebelgaube  x 0.90  y 0.85   2000 × 1800 × 2500 mm   -> Randzone (Probefall b)
+ * ```
+ * Die **art-abhängige Achsenregel** greift damit an beiden: `oeffnungVTiefeM` nimmt bei `window`
+ * die Höhe, sonst die Tiefe (`dachOeffnung.ts:52-54`) — die Fixture belegt beide Zweige.
+ *
+ * ⚠ **Die Kontur ist RECHTECKIG und die Form `sattel`** — nicht aus Bequemlichkeit: `projiziereDach`
+ * wirft bei nicht-rechteckiger Traufkontur, und `dachVorlage` kennt nur die vier echten `DachForm`.
+ * Damit ist dieselbe Fixture auch das Prüfmittel für die **Positivfälle** der Z1-V1-1-Module 2, 3
+ * und 4, die an `u-dach` (u-shape, ohne Aufbauten) nur ihren Meldungsfall zeigen konnten.
+ */
+function dachAufbauten(): SceneDocument {
+  const dach: RoofNode = {
+    id: 'roof-rechteck', type: 'roof', levelId: EG.id, visible: true, locked: false, tags: [],
+    createdAt: ISO, updatedAt: ISO,
+    polygon: RECHTECK_UMRISS, roofType: 'sattel', neigungGrad: 35, firstAzimutGrad: 90,
+    ueberstandMm: 500, traufhoeheMm: 2800,
+    geometrieHerkunft: 'manuell', freigabe: 'bestaetigt',
+    aufbauten: [
+      { id: 'dachfenster-mitte', typ: 'window', x: 0.5, y: 0.5, breiteMm: 1000, hoeheMm: 1200, tiefeMm: 1200 },
+      { id: 'gaube-rand', typ: 'giebelgaube', x: 0.9, y: 0.85, breiteMm: 2000, hoeheMm: 1800, tiefeMm: 2500 },
+    ],
+  };
+  return {
+    id: 'fixture-dach-aufbauten', projectId: 1, schemaVersion: 3, revision: 1, units: 'mm',
+    settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
+    levels: [EG], nodes: umrissZuWaenden(RECHTECK_UMRISS, EG.id), materials: [], roofs: [dach],
+    metadata: { createdAt: ISO, updatedAt: ISO },
+  };
+}
+
 export const STUDIO_FIXTURES: Record<string, () => SceneDocument> = {
   'u-dach': uDach,
   'decke-treppe': deckeTreppe,
+  'wand-schichten': wandSchichten,
+  'dach-aufbauten': dachAufbauten,
 };
 
 /** Fixture-Name aus dem Query-String (`?fixture=u-dach`). Reine Funktion ⇒ testbar. */
