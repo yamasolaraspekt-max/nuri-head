@@ -40593,3 +40593,58 @@ noch einmal hingesehen haben.
 Bemerkenswert ist der Satz, mit dem er die Lage schließt: **„ich warte, ohne Arbeit zu erfinden."**
 Das ist dieselbe Grenze, die ich für mich beanspruche, wenn meine Bahn leer ist — nur dass ich dann
 in den Vorrat gehe und er wartet. Beides ist richtig: Ich habe einen Vorratsauftrag, er hat keinen.
+
+## §508 — `5597c023` geprüft: kein Rest, und eine Begründung, die über den Anlass hinausreicht
+
+Stand: HEAD `435396b9`, Baum 0, gen 11, Digest gleich. Zeit 23:51. Messstand `9553b44d`.
+Vorratsposten (a) — Verweise, die auf einen aufgehobenen Weg zeigen.
+
+Der Generator hat um 23:43 nachgezogen, was der Evaluator um 23:33 gemeldet hatte: Die Kommentare
+beschrieben noch Posten 25.6 („Aufbau nicht erfasst → 0"), obwohl der um 23:12 aufgehoben wurde.
+
+### Die „zweite Stelle" ist echt
+
+Der Evaluator nannte `hoehenkette.ts:124` und `BodenplattenPanel.tsx:105-106`. Geändert wurden
+**sechs** Dateien — darunter `app/rahmen/FussUndUeberlagerungen.tsx`, **die im Befund nicht stand**.
+Der Generator schreibt es dazu: *„Eine zweite Stelle war im Befund nicht genannt und ist
+mitgezogen."* Wer nur den Befund abgearbeitet hätte, hätte sie stehen lassen.
+
+### `Rückgabewert 0` steht noch — und das ist richtig
+
+Meine Messung: `Rückgabewert 0` **1 Treffer, vorher 1 — unverändert.** Das sah nach einem Rest aus.
+Ist keiner:
+
+```
+:125  Dirigent, 22.08. 23:12:40 — Posten 25.6 ist aufgehoben:
+:126  der FRÜHERE Weg („Aufbau nicht erfasst → Rückgabewert 0, daneben ein Vermerk") erzeugte genau
+:127  die Null, die Yamas Bezugshöhe ausschließt.
+```
+
+Es ist die **Dokumentation der Aufhebung**, nicht die Regel selbst — genau wie der
+`verbindeMit('ticket')`-Kommentar aus §491, der ebenfalls den behobenen Zustand festhält. Zum
+zweiten Mal heute hätte eine Zeichenkettenzählung einen Rest gemeldet, wo eine Erklärung steht. Das
+ist der Punkt, den der Generator selbst in §500 aufgeworfen hat: *„Ein Kriterium, das eine
+Zeichenkette auf 0 zählt, verbietet auch das Erzählen über sie."*
+
+`nicht erfasst` ging von **16 auf 15** — eine Stelle bereinigt, der Rest ist die
+Tiefgaragen-Ausnahme (§503).
+
+### Die Begründung, die über den Anlass hinausreicht
+
+Der neue Kommentar beantwortet eine Frage, die ich hätte stellen können — warum wirft
+`bodenplatteOberkanteMm` nicht selbst, wenn der Aufbau fehlt?
+
+> „**Die Funktion selbst bleibt trotzdem total** und liefert für eine leere Liste die Bezugshöhe
+> zurück. *Das ist kein stiller Default, sondern die Weigerung, hier eine zweite Wache zu bauen:*
+> eine Regel, die an zwei Stellen lebt, wird an einer davon vergessen. Die Wache steht im Command,
+> geprüft und mit lesbarem Grund — **nicht in einer Rechenfunktion, die niemand beim Namen ruft.**"
+
+Das ist die „eine Wahrheit"-Regel aus CLAUDE.md, angewandt auf **Wächter** statt auf Werte. Und es
+ist die richtige Antwort auf meinen eigenen §495-Befund: Ich hatte die Absage-Regel schärfen wollen,
+der Dirigent hat die Quelle beseitigt, und der Generator erklärt jetzt, **warum die Wache genau an
+einer Stelle steht** — dort, wo sie beim Setzen greift, nicht in der Rechnung, die auch für
+nicht-erdberührte Platten läuft.
+
+Der Halbsatz „die niemand beim Namen ruft" ist dabei mehr als eine Formulierung: Eine Wache in
+einer reinen Rechenfunktion würde nur greifen, wenn jemand sie aufruft — und `bodenplatteOberkanteMm`
+wird vom Panel zur **Anzeige** gerufen, nicht beim Speichern. Sie wäre eine Wache am falschen Tor.
