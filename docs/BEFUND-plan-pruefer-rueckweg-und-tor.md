@@ -39776,3 +39776,85 @@ Ich ändere weder Blatt noch Konzeptplan (Rollenquelle gen 11: `verboten: [Blaet
 Beides sind Befunde. Und die fachliche Seite — ob ein Fußbodenaufbau im Referenzhaus 180 mm
 misst — ist Yamas Entscheidung, nicht meine; ich rechne nur die Kette durch, die aus seinen
 Operanden folgt.
+
+## §496 — Berichtigung zu §495: richtige Zahl, falsche Herleitung. Ich habe zwei Größen gleichgesetzt
+
+Stand: HEAD `1ec2b237`, Baum 0, gen 11, Digest gleich. Zeit 23:16. Messstand der Prüfung:
+`eed9a27e` (Integration).
+
+Der Dirigent hat meinen §495-Befund um **23:12:40** übernommen — beide Punkte, und zwar schärfer,
+als ich sie gestellt hatte. Dabei hat er einen Fehler in **meiner** Rechnung berichtigt.
+
+### Was er übernommen hat
+
+| mein Befund | seine Entscheidung |
+|---|---|
+| Absage-Regel fängt die 0 nicht | „`oberkanteMm >= 0` erfüllt (e) **nicht** (Null eingeschlossen)" |
+| GP-0 `:220`/`:260` überholt | Planner zieht beides nach, **in einem Commit** mit dem d-Halbsatz |
+
+Und er geht weiter: **Posten 25.6 ist aufgehoben.** Die Regel „Fußbodenaufbau nicht erfasst → 0 mit
+Vermerk" ist weg — *„es würde genau die Null erzeugen, die Yamas Operand ausschließt."* Neu ist der
+Fußbodenaufbau ein **Pflichtfeld**: *„Wer den Aufbau nicht kennt, setzt die Platte erst, wenn er ihn
+kennt — ehrlich statt Null."*
+
+Das ist die bessere Antwort auf meinen Befund, als mein Vorschlag war: Ich hatte nur die Absage-Regel
+schärfen wollen. Er beseitigt die **Quelle** der Null.
+
+### Mein Fehler: `floorThickness` ist nicht der Fußbodenaufbau
+
+Sein Hinweis: *„`Level.floorThickness` (Geschossdecken-Dicke) ist NICHT der Fußbodenaufbau — die
+Fixture nennt beide Werte getrennt."*
+
+Ich hatte in §495 gerechnet:
+
+```
+Auflage 4 (übernommen): floorThickness 180
+  OK Platte = 0 − 180 = −180 mm
+```
+
+Nachgemessen, was `floorThickness` wirklich ist:
+
+```
+scene.types.ts:352   /** Deckendicke in mm (Default = level.floorThickness). */
+scene.types.ts:344   Dicke `dickeMm` (Default level.floorThickness)
+hoehenkette.ts:53    const deckeDickeMm = decke ? decke.dickeMm : level.floorThickness;
+```
+
+**Es ist der Rückfallwert für die Geschossdecke** — eine Größe *über* dem Geschoss, nicht darunter.
+Ein Feld für den Fußbodenaufbau gibt es im Bestand gar nicht: `fussbodenaufbau` und `aufbauMm` je
+**0 Treffer**, Felddefinitionen mit passendem Namen **0**.
+
+**Das Ergebnis −180 stimmt trotzdem** — aber nur, weil der Dirigent den Aufbau auf 180 gesetzt hat.
+Wäre er 150, hätte meine Rechnung −180 ergeben statt −150. **Richtige Zahl, falsche Herleitung.**
+
+Schlimmer noch: Ich habe **meine eigene Auflage 4 falsch angewandt.** Sie sagte, `floorThickness 200`
+und Deckendicke 200 seien nicht unterscheidbar, deshalb 180 — das betraf die Unterscheidbarkeit der
+Höhenkette **nach oben**. Ich habe die Zahl nach **unten** übertragen, wo sie nichts zu suchen hat.
+
+### Und noch eine Teilstring-Falle, im selben Durchgang
+
+Auf der Suche nach einem vorhandenen Aufbau-Feld:
+
+```
+estrich    16 Treffer      →  fast alle "ge-strich-elt"
+fussboden  13 Treffer      →  Kommentare und Fließtext
+Felddefinitionen           →  0
+```
+
+`estrich` steckt in **„gestrichelt"**. Hätte ich die 16 als Beleg genommen, hätte ich gemeldet, der
+Bestand kenne den Fußbodenaufbau bereits — auf der Grundlage von Kommentaren über gestrichelte
+Linien.
+
+### Die Bilanz dieser drei Runden
+
+§494 eine Zahl ohne fixierten Stand · §495 zwei Größen gleichgesetzt · dazwischen zweimal die
+Einordnung vor die Messung gesetzt (§488, §491). **Vier eigene Fehler in fünf Runden**, alle vor dem
+Melden gefangen oder von anderen berichtigt — aber die Häufung ist selbst der Befund.
+
+Was sie gemeinsam haben: Ich messe die *Sache* sorgfältig und die *Größe* nachlässig. Ob eine Datei
+existiert, ob eine Zeile trifft, ob eine Null echt ist — das prüfe ich mehrfach. Ob der Wert, den
+ich einsetze, **dasselbe bedeutet** wie der Wert, den ich meine — das habe ich viermal nicht
+geprüft.
+
+**Selbstbindung, zusätzlich zu §494:** Bevor ich eine Zahl aus einer Quelle in eine Rechnung
+übernehme, messe ich, **was sie bezeichnet** — nicht nur, dass sie dort steht.
