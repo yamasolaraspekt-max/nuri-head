@@ -28598,3 +28598,67 @@ wie seit §300 in jeder Vorlage.
 **Ball: niemand bei mir.** Die Liste geht als eigenes Ereignis an den Planner (P-02 Punkt 3), nicht
 in sein Blatt. Der Auslöser für die DoR **Z2-W0-5b** liegt weiterhin nicht vor: Treffer mit
 `kennung: Z2-W0-5b` im Auslöser-Ordner **0**.
+
+## §348 — Werkzeug-Register gegengelesen: zwei Module fehlen darin ganz, und zwei Summen gehen nicht auf
+
+Gewählt gegen HEAD `c3b5835c` (Baum sauber, 14:21). §348 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok. **Konzept, kein DoR** — mein Auftrag sagt es ausdrücklich, also
+Hinweis und kein Votum.
+
+**Geliefert:** `docs/konzept/werkzeug-register.md`, 184 Zeilen, Blatt `4f4bbc6e`, Meldung
+`planner-CODE_FERTIG-posten1-register.yaml` (14:13:14, `abschlussbegriff: KONZIPIERT`).
+
+**Was trägt — und zwar gut.** Die beiden Auftragszahlen sind unabhängig nachgemessen und bestätigt
+(37 Registerzeilen BESCHRIEBEN, 13 toolRegistry-Kennungen); die vier Grundmengen stehen **je mit
+Befehl und Stand** (`6e37d2b5`). Und er benennt die **Grenze seiner eigenen Zuordnung** von selbst:
+*„das misst ERWÄHNUNG IN EINEM BLATT, nicht Verwendung im Code. Ein Modul, das in sechs Blättern
+vorkommt, gehört nicht zu sechs Werkzeugen."* **Das ist die Unterscheidung, die ich in §338 zu spät
+gemacht habe — hier steht sie vor der Verwendung.** Auch seinen eigenen Zählfehler legt er offen
+(erster Zähler 49 statt 37, weil die Worterklärungen im Registerkopf mitzählten).
+
+**Erste Summe: die Reifegrade decken 41 von 43 Zeilen.** Das Register nennt
+*„BESCHRIEBEN 37 · dazu ENTWORFEN 2 · GEGENSTANDSLOS 2"*. Gemessen an der Quelle
+`docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md`, Spaltenwerte isoliert:
+
+    BESCHRIEBEN                        37
+    ENTWORFEN                           2
+    GEGENSTANDSLOS                      2      <- seine Zahl, exakt
+    GEGENSTANDSLOS · GEMESSEN 16.08.    1      (W-24 Fundament, zusammengesetzter Wert)
+    GEBAUT                              1      (W-27 Dachkantentypen)
+    ---------------------------------------
+    W-Zeilen gesamt                    43      seine Aufzaehlung: 37+2+2 = 41
+
+**Seine „2" ist nicht falsch — sie ist die Zahl der Zeilen mit exaktem Spaltenwert.** Meine „3" aus
+§346 zählte W-24 mit, weil es fachlich gegenstandslos ist (*„Die Prämisse trägt nicht"*). **Beide
+Zählweisen sind vertretbar; unvollständig ist die Aufzählung**, weil `GEBAUT` gar nicht vorkommt und
+der zusammengesetzte Wert keiner Klasse zugeordnet ist. **41 + 1 + 1 = 43 — die Differenz ist
+vollständig erklärt und in einem Satz zu schließen.**
+
+**Zweite Summe, und die wiegt schwerer: zwei Module fehlen im Register vollständig.** Er rechnet
+*„27 nicht erreichbar · davon 3 reine Typmodule · **24** echte Kandidaten"*. Gemessen, meine
+27er-Liste aus §347 gegen den Kandidatenabschnitt geprüft:
+
+    im Kandidatenabschnitt vorhanden          25 von 27
+    im GANZEN Register 0 Treffer              app/tools/werkzeugArten.ts · domain/scene.types.ts
+    toolTypes.ts                              1 Treffer (Z.139, als Grenzbeleg zitiert)
+    treppenTypen.ts                           3 Treffer (Z.98, als Kandidat W-09 gefuehrt)
+
+**Die Rechnung geht um eins nicht auf.** Wären drei Typmodule ausgeschlossen, müssten 24 im
+Abschnitt stehen und 3 anderswo benannt sein. Es stehen **25** drin, und **2 kommen nirgends vor** —
+`werkzeugArten.ts` und `scene.types.ts` sind weder Kandidat noch ausdrücklich ausgeschlossen.
+**Sie fallen still aus der Grundmenge.** Griff gegengeprüft: ein bekannt enthaltenes Modul trifft 1×,
+ein erfundenes 0×.
+
+*Das ist genau die Klasse, die mein §346 an mir selbst gefunden hat — drei Zeilen fielen durch, weil
+mein Muster einen sechsten Reifegrad nicht kannte, und nur die Summenprobe hat sie gerettet. Hier
+ist es dieselbe Mechanik: **eine Zahl, die als Differenz gebildet wird (27 − 3 = 24), prüft sich
+nicht selbst.** Erst der Abgleich Element für Element zeigt, dass zwei Elemente gar nicht auftauchen.*
+
+**Was ich NICHT tue:** kein Votum (Konzept, kein DoR), keine Änderung an seinem Dokument, keine
+Empfehlung, ob `werkzeugArten.ts` und `scene.types.ts` Kandidaten oder Typmodule sind — **das ist
+eine fachliche Einordnung und seine Sache.** Gemeldet wird nur, dass sie in keiner der beiden
+Kategorien stehen.
+
+**Ball: Planner** — zwei Sätze: `GEBAUT` und den zusammengesetzten Reifegrad in die Aufzählung
+aufnehmen (41 → 43), und die zwei fehlenden Module einordnen (25 + 2 = 27). Als eigenes Ereignis
+gemeldet, nicht in sein Dokument (P-02 Punkt 3).
