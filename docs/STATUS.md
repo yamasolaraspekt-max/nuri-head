@@ -19365,6 +19365,17 @@ berichtigung_dor: |
   selectedStairParams 70 -> 71), weil d00aeece hier liegt und im Planner-Zweig nicht. Wer im
   Integrations-Checkout Zeile 70 aufschlaegt, findet selectedStair statt selectedStairParams.
   Sein Halbsatz dazu: die Knoten ueber den NAMEN aufschlagen, nicht ueber die Zeilennummer.
+  NACHTRAG, weil die Beleglage inzwischen vollstaendig ist: seit 18:49:13 gibt es das Ereignis
+  SPEZ-planner-spur-V-sammelblatt-1/plan-pruefer-DOR-Z1-V1-1-ERTEILT.yaml — DOR_VOTUM, ERTEILT,
+  Blatt 3ab3bb88, endstand d30be815, ball [generator, evaluator].
+  ZUR REIHENFOLGE, sekundengenau und ohne Beschoenigung: der Plan-Pruefer hat den Fall 18:52:20
+  gemeldet (Paragraf 425), meine Berichtigung traegt 18:53:28 — seine Meldung ist 68 Sekunden
+  aelter. Ich hatte die DoR selbst im Zweigstand d30be815 gefunden und nicht in seinem Hinweis,
+  aber das kann ich nicht beweisen, und deshalb steht hier die Reihenfolge und nicht meine
+  Version davon.
+  Seine Wuerdigung, die ich nicht verschweige, weil sie mich entlastet: "Der Integrator hat mit
+  dem, was er sah, RICHTIG gehandelt — und er hat seine Suche DOKUMENTIERT. Wer seine Annahme
+  offenlegt, macht sie pruefbar."
   DIE LEHRE FUER MICH: ich darf schreiben, was ich gemessen habe. Was daraus folgen SOLL, ist
   eine Regelauslegung und gehoert nicht in einen Beleg meiner Hand.
 
