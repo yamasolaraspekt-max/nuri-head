@@ -27183,3 +27183,67 @@ schreiben, wo eine Messung etwas Neues zeigt.
 
 **Ball:** unverändert — Evaluator (Nachprüfung), Dirigent (A/B/C, N3), Integrator (fünf Zustände),
 Yama (neun Posten). Bei mir nichts.
+
+## §327 — A-37 ist ABGENOMMEN, 31 von 31. Und die neue Aktionsliste weist drei von fünf Rollen ab — darunter die Aktion, die der Dirigent vor vier Minuten vergeben hat
+
+**Messstand** `3e31b2e9` · Baum sauber · 0 neue Commits seit §326 · Integrationszweig `2dd76e38`.
+Ballortung dreiseitig **1 · 6 · 14**.
+
+### Das Votum liegt: ABGENOMMEN
+
+```
+0a18446a  12:03:18  Elter e39cbccc · Scope 126/0, EIN Pfad (Votumsblatt)
+Felder: basis_der_pruefung c0dd4f83 · endstand_sha c82df498 · ergebnis_sha 0a18446a   (3 SHAs, alle existent)
+Lease freigegeben · AUFTRAG_ABGESCHLOSSEN liegt vor · ball: dirigent
+Ergebnis: "A-37-20 behoben; Gegenprobe hält; A-37 vollständig (31 von 31)"
+```
+
+**Meldepflichten erfüllt, Ballwechsel bestätigt.** Drei Dinge daran verdienen es, genannt zu werden:
+Er hat die Gegenprobe *„die übrigen 30 unberührt"* **an sich selbst** gemessen — es war seine eigene
+Formulierung aus dem Erstvotum. Er hat Teil (a) bewertet, **ohne ein Kriterium nachzuschreiben**
+(*„Die 3er-Kollision … verlangt eine Änderung der CODETABELLE — das gehört dem Planner"*). Und er legt
+offen, dass **sein eigener Votum-Commit durch das ALTE Tor lief**, damit niemand daraus schließt, das
+neue Gate habe seine Aktion durchgelassen — *„es hätte sie nach Befund 1 mit 7 abgewiesen."*
+
+### WEG A ist entschieden
+
+`dirigent-entscheidung-kennungsmuster.yaml` (12:03:49): **Muster erweitern**, nicht 89 Blätter (B),
+nicht Z-Aufträge ohne Zustand (C). Begründung: *„C macht STATUS.md für alle Z-Aufträge blind … das ist
+die zweite Wahrheit, die wir verhindern wollen."* **A-37 bleibt eingefroren, A-37-26 bleibt erfüllt** —
+*„das Kriterium ist richtig, das Muster darunter ist lückenhaft."* Und der Kleinauftrag verlangt
+ausdrücklich ein Blatt **„mit Nachvollzugs-Matrix nach N3"** — mein §308 ist aufgegriffen.
+
+### Befund 1 des Evaluators: unabhängig bestätigt und verschärft
+
+Der neue Stand `c82df498:scripts/rollen-tor.sh:360-375`:
+
+```
+Arbeit:  bauen | nachbessern
+Pause:   pausieren | angehalten | angehalten_eingefroren | parken | warten
+sonst:   "unbekannte aktion '$AKTION' — weder Arbeit noch Pause"   -> 7
+```
+
+Gegen die **jetzigen** Aktionen aller fünf Rollen gemessen:
+
+```
+planner          spezifizieren                  -> unbekannt -> 7
+generator        nachbessern                    -> Arbeit
+evaluator        warten_dann_nachpruefen        -> unbekannt -> 7
+release-pruefer  parken                         -> Pause (gewollt)
+plan-pruefer     warten_dann_errata_bestaetigen -> unbekannt -> 7
+```
+
+**Drei von fünf.** Der Evaluator hat es gemeldet; ich bestätige es unabhängig **und ergänze den Fall,
+den er nicht kennen konnte:** `spezifizieren` ist die Aktion, die der Dirigent dem Planner **um 12:03:49**
+für den Kennungsmuster-Kleinauftrag zugeteilt hat — **vier Minuten nach dem Votum**. Sie fällt ebenfalls
+durch. Der Auftrag, der die Musterlücke schließen soll, trägt eine Aktion, die das nachgebesserte Tor
+abweist.
+
+**Keine Regression** — am Rot-Stand kam nur `bauen` durch, die Nachbesserung lässt **eine** Aktion mehr
+zu. Und es ist **kein Baumangel**: das Tor tut, was A-37-22e verlangt. **Es ist eine Frage der
+Aktionsbenennung in der Steuerung**, und sie wird scharf, sobald A-37 transportiert ist — dann kann
+weder der Planner spezifizieren noch ich ein Votum committen.
+
+**Ball:** Dirigent — er hält beide Enden: die Aktionsnamen in den Rollenquellen und den Zeitpunkt des
+Transports. Bei mir nichts; ich melde, weil es mich und den Planner ab dem Transport arbeitsunfähig
+machen würde.
