@@ -47,7 +47,7 @@ keine Änderung der Tests selbst (nur Bootstrap/Guard).
 ## Nachvollzugs-Matrix (Fassung 1.7, §5)
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
-| A: Guard: Lauf gegen DB `ticket` (simuliert per Env) bricht VOR dem ersten Schreibzugriff ab, Rohausgabe der Meldung | Teil B | *n.U.* | Rohausgabe |
+| A: Guard: Lauf gegen DB `information_schema` (erzwungen per Env) bricht VOR dem ersten Schreibzugriff ab, Rohausgabe der Meldung | Teil B | *n.U.* | Rohausgabe |
 | B: Guard: Lauf gegen `ticket_testing_evaluator` läuft durch | Teil B | *n.U.* | Rohausgabe |
 | C: Positivprobe: zwei Rollen laufen gleichzeitig gegen zwei DBs, beide grün, Konten/IDs der jeweils anderen unverändert (DB-Probe vorher/nachher) | Teil A | *n.U.* | Rohausgaben |
 | D: Kollisionsprobe: zwei Läufe gegen DIESELBE DB → der Guard/die Serialisierung verhindert die Kollision ODER sie wird sichtbar gemeldet (kein stilles Überschreiben) | Teil A | *n.U.* | Rohausgaben |
@@ -176,7 +176,7 @@ das Verbot bis Z0-I1 gilt auch für die Messung, die es aufhebt; alle Belege sin
   **Rot:** `grep -rl 'SELECT DATABASE' --include=*.php --include=*.xml --include=*.sh .` → **0 Dateien**.
   Gegenprobe, dass der Griff trägt: `grep -rl 'RefreshDatabase' tests/` → **70 Dateien**.
   **Art des Rot: Produkt.**
-- **Z0-I1-2** · **Negativprobe Produktion.** Lauf gegen `ticket` (per Env simuliert) bricht ab,
+- **Z0-I1-2** · **Negativprobe Produktion.** Lauf gegen `information_schema` (per Env erzwungen) bricht ab,
   **bevor** geschrieben wird. Rohausgabe und `echo $?` in den Bericht.
   **Rot:** `tests/TestCase.php` hat **10 Zeilen** und **0** Treffer auf eine Datenbank-Namensprüfung.
   **Art des Rot: Schutz** — deshalb genügt kein Grep, die Probe muss **ausgelöst** werden.
@@ -301,7 +301,7 @@ stufe_2: "Vier DBs ticket_testing_<rolle> — Folgeposten, braucht root. NICHT b
 >
 > **Was daraus folgt und was nicht:**
 > **Es fehlte nie der Zugriff — es fehlt die ISOLATION.** Serialisierung paralleler Rollenläufe,
-> `TEST_ROLLE`-Pflicht, fail-closed gegen `ticket`, Seedweg, `SELECT DATABASE()` je Lauf.
+> `TEST_ROLLE`-Pflicht, fail-closed gegen jede nicht freigegebene Datenbank, Seedweg, `SELECT DATABASE()` je Lauf.
 > **Die Folgerung „Stufe 1 ohne `root` baubar" bleibt** — sie ruht jetzt auf dem gemessenen Zugriff
 > statt auf meinem Kausalsatz. **Die elf Kriterien sind unberührt.**
 >
@@ -393,7 +393,7 @@ niemand belegen kann, dass es dieselbe ist.*
 | Kriterium | Stufe 1 | Änderung |
 |---|---|---|
 | **Z0-I1-1** Guard fragt die Verbindung | **gilt** | unverändert — jetzt erst recht, der Weg ist die Ursache |
-| **Z0-I1-2** Negativprobe `ticket` | **gilt** | unverändert — Produktiv-DB nie im Testlauf |
+| **Z0-I1-2** Negativprobe Produktion | **gilt** | unverändert — Produktiv-DB nie im Testlauf |
 | **Z0-I1-3** Rollennamen zulässig | **umgeschnitten** | Stufe 1 kennt **eine** DB: **`ticket_testing`** (Errata; vorher `ticket_g1b1_testing`). Das Muster prüft **diesen einen Namen exakt**, `ticket_testing_kopie` und jeder andere bleiben abgewiesen |
 | **Z0-I1-4** `TEST_ROLLE` verpflichtend | **gilt** | unverändert — sie benennt jetzt den **Lease-Halter**, nicht die DB |
 | **Z0-I1-5** Zuordnung an EINER Stelle | **gilt** | unverändert |
@@ -430,7 +430,7 @@ niemand belegen kann, dass es dieselbe ist.*
   **Messbefehl:**
   ```
   SELECT DATABASE() je Lauf  ->  ticket_testing        im Bericht woertlich
-  Gegenprobe: ein Lauf gegen 'ticket' (per Env erzwungen) -> fail closed, Rueckgabe != 0
+  Gegenprobe: ein Lauf gegen 'information_schema' (per Env erzwungen) -> fail closed, Rueckgabe != 0
   ```
 
   **Heutiges (rotes) Ergebnis:** kein Lauf gibt ihn aus. *Was konfiguriert ist, ist eine Absicht;
@@ -464,7 +464,7 @@ niemand belegen kann, dass es dieselbe ist.*
   **Messbefehl:**
   ```
   Lauf 1 -> Nutzer a24 existiert · Lauf 2 -> Menge IDENTISCH (Auflage 2, gezaehlt)
-  Lauf gegen 'ticket' (per Env simuliert) -> Abbruch, Rueckgabe != 0, Wortlaut (Auflage 1)
+  Lauf gegen 'information_schema' (per Env erzwungen) -> Abbruch, Rueckgabe != 0, Wortlaut (Auflage 1)
   Rot-Probe: Browserabnahme OHNE Seed -> faellt mit klarer Meldung, nicht stumm
   Diff: database/ waechst NICHT um einen dauerhaften Seeder (Auflage 3 / Weg A ausgeschlossen)
   ```
@@ -565,7 +565,7 @@ Beleg der Vorarbeit stehen und ist **ÜBERHOLT**.
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
 | Z0-I1-1 Guard fragt die Verbindung | AP-1 Guard | n.U. | n.U. |
-| Z0-I1-2 Negativprobe `ticket` | AP-1 (Negativlauf) | n.U. | n.U. |
+| Z0-I1-2 Negativprobe Produktion | AP-1 (Negativlauf) | n.U. | n.U. |
 | Z0-I1-3 nur `ticket_testing` zulässig | AP-1 (Liste + Muster) | n.U. | n.U. |
 | Z0-I1-4 `TEST_ROLLE` verpflichtend | AP-2 Rollenpflicht | n.U. | n.U. |
 | Z0-I1-5 Zuordnung an EINER Stelle | AP-2 (eine Wahrheit) | n.U. | n.U. |
