@@ -31506,3 +31506,61 @@ Y-12 als Operand benannt. Zwei Teile ragen heraus:
 
 Ball: **Planner** (ein Halbsatz zu (c)) · **Generator** (bauen; der Halbsatz hindert ihn nicht) ·
 bei mir nichts.
+
+## §394 — Die Integration steht seit 48 Minuten, und der Bündel-Commit wartet: Punkt 4 der Bündel-Regel gilt seit 16:25 nicht mehr
+
+Messstand: HEAD `343bd48f`, Baum 0, gemessen 16:53–16:56. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §394'` → 0). Vorratsprüfung (d) Alterung — und Punkt 3 des Wacheauftrags:
+**Stillstand → auflösen.**
+
+### Gemessen
+
+    Integration ceb4224a        letzter Commit 16:05:04   ->  48 Minuten alt
+    rolle/generator             11 Commits vor der Integration · Spitze 16:53:43
+    rolle/planner                5 Commits · Spitze 16:48:39
+    rolle/plan-pruefer          17 Commits (§377 bis §393), aeltester 16:06:04
+    Integrator, letztes Ereignis   15:58:25   ->  56 Minuten her
+    Integrator-Rollenquelle     gen 11 · aktion zustand_nachziehen · Dateizeit 14:11:33
+
+**Der kritische Wartende ist nicht meiner:**
+
+    be4f637c  "generator: Buendel gebaut fuer Z1-W2-1 @ c4ddc02b"   <- wartet
+    public/hausplaner/hausplaner.js in der Integration: ad340caf, 21.08. 21:10
+
+### Warum das jetzt zählt und um 16:02 noch nicht
+
+Die Bündel-Regel (16:02:19, in Yamas Namen) sagt in Punkt 4:
+
+> *„Bis zum ersten ABGENOMMEN (BROWSER) zeigt `ticket.test` den Stand 21.08. 21:10 — **das ist
+> RICHTIG so** (kein unabgenommenes Werkzeug beim Benutzer)."*
+
+**Das erste ABGENOMMEN (BROWSER) liegt seit 16:25:16 vor** (Z1-W2-1, §384). Punkt 3 derselben Regel:
+*„NACH jedem ABGENOMMEN (BROWSER) baut der GENERATOR das Bündel … **der Integrator transportiert
+ihn**. So zeigt `ticket.test` genau die abgenommenen Stände."* Der Generator hat geliefert —
+`be4f637c`, 16:27:41.
+
+**Damit ist der Satz „das ist richtig so" seit 16:25 abgelaufen.** Was bis dahin die gewollte Lage
+war, ist seit 29 Minuten ein Transportrückstand: **ein abgenommenes Werkzeug, das den Benutzer nicht
+erreicht.** Die Regel hat für diesen Zustand keinen eigenen Satz — sie beschreibt den Zustand *vor*
+der ersten Abnahme und den *nach* dem Transport, nicht den dazwischen.
+
+### Was ich ausdrücklich nicht behaupte
+
+**Ich sage nicht, dass der Integrator untätig ist.** Sein letztes Ereignis ist 56 Minuten alt, seine
+Rollenquelle seit 14:11:33 unverändert — beides ist auffällig, **aber keines beweist Stillstand.** Er
+kann messen, mergen oder auf etwas warten; ein Integrationslauf hinterlässt erst am Ende eine Spur.
+**Belegt ist der Zustand, nicht seine Ursache.**
+
+Und meine eigenen 17 Commits sind **kein** Argument: sie tragen Befunde, keinen Produktcode, und ein
+Befund, der eine Stunde später transportiert wird, verliert nichts. **Ich nenne sie nur, damit die
+Zahl nicht so aussieht, als ginge es um mich.**
+
+### Der eine Satz, auf den es ankommt
+
+`hausplaner.js` in der Integration trägt den Stand vom **21.08. 21:10**. Seit heute 16:25 ist ein
+Werkzeug browserabgenommen, dessen Bündel seit 16:27 gebaut danebenliegt. **Wer jetzt `ticket.test`
+öffnet, sieht `IntegrationsKonflikte.tsx` nicht — und diesmal ist das kein Schutz mehr, sondern ein
+Rückstand.**
+
+Ball: **Integrator** (Transport von `be4f637c`, danach Zustandscommit mit `buendel: <SHA>`, wie die
+Regel es vorsieht) · bei mir nichts.
