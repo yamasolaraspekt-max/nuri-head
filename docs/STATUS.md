@@ -113,6 +113,7 @@
 | **Z1-E4-1** Bodenplatte als eigenes Bauteil (GP-0) | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 22:25:33 · Basis `54163b25` | **Blatt** `docs/auftraege/aktiv/Z1-E4-1-bodenplatte-als-eigenes-bauteil.md` @ `54163b25` · **auf Yamas Anweisung vorgezogen** (22:08) · neun Kriterien, acht rot · **DoR ERTEILT** 22:32:20 · Bau `3b4e8f6b` · CODE_FERTIG 23:18 |
 | **Z1-E0-1b** Umbenennung `deckenOberkanteMm` -> `wandOberkanteMm` | **`ABGENOMMEN`** | **Release-Prüfer** | Bauplatz 22.08. 22:32:23 · Basis `3b4e8f6b` | **KEIN Blatt, kein DoR-Durchgang** — Kriterien a-d stehen im Bauplatz selbst, so ausdruecklich verfuegt · Bau `d5e88f15` · CODE_FERTIG 23:23:20 · **ABGENOMMEN (CODE)** 23:28:31 — vier von vier, Reifegrad `code-abgenommen per Diff-Lesung und Suite`, **kein Browserlauf, wie vorgesehen** |
 | **Z1-E1-1** Wo bin ich — Etagenkontext als Vertrag | `ENTWURF` | **Plan-Prüfer** | Schnitt 23.08. 00:01:40 · Basis `97c610ca` | **Blatt** `docs/auftraege/aktiv/Z1-E1-1-wo-bin-ich-etagenkontext-als-vertrag.md` @ `31ff1600` · **Spur A** · **DoR steht aus** · auf Dirigenten-Anweisung 23:50 geschnitten |
+| **Z1-E3-1** Decke aenderbar und Rolle abgeleitet | `ENTWURF` | **Plan-Prüfer** | Schnitt 23.08. 00:01:40 · Basis `97c610ca` | **Blatt** `docs/auftraege/aktiv/Z1-E3-1-decke-aenderbar-und-rolle-abgeleitet.md` @ `31ff1600` · **Spur A** · **DoR steht aus** · auf Dirigenten-Anweisung 23:50 geschnitten |
 | **Z0-I1** Testdatenbank-Isolation — Stufe 1 | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` · **NACHBESSERN** 19:04:28, 8 von 10 Kriterien, Reifegrad `code-geprueft mit Ausloesung` — zwei Zusagen nennen das Vorhandene statt das Wirkende · **nachgebessert** `ba6fc673` 19:42:03, Kriterien 10 und 12 · **ABGENOMMEN** 23:00:11 — **zehn von zehn**, Reifegrad `code-geprueft mit Ausloesung` |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
@@ -19836,6 +19837,30 @@ herkunft_dieses_blocks: |
   erteilen, und der Generator wartete auf etwas, das es nicht gab. Vierzehn Minuten vom
   Erkennen bis zum Schnitt.
   Sein Titel nennt den eigentlichen Fund: "die Ablehnung ist gebaut und kann nie ausloesen".
+  Zwei Kennungen aus EINEM Planner-Commit, zwei Statusplaetze in zwei Commits — wie bei
+  Z1-E0-1 und Z1-E2-1.
+  ZUSTAND ENTWURF UND BALL PLAN-PRUEFER sind der belegte Anfangswert, kein Urteil.
+```
+
+```yaml
+auftrag: "Z1-E3-1"
+titel: "Decke aenderbar und Rolle abgeleitet"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+blatt: "docs/auftraege/aktiv/Z1-E3-1-decke-aenderbar-und-rolle-abgeleitet.md"
+blatt_sha: 31ff1600
+basis_sha: 97c610ca
+dor_beleg: "steht aus — planner-CODE_FERTIG-Z1-E3-1.yaml nennt ball: [plan-pruefer]"
+bau_sha: "noch offen"
+herkunft_dieses_blocks: |
+  Statusplatz vom integrator im selben Takt wie der Transport angelegt.
+  Beleg: planner-CODE_FERTIG-Z1-E3-1.yaml, 00:01:40, Blatt 31ff1600, Basis 97c610ca.
+  Geschnitten auf die Dirigenten-Anweisung von 23:50, die ihrerseits auf der Standklaerung des
+  Plan-Pruefers von 23:47 beruht: E1 und E3 hatten kein Blatt, deshalb konnte er keine DoR
+  erteilen, und der Generator wartete auf etwas, das es nicht gab. Vierzehn Minuten vom
+  Erkennen bis zum Schnitt.
+  Geschnitten mit der ENGEREN Rot-Lage, die der Plan-Pruefer in Paragraf 509 verlangt hat.
+  Sein Satz dazu: "Er hatte recht."
   Zwei Kennungen aus EINEM Planner-Commit, zwei Statusplaetze in zwei Commits — wie bei
   Z1-E0-1 und Z1-E2-1.
   ZUSTAND ENTWURF UND BALL PLAN-PRUEFER sind der belegte Anfangswert, kein Urteil.
