@@ -1,14 +1,20 @@
-auftrag_id: PARKEN-release-pruefer-a43
-generation: 4            # 2026-08-22T13:58:44+0200 — weiterhin geparkt; Hinweg auf den A-43-Stand (Merge passiert das Tor)
+auftrag_id: REL-integrationspruefung-welle-1
+generation: 5            # 2026-08-22T23:53:11+0200 — Parken AUFGEHOBEN (Yama-Bericht 23:40: 24 abgenommene Bauten, Release-Pruefer 10 h still, Zweig 487 Commits zurueck, haelt 10 ABGENOMMEN). KEIN Deploy, KEIN Produktionsbezug: Integrations-/Regressionspruefung der Tageswelle auf dem Integrationsstand.
 rolle: release-pruefer
 sitzung_erwartet: 4a2203cb-127f-4c71-aeb4-206a86181667
 worktree: /Users/yamanuri/Documents/ticket-release-pruefung
 branch: rolle/release-pruefer
-prioritaet: P3
-aktion: parken
-taetigkeit: "warten (Release-Pruefer)"
-hinweg_zuerst: "ZUERST Hinweg: git merge --no-edit -m "<rolle>: Hinweg — A-43-Stand" auto/hausplaner-integration im EIGENEN Worktree (kein Rebase/Force; Konflikt -> BASE_BLOCKED melden). Erst danach ist das Rollenverb in deinem Tor bekannt; <rolle>-BASIS_NACHGEZOGEN.yaml mit HEAD."
-steuerungshandlungen_erlaubt: [Registrierung, ACK, Ereignisse]
+prioritaet: P1
+aktion: release_pruefen
+taetigkeit: "release_pruefen (lokal, kein Deploy): Welle 22.08. auf auto/hausplaner-integration gesamtheitlich pruefen"
+jetzt:
+  0: "Hinweg: eigenen Zweig auf den Integrationsstand ziehen (487 Commits), Herkunftszeile; .env im eigenen Worktree auf ticket_testing pruefen (grep -c '^DB_DATABASE=ticket_testing$' .env = 1, sonst melden — der Dirigent stellt um)."
+  1: "Integrationspruefung der Welle (Stand = juengster Integrations-HEAD, SHA nennen): (a) PHP-Suite gesamt gegen ticket_testing (DB-Lease 6j!) gruen, Anzahl; (b) Insel-Suite + tsc 0 + schema:hausplaner:check; (c) Browser-Smoke auf der Buehne (eigener Worktree, Bundle selbst bauen, ticket_testing): alle 14 Leisten-Werkzeuge einmal ausloesen (Bodenplatte Platz 1, Reihenfolge Wand/Fenster/Tuer/Treppe/Decke/Kontur/Dach), die 7 angeschlossenen Module (Z1-W2-1/3/5, Z1-V1-1 vier) einmal sichtbar; (d) Bestandsdokument Schema 3 laden -> Migration 4 -> speichern 200; Dokument mit Platte speichern/laden; (e) kein Konsolenfehler, kein 422 im Normalweg."
+  2: "Ergebnis: RELEASE_FREI (lokal) / NICHT RELEASE_FREI mit Liste (Kennung, Befund, Beleg) — ein Ereignis release-pruefer-VOTUM-welle-1.yaml mit endstand_sha/ergebnis_sha/gelesen_bis. Befunde an Generator (Nachbesserung) und Dirigent; KEINE eigenen Reparaturen."
+  3: "Danach: die ABGENOMMEN-Zeilen, die der Integrator dir zuweist (Ball nach ABGENOMMEN = release-pruefer), in der Tafel als 'RELEASE_FREI (lokal)' bzw. mit Befund fuehren — Integrator schreibt, du meldest."
+abschluss: "RELEASE_FREI / NICHT RELEASE_FREI je Welle mit SHA."
+verboten: [Deploy, Hetzner/Produktion, Produktiv-DB 'ticket' (auch lesend), Produktcode, Reparaturen, --no-verify, Commit ausserhalb des eigenen Worktrees]
+steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/PARKEN-release-pruefer-a43/release-pruefer-ack.yaml
-erstellt: "2026-08-22T13:58:44+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/REL-integrationspruefung-welle-1/release-pruefer-ack.yaml
+erstellt: "2026-08-22T23:53:11+0200 Dirigent (atomar; Uhr: date)"
