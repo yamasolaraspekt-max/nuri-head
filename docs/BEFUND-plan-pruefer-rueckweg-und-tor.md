@@ -40534,3 +40534,62 @@ den Einzelmessungen, nicht aus der Schleife.
 Hätte ich nur die Schleife gehabt, stünde hier „netto 0 gegen gemeldet 24" — eine Abweichung von
 24 aus einer Messung, die gar nicht gelaufen ist. **Eine ausgefallene Messung ist kein Ergebnis**,
 und diese sah aus wie eines: Sie lieferte eine Tabelle, Zahlen und ein Gleichheitszeichen.
+
+## §507 — „Nichts frei" ist kein Stillstand, sondern Taktende. Und der Ball liegt nicht bei mir
+
+Stand: HEAD `5f03e9c3`, Baum 0, gen 11, Digest gleich. Zeit 23:48. Messstand `dc3c9504`.
+
+Der Generator meldet um **23:45:14** `NICHTS_FREI`: *„Alles aus Generation 21 ist geliefert;
+Z1-E1-1 und Z1-E3-1 haben keine DoR, Z1-E0-2 kein Blatt — ich warte, ohne Arbeit zu erfinden."*
+Sein `naechster_schritt` adressiert **mich**: *„plan-pruefer: DoR für Z1-E1-1 und Z1-E3-1, dann baue
+ich."*
+
+**Ich kann diese DoR nicht fahren — es gibt nichts zu prüfen.**
+
+### Gemessen
+
+```
+Z1-E1-1   KEIN Blatt in docs/auftraege/aktiv/  ·  0 Erwähnungen in docs/STATUS.md
+Z1-E3-1   KEIN Blatt                            ·  0 Erwähnungen
+Z1-E0-2   KEIN Blatt
+```
+
+Nicht „Blatt ohne DoR", sondern **kein Blatt und keine vergebene Kennung**. Eine DoR prüft ein
+Blatt gegen den Bestand; ohne Blatt gibt es keinen Prüfgegenstand.
+
+### Alle drei Rollenquellen stimmen überein — und sagen dasselbe
+
+| Rolle | Quelle | Aussage |
+|---|---|---|
+| **Planner** (gen 21) | `taetigkeit`, Punkt 2 | „**Morgen früh (23.08., erster Takt)**: E1 ‚Wo bin ich' (Z1-E1-1, Spur W) und E3 ‚Decke bedienbar…'" |
+| **Plan-Prüfer** (gen 11) | Punkt 3 | „Danach DoR Z1-E1-1, Z1-E3-1 (**morgen früh**)" |
+| **Generator** (gen 21) | eigene Meldung | „ich warte" |
+
+Alle drei Digests stimmen mit ihren `.sha256` überein. **Das ist kein Stillstand, sondern das
+geplante Ende dieses Takts.** Der Ball liegt beim **Planner** (schneiden), und zwar ab morgen früh —
+nicht bei mir.
+
+Was jetzt noch läuft: die **Abnahme von Z1-E4-1** beim Evaluator, und der **Transport** von fünf
+Commits beim Integrator. Beides ist adressiert.
+
+### Was ich am Generator würdige — es ist meine eigene Falle
+
+Er legt offen, wie er die DoR-Lage zuerst falsch gemessen hat:
+
+> „ERST FALSCH, DANN RICHTIG […] Ein grep auf die Kennung in den `*ERTEILT*`-Dateien meldete für
+> Z1-E1-1 und Z1-E3-1 je einen Treffer. Beide standen in
+> `plan-pruefer-DOR-ERTEILT-Z1-E4-1.yaml` — als **Erwähnung im Fließtext**, nicht als Vergabe. Über
+> das **Feld** gemessen (`^kennung:`) sind es 0 und 0. Hätte ich den ersten Zählstand gemeldet,
+> hätte ich zwei Aufträge begonnen, die niemand freigegeben hat."
+
+**Die Erwähnungen stehen in meiner Datei.** Mein DoR-Votum zu Z1-E4-1 nennt E1 und E3 im
+Fließtext (als „danach"), und genau daran wäre er hängengeblieben.
+
+Und es ist **exakt die Falle aus §497**, wo ich aus der `taetigkeit`-Zeile schloss, die
+Generator-Rollenquelle kenne E4 nicht — Ausschnitt statt Grundmenge, Erwähnung statt Feld. Wir sind
+heute beide einmal hineingelaufen und beide vor dem Melden herausgekommen, weil wir nach der Zahl
+noch einmal hingesehen haben.
+
+Bemerkenswert ist der Satz, mit dem er die Lage schließt: **„ich warte, ohne Arbeit zu erfinden."**
+Das ist dieselbe Grenze, die ich für mich beanspruche, wenn meine Bahn leer ist — nur dass ich dann
+in den Vorrat gehe und er wartet. Beides ist richtig: Ich habe einen Vorratsauftrag, er hat keinen.
