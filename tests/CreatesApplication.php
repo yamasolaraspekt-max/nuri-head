@@ -16,6 +16,17 @@ trait CreatesApplication
     /** Wer diesen Lauf haelt — aus TEST_ROLLE, geprueft. Z0-I1-4 und Grundlage fuer Z0-I1-9. */
     public static string $halter = '';
 
+    /** Die Lease wird EINMAL je Prozess gezogen, nicht je Testfall. */
+    private static bool $leaseGezogen = false;
+
+    /** Eine Kennung fuer diesen Lauf — sie steht als `owner` in der Lease. */
+    private static function sitzung(): string
+    {
+        $s = getenv('SITZUNGS_ID');
+
+        return is_string($s) && $s !== '' ? $s : ('lauf-'.getmypid());
+    }
+
     /**
      * Creates the application.
      */
@@ -34,6 +45,17 @@ trait CreatesApplication
         // `TestDatenbank::name()` bleibt unangetastet: sie beantwortet die Stufe-2-Frage, welche
         // DB eine Rolle bekaeme, und ihre Zusage gilt weiter.
         self::$halter = TestDatenbank::verlangeRolle(getenv('TEST_ROLLE') ?: null);
+
+        // Z0-I1-9: die Lease VOR dem ersten Schreibzugriff — und genau EINMAL je Prozess.
+        // `createApplication` laeuft je Testfall; die Lease gilt fuer den ganzen Lauf, sonst
+        // zoege ein Lauf mit 300 Faellen 300 Token und der Zaehler saegte sich selbst durch.
+        if (! self::$leaseGezogen) {
+            self::$leaseGezogen = true;
+            TestDbLease::ziehen(TestDatenbank::BASIS, self::$halter, self::sitzung());
+            // Freigabe am PROZESSENDE, nicht am Testfall-Ende. Ein Abbruch mitten im Lauf laesst
+            // sie stehen — dagegen steht `heartbeat_bis`, nicht ein Hoffen auf sauberes Beenden.
+            register_shutdown_function(static fn () => TestDbLease::freigeben());
+        }
 
         // Der Name wird VOR dem Bootstrap gesetzt — danach steht die Verbindung.
         $db = TestDatenbank::BASIS;
