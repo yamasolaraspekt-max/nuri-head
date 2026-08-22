@@ -130,14 +130,15 @@ export const WERKZEUG_THEMEN: readonly WerkzeugThema[] = [
     id: '07-architektur',
     label: 'Architektur & Gebäude',
     werkzeuge: [
+      // **Bodenplatte ZUERST** (Yama 23.08., 00:0x — Baureihenfolge unten nach oben). In diesem
+      // Menue gibt es kein „Markieren", also beginnt die Liste direkt mit dem ersten Bauteil.
+      // *Zuerst stand sie hier neben `decke`, weil beide benachbarte Bauteile sind; die
+      // Baureihenfolge wiegt schwerer als die Verwandtschaft — man baut den Boden vor der Wand.*
+      'bodenplatte',
       'wand',
       'fenster',
       'tuer',
       'treppe',
-      // Z1-E4-1: die Bodenplatte gehoert zur Architektur wie die Decke — sie steht direkt neben
-      // ihr, weil beide dasselbe missverstaendlich benachbarte Bauteil sind und der Leser sie
-      // hier auseinanderhalten koennen muss.
-      'bodenplatte',
       'decke',
       // Z-05-N1: die Kontur ist der Umriss eines Bauteils und gehoert damit zur Architektur —
       // nicht zu den Zeichen-Primitiven, die stillgelegt sind.

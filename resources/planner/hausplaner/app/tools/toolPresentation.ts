@@ -69,12 +69,19 @@ const GRUND_PAKET = 'Fach-Werkzeug — über seine Kategorie-Gruppe in der obere
 // entschieden; nur WOHER sie kommen, hat sich geaendert.
 export const TOOL_PRESENTATION_RULES: readonly ToolPresentationRule[] = [
   // --- Registry: die 7 modus-schaltenden Bau-Werkzeuge (Reihenfolge = Registry-Reihenfolge) ------
-  // Z1-E4-1: **die Bodenplatte steht auf Platz 1.** Yamas Anweisung 22.08. 22:08 („ich moechte
-  // dass die bodenplatte verfuegbar ist"), im Blatt als Kriterium (a) festgehalten. Die acht
-  // vorhandenen Fix-Regeln ruecken geschlossen um eins nach hinten — **ihre Soll-Folge aus
-  // Z1-W2-8 bleibt damit unveraendert**, es verschiebt sich nur der gemeinsame Anfang.
-  { toolId: 'bodenplatte', zone: 'fix', ordnung: 1, herkunft: 'registry', begruendung: GRUND_BAU },
-  { toolId: 'auswahl', zone: 'fix', ordnung: 2, herkunft: 'registry', begruendung: GRUND_BAU },
+  // **MARKIEREN BLEIBT GANZ OBEN.** Yamas Wort vom 23.08., 00:0x: *„warum ist bodenplatte in der
+  // navi ganz oben und dazwischen die markieren, das ist nicht richtig: markieren ganz oben, dann
+  // bodenplatte, dann wand usw."*
+  //
+  // *Mein erster Bau hatte die Platte auf 1 gesetzt und `auswahl` dahinter geschoben* — der
+  // Auftrag „Bodenplatte an erster Stelle der Leiste" liess sich so lesen, aber er meinte den
+  // ersten BAUTEIL-Eintrag. **`auswahl` ist kein Bauteil, sondern der Griff**, mit dem man alles
+  // andere anfasst; er gehoert vor die Bauteile und nicht zwischen sie.
+  //
+  // Ab hier: Markieren, dann die Bauteile in Baureihenfolge (Bodenplatte -> Wand -> Fenster ->
+  // Tuer -> Treppe -> Decke -> Kontur -> Dach) — unten nach oben gebaut, wie das Haus entsteht.
+  { toolId: 'auswahl', zone: 'fix', ordnung: 1, herkunft: 'registry', begruendung: GRUND_BAU },
+  { toolId: 'bodenplatte', zone: 'fix', ordnung: 2, herkunft: 'registry', begruendung: GRUND_BAU },
   { toolId: 'wand', zone: 'fix', ordnung: 3, herkunft: 'registry', begruendung: GRUND_BAU },
   { toolId: 'fenster', zone: 'fix', ordnung: 4, herkunft: 'registry', begruendung: GRUND_BAU },
   { toolId: 'tuer', zone: 'fix', ordnung: 5, herkunft: 'registry', begruendung: GRUND_BAU },

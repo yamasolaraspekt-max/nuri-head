@@ -49,15 +49,31 @@ function platte(over: Partial<FoundationSlabNode> = {}): FoundationSlabNode {
 
 // --- (a) Die Leiste beginnt mit „Bodenplatte" ------------------------------------------------
 
-test('Z1-E4-1-a: `bodenplatte` steht auf Platz 1 der Fix-Zone', () => {
+test('Z1-E4-1-a: `bodenplatte` ist der ERSTE BAUTEIL-Eintrag — hinter „Markieren"', () => {
+  // **Yamas Präzisierung vom 23.08., 00:0x**, wörtlich: *„markieren ganz oben, dann bodenplatte,
+  // dann wand usw."*
+  //
+  // *Die erste Fassung dieser Zusage prüfte `fix[0] === 'bodenplatte'` und war grün* — sie hat
+  // den Auftrag „an erster Stelle der Leiste" mitgelesen, wie ich ihn gebaut hatte. **Genau das
+  // ist die Schwäche einer Zusage, die der Bauende selbst schreibt:** sie prüft, was er verstanden
+  // hat, nicht, was gemeint war. Erst der Blick auf die Oberfläche hat den Unterschied gezeigt.
+  //
+  // Deshalb prüft sie jetzt die SACHE und nicht die Position: `auswahl` ist kein Bauteil, sondern
+  // der Griff, mit dem man alles andere anfasst — er steht vor den Bauteilen, nicht zwischen ihnen.
   const fix = TOOL_PRESENTATION_RULES.filter((r) => r.zone === 'fix').sort((x, y) => x.ordnung - y.ordnung);
-  assert.equal(fix[0].toolId, 'bodenplatte', 'die Leiste beginnt nicht mit der Bodenplatte');
-  assert.equal(fix[0].ordnung, 1);
-  // Gegenprobe: die acht Bestandswerkzeuge sind nur nachgerückt, ihre Folge zueinander steht.
-  assert.deepEqual(
-    fix.slice(1).map((r) => r.toolId),
-    ['auswahl', 'wand', 'fenster', 'tuer', 'treppe', 'decke', 'kontur', 'dach'],
-  );
+  const ids = fix.map((r) => r.toolId);
+
+  assert.equal(ids[0], 'auswahl', 'Markieren steht nicht ganz oben');
+  assert.equal(ids[1], 'bodenplatte', 'die Bodenplatte ist nicht der erste Bauteil-Eintrag');
+
+  // Der erste Eintrag, der ein Bauteil ist — unabhängig davon, wie viele Griffe davor stehen.
+  const ersterBauteilEintrag = ids.find((id) => toolNach(id)?.bauteilKind !== undefined);
+  assert.equal(ersterBauteilEintrag, 'bodenplatte');
+  // und `auswahl` ist wirklich keines, sonst misst die Zeile darüber etwas anderes als gedacht
+  assert.equal(toolNach('auswahl')?.bauteilKind, undefined, '`auswahl` traegt ein bauteilKind — dann ist es ein Bauteil');
+
+  // Die Bauteile stehen in Baureihenfolge: unten nach oben, wie das Haus entsteht.
+  assert.deepEqual(ids, ['auswahl', 'bodenplatte', 'wand', 'fenster', 'tuer', 'treppe', 'decke', 'kontur', 'dach']);
 });
 
 test('Z1-E4-1-a Absage-Regel: der Eintrag traegt NICHT bauteilKind ceiling', () => {
