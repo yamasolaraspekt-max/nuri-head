@@ -34200,3 +34200,94 @@ Fachentscheidungen werden nicht still automatisiert. **Mein Halbsatz 2 streicht 
 
 Ball: **Generator** (bauen, SIEBEN Einträge) · **Planner** (Kriterientext Z. 59/84 und Matrix Z. 171
 nachziehen, damit das Blatt nicht dreistimmig bleibt) · **Dirigent/Yama** (GP-0).
+
+## §430 — Berichtigung zu §429: ich habe gegen einen überholten Blattstand votiert. Das Votum trägt trotzdem — aber der Grund dafür ist Glück, nicht Sorgfalt
+
+Messstand: HEAD `8a4ffd58`, Baum 0, gemessen 19:07–19:10. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §430'` → 0). **Stopp-Regel** — drei Punkte an meinem eigenen Votum, 4 Minuten alt.
+**Ereignis dieses Abschnitts:** `ereignisse/SPEZ-planner-spur-V-sammelblatt-1/plan-pruefer-BERICHTIGUNG-429-blattstand-und-buendelregel.yaml`
+
+### Fehler 1: Ich habe gegen `dbaa6b4d` votiert, gültig war `6549ab61`
+
+    19:03:32  ich messe:  Blob 877ea752 identisch auf HEAD und rolle/planner   RICHTIG zu dieser Zeit
+    19:04:56  6549ab61    "Zwei eigene Zahlen ohne Grundmenge berichtigt …"    NEUER STAND
+    19:06:40  mein Votum  "geprueft_gegen: dbaa6b4d"                            UEBERHOLT
+
+    Blob je Stand:  dbaa6b4d -> 877ea752   ·   6549ab61 / HEAD / rolle/planner -> f2695aae
+
+**Die Wache sagt: *„VOR dem Schreiben den Messstand NEU messen — nicht den vom Rundenbeginn
+verwenden."*** Ich habe den Messstand **meines Zweiges** neu gemessen (19:04:58) — den **Blattstand
+nicht.** In §428 habe ich genau diese Drift bei anderen gemeldet, drei Minuten später bin ich selbst
+hineingelaufen.
+
+### Das Votum trägt — und ich sage ausdrücklich, warum das kein Verdienst ist
+
+    Diff dbaa6b4d -> 6549ab61 am Blatt:  NUR die Belegzahlen
+      -  "type · polygon · dickeMm · oeffnungen? · schichten?  — KEINE elevation"
+      +  "'eleva' IM CeilingNode-BLOCK 0 · in der GANZEN DATEI 3 (:66, :327, :343)"
+      -  "DREI Aufrufstellen (u. a. :296)."
+      +  "ZWEI Aufrufstellen (:296, :315) + EINE Definition (:112) = DREI Zeilen mit Klammer."
+
+**Der Planner hat meine §428-Kritik eingearbeitet — das ist der ganze Unterschied.** Die Kriterien
+sind unverändert, der Widerspruch besteht fort:
+
+    Z. 59   Kriterium a  verlangt weiterhin "bodenplatte → wand → …"
+    Z. 77   Kriterium b  verlangt weiterhin den Eintrag
+    Z. 171  Matrix       fuehrt b weiterhin
+    Z. 232  Entscheidung "(a) baubar — ohne bodenplatte, sieben statt acht"
+    Z. 233  Entscheidung "(b) FAELLT"
+
+**Meine zwei Halbsätze sind unverändert nötig und richtig.** Aber: *hätte* der Planner in derselben
+Minute ein Kriterium geändert, hätte ich über einen Text votiert, den es nicht mehr gibt. **Dass es
+gutging, ist Glück.**
+
+**Berichtigung der Zeilenverweise:** Mein Votum nennt Z. 230/231 für die Entscheidungstabelle — im
+gültigen Stand sind es **Z. 232/233**. Um zwei verschoben, weil der Planner Text eingefügt hat.
+**Die dritte Zeilenverschiebung heute** (§424 `:70→:71`, §428 Blattdrift, jetzt diese).
+
+### Fehler 2: Die Bündel-Regel 16:02, auf die ich mich berief, ist aufgehoben
+
+§429 sagt: *„Z1-W2-8 ist Spur W, dort gilt die Bündel-Regel von 16:02."* Der Dirigent hat sie
+**19:05:47** aufgehoben — **53 Sekunden vor meinem Votum**:
+
+> *„VEREINFACHUNG AB JETZT: das Bündel ist Teil JEDER Lieferung (V-5 gilt auch für Z1-W2-4/5/6) —
+> die Regel 16:02 ‚Bündel erst nach Browser-Votum' ist AUFGEHOBEN."*
+
+**Mein Satz ist überholt, meine Schlussfolgerung nicht:** Kriterium f nennt
+`public/hausplaner/hausplaner.js` ausdrücklich in der erlaubten Liste — es trägt jetzt erst recht,
+weil das Bündel **Pflicht** ist statt nur erlaubt.
+
+### Fehler 3, und er ist der eigentliche: mein Ereignis-Schnitt sitzt falsch
+
+**Elf neue Dateien, null Treffer** — das ließ mich nachmessen. Ursache:
+
+    ich filtere:  zeit > <Zeit meines letzten GESCHRIEBENEN Ereignisses>   (19:06:40)
+    richtig ist:  zeit > <Zeit meines letzten vollstaendigen PULLS>        (19:03:10)
+
+**Alles, was zwischen meiner letzten Lesung und meinem eigenen Schreiben ankommt, fällt durch.** In
+dieser Runde waren das **vier Antworten auf meine Befunde**:
+
+    19:04:18  dirigent   ENTSCHEIDUNG etagenweiser Aufbau
+    19:04:28  evaluator  NACHBESSERN Z0-I1
+    19:05:32  planner    BERICHTIGUNG zwei Zahlen + V-1-Nachschaerfung   <- auf §428
+    19:05:47  dirigent   ENTSCHEIDUNG vier Befunde                        <- IN MEINEM ORDNER
+    19:06:16  integrator ANTWORT Blattdrift Z1-W2-8 ist behoben           <- auf §428
+
+**Fünf, nicht vier** — und eine davon lag in `DOR-plan-pruefer-spur-V/`, meinem eigenen
+Auftragsordner.
+
+**Das ist Regel 6g, die ich verletzt habe:** *„`gelesen_bis` = Zeit des letzten vollständigen
+Pulls."* Ich habe sie als Schreibzeit geführt. **Ab sofort: der Schnitt ist die Zeit meiner letzten
+Lesung, nicht die meines letzten Ereignisses.**
+
+### Was der Dirigent entschieden hat, deckt sich mit meinem Votum
+
+> *„OHNE Bodenplatte bauen — Reihenfolge Wand → Fenster → Tür → Treppe → Decke → Kontur → Dach …
+> Bodenplatte NICHT auf ‚ceiling' legen; sie kommt als Scheibe E4 (slab, GP-0)."*
+
+**Identisch in der Sache, 53 Sekunden vor mir und unabhängig.** Das ist die beste Bestätigung, die
+ein Votum bekommen kann — und sie ändert nichts daran, dass ich gegen den falschen Stand geprüft
+habe.
+
+Ball: **niemand** — das Votum bleibt gültig, die Berichtigung ist meine. **Generator** unverändert:
+sieben Einträge, Bündel jetzt Pflicht.
