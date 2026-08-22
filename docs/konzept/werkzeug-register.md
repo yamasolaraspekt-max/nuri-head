@@ -79,17 +79,30 @@ Feststellung: „ein Werkzeug = ein Blatt" braucht hier eine andere Anbindung al
 | `geometry/holzBauteile.ts` | 99 | W-21 · W-25 · **W-43** Abbund | — | CODE | **offen** |
 | `geometry/holzMengen.ts` | 81 | **W-20** Stückliste und Mengen · W-21 | — | CODE | **offen** |
 
-### Paket 2 — Dach · **ANSCHLIESSEN, als drittes**
+### Paket 2 — Dach · **AUFGETEILT** (Dirigent 14:12:32, nach Zimmerer-Fachlinse)
 
-| Modul | Z. | Registerzeile | Registry-Kennung | Reifegrad | Zielmenü |
-|---|---|---|---|---|---|
-| `geometry/dachAusschnitt.ts` | 531 | **W-07** Dach aus Kontur · W-08 · W-26 · W-29 · W-30 | `dach`/`kontur` (W-07) | CODE | **offen** |
-| `geometry/dachTopologie.ts` | 183 | W-27 | — | CODE | **offen** |
-| `geometry/schifterListe.ts` | 152 | W-21 · W-25 · W-27 · **W-43** | — | CODE | **offen** |
-| `geometry/dachOeffnung.ts` | 96 | W-07 · W-21 · W-26 · **W-29** Durchdringungen | — | CODE | **offen** |
-| `geometry/sparrenTrennung.ts` | 67 | **W-21** Sparren und Lattung · W-25 · W-29 | — | CODE | **offen** |
-| `projection/dachProjektion.ts` | 43 | **W-07** | — | CODE | **offen** |
-| `geometry/dachVorlage.ts` | 34 | **W-07** · W-30 | — | CODE | **offen** |
+**7 Module · 1106 Zeilen.** *Nicht mehr ein Paket mit einer Entscheidung, sondern drei Klassen:*
+
+| Modul | Z. | Registerzeile | Kennung | Entscheidung |
+|---|---|---|---|---|
+| `projection/dachProjektion.ts` | 43 | **W-07** | — | **ANSCHLIESSEN** (echte Verdrahtung, eigenes Spur-W-Blatt) |
+| `geometry/dachOeffnung.ts` | 96 | W-07 · W-21 · W-26 · **W-29** Durchdringungen | — | **ANSCHLIESSEN** (echte Verdrahtung, eigenes Spur-W-Blatt) |
+| `geometry/sparrenTrennung.ts` | 67 | **W-21** Sparren und Lattung · W-25 · W-29 | — | **zurückgestellt** — braucht Modell-/Renderer-Fähigkeit |
+| `geometry/dachTopologie.ts` | 183 | W-27 | — | **zurückgestellt** — braucht Modell-/Renderer-Fähigkeit |
+| `geometry/schifterListe.ts` | 152 | W-21 · W-25 · W-27 · **W-43** | — | **zurückgestellt** — braucht Modell-/Renderer-Fähigkeit |
+| `geometry/dachAusschnitt.ts` | 531 | **W-07** Dach aus Kontur · W-08 · W-26 · W-29 · W-30 | `dach`/`kontur` (W-07) | **klären** — fremdes Haus, Meter gegen mm |
+| `geometry/dachVorlage.ts` | 34 | **W-07** · W-30 | — | **klären** — zweite Wahrheit neben `dachformVorlagen.ts` |
+
+**Reihenfolge:** die zwei Anschlüsse kommen **nach Paket 3 und Paket 1**. Die zwei Klärungen sind
+**eigene Klärungsposten, kein Anschluss**. Die vier Zimmerer-Befunde **B-1…B-4** werden in den
+Register-Zeilen der Dachmodule **zitiert, nicht nachgebaut** (P-02 Punkt 4), sobald sie vorliegen.
+
+> **Meine Kopfzahl war falsch und die Korrektur ist belegt:** die Anschluss-Vorlage nannte
+> **1010 Zeilen**. Selbst nachgemessen, Modul für Modul: **1106**.
+> *Die Differenz ist exakt `dachOeffnung.ts` (96)* — es stand in meiner Tabelle, fiel aber aus der
+> Summe. **Eine Summe ohne Gegenprobe**, obwohl ich die Summenprobe an diesem Vormittag zweimal
+> selbst als Rettung erlebt habe. Der Dirigent nennt 1106; die Zahl ist von mir nachgerechnet,
+> nicht übernommen.
 
 ### Paket 4 — Einzelstücke · Entscheidung: **PARKEN**
 
@@ -154,8 +167,23 @@ Feststellung: „ein Werkzeug = ein Blatt" braucht hier eine andere Anbindung al
 > **Namensähnlichkeit** geschlossen, ohne die Abgrenzung zu lesen. *Der Name war mein Kriterium,
 > nicht die Sache.* **Kein Gegenbefund** — die Abgrenzung trägt.
 
-**Was offen bleibt und hier nicht behauptet wird:** ob `werkzeugRegistry` je einen Produktivpfad
-bekommen *soll*. Es ist nicht erreichbar, aber das ist eine Anschlussfrage, keine Doppelungsfrage.
+#### Entscheidung: **STILLLEGEN** (Dirigent 14:11:33, nach Fachlinse Software-Architekt)
+
+**Eine Fachmessung geht über meinen Befund hinaus und ändert die Antwort:** `werkzeugRegistry.ts`
+ist **nicht der Zwilling von `toolRegistry`** (die Datenmodelle sind disjunkt — das deckt sich mit
+meiner Messung), sondern **der unbenutzte vierte Entwurf der Bauteil-Schicht** neben
+`scene.types`, `geometry/*` und `enginePanels.ts:89` (`EngineErgebnis`) / `faehigkeiten.ts`.
+**0 Produktivverbraucher.**
+
+**Register-Zeile: `stillzulegen (Kleinblatt nach Paket 3)`** — nach dem Muster
+`toolCatalogStillgelegt`: **nicht verwerfen, nicht anschließen, NICHT mit `toolRegistry`
+zusammenführen.** Der Grund gehört in den Dateikopf. *Kein Blatt jetzt.*
+
+> **Meine Frage war die falsche.** Ich habe gefragt: *„welche der zwei Registries gilt?"* — die
+> richtige Frage lautet **„Parametrik oder `EngineErgebnis`?"**, und **`EngineErgebnis` lebt**.
+> *Ich hatte die Abgrenzung Werkzeug/Bauteil gemessen und damit die Doppelung widerlegt; dass
+> daneben eine dritte und vierte Bauteil-Sicht steht, lag außerhalb meines Blickfelds.* Damit ist
+> auch mein „was offen bleibt" beantwortet: `werkzeugRegistry` bekommt **keinen** Produktivpfad.
 
 ---
 
@@ -179,6 +207,27 @@ nicht in dieses Register.
 
 **Die drei Module von Paket 3 haben keine Registry-Kennung und sind keine Leistenwerkzeuge.**
 `ein Werkzeug = ein Blatt` gilt weiter, aber der **Bedienweg (N4)** kann bei ihnen nicht
-„Leisteneintrag anklicken" heißen. Wahrscheinlicher: **Warnung/Prüfergebnis erscheint am Objekt
-oder im Statusbereich**, ausgelöst durch die Bearbeitung selbst. **Das ist je Blatt zu entscheiden
-und zu belegen — hier nur festgehalten, damit es nicht in drei Blättern neu gefragt wird.**
+„Leisteneintrag anklicken" heißen.
+
+**Der Dirigent hat daraufhin Kriterium (a) zweigleisig präzisiert (14:15:26)** — je Blatt genau
+eine Zeile:
+
+```
+Leistenwerkzeug   (a) Werkzeug in der Leiste sichtbar (toolRegistry-Kennung <K>)
+Pruefung/Warnung  (a) Meldung erscheint am Objekt bzw. im Statusbereich, ausgeloest durch die
+                      Bearbeitung selbst — Ort je Blatt benannt (Komponente/Panel, Pfad) und im
+                      Browser belegt; N4 nennt das TRAGENDE Werkzeug statt einer Leistenkennung
+```
+
+**(b) und (c) bleiben unverändert:** Bearbeiten erzeugt die Meldung · ohne das Modul erscheint sie
+nicht (Rot-Probe).
+
+**Für `grundriss.ts` (sechs Blätter, mehrdeutig) ist die Zuordnung ausdrücklich meine
+Gestaltungsentscheidung im Blatt — benennen, nicht offenlassen.** *Damit ist die Mehrdeutigkeit
+kein Dauerzustand: das Register hält sie fest, das Blatt entscheidet sie.*
+
+| Modul | tragendes Werkzeug für N4 |
+|---|---|
+| `integrationAbgleich.ts` | **W-40** Gültigkeitsstatus |
+| `aufbautenStatus.ts` | **W-22** Gaube |
+| `grundriss.ts` | **im Blatt zu entscheiden** — aus W-05 · W-08 · W-10 · W-11 · W-17 · W-26 |
