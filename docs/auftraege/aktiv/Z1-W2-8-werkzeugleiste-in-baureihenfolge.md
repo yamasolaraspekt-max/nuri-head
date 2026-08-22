@@ -63,6 +63,15 @@ IST    (kein Eintrag) wand -> fenster -> tuer -> DACH  -> decke -> treppe -> …
 
 - **Z1-W2-8-a** · **DIE REIHENFOLGE STIMMT — IN LEISTE UND MENÜ.**
 
+  > *(**Halbsatz, Dirigent 2026-08-23T00:03:53 in Yamas Namen.** Klarstellung ohne
+  > Kriterienänderung — die DoR bleibt gültig, Nachtrag 1.5, kein neuer Durchgang.)*
+  >
+  > **`auswahl` (Markieren) steht GANZ OBEN und ist nicht Teil der sieben.** *Das stand hier
+  > schon („`auswahl` bleibt vorn"); der Dirigent hat es zur ausdrücklichen Hausfolge erhoben,
+  > nachdem Yama es an der gebauten Leiste bemängelt hat.*
+  > **Und: `Z1-E4-1` schiebt `bodenplatte` zwischen `auswahl` und `wand`.** *Die sieben hier
+  > bleiben sieben und ihre Folge bleibt unverändert — sie beginnen nach der Bodenplatte.*
+
   **Verlangt:** In **beiden** Ansichten exakt: `wand → fenster → tuer → treppe → decke → kontur →
   dach` — **SIEBEN Einträge**. **Die übrigen Gruppen** (Auswahl/Messen/Bearbeiten/CAD) stehen
   **unverändert dahinter**.
