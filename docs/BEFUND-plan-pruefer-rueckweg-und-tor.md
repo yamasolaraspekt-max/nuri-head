@@ -33620,3 +33620,83 @@ Kopfblock, nicht die Datei.**
 
 Ball: **niemand** für die Zahl (sie ist beauftragt und geliefert) · **Planner**, falls die 36 alten
 `dor_beleg`-Felder nachgezogen werden — das stand schon in §413 und ist keine neue Forderung.
+
+## §423 — Die „13" aus Nachtrag 1.6 ist richtig gemessen und stabil. Aber „Werkzeugleiste-Einträge" ist mehrdeutig: der Code selbst kennt 10 Werkzeuge und 3 Aktionen
+
+Messstand: HEAD `20fd8ec8`, Baum 0, gemessen 18:42–18:44. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §423'` → 0). Vorratsprüfung **(d)**: Alterung einer Zahl mit genanntem Stand.
+
+**Posten 2 zuvor:** Sammelblatt `Z1-V1-1` liegt weiterhin auf **keinem** der drei Zweige.
+
+### Der Gegenstand
+
+Nachtrag 1.6, den ich in §421 erteilt habe, verlangt im Lagebericht-Zusatz:
+
+> *„Werkzeugleiste-Einträge (Quelle `toolRegistry.ts`, **heute 13, Stand 15.08.**)"*
+
+Eine Zahl mit genannter Quelle und einem **sieben Tage alten** Stand — genau der Fall für (d).
+
+### Die Zahl ist stabil, und der Grund ist hart
+
+    Commits an app/tools/toolRegistry.ts seit 2026-08-15:   0
+
+**Die Zahl kann sich nicht geändert haben.** Das ist der bessere Beleg als jedes Nachzählen: nicht
+„ich habe 13 gezählt", sondern „die Datei ist unberührt".
+
+Nachgezählt trotzdem, mit zwei Mustern und Namensprobe:
+
+    ids im TOOL_DEFINITIONS-Block (Z. 37–321):   13
+      auswahl · wand · fenster · tuer · dach · decke · treppe · bemassen ·
+      flaeche-messen · kontur · loeschen · duplizieren · trimmen
+
+### Aber „Werkzeugleiste-Einträge" ist nicht dasselbe wie „Registry-Einträge"
+
+    art: 'werkzeug'   10    auswahl wand fenster tuer dach decke treppe bemassen
+                            flaeche-messen kontur
+    art: 'aktion'      3    loeschen duplizieren trimmen
+    Summenprobe 10 + 3 = 13 = Anzahl der ids
+
+Und der Code selbst zieht diese Grenze — `toolRegistry.ts:381-384`:
+
+    /** Nur die modus-schaltenden Werkzeuge DER WERKZEUGLEISTE (art='werkzeug'), in Anzeigereihenfolge. */
+    export function werkzeugTools(): ToolDefinition[] {
+      return TOOL_DEFINITIONS.filter((t) => t.art === 'werkzeug');
+    }
+
+**Die Funktion, die der Bestand „der Werkzeugleiste" nennt, liefert 10 — nicht 13.**
+
+**Das ist keine Widerlegung der 13.** Sie ist als *Registry*-Zahl richtig. Aber im Lagebericht steht
+sie unter dem Namen „Werkzeugleiste-Einträge", und dafür gibt es im selben Modul zwei
+verteidigbare Werte. **Wer nächste Woche 10 meldet und wer 13 meldet, haben beide recht — und der
+Lagebericht wird unvergleichbar.**
+
+**Vorschlag, keine Forderung:** die Zahl mit der Funktion benennen, die sie liefert —
+*„TOOL_DEFINITIONS 13 (davon werkzeugTools() 10, Aktionen 3)"*. Das kostet eine Klammer und schließt
+die Lücke. Ob der Lagebericht so geführt wird, entscheidet der Dirigent.
+
+### DIE TEILSTRING-FALLE, ZUM DRITTEN MAL HEUTE
+
+    grep -cE "art: '[a-z]+'" ueber die ganze Datei:   14
+    davon echte Felder:                              13
+    Zeile 216:  // Ein achter `art: 'werkzeug'`-Eintrag ist **keine additive Zeile**: …
+
+**Ein Kommentar, der das Feld zitiert.** Datei-weit gezählt kommt 11 + 3 = 14 heraus; über den
+`TOOL_DEFINITIONS`-Block gezählt 10 + 3 = 13, und das deckt sich mit der Zahl der `id`-Zeilen.
+
+Damit ist es heute **dreimal dieselbe Klasse**:
+
+    A-37-22e   'grep -ci ack' -> 5 Treffer, KEINER ist ein ACK (package, ungetrackt)
+    §422       'dor_beleg: steht aus' in einem Fliesstext-Satz und in zwei Codebloecken
+    §423       "art: 'werkzeug'" in einem Kommentar ueber das Feld
+
+**Die Regel aus §422 hat hier zum ersten Mal vorbeugend gegriffen:** *„Die Grundmenge ist der
+Kopfblock, nicht die Datei."* Ich habe von vornherein über den Block gemessen und die Datei-Zahl nur
+als Gegenprobe gefahren — deshalb ist die 14 hier ein Fund und kein Fehler.
+
+**Eine Nebenbeobachtung, ausdrücklich ungeprüft:** derselbe Kommentar spricht von einem **„achten"**
+`art: 'werkzeug'`-Eintrag, während heute **zehn** existieren. Das riecht nach einem Satz, der beim
+Wachsen der Liste stehengeblieben ist. Ich habe die Historie **nicht** gemessen und behaupte nichts
+— es steht hier, damit es beim nächsten Anfassen von `toolRegistry.ts` auffällt.
+
+Ball: **niemand** — die Zahl im Nachtrag ist richtig, der Rest ist ein Vorschlag zur Eindeutigkeit
+und eine Notiz für den nächsten, der die Datei öffnet.
