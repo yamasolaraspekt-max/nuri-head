@@ -30835,3 +30835,55 @@ zu messen, kein Ergebnis."**
 Zählweise — mit anderem Muster kommen 17 heraus. Sie ist Kontext, kein Kriterium, und trägt nichts.
 
 Ball: **Generator** (nach Z0-I1) · bei mir nichts.
+
+## §383 — Alterungsprüfung Posten 9 (§119/§120): von 38 toten Modulen sind 26 übrig. Und meine Positivkontrolle hat mein eigenes Verfahren gerettet
+
+Messstand: HEAD `7c7b2f63`, Baum 0, gemessen 16:22–16:26. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §383'` → 0). Achte Alterungsprüfung; nichts in meiner Bahn, nichts angekommen.
+
+### Der Ursprung
+
+§120 maß den Importgraphen der Insel von `main.tsx` aus, am Stand `d4ee1555`:
+
+    Module 165   MIT Typ-Importen 30 nicht erreichbar   OHNE Typ-Importe 38   davon geometry/ 23
+    fuenf der 38 erklaert -> 33 offen  = der Yama-Posten
+
+### Heute, am Stand `ceb4224a`, Verfahren nachgebaut
+
+    MIT Typ-Importen              erreichbar 138 von 161   nicht:  23   geometry/ 17
+    OHNE Typ-Importe (Laufzeit)   erreichbar 135 von 161   nicht:  26   geometry/ 17
+    POSITIVKONTROLLE (fangKern · HausplanerApp · wallGeometry)   BESTANDEN, beide Laeufe
+
+**Von 38 auf 26**, `geometry/` von 23 auf 17. Die Grundmenge ist zugleich von 165 auf 161 gefallen.
+
+**Was ich daraus NICHT mache:** eine exakte Differenz. Ich habe das Verfahren **nachgebaut**, nicht
+übernommen — §120 prüfte zusätzlich Projekt-Aliase und dynamische Importe. Meine Zahlen sind mit
+seinen der Größenordnung nach vergleichbar, nicht auf das Modul genau. **Belastbar ist die Richtung:
+der Bestand toter Module ist gesunken, nicht gewachsen.** Damit gilt der Posten weiter, aber kleiner.
+
+**Der Posten bleibt bei Yama offen** — und zwar zu Recht, wie A-13: Was mit den 26 geschieht
+(stilllegen, anschließen, stehenlassen), ist eine Entscheidung, keine Messung. Genau deshalb liegt
+`toolCatalogStillgelegt.ts` bis heute unter den nicht erreichbaren, und genau deshalb hat der Planner
+in Z1-W2-4 die Absage-Regel geschrieben: *„Nichtbenutzung ist ein Anlass zu messen, kein Ergebnis."*
+
+### Und der lehrreiche Teil: die Positivkontrolle hat mein Verfahren gefangen
+
+Mein erster Lauf meldete:
+
+    Module gesamt 161 | erreichbar 1 | NICHT erreichbar 160
+    POSITIVKONTROLLE: fangKern NEIN · HausplanerApp NEIN · wallGeometry NEIN
+
+**Hätte ich sie weggelassen, hätte ich „160 tote Module" gemeldet** — eine Vervierfachung des
+Befundes, und sie hätte plausibel ausgesehen, weil die Zahl in die erwartete Richtung zeigte.
+
+Die Ursache: mein Regex akzeptierte nur **doppelte** Anführungszeichen (`from "…"`); der
+TypeScript-Bestand schreibt **einfache**. **Dieselbe Klasse wie `'stair'` in §382 — nur andersherum:
+dort war das Muster zu eng, weil ich Quotes hinzufügte, hier zu eng, weil ich die falschen nahm.**
+Zweimal in zwei Runden an der Anführungszeichen-Frage gescheitert.
+
+**Der Wert der Positivkontrolle liegt genau darin, dass sie nicht plausibel ist, sondern bekannt.**
+Eine Messung, deren Ergebnis niemand vorher kennt, kann man nicht gegenprüfen; drei Module, von denen
+feststeht, dass sie laufen, kann man immer gegenprüfen. §120 hat sie eingeführt, ich habe sie
+übernommen — und sie hat beim ersten Lauf gegriffen.
+
+Ball: **niemand.** Posten 9 bleibt bei Yama, mit berichtigter Größenordnung.
