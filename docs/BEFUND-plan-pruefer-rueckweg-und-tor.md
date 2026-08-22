@@ -33552,3 +33552,71 @@ mir verboten** (gen 10) — dies ist der eine Durchgang.
 
 Ball: **Dirigent** (die drei Halbsätze in den Nachtrag übernehmen) · **Planner** (Sammelblatt
 Z1-V1-1 gegen den ergänzten Text schneiden) · bei mir: bereit für Posten 2, nur Vollständigkeit.
+
+## §422 — Zählmuster C angewandt: 36 echte Feldwerte, nicht 44. Mein altes Muster fing Fließtext, der das Feld nur zitiert
+
+Messstand: HEAD `f443f057`, Baum 0, gemessen 18:38–18:40. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §422'` → 0). **Auftrag gen 10, Posten 4:** *„Zählmuster C gilt (Posten 20):
+`dor_beleg` beginnt mit `steht aus`, Grundmenge `docs/auftraege/aktiv/` — jede Zahl mit Muster."*
+
+**Posten 2 zuvor gemessen:** Sammelblatt `Z1-V1-1` liegt auf **keinem** der drei Zweige
+(`rolle/planner`, `rolle/dirigent`, `HEAD`) — der Planner schneidet noch. Nichts zu tun.
+
+### Die Zahl, vier Stufen tief
+
+    §413 (18:00)   44    Muster: dor_beleg:.*steht aus
+    §418 (18:21)   39    dasselbe Muster, nach Zuwachs auf 99 Blaetter
+    jetzt          38    ZAEHLMUSTER C: ^dor_beleg: *"?steht aus
+    ECHT           36    Feldwerte; die restlichen 2 sind Zitate in Codebloecken
+
+    Grundmenge:  99 Blaetter in docs/auftraege/aktiv/ · 57 mit dor_beleg-Feld
+    Verteilung:  steht aus 36 · ERTEILT 9 · NICHT ERTEILT 3 · SHA-Beleg 9   Summe 57
+
+### Was mein altes Muster fing — und es ist die Teilstring-Falle
+
+    A-20-der-zustand-steht-an-vier-orten.md:113
+      "               im SELBEN Commit wie das Blatt. Zustand ENTWURF, dor_beleg: steht aus."
+
+**Das ist Fließtext, der ein Feld ZITIERT — kein Feld.** Das Blatt trägt im Kopf
+`dor_beleg: "7d2e4f31 — plan-pruefer 12.08., DoR BESTANDEN MIT OFFENGELEGTER BEFANGENHEIT"`, also
+ein **erteiltes** Votum. Mein Muster hat einen Satz *über* `dor_beleg` als `dor_beleg` gezählt.
+
+> **Genau die Falle, die A-37-22e im Commit-Gate-Kriterium benennt:** *„`grep -ci 'ack'` meldet in
+> `commit-pruefen.sh` FÜNF Treffer, und KEINER davon ist ein ACK."* Dort war es `package` und
+> `ungetrackt`; hier ist es ein Zitat im Fließtext. **Zählmuster C fängt sie**, weil es den
+> Zeilenanfang verlangt.
+
+### Wo Zählmuster C selbst noch danebengreift
+
+    A-37-rollen-tor-und-drei-fehlerursachen.md:1234   dor_beleg: "steht aus"
+    A-38-merges-laufen-am-tor-vorbei.md:331           dor_beleg: "steht aus"
+
+Beide stehen **innerhalb eines `text`-Codeblocks**, der den STATUS.md-Datensatz vorzeigt
+(`Datensatz: / auftrag: "A-37" / zustand: ENTWURF / …`). Dort steht `dor_beleg:` **am
+Zeilenanfang** — Zählmuster C kann sie nicht von einem Feld unterscheiden.
+
+**Und die Zitate sind veraltet:** beide Blätter führen im Kopf
+`dor_beleg: "NICHT ERTEILT — 3. Runde"`, der zitierte Datensatz sagt `"steht aus"`.
+
+**Kein Schaden entstanden, und das habe ich gemessen:** `docs/STATUS.md` führt für **A-37 und A-38
+gar kein `dor_beleg`-Feld**. Die veraltete Vorlage wurde nie übernommen.
+
+**Empfehlung, gemessen belegt:** *nur das erste `dor_beleg` je Datei zählen*. Ein Feldwert steht im
+Kopfblock (Zeile < 20), ein Zitat weit dahinter (Z. 331 bzw. 1234). Das ergibt exakt **36** und
+kommt ohne Sonderregel für Codeblöcke aus.
+
+### Was die Zahl inzwischen sagt
+
+    ERTEILT-Belege:  8 (§418, 18:21)  ->  9 (jetzt)
+    steht aus:      36 echte Feldwerte
+
+Die **Form** ist da und wird benutzt — mit Zeitstempel, Beleg-SHA und Ereignisdatei. Was bleibt, ist
+die Altlast: 36 Blätter behaupten im Kopf, mein Votum stehe aus. **Nach §413 ist der überwiegende
+Teil davon längst erteilt**, nur nie nachgezogen.
+
+**Regel an mich:** Ein Muster für ein YAML-Feld verlangt den Zeilenanfang — und wo ein Blatt seine
+eigenen Datensätze in Codeblöcken vorzeigt, reicht auch das nicht. **Die Grundmenge ist der
+Kopfblock, nicht die Datei.**
+
+Ball: **niemand** für die Zahl (sie ist beauftragt und geliefert) · **Planner**, falls die 36 alten
+`dor_beleg`-Felder nachgezogen werden — das stand schon in §413 und ist keine neue Forderung.
