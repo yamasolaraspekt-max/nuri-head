@@ -34,7 +34,7 @@ exportiert   GrundrissForm ('rechteck'|'l-form'|'t-form'|'u-form')
              grundrissPolygon(form, length, width, lengthB?, widthB?)
              eckenAnalyse(poly) -> EckenAnalyse · anzahlInnenwinkel(poly)
 Erreichbar   NEIN — 0 Aufrufe im Produktivpfad
-             grep -rl 'grundrissPolygon|eckenAnalyse|anzahlInnenwinkel'
+             grep -rlE 'grundrissPolygon|eckenAnalyse|anzahlInnenwinkel'
              ohne __tests__/__domtests__ und die Datei selbst  ->  0
 EIGENE Testdatei   NEIN
 mittelbar geprueft in  __tests__/dachformVorlagen.test.ts · __tests__/dachAusschnitt.test.ts

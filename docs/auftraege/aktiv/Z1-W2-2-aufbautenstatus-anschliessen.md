@@ -36,7 +36,7 @@ exportiert   AUFBAUTEN_WARNUNG (Text) · aufbautenOhneFlaeche() · istAufbauPrue
              AufbauRef · AufbautenPruefErgebnis
 Testdatei    __tests__/aufbautenStatus.test.ts   VORHANDEN
 Erreichbar   NEIN — 0 Aufrufe im Produktivpfad
-             grep -rl 'aufbautenOhneFlaeche|istAufbauPruefpflichtig|AUFBAUTEN_WARNUNG'
+             grep -rlE 'aufbautenOhneFlaeche|istAufbauPruefpflichtig|AUFBAUTEN_WARNUNG'
              ohne __tests__/__domtests__ und die Datei selbst  ->  0
 Registerzeile W-22 Gaube (gemessen ueber die Werkzeugblaetter)
 ```
