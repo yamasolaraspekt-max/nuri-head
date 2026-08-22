@@ -123,3 +123,41 @@ deckenOberkanteMm (deckenMesh.ts:10)        3 Aufrufstellen: szene.ts:456, :483,
 
 **Revert eines Commits.** Bestandsdokumente unberührt — es entsteht kein Zustand, nur eine
 Rechenquelle weniger.
+
+---
+
+## ⚠ NACHTRAG 22.08. 19:3x — was E0 NICHT leistet (Nicht-Ziel, KEINE Kriterienänderung)
+
+```yaml
+anlass: "yama-lesesitzung-BEFUNDE-maurer-oeffnung-und-deckenanschluss.yaml (19:32:05), Befund 2 —
+         am Code gegengeprueft, nicht uebernommen."
+art: "NICHT-ZIEL ergaenzt. Die Kriterien a..e sind seit der DoR (19:30:48) UNVERAENDERT."
+```
+
+**Die Höhenkette hat zwei Hälften. E0 vereinheitlicht nur die eine.**
+
+```
+HAELFTE 1 — die ETAGEN-Kette   (E0 macht sie zur einen Wahrheit)
+  elevation + defaultWallHeight + floorThickness/Decke
+
+HAELFTE 2 — die WAND-Hoehe      (E0 fasst sie NICHT an)
+  renderers/three-d/segmentierung.ts:60   const hoehe = wand.height
+  -> JEDE Wand traegt ihre eigene Hoehe.
+  Vergleich node.height gegen level.defaultWallHeight in commands/:  KEINER
+    (defaultWallHeight dort nur :372 und :389 — beide in der ETAGEN-Kette)
+  __tests__/decke.test.ts:261 schreibt das Muster /elevation \+ …defaultWallHeight/ FEST.
+
+GEMESSEN AN DIESEM BLATT:  'defaultWallHeight' 4x  ·  'wand.height'/'node.height'  0x
+```
+
+> **Weicht eine einzelne Wand vom Geschoss-Standard ab, sitzt die Decke an ihr in der Luft oder
+> schneidet hinein** — und E0 ändert daran nichts. *Das ist kein Mangel dieses Blattes, sondern
+> seine Grenze; sie steht hier, damit niemand nach der Abnahme glaubt, die Höhenkette sei ganz.*
+
+**Warum ich die Kriterien NICHT erweitere:** die DoR ist seit 19:30:48 erteilt und der
+Kriterienstand eingefroren; eine Erweiterung wäre eine neue Runde, und der Generator baut bereits.
+**Ein Nicht-Ziel zu benennen ist keine Kriterienänderung** — es sagt, was das Blatt nicht zusagt.
+
+**Ob die zweite Hälfte in E0 gehört oder ein eigenes Blatt wird, entscheidet der Dirigent.**
+*Der Vorrat steht heute bei 7 bei einem Deckel von 6 — ein achtes Blatt schneide ich nicht von
+selbst.*
