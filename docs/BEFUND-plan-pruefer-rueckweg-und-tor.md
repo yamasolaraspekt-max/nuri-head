@@ -34709,3 +34709,87 @@ bei einer Mengenangabe teuer.
 
 Ball: **Evaluator** (Abnahme mit Vorbehalt „b per Prüfmittel", wie beauftragt; dazu die Beschriftung)
 · **Integrator** (Transport).
+
+## §436 — DoR Z1-E0-1 und Z1-E2-1: BEIDE ERTEILT, ohne Halbsätze. Der Planner zitiert meinen §421-Halbsatz mit Paragraphennummer
+
+Messstand: HEAD `fc7c99eb`, Baum 0, gemessen 19:27–19:33. **Messzeit des Ereignisbefehls dieser
+Runde: 19:27:30.** Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §436'` → 0).
+**Auftrag: Dirigenten-Hinweis 19:11:46 — „DoR je Blatt EIN Durchgang, unmittelbar nach CODE_FERTIG."**
+**Ereignis dieses Abschnitts:** `ereignisse/SPEZ-planner-etagen-1/plan-pruefer-DOR-Z1-E0-1-und-Z1-E2-1-ERTEILT.yaml`
+
+### VOTUM: BEIDE ERTEILT
+
+    Z1-E0-1 Hoehenkette, eine Wahrheit    125 Z. · Spur A · 5 Kriterien (a-e)
+    Z1-E2-1 Etagen-Integritaet            146 Z. · Spur A · 6 Kriterien (a-f)
+    beide:  mess_sha = basis_sha = fd2575ce · Blob identisch auf HEAD und rolle/planner
+
+**Kein Blattdrift** — anders als bei Z0-I1 (§414) und Z1-W2-8 (§428). Ich prüfe gegen den Stand, der
+in beiden Bäumen liegt.
+
+### Die tragenden Befunde — selbst nachgemessen, nicht übernommen
+
+**Z1-E0-1, Befund L1 („drei Rechnungen für dieselbe Größe"):**
+
+    naechsteEtageElevationMm()  Aufrufstellen mit Klammer, OHNE Definition:   0   -> TOT
+    POSITIVKONTROLLE deckenOberkanteMm()                                      3
+      szene.ts:456 · szene.ts:483 · HausplanerApp.tsx:1008   — exakt die drei genannten
+    geometry/hoehenkette.ts                                   existiert NICHT
+    app/dashboard/Kopfrahmen.tsx:172      elevation: oben.elevation + oben.defaultWallHeight + …
+    geometry/geschossVorlage.ts:54        elevation: quelle.elevation + quelle.defaultWallHeight + …
+
+**Die Funktion, die die Decke berücksichtigt, ruft niemand — die beiden, die sie nicht kennen,
+rechnen.** Das ist der Bruch 2700 gegen 2740, und er ist belegt. **Eine zweite und dritte Wahrheit
+für dieselbe Größe.**
+
+**Z1-E2-1, Befund L4 („Etage mit Decke löschbar"):**
+
+    applyCommand.ts:396-412  REMOVE_LEVEL prueft hatNodes (:405) und hatDach (:406)
+                             'ceilings' im ganzen Block:  0 Treffer
+    app/sammelBefehle.ts:123 dup: { level: Level; nodes: SceneNode[]; roof: RoofNode | null }
+                             Befehle: ADD_LEVEL · dup.nodes · ADD_ROOF  —  KEIN ceiling
+
+**Beide Behauptungen treffen.** Eine Etage mit Decke lässt sich löschen, die `CeilingNode` bleibt
+verwaist; und beim Duplizieren fährt die Decke nicht mit.
+
+### Ein Messfehler von mir, und er war es dreimal
+
+Drei Pfade meiner Messung griffen ins Leere — **alle drei geraten, keiner gemessen:**
+
+    ich: app/rahmen/Kopfrahmen.tsx      wirklich: app/dashboard/Kopfrahmen.tsx
+    ich: app/dashboard/geschossVorlage  wirklich: geometry/geschossVorlage.ts
+    ich: commands/sammelBefehle.ts      wirklich: app/sammelBefehle.ts
+
+**Der Planner nennt die Dateien ohne Verzeichnis — ich habe die Verzeichnisse ergänzt und dreimal
+falsch geraten.** Das ist meine alte Falle („geratener Pfad", zuletzt `app/tools/` statt
+`geometry/`). **Gefangen hat sie nur, dass `sed` und `find` unterschiedlich antworteten.**
+
+**Kein Mangel am Blatt:** die Dateinamen sind eindeutig, `find` löst sie in einem Griff auf. **Aber
+mein Reflex, den Pfad zu vervollständigen, statt ihn zu suchen, hat drei Fehlmessungen erzeugt.**
+
+### Warum ich ohne Halbsätze erteile
+
+**Jedes der elf Kriterien trägt Verlangt, Messbefehl UND Absage-Regel.** Die Absage-Regeln sind
+scharf und treffen genau die Fehler, die hier möglich sind:
+
+    E0-a  "Eine neue Funktion NEBEN den drei alten erfuellt (a) nicht — dann sind es vier"
+    E0-b  "Ein Testlauf ohne Browser erfuellt (b) nicht — der Bruch entsteht im Bedienweg"
+    E0-c  "Eine Abweichung ohne Decke erfuellt (c) nicht — dann aendert der Umbau mehr"
+    E2-a  "Eine Ablehnung ohne sichtbaren Grund erfuellt (a) nicht"
+    E2-b  "Dieselbe sortOrder fuer beide Level erfuellt (b) nicht"
+    E2-c  "Ein stiller Ausschluss der verwaisten Decke erfuellt (c) nicht"
+    E2-d  "Eine schaerfere Pruefung, die ALTBESTAND ABLEHNT, ist keine Haertung, sondern ein Fehler"
+
+**E2-d ist der wichtigste Satz beider Blätter.** Er schützt den Bestand gegen die eigene Härtung —
+genau die Schutzgrenze aus CLAUDE.md, als Absage-Regel formuliert statt als Hoffnung.
+
+### Mein §421-Halbsatz ist in die Blattsprache eingegangen
+
+    Z1-E0-1-e  "git diff OHNE BEIDE SHA erfuellt (e) nicht — ohne Referenz ist es nach dem Commit …"
+    Z1-E2-1-f  "git diff OHNE BEIDE SHA erfuellt (f) nicht (§421, Halbsatz 1)."
+
+**Das zweite Blatt zitiert die Paragraphennummer.** Was ich vor 47 Minuten als Lücke im
+Spur-V-Kriterientext gemeldet habe, steht jetzt als Absage-Regel in einem Spur-A-Blatt — **ohne dass
+jemand es anordnen musste.**
+
+Ball: **Generator** (bauen — E0 und E2 kommen laut Dirigent VOR Z1-W2-6 und Z1-W2-4) ·
+**Evaluator** (E0-Rot-Probe 2700/2740 im Browser, Bildbeleg).
