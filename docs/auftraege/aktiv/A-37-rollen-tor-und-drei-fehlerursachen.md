@@ -656,8 +656,22 @@ ausnahmslos eine **ausgelöste** Negativprobe mit Rohausgabe und `echo $?`, nich
      ticket-rolle-generator                 rolle/generator                  (baut gerade)
      ticket-rolle-generator-beleg-2026-08-21  rolle/generator-beleg-2026-08-21 (eingefroren)
   scripts/rueckweg.py:128   pfad = f'{WURZEL}/{name}'      -> Auswahl über den NAMEN
-  grep -cE 'startswith|praefix|aehnlich|fnmatch|glob' scripts/rueckweg.py  -> 0
+  grep -cE 'startswith|praefix|aehnlich|fnmatch|glob' scripts/rueckweg.py  -> 0   (Stand 762243b9)
   ```
+  **⚠ DIESER MESSBEFEHL GILT NUR GEGEN DEN BLATTSTAND `762243b9` — nach dem Bau misst er das
+  Gegenteil.** Gemessen über drei Stände:
+  ```
+  762243b9  (Blattstand, rot)      0
+  49972884  (A-37-22 gebaut)       1   ← rueckweg.py:119 zeile.startswith('worktree ')
+  561cc3d1  (A-37 fertig gebaut)   9   ← überwiegend die neue aehnelt()-Funktion, also die ERFÜLLUNG
+  ```
+  *Wer nach dem Bau `grep -c` fährt, findet 9 und weiß nicht, ob das die Ähnlichkeitsprüfung oder ein
+  Zeilenparser ist.* **Dieselbe Klasse wie der ursprüngliche `22b`-Messbefehl** (siehe dort): ein
+  Wort-Zähler misst nach dem nächsten Commit die Wortwahl, nicht die Wirkung.
+  **Für die Abnahme gilt deshalb nicht die Zahl, sondern die Wirkung:** eine Funktion, die
+  Namens-Ähnlichkeit prüft, und die *ausgelöste* Probe, in der der Belegbaum namentlich als
+  ausgeschlossen gemeldet wird. **Der Generator hat die Abweichung von sich aus offengelegt und
+  beide Zahlen genannt** (`generator-CODE_FERTIG.yaml`, Feld `abweichung`) — richtig so.
   **Art des Rot: Vergleich.**
 
   **⚠ Der Doppelgänger ist ABSICHT, nicht Versehen — und das ändert das Kriterium.** Der Belegbaum
@@ -699,7 +713,7 @@ ausnahmslos eine **ausgelöste** Negativprobe mit Rohausgabe und `echo $?`, nich
 
   **⚠ BERICHTIGUNG DER ROT-ZEILE (22.08., Anmerkung des Plan-Prüfers, zutreffend):** oben stand
   *„kein Wegwerf-Repo **und kein Aufbauskript** vorhanden"*. **Der zweite Teil greift zu weit.**
-  Gemessen: `grep -n 'mkdtempSync' scripts/__tests__/*.mjs` → **15 Treffer** in drei Dateien, u. a.
+  Gemessen: `grep -n 'mkdtempSync' scripts/__tests__/*.mjs | wc -l` → **16 Treffer** in drei Dateien, u. a.
   `buehnenWaechter.test.mjs:56` (`zz-a04-wegwerf-`) und `commitPruefen.test.mjs:56` (`w09-tor-`),
   jeweils mit `rmSync`-Aufräumung und **0** Bezug auf `Documents/ticket` oder `worktree`
   (Gegenprobe: `assert` trifft 319×). **Für TRANSPORT-Proben gibt es tatsächlich keines — die
@@ -725,7 +739,14 @@ ausnahmslos eine **ausgelöste** Negativprobe mit Rohausgabe und `echo $?`, nich
   grep -ci 'ticket-steuerung'    0                  0
   grep -ci 'rollen/'             0                  0
   grep -cw 'ACK'                 0                  0
+  grep -cw 'aktion'              0                  0
   ```
+  **Gegenprobe, dass der Griff auf beide Dateien greift** — bewusst an **versionierten** Dateien,
+  nicht an der Steuerungsablage: `grep -cw 'TICKET_ROLLE' scripts/commit-pruefen.sh` → **7**,
+  `grep -cw 'commit' .githooks/commit-msg` → **10**. Beide > 0, also ist die Null bei `aktion` echt.
+  *(Eine frühere Fassung dieses Belegs zählte `aktion` in `rollen/planner.yaml` — dort ändert sich
+  die Zahl mit jeder Generation, gemessen 3 bei gen 11 und 2 bei gen 12. Ein Beleg, der an der
+  Steuerungsablage hängt, wandert mit ihr; er gehört nicht in ein Blatt, das Wochen überdauert.)*
   **⚠ Zur Teilstring-Falle, weil sie hier zuschlägt:** `grep -ci 'ack'` meldet in
   `commit-pruefen.sh` **5** Treffer — **keiner davon ist ein ACK**: es sind `package.json`
   (2×), `getrackt`, `gestagt` und ein weiterer Wortteil. **Mit Wortgrenze sind es 0.**
