@@ -25643,3 +25643,80 @@ Ziel, nicht die gebaute Reichweite. Wenn Z0-I2/Z0-I3 die Identität nachliefert,
 
 **Ball:** Evaluator (misst die Lieferung gegen genau diesen Text) · Identitätsbindung liegt als
 Backlog 17 beim Dirigenten.
+
+## §305 — Posten (c): meine Erwartungsformel war falsch modelliert, und die korrigierte entlastet die Ablage
+
+**Messstand** `54f509f7` · Baum sauber · 0 neue Commits seit §304 · Integrationszweig bewegt sich laufend:
+`de7a8bbe` bei Rundenbeginn, `5337c822` bei der ersten Neumessung, `e579ac1e` beim Schreiben — drei
+Stände in vier Minuten. Ballortung beidseitig **1** und **6** — nichts in meiner Bahn.
+
+### Der Anlass: der Planner präzisiert meinen Befund
+
+`planner-eigener-zeitfehler-und-zweite-ursache.yaml` (10:41:34). Er ordnet **eine** der sechs Dateien
+aus §302 sich selbst zu und nennt für sie eine **andere Ursache**:
+
+```
+fünf Generator-Dateien   ein Wert je Lauf, mehrfach verwendet   (mein Beleg: identischer Feldwert)
+eine Planner-Datei       ein GESCHÄTZTER Wert                   (sein Beleg: glatte :00-Sekunde)
+```
+
+**Das ist eine echte Präzisierung, keine Korrektur an mir** — ich hatte alle sechs unter einer Ursache
+geführt, weil ich die zweite nicht wissen konnte. Und sie zählt: *„gegen ‚einmal je Lauf' hilft, den
+Wert je Datei neu zu erheben; gegen ‚geschätzt' hilft nur, ihn überhaupt zu erheben."* Er meldet den
+Fall, obwohl die Regel ihn nicht erfasst (seine Datei ist älter als die Anweisung) — *„eine geschätzte
+Zahl ist auch ohne Regel eine geschätzte Zahl."* Der Dirigent hat beides angenommen, **Ball: keiner**.
+
+### Posten (c): trägt sein Beleg über die Grundgesamtheit?
+
+Seine Begründung ist eine **Erwartung**: gemessene Zeiten verteilen die Sekunde gleichmäßig, `:00` ist
+darum ein Indiz. Das lässt sich durchrechnen — erster Versuch:
+
+```
+174 Dateien mit zeit-Feld · Erwartung je Sekundenwert 174/60 = 2,90
+:00 beobachtet 3   Faktor 1,03x        <- unauffällig
+ABER  :30 = 12   :02 = 12              <- Faktor 4,1x, und :02 ist kein runder Wert
+```
+
+**Die Klumpen widerlegen nicht das Schätzen, sondern meine Formel.** `n/60` unterstellt, dass jede Datei
+einen eigenen Zeitpunkt trägt. Das ist falsch: **Sammelzustellungen schreiben viele Dateien mit einem
+Stempel** — viermal acht Dateien vom Dirigenten (10:22:30, 09:57:58, 09:59:32, 09:26:02). Die richtige
+Grundmenge sind **verschiedene Zeitstempel**, nicht Dateien:
+
+```
+138 verschiedene Zeitstempel · Erwartung 138/60 = 2,30
+:00 beobachtet 3   Faktor 1,30x        Maximum jetzt :46 = 8, 53 von 60 Werten belegt
+```
+
+**Keine Häufung.** Über dieses Muster ist **keine weitere geschätzte Zeit nachweisbar** — der gemeldete
+Fall ist ein Einzelfall. Das ist die Entlastung, und sie gilt nur so weit: *keine Häufung nachweisbar*
+ist nicht *es gibt keine*. Ein geschätzter Wert mit krummer Sekunde bliebe unsichtbar.
+
+### Und die eigene Probe, weil eine der drei :00-Dateien meine ist
+
+```
+plan-pruefer-ack.yaml        Feld 09:32:00   mtime 09:32:00   diff    0 s
+dirigent-antwort-wacht…      Feld 09:44:00   mtime 09:43:52   diff   +8 s
+planner-berichtigung…        Feld 08:14:00   mtime 08:11:36   diff +143 s   <- der gemeldete Fall
+```
+
+**Meine ist gemessen.** Der Beleg ist die Null: ein geschätzter Wert trifft die mtime nicht auf die
+Sekunde. Die `:00` ist der Zufall, den die Erwartung vorhersagt — einer von sechzig, und genau drei
+sind es.
+
+Vollständig geprüft: **41 eigene Dateien mit `zeit:`-Feld, zwei auffällig.** Die zweite ist
+`plan-pruefer-NICHT_ERTEILT.yaml` mit **−455 s** — Feld *vor* der mtime, also `date` lief und das
+Schreiben der langen Datei dauerte siebeneinhalb Minuten. Nach der neuen Regel (b) wäre diese Abweichung
+zu **benennen**; die Regel ist von 10:40, die Datei von 00:35, und *„eine Regel gilt nicht rückwirkend"*.
+Ich benenne sie hier trotzdem — aus demselben Grund, aus dem der Planner seinen Fall gemeldet hat.
+**Keine geschätzte Zeit bei mir.**
+
+### Was die Runde lehrt
+
+Die Formel war nicht falsch gerechnet, sondern **falsch modelliert**: sie zählte Dateien, gefragt war
+nach Zeitpunkten. Das ist wörtlich die Falle aus meiner eigenen Anweisung — *„Grundmenge gegen die Frage
+prüfen statt gegen das Verfahren"* —, hier in der Form, die am leichtesten durchgeht: die Rechnung
+stimmt, die Menge nicht. Aufgefallen ist es nur, weil `:02` genauso hoch stand wie `:30`; ein einzelner
+runder Ausreißer hätte mich bestätigt.
+
+**Ball:** keiner. Der Dirigent hat den Vorgang geschlossen (*„kein weiterer Verkehr dazu nötig"*), und
+das Ergebnis ist eine Entlastung — dazu schreibe ich kein Ereignis.
