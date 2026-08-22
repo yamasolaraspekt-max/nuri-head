@@ -67,7 +67,9 @@ test('K-03: jede `deckt`-Begründung nennt einen Befehl, den es in applyCommand 
 test('K-03 (Grundlage): der Leser findet die Befehle überhaupt — sonst prüft die Zusage oben Leere', () => {
   // presence-Partner nach R2: schlüge das `matchAll` fehl, wäre `VORHANDENE_BEFEHLE` leer und die
   // Zusage oben nur dann grün, wenn es GAR KEINE `deckt`-Marke gäbe.
-  assert.equal(VORHANDENE_BEFEHLE.size, 19, 'die Zahl der Modellbefehle hat sich geändert');
+  // 19 → 22: Z1-E4-1 hat ADD/UPDATE/REMOVE_FOUNDATION_SLAB ergänzt. Die Zusage ist bewusst
+  // brüchig — sie soll bei jeder Befehlsänderung anschlagen, damit niemand sie unbemerkt umgeht.
+  assert.equal(VORHANDENE_BEFEHLE.size, 22, 'die Zahl der Modellbefehle hat sich geändert');
   for (const bekannt of ['ADD_NODE', 'REMOVE_NODE', 'MOVE_NODE', 'UPDATE_NODE', 'UPDATE_SETTINGS']) {
     assert.ok(VORHANDENE_BEFEHLE.has(bekannt), `${bekannt} nicht gefunden — der Leser greift daneben`);
   }
@@ -119,7 +121,7 @@ test('ERGEBNIS der Stufe: die Zahlen stehen fest und sind hier festgehalten', ()
   assert.deepEqual(markenZaehlung(), {
     // A-35 (`ec12e9b3`, 15.08.) hat `trimmen` mit `MOVE_NODE` gebaut — kein eigener
     // Modellbefehl nötig, Marke `fehlt` -> `deckt`. deckt 41 -> 42, fehlt 21 -> 20.
-    deckt: 42,
+    deckt: 43,   // Z1-E4-1: bodenplatte -> ADD_FOUNDATION_SLAB
     fehlt: 20,
     // Z-05-N1: `kontur` liefert Punkte und schreibt nichts — ohne-modell 42 -> 43.
     'ohne-modell': 43,

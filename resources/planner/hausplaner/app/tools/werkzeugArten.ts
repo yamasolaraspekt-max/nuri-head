@@ -18,4 +18,4 @@
  * **Diese Union ist reiner UI-Zustand.** Im Zod-Schema kommt `werkzeug` nicht vor (gemessen: 0
  * Treffer in `domain/validation.ts`) — ein achter Wert aendert also KEIN persistiertes Schema.
  */
-export type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach' | 'treppe' | 'decke' | 'kontur';
+export type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach' | 'treppe' | 'decke' | 'kontur' | 'bodenplatte';

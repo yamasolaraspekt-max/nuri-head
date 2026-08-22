@@ -175,6 +175,7 @@ export const WERKZEUG_LANDKARTE: readonly LandkartenEintrag[] = [
 
   // --- create: Bauteile (34) — hier greift der ADD_NODE/ADD_ROOF/ADD_CEILING-Vorrat ----------------
   { werkzeugId: 'boden', marke: 'deckt', begruendung: 'ADD_CEILING' },
+  { werkzeugId: 'bodenplatte', marke: 'deckt', begruendung: 'ADD_FOUNDATION_SLAB' },
   { werkzeugId: 'dach', marke: 'deckt', begruendung: 'ADD_ROOF' },
   { werkzeugId: 'dachfenster', marke: 'deckt', begruendung: 'ADD_ROOF_AUFBAU' },
   { werkzeugId: 'decke', marke: 'deckt', begruendung: 'ADD_CEILING' },

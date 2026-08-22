@@ -10,6 +10,8 @@ import { sceneDocumentSchema } from '../domain/validation';
 import { dachMeshWelt } from '../renderers/three-d/dachMesh';
 import { istVerschneidungsForm } from '../domain/roofShape';
 import type { SceneDocument, RoofNode, RoofAnbauMasse, RoofShape } from '../domain/scene.types';
+// Z1-E4-1: die Versionszahl kommt aus der Konstante, nicht aus einer Kopie.
+import { SCHEMA_VERSION } from '../domain/scene.types';
 
 const ISO = '2026-01-01T00:00:00.000Z';
 function roof(roofType: RoofShape, anbau?: RoofAnbauMasse): RoofNode {
@@ -23,7 +25,7 @@ function roof(roofType: RoofShape, anbau?: RoofAnbauMasse): RoofNode {
 }
 function doc(r: RoofNode): SceneDocument {
   return {
-    id: 'd', projectId: 1, schemaVersion: 3, revision: 1, units: 'mm',
+    id: 'd', projectId: 1, schemaVersion: SCHEMA_VERSION, revision: 1, units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
     levels: [{ id: 'l1', name: 'DG', elevation: 0, defaultWallHeight: 2500, floorThickness: 200, sortOrder: 0 }],
     nodes: [], materials: [], roofs: [r], metadata: { createdAt: ISO, updatedAt: ISO },

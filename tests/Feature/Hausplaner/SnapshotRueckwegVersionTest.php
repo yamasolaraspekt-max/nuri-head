@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
+use App\Domain\Hausplaner\Models\HausplanerDocument;
 
 /**
  * Z-06-N1, **vierte Naht** — der Snapshot-Rückweg führt die Schema-Version mit.
@@ -65,7 +66,7 @@ class SnapshotRueckwegVersionTest extends TestCase
 
         // Das Dokument steht auf v3 — so, wie es nach einem heutigen Speichern aussieht.
         $dokId = DB::table('hausplaner_documents')->insertGetId([
-            'alternative_id' => $alt, 'schema_version' => 3, 'revision' => 5,
+            'alternative_id' => $alt, 'schema_version' => HausplanerDocument::SCHEMA_VERSION, 'revision' => 5,
             'scene_json' => json_encode($this->szene($alt, 3, 5)),
             'checksum' => 'aktuell', 'created_by' => null, 'updated_by' => null,
             'created_at' => now(), 'updated_at' => now(),
@@ -111,10 +112,13 @@ class SnapshotRueckwegVersionTest extends TestCase
     public function test_rueckweg_prueft_eine_AKTUELLE_szene_gegen_das_schema(): void
     {
         // K-N5, zweiter Teil: was die heutige Version traegt, wird geprueft — ein kaputter
-        // v3-Snapshot darf nicht zurueckgeschrieben werden.
+        // Snapshot der heutigen Version darf nicht zurueckgeschrieben werden.
         [$alt, ] = $this->aufbau(740);
         $dokId = (int) DB::table('hausplaner_documents')->where('alternative_id', $alt)->value('id');
-        $kaputt = $this->szene($alt, 3, 3);
+        // Z1-E4-1: „AKTUELL" ist die Konstante, nicht die Zahl 3. Mit der getippten 3 prüfte
+        // dieser Test nach dem Sprung auf 4 genau den Fall NICHT mehr, den sein Name verspricht —
+        // er wurde still zur Gegenprobe und meldete 200 statt 500.
+        $kaputt = $this->szene($alt, HausplanerDocument::SCHEMA_VERSION, 3);
         $kaputt['roofs'][0]['neigungGrad'] = 95;          // ausserhalb [0,89]
         $snapId = DB::table('hausplaner_snapshots')->insertGetId([
             'hausplaner_document_id' => $dokId, 'revision' => 3,
@@ -149,12 +153,13 @@ class SnapshotRueckwegVersionTest extends TestCase
 
     public function test_rueckweg_auf_gleiche_version_laesst_die_spalte_stehen(): void
     {
-        // Die Umkehrung: ein v3-Snapshot in ein v3-Dokument darf nichts verstellen.
+        // Die Umkehrung: ein Snapshot der AKTUELLEN Version in ein Dokument derselben Version
+        // darf nichts verstellen. (Bis Z1-E4-1 hiess „aktuell" hier v3.)
         [$alt, ] = $this->aufbau(720);
         $dokId = (int) DB::table('hausplaner_documents')->where('alternative_id', $alt)->value('id');
         $snapId = DB::table('hausplaner_snapshots')->insertGetId([
             'hausplaner_document_id' => $dokId, 'revision' => 3,
-            'scene_json' => json_encode($this->szene($alt, 3, 3)),
+            'scene_json' => json_encode($this->szene($alt, HausplanerDocument::SCHEMA_VERSION, 3)),
             'label' => 'v3', 'reason' => 'manuell',
             'created_by' => null, 'created_at' => now(), 'updated_at' => now(),
         ]);
@@ -164,6 +169,6 @@ class SnapshotRueckwegVersionTest extends TestCase
             ->assertOk();
 
         $doc = (array) DB::table('hausplaner_documents')->where('alternative_id', $alt)->first();
-        $this->assertSame(3, (int) $doc['schema_version']);
+        $this->assertSame(HausplanerDocument::SCHEMA_VERSION, (int) $doc['schema_version']);
     }
 }

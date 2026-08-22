@@ -84,6 +84,11 @@ test('Fix-Zone = genau die art:werkzeug-Registry-ids in Registry-Reihenfolge', (
     // tuer, treppe, decke, kontur, dach. Vorher stand `dach` vor `decke` und `treppe`; wer die
     // Leiste von oben nach unten las, bekam das Dach vor der Decke. *Diese Liste bleibt
     // ausgeschrieben — sie hat sich geaendert, weil jemand sie aendern WOLLTE.*
+    // **Z1-E4-1 (Yama, 22.08. 22:08):** `bodenplatte` steht VORN — der Bau beginnt unten.
+    // *Die Liste ist ausgeschrieben, und sie hat sich wieder geaendert, weil jemand sie aendern
+    // WOLLTE.* Die Zusage hat beim Bau ihren Zweck erfuellt: der Registry-Eintrag stand zuerst
+    // neben `decke`, und sie hat den Widerspruch zur Leisten-Ordnung 1 sofort gemeldet.
+    'bodenplatte',
     'auswahl', 'wand', 'fenster', 'tuer', 'treppe', 'decke', 'kontur', 'dach',
     'bemassen', 'flaeche-messen',   // <- W-05, gehoben
   ]);
@@ -170,15 +175,16 @@ test('Regressionsanker: faehigkeitenNach(werkzeuge) bleibt nach der Fachzuordnun
   // **Z1-W2-8:** `kontur` steht in der Registry jetzt vor den gehobenen Werkzeugen — die Navi
   // folgt der Registry-Reihenfolge, also wandert sie hier mit. Der Anker bleibt ein Anker: er
   // haelt die Folge fest, und sie hat sich aus einem benannten Grund geaendert.
-  const vorher = ['auswahl', 'kontur', 'bemassen', 'flaeche-messen', 'loeschen', 'duplizieren', 'trimmen'];
+  // Z1-E4-1: `bodenplatte` steht in der Registry vorn und wandert deshalb auch hier nach vorn.
+  const vorher = ['bodenplatte', 'auswahl', 'kontur', 'bemassen', 'flaeche-messen', 'loeschen', 'duplizieren', 'trimmen'];
   const ist = faehigkeitenNach('werkzeuge').map((f) => f.id);
   assert.deepEqual(ist, vorher);
 
-  // Die eigentliche Ankerzusage, unabhaengig von der Laenge: die vier Alten stehen weiterhin in
-  // ihrer alten Ordnung zueinander.
+  // Die eigentliche Ankerzusage, unabhaengig von der Laenge: die Alten stehen weiterhin in
+  // ihrer alten Ordnung ZUEINANDER — Z1-E4-1 setzt `bodenplatte` davor, ohne sie zu verschieben.
   assert.deepEqual(
     ist.filter((id) => !(AUS_PAKET_GEHOBEN as readonly string[]).includes(id)),
-    ['auswahl', 'kontur', 'loeschen', 'duplizieren'],
+    ['bodenplatte', 'auswahl', 'kontur', 'loeschen', 'duplizieren'],
   );
 });
 

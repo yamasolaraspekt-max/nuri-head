@@ -32,13 +32,15 @@ import { migriereSzene, sceneDocumentSchema } from '../domain/validation';
 import { readFileSync } from 'node:fs';
 import { FreigabeFehlt, herkunftFuerNeueDecke, herkunftFuerNeuesDach, istFreigegeben, setzeFreigabe, verlangeFreigabe } from '../geometry/freigabe';
 import type { Freigabe } from '../geometry/freigabe';
+// Z1-E4-1: die Versionszahl kommt aus der Konstante, nicht aus einer Kopie.
+import { SCHEMA_VERSION } from '../domain/scene.types';
 
 const ISO = '2026-08-03T00:00:00.000Z';
 const UMRISS = [{ x: 0, y: 0 }, { x: 8000, y: 0 }, { x: 8000, y: 6000 }, { x: 0, y: 6000 }];
 
 function szene(over: Record<string, unknown> = {}): Record<string, unknown> {
   return {
-    id: 'd', projectId: 1, schemaVersion: 3, revision: 1, units: 'mm',
+    id: 'd', projectId: 1, schemaVersion: SCHEMA_VERSION, revision: 1, units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
     levels: [{ id: 'l1', name: 'EG', elevation: 0, defaultWallHeight: 2500, floorThickness: 200, sortOrder: 0 }],
     nodes: [], materials: [], roofs: [], ceilings: [],
@@ -111,7 +113,7 @@ test('K-05: dasselbe Dokument als v2 wird MIGRIERT statt abgelehnt', () => {
   delete ohne.freigabe;
   const d = durchDieAblage(szene({ schemaVersion: 2, ceilings: [ohne] }));
 
-  assert.equal(d.schemaVersion, 3);
+  assert.equal(d.schemaVersion, SCHEMA_VERSION);
   assert.equal(d.ceilings[0].freigabe, 'zu_pruefen');
   assert.equal(d.ceilings[0].geometrieHerkunft, 'abgeleitet');
 });

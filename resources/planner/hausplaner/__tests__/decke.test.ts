@@ -13,6 +13,8 @@ import { treppeZuParametern } from '../geometry/treppeObjekt';
 import { polygonFlaecheM2 } from '../geometry/polygonFlaeche';
 import { teil, ohneKommentare } from './_zerlegteApp';
 import type { SceneDocument, CeilingNode, ObjectNode, Level } from '../domain/scene.types';
+// Z1-E4-1: die Versionszahl kommt aus der Konstante, nicht aus einer Kopie.
+import { SCHEMA_VERSION } from '../domain/scene.types';
 
 const ISO = '2026-07-23T00:00:00.000Z';
 const LEVEL: Level = { id: 'l1', name: 'EG', elevation: 0, defaultWallHeight: 2500, floorThickness: 200, sortOrder: 0 };
@@ -20,7 +22,7 @@ const UMRISS = [{ x: 0, y: 0 }, { x: 10000, y: 0 }, { x: 10000, y: 8000 }, { x: 
 
 function baseDoc(): SceneDocument {
   return {
-    id: 'd', projectId: 1, schemaVersion: 3, revision: 1, units: 'mm',
+    id: 'd', projectId: 1, schemaVersion: SCHEMA_VERSION, revision: 1, units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
     levels: [LEVEL], nodes: [], materials: [], roofs: [], metadata: { createdAt: ISO, updatedAt: ISO },
   };
@@ -165,7 +167,10 @@ test('Z-06/K-01: die Insel nimmt die Kontur — und nur das Dach behaelt den Umr
 
   // Und die Gegenrichtung, sonst waere die 0 auch mit gaenzlich fehlendem Umriss-Rueckfall erfuellt:
   const bedingt = (app.match(/polygon: ausKontur \? letzteKontur : gebaeudeUmriss\(\)/g) ?? []).length;
-  assert.equal(bedingt, 2, `${bedingt} bedingte Umriss-Bauteile statt zwei (Decke und Dach)`);
+  // **2 -> 3: Z1-E4-1.** Die Bodenplatte fragt dieselbe Bedingung wie Decke und Dach — Kontur
+  // schlaegt Umriss. *Die Zusage bleibt scharf:* `umriss` oben steht weiterhin auf 0, also nimmt
+  // auch das dritte Bauteil den Umriss NICHT bedingungslos.
+  assert.equal(bedingt, 3, `${bedingt} bedingte Umriss-Bauteile statt drei (Decke, Dach, Bodenplatte)`);
 });
 
 test('Z-06/K-03: ohne Kontur meldet die Fussleiste eine Naeherung — mit Kontur schweigt sie', () => {

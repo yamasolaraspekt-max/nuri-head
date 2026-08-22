@@ -57,3 +57,65 @@ export function naechsteEtageElevationMm(
   const deckeDickeMm = decke ? decke.dickeMm : level.floorThickness;
   return Math.round(deckenOberkanteMm(level) + deckeDickeMm);
 }
+
+// ---------------------------------------------------------------- Z1-E4-1: das untere Ende
+//
+// **Bis hierher rechnete die Kette nur nach oben.** `deckenOberkanteMm` und
+// `naechsteEtageElevationMm` beantworten „wie hoch liegt das Geschoss darüber" — was UNTEN
+// abschließt, kannte die Datei nicht. Die drei folgenden Funktionen ergänzen genau das, **additiv:
+// keine der beiden bestehenden Funktionen ist angefasst.**
+
+/** Eine Schicht des Fußbodenaufbaus — feldgleich mit `CeilingNode.schichten`/`FoundationSlabNode.schichten`. */
+type Aufbauschicht = { materialId?: string; dickeMm: number };
+
+/**
+ * **Gesamtdicke des Fußbodenaufbaus über der tragenden Platte** (mm).
+ *
+ * Reihenfolgeunabhängig — es ist eine Summe (siehe `SCHICHT_REIHENFOLGE`: die Festlegung
+ * außen→innen ordnet die Liste, sie ändert diese Rechnung nicht).
+ */
+export function fussbodenaufbauDickeMm(schichten: readonly Aufbauschicht[] | undefined): number {
+  return (schichten ?? []).reduce((summe, s) => summe + s.dickeMm, 0);
+}
+
+/**
+ * **Ist der Fußbodenaufbau überhaupt erfasst?**
+ *
+ * *Getrennte Frage von „wie dick ist er".* Ein nicht erfasster Aufbau und ein Aufbau der Dicke 0
+ * ergeben beide die Summe 0 — aber nur der zweite ist eine Angabe. Das Panel muss das
+ * unterscheiden können (Kriterium `Z1-E4-1-g`: **behaupte nichts, was nicht geprüft ist**).
+ */
+export function fussbodenaufbauErfasst(schichten: readonly Aufbauschicht[] | undefined): boolean {
+  return (schichten ?? []).length > 0;
+}
+
+/**
+ * **Oberkante der tragenden Bodenplatte** (mm), bezogen auf **±0,00 = OK Fertigfußboden EG**.
+ *
+ * **Yamas Operand 1 vom 22.08.2026, 22:08**, wörtlich: *„plus-minus-0,00 = OK FERTIGFUSSBODEN EG →
+ * die Platte liegt um den GESAMTEN Fußbodenaufbau tiefer; `oberkanteMm` ist bei `erdberuehrt=true`
+ * NEGATIV (Bauzeichnungs-Konvention)."*
+ *
+ * ```text
+ *   ±0,00  ────────────────  OK Fertigfußboden
+ *                    ↑ Estrich, Dämmung, … = fussbodenaufbauDickeMm
+ *   -180   ────────────────  OK tragende Platte   ← dieser Rückgabewert
+ *                    ↑ dickeMm der Platte
+ * ```
+ *
+ * **Ist der Aufbau nicht erfasst, ist der Rückgabewert 0** — und 0 ist hier keine Messung, sondern
+ * das Fehlen einer. *Deshalb steht daneben `fussbodenaufbauErfasst`, und deshalb schreibt das
+ * Panel „Aufbau nicht erfasst" statt einer Höhe.* Eine erfundene Aufbaudicke wäre schlimmer als
+ * keine — sie sähe aus wie eine Angabe.
+ *
+ * @param bezugshoeheMm Elevation des Geschosses, auf dem die Platte liegt. Für das EG ist das 0
+ *        (±0,00 selbst); ein Keller mit eigener Sohle reicht seine eigene, negative Elevation
+ *        herein. *Ohne diesen Parameter wäre die Funktion auf das EG festgelegt und Yamas
+ *        Entscheidung „eine Platte je Geschoss" wäre nicht abbildbar.*
+ */
+export function bodenplatteOberkanteMm(
+  schichten: readonly Aufbauschicht[] | undefined,
+  bezugshoeheMm = 0,
+): number {
+  return Math.round(bezugshoeheMm - fussbodenaufbauDickeMm(schichten));
+}

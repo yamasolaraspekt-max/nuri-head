@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { migriereSzene, sceneDocumentSchema } from '../domain/validation';
+// Z1-E4-1: die Versionszahl kommt aus der Konstante, nicht aus einer Kopie.
+import { SCHEMA_VERSION } from '../domain/scene.types';
 
 const JETZT = '2026-07-19T12:00:00.000Z';
 
@@ -35,7 +37,7 @@ test('Studio-Scratch-Szene mit positiver projectId migriert von v1 nach v2 und v
   }
 
   assert.equal(ergebnis.data.projectId, 999999999);
-  assert.equal(ergebnis.data.schemaVersion, 3); // Z-06-N1: Migrationsziel, war 2
+  assert.equal(ergebnis.data.schemaVersion, SCHEMA_VERSION); // Migrationsziel; war 2, dann 3, seit Z1-E4-1 die Konstante
   assert.deepEqual(ergebnis.data.roofs, []);
 });
 

@@ -273,6 +273,28 @@ export const ceilingNodeSchema = z
   })
   .strict();
 
+// Bodenplatte (Z1-E4-1, additiv): eigenes Schema, NICHT Teil der Node-Union (foundationSlabs[]
+// ist eine eigene Sammlung, Muster ceilings[]).
+export const foundationSlabDurchbruchSchema = z.object({ polygon: z.array(punkt2).min(3) }).strict();
+export const foundationSlabNodeSchema = z
+  .object({
+    ...baseNode,
+    type: z.literal('foundation_slab'),
+    polygon: z.array(punkt2).min(3),
+    dickeMm: mmPos,
+    // `mm`, NICHT `mmPos`: bei erdberuehrt=true ist die Oberkante negativ (±0,00 = OK
+    // Fertigfussboden EG, Yama 22.08. 22:08). Ein mmPos hier wuerde genau den Normalfall ablehnen.
+    oberkanteMm: mm,
+    erdberuehrt: z.boolean(),
+    materialId: z.string().optional(),
+    schichten: z.array(z.object({ materialId: z.string().optional(), dickeMm: mmPos }).strict()).optional(),
+    durchbrueche: z.array(foundationSlabDurchbruchSchema).optional(),
+    // Dieselben vier Felder wie Decke und Dach: die Platte ist Geometrie, die jemand entweder
+    // gezeichnet oder abgeleitet hat, und B10 gilt fuer sie wie fuer die anderen.
+    ...herkunftsFelder,
+  })
+  .strict();
+
 export const sceneDocumentSchema = z
   .object({
     id: z.string().min(1),
@@ -281,7 +303,9 @@ export const sceneDocumentSchema = z
     // angehoben (s. u.). **Die Anhebung ist nicht Kosmetik:** bliebe sie bei 2, laedt ein Dokument
     // OHNE die neuen Felder als gueltig — und eine Bestandsdecke haette keinen Herkunftsstatus,
     // saehe aber aus wie eine mit. Genau der Zustand, den B10 verbietet, nur unsichtbarer.
-    schemaVersion: z.literal(3),
+    // v4 (Z1-E4-1): foundationSlabs. Der Sprung folgt derselben Ueberlegung wie v3 — ohne ihn
+    // waere "hat keine Platte" von "stammt aus der Zeit vor der Platte" nicht zu unterscheiden.
+    schemaVersion: z.literal(4),
     revision: z.number().int().positive(),
     units: z.literal('mm'),
     settings: z
@@ -292,6 +316,7 @@ export const sceneDocumentSchema = z
     materials: z.array(materialSchema),
     roofs: z.array(roofNodeSchema),
     ceilings: z.array(ceilingNodeSchema).optional(), // additiv: Bestand ohne ceilings bleibt gültig (kein 422)
+    foundationSlabs: z.array(foundationSlabNodeSchema).optional(), // additiv, Muster ceilings (kein 422)
     metadata: z.object({ createdAt: isoDatum, updatedAt: isoDatum }).strict(),
   })
   .strict();
@@ -314,6 +339,7 @@ export function migriereSzene(roh: unknown): unknown {
     ...q,
     roofs: Array.isArray(q.roofs) ? q.roofs : [],
     ceilings: Array.isArray(q.ceilings) ? q.ceilings : [], // Feature A: additiv, Bestand → [] (kein 422)
+    foundationSlabs: Array.isArray(q.foundationSlabs) ? q.foundationSlabs : [], // Z1-E4-1: dito
   });
 
   /**
@@ -336,6 +362,8 @@ export function migriereSzene(roh: unknown): unknown {
         )
       : liste;
 
+  // Seit Z1-E4-1 ist aufV3 eine ZWISCHENSTUFE, keine Endstufe: v1/v2 laufen durch aufV3 und
+  // danach durch aufV4. Der Name bleibt, weil er die Herkunft der vier Felder benennt.
   const aufV3 = (q: Record<string, unknown>): Record<string, unknown> => ({
     ...q,
     schemaVersion: 3,
@@ -343,10 +371,30 @@ export function migriereSzene(roh: unknown): unknown {
     roofs: mitHerkunft(q.roofs),
   });
 
+  /**
+   * Z1-E4-1 — v3 → v4: **eine Version, ein leeres Feld, sonst nichts.**
+   *
+   * Anders als v2→v3 wird hier **kein Bestandswert angefasst**. Die Platte ist neu; ein
+   * Bestandsdokument hat keine, und es bekommt auch keine untergeschoben. *Eine erfundene
+   * Bodenplatte wäre schlimmer als keine — sie sähe aus wie eine Angabe.* Genau dieselbe
+   * Überlegung wie bei `WallNode.schichten`.
+   *
+   * Deshalb ist `foundationSlabs: []` und nicht etwa eine aus dem Gebäudeumriss abgeleitete Platte
+   * das Migrationsergebnis: **leer heißt „nicht erfasst", nicht „es gibt keine".**
+   */
+  const aufV4 = (q: Record<string, unknown>): Record<string, unknown> => ({
+    ...q,
+    schemaVersion: 4,
+    foundationSlabs: Array.isArray(q.foundationSlabs) ? q.foundationSlabs : [],
+  });
+
   if (o.schemaVersion === 1 || o.schemaVersion === 2) {
-    return aufV3(mitSammlungen(o));
+    return aufV4(aufV3(mitSammlungen(o)));
   }
-  if (o.schemaVersion === 3 && (!Array.isArray(o.roofs) || !Array.isArray(o.ceilings))) {
+  if (o.schemaVersion === 3) {
+    return aufV4(mitSammlungen(o));
+  }
+  if (o.schemaVersion === 4 && (!Array.isArray(o.roofs) || !Array.isArray(o.ceilings) || !Array.isArray(o.foundationSlabs))) {
     return mitSammlungen(o);
   }
 
@@ -366,6 +414,8 @@ export function validateSceneIntegrity(doc: {
   /** Z1-E2-1, additiv und optional: Altaufrufer ohne diese Felder bleiben gueltig. */
   ceilings?: Array<Record<string, unknown>>;
   roofs?: Array<Record<string, unknown>>;
+  /** Z1-E4-1, dito additiv und optional. */
+  foundationSlabs?: Array<Record<string, unknown>>;
 }): string[] {
   const fehler: string[] = [];
   const levelIds = new Set(doc.levels.map((l) => l.id));
@@ -381,6 +431,11 @@ export function validateSceneIntegrity(doc: {
   for (const r of doc.roofs ?? []) {
     if (!levelIds.has(String(r.levelId))) {
       fehler.push(`Dach ${r.id}: unbekanntes Level ${r.levelId}.`);
+    }
+  }
+  for (const b of doc.foundationSlabs ?? []) {
+    if (!levelIds.has(String(b.levelId))) {
+      fehler.push(`Bodenplatte ${b.id}: unbekanntes Level ${b.levelId}.`);
     }
   }
   const walls = new Map<string, { sx: number; sy: number; ex: number; ey: number; levelId: string }>();

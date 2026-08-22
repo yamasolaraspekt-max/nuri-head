@@ -69,16 +69,21 @@ const GRUND_PAKET = 'Fach-Werkzeug — über seine Kategorie-Gruppe in der obere
 // entschieden; nur WOHER sie kommen, hat sich geaendert.
 export const TOOL_PRESENTATION_RULES: readonly ToolPresentationRule[] = [
   // --- Registry: die 7 modus-schaltenden Bau-Werkzeuge (Reihenfolge = Registry-Reihenfolge) ------
-  { toolId: 'auswahl', zone: 'fix', ordnung: 1, herkunft: 'registry', begruendung: GRUND_BAU },
-  { toolId: 'wand', zone: 'fix', ordnung: 2, herkunft: 'registry', begruendung: GRUND_BAU },
-  { toolId: 'fenster', zone: 'fix', ordnung: 3, herkunft: 'registry', begruendung: GRUND_BAU },
-  { toolId: 'tuer', zone: 'fix', ordnung: 4, herkunft: 'registry', begruendung: GRUND_BAU },
-  { toolId: 'dach', zone: 'fix', ordnung: 8, herkunft: 'registry', begruendung: GRUND_BAU },
-  { toolId: 'decke', zone: 'fix', ordnung: 6, herkunft: 'registry', begruendung: GRUND_BAU },
-  { toolId: 'treppe', zone: 'fix', ordnung: 5, herkunft: 'registry', begruendung: GRUND_BAU },
+  // Z1-E4-1: **die Bodenplatte steht auf Platz 1.** Yamas Anweisung 22.08. 22:08 („ich moechte
+  // dass die bodenplatte verfuegbar ist"), im Blatt als Kriterium (a) festgehalten. Die acht
+  // vorhandenen Fix-Regeln ruecken geschlossen um eins nach hinten — **ihre Soll-Folge aus
+  // Z1-W2-8 bleibt damit unveraendert**, es verschiebt sich nur der gemeinsame Anfang.
+  { toolId: 'bodenplatte', zone: 'fix', ordnung: 1, herkunft: 'registry', begruendung: GRUND_BAU },
+  { toolId: 'auswahl', zone: 'fix', ordnung: 2, herkunft: 'registry', begruendung: GRUND_BAU },
+  { toolId: 'wand', zone: 'fix', ordnung: 3, herkunft: 'registry', begruendung: GRUND_BAU },
+  { toolId: 'fenster', zone: 'fix', ordnung: 4, herkunft: 'registry', begruendung: GRUND_BAU },
+  { toolId: 'tuer', zone: 'fix', ordnung: 5, herkunft: 'registry', begruendung: GRUND_BAU },
+  { toolId: 'dach', zone: 'fix', ordnung: 9, herkunft: 'registry', begruendung: GRUND_BAU },
+  { toolId: 'decke', zone: 'fix', ordnung: 7, herkunft: 'registry', begruendung: GRUND_BAU },
+  { toolId: 'treppe', zone: 'fix', ordnung: 6, herkunft: 'registry', begruendung: GRUND_BAU },
   // Z-05-N1: die Kontur steht am Ende der Fix-Zone, nicht mittendrin — die Ordnung folgt der
   // Registry-Reihenfolge, und ein Einschub haette alle nachfolgenden Zahlen verschoben.
-  { toolId: 'kontur', zone: 'fix', ordnung: 7, herkunft: 'registry', begruendung: GRUND_BAU },
+  { toolId: 'kontur', zone: 'fix', ordnung: 8, herkunft: 'registry', begruendung: GRUND_BAU },
 
   // --- Registry: die 2 Sofort-Aktionen ----------------------------------------------------------
   { toolId: 'loeschen', zone: 'kontext', ordnung: 1, herkunft: 'registry', begruendung: GRUND_SOFORT },

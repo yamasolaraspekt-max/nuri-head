@@ -10,12 +10,14 @@ import { sceneDocumentSchema } from '../domain/validation';
 import { ROOF_SHAPES, VERSCHNEIDUNGS_FORMEN, istVerschneidungsForm, type RoofShape } from '../domain/roofShape';
 import { dachMeshWelt, dachflaechen } from '../renderers/three-d/dachMesh';
 import type { SceneDocument, RoofNode } from '../domain/scene.types';
+// Z1-E4-1: die Versionszahl kommt aus der Konstante, nicht aus einer Kopie.
+import { SCHEMA_VERSION } from '../domain/scene.types';
 
 const ISO = '2026-07-23T00:00:00.000Z';
 
 function docMit(shape: RoofShape): SceneDocument {
   return {
-    id: 'doc-1', projectId: 1, schemaVersion: 3, revision: 1, units: 'mm',
+    id: 'doc-1', projectId: 1, schemaVersion: SCHEMA_VERSION, revision: 1, units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
     levels: [{ id: 'l1', name: 'DG', elevation: 0, defaultWallHeight: 2500, floorThickness: 200, sortOrder: 0 }],
     nodes: [], materials: [],

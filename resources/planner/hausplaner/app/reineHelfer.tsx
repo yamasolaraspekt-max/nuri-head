@@ -43,6 +43,9 @@ export function werkzeugIcon(w: string): React.ReactElement {
     case 'fenster': return svgWrap(<><rect x="4" y="4" width="16" height="16" rx="1" /><path d="M12 4v16M4 12h16" /></>);
     case 'tuer': return svgWrap(<><path d="M7 21V4h9v17" /><path d="M7 21a9 9 0 0 1 9-9" /></>);
     case 'dach': return svgWrap(<path d="M3 12L12 5l9 7" />);
+    // Z1-E4-1: die Platte liegt UNTEN und traegt — deshalb der Balken am Fussrand mit der
+    // Erdlinie darunter, waehrend `decke` denselben Balken oben mit Abhaenger fuehrt.
+    case 'bodenplatte': return svgWrap(<><rect x="3" y="14" width="18" height="5" rx="1" /><path d="M2 21h20" /></>);
     case 'decke': return svgWrap(<><rect x="3" y="9" width="18" height="5" rx="1" /><path d="M13 9v5" /></>);
     case 'treppe': return svgWrap(<path d="M3 21h4v-4h4v-4h4v-4h4" />);
     default: return svgWrap(<circle cx="12" cy="12" r="3" />);

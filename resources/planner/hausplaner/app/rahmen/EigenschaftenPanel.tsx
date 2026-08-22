@@ -40,7 +40,8 @@ import { treppeZuParametern, type TreppeParams } from '../../geometry/treppeObje
 import { PROFIL_KATALOG, VERGLASUNG_KATALOG, berechneUw, rcMachbar, preisFenster, profilNach, verglasungNach, type OeffnungsArt, type RcKlasse } from '../../geometry/fensterProdukt';
 import { FENSTER_BAUARTEN, TUER_BAUARTEN, fensterBauartNach, tuerBauartNach } from '../../geometry/oeffnungsBauarten';
 import { TREPPEN_BAUARTEN, treppenBauartNach } from '../../geometry/treppenBauarten';
-import type { Level } from '../../domain/scene.types';
+import type { Level, FoundationSlabNode } from '../../domain/scene.types';
+import { BodenplattenPanel } from './BodenplattenPanel';
 import type { SchienenZustand } from '../state/schienenSpeicher';
 import type { mehrfachUebersicht } from '../tools/auswahlUebersicht';
 import type { befundeAus } from '../dashboard/befunde';
@@ -74,6 +75,8 @@ export interface EigenschaftenPanelEigenschaften {
   selectedStair: ObjectNode | null;
   selectedStairParams: TreppeParams | null;
   selectedObjekt: ObjectNode | null;
+  /** Z1-E4-1: der achte selected*-Typ. Eigene Sammlung ⇒ eigene Auswahl, wie beim Dach. */
+  selectedFoundationSlab: FoundationSlabNode | null;
   dupliziere: () => void;
   loescheAuswahl: () => void;
 }
@@ -81,7 +84,7 @@ export interface EigenschaftenPanelEigenschaften {
 export function EigenschaftenPanel({
   aktiverTab, setAktiverTab, istSchmal, schienen, klappeSchiene, level, werkzeug, raeume, befunde,
   auswahlUebersicht, selectedNode, selectedWall, selectedOpening, selectedRoof, selectedStair,
-  selectedStairParams, selectedObjekt, dupliziere, loescheAuswahl,
+  selectedStairParams, selectedObjekt, selectedFoundationSlab, dupliziere, loescheAuswahl,
 }: EigenschaftenPanelEigenschaften): React.ReactElement {
   const MAUERWERK = [
     { id: 'ziegel', label: 'Ziegel (Hochlochziegel)' },
@@ -244,6 +247,14 @@ export function EigenschaftenPanel({
             {selectedNode.locked ? '🔒 Gesperrt' : '🔓 Sperren'}
           </button>
         </div>
+      )}
+      {selectedFoundationSlab && (
+        <BodenplattenPanel
+          platte={selectedFoundationSlab}
+          aendere={(changes) => store.getState().executeCommand({
+            type: 'UPDATE_FOUNDATION_SLAB', slabId: selectedFoundationSlab.id, changes,
+          })}
+        />
       )}
       {selectedRoof ? (
         <>
