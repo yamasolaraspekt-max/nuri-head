@@ -26955,3 +26955,120 @@ Auftragsart variieren darf und wer sie setzt, ist eine Entscheidung über das Le
 gehört zu Z0-I2, nicht zu einer Wache-Runde.
 
 **Ball:** Vorrat Z0-I2 (Planner) · nachrichtlich Dirigent, weil die Zielregel daran hängt.
+
+## §323 — Die Reichweite nachgeprüft: A-37-26 ist wirklich der einzige Fall. Sein Griff war enger als nötig und traf trotzdem
+
+**Messstand** `4ec68ad6` · Baum sauber · 0 neue Commits seit §322 · Integrationszweig `1d50aaae` →
+`63452c63`. Ballortung dreiseitig **1 · 6 · 14**. Die Evaluator-Lease läuft in zwei Minuten ab
+(`11:55:50`), `active/` steht noch.
+
+### Er nimmt seinen Anteil an — und formuliert die Lehre besser als ich
+
+`planner-eigener-anteil-probenvielfalt.yaml` (11:52:00). Zu meinem §321 (*„ich habe geprüft, ob die
+Proben auslösen, nicht, ob sie die Vielfalt herstellen"*) schreibt er: **„Meiner ist der frühere"** —
+die drei Proben stammen aus seiner Feder, und gemessen tragen sie die Kennungen `A-37-26 · A-37-27 ·
+A-38 · A-42 · L-ABH`, **keine einzige Z-Form**. Seine Regel an sich selbst:
+
+> **„Wer ein Kriterium an ein vorhandenes Artefakt bindet, legt eine Probe bei, die dessen ABDECKUNG
+> misst — nicht nur eine, die das Kriterium auslöst."**
+
+Das ist schärfer als meine Fassung in §321 und es gilt für beide Rollen: er entwirft die Probe, ich
+nehme sie ab. **Keiner von uns hat gefragt, ob sie die Formenvielfalt herstellt.**
+
+### Seine Reichweiten-Messung, mit anderem Griff nachgeprüft
+
+Er misst *„nur EIN Kriterium bindet sich an ein FREMDES Artefakt"* über eine Wortsuche. Ich habe
+stattdessen die genannten **Dateien** je Kriterium gezählt:
+
+```
+Kriterien-Abschnitte                                          27
+nennen eine Nicht-Lieferdatei                                 10
+davon mit MASSSTAB-Bindung (nicht Pfadgrenze/Kontext):
+  A-37-26   "gegen das Muster aus scripts/status-erzeugen.sh"   FREMD  <- der Fall
+  A-37-18   "in jedem Baum der Liste aus A-37-22"               EIGEN
+  A-37-27   nennt status-erzeugen.sh nur begründend; verlangt js-yaml in package.json/Lockfile
+  A-37-10 · A-37-23   nennen docs/STATUS.md als PFADGRENZE (Verbot), nicht als Maßstab
+  A-37-6 · 7 · 11 · 24   Kontext, 0 Maßstab-Bindung
+```
+
+**Sein Ergebnis hält.** Mein erster Griff war zu **weit** (10 Dateinennungen sehen nach zehn Fällen
+aus), seiner zu **eng** (eine Wortliste) — und trotzdem ist seine Zahl die richtige. Das ist kein
+Zufall im Ergebnis, sondern einer im Verfahren: **eine enge Suche, die den einen relevanten Wortlaut
+enthält, findet ihn; sie hätte einen zweiten Fall mit anderer Formulierung übersehen.** Deshalb war
+die Gegenprüfung nötig, auch wenn sie ihn bestätigt.
+
+**Eigener Messausfall dabei:** Mein `awk`-Griff zur Abgrenzung eines einzelnen Kriterienabschnitts
+gab den halben Rest des Blattes aus — die Kriterien stehen dort **nicht aufsteigend** (`22`, `22b–e`,
+`23` … stehen zwischen `18` und `19`), also traf die Endbedingung nie. Als Ausfall erkannt; die
+Antwort stand in der ersten Zeile der Ausgabe und war unabhängig davon lesbar.
+
+### Was daraus bleibt
+
+**Ein Einzelfall, aber kein zufälliger** — sein Satz, und er trifft: *„die Bindung an Fremdes ist genau
+die Stelle, an der eine ungeprüfte Voraussetzung entsteht."* Von 27 Kriterien bindet sich genau **eines**
+an etwas, das A-37 nicht selbst herstellt, und genau dieses trägt die Lücke. Die übrigen 26 stehen auf
+eigenen Füßen — entweder prüfen sie den eigenen Bau oder sie verweisen auf ein anderes A-37-Kriterium,
+dessen Abdeckung mit ihm entsteht.
+
+**Ball:** Dirigent, unverändert — Entscheidung A (Muster erweitern), B (Kennungsform vereinheitlichen,
+89 Blätter) oder C (Z-Aufträge ohne maschinellen Zustandswechsel, im Blatt gesagt). Von uns beiden ist
+der Anteil gemeldet; die Entscheidung gehört nicht dem, der die Lücke übersehen hat, und nicht dem,
+der sie geschrieben hat.
+
+## §324 — Der Realfall zu §322, sechzehn Sekunden alt: die Evaluator-Lease ist abgelaufen, der Inhaber arbeitet, und es gibt keinen Weg, den Heartbeat zu erneuern
+
+**Messstand** `575d4402` · Baum sauber · 0 neue Commits seit §323 · Integrationszweig `63452c63` →
+`d5e9e405`. Ballortung dreiseitig **1 · 6 · 14**, nichts angekommen.
+
+### Die Lage, live gemessen
+
+```
+Lease NACHPRUEFUNG-evaluator-A-37/active/   erteilt 11:15:50 · heartbeat_bis 11:55:50 (40 min)
+jetzt 11:56:06                              -> ABGELAUFEN, active/ steht noch
+Inhaber: sitzungs_id 303cefb6… = PID 87995, STAT S, läuft seit 08:43  -> LEBT
+sein Baum: HEAD e39cbccc unverändert · 0 Commits seit Lease-Beginn · letzte Reflog-Bewegung 10:50:57
+Heartbeat-Erneuerung in scripts/: 0 Treffer
+```
+
+**§8 der Agentenarchitektur sagt:** *„`active/` darf nur entfernt werden, wenn `heartbeat_bis`
+verstrichen ist."* Es **ist** verstrichen. Nach der Regel dürfte jetzt jede andere Rolle die Lease
+übernehmen — **während der Inhaber lebt.**
+
+### Warum das kein Vorwurf ist
+
+Der Evaluator hat nichts falsch gemacht. Er hat beim Ziehen eine Frist von 40 Minuten geschrieben,
+die Arbeit dauert länger — beim **ersten** Votum lagen zwischen Lease und Votum-Commit **32 Minuten**,
+diesmal sind es bisher **40**. Eine Abnahme misst, sie committet erst am Ende; kein Commit heißt nicht
+kein Fortschritt. *(Ich messe seinen Baum, weil das der einzige von außen sichtbare Fortschritt ist —
+er ist ausdrücklich **kein** Beleg dafür, dass nichts geschieht.)*
+
+**Das Entscheidende ist der letzte Messwert:** `heartbeat_bis` wird in **keinem** Skript erneuert.
+Wer eine Lease zieht, setzt die Frist **einmal** — und wenn sie zu kurz war, gibt es keinen Weg, sie
+zu verlängern. Es bleibt nur, die Lease freizugeben und neu zu ziehen, was den `fencing_token`
+hochzählt und wie ein Neustart aussieht.
+
+### Das ist §322 als Realfall
+
+Dort schrieb ich: *„Die Sperrdauer bestimmt der Gesperrte selbst."* Der Fall zeigt die andere Hälfte
+derselben Sache: **er bestimmt sie einmal und dann nie wieder.** Beides zusammen:
+
+```
+Frist frei wählbar (§322)        20 · 30 · 33 · 37 · 40 · 45 · 56 · 151 min, keine Regel
+Frist nicht verlängerbar (hier)  0 Skripte erneuern heartbeat_bis
+Folge                            zu kurz gewählt -> Lease läuft unter laufender Arbeit ab
+                                 zu lang gewählt -> Übernahme blockiert (bis 151 min)
+```
+
+**Es gibt keine Wahl, die beides vermeidet** — und genau deshalb ist die Frist ohne
+Erneuerungsmechanismus keine gute Sperre. Yamas Zielregel Punkt 4 (*Übernahme nur bei abgelaufenem
+Heartbeat*) hängt an einem Wert, der weder einheitlich noch nachführbar ist.
+
+### Was ich NICHT tue
+
+**Ich übernehme nichts, räume nichts auf und fordere nichts.** Die Lease gehört dem Evaluator, sein
+Prozess lebt, und §8 erlaubt die Übernahme — sie ist damit nicht geboten. *„Das Tor meldet und lässt
+durch; die Übernahme verlangt zusätzlich einen abgelaufenen Heartbeat und gehört der Claim-Sperre
+(Z0-I2), nicht einem Commit-Haken"* — so steht es im Bau des Generators, und so halte ich es.
+
+**Ball:** Vorrat Z0-I2 (Planner), zusammen mit §322 und dem Zeitformat-Befund · nachrichtlich Dirigent
+und Evaluator, damit niemand die abgelaufene Lease für verwaist hält, während der Inhaber misst.
