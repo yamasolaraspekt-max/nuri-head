@@ -38263,3 +38263,85 @@ und er blockiert nichts — **er zeigt nur, dass niemand die Tafel maschinell li
 Ball: **Integrator** (`docs/STATUS.md` schreibt er allein, §16 — der doppelte Schlüssel bei A-09
 gehört zu seinen Feldern). **Geht in die nächste Sammelmeldung**, nicht sofort: kein Blocker,
 zwölf Tage alt, und er liest seit 127 Minuten nicht.
+
+## §478 — Der Integrator ist zurück, und meine „131 Minuten Stille" waren gegen einen fest verdrahteten Anker gerechnet
+
+Messstand: HEAD `9acb393a`, Baum 0 · **Integration `4ac8085c`** (war `57e661bd`) · **Rückstand
+`HEAD..auto` = 154** · gemessen 21:57–22:00. **Ereignis-Schnitt dieser Runde: 21:53:32** (1 neues
+Ereignis). Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §478'` → 0).
+
+### Was passiert ist
+
+    27a45baa  21:56:43  integrator: zustand: Z1-V1-1 · ABGENOMMEN · dirigent · votum 187e4eae
+    352a8996  21:57:23  integrator: zustand: Z1-W2-6 · CODE_FERTIG · evaluator · bau a7d1e9a6
+    4ac8085c  21:57:23  integrator: zustand: Z0-I1  · CODE_FERTIG · evaluator · bau ba6fc673
+
+**Die Stille ist beendet — 40 Sekunden vor meiner Messung.**
+
+### Und mein Fehler, in derselben Minute
+
+**Ich habe die Integrator-Stille in JEDER Runde gegen `19:45:38` gerechnet** — einen Zeitpunkt, den
+ich einmal gemessen und dann **fest in den Messbefehl geschrieben** habe.
+
+    mein Befehl, jede Runde:  $(( ($(date +%s) - $(date -j … '2026-08-22 19:45:38' +%s)) / 60 ))
+    Ergebnis diese Runde:     131 Minuten
+    tatsaechlich, gemessen:   juengster Integrator-Commit 21:57:23  ->  0 Minuten
+
+> **Hätte ich in dieser Runde nicht zufällig die Zweigprobe gelesen und den geänderten
+> Integrationsstand gesehen, hätte ich „131 Minuten Stille" gemeldet, während der Integrator gerade
+> arbeitet.**
+>
+> **Das ist §462 in seiner reinsten Form, und diesmal nicht in einem Text, sondern in einem
+> Messbefehl:** Ein fest verdrahteter Anker ist dasselbe wie das Wort „unverändert" — **eine
+> Behauptung über einen Zustand, die bei jeder Wiederholung ungeprüft mitläuft.** Der Unterschied
+> ist, dass ein Befehl seriöser aussieht als ein Wort. **Er ist es nicht.**
+
+**Berichtigt, ab sofort:** Der Anker wird in jeder Runde gemessen —
+`git log -1 --format=%cd auto/hausplaner-integration` — und nicht als Datum in den Befehl
+geschrieben. **Sechste Formregel, und die erste, die einen Befehl betrifft statt einen Satz.**
+
+### Was er tut — und was noch nicht
+
+    drei Commits, alle vom Typ „zustand: … · <Rolle> · <SHA>"
+    -> ZUSTANDSFELDER, kein Rueckweg.
+
+    Commits NICHT in der Integration:  50   (unveraendert)
+    meine Befunde 73cdde46, 10601a53, 9acb393a:  alle NEIN
+    generator ad2ac724 (Z1-E0-1):                 NEIN
+    §447 „steht aus" bei E0/E2:                    2   (unveraendert, gegen 4ac8085c gemessen)
+
+**Er trägt die Zustände nach, die seit 19:45 aufgelaufen sind — der Transport steht noch aus.** Das
+ist kein Vorwurf: **Zustand vor Transport ist die richtige Reihenfolge**, denn ein transportierter
+Bau ohne Zustandszeile wäre in der Tafel unsichtbar.
+
+### Der Evaluator hat den git-grep-Befund bestätigt — und besser als ich
+
+> *„Nicht seinen Fall nachgebaut, sondern einen eigenen genommen — `registriereWerkzeug`, in meinem
+> Baum, im Insel-Pfad."*
+>
+>     git grep -cE '\bregistriereWerkzeug\b'  ->  0   <- FALSCH
+>     git grep -cE   'registriereWerkzeug'    ->  8
+>     git grep -cwE  'registriereWerkzeug'    ->  8
+>     grep -rcE '\bregistriereWerkzeug\b'     ->  8   <- normales grep kennt \b sehr wohl
+
+**Drei unabhängige Bestätigungen mit drei verschiedenen Suchbegriffen, Pfaden und Bäumen** —
+Planner (`IdsController`), ich (`IdsController` im Integrationsbaum), Evaluator
+(`registriereWerkzeug` in seinem Baum). **Und alle drei kamen auf dieselbe Gegenprobe: das normale
+`grep` ist nicht betroffen.**
+
+> **Sein Vorgehen ist strenger als meines.** Ich habe **seinen** Suchbegriff genommen und damit
+> streng genommen nur reproduziert; **er hat einen eigenen genommen und damit unabhängig
+> bestätigt.** Der Unterschied zählt: **eine Reproduktion prüft den Befehl, eine unabhängige
+> Messung prüft die Aussage.**
+
+### Lage, jetzt gemessen (21:57:46) — mit gemessenem Anker
+
+    Integration                           4ac8085c  (juengster Commit 21:57:23)
+    Integrator-Stille                     0 Minuten
+    Commits NICHT in der Integration      50
+    §447 „steht aus" bei E0/E2             2
+    Baelle beim Integrator (ganzes Haus)  22
+    Rueckstand mein Baum -> Integration   154
+
+Ball: **keiner von mir** — aber der Integrator liest wieder. **Die Sammelmeldung geht jetzt raus**
+(§463): §464, §465 ×2, §475, §477.
