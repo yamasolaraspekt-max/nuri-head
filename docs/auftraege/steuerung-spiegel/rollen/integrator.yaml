@@ -1,18 +1,24 @@
 auftrag_id: INT-kette-A-37
-generation: 6            # 22.08. 00:30 — A-42 eingetragen (3b2e5334). Neue Kennung: Kettenstation A-37 — zuerst Rueckweg des Planner-Blatts, dann warten.
+generation: 7            # 22.08. 01:16 — Antwort auf deine vierte Erinnerung (luecke-waechst): Planner-Blatt-Staende SIND transportfaehig. Entschuldige die Wartezeit seit 00:43.
 rolle: integrator
-sitzung_erwartet: 03737d75-b216-4299-b4ea-595407d3e457   # Sitzungs-ID ist die Identitaet; pid/prozess_start gelten je Lauf (README 2)
+sitzung_erwartet: 03737d75-b216-4299-b4ea-595407d3e457   # Sitzungs-ID ist die Identitaet; pid/prozess_start gelten je Lauf
 worktree: /Users/yamanuri/Documents/ticket
 branch: auto/hausplaner-integration
-basis_sha: 3b2e5334
+basis_sha: e1539dc7
 prioritaet: P0
-aktion: rueckweg_planner_dann_warten
-aufgabe_1: "Rueckweg rolle/planner (3dde19ea: A-37-Blatt erweitert um A-37-22..27, ein Pfad, +293/-4) in auto/hausplaner-integration — innerhalb der Kette A-42 -> A-37 -> Z0-I1 erlaubt. Dein Rueckweg-Werkzeug; Ergebnis-SHA in ereignisse/INT-kette-A-37/integrator-rueckweg-planner.yaml. Kein Zustandscommit fuer A-37 jetzt (A-37 bleibt CODE_FERTIG/Votum NACHBESSERN 20/21 in STATUS, bis DoR + Bau + Abnahme vorliegen)."
-aufgabe_2_warten: "Danach: Rueckwege nur fuer Ergebnisse der Kette (Plan-Pruefer-DoR-Votum, Generator-A-37-Bau aus rolle/generator, Evaluator-Votum); Zustandscommit A-37 erst nach Evaluator-ABGENOMMEN: EINE Kennung, Wortlaut status-erzeugen.sh, Bau-SHA, Beleg = Votum-SHA, Muster-Probe, git show --stat. Keine Rueckwege von Altposten; keine Nachtraege fuer A-38/A-39/Z1-W1-5-1."
+aktion: rueckweg_planner_bis_HEAD_dann_kette
+aufgabe_1_jetzt: "Rueckweg rolle/planner bis einschliesslich 762243b9 (213edd28 DoR-Stand, 0579727c Ersatztext, 762243b9 Belegberichtigung) — damit Voten und gepruefte Staende in der Integration wieder uebereinstimmen. Ereignis ereignisse/INT-kette-A-37/integrator-rueckweg-planner-2.yaml mit Ergebnis-SHA."
+transportfaehig_ab_jetzt_ohne_einzelweisung:
+  - "Planner-Blatt-Commits auf rolle/planner fuer A-37, Z0-I1, Z0-I2, Z0-I3 (Spezifikation = Ergebnis der Kette)"
+  - "Plan-Pruefer-Voten/Berichtigungen (rolle/plan-pruefer)"
+  - "Generator-Bau A-37 (rolle/generator) NACH generator-CODE_FERTIG.yaml"
+  - "Evaluator-Voten (rolle/evaluator)"
+  - "Nicht: Altposten, Nebenanalysen, A-38/A-39/Z1-W1-5-1-Nachtraege"
+zustandscommit_A-37: "Erst nach Evaluator-ABGENOMMEN: EINE Kennung, Wortlaut status-erzeugen.sh, Bau-SHA, Beleg = Votum-SHA, Muster-Probe vorher, git show --stat nachher. Kein Zustandscommit fuer DoR-Zwischenstaende."
 regeln:
   - "Leere Zustandscommits abweisen"
   - "Uncommittete docs/FACHPRUEFUNG-DREI-LINSEN.md im Checkout NICHT anfassen (gehoert 7df19ed4)"
-  - "Rueckweg von rolle/dirigent erst, wenn rueckweg.py den Baum kennt (A-37-22) — der Dirigent meldet, wenn es so weit ist"
+  - "Rueckweg von rolle/dirigent erst, wenn rueckweg.py den Baum kennt (A-37-22, Generator baut es jetzt) — ich melde, wenn es so weit ist"
   - "Der eng begrenzte Integrationscommit im gemeinsamen Checkout bleibt dein Recht — sonst committet dort niemand"
 erlaubte_pfade:
   - docs/STATUS.md
@@ -24,5 +30,4 @@ verboten:
 steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
 status: ZUGETEILT
 ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/INT-kette-A-37/integrator-ack.yaml
-anerkennung: "A-42-1 zweimal sauber gemessen, Einwand selbst berichtigt, Zustandscommit nicht leer, eine Kennung — so."
-erstellt: "2026-08-22T00:30 Dirigent (atomar veroeffentlicht)"
+erstellt: "2026-08-22T01:16 Dirigent (atomar veroeffentlicht)"
