@@ -32267,3 +32267,73 @@ der Messbarkeit, keine Aussage über ihn.
 Ball: **unverändert Dirigent** — mit dem Zusatz, dass diese Meldung ihn möglicherweise so wenig
 erreicht wie die drei davor. **Wenn nach der nächsten Runde nichts geschehen ist, gehört die Lage
 Yama vorgelegt**, nicht weiter an dieselbe Stelle gemeldet.
+
+## §406 — Vorlage an Yama: die Kette steht seit 82 Minuten, drei von vier Rollen sind still
+
+Messstand: HEAD `70d7418b`, Baum 0, gemessen 17:27–17:30. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §406'` → 0). **Jede Zahl in diesem Abschnitt ist in den letzten drei Minuten
+frisch gemessen** — meine Dauerregel für Vorlagen an Yama.
+
+In §405 hatte ich angekündigt: *„Wenn nach der nächsten Runde nichts geschehen ist, gehört die Lage
+Yama vorgelegt."* **Es ist nichts geschehen.**
+
+### Was fertig ist und nicht weiterkommt
+
+    Bau        CODE_FERTIG   abgenommen
+    Z2-W0-5b   15:26         NEIN
+    Z1-W2-0    15:45         NEIN
+    Z0-I1      15:51         NEIN      <- Stufe 1, der hoechste technische Blocker
+    Z1-W2-3    16:13         NEIN
+
+    Commits vor der Integration:  generator 11 · planner 9 · plan-pruefer 29   = 49
+    Integration ceb4224a:         82 Minuten alt
+    public/hausplaner/hausplaner.js in der Integration:  ad340caf, 21.08. 21:10
+      — obwohl Z1-W2-1 seit 16:25:16 BROWSER-abgenommen und das Buendel seit 16:27:41 gebaut ist
+    docs/STATUS.md im gemeinsamen Checkout:  ' M', 15/4, seit 16:06:57 uncommittet
+
+### Wer still ist, und was daran gemessen ist
+
+    Rolle        PID     laeuft   heartbeat_bis        letztes Ereignis
+    planner      93830   JA       17:53:20 gueltig     17:18:19    9 Min still — arbeitet
+    evaluator    87995   JA       16:57:46 (29 min)    16:26:43   60 Min still
+    integrator   91006   JA       16:25:04 (62 min)    15:58:25   89 Min still
+    dirigent     keine Lease, keine PID                16:03:05   84 Min still
+
+**Alle Prozesse, für die eine PID hinterlegt ist, laufen** — das habe ich in §400, §401 und §405
+dreimal gemessen, jedes Mal mit Gegenprobe. **Keine Lease ist verwaist.** Der Evaluator hält vier
+fertige Bauten, der Integrator den Transport.
+
+### Was ich gemeldet habe und was daraus wurde
+
+    17:06:43  BERICHTIGUNG-394: Ball liegt beim Dirigenten, nicht beim Integrator
+    17:13:18  GEGENPROBE B-009: der Integrator-Prozess laeuft, Uebernahme waere nicht regulaer
+    17:15:56  GRUNDMENGE B-009: zwei von drei Leases im selben Zustand
+    17:21:12  BERICHTIGUNG Z1-W2-6 bestaetigt
+
+    Dirigenten-Ereignisse seither: 0
+
+**Vier Meldungen, keine Reaktion.** Das ist keine Klage — es ist der Grund, warum ich die Lage jetzt
+hier vorlege statt ein fünftes Mal an dieselbe Stelle.
+
+### Was ich NICHT weiß
+
+- **Warum** Integrator und Dirigent still sind. Der Integrator läuft nachweislich und verbraucht
+  CPU-Zeit (§402) — er wartet, er hängt nicht. Für den Dirigenten gibt es **keine PID im System**,
+  also auch kein Verfahren, das ihn misst. **Das ist eine Grenze der Messbarkeit, keine Aussage.**
+- **Ob** es einen Grund gibt, der von außen richtig ist. Ein Transport, der auf eine Entscheidung
+  wartet, sieht genauso aus wie einer, der vergessen wurde.
+
+### Was ich NICHT tue
+
+Ich übernehme keine Lease, transportiere nichts, fasse `docs/STATUS.md` nicht an, ändere keine
+fremde Rollenquelle. **Der Integrator ist die einzige Rolle mit Rückweg-Recht**, und die Statuswahrheit
+schreibt allein er (ARBEITSREGELN §16). **Ich messe und melde — mehr steht mir nicht zu, und mehr
+brauche ich nicht, damit die Lage sichtbar ist.**
+
+### Der eine Satz
+
+**Vier abgenommene oder fertige Stände, 49 Commits und ein gebautes Bündel warten auf eine Kette,
+deren beide Weiterleitungsstellen seit über 80 Minuten schweigen — während die zwei Rollen, die
+liefern, weiterarbeiten.**
+
+Ball: **Yama** · nachrichtlich Dirigent und Integrator · bei mir nichts.
