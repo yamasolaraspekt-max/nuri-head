@@ -196,6 +196,99 @@ STEUERUNG="${TICKET_STEUERUNG:-/Users/yamanuri/.ticket-steuerung}"
 # Beides waere hier gelogen — Rolle und Baum koennen tadellos stimmen, waehrend die Steuerung
 # pausiert. Ein eigener Code haelt die Faelle am Rueckgabewert unterscheidbar, so wie der
 # Plan-Pruefer es fuer 1 gegen 5 durchgesetzt hat.
+# ── A-37-25 — SITZUNGSIDENTITAET: PUNKT 1, 2 UND 6 DER ZIELREGEL ───────────────────────────
+#
+# **Punkt 1: die stabile Identitaet ist allein die Sitzungs-ID.** Sie ueberlebt den Prozess.
+# **Punkt 2: `pid` und `prozess_start` gelten je LAUF**, nicht je Sitzung.
+# **Punkt 6: eine alte PID allein erklaert eine Lease NIEMALS fuer verwaist.**
+#
+# **Der Realfall ist protokolliert, nicht konstruiert:** um 00:17:18 wurde die Planner-Lease mit
+# `owner.pid 88928` erteilt — *dieser Prozess war da bereits tot*, waehrend die Sitzung durchgehend
+# arbeitete und vier Minuten spaeter ihr Blatt schrieb. **Jede eingetragene PID war zum Zeitpunkt
+# ihres Eintrags richtig; sie ist nicht falsch, sondern abgelaufen.**
+#
+# **Am 22.08. traf es diese Rolle selbst:** der Auftrag nannte PID 88088 als meine Sitzung, und
+# `ps` gab dafuer STAT T. Mein tatsaechlicher Lauf war 91834 — dieselbe Sitzung, neuer Lauf.
+# *Aufgefallen ist es nur, weil die alte PID gestoppt war.* **Haette sie gelebt, waere die
+# Lebendprobe gruen gewesen und der Wechsel unbemerkt geblieben** — genau das ist dem Plan-Pruefer
+# am selben Vormittag passiert, der seine tote PID dutzendfach mit exit 0 geprueft hatte.
+#
+# **Daraus die Regel, die dieses Tor anwendet:** *nicht „lebt die eingetragene PID?", sondern
+# „ist sie MEINE?".* Die erste Frage kann gruen sein, waehrend die zweite rot ist.
+sitzung_lebt() {
+  # $1 = Sitzungs-ID. Gesucht wird der LAUF an seiner Kommandozeile, nicht an einer gespeicherten
+  # Zahl. Eine Sitzungs-ID in der Kommandozeile ist ein Lebensnachweis; eine PID in einer Datei
+  # ist eine Aussage mit Verfallsdatum, deren Datum niemand kennt.
+  [ -z "${1:-}" ] && return 1
+  # Ohne Pipe: die Ausgabe wird erst vollstaendig eingelesen und dann geprueft. Ein `grep -q`
+  # hinter einer Pipe beendet sich beim ersten Treffer und kann dem Erzeuger SIGPIPE geben —
+  # unter `pipefail` wird daraus ein Fehlschlag der ganzen Kette. Der Hausgrundsatz dazu steht im
+  # Kopf von rueckweg.py: eine ausgefallene Messung ist KEIN Ergebnis. Hier ist sie einfach
+  # vermeidbar, also wird sie vermieden.
+  #
+  # ⚠ HIER STAND EINE ZUFALLSTREFFER-FALLE, gefunden durch die eigene Negativprobe S3.
+  # Die erste Fassung suchte die Sitzungs-ID irgendwo in der GESAMTAUSGABE von `ps`. Gemessen:
+  # eine Sitzungs-ID, zu der KEIN Prozess existierte, galt als lebend — weil die Probe selbst
+  # `printf ... tote-sitzung-4711 ...` aufgerufen hatte und diese Kommandozeile in `ps` stand.
+  # **Das Muster mass, ob die Zeichenkette irgendwo vorkommt, und nicht, ob die Sitzung laeuft.**
+  # Ein Editor mit der ID im Dateinamen, ein grep, ein Scratchpad-Pfad — jedes davon haette eine
+  # tote Sitzung fuer lebend erklaert, und zwar ausgerechnet in der Richtung, die einen fremden
+  # Commit durchgelassen haette.
+  #
+  # Gezaehlt wird jetzt nur, was ein claude-LAUF ist: das erste Feld der Kommandozeile muss das
+  # Programm `claude` sein. Damit fallen bash, printf, sed und der Scratchpad-Pfad heraus —
+  # letzterer enthaelt uebrigens selbst die Zeichenfolge `claude`, weshalb eine Suche nach dem
+  # blossen Wort ebenfalls nicht genuegt haette.
+  _AUS="$(ps -axo command= 2>/dev/null)"
+  while IFS= read -r _z; do
+    _prog="${_z%% *}"
+    case "$_prog" in
+      */claude|claude) ;;
+      *) continue ;;
+    esac
+    case "$_z" in
+      *"$1"*) return 0 ;;
+    esac
+  done <<< "$_AUS"
+  return 1
+}
+
+# Die eigene Sitzungs-ID. Ohne sie kann dieses Tor keine Sitzung unterscheiden — dann prueft es
+# nicht und sagt das, statt zu raten.
+SITZUNG="${TICKET_SITZUNG:-}"
+
+# ── Committe ich unter einer FREMDEN Lease? ────────────────────────────────────────────────
+#
+# **Abgrenzung, und sie ist Teil des Kriteriums:** A-37-25 baut ein pre-commit-Tor, KEINE
+# Lease-Verwaltung. Hier wird gelesen und verglichen — nie erteilt, nie uebernommen, nie
+# entfernt. Heartbeat-Erneuerung, Uebernahme und Fencing sind Mechanik der Claim-Sperre und
+# gehoeren nach Z0-I2. *Sie hier zu bauen hiesse, Lease-Verwaltung in einen Commit-Haken zu legen.*
+fremde_lease_pruefen() {
+  [ -z "$SITZUNG" ] && return 0
+  LEASEDATEI="$(ls -1 "$STEUERUNG"/leases/*/active/lease.yaml 2>/dev/null | head -1)"
+  [ -f "${LEASEDATEI:-}" ] || return 0
+  LSITZUNG="$(sed -n 's/^[[:space:]]*sitzungs_id:[[:space:]]*\([^[:space:]#]*\).*/\1/p' "$LEASEDATEI" | head -1)"
+  [ -z "$LSITZUNG" ] && return 0
+  [ "$LSITZUNG" = "$SITZUNG" ] && return 0
+
+  # Die Lease gehoert einer anderen Sitzung. Ob sie noch gilt, entscheidet NICHT die eingetragene
+  # PID — Punkt 6 der Zielregel verbietet genau diesen Schluss. Gefragt wird, ob JENE SITZUNG lebt.
+  if sitzung_lebt "$LSITZUNG"; then
+    echo "ROLLEN-TOR  VERSTOSS  eine andere Sitzung haelt die Lease und lebt." >&2
+    echo "            Lease: $LEASEDATEI" >&2
+    echo "            haelt:  $LSITZUNG" >&2
+    echo "            ich:    $SITZUNG" >&2
+    return 7
+  fi
+  # Sie lebt nicht — und trotzdem wird hier NICHTS uebernommen und nichts fuer verwaist erklaert.
+  # Das Tor meldet und laesst durch; die Uebernahme verlangt zusaetzlich einen abgelaufenen
+  # Heartbeat und gehoert der Claim-Sperre (Z0-I2), nicht einem Commit-Haken.
+  echo "ROLLEN-TOR  HINWEIS  die aktive Lease gehoert Sitzung $LSITZUNG, die kein laufender" >&2
+  echo "            Prozess traegt. NICHT als verwaist behandelt — das entscheidet die" >&2
+  echo "            Claim-Sperre ueber Heartbeat und Fencing, nicht dieses Tor." >&2
+  return 0
+}
+
 steuerung_pruefen() {
   QUELLE="$STEUERUNG/rollen/$STAMM.yaml"
   DIGESTDATEI="$QUELLE.sha256"
@@ -293,11 +386,13 @@ steuerung_pruefen() {
 # wieder vor, nur kleiner. Die Absage-Regel des Kriteriums zielt genau darauf: verlangt ist die
 # Pruefung IM Commit-Gate, nicht davor.
 if [ "${1:-}" = "--steuerung" ]; then
-  steuerung_pruefen
+  steuerung_pruefen || exit $?
+  fremde_lease_pruefen
   exit $?
 fi
 
 steuerung_pruefen || exit $?
+fremde_lease_pruefen || exit $?
 
 # K4: kein Repo ist KEIN Rollenfehler und wird auch nicht als einer gemeldet.
 BAUM="$(git rev-parse --show-toplevel 2>/dev/null)" || BAUM=""
