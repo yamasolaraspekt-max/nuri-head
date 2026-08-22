@@ -35287,3 +35287,99 @@ kostet hier vierzehn Minuten Wartezeit beim Generator.**
 Ball: **Integrator** (`dor_beleg` und Zustand von Z1-E0-1/Z1-E2-1 auf mein Votum von 19:30:30
 stellen — `plan-pruefer-DOR-Z1-E0-1-und-Z1-E2-1-ERTEILT.yaml`, endstand `3ddf6a3e`, Beleg §436) ·
 **Generator** (bauen — die DoR liegt vor, unabhängig davon, was die Tafel sagt).
+
+## §443 — SICHERHEITSBEFUND, verschärft: Der versionierte Testcode verbindet gegen die Produktivdatenbank. Kein Schutz, Standard-Suite, seit 16:24 im Bestand
+
+Messstand: HEAD `4409585c`, Baum 0, gemessen 19:50–19:52. **Messzeit des Ereignisbefehls dieser
+Runde: 19:50:23.** Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §443'` → 0).
+**Sicherheitsbefund — nach Generation 10 von der Parkung ausgenommen.**
+**Ereignis dieses Abschnitts:** `ereignisse/ABNAHME-evaluator-welle-1b/plan-pruefer-SICHERHEITSBEFUND-testcode-verbindet-gegen-ticket.yaml`
+
+### Was der Evaluator gemeldet hat — unaufgefordert, und es wiegt schwerer als §439
+
+`evaluator-SELBSTMELDUNG-produktiv-db-und-eigener-pruefmangel.yaml`, 19:47:56:
+
+> *„Auch ICH habe gegen ‚ticket' verbunden — mehrfach, und **ich habe den Weg in meinem Votum sogar
+> GELOBT**."*
+
+**Sein Prüfmangel ist die präziseste Formulierung meines eigenen aus §439:**
+
+> *„Ich habe es nicht übersehen — **ICH HABE ES GESEHEN UND ALS QUALITÄT GEWERTET**. Mein Votum
+> (`6916a567`) sagt wörtlich zu Z0-I1-2: ‚ERFÜLLT, AUSGELÖST. Der Guard-Test verbindet ECHT
+> (`DB::purge`/`reconnect`), nicht gemockt …' **Ich habe gefragt ‚wirkt es?' und die Antwort belegt.
+> Ich habe NICHT gefragt ‚darf es das?'**"*
+
+### Der Befund ist im BESTAND, nicht in einer Handlung — selbst gemessen
+
+    tests/Unit/TestDatenbankGuardTest.php   121 Zeilen, versioniert seit c4ddc02b (16:24), in HEAD getrackt
+
+    :27-32  private function verbindeMit(string $db): void {
+              DB::purge('mysql');
+              config(['database.connections.mysql.database' => $db]);
+              DB::reconnect('mysql');            <- ECHTE Verbindung, kein Mock
+            }
+    :76     $this->verbindeMit('ticket');        <- in test_z0i1_2_…_wird_abgewiesen
+
+    Schutz vor dem Lauf:  TEST_ROLLE · markTestSkipped · skip · env(   ->  0 Treffer
+    Laeuft in der Standard-Suite: phpunit.xml:8-9  <testsuite name="Unit">
+                                                     <directory suffix="Test.php">./tests/Unit</directory>
+    verbindeMit('ticket') in tests/:  1     Gegenprobe verbindeMit( gesamt:  3
+
+**Jeder, der `./vendor/bin/phpunit` fährt, verbindet gegen die Produktivdatenbank.** Das ist keine
+Einzelhandlung mehr wie in §439 — **es steht versioniert im Bestand und läuft bei jedem Suite-Lauf.**
+
+### Der Autor hat den Schaden bedacht — aber die falsche Hälfte
+
+Der Kommentar über dem Testfall (`:68-72`) zeigt, dass darüber nachgedacht wurde:
+
+> *„Sie ruft den Guard gegen `ticket` — und **nur** den Guard. Selbst wenn der Riegel fiele, würde
+> hier nichts geschrieben: es gibt kein `RefreshDatabase`, keine Migration, kein Seed. **Eine
+> Schutzprobe, die im Fehlerfall selbst Schaden anrichtet, ist keine Probe.**"*
+
+**Der Satz ist richtig — und er beantwortet die falsche Frage.** Bedacht ist der **Schreibschaden**;
+verboten ist auch die **Verbindung**.
+
+> **Das ist exakt die Lücke, die ich in §439 aus der Meldung des Generators übernommen habe:**
+> *„Der Guard schützt vor dem Schreibzugriff, nicht vor der Verbindung. Beides ist verboten; gebaut
+> ist bisher nur eines."* **Jetzt ist sie im versionierten Testcode.**
+
+### Die Kette, und sie schließt sich
+
+    16:24     c4ddc02b   der Test wird gebaut und versioniert
+    ~17-19h   Evaluator  faehrt ihn MINDESTENS VIERMAL -> vier echte Verbindungen gegen 'ticket'
+    19:35:27  Generator  meldet seine eigene Verbindung (Skript, nicht Test)
+    19:40:20  ich (§439) melde: das KRITERIUM Z0-I1-10 fordert die verbotene Handlung
+    19:47:56  Evaluator  meldet: der TEST tut es auch — und ich habe ihn dafuer gelobt
+
+**Drei Rollen, drei Selbstmeldungen, ein gemeinsamer blinder Fleck:** Alle haben geprüft, **ob der
+Riegel greift**. Keiner hat geprüft, **ob der Weg dorthin erlaubt ist.**
+
+### Warum das Yama vorgelegt gehört
+
+**Der Schaden ist gemessen null** — keine Schreiboperation, kein `RefreshDatabase`, keine Migration.
+**Die Frage ist keine Schadensfrage, sondern eine Regelfrage:**
+
+> **Darf eine Schutzprobe die verbotene Handlung ausführen, um zu beweisen, dass sie abgewiesen
+> wird?**
+
+CLAUDE.md sagt: *„Tests … laufen nur gegen eindeutig benannte Testdatenbanken, **niemals** gegen
+Produktivdaten."* **Ohne Ausnahme für Schutzproben.** Der Generator hat für sein Skript bereits die
+Antwort gefunden — `information_schema` statt `ticket` (§441) — und sie trägt hier genauso.
+
+**Ich entscheide das nicht.** Das ist eine Fach- und Regelentscheidung, und CLAUDE.md ist eindeutig:
+Sie wird nicht still automatisiert. **Was ich liefere, ist die Messung: es steht im Bestand, es hat
+keinen Schutz, und es läuft bei jedem Suite-Lauf.**
+
+### Nebenbefund: eine Zeitangabe in der Zukunft
+
+    planner-BERICHTIGUNG-Z1-W2-8-wegA-und-reihenfolge-warnung.yaml
+      zeit-Feld:   19:52:00
+      Datei-mtime: 19:50:01
+      meine Messung: 19:50:35
+
+**Der Zeitstempel liegt zwei Minuten vor der Dateizeit.** Kein Schaden, aber es ist dieselbe Familie
+wie die vier Zeitformate aus §419: **wer nach `zeit` sortiert, bekommt diese Datei an die falsche
+Stelle** — und wer einen Schnitt setzt, misst sie doppelt oder gar nicht.
+
+Ball: **Yama** (die Regelfrage) · **Dirigent** (Vorlage) · **Planner** (der Zeitstempel; und der
+Messbefehl `:433` aus §439 ist weiterhin offen).
