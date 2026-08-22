@@ -25963,3 +25963,71 @@ Kriterium, das ich abgenommen habe. Der Unterschied zu den bisherigen eigenen Fe
 ist der Rang: die anderen waren Messfehler, dieser ist ein **übersprungener Prüfschritt**.
 
 **Ball:** Dirigent (Regelfrage N3 für `aktiv/`) · A-37 selbst unverändert beim Generator.
+
+## §309 — Posten (a): meine Ballortung heißt „zweiseitig", und es gibt drei Ablagen
+
+**Messstand** `426226c8` · Baum sauber · 0 neue Commits seit §308 · Integrationszweig `6de33adb` →
+`1c14579a`. Ballortung beidseitig **1** (P-02) und **6** — und genau das ist der Posten dieser Runde.
+Angekommen war nur meine eigene Selbstmeldung von 11:01.
+
+### Der blinde Fleck
+
+In der Ordnerliste der Steuerung steht seit gestern ein Ordner mit meinem Namen, den ich nie geöffnet
+habe: `PARKEN-plan-pruefer/`. Er enthält nur mein eigenes ACK von 21.08. 23:16 (gen 2), abgelöst durch
+gen 3–7 — **kein offener Ball.** Aber die Frage dahinter trägt weiter: Meine Vorschrift heißt
+**„Ballortung ZWEISEITIG (P-03)"** — `docs/STATUS.md` und die Blätter in `docs/auftraege/aktiv/`.
+**Die Steuerungsablage ist eine dritte Seite, und ich habe sie nie systematisch abgesucht.**
+
+```
+'ball: plan-pruefer' in .ticket-steuerung/ereignisse/     14
+Gegenprobe, Verteilung aller ball:-Zeilen:
+   dirigent 25 · generator 17 · plan-pruefer 14 · planner 13 · evaluator 12 · yama 3 · release-pruefer 1
+Dateien, die mich im an:-Feld nennen                      64
+```
+
+### Ein Fehlalarm mit zwölf Positionen, vor dem Melden gefangen
+
+Meine erste Gegenprüfung fragte: „kam nach dem Ball eine `plan-pruefer-*`-Datei **im selben Ordner**?"
+Ergebnis: **12 von 14 → null.** Das sah nach zwölf unbeantworteten Bällen aus. Es ist ein
+**Messartefakt**: Die Graubereich-Regel schreibt vor, Ereignisse **im eigenen Auftragsordner**
+abzulegen, nicht beim Absender. Mein Verfahren maß also genau das Befolgen der Regel als Verstoß.
+Richtig zugeordnet — Ball gegen Votum, ordnerübergreifend, über die Zeit:
+
+```
+SPEZ-planner-A-37           4 Bälle  00:25–01:00  ->  NICHT_ERTEILT 00:42 · ERTEILT 00:49
+INT-kette-A-37              1        00:32        ->  dasselbe Votum
+NACHSCHAERFUNG-planner-A-37 5        08:20–09:04  ->  ERTEILT 09:05
+ERRATA-planner-A-37         2        10:02–10:03  ->  BESTAETIGT 10:12
+eigene Selbstprüfung        1        09:27        ->  meine eigene Datei
+LAGE-…/zwei-zeitkonventionen 1       09:36        ->  KEINE Quittung
+```
+
+**13 von 14 waren beantwortet** — durch die Voten, die in meinem Ordner liegen. Hätte ich die erste
+Zahl gemeldet, wäre es der zwölffache Fehlalarm gewesen.
+
+### Der eine echte Punkt
+
+`evaluator-zwei-zeitkonventionen-utc-gegen-ortszeit.yaml`, 09:36:30, `ball: plan-pruefer`,
+**87 Minuten offen**. Sein Schritt an mich: *„bei Alterungsangaben zu Generator- und
+Release-Prüfer-Dateien die Zone mitlesen (13 Dateien in UTC)."*
+
+**Sachlich war es erledigt, bevor ich es bemerkt habe** — das Skript aus §302 parst zonenbewusst
+(`Z` als UTC, `+0200` normalisiert, Vergleich in Epoch, Zone je Datei ausgewiesen, 168 Dateien,
+0 unparsbar). **Formal stand keine Quittung.** Jetzt nachgeholt
+(`plan-pruefer-quittung-zeitkonventionen.yaml`), mit dem Beleg statt mit „zur Kenntnis" — und mit der
+Feststellung, dass sein Befund meinen erst möglich gemacht hat: erst als die Zonen geklärt waren,
+blieb der Rest als eigener Befund übrig, und daraus wurde die Regel des Dirigenten von 10:40.
+
+### Das ist die Fortsetzung meines eigenen P-03
+
+P-03 lautete am 16.08.: *„Meine Ballortung sah nur die Statuswahrheit — Blätter tragen einen DoR-Ball
+bei mir, den sie nie gemeldet hat."* Damals ging es von **einer** auf **zwei** Seiten. Heute zeigt
+sich: es sind **drei**. Die dritte hat in diesem Fall nichts Liegengebliebenes verborgen — 13 von 14
+erledigt, der 14. sachlich erfüllt. **Dass nichts liegenblieb, ist aber Folge der eng getakteten
+Kette, nicht Folge meiner Ortung.** Bei längeren Wegen wäre es anders ausgegangen.
+
+**Was ich ändere:** Die Ballortung fragt ab sofort auch `grep -r '^ball: plan-pruefer'` in der
+Steuerungsablage — und die Antwort wird **ordnerübergreifend über die Zeit** zugeordnet, nicht im
+Ordner des Absenders gesucht.
+
+**Ball:** keiner. A-37-20 liegt beim Generator, die Nachprüfung beim Evaluator.
