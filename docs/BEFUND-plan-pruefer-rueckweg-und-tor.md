@@ -39565,3 +39565,66 @@ Zwei Migrationen mit Hausplaner-Bezug existieren
 (`2026_07_16_…create_hausplaner_foundation_tables`,
 `2026_07_26_…configurator_packages`) — die Bauform für den Fall, dass Yamas Migrationssatz greift,
 ist also vorhanden und muss nicht erfunden werden.
+
+## §493 — Posten 29 beantwortet meine Regelfrage; die Schlussprobe hält, und der Messbefehl braucht eine Zeile mehr
+
+Stand: HEAD `3857a069`, Baum 0, gen 11, Digest gleich. Zeit 23:04.
+
+Um **22:59:02** hat der Dirigent Posten 29 abgelegt (`c710f0bc`) — meine Regelfrage aus §491,
+beantwortet in der von mir vorgeschlagenen Richtung:
+
+> „**VERBINDEN verboten** (jede Verbindung zu `ticket` aus Tests/Proben/Skripten/Rollenbäumen);
+> **NENNEN als abzulehnender Wert erlaubt und erwünscht** (Negativproben müssen den String
+> enthalten). **Messbefehl = Verbindungsaufrufe, nicht String-Treffer.**"
+
+Der letzte Satz stammt nicht von mir und ist der wertvollste: Er macht aus der Unterscheidung eine
+**Messanweisung**. Damit ist die Teilstring-Lehre, die mich heute mehrfach beschäftigt hat
+(A-37-22e, §487, §491), in Regelform gegossen — an einer Stelle, an der ein falscher Griff eine
+Schutzgrenze scheinbar verletzt aussehen ließe.
+
+### Schlussprobe nach dem neuen Maßstab: die Grenze hält
+
+```
+ECHTE Verbindungsaufrufe auf blankes 'ticket':   0
+Die zwei echten Aufrufe:
+  TestDatenbankGuardTest.php:53   verbindeMit('ticket_g1b1_testing')
+  TestDatenbankGuardTest.php:89   verbindeMit('information_schema')
+scripts/: ticket_testing in 7 Dateien · blankes ticket als DB-Ziel: 0
+```
+
+Beides genau das, was Posten 29 erlaubt.
+
+### Der Messbefehl braucht eine Zeile mehr, als die Regel nennt
+
+Mein erster Versuch setzte die Regel wörtlich um — ich suchte **Aufrufe** statt Strings:
+
+```
+grep -oE "verbindeMit\('[a-z_0-9]+'\)"   →   verbindeMit('ticket')   1 Treffer
+```
+
+**Und lief trotzdem in die Falle.** Der Treffer steht in Zeile 76 — einer **Kommentarzeile**, die
+den behobenen Vorzustand dokumentiert (§491). Ein Kommentar, der einen Aufruf zitiert, sieht für
+jeden Mustervergleich aus wie ein Aufruf.
+
+Erst mit ausgeschlossenen Kommentarzeilen (`//`, `*`, `/*`, `#` nach Einrückung) fiel der Treffer
+weg und die Zahl wurde **0**. Die Regel sagt richtig „Verbindungsaufrufe, nicht String-Treffer" —
+aber ein Muster, das nach Aufrufen sucht, ist immer noch ein String-Treffer. **Wer sie umsetzt,
+muss Kommentare ausschließen, sonst meldet er eine Verletzung, die es nicht gibt** — ausgerechnet
+verursacht durch die Zeile, die die Behebung dokumentiert.
+
+Das ist bemerkenswert genug, um es festzuhalten: Der sorgfältig geschriebene Kommentar des
+Generators, der erklärt, **warum** `verbindeMit('ticket')` falsch war, ist jetzt selbst die
+häufigste Quelle eines falschen Positivbefunds.
+
+### Und die Präzisierung war nötig — hier ist der Beleg dafür
+
+`scripts/__tests__/browserBuehne.test.mjs:67`:
+
+```js
+assert.equal(r.code, 3, 'DB_DATABASE=ticket kommt durch — …')
+```
+
+Eine **Negativprobe**, die belegt, dass `DB_DATABASE=ticket` mit Exit-Code 3 abgewiesen wird. Nach
+dem alten Wortlaut („`ticket` darf in keinem Test-/Probebefehl stehen") wäre sie zu entfernen
+gewesen — und danach hätte niemand mehr gemerkt, wenn die Bühne `ticket` durchlässt. Es sind also
+nicht nur die zwei Stellen aus §491; die erlaubte Nennung trägt mindestens **drei** Prüfungen.
