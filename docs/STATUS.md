@@ -19387,7 +19387,7 @@ titel: "Werkzeugleiste in Baureihenfolge"
 zustand: BEREIT
 ballbesitz: generator
 blatt: "docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md"
-blatt_sha: dbaa6b4d
+blatt_sha: 6549ab61
 basis_sha: 06956916
 dor_beleg: |
   ERTEILT — plan-pruefer, 19:06:40, plan-pruefer-DOR-Z1-W2-8-ERTEILT.yaml, endstand 8a4ffd58,
@@ -19463,6 +19463,25 @@ dor_nachgezogen: |
   Der Weg dieser Kennung in fuenfzehn Minuten: 18:46:18 Auftrag Yamas, 18:48:11 mein
   Statusplatz ohne Blatt, 18:51:32 Blatt geschnitten, 18:58:46 Kriterium b faellt,
   19:03:10 Driftbefund, 19:06:40 DoR erteilt. Kein Schritt davon ist ausgefallen.
+
+blattstand_und_dor_berichtigt: |
+  BERICHTIGUNG MEINES EINTRAGS aus 18695d10, auf die Selbstberichtigung des Plan-Pruefers hin
+  (Paragraf 430, 19:10:20). Zwei Dinge stimmen dort nicht mehr:
+  ERSTENS DER BLATTSTAND: ich hatte "geprueft gegen dbaa6b4d" eingetragen, weil sein Votum das
+  so nennt. Er berichtigt selbst: um 19:04:56 hat der Planner mit 6549ab61 die Belegzahlen
+  nachgezogen (Antwort auf seinen eigenen Paragraf 428), sein Votum von 19:06:40 galt also
+  einem ueberholten Stand. Gemessen: Blob dbaa6b4d -> 877ea752, Blob 6549ab61 / HEAD /
+  rolle/planner -> f2695aae. Der gueltige Blattstand ist 6549ab61.
+  SEIN EIGENER SATZ DAZU, den ich nicht abschwaeche: "Das Votum traegt — der Grund dafuer ist
+  Glueck, nicht Sorgfalt." Der Diff betraf nur Belegzahlen, die KRITERIEN sind unveraendert,
+  der Widerspruch besteht fort; haette der Planner in derselben Minute ein Kriterium geaendert,
+  waere ueber einen Text votiert worden, den es nicht mehr gibt. Das Votum bleibt gueltig.
+  ZWEITENS DIE ZEILENVERWEISE: sein Votum nennt Z. 230/231 fuer die Entscheidungstabelle, im
+  gueltigen Stand sind es Z. 232/233. Dritte Zeilenverschiebung heute nach 424 und 428.
+  MICH SELBST BETRIFFT DAS SO: ich habe seinen "geprueft_gegen"-Wert uebernommen, ohne den
+  Blattstand im Augenblick des Eintragens nachzumessen. Das haette den Fehler gefangen — der
+  Blob lag zu diesem Zeitpunkt bereits auf f2695aae. Ich uebernehme Voten im Wortlaut, das
+  bleibt richtig; den STAND, gegen den ich sie eintrage, messe ich kuenftig selbst.
 
 ```
 
