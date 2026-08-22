@@ -29811,3 +29811,79 @@ Messung ist kein Ergebnis — und eine leere Ausgabe aus einem Fehler sieht aus 
 
 Ball: **niemand von mir aus.** Sieben Nachzieh-Rückstände auf beiden Seiten sind Transport
 (ARBEITSREGELN §272), nicht Votum. Kein Blatt berührt, kein Votum geändert, keine DoR eröffnet.
+
+## §368 — DoR Z2-W0-5b: ERTEILT. Zwei Halbsätze im Votum, keiner davon ein Ball zurück
+
+Messstand: HEAD `cfaa391b`, Baum 0, gemessen 15:30–15:41. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §368'` → 0). Auftrag gen 9 (`DOR-plan-pruefer-w0-5b`) ist damit erfüllt.
+
+**Auslöser:** `SPEZ-planner-anschlusswelle-1/planner-CODE_FERTIG-Z2-W0-5b.yaml`, 15:26:51, gen 19,
+`blatt_sha ec239609`, `mess_sha 97843380`. Alles Folgende ist **selbst am Basis-Stand** erhoben
+(`git show "${SHA}:${PFAD}"`), nicht aus dem Ereignis übernommen.
+
+### Die tragenden Zahlen — selbst nachgemessen, alle bestätigt
+
+    Behauptung des Planners                      meine Messung am Stand 97843380
+    ...FuerItem im MasterSetController = 2       2  (:182 link, :195 unlink)          BESTAETIGT
+    linked ohne jede Wache                       :162-175, KEINE Zeile vor der Query  BESTAETIGT
+    zwei Bausteine, nicht einer                  ...FuerPlan :209 (addToPlan)         BESTAETIGT
+    GET-Routen unter /items/{ in api.php = 2     :339 linked, :359 materials/index    BESTAETIGT
+    5 Kriterien / 5 Matrixzeilen                 5 / 5, jede Kennung genau 2x         BESTAETIGT
+
+`linked` nimmt `int $plannerItemId`, die Geschwister nehmen Model-Binding — der Befund des Planners,
+dass die Lücke **strukturell** ist („wo kein Modell gebunden wird, fällt auch nicht auf, dass niemand
+es prüft"), hält meiner Nachmessung stand: Route `:339` heißt `{plannerItem}`, `:343`/`:348` heißen
+`{item}`.
+
+### Zwei eigene Fehlgriffe, die ich hier ausweise, weil sie sonst als Befund durchgingen
+
+**Erstens** — ich zählte `Route::get.*items/\{` zusätzlich in `routes/web.php` und fand **2**, also
+scheinbar eine Grundmenge von 4. Nachgesehen: es sind
+`/plans/{plan}/items/{item}/materials/sources` und `…/products` — anderer Präfix, anderer Controller,
+**nicht der Gegenstand**. Und der Messbefehl des Blattes nennt `routes/api.php` **ausdrücklich**; ich
+hatte die verkürzte Fassung aus dem Ereignis gelesen statt die aus dem Blatt. **Das Blatt ist
+genauer als seine eigene Zusammenfassung** — und ich hätte um ein Haar dem Blatt vorgeworfen, was nur
+in der Zusammenfassung fehlte.
+
+**Zweitens** — `grep -ci 'rueckweg'` gab **0**, und einen Moment lang sah es aus, als fehle der
+Rückweg. Der Abschnitt heißt **„Rückweg"**, mit Umlaut. Er ist da und lautet „Revert dieses einen
+Commits". Dieselbe Klasse wie meine Teilstring-Fallen, nur andersherum: **nicht zu weit, sondern am
+falschen Zeichen zu eng.**
+
+### Die zwei Halbsätze — Ort statt Rückfrage
+
+Nachtrag 1.5 verlangt, Halbsätze **im Votum mitzuliefern** statt eine Auflagen-Schleife zu drehen.
+Beide betreffen N3 (Messbefehl mit ORT), und ich liefere jeweils die **Antwort**, nicht die Frage:
+
+**(1) Kriterium c nennt „der vorhandene Vertragstest" ohne Datei — und es gibt zwei Kandidaten.**
+Gemessen, welcher gemeint ist:
+
+    tests/Feature/Planner/PlannerApiZustaendigkeitTest.php   394 Z · 14 Faelle
+        link 6 · unlink 3 · linked 0      <- die Geschwister sind drin, linked fehlt: DIESER
+    tests/Feature/Api/MasterSetApiSchalterTest.php           113 Z · 4 Faelle
+        Kopfzeile: "Z2-W0-10 — Waechter fuer die reversible Stilllegung"   <- anderer Gegenstand
+
+Das ist kein Schönheitsfehler: Die Absage-Regel zu (c) verwirft ausdrücklich „einen zweiten, eigenen
+Test daneben". **Wer den falschen der beiden erweitert, verletzt genau die Regel, die ihn schützen
+soll** — und merkt es nicht, weil auch der falsche `master-sets` enthält (6 Treffer).
+
+**(2) Kriterium b verlangt vier Läufe über beide Schalterstellungen, ohne zu sagen, wo der Schalter
+sitzt.** Gemessen: `config/rechte.php` (15 Treffer im Baum, davon einer die Konfiguration selbst,
+dazu `.env.example` und `app/Models/User.php`). Damit ist der Messbefehl ausführbar.
+
+### Votum
+
+**ERTEILT.** Fünf Kriterien, fünf Matrixzeilen, deckungsgleich; jedes Kriterium mit Messbefehl,
+rotem Ist-Ergebnis und Absage-Regel. Rot-Lage steht auf einem **fremden, belegten** Fund (Evaluator-
+Votum `639a7a32`: fremdes Item → 200 mit Daten), nicht auf einer Quote. N4 ist erfüllt — „Bedienweg:
+keiner, API-Wache; die Zusage ist der HTTP-Code" ist eine zulässige Bedienweg-Zeile, denn N4 verlangt
+die **Angabe**, nicht das Vorhandensein einer Oberfläche. Rückweg ist Revert eines Commits, ohne
+Zustand. Ein Entdeckungssignal fehlt und ist hier auch nicht verlangt: kein Schema, keine Migration,
+keine Datenänderung (Kriterium e nagelt die Nutzlast fest).
+
+Die Nicht-Ziele halte ich für den stärksten Teil des Blattes: der Umbau auf Route-Model-Binding wäre
+die naheliegende „Verbesserung nebenbei" — **das Blatt benennt ihn und lehnt ihn im selben Satz ab**,
+weil er eine Signaturänderung neben die Wache setzen würde.
+
+Ball: **niemand von mir aus.** Das Votum ist nach Nachtrag 1.5 Teil des Blatts; die zwei Halbsätze
+sind mitgeliefert und brauchen keine zweite Runde. Nächster ist der Generator.
