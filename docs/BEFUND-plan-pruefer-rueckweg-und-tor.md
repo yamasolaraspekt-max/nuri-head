@@ -28195,3 +28195,63 @@ eng. **Ein Fensterfehler in der Zeile, während ich einen Fensterfehler in der Z
 
 **Ball: Dirigent** (A-43-Abnahme liegt dort; Zustandscommit und Tafel sind nicht meine Schreibhoheit)
 · **Integrator** (§337, A-39 unverändert `UNGEKLAERT`). Bei mir nichts offen.
+
+## §342 — Zwei Fehler übereinander: ich habe die Statuswahrheit in meinem eigenen, 17 Commits alten Baum gemessen
+
+Gewählt gegen HEAD `e8c9b598` (Baum sauber, 13:49). §342 als Überschrift 0 Treffer, frei.
+**Dies berichtigt den Nebenbefund aus §341 und das Ereignis
+`plan-pruefer-BEFUND-a43-ohne-zustandscommit.yaml` (13:47:47) — beide Hälften waren falsch.**
+
+**Was ich behauptet habe:** *„A-43 ist gebaut und ABGENOMMEN — die Tafel führt ihn als `BEREIT`
+beim Generator, weil kein Zustandscommit existiert."* Ball gesetzt auf Integrator und Dirigent.
+
+**Was stimmt:**
+
+    4950bf41  13:47:06  integrator: zustand: A-43 · ABGENOMMEN · release-pruefer · abnahme fbb8a73a
+    in auto/hausplaner-integration enthalten · vom gebauten Muster korrekt als 'A-43' erkannt
+    Tafel in der Integration: zustand: ABGENOMMEN · ballbesitz: release-pruefer
+
+**Der erste Fehler ist ein Zeitfehler.** Gemessen 13:46:12 (*„Zustandscommits: 0"* — zu dem
+Zeitpunkt richtig), abgelegt 13:47:47; dazwischen, um **13:47:06**, entstand der Commit. Mein
+„Messstand vor dem Schreiben" um 13:47:18 prüfte nur **meinen HEAD** — und der bewegt sich nicht,
+wenn ein anderer committet. **Ich habe die Regel aus §341 formal befolgt und trotzdem genau den
+Fehler gemacht, den sie verhindern soll:** geprüft wurde der Träger, nicht die **tragende Zahl**.
+
+**Der zweite Fehler wiegt schwerer, und er ist ein Ortsfehler.** Ich habe den Zustand der
+**Statuswahrheit** in meinem eigenen Rollen-Worktree gelesen. `docs/STATUS.md` wird im
+Integrations-Checkout gepflegt; mein Baum ist per Bauart hinterher. **Ich hatte den Rückstand sogar
+gemessen — 17 Commits — und trotzdem aus dem eigenen Baum geschlossen.**
+
+    mein Baum          zustand: BEREIT      ballbesitz: generator          (17 Commits zurueck)
+    Integration        zustand: ABGENOMMEN  ballbesitz: release-pruefer    (der gepflegte Stand)
+
+**Wer die Statuswahrheit misst, muss den Baum nehmen, in dem sie gepflegt wird.** Das ist dieselbe
+Klasse wie P7 (*Ort ≠ Wirkung*) und wie mein §338 (*Form ≠ Betreff*): ich hatte die Datei zur Hand
+und habe nicht gefragt, ob sie an diesem Ort die Wahrheit trägt.
+
+**Wen es entlastet:** Integrator und Generator trifft nichts. Der Integrator hat den Zustandscommit
+41 Sekunden vor meiner Ablage geschrieben **und die Tafel im selben Zug nachgezogen**. Mein Befund
+hat eine erledigte Sache als offen gemeldet und ihm einen Ball zugewiesen, den er nicht hat.
+
+**Was von §341 trägt und was fällt.**
+**Trägt:** die Lücke im Ereignis-Fenster — vier Dateien am Fenster 13:34–13:38:08 vorbei, darunter
+beide A-43-Abnahmemeldungen — und die Abhilfe, den Anker auf die letzte **Messung** zu setzen.
+*Diese Runde hat der neue Anker bereits gegriffen: das Fenster „seit 13:47:22" fing genau eine
+Datei, meine eigene.*
+**Fällt:** der Nebenbefund *„A-43 ohne Zustandscommit, dritte Variante derselben Klasse"*.
+**A-39 aus §337 bleibt unberührt und offen** — dort liegt der Zustandscommit seit 21.08. 22:17 und
+der Block sagt weiterhin `BEREIT`; das ist nach wie vor der einzige `UNGEKLAERT` im Vergleichslauf.
+
+**Abhilfe als Prüfliste — die dritte Verschärfung derselben Regel an einem Tag:**
+
+    1. Vor dem Ablegen die TRAGENDE ZAHL neu messen, nicht nur den eigenen HEAD.
+    2. Statuswahrheit IMMER gegen auto/hausplaner-integration messen
+       (git show auto/hausplaner-integration:docs/STATUS.md), nie gegen den eigenen Worktree.
+    3. Rueckstand ist kein Nebenwert: steht er ueber 0, ist jede Aussage aus dem eigenen Baum
+       ueber gepflegte Fremddateien vorlaeufig.
+
+*Bemerkenswert und unangenehm: §341 war der Befund über ein zu enges Zeitfenster, und ich habe ihn
+mit einem Befund abgeschlossen, der genau daran scheitert — 41 Sekunden zu spät und im falschen
+Baum. Eine Regel, die ich in derselben Runde aufschreibe und breche, ist noch keine Regel.*
+
+**Ball: keiner bei mir zu A-43.** Der Befund ist zurückgezogen; A-39 bleibt beim Integrator.
