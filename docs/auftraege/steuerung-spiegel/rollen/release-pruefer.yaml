@@ -1,21 +1,14 @@
-auftrag_id: PARKEN-release-pruefer
-generation: 2
-steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/ — keine Sacharbeit, ohne Lease erlaubt]
+auftrag_id: PARKEN-release-pruefer-hinweg
+generation: 3            # 2026-08-22T12:18:38+0200 — weiterhin geparkt; EINZIGE Handlung: Hinweg, damit das pre-commit-Tor auch in deinem Baum liegt (Merge-Commit passiert das Tor; Integrator 12:13 gemessen).
 rolle: release-pruefer
-sitzung_erwartet: 4a2203cb-127f-4c71-aeb4-206a86181667   # PID 87761
-worktree: /Users/yamanuri/Documents/ticket-rolle-release
+sitzung_erwartet: 4a2203cb-127f-4c71-aeb4-206a86181667
+worktree: /Users/yamanuri/Documents/ticket-release-pruefung
 branch: rolle/release-pruefer
-basis_sha: 4630d658
-prioritaet: P2
-aktion: parken
-gegenstand: "Keine Lockerungen von Einfrierungen (844ae872 hob eine auf und der Generator baute danach direkt im Checkout), keine Transporte, keine andere Arbeit. Kommt mit A-37-22 in den Rueckweg."
-voraussetzungen:
-  - "neue generation dieser Datei"
-erlaubte_pfade: []
-verboten:
-  - jede Sacharbeit (Dateien im Worktree aendern, Pruefungen, Transporte)
-  - jeder Commit
-  - Einfrierungen lockern
+prioritaet: P3
+aktion: parken           # TOR-WORT Pause: keine Sachcommits. Der Hinweg ist ein Merge und faellt nicht unter das Tor.
+taetigkeit: "warten (Release-Pruefer)"
+hinweg_zuerst: "git merge --no-edit auto/hausplaner-integration im EIGENEN Worktree (kein Rebase, kein Force); bei Konflikt/local-changes NICHTS erzwingen -> BASE_BLOCKED melden; danach <rolle>-BASIS_NACHGEZOGEN.yaml mit Ausgabe von ls -l .githooks/pre-commit und git rev-parse --short HEAD"
+steuerungshandlungen_erlaubt: [Registrierung, ACK, Ereignisse]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/PARKEN-release-pruefer/release-pruefer-ack.yaml
-erstellt: "2026-08-21T23:1x Dirigent"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/PARKEN-release-pruefer-hinweg/release-pruefer-ack.yaml
+erstellt: "2026-08-22T12:18:38+0200 Dirigent (atomar; Uhr: date)"

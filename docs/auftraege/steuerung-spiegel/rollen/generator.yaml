@@ -1,46 +1,16 @@
-auftrag_id: NACHBESSERUNG-generator-A-37
-generation: 9            # 2026-08-22T10:53:11+0200 — Evaluator-Votum NACHBESSERN db420cf0 (30/31; A-37-20 nicht erfuellt). NUR A-37-20 nachbessern. gen 8 (BAU) ist abgeschlossen: CODE_FERTIG c0dd4f83.
+auftrag_id: WARTEN-generator-nach-A-37
+generation: 10           # 2026-08-22T12:18:38+0200 — A-37 ABGENOMMEN (0a18446a) und transportiert (f6792ec3). Kein Bauauftrag offen. gen 9 abgeschlossen (CODE_FERTIG c82df498).
 rolle: generator
 sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8
-sitzung_gesperrt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b   # unveraendert: jeder Lauf dieser Sitzung beendet sich ohne Schreiben; Sperre bis Yamas fuenf Bedingungen
+sitzung_gesperrt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b   # unveraendert; Freigabe/Ende entscheidet Yama (fuenf Bedingungen)
 worktree: /Users/yamanuri/Documents/ticket-rolle-generator
 branch: rolle/generator
-basis_sha: c0dd4f83      # dein Endstand; darauf aufsetzen, kein Rebase, kein Umschreiben
-prioritaet: P0
-aktion: nachbessern
-ausloeser: "ereignisse/ABNAHME-evaluator-A-37/evaluator-NACHBESSERN.yaml (10:48) + Votum rolle/evaluator db420cf0 docs/rollenkette/rollen/4-evaluator/VOTUM-A-37-LIEFERUNG-22-08.md"
-massstab: |
-  A-37-20 WOERTLICH nach Blatt docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md @ rolle/planner c11f97ac:371 ff.
-  (inkl. Teil (a) exit-2-Mehrdeutigkeit und Teil (b) Codes 2/3/4 werden nicht vergeben) UND Votum db420cf0 Abschnitt
-  'Der eine Mangel: A-37-20' (Sammelstelle commit-pruefen.sh:836-839; exit 4 null Mal; exit 2 viermal fremd, exit 3 sechsmal
-  ENV_BLOCKED). Der Dirigent schreibt kein Kriterium nach: was 'erfuellt' heisst, steht im Blatt; wie es heute scheitert, im Votum.
-jetzt: |
-  1. Auftrag + Digest pruefen, ACK gen 9 unter ack_pfad, Lease leases/NACHBESSERUNG-generator-A-37/ (neuer Token), Startmeldung
-     generator-AUFTRAG_GESTARTET.yaml MIT endstand_sha: c0dd4f83 (README 6e).
-  2. Nur A-37-20 beheben. Je Ursache (YAML-Syntax / MODUL / LAUFZEIT) ein eigener, im Bau wirklich erreichbarer Rueckgabewert
-     nach der Codetabelle des Blatts; Kollisionen mit vorhandenen exit 2/3-Bedeutungen so loesen, wie das Blatt (Teil a) es verlangt
-     — nicht still umetikettieren. Belege: je Ursache EIN Lauf mit Rohausgabe und 'echo $?' (rot auf c0dd4f83 -> gruen auf Ergebnis).
-  3. Die uebrigen 30 Kriterien NICHT anfassen. Gegenprobe im CODE_FERTIG: 'git diff --stat c0dd4f83..HEAD' zeigt nur die fuer
-     A-37-20 noetigen Dateien; Suite 1778/1778, tsc 0; Produktcode leer (git diff --stat c0dd4f83..HEAD -- resources/ app/).
-  4. Commit-Gate: NUR ueber scripts/commit-pruefen.sh mit TICKET_ROLLE=generator, NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules,
-     im eigenen Worktree; vor JEDEM Commit rollen/generator.yaml + Digest neu lesen (aktion != nachbessern oder generation > dein
-     ACK -> NICHT committen). Negativproben NUR im Wegwerf-Repo unter --probe-root (22d; README 6d).
-  5. Ergebnis: ereignisse/NACHBESSERUNG-generator-A-37/generator-CODE_FERTIG.yaml mit endstand_sha c0dd4f83, ergebnis_sha,
-     Pfaden, je Ursache Messbefehl + Rohausgabe + echo $?, Gegenprobe aus 3.; Abschlussmeldung CODE_FERTIG; Lease freigeben;
-     Ball an den Evaluator (gen 7 haengt per Muster an deinem CODE_FERTIG).
-  6. Ein Nachtrag heisst generator-CODE_FERTIG-nachtrag.yaml und traegt 'ersetzt_sha:' und 'ersetzt_datei:' (README 6c').
-verboten:
-  - andere Kriterien als A-37-20; Produktcode; DB-Laeufe; gemeinsamer Checkout; Beleg-Baum; W0-5-Staende
-  - rueckweg.py oder anderes Transportwerkzeug auf realen Worktrees; TICKET_ROLLE=<fremde Rolle> im Bestand
-  - Kriterientext aendern (nur Nachvollzugs-Matrix A-37-20 fuellen); eigene Abnahme; nacktes git commit
-  - Rebase/Amend/Force auf rolle/generator (c0dd4f83 bleibt, wie er ist)
-erlaubte_pfade:
-  - scripts/commit-pruefen.sh
-  - scripts/rollen-tor.sh
-  - .githooks/pre-commit
-  - "docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md NUR Nachvollzugs-Matrix A-37-20"
-  - "eigener Baubericht im Worktree"
-steuerungshandlungen_erlaubt: [ACK, Lease-Heartbeat, Ereignisse, Start-/Abschlussmeldung]
+basis_sha: c82df498
+prioritaet: P2
+aktion: parken           # TOR-WORT Pause: keine Commits. Naechster Bau (Kennungsmuster + Aktionsvokabular) kommt als eigene Generation NACH DoR.
+taetigkeit: "warten (Generator); lesend vorbereiten erlaubt"
+hinweis: "Dein Baum traegt den Haken bereits; Hinweg nicht noetig (c82df498 ist in der Integration). Keine Sacharbeit, keine Commits, Lease nicht noetig."
+steuerungshandlungen_erlaubt: [ACK, Ereignisse]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/NACHBESSERUNG-generator-A-37/generator-ack.yaml
-erstellt: "2026-08-22T10:53:11+0200 Dirigent (atomar veroeffentlicht; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/WARTEN-generator-nach-A-37/generator-ack.yaml
+erstellt: "2026-08-22T12:18:38+0200 Dirigent (atomar; Uhr: date)"

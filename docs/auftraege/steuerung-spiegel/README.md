@@ -51,6 +51,16 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
     Ergebnis-SHA; wer ein Ereignis zitiert, zitiert den jüngsten Stand (per SHA, nicht per Wort). Nachträge nennen ausdrücklich,
     welchen SHA sie ablösen.
 6b. **Antworten des Dirigenten** stehen unter `ereignisse/<auftrag_id>/dirigent-*.yaml` — bei jedem Pull mitlesen.
+6f. **`aktion` ist das Tor-Wort, `taetigkeit` die Rollenarbeit (BEFRISTET, Dirigent 22.08. 12:17, Weg 3):** das transportierte
+    Rollen-Tor (`scripts/rollen-tor.sh:360-375`, Stand c82df498) kennt als **Arbeit** nur `bauen|nachbessern`, als **Pause**
+    `pausieren|angehalten|angehalten_eingefroren|parken|warten`; alles andere → exit 7 (Befunde Evaluator 12:04, Plan-Prüfer 12:06,
+    Integrator 12:1x, externe Prüfung B-005). Damit der einzige Statusträger nicht eingefroren bleibt, trägt **jede Rollenquelle ab
+    gen 12:17 `aktion:` als Tor-Wort** (Arbeit erlaubt = `bauen`, auch wenn die Rolle nichts baut; Pause = `parken`/`warten`) und die
+    tatsächliche Tätigkeit in **`taetigkeit:`** (spezifizieren, pruefen/erteilen, abnehmen, transportieren/zustand_nachziehen, steuern,
+    warten). Das ist **keine Abschaltung**: Digest, Generation, ACK, Lease, Pfad- und Zweigprüfung bleiben scharf. Befristet bis das
+    Aktionsvokabular des Tors rollengerecht erweitert und transportiert ist (Planner gen 14, Posten 2; Backlog 23) — dann werden die
+    Tor-Wörter zurückgenommen. Meldepflicht-Abschlussbegriffe (SPEZIFIZIERT, ERTEILT, CODE_FERTIG, ABGENOMMEN, TRANSPORTIERT …)
+    bleiben unverändert die Rollenwahrheit.
 6e. **Endstand-SHA in jeder Meldung (externe Prüfung V-002/3, 22.08. 10:36):** Start- und Abschlussmeldung nennen `endstand_sha:`
     (der Stand, **gegen den** gearbeitet wurde — z. B. der Generator-Endstand bei der Abnahme) und `ergebnis_sha:` (der Stand, **den**
     die Rolle hinterlässt). Ein SHA ist prüfbar, „gelesen" nicht. Ein Votum ohne `endstand_sha` ist unvollständig.

@@ -475,3 +475,15 @@ Prüfung; **die technische Schreibsperre hat Vorrang vor jeder weiteren Konzept-
 | 10:32:5x | **Evaluator-Regelbruch, selbst gemeldet 10:34:28:** `rueckweg.py --preflight` (Kopie aus /tmp) als `TICKET_ROLLE=integrator` im realen Checkout; Kern brach rc 2 ab; **Wirkung null** (reflogs 6 Bäume, Dirigent nachgemessen) | `evaluator-selbstmeldung-rueckweg-auf-bestand.yaml`; Antwort 10:40:51 mit 3 Auflagen; Backlog 17/18 |
 | 10:35:50 | Plan-Prüfer §302 Zeitquelle (zeit-Feld = Laufmarke, 6 Dateien bis 425 s nach mtime) → README 6c' | `plan-pruefer-hinweis-zeitquelle.yaml`, Antwort `dirigent-antwort-zeitquelle.yaml`; Backlog 19 |
 | 10:41:31 | README-Digest `99fd2f80`; Evaluator hat Endstand-Hinweise noch nicht zitiert | dieser Eintrag |
+
+### Protokoll 10:48–12:19:34 (Dirigent; Uhr: `date` lokal)
+| Zeit | Ereignis | Beleg |
+|---|---|---|
+| 10:48 | Evaluator NACHBESSERN 30/31 (A-37-20) | rolle/evaluator `db420cf0`; `evaluator-NACHBESSERN.yaml` |
+| 10:53 | Generator gen 9 (nur A-37-20), Evaluator gen 7 (Muster-Auslöser) | Spiegel `0929f695` |
+| 11:08 | Generator CODE_FERTIG A-37-20, Endstand **c82df498** (endstand_sha c0dd4f83) | `NACHBESSERUNG-generator-A-37/generator-CODE_FERTIG.yaml` |
+| 12:04 | **Evaluator ABGENOMMEN** Nachprüfung A-37-20 — A-37 vollständig (31/31) | rolle/evaluator `0a18446a`; `evaluator-ABGENOMMEN.yaml` |
+| 12:03 | Entscheidung **Weg A** Kennungsmuster (Planner 11:44: Z0-I1/Z1-W1-x/Z2-W0-1/A-37-22b nicht erkannt); Planner gen 13 Kleinauftrag; keine Z-Zustandscommits bis Transport | `dirigent-entscheidung-kennungsmuster.yaml`; Backlog 22 |
+| 12:1x | **Integrator transportiert A-37-Bau** → Integration `f6792ec3`; `.githooks/pre-commit` liegt im Integrations-Checkout | reflog `ticket` |
+| 12:1x | **R3 eingetreten:** Tor weist `rueckweg_planner_bis_HEAD_dann_kette` ab (exit 7); Zustandscommit A-37 / STATUS.md eingefroren; vier von sechs aktion-Werten unbekannt | Integrator-Befund, Plan-Prüfer 12:06/Berichtigung, externe Prüfung B-005/B-006 |
+| 12:17–12:18 | **Weg 3:** aktion = Tor-Wort + `taetigkeit:` in allen Rollenquellen (Integrator gen 8, Planner gen 14 [+Posten 2 Aktionsvokabular], Plan-Prüfer gen 8, Evaluator gen 8 [7/7-Probe], Generator gen 10 parken, Release-Prüfer gen 3 Hinweg, **Dirigent gen 1 + ACK** = Backlog 13 geschlossen); README 6f | Spiegel dieser Commit; Backlog 23 |

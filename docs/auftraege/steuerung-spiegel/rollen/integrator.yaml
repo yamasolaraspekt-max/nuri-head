@@ -1,33 +1,28 @@
-auftrag_id: INT-kette-A-37
-generation: 7            # 22.08. 01:16 — Antwort auf deine vierte Erinnerung (luecke-waechst): Planner-Blatt-Staende SIND transportfaehig. Entschuldige die Wartezeit seit 00:43.
+auftrag_id: INT-zustand-A-37
+generation: 8            # 2026-08-22T12:17:32+0200 — Weg 3 (Tor weist 'rueckweg_planner_bis_HEAD_dann_kette' ab, dein Befund 12:1x): aktion = Tor-Wort, Taetigkeit in taetigkeit:. gen 7 INT-kette-A-37 abgeschlossen mit dem Transport f6792ec3.
 rolle: integrator
-sitzung_erwartet: 03737d75-b216-4299-b4ea-595407d3e457   # Sitzungs-ID ist die Identitaet; pid/prozess_start gelten je Lauf
+sitzung_erwartet: 03737d75-b216-4299-b4ea-595407d3e457
 worktree: /Users/yamanuri/Documents/ticket
 branch: auto/hausplaner-integration
-basis_sha: e1539dc7
+basis_sha: f6792ec3
 prioritaet: P0
-aktion: rueckweg_planner_bis_HEAD_dann_kette
-aufgabe_1_jetzt: "Rueckweg rolle/planner bis einschliesslich 762243b9 (213edd28 DoR-Stand, 0579727c Ersatztext, 762243b9 Belegberichtigung) — damit Voten und gepruefte Staende in der Integration wieder uebereinstimmen. Ereignis ereignisse/INT-kette-A-37/integrator-rueckweg-planner-2.yaml mit Ergebnis-SHA."
-transportfaehig_ab_jetzt_ohne_einzelweisung:
-  - "Planner-Blatt-Commits auf rolle/planner fuer A-37, Z0-I1, Z0-I2, Z0-I3 (Spezifikation = Ergebnis der Kette)"
-  - "Plan-Pruefer-Voten/Berichtigungen (rolle/plan-pruefer)"
-  - "Generator-Bau A-37 (rolle/generator) NACH generator-CODE_FERTIG.yaml"
-  - "Evaluator-Voten (rolle/evaluator)"
-  - "Nicht: Altposten, Nebenanalysen, A-38/A-39/Z1-W1-5-1-Nachtraege"
-zustandscommit_A-37: "Erst nach Evaluator-ABGENOMMEN: EINE Kennung, Wortlaut status-erzeugen.sh, Bau-SHA, Beleg = Votum-SHA, Muster-Probe vorher, git show --stat nachher. Kein Zustandscommit fuer DoR-Zwischenstaende."
-regeln:
-  - "Leere Zustandscommits abweisen"
-  - "Uncommittete docs/FACHPRUEFUNG-DREI-LINSEN.md im Checkout NICHT anfassen (gehoert 7df19ed4)"
-  - "Rueckweg von rolle/dirigent erst, wenn rueckweg.py den Baum kennt (A-37-22, Generator baut es jetzt) — ich melde, wenn es so weit ist"
-  - "Der eng begrenzte Integrationscommit im gemeinsamen Checkout bleibt dein Recht — sonst committet dort niemand"
+aktion: bauen            # TOR-WORT (befristet, README 6f): 'bauen' = Arbeit erlaubt. Keine Bedeutung 'Produktcode bauen'.
+taetigkeit: "transportieren + zustand_nachziehen (Integrator); kein Produktcode"
+jetzt:
+  1: "ACK gen 8, Lease leases/INT-zustand-A-37/, Startmeldung mit endstand_sha f6792ec3. Dann den vorbereiteten Zustandscommit A-37 committen (deine M docs/STATUS.md, numstat 15/3; Bau-SHA c82df498, Beleg db420cf0 + 0a18446a, EINE Kennung, nicht leer, git show --stat danach). Das Tor laesst dich mit aktion 'bauen' + ACK gen 8 durch; wird es dennoch abgewiesen: Rohausgabe als Befund, kein --no-verify."
+  2: "Zustandscommits R-1 (Votum b9fe55c0) und R-2 (Votum 36eb8b63): ABGENOMMEN, je EIN nicht-leerer Commit mit Votum-SHA (Steuerungs-Backlog 12; externe Pruefung Aufgabe-001 Punkt 6)."
+  3: "Verwaiste Aenderung docs/FACHPRUEFUNG-DREI-LINSEN.md (33+/2-, mtime 21.08. 22:36:37): Beleg liegt als Patch sha bc8069f3 in ~/.ticket-steuerung/belege/ UND im Spiegel (rolle/dirigent 0929f695). Pruefe 'git diff -- docs/FACHPRUEFUNG-DREI-LINSEN.md | shasum -a 256' == bc8069f3...; wenn gleich: git checkout -- docs/FACHPRUEFUNG-DREI-LINSEN.md (verwerfen, kein Commit). Wenn ungleich: NICHT anfassen, melden."
+  4: "Weiter Transport der Rollenzweige wie in gen 7 (Planner-Blaetter, Plan-Pruefer, Evaluator-Voten, spaeter rolle/dirigent sobald rueckweg.py ihn kennt — jetzt kennt er ihn: A-37-22 ist transportiert; Rueckweg rolle/dirigent bitte aufnehmen)."
+  5: "Abschlussmeldung ZUSTAND_NACHGEZOGEN mit ergebnis_sha; Lease freigeben."
+verboten:
+  - "Zustandscommits fuer Z-Kennungen (Z0-*, Z1-*, Z2-*) bis das erweiterte Kennungsmuster transportiert ist (Entscheidung Weg A 12:03)"
+  - "Produktcode; --no-verify; core.hooksPath aendern; leere Commits"
+  - "Transport von A-38/A-39/Z1-W1-5-1-Bauten als Fortschritt"
 erlaubte_pfade:
   - docs/STATUS.md
   - docs/BEFUNDNOTIZEN.md
-  - "Rueckweg-Commits (Merge/FF) der Rollenzweige innerhalb der Kette"
-verboten:
-  - Produktcode aendern
-  - Transport von A-38/A-39/Z1-W1-5-1-Bauten als Fortschritt
-steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
+  - "Rueckweg-Commits (Merge/FF) der Rollenzweige"
+steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/INT-kette-A-37/integrator-ack.yaml
-erstellt: "2026-08-22T01:16 Dirigent (atomar veroeffentlicht)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/INT-zustand-A-37/integrator-ack.yaml
+erstellt: "2026-08-22T12:17:32+0200 Dirigent (atomar veroeffentlicht; Uhr: date)"

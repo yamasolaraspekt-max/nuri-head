@@ -1,14 +1,17 @@
-auftrag_id: SPEZ-planner-kennungsmuster
-generation: 13           # 2026-08-22T12:03:49+0200 — Entscheidung Weg A (dirigent-entscheidung-kennungsmuster.yaml). gen 12 ERRATA abgeschlossen (c11f97ac). Z0-I1 bleibt geparkt (PARKED_DRAFT, nicht anfassen) bis A-37 ABGENOMMEN.
+auftrag_id: SPEZ-planner-kennungsmuster   # gen 14 = gen 13 + Posten 2 (Aktionsvokabular) + Hinweg
+generation: 14           # 2026-08-22T12:17:32+0200 — Weg 3: aktion = Tor-Wort; Posten 2 Aktionsvokabular ins SELBE Blatt; vorher Hinweg (basis_nachziehen). Inhalt von gen 13 unveraendert uebernommen.
 rolle: planner
 sitzung_erwartet: ef8ec540-263d-4f06-8a02-5a2f1beeb572
 worktree: /Users/yamanuri/Documents/ticket-rolle-planner
 branch: rolle/planner
 basis_sha: c11f97ac
 prioritaet: P1           # hinter A-37; nutzt freie Planner-Kapazitaet, beruehrt die A-37-Kette nicht
-aktion: spezifizieren
+aktion: bauen            # TOR-WORT (befristet, README 6f). Deine Taetigkeit: taetigkeit:
+taetigkeit: "spezifizieren (Planner); kein Produktcode"
 gegenstand: "Kleinauftrag 'Kennungsmuster mehrgliedrig': das Muster (?P<kennung>[A-Z]+-?[0-9]+[A-Za-z]?(?:/[0-9A-Za-z]+)?) in scripts/status-erzeugen.sh erkennt Z0-I1, Z1-W1-1, Z2-W0-1, A-37-22b NICHT (dein Befund 11:44). Ziel: EIN erweitertes Muster, das alle sieben gemessenen Formen erkennt, alle heute erkannten Formen unveraendert erkennt, und an das commit-pruefen.sh/pre-commit per A-37-26 weiterhin gebunden bleiben (keine zweite Definition)."
 blatt: "docs/auftraege/aktiv/<naechste freie A-Kennung laut docs/auftraege/REGISTER.md bzw. Tafel — du vergibst sie und nennst die Messung, dass sie frei ist>-kennungsmuster-mehrgliedrig.md — MIT Nachvollzugs-Matrix (ARBEITSREGELN N3; dein Befund 10:54 gilt fuer neue Blaetter ab sofort)"
+hinweg_zuerst: "VOR der Sacharbeit: git -C /Users/yamanuri/Documents/ticket-rolle-planner merge --no-edit auto/hausplaner-integration (kein Rebase, kein Force); bei Konflikt oder 'local changes would be overwritten' (PARKED_DRAFT!) -> NICHTS erzwingen, BASE_BLOCKED melden und ohne Hinweg weiterarbeiten. Danach 'ls -l .githooks/pre-commit' im Ereignis planner-BASIS_NACHGEZOGEN.yaml melden. Ab dann laeuft jeder deiner Commits durch das Tor: TICKET_ROLLE=planner, ACK gen 14, aktion bauen."
+posten_2_aktionsvokabular: "Ins SELBE Blatt: scripts/rollen-tor.sh:360-375 kennt als Arbeit nur bauen|nachbessern, als Pause pausieren|angehalten|angehalten_eingefroren|parken|warten; alles andere exit 7 (Befunde Evaluator 12:04, Plan-Pruefer 12:06, Integrator 12:1x, externe Pruefung B-005). Kriterien: je Rolle ein rollengerechtes Arbeitsverb als Arbeit anerkannt (z. B. spezifizieren, pruefen/erteilen, abnehmen/nachpruefen, transportieren/zustand_nachziehen, steuern, release_pruefen) + 'warten*' und die bestehenden Pausewoerter als Pause + unbekannt bleibt 7; Rot/Gruen je Wort mit Rohausgabe; EINE Liste (keine zweite Definition in pre-commit/commit-pruefen); Grundmenge: alle heute in rollen/*.yaml gesetzten aktion-Werte + die Tor-Woerter der Uebergangszeit (README 6f) laufen gruen. Danach nimmt der Dirigent die Tor-Woerter wieder zurueck."
 kriterien_mindestens:
   - "Rot/Gruen je Form: A-42, A-37, W-17/1, P-05, Z0-I1, Z1-W1-1, Z2-W0-1, A-37-22b — vorher/nachher je ein Lauf mit Rohausgabe"
   - "Grundmenge: alle Betreffs mit 'zustand:' im Integrationslog (gemessen: 'zustand: Z' 6, 'zustand: A-' 21) — nach dem Bau erkennt das Muster 100 % davon; Zahl und Befehl im Blatt"

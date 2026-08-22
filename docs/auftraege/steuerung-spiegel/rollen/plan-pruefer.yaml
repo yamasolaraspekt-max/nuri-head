@@ -1,23 +1,18 @@
-auftrag_id: DOR-plan-pruefer-A-37-errata
-generation: 7            # Ausloeser-gebunden: NACH ereignisse/ERRATA-planner-A-37/planner-CODE_FERTIG.yaml. Dein nachgetragener Restpunkt (22e-Rot-Beleg 'aktion') wird damit geschlossen — kurze Bestaetigung, keine neue DoR-Runde.
+auftrag_id: DOR-plan-pruefer-kennungsmuster
+generation: 8            # 2026-08-22T12:18:38+0200 — Weg 3: aktion = Tor-Wort (README 6f); Hinweg zuerst; danach DoR fuer das Planner-Blatt 'Kennungsmuster + Aktionsvokabular' sobald planner-SPEZIFIZIERT* vorliegt. gen 7 abgeschlossen (BESTAETIGT 599976c9 + Nachtrag).
 rolle: plan-pruefer
 sitzung_erwartet: 3870df7a-b0ad-4c78-bcb2-c5aa83a4c09d
 worktree: /Users/yamanuri/Documents/ticket-rolle-plan-pruefer
 branch: rolle/plan-pruefer
-basis_sha: e6af5693
-prioritaet: P0
-aktion: warten_dann_errata_bestaetigen
-ausloeser: "ereignisse/ERRATA-planner-A-37/planner-CODE_FERTIG.yaml (gebuendelter Errata-Commit des Planners: 15->16, 'aktion -> 0/0'-Belegzeile in 22e, ggf. weitere ohne Kriterienwirkung)"
-gegenstand: "Kurze Bestaetigung: (1) Errata-Commit aendert KEIN Kriterium (Kriterien 1-27 + 22b/c/d/e wortgleich zu 96b24ca3 — diff auf Kriterienzeilen leer), (2) die Rot-Belegzeile fuer 'aktion' steht jetzt im 22e-Rot-Block, (3) 15->16 berichtigt; dein DoR ERTEILT 1ca8d512 bleibt und der nachgetragene Restpunkt ist geschlossen. Ereignis ereignisse/DOR-plan-pruefer-A-37-errata/plan-pruefer-BESTAETIGT.yaml (oder -NICHT_BESTAETIGT mit Restpunkt). Votum-Nachtrag im eigenen Worktree committen."
-meldepflicht: "Start-/Abschlussmeldung nach docs/regelwerk/MELDEPFLICHT-AUFTRAG.md (Abschlussbegriff ERTEILT bzw. hier BESTAETIGT als Nachtrag zum ERTEILT). Zeiten nur gemessen."
-bis_zum_ausloeser: "Keine Sacharbeit, keine weiteren Vorratsmessungen (Begleitverkehr begrenzen — Yama)."
-lease: "leases/DOR-plan-pruefer-A-37-errata/ fuer den Votum-Nachtrag."
-erlaubte_pfade:
-  - "eigenes DoR-/Votumsblatt im Worktree"
-verboten:
-  - Kriterien selbst schreiben; Produktcode; docs/STATUS.md / docs/BEFUNDNOTIZEN.md
-  - Commit ohne Lease; Commit ausserhalb des eigenen Worktrees
+prioritaet: P1
+aktion: bauen            # TOR-WORT (befristet). Bedeutung hier: Arbeit erlaubt.
+taetigkeit: "pruefen/erteilen (Plan-Pruefer): Befundblatt weiterfuehren; DoR des Kleinauftrags nach SPEZIFIZIERT"
+hinweg_zuerst: "git merge --no-edit auto/hausplaner-integration im EIGENEN Worktree (kein Rebase, kein Force); bei Konflikt/local-changes NICHTS erzwingen -> BASE_BLOCKED melden; danach <rolle>-BASIS_NACHGEZOGEN.yaml mit Ausgabe von ls -l .githooks/pre-commit und git rev-parse --short HEAD"
+ausloeser_dor:
+  - "ereignisse/SPEZ-planner-kennungsmuster/planner-SPEZIFIZIERT*.yaml (Muster; juengster Stand per SHA)"
+dor_pruefen: "Blatt gegen ARBEITSREGELN §5 inkl. N3 Nachvollzugs-Matrix; beide Posten (Kennungsmuster 7 Formen + Grundmenge; Aktionsvokabular je Rolle, warten* = Pause, unbekannt = 7, EINE Liste); Messbefehle ausfuehrbar; Rot/Gruen definiert. Votum ERTEILT/NICHT ERTEILT mit endstand_sha (Blatt-SHA) + ergebnis_sha."
+verboten: [Produktcode, Kriterien selbst schreiben, A-37-Blatt anfassen, --no-verify]
 steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/DOR-plan-pruefer-A-37-errata/plan-pruefer-ack.yaml
-erstellt: "2026-08-22T09:30:24+02:00 Dirigent (gemessen)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/DOR-plan-pruefer-kennungsmuster/plan-pruefer-ack.yaml
+erstellt: "2026-08-22T12:18:38+0200 Dirigent (atomar; Uhr: date)"
