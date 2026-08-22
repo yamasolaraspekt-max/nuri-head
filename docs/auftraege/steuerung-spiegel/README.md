@@ -53,6 +53,9 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
     umbenannt. Ein `<ereignis>-nachtrag*.yaml` ist die **Fortschreibung desselben Ereignisses** und ersetzt dessen
     Ergebnis-SHA; wer ein Ereignis zitiert, zitiert den jüngsten Stand (per SHA, nicht per Wort). Nachträge nennen ausdrücklich,
     welchen SHA sie ablösen.
+6h. **`sitzung_erwartet` / `sitzung_gesperrt` sind VERMERKE** (externe Prüfung 22.08. 14:23): das Tor erzwingt sie nicht; den Riegel
+    tragen heute ACK + Generation/Digest/Aktion (A-37-22e) — eine nicht registrierte Sitzung hat keine gültige ACK. Die technische Bindung
+    Sitzung ↔ Lease ↔ Commit kommt mit Z0-I3 (Backlog 17). Bis dahin ergänzt die Dirigenten-Prozess-Sperre (Dauersperre) den Vermerk.
 6b. **Antworten des Dirigenten** stehen unter `ereignisse/<auftrag_id>/dirigent-*.yaml` — bei jedem Pull mitlesen.
 6f. **`aktion` ist das Tor-Wort, `taetigkeit` die Rollenarbeit (BEFRISTET, Dirigent 22.08. 12:17, Weg 3):** das transportierte
     Rollen-Tor (`scripts/rollen-tor.sh:360-375`, Stand c82df498) kennt als **Arbeit** nur `bauen|nachbessern`, als **Pause**
