@@ -40986,3 +40986,66 @@ allein stehen.
 
 Für E1-(c), E1-(d), E1-(f), E3-(d), E3-(f) sehe ich diese Gefahr nicht: Browserbeleg, Tastendruck
 und Suitezahl sind schwer falsch zu erfüllen.
+
+## §514 — Kriterium (a) war wörtlich erfüllt und trotzdem falsch. Ich habe die Rot-Lage gemessen und die Folge nicht gerechnet
+
+Stand: HEAD `8de74a9d`, Baum 0, gen 11, Digest gleich. Zeit 00:11. Aus meinem Worktree gemessen.
+
+Yama um 00:0x, wörtlich: *„warum ist bodenplatte in der navi ganz oben und dazwischen die markieren,
+das ist nicht richtig: markieren ganz oben, dann bodenplatte, dann wand usw."*
+
+### Was passiert ist
+
+```
+Kriterium (a), Blatt:  „Registry-Eintrag `bodenplatte` an Platz 1 der Fix-Zone"
+Rot-Lage (von mir bestätigt, §484):  „Fix-Zone beginnt mit `auswahl` (toolPresentation.ts:72)"
+Gebaut (97c610ca:76):  { toolId: 'bodenplatte', zone: 'fix', ordnung: 1 }
+Votum (a):             „ERFÜLLT — Spalte beginnt mit Bodenplatte (B) y=432, dann Markieren/…"
+```
+
+**Der Generator hat (a) wörtlich erfüllt.** Bodenplatte auf Platz 1 — und damit `auswahl` von dort
+verdrängt. Genau das beanstandet Yama.
+
+Der Dirigent hat es um **00:03:53** aufgelöst: *„‚Platz 1' in E4 Kriterium (a) heißt: erster
+**BAUTEIL**-Eintrag, nicht vor dem Markieren."* Mit verteilten Folgen — Generator bessert nach,
+Planner setzt den Halbsatz, Evaluator misst gegen den neuen Stand.
+
+Das Votum kam **00:06:32**, also 159 Sekunden nach der Entscheidung, mit
+`gelesen_bis: 22.08. 23:37:19` — **27 Minuten vor** der Entscheidung. Er konnte sie nicht kennen,
+und sein `gelesen_bis` sagt es ehrlich. **Das Muster heute zum fünften Mal**, und der Dirigent hat
+den Fall im selben Ereignis schon vorweggenommen: *„Falls das Votum schon geschrieben ist: (a) als
+NACHBESSERN führen, Rest bleibt."*
+
+### Mein Anteil, und er ist der eigentliche Punkt
+
+In §484 habe ich Kriterium (a) geprüft und die Rot-Lage **bestätigt**:
+
+> | `toolPresentation.ts:72` | „Fix-Zone beginnt mit `auswahl`" | `{ toolId: 'auswahl', zone: 'fix', ordnung: 1` |
+
+**Die Messung war richtig. Die Frage habe ich nicht gestellt.** Wenn `auswahl` heute `ordnung: 1`
+hat und das Kriterium `bodenplatte` auf `Platz 1` verlangt, dann **verdrängt die Erfüllung des
+Kriteriums das Markieren** — das steht in der Rot-Lage, die ich selbst gemessen habe, und ich habe
+es nicht ausgerechnet.
+
+Mein Auftrag sagt: *„jede tragende Formel durchrechnen."* **Eine Reihenfolge ist auch eine Formel.**
+Ich habe heute Nacht die Höhenkette dreimal durchgerechnet (§483, §495, §501) und bei einer
+Sortierung nicht gefragt, was aus dem verdrängten Element wird.
+
+Der Unterschied ist lehrreich: Bei Zahlen prüfe ich, ob das Ergebnis stimmt. Bei einer Ordnung habe
+ich geprüft, ob die **Behauptung über den Ist-Zustand** stimmt — nicht, ob der **Soll-Zustand**
+widerspruchsfrei ist. Ein Kriterium, das einen Platz vergibt, muss sagen, wer ihn räumt.
+
+**Hätte eine Absage-Regel geholfen?** Vermutlich ja — genau die Sorte, deren Fehlen ich zwei Stunden
+später in §513 an E1-(e) angemerkt habe. Eine Zeile wie „Ein Eintrag, der `auswahl` von Platz 1
+verdrängt, erfüllt (a) nicht" hätte den Fall vor dem Bau erledigt.
+
+### Was daraus folgt
+
+Für die zwei DoR, die ich gerade erteilt habe (§513), ändert das nichts — beide Blätter vergeben
+keine Plätze. Aber für **Posten 33** (die neue Leistenreihenfolge) und für das kommende Blatt zu den
+vier Bauaufträgen gilt: Wo ein Kriterium eine **Position** verlangt, gehört die verdrängte Position
+mit ins Kriterium.
+
+**Selbstbindung, dritte in dieser Nacht** (nach §494 „Stand nennen" und §496 „messen, was die Zahl
+bezeichnet"): Bei jedem Kriterium, das eine **Reihenfolge, einen Platz oder eine Rangfolge** setzt,
+messe ich, **was heute dort steht und wohin es rückt**.
