@@ -24,6 +24,7 @@ import { istVerschneidungsForm } from '../../domain/roofShape';
 import { GrundrissformHinweis } from './GrundrissformHinweis';
 import { WandflaechenAnzeige } from './WandflaechenAnzeige';
 import { DachKennzahlen } from './DachKennzahlen';
+import { AuswechslungAnzeige } from './AuswechslungAnzeige';
 import { TreppentypAnzeige } from './TreppentypAnzeige';
 import { T, FARBEN, OP_TOKEN } from '../studioDaten';
 import { opKnopfBild } from '../dashboard/opKnopfZustand';
@@ -326,6 +327,12 @@ export function EigenschaftenPanel({
           {/* Z1-V1-1 Module 2-4: Vorlage, projizierte Flaeche und Sparrentrennung stehen
               am ausgewaehlten Dach — dort, wo Form, Neigung und Kontur schon stehen. */}
           <DachKennzahlen dach={selectedRoof} scene={store.getState().scene} />
+          {/* Z1-W2-6: je Aufbau eine Auswechslungs-Analyse. EINE Anzeige je Aufbau, weil es
+              keinen Bedienweg gibt, EINEN Aufbau auszuwaehlen — die Liste zeigt alle, statt
+              stillschweigend den ersten zu bevorzugen. */}
+          {(selectedRoof.aufbauten ?? []).map((a) => (
+            <AuswechslungAnzeige key={a.id} dach={selectedRoof} aufbau={a} />
+          ))}
           <button type="button" style={{ ...knopf(false), width: '100%', marginTop: 4 }} onClick={() => { store.getState().executeCommand({ type: 'REMOVE_ROOF', roofId: selectedRoof.id }); store.getState().selectNodes([]); }}>Dach entfernen</button>
         </>
       ) : selectedWall ? (
