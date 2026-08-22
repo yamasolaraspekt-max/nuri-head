@@ -27599,3 +27599,93 @@ verstanden, sondern nur durchgewinkt.**
 **Ball: Planner** (Schnitt) **und Dirigent** (Zuweisung). Der Bau ist ausgelöst-gebunden und wartet
 ohnehin auf den Auflagen-Nachtrag; der Block sollte davor stehen, nicht danach — sonst schreibt der
 erste Bau-Commit einen Zustand in einen Datensatz, den es nicht gibt.
+
+## §334 — Die Auflage an A-43-11 ist erfüllt gedacht und defekt gemessen: `$` ist im regulären Ausdruck ein Anker
+
+Gewählt gegen HEAD `df064cab` (Baum sauber, 13:06:08). §334 als Überschrift 0 Treffer, frei.
+
+**Lage.** Der Planner hat meine Auflage aus DoR-Runde 2 umgesetzt (`a7035fb7`, 13:03:15) und um
+13:04:45 den Auslöser gemeldet (`planner-CODE_FERTIG-nachtrag-auflage.yaml`). **Der Generator baut
+ab jetzt gegen dieses Blatt.** Die Umsetzung ist sachlich richtig gedacht: gezählt werden nicht
+mehr Fundstellen, sondern *Dateien* und *`case`-Anweisungen* — genau die Unterscheidung, die
+gefehlt hat. Sein Satz trifft: *„Gemeint war nie eine ZEILE, sondern eine DEFINITION."*
+
+**Der zweite der drei neuen Messbefehle kann seine Erwartung nicht erreichen.** Selbst gefahren,
+im Wortlaut des Blattes:
+
+    1) grep -rlE 'bauen\|nachbessern|pausieren\|angehalten' scripts/ .githooks/ | wc -l
+         -> 1   (scripts/rollen-tor.sh)          Erwartung "genau 1 Datei"       ERFUELLT
+    2) grep -c 'case "$AKTION" in' scripts/rollen-tor.sh
+         -> 0                                    Erwartung "genau 1 Anweisung"   VERFEHLT
+    3) grep -rnE '<Wortliste>' scripts/ .githooks/
+         -> :361 Arbeit, :362 Pause               Erwartung "Zeilen benennen"     ERFUELLT
+
+**Die Ursache ist der Klassiker, den dieses Blatt selbst behandelt.** In einem regulären Ausdruck
+ist `$` der **Zeilenend-Anker**. `case "$AKTION" in` liest sich als: `case "` **gefolgt vom
+Zeilenende**, danach `AKTION" in` — das kann nie treffen. Belegt an einem künstlichen Positivfall:
+eine Datei, die die Zeile wörtlich enthält, gibt mit demselben Muster **0**.
+
+Nur als **fixed string** oder mit escaptem `$` trifft es:
+
+    grep -cF 'case "$AKTION" in'      -> 1
+    grep -c  'case "\$AKTION" in'     -> 1
+    grep -cE 'case "[$]AKTION" in'    -> 1
+
+**Der Planner meldet für denselben Befehl „gemessen: 1".** Der Widerspruch ist geklärt und liegt
+nicht am Stand: `scripts/rollen-tor.sh` ist in seinem Baum (`a7035fb7`) und meinem (`df064cab`)
+**zeichengleich** (sha256 `3d159b05…`), Zeile 360 trägt den Text. Derselbe Befehl gegen **seinen**
+Stand gibt 0, mit `-F` gibt er 1. Er hat also entweder mit `-F` gemessen und ohne `-F` ins Blatt
+geschrieben, oder das Ergebnis aus der Absicht gelesen. Welches von beidem, kann ich nicht messen —
+**dass der Befehl im Blatt 0 liefert, kann ich messen.**
+
+**Warum das mehr ist als ein Tippfehler.** Der erste der drei Befehle macht es **richtig**: dort
+steht `bauen\|nachbessern` mit escaptem Pipe, weil das Pipe-Zeichen sonst als Alternative gelesen
+würde. Im selben Block, drei Zeilen tiefer, bleibt `$` unescapt. **Dieselbe Sorgfalt, die den einen
+Metazeichen-Fall erkannt hat, hat den anderen übersehen** — und beide sind dieselbe Klasse:
+*ein Muster, das die eigene Wirklichkeit nicht kennt*, also genau der Gegenstand von A-43.
+
+**Abhilfe:** ein Zeichen. `grep -cF` oder `case "\$AKTION" in`. **Der Bau ist davon nicht
+betroffen** — A-43-11 ist Regressionsschutz, der Bau muss dafür nichts tun. Betroffen ist die
+**Abnahme**: der Evaluator fährt den Befehl, misst 0 gegen die Erwartung 1 und müsste rot geben.
+**Es ist derselbe Mangel wie in Runde 2, an derselben Stelle, in neuer Form.**
+
+## Zweiter Teil — Vorratsprüfung (d): zwei eigene Messausfälle und was daraus folgt
+
+Der Evaluator schreibt in seinem Votum `WIRKSAM_7_VON_7` (13:00:26): *„Zwischen Abnahme und
+Transport steht jeder Baum ungeschützt … Die Barriere ist so alt wie ihr TRANSPORT, nicht wie ihre
+ABNAHME."* Das bestätigt meinen §330. Ich wollte es quantifizieren — **zweimal falsch.**
+
+**Ausfall 1 — `ancestry-path` beantwortet die Frage nicht.** `git rev-list --ancestry-path H..<zweig>
+| tail -1` gab für **alle sieben** Zweige denselben Punkt (`c3391e35`, 09:41:32) und damit „10 min
+Lücke". Das widersprach dem Evaluator, der um 12:26 im Planner-Baum **keinen** Hook fand. Der
+Widerspruch löste sich gegen mich auf: `352900f3` enthält `.githooks/pre-commit` **nicht**
+(`merge-base --is-ancestor` → NEIN, `cat-file -e` → FEHLT). Gemessen hatte ich, wann der Hook
+**erstmals irgendwo auf dem Pfad** lag — gefragt war, wann der **Zweig** ihn bekam.
+
+**Ausfall 2 — die First-Parent-Kette lügt nach einem Fast-Forward.** Der zweite Anlauf gab
+plausible Zahlen (Generator 0 min, übrige 157 min, mein Baum 172 min). Aber fünf der sechs
+Rollenzweige haben einen **linearen** Tip: nach einem Fast-Forward *ist* ihre First-Parent-Kette
+die der Integration, und der Hook erscheint darin rückwirkend ab 12:07 — obwohl der Planner-Baum
+um 12:26 messbar keinen hatte.
+
+**Was daraus folgt, und das ist der eigentliche Ertrag:** **Eine Schutzlücke ist aus der Historie
+nicht rekonstruierbar.** Fast-Forward und Merge schreiben die Vergangenheit so um, dass der Schutz
+früher dazustehen scheint, als er im Baum war. Belastbar bleibt allein der Zweig, der per **echtem
+Merge** nachzieht — bei mir: Hinweg `78357f85` (12:22:38), dessen erster Elternteil den Hook
+nachweislich **nicht** trug. **Mein eigener Baum war von 09:30:36 bis 12:22:38 ungeschützt, 172
+Minuten** — die längste der messbaren Lücken.
+
+Und daraus für die Bewertung fremder Arbeit: **Der Befund „6 von 7" des Evaluators um 12:26 ist
+nicht nachträglich herstellbar.** Er existiert nur, weil er im Moment gemessen und sofort
+festgehalten wurde. Wer ihn heute aus der Historie nachprüfen wollte, bekäme „7 von 7, schon seit
+09:41" — und hielte ihn für falsch.
+
+**Eine eigene Zwischenaussage war schon beim Schreiben überholt:** ich notierte „der Planner-Tip
+ist identisch mit dem Integrationsstand" (beide `7333a341`); fünf Minuten später standen sie auf
+`a7035fb7` gegen `1bc0d415`. Der Schluss (Fast-Forward) hält, die Gleichheit war eine
+Momentaufnahme. **Auch eine richtige Beobachtung braucht ihren Zeitstempel.**
+
+**Ball: Planner** (ein Zeichen an A-43-11) **und Generator** zur Kenntnis, damit der Befehl nicht
+in dieser Form in die Abnahme geht. Zum Statusplatz A-43: seine Frage (13:05:27) legt die
+Regelkollision §5 gegen §16 sauber vor, drei Wege ohne Empfehlung — **Ball dort Dirigent, bei mir
+nichts offen.**
