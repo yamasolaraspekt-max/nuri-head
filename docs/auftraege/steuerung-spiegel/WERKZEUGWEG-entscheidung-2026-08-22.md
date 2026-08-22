@@ -1,0 +1,18 @@
+# WERKZEUGWEG — Entscheidung zu „Warum keine Werkzeuge entstehen" (Bericht 22.08. 14:25, Mess-SHA 9d2245df) — Dirigent in Yamas Namen, 2026-08-22T14:46:11+0200
+
+```yaml
+grundlage: "Yama 14:4x: 'bewerte und nutze diese Informationen ueber weiteren Ablauf und Fahrplan'; Delegation 14:1x; V3 (26a2bd62), Meilensteinplan, ANSCHLUSS-entscheidung"
+bewertung: "Der Bericht trifft die Luecke hinter V3: 'Abnahme = Bedienbarkeit' hat kein Messgeraet (0 DOM-Tests je Werkzeug), die Bruecke Register<->Registry ist keine Abfrage, ein Anschluss kostet ungemessene 12 Stellen. Alle sechs Vorschlaege sind klein, messbar und machen jedes folgende Werkzeug billiger und beweisbar — deshalb VOR Paket 1, parallel zu Paket 3."
+```
+
+| # | Vorschlag | Entscheidung | Auftrag/Ziel | Besitzer | Meilenstein |
+|---|---|---|---|---|---|
+| 2 | DOM-Probe ueber TOOL_DEFINITIONS (Werkzeug per Kuerzel aktivieren -> Leiste aktiv -> Aktion -> Szene geaendert -> Escape) | **ANGENOMMEN, zuerst** | **Z1-W2-0** (Spur W): EINE parametrisierte Datei `__domtests__/werkzeugBedienbar.dom.test.ts`, laeuft ueber TOOL_DEFINITIONS, Rot-Probe: ein Werkzeug ohne Bedienweg faellt rot; wird Pflicht-Messbefehl jeder Browser-/Bedienbarkeitsabnahme (Evaluator: DOM-Probe + EIN Screenshot statt Handlauf je Kriterium) | Planner -> Plan-Pruefer -> Generator -> Evaluator | M1 |
+| 4 | Feld `registry_id` je Registerzeile (W-01..W-43) + Zaehlbefehl „Registerzeilen mit registry_id, die in TOOL_DEFINITIONS fehlen" = Anschlussvorrat | **ANGENOMMEN** | Planner: Feld in docs/…/REGISTER.md (43 Zeilen) + Werkzeug-Register; Abfrage als Messbefehl im Lagebericht (Messgroesse „Anschlussvorrat") | Planner | M1 |
+| 3 | Werkzeug-Vorlage aus A-35 (12 Stellen, 894 Zeilen, 291 Test) | **ANGENOMMEN** | docs/konzept/werkzeug-vorlage-aus-a-35.md: Datei · Zeile · was aendert sich · welcher Test zieht nach; Pflichtanhang jedes Spur-W-Blatts (Planner zitiert die Stellen) | Planner | M1 |
+| 1 | Ein Bauteil (Treppe, DIN-18065-Parametrik) ueber den werkzeugRegistry-Vertrag registrieren, BEVOR stillgelegt wird | **ANGENOMMEN — Reihenfolge geaendert, Ziel nicht:** Stilllegung erst nach der Probe; Ausgang 'funktioniert' -> Weg belegt, Stilllegung entfaellt; 'funktioniert nicht' -> Stilllegung begruendet | Kleinblatt Spur W (Generator) nach Paket 3, vor Paket 1; Evaluator misst beide Ausgaenge | Planner/Generator | M2 |
+| 6 | Grundgesamtheit der 110 Paketeintraege festlegen | **ENTSCHIEDEN:** Grundgesamtheit Bauplaner = die Auswahl in `app/tools/faehigkeiten.ts` (DTP bewusst ausgeschlossen, Begruendung im Dateikopf) — Stand heute; Aenderungen nur per Blatt. Planner zaehlt sie (N von 110) und traegt sie als Bezugsrahmen ins Werkzeug-Register; ab dann ist „wie weit sind wir" eine Zahl | Dirigent (Entscheidung) / Planner (Zaehlung) | M1 |
+| 5 | Verfallsdatum je Modul ohne Ladeweg (eine Kopfzeile: zuletzt geprueft · erwarteter Anschluss · sonst Stilllegung) | **ANGENOMMEN, nachrangig** | Ordnungsposten (27 Kopfzeilen, kein Bau) NACH Anschlusswelle 1 — keine parallele Aufraeumaktion (Index-Kollision 21.08.) | Generator (nach Welle 1) | M2 |
+| NB | `public/hausplaner/hausplaner.js` (gebautes Bundle) wird je Werkzeug mitcommittet | **KLAEREN:** gibt es auf dem Zielsystem einen Build-Schritt? Wenn ja -> Bundle aus dem Repo (Kleinblatt, Spur A); wenn nein -> bleibt, aber als bewusste Entscheidung vermerkt | Planner (Messung) -> Dirigent | M2 |
+
+Reihenfolge im Haus ab jetzt: Paket 3 (laeuft) · **Z1-W2-0 DOM-Probe** · registry_id + Vorlage + Grundgesamtheit (Planner-Posten, ohne Bau) · Z2-W0-5b · Treppe-Probe (V1) · Paket 1 · Dach-2 · Verfallsdatum/Bundle-Klaerung.
