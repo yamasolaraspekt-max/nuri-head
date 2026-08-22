@@ -36249,3 +36249,104 @@ sind im Integrations-Checkout **nicht lesbar**.
 Ball: **Integrator** (Transport, 21 Commits · 15 Ereignisse · §447-Tafelfelder) · **Dirigent**
 (Generation 21, ausdrücklich vom Generator erfragt) · **Yama** unverändert §443/§444 + Pfadfrage
 Z0-I1.
+
+## §454 — Mein Streichungs-Halbsatz war richtig und trotzdem die Ursache: er sagt, WAS entfällt, aber nicht, WAS daran hängt
+
+Messstand: HEAD `ea2e3592`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 20:36–20:40.
+**Ereignis-Schnitt dieser Runde: 20:35:08** (1 neues Ereignis). Abschnittsnummer gegen den frischen
+HEAD gewählt (`grep -c '^## §454'` → 0). Anlass:
+`planner-HINWEIS-Z1-W2-8-kriterium-c-faellt-nicht.yaml` (20:35:22) — **zitiert, nicht nachgebaut**;
+er betrifft die Auslegung **meines** Votums von 19:06:40.
+
+### Was passiert ist
+
+    Mein Halbsatz 2 (DoR Z1-W2-8, 19:06:40):
+      „Kriterium Z1-W2-8-b ENTFAELLT (Z. 231) — samt seiner Matrixzeile Z. 171."
+      -> (c) kommt darin NICHT vor.
+
+    Die Lieferung meldet:
+      c:  stand: ENTFAELLT_MIT_b
+          grund: „Kriterium c betrifft den Bodenplatten-Tooltip. Da (b) laut DoR-Halbsatz 2
+                  entfaellt und kein bodenplatte-Eintrag entsteht …"
+
+    Die Entscheidungstabelle des Blattes (@ 8460f98f, Z. 272-273), SELBST gemessen:
+      | (b) bodenplatte als Eintrag | FÄLLT — braucht GP-0 (eigener Knotentyp)                    |
+      | (c) Tooltip ehrlich         | baubar, verschoben — gilt fuer den Decken-Tooltip
+                                      (Zwischen-/Abschlussdecke)                                  |
+
+**Der Planner hat recht: (c) entfällt nicht.** Und meine eigene Gegenmessung am Bestand bestätigt
+seine Bestandsaussage:
+
+    toolRegistry.ts:147   tooltip: { title: 'Decke / Bodenplatte', body: 'Massive oder mehrschichtige
+                                     Decke erzeugen.', … }
+    'Zwischendecke'   0 Treffer     'Abschlussdecke'  0 Treffer
+    Positivkontrollen: 'tooltip' 13 Treffer in derselben Datei · 'Bodenplatte' 1 Datei im Bestand
+    -> die Muster greifen, die beiden Nullen sind echt. Haelfte 2 ist NICHT geliefert.
+
+### Warum das MEIN Befund ist und nicht seiner
+
+**Mein Halbsatz war inhaltlich richtig.** Er strich genau (b) und nichts sonst. **Der Mangel liegt
+in dem, was er NICHT sagt:**
+
+> **(c) hat zwei Hälften, und nur eine hängt an (b):**
+>
+>     Haelfte 1  Bodenplatten-Tooltip        faellt mit (b) — mangels Gegenstand, korrekt
+>     Haelfte 2  Decken-Tooltip nennt BEIDES steht — sie haengt nicht an (b)
+>
+> **Ich habe ein Kriterium gestrichen, ohne zu prüfen, was daran hängt.** Der Generator hat (c) als
+> Ganzes fallen lassen, weil mein Halbsatz die Teilbarkeit nicht benannt hat. **Seine
+> Schlussfolgerung ist nachvollziehbar — sie ist die nächstliegende Lesart meines Satzes.**
+
+### Und meine beiden Halbsätze zusammen hätten es geklärt
+
+    Halbsatz 1: „Es gilt die ENTSCHEIDUNGSTABELLE, nicht der Kriterientext."
+    Halbsatz 2: „Kriterium Z1-W2-8-b ENTFAELLT — samt seiner Matrixzeile."
+
+**Halbsatz 1 verweist auf die Tabelle, und die führt (c) als „baubar, verschoben".** Wer beide liest,
+kommt zum richtigen Ergebnis. **Wer nur Halbsatz 2 liest — den, der konkret und handlungsnah ist —,
+kommt zum falschen.**
+
+> **Das ist die eigentliche Lehre, und sie ist neu:** Zwei Halbsätze, die zusammen richtig sind,
+> können einzeln gelesen in die Irre führen. **Der abstrakte Halbsatz (»es gilt die Tabelle«) hat
+> keine Chance gegen den konkreten (»b entfällt«)** — der Leser nimmt den, der ihm sagt, was zu tun
+> ist. **Ein Halbsatz, der etwas streicht, muss seine Reichweite mitliefern; sonst streicht er
+> mehr, als er sagt.**
+
+### Die Regel, die daraus folgt
+
+> **Wer ein Kriterium streicht, benennt in demselben Satz, was daran hängt und was nicht.**
+> Nicht: *„(b) entfällt."*
+> Sondern: *„(b) entfällt. (c) bleibt, soweit es nicht auf (b) beruht — Hälfte 1 fällt mit,
+> Hälfte 2 steht."*
+>
+> **Das ist eine Folgenabschätzung, keine Erweiterung des Votums.** Sie kostet einen Nebensatz und
+> erspart genau die Runde, die hier gerade läuft.
+
+**Dritte Regel an mich heute, und alle drei betreffen die Form meines Votums:**
+`blatt_sha` nennen (§450) · jede Zahl im Kriterientext nachrechnen (§451) · **bei Streichungen die
+Reichweite mitliefern (hier)**.
+
+### Was der Planner zusätzlich richtig macht
+
+Er meldet **seinen eigenen Anteil** ungefragt mit: die Überschrift von (b) trug weiter *„DIE
+BODENPLATTE IST EIN EINTRAG"*, während nur Messbefehl und Matrixzeile gestrichen waren — *„Wer die
+Überschrift liest, bekommt die gestrichene Fassung."* Nachgezogen in `8460f98f`, **durchgestrichen
+statt gelöscht**, mit dem Halbsatz-Wortlaut daneben.
+
+Und er berichtigt die Transportbitte des Evaluators: **nicht `f5cfc933`, sondern `8460f98f`** — drei
+Stände weiter, zwei davon ändern, was gemessen wird. **Das ist §449 in seiner nützlichen Form: ein
+Verweis, der auf einen überholten Stand zeigt, und jemand sagt es rechtzeitig.**
+
+### Nebenbefund: meine eigene Messung fiel wieder auf dieselbe Weise aus
+
+Mein Rundenbeginn meldete **„Commits nicht in der Integration: 0"** — bei sichtbar verschiedenen
+Zweigspitzen. **Ursache: der `git`-Befehl lief im Ereignisordner, nicht im Repo.** Nach Korrektur:
+**24** (generator 6 · planner 4 · evaluator 1 · plan-pruefer 13).
+
+**Das ist die zehnte Falle aus §448 — dieselbe, vier Runden später.** Und damit heute zum dritten Mal
+der Satz, den der Generator um 19:55:40 geprägt hat: *„Eine Lehre, die nur die eine Stelle repariert,
+an der sie entstand, ist keine Lehre."* **Gefangen nur, weil die Zahl 0 gegen die sichtbaren
+Zweigstände stand — nicht durch eine Kontrolle.**
+
+Ball: **Evaluator** (der Planner hat ihn dorthin gegeben; meine Auslegungsklarstellung liegt jetzt
+vor) · **Integrator** unverändert (jetzt **24** Commits, Stille **50 Minuten**).
