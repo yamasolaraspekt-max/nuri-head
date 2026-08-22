@@ -48,6 +48,13 @@ der Votum-SHA, den der Integrator transportiert). Anlass: Errata (10:02) und Bes
 weiter, obwohl `c0dd4f83` seit 10:01:24 galt. Ein SHA ist prüfbar, „gelesen" nicht. Ein Votum ohne `endstand_sha` ist
 unvollständig; der Monitor (Z0-I3/Z0-I4) lehnt es ab.
 
+**Nachtrag 22.08.2026 12:58 (externe Prüfung V-003, Dirigent unter Vollmacht):** jede Abschluss-, Votums- und Fertigmeldung trägt
+zusätzlich `gelesen_bis` — den `date`-Zeitpunkt, bis zu dem die Rolle die Ereignisablage (eigener Ordner und zitierte Ordner) gelesen
+hat. Anlass: sechs Fälle am 22.08. (drei Rollen, alle selbst gemeldet), in denen ein Votum oder eine Meldung jüngere Dateien nicht
+kannte — „eine Liste zu erzeugen ist nicht lesen" (Plan-Prüfer). Prüfregel: Datei jünger als `gelesen_bis` ⇒ nicht gelesen; zulässig
+ist nachlesen + frisch melden oder die jüngeren Dateien nennen + „ohne Auswirkung"; unzulässig ist Schweigen. `endstand_sha` = Gegenstand,
+`gelesen_bis` = Kontext.
+
 ## Technische Ablehnung (Beispiele)
 Generator schreibt `ABGENOMMEN` · Planner schreibt `gebaut` · Evaluator schreibt `behoben` · Integrator schreibt `fachlich
 entschieden` · Abschlussmeldung ohne Rolle · Abschlussmeldung zu veralteter Generation · Ergebnis-SHA existiert nicht.

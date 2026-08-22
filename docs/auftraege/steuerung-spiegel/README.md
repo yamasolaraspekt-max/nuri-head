@@ -64,6 +64,12 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
     Aktionsvokabular des Tors rollengerecht erweitert und transportiert ist (Planner gen 14, Posten 2; Backlog 23) — dann werden die
     Tor-Wörter zurückgenommen. Meldepflicht-Abschlussbegriffe (SPEZIFIZIERT, ERTEILT, CODE_FERTIG, ABGENOMMEN, TRANSPORTIERT …)
     bleiben unverändert die Rollenwahrheit.
+6g. **`gelesen_bis` in jeder Abschluss-, Votums- und Fertigmeldung (externe Prüfung V-003, 22.08. 12:35; Dirigent 12:58):** der
+    `date`-Zeitpunkt, bis zu dem die Rolle `ereignisse/` (eigener Ordner **und** die Ordner, deren Ereignisse sie zitiert) gelesen hat.
+    Anlass: sechs Fälle heute (Plan-Prüfer 10:12/12:30/12:41, externe Prüfung 10:14/12:19, Planner 12:22), alle mit Sorgfalt, alle
+    „Liste erzeugt, Datei nicht gelesen". Prüfbar: ist eine Datei jünger als `gelesen_bis`, hat der Melder sie nicht gesehen. Zwei
+    zulässige Ausgänge: nachlesen und frisch melden **oder** die jüngeren Dateien nennen und „ohne Auswirkung" schreiben. Unzulässig ist
+    nur das Schweigen. `endstand_sha` deckt den Gegenstand, `gelesen_bis` den Kontext.
 6e. **Endstand-SHA in jeder Meldung (externe Prüfung V-002/3, 22.08. 10:36):** Start- und Abschlussmeldung nennen `endstand_sha:`
     (der Stand, **gegen den** gearbeitet wurde — z. B. der Generator-Endstand bei der Abnahme) und `ergebnis_sha:` (der Stand, **den**
     die Rolle hinterlässt). Ein SHA ist prüfbar, „gelesen" nicht. Ein Votum ohne `endstand_sha` ist unvollständig.
