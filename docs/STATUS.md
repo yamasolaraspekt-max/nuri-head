@@ -106,6 +106,7 @@
 | **Z1-W2-4** Treppe ueber den Werkzeugregistry-Vertrag anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md` · **DoR ERTEILT** (plan-pruefer 16:21:25) · Planner-Blatt `418bcb6c` |
 | **Z1-W2-5** Wandflaeche anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` |
 | **Z1-W2-6** Auswechslung anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` |
+| **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -19278,6 +19279,32 @@ herkunft_dieses_blocks: |
   Dieses Blatt hat sich nach der DoR noch bewegt (Achsenregel 17:18/17:21); ich trage den
   JUENGSTEN Blattstand ein, e1c3f425, und nicht den, der zur DoR gehoerte. Nach dem Fehler bei
   Z1-W2-3 ist das die Regel: das juengste Ereignis entscheidet, nicht das erstgefundene.
+```
+
+```yaml
+auftrag: "Z0-I1"
+titel: "Testdatenbank-Isolation — Stufe 1"
+zustand: CODE_FERTIG
+ballbesitz: evaluator
+blatt: "docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md"
+blatt_sha: 7791920f
+basis_sha: 161868e9
+dor_beleg: |
+  ERTEILT — im Verlauf des Tages; das Blatt liegt nicht unter docs/auftraege/aktiv/,
+  sondern unter docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md.
+  Ich vermerke den abweichenden Ort, statt ihn stillschweigend zu vereinheitlichen.
+bau_sha: 04949151
+herkunft_dieses_blocks: |
+  Statusplatz vom integrator angelegt, und von den fuenf ist das der, der am laengsten gefehlt hat.
+  Z0-I1 ist seit 16:58:55 CODE_FERTIG und wird vom Plan-Pruefer in der Vorlage an Yama (17:29)
+  als "Stufe 1, hoechster technischer Blocker" gefuehrt — die Kennung, gegen die der
+  Datenbank-Vorfall von 16:00:33 gebaut wird, bei dem ein fremder Testlauf den Pruefstand des
+  Evaluators geleert hat. Sie stand waehrend der ganzen Zeit in keinem Statustraeger.
+  BAU IST IN DER INTEGRATION: 04949151, transportiert in diesem Lauf.
+  OFFEN UND NICHT VON MIR ZU ENTSCHEIDEN: der Generator stellt 18:09 klar, dass Z0-I1-7 und -8
+  zur Stufe 2 gehoeren; der Plan-Pruefer weist 18:06 auf Blattdrift und Z0-I1-8 hin. Beides
+  beruehrt den Zuschnitt, nicht den Zustand des Gebauten. Ich trage CODE_FERTIG fuer Stufe 1 ein
+  und nenne die zwei offenen Punkte, statt sie zu verrechnen.
 ```
 
 
