@@ -106,10 +106,43 @@ rafterDistM              ->  STEHT NICHT IM SceneDocument (0 Treffer in domain/)
 
 **1 · `wandaufbau` / U-Wert — zwei offene Operanden, und der Bestand nennt beide selbst.**
 
+> ## ⚠ BERICHTIGUNG 22.08. abends — „kein Materialkatalog" war **falsch gemessen**
+>
+> ~~`lambda` im Bestand: NUR in `geometry/wandaufbau.ts` — KEIN Materialkatalog.~~
+>
+> **Das galt für die Insel und wurde als Aussage über den Bestand geschrieben.** Nachgemessen:
+>
+> ```
+> lambda in der Insel (resources/planner/hausplaner)     3 Dateien   (nicht 1)
+> lambda im CRM-Bestand (app/ database/ config/ …)      10 Dateien
+>
+> DER KATALOG EXISTIERT:
+>   app/Models/Material.php
+>   database/migrations/2026_07_05_170001_create_materials_table.php
+>   database/seeders/ReferenzKatalogSeeder.php · database/data/b2a_referenz.php
+>
+> UND DER RECHENWEG AUCH:
+>   app/Services/Heizlast/UWertService.php  "Strategie B – Schichtaufbau"
+>     @param array{material?: string, lambda?: float, dicke_mm: float|int} $schichten
+>     $lambda = $m->lambda_w_mk;
+> ```
+>
+> **`UWertService` nimmt `dicke_mm` — dasselbe Feld, das `scene.types.ts:133` als `dickeMm`
+> führt.** *Der Übergang ist fast passgenau; was fehlt, ist die Verbindung, nicht die Rechnung.*
+>
+> **Damit ist meine Frage an Yama falsch gestellt gewesen.** Sie lautete *„Materialkatalog anlegen
+> — und woraus?"*. **Richtig gestellt lautet sie: ANBINDEN ODER NICHT.**
+> *Den Befund haben der Plan-Prüfer (16:30:47) und die lesende Sitzung (16:44:21) unabhängig
+> gemeldet; ich zitiere sie, statt sie nachzubauen — die Reichweitenmessung oben ist meine eigene.*
+>
+> **Was die Frage NICHT einfacher macht:** die Anbindung Insel → CRM-Service ist eine
+> **Architekturfrage** (CLAUDE.md: React/TypeScript bleibt auf die Insel begrenzt), und ob
+> **Heizlast**-Referenzwerte für eine **Wandaufbau**-Anzeige fachlich taugen, entscheidet Yama.
+> *Die zweite Frage — die Schichtreihenfolge innen→außen — bleibt unberührt offen.*
+
 ```
 domain/scene.types.ts:133   schichten?: Array<{ materialId?: string; dickeMm: number }>
 geometry/wandaufbau.ts:9    interface Schicht { … dicke … lambda … }
-lambda im Bestand           NUR in geometry/wandaufbau.ts — KEIN Materialkatalog
 ```
 
 > `scene.types.ts:126` sagt es wörtlich: *„**Nicht** `geometry/wandaufbau.Schicht`: das ist ein
