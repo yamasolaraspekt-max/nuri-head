@@ -40648,3 +40648,65 @@ nicht-erdberührte Platten läuft.
 Der Halbsatz „die niemand beim Namen ruft" ist dabei mehr als eine Formulierung: Eine Wache in
 einer reinen Rechenfunktion würde nur greifen, wenn jemand sie aufruft — und `bodenplatteOberkanteMm`
 wird vom Panel zur **Anzeige** gerufen, nicht beim Speichern. Sie wäre eine Wache am falschen Tor.
+
+## §509 — Vorarbeit für die DoR zu E1/E3: die Decke ist heute schon bedienbar, und die Landkarte führt `boden` auf `ADD_CEILING`
+
+Stand: HEAD `c29d78de`, Baum 0, gen 11, Digest gleich. Zeit 23:54. **Messstand `05186670`.**
+
+Der Dirigent hat um 23:50:43 angewiesen, Z1-E1-1 und Z1-E3-1 **jetzt** zu schneiden statt morgen
+früh. Meine Bahn: *„DoR je Blatt, ein Durchgang, sobald CODE_FERTIG."* Solange messe ich den
+**Bestand**, gegen den die DoR prüfen wird — das ist die Rot-Lage, die jedes Blatt braucht, und kein
+Vorgriff auf seinen Inhalt.
+
+### E1 „Wo bin ich": zwei Schreibweisen, aber eine saubere Grenze
+
+```
+activeLevel   (englisch)  83 Treffer  →  App-Ebene: ConfigWizard, DreiDBereich, HausplanerApp,
+                                          tools/vorbedingungen, tools/werkzeugVertrag
+aktivesLevelId (deutsch)   6 Treffer  →  NUR renderers/three-d/szene.ts (privates Feld + Parameter)
+```
+
+Das sieht zunächst nach Doppelung aus, ist aber eine **Schichtgrenze**: Die App spricht englisch,
+der Renderer hält den Wert als eigenes privates Feld. Kein Widerspruch, keine zweite Wahrheit —
+`szene.ts:243` setzt `this.aktivesLevelId` aus dem übergebenen Parameter. **Kein Befund**, aber
+festgehalten, damit die DoR nicht darüber stolpert.
+
+### E3 „Decke bedienbar": sie ist es bereits
+
+Die Rot-Lage für E3 ist **nicht** „Decke nicht bedienbar". Gemessen:
+
+```
+toolRegistry.ts:164       id: 'decke'
+toolPresentation.ts:82    { toolId: 'decke', zone: 'fix', ordnung: 7, herkunft: 'registry' }
+HausplanerApp.tsx:1120    type: 'ADD_CEILING'        ← echter Produktivaufruf
+werkzeugLandkarte.ts:181  { werkzeugId: 'decke', marke: 'deckt', begruendung: 'ADD_CEILING' }
+```
+
+Werkzeug in der Leiste auf **Platz 7**, Registry-Eintrag, Landkarten-Marke und ein Aufruf im
+Produktivpfad. Wer das Blatt schneidet, sollte die Rot-Lage enger fassen — vermutlich auf den
+zweiten Halbsatz („Rolle abgeleitet"), nicht auf die Bedienbarkeit.
+
+### Und ein Befund, der den Generator bestätigt
+
+`werkzeugLandkarte.ts:177`:
+
+```
+{ werkzeugId: 'boden', marke: 'deckt', begruendung: 'ADD_CEILING' }
+```
+
+Das ist genau die offene Fachfrage aus seinem CODE_FERTIG zu Z1-E4-1:
+
+> „Das KATALOG-Werkzeug `boden` (`werkzeugPaket.ts:167`, ‚Bodenfläche und Bodenaufbau erzeugen') ist
+> in der Landkarte als ‚deckt `ADD_CEILING`' geführt. Nach diesem Blatt ist mehrdeutig, ob damit ein
+> Bodenbelag oder die Bodenplatte gemeint ist. **ICH HABE ES NICHT ANGEFASST** — das ist eine
+> fachliche Zuordnung, keine technische."
+
+**Zitiert, nicht nachgebaut** (P-02 Punkt 4). Meine Ergänzung ist die Lage **nach** E4: Seit
+`3b4e8f6b` gibt es `ADD_FOUNDATION_SLAB`, und die Landkarte führt `boden` weiterhin auf
+`ADD_CEILING`. Damit zeigen jetzt **zwei** Werkzeuge (`boden`, `decke`) auf denselben Befehl,
+während der neue Befehl kein Landkarten-Werkzeug hat außer `bodenplatte`.
+
+Das ist keine Fehlfunktion — die Landkarte beschreibt, sie steuert nicht. Aber es ist eine
+**Zuordnung, die nach E4 nicht mehr stimmt**, und sie gehört in dieselbe Fachentscheidung wie die
+Frage des Generators: Ist `boden` der Bodenbelag (dann `ADD_CEILING` mit `erdberuehrt`-Kontext) oder
+die Platte (dann `ADD_FOUNDATION_SLAB`)? **Das entscheidet nicht der Plan-Prüfer.**
