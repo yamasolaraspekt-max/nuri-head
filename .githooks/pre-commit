@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+#
+# A-37-25 — EIN WIRKSAMES pre-commit-TOR. DER NACKTE `git commit` MUSS SCHEITERN.
+# A-37-22e — UND ER LIEST DIE STEUERUNG IM MOMENT DES COMMITS.
+#
+# **Der Anlass, gemessen und nicht behauptet:** sechs Generator-Commits entstanden direkt im
+# gemeinsamen Checkout. Das Rollen-Tor wirkte bis dahin ausschliesslich in `commit-pruefen.sh` —
+# **also nur, wenn jemand es aufruft.** Ein nackter `git commit` erreichte es nie, und der
+# `SIGSTOP` auf einen Prozess war die einzige verbliebene Abhilfe. *Eine Barriere, die vom guten
+# Willen des Committenden abhaengt, ist eine Bitte.*
+#
+# **`core.hooksPath` steht bereits auf `.githooks`** — der Pfad war da, der Haken fehlte. Der
+# vorhandene `commit-msg` steigt bei allem, was kein Merge ist, sofort mit `exit 0` aus; er bleibt
+# unveraendert und weiter wirksam fuer Merges (A-38). **Dieser Haken deckt den Normalfall.**
+#
+# ## ⚠ `--no-verify` IST DIE GRENZE — BENANNT, NICHT ÜBERSPIELT
+#
+# `git commit --no-verify` uebergeht jeden Haken, auch diesen. Wer `core.hooksPath` umbiegt, schaltet
+# ihn ebenso ab. **Das ist technisch nicht verhinderbar, und es wird hier nicht als geloest gemeldet.**
+#
+# **Diese Barriere ist gegen Gewohnheit und Versehen wirksam, nicht gegen Absicht.**
+#
+# *Der Wert liegt genau darin:* sie macht aus einem Commit, der aus Versehen im falschen Baum
+# entstanden waere, einen bewussten Akt — wer sie umgeht, tut es sichtbar und muss es tippen.
+# **Eine benannte Grenze ist der Liefergegenstand; eine behauptete Dichtheit waere der Mangel.**
+#
+# ## Zur Sitzungsidentitaet
+#
+# Wo dieser Haken eine Sitzung unterscheidet, tut er es ueber die **Sitzungs-ID** und niemals ueber
+# eine gespeicherte PID. Die Regel und ihre Begruendung stehen im Tor bei `sitzung_lebt()`; hier
+# steht kein zweites Exemplar davon. **Eine alte PID allein erklaert nichts fuer verwaist.**
+set -uo pipefail
+
+# ── DAS TOR TRAEGT DIE PRUEFUNG, DIESER HAKEN RUFT SIE AUF ─────────────────────────────────
+#
+# Zwei Fassungen derselben Regel waeren zwei Wahrheiten, und die zweite altert still — dieselbe
+# Begruendung, mit der die Zuordnung Baum/Zweig im Tor genau einmal steht. Der Haken ruft das
+# VOLLE Tor: Rolle (exit 5), Baum, Zweig, Steuerung. Er entscheidet nichts selbst.
+WURZEL="$(git rev-parse --show-toplevel 2>/dev/null)" || WURZEL=""
+TOR="$WURZEL/scripts/rollen-tor.sh"
+
+if [ ! -f "$TOR" ]; then
+  # Durchlassen und MELDEN, wie K3/K4/K6 es tun. Die Datei kommt ueber den Transport; ein Baum,
+  # der sie noch nicht hat, kann sie nicht selbst herbeischaffen. Eine Barriere, die ueberall dort
+  # sperrt, wo sie nichts messen kann, wird abgeschaltet — und schuetzt danach nirgends (A-03).
+  echo "PRE-COMMIT  HINWEIS  scripts/rollen-tor.sh fehlt in diesem Baum — UNGEPRUEFT." >&2
+  exit 0
+fi
+
+bash "$TOR"
+RC=$?
+if [ "$RC" -ne 0 ]; then
+  echo "" >&2
+  case "$RC" in
+    5) echo "KEIN COMMIT. Ohne Rollenmarke ist keine Zuordnung pruefbar (Rueckgabe 5)." >&2
+       echo "            TICKET_ROLLE=<rolle> setzen — oder ueber scripts/commit-pruefen.sh gehen." >&2 ;;
+    7) echo "KEIN COMMIT. Die zentrale Rollenquelle laesst ihn nicht zu (Rueckgabe 7)." >&2
+       echo "            Generation, Digest und ACK werden im Moment des Commits gelesen," >&2
+       echo "            nicht beim letzten Takt. Genau dazwischen lag der Fall vom 22.08." >&2 ;;
+    *) echo "KEIN COMMIT. Baum, Zweig und Rolle gehoeren nicht zusammen (Rueckgabe $RC)." >&2
+       echo "            Ein Commit im falschen Baum landet auf einem fremden Zweig" >&2
+       echo "            und faellt niemandem auf." >&2 ;;
+  esac
+  exit "$RC"
+fi
+exit 0

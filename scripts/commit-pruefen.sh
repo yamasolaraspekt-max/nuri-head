@@ -127,15 +127,38 @@ if [ -f scripts/rollen-tor.sh ]; then
   # A-37 Teil 2: das Tor muss wissen, OB die Statuswahrheit in der Pfadliste steht. Es bekommt
   # die Auskunft als Umgebungsvariable, damit es selbst keine Pfadliste kennen muss — es prueft
   # Rolle gegen Baum und nicht Dateien.
+  # A-37-24: die Barriere gilt fuer BEIDE Dateien mit genau einem Schreiber. Sie stehen hier
+  # als Liste und nicht als zwei Zweige, damit die naechste Datei eine Zeile kostet und nicht
+  # eine zweite Sperre. TOR_STATUS_DATEIEN sagt dem Tor, WELCHE davon anliegt — sonst nennt
+  # es beim Abweisen den falschen Namen.
   TOR_STATUS_PFAD=0
+  TOR_STATUS_DATEIEN=""
   for _p in "$@"; do
-    case "$_p" in docs/STATUS.md) TOR_STATUS_PFAD=1 ;; esac
+    case "$_p" in
+      docs/STATUS.md|docs/BEFUNDNOTIZEN.md)
+        TOR_STATUS_PFAD=1
+        TOR_STATUS_DATEIEN="${TOR_STATUS_DATEIEN:+$TOR_STATUS_DATEIEN }$_p" ;;
+    esac
   done
-  TICKET_ROLLE="$ROLLE" TOR_STATUS_PFAD="$TOR_STATUS_PFAD" bash scripts/rollen-tor.sh
+  # A-37-23: der dirigent hat einen technisch begrenzten Schreibbereich. Durchsetzen kann das
+  # Tor ihn nur, wenn es die Pfade SIEHT — die Ja/Nein-Auskunft oben reicht dafuer nicht. Die
+  # Liste geht zeilenweise hinueber, damit ein Pfad mit Leerzeichen nicht in zwei zerfaellt.
+  # Das Tor entscheidet, was es damit anfaengt; hier wird nichts bewertet.
+  TOR_PFADE="$(printf '%s\n' "$@")"
+  TICKET_ROLLE="$ROLLE" TOR_STATUS_PFAD="$TOR_STATUS_PFAD" \
+    TOR_STATUS_DATEIEN="$TOR_STATUS_DATEIEN" TOR_PFADE="$TOR_PFADE" bash scripts/rollen-tor.sh
   TOR_RC=$?
   if [ "$TOR_RC" -ne 0 ]; then
     echo "" >&2
-    echo "KEIN COMMIT. Der Baum gehoert nicht zu dieser Rolle (Rollen-Tor, Rueckgabe $TOR_RC)." >&2
+    # Die Meldung muss zur URSACHE passen und nicht zur haeufigsten. Mit A-37-22e kann das Tor
+    # jetzt auch 7 zurueckgeben — "die Steuerung sagt nicht jetzt" —, und da stimmt der Satz vom
+    # falschen Baum nicht mehr: Baum und Rolle koennen tadellos zusammenpassen, waehrend die
+    # Steuerung pausiert. In der Probe stand genau das da, und es war irrefuehrend.
+    if [ "$TOR_RC" = "7" ]; then
+      echo "KEIN COMMIT. Die zentrale Rollenquelle laesst ihn nicht zu (Rollen-Tor, Rueckgabe 7)." >&2
+    else
+      echo "KEIN COMMIT. Der Baum gehoert nicht zu dieser Rolle (Rollen-Tor, Rueckgabe $TOR_RC)." >&2
+    fi
     # DER RUECKGABEWERT WIRD DURCHGEREICHT und nicht durch einen eigenen ersetzt.
     #
     # **Vorher stand hier `exit 2`** — und damit war an der Einhaengestelle genau die
@@ -224,6 +247,53 @@ else
 fi
 
 FEHLER=0
+
+# ── A-37-20 — JE URSACHE EIN EIGENER, WIRKLICH ERREICHBARER RUECKGABEWERT ───────────────────
+#
+# **Der Mangel, den der Evaluator gemessen hat (Votum db420cf0):** die drei Ursachen aus A-37-8
+# waren am TEXT unterscheidbar und am RUECKGABEWERT nicht — alle drei endeten in derselben
+# Sammelstelle mit `exit 1`. **`exit 4` kam im ganzen Bau null Mal vor.**
+#
+# ***Der Witz daran: die Unterscheidung war schon da.*** `yaml_bericht()` gibt intern laengst 2 fuer
+# den Syntaxfehler, 3 fuer die fehlende Modulaufloesung und alles Uebrige fuer den Laufzeitfehler
+# zurueck — der Code wurde eine Zeile spaeter auf `FEHLER=1` eingeebnet und war weg.
+# **Es fehlte kein Wissen, es fehlte die Weitergabe.**
+#
+# **Die Zuordnung stammt aus der Codetabelle des Blattes (`c11f97ac:317-323`), nicht von mir:**
+# ```text
+#   2  YAML-Syntaxfehler im Kopf      commit-pruefen.sh
+#   3  fehlende Modulaufloesung MODUL commit-pruefen.sh
+#   4  sonstiger Laufzeitfehler       commit-pruefen.sh
+# ```
+#
+# **ZU DEN KOLLISIONEN — beide benannt, keine still umetikettiert (Blatt Teil a):**
+#
+# *`2` traegt hier auch den Aufruffehler* (`:72`, `:86`, `:90`, `:241`). **Das Blatt fuehrt diese
+# Doppelbelegung selbst** — als eigene Tabellenzeile *„(2) Rollenkennung fehlt/falsche Form,
+# `commit-pruefen.sh:59-65`, unberuehrt"* — und begruendet sie: *„keine Verdopplung, sondern eine
+# zweite Eintrittstuer: wer `commit-pruefen.sh` ruft, wird von `:59-65` mit 2 abgewiesen und
+# erreicht das Tor gar nicht."* **Die beiden Bedeutungen koennen nicht im selben Lauf auftreten.**
+# Die Suite nennt den Wert dort ausdruecklich *„Aufruffehler-Klasse"* und prueft ihn dreimal;
+# ich fasse ihn nicht an.
+#
+# *`3` traegt hier auch `ENV_BLOCKED`* (sechsmal, `:514`-`:607`). **Diese Kollision steht NICHT im
+# Blatt** — sie ist nach der Tabelle entstanden. Sie ist folgenlos aus demselben Grund wie oben:
+# der Lock-Riegel liegt mehrere hundert Zeilen VOR der YAML-Pruefung, wer dort abbricht, erreicht
+# sie nie. **Ich melde sie trotzdem, statt sie stillschweigend als geloest zu behandeln** — die
+# Begruendung stammt von mir und nicht aus dem Blatt, und das ist ein Unterschied.
+#
+# **Was KEINEN eigenen Code bekommt und warum:** `VERSCHWUNDEN`, `FEHLT`, `LEER`, `UNVERAENDERT`
+# und `SYNTAX` (js/mjs) bleiben bei `1`. Sie gehoeren nicht zu den drei Ursachen aus A-37-8; die
+# Tabelle weist ihnen nichts zu, und ich erfinde keine Codes, die niemand verlangt hat.
+#
+# **Der ERSTE Fehler bestimmt den Code.** Ohne diese Regel ueberschreibt ein spaeteres `FEHLER=1`
+# aus einer zweiten Datei die spezifische Ursache der ersten — der Lauf meldete dann `1`, obwohl
+# er die Modulaufloesung gefunden hat. *Genau die Einebnung, gegen die dieses Kriterium steht,
+# nur eine Datei weiter.*
+fehler_setzen() {
+  [ "$FEHLER" -eq 0 ] && FEHLER="$1"
+  return 0
+}
 
 # ── STUFE 5 ──────────────────────────────────────────────────────────────────────────────────
 # Der Index wandert aus dem Mount. Der Pfad traegt die PID: teilen sich zwei gleichzeitige
@@ -757,20 +827,20 @@ for p in "$@"; do
       echo "VERSCHWUNDEN $p  — im Baum weg, aber in HEAD vorhanden." >&2
       echo "           Ist das eine Entfernung oder eine Umbenennung, dann TICKET_ENTFERNEN=1 voranstellen." >&2
       echo "           Ist es keine, dann ist die Datei verlorengegangen — erst suchen, nicht committen." >&2
-      FEHLER=1; continue
+      fehler_setzen 1; continue
     fi
-    echo "FEHLT      $p" >&2; FEHLER=1; continue
+    echo "FEHLT      $p" >&2; fehler_setzen 1; continue
   fi
   if [ ! -s "$p" ]; then
-    echo "LEER       $p  — ein leerer Schreibvorgang ist ein gescheiterter" >&2; FEHLER=1; continue
+    echo "LEER       $p  — ein leerer Schreibvorgang ist ein gescheiterter" >&2; fehler_setzen 1; continue
   fi
   if git --no-optional-locks diff --quiet -- "$p" && git --no-optional-locks diff --cached --quiet -- "$p" \
      && ! git --no-optional-locks status --porcelain -- "$p" | grep -q '^??'; then
-    echo "UNVERAENDERT $p  — der Schreibvorgang hat nichts bewirkt" >&2; FEHLER=1; continue
+    echo "UNVERAENDERT $p  — der Schreibvorgang hat nichts bewirkt" >&2; fehler_setzen 1; continue
   fi
   case "$p" in
     *.mjs|*.js)
-      node --check "$p" 2>/dev/null || { echo "SYNTAX     $p" >&2; FEHLER=1; } ;;
+      node --check "$p" 2>/dev/null || { echo "SYNTAX     $p" >&2; fehler_setzen 1; } ;;
     *.md)
       BERICHT="$(yaml_bericht "$p")"; RC=$?
       case "$RC" in
@@ -779,7 +849,7 @@ for p in "$@"; do
           # Fall 2 der Anordnung vom 14.08.: der WAHRE Grund, nicht als Kopf-Fehler getarnt.
           echo "MODUL      $p  — js-yaml nicht aufloesbar. Dieser Worktree hat kein node_modules." >&2
           echo "           Abhilfe: NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules vor den Aufruf setzen." >&2
-          FEHLER=1 ;;
+          fehler_setzen 3 ;;   # MODUL — Codetabelle c11f97ac:320
         2)
           # Fall 1: echter Syntaxfehler. ABER: die Zahl allein sagt nicht, WER ihn gemacht hat.
           # Verglichen wird gegen den committeten Stand DERSELBEN Datei — kein fester Schwellwert,
@@ -797,7 +867,7 @@ for p in "$@"; do
           if [ "${JETZT:-0}" -gt "$VORHER" ]; then
             echo "YAML-KOPF  $p  — der Kopf parst nicht ($JETZT kaputte Bloecke, am Commit waren es $VORHER)" >&2
             printf '%s\n' "$BERICHT" | grep '^  Block' >&2
-            FEHLER=1
+            fehler_setzen 2   # YAML-Syntaxfehler — Codetabelle c11f97ac:319
           else
             echo "YAML-ALTLAST  $p  — $JETZT kaputte Bloecke, gegenueber dem Commit nicht mehr geworden ($VORHER)." >&2
             echo "              Warnung, kein Abbruch: dieser Schreibvorgang hat sie nicht verursacht." >&2
@@ -805,7 +875,7 @@ for p in "$@"; do
           fi ;;
         *)
           # Fall 3: alles Uebrige, als solches benannt statt als Kopf-Fehler.
-          echo "LAUFZEIT   $p  — ${BERICHT#LAUFZEIT }" >&2; FEHLER=1 ;;
+          echo "LAUFZEIT   $p  — ${BERICHT#LAUFZEIT }" >&2; fehler_setzen 4 ;;   # Codetabelle c11f97ac:321
       esac ;;
   esac
 done
@@ -813,7 +883,9 @@ done
 if [ "$FEHLER" -ne 0 ]; then
   echo "" >&2
   echo "KEIN COMMIT. F-14: was nicht geschrieben wurde, wird auch nicht belegt." >&2
-  exit 1
+  # A-37-20: HIER stand `exit 1` — die Stelle, an der die drei Ursachen ihre Unterscheidung
+  # verloren. Der Code wird jetzt durchgereicht, statt eingeebnet zu werden.
+  exit "$FEHLER"
 fi
 
 # ── B5: EIN ZAEHLERGEBNIS, DAS EINEN BEFUND TRAEGT, BRAUCHT SEINE TREFFERZEILEN ─────────────
@@ -986,6 +1058,130 @@ if [ "$TROCKEN" = "1" ]; then
     fi
   done
   exit 0
+fi
+
+# ── A-37-26 — EIN ZUSTANDSCOMMIT, DEN DIE ERZEUGUNG NICHT ERKENNT, DARF NICHT DURCHGEHEN ────
+#
+# **Der Fall liegt im Bestand und ist der gefaehrlichste der drei:** `e9e6ee5b` trug den Betreff
+# `generator: zustand: A-38 · A-42 · CODE_FERTIG · evaluator · bau 0f731c22 26c46f31 — …` —
+# **zwei Kennungen, zwei Bau-SHAs, und der Commit war ausserdem leer.**
+#
+# ***Ein leerer Commit faellt auf. Ein Betreff, den das Muster nicht erkennt, faellt nicht auf:***
+# *er sieht richtig aus und wird still uebergangen.* **Folge im Bestand: weder A-38 noch A-42
+# bekamen aus diesem Commit einen Zustandswechsel**, und `docs/STATUS.md` fuehrte A-42 weiter auf
+# `BEREIT/generator`, obwohl der Bau seit Stunden lag.
+#
+# **DAS MUSTER WIRD AUS `status-erzeugen.sh` GELESEN, NICHT NACHGEBAUT.** Das ist die Absage-Regel
+# des Kriteriums, und sie hat einen Grund: *zwei Muster fuer dieselbe Frage sind eine zweite
+# Wahrheit und driften auseinander.* Waere hier eine Kopie, koennte die Erzeugung ihr Muster
+# schaerfen, waehrend dieses Tor weiter das alte pruefte — und der Betreff, den beide fuer richtig
+# hielten, gaebe es nicht mehr.
+#
+# **Geholt wird ueber ANKER, nicht ueber Zeilennummern** (`KERN = (` bis `WORTLAUT = re.compile`).
+# *Eine Zeilennummer im Beleg ist genau der Mangel, den A-37-19 beschreibt: sie stimmt am Tag des
+# Schreibens und driftet mit dem naechsten Einschub.*
+#
+# **Der Grep auf `zustand:` ist der AUSLOESER, nicht die Pruefung.** Er entscheidet nur, ob dieser
+# Betreff ueberhaupt ein Zustandscommit sein will; geprueft wird danach mit dem geholten Muster.
+# ⚠ DER AUSLOESER IST VERANKERT — und die Verankerung IST der Unterschied.
+#
+# **Hier stand `grep -q 'zustand:'` ohne Anker, und die Barriere hat mich beim naechsten Commit
+# selbst gefangen.** Meine Bau-Botschaft enthielt den Satz *„DER GREP AUF `zustand:` ist der
+# AUSLOESER"* — sie ZITIERTE den Wortlaut, statt ihn zu SEIN. **Der Commit wurde abgewiesen,
+# obwohl er kein Zustandscommit war.**
+#
+# *Das ist genau die Unterscheidung, die `status-erzeugen.sh` zwei Zeilen unter seinem eigenen
+# Muster notiert:* **„Ein Commit-BETREFF muss der Wortlaut SEIN; eine Regel ZITIERT ihn."**
+# Dort steht sie, weil dieselbe Falle die Regelprobe schon einmal falsch-rot gemeldet hat.
+# **Ich bin in dieselbe Grube gefallen, eine Datei weiter.**
+#
+# **Und die Richtung ist die unangenehmere:** ein Falsch-Positiv sperrt Arbeit, die in Ordnung
+# ist. Eine Barriere, die das oefter tut, wird weggeklickt (A-03) — und schuetzt danach nicht
+# mehr gegen den Fall, fuer den sie gebaut wurde.
+if printf '%s' "$A11_ERSTE" | grep -qE '^([a-z-]+(-[0-9]+)?:[[:space:]]+)?zustand:'; then
+  ZUSTAND_MELDUNG="$(python3 - "$A11_ERSTE" <<'PYENDE'
+import io, re, sys
+
+betreff = sys.argv[1]
+quelle = 'scripts/status-erzeugen.sh'
+try:
+    text = io.open(quelle, encoding='utf-8').read()
+except OSError:
+    # Eine ausgefallene Messung ist KEIN Ergebnis — aber sie ist auch kein Verstoss.
+    print('HINWEIS  %s nicht lesbar — Zustandsmuster UNGEPRUEFT.' % quelle)
+    sys.exit(0)
+
+a = text.find('KERN = (')
+b = text.find('WORTLAUT = re.compile')
+if a < 0 or b < 0 or b < a:
+    print('HINWEIS  KERN/WORTLAUT in %s nicht auffindbar — UNGEPRUEFT.' % quelle)
+    sys.exit(0)
+ende = text.find('\n', text.find('\n', b) - 1)
+raum = {'re': re}
+try:
+    exec(text[a:text.find('\n', b)], raum)          # genau der Block der Quelle, unveraendert
+except Exception as f:
+    print('HINWEIS  Muster aus %s nicht auswertbar (%s) — UNGEPRUEFT.' % (quelle, f))
+    sys.exit(0)
+
+if not raum['WORTLAUT'].match(betreff):
+    print('VERSTOSS  Der Betreff traegt "zustand:", aber die ERZEUGUNG erkennt ihn nicht.')
+    print('          Betreff: %s' % betreff[:120])
+    print('          Erwartet: <rolle>: zustand: <KENNUNG> · <ZUSTAND> · <rolle> · <beleg>')
+    print('          Genau EINE Kennung. Ein Betreff, den status-erzeugen.sh nicht erkennt,')
+    print('          erzeugt keinen Zustandswechsel — und faellt niemandem auf, weil er')
+    print('          richtig aussieht. Genau das ist bei e9e6ee5b geschehen.')
+    sys.exit(1)
+
+# Zweiter Teil des Kriteriums: mehr als EIN Bau-SHA. Das Muster laesst den Beleg-Teil offen
+# (`.*`), es kann diesen Fall also nicht sehen — er wird hier zusaetzlich gemessen und nicht
+# stillschweigend dem Muster zugeschrieben.
+beleg = raum['WORTLAUT'].match(betreff).group('beleg') or ''
+m = re.search(r'\bbau\b(.*)', beleg)
+if m:
+    shas = re.findall(r'\b[0-9a-f]{7,40}\b', m.group(1))
+    if len(shas) > 1:
+        print('VERSTOSS  Der Betreff nennt %d Bau-SHAs: %s' % (len(shas), ' '.join(shas)))
+        print('          Ein Zustandswechsel gehoert zu EINEM Bau. Zwei SHAs in einer Zeile')
+        print('          heissen, dass zwei Lieferungen in einem Commit verschwinden.')
+        sys.exit(1)
+sys.exit(0)
+PYENDE
+)"
+  ZUSTAND_RC=$?
+  [ -n "$ZUSTAND_MELDUNG" ] && printf 'A-37-26   %s\n' "$ZUSTAND_MELDUNG" >&2
+  if [ "$ZUSTAND_RC" -ne 0 ]; then
+    echo "" >&2
+    echo "KEIN COMMIT. Der Zustandsbetreff wird von der Erzeugung nicht erkannt." >&2
+    exit 1
+  fi
+fi
+
+# ── A-37-22e — DIE STEUERUNG WIRD HIER ERNEUT GELESEN, NICHT NUR AM ANFANG ──────────────────
+#
+# **Yamas Wortlaut verlangt zwei Zeitpunkte:** *vor jedem schreibenden Schritt* UND *unmittelbar im
+# Commit-Gate.* **Der erste schreibende Schritt ist die naechste Zeile** — `git add` fuer ungetrackte
+# Pfade. Deshalb steht die Pruefung HIER und nicht nach dem Stagen.
+#
+# **Das Tor oben (Zeile ~134) hat dieselbe Pruefung schon gefahren — und das genuegt nicht.**
+# Dazwischen liegen die YAML-Koepfe, der Modulstand und die B5-bis-B8-Zusagen: Sekunden bis Minuten.
+# *Eine Pause, die in diesem Fenster veroeffentlicht wird, faende sonst genau dasselbe Loch wieder
+# vor, nur kleiner.* **Die Absage-Regel des Kriteriums zielt darauf: verlangt ist die Pruefung IM
+# Commit-Gate, nicht davor.** Ein Tor, das die Generation einmal liest und dann zwischenspeichert,
+# erfuellt A-37-22e nicht.
+#
+# **Gemessen, warum es dieses Fenster wirklich gibt:** am 22.08. lagen zwischen der Veroeffentlichung
+# der Pause (08:12:54) und dem Commit (1155709d, 08:16:37) drei Minuten und 43 Sekunden. Der Bauende
+# hatte die Quelle davor gelesen — nur eben davor.
+if [ -f scripts/rollen-tor.sh ]; then
+  TICKET_ROLLE="$ROLLE" bash scripts/rollen-tor.sh --steuerung
+  STEUER_RC=$?
+  if [ "$STEUER_RC" -ne 0 ]; then
+    echo "" >&2
+    echo "KEIN COMMIT. Die zentrale Rollenquelle laesst ihn nicht zu (Rueckgabe $STEUER_RC)." >&2
+    echo "            Generation, Digest und ACK werden hier erneut gelesen — nicht erinnert." >&2
+    exit "$STEUER_RC"
+  fi
 fi
 
 for p in "$@"; do

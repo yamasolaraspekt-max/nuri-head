@@ -164,6 +164,274 @@ fi
 # K1: eine Instanz haengt ihre Nummer an. `plan-pruefer-2` ist die Rolle `plan-pruefer`.
 STAMM="$(printf '%s' "$ROLLE" | sed -E 's/-[0-9]+$//')"
 
+# ── A-37-22e — GENERATION UND DIGEST GEGEN DIE ZENTRALE ROLLENQUELLE ────────────────────────
+#
+# **Yamas Wortlaut:** *vor jedem schreibenden Schritt und unmittelbar im Commit-Gate wird die
+# aktuelle Generation samt Digest erneut gegen die zentrale Rollenquelle geprueft; veralteter ACK,
+# fehlender ACK oder eine Aktion wie `pausieren` fuehren zur Abweisung — vor jeder Aenderung.*
+# **„Beim naechsten Takt lesen" reicht nicht.**
+#
+# **Der Beleg, dass die Luecke wirkt, ist von heute und entlastet den Bauenden:**
+# ```text
+#   08:12:54   Pause (gen 6) fuer den Generator veroeffentlicht
+#   08:16:37   Generator-Commit 1155709d — trotzdem gesetzt
+# ```
+# *Er hat gegen keine Regel verstossen: sein Takt hatte die Pause noch nicht gelesen.* **Genau das
+# ist der Punkt.** Eine Steuerung, die erst beim naechsten Takt wirkt, hat zwischen Veroeffentlichung
+# und Lesen ein Loch, und der Commit faellt hinein. *Ich war dieser Bauende; das Kriterium schliesst
+# meinen eigenen Fehler, und deshalb steht die Pruefung hier und nicht in einer Merkregel.*
+#
+# **ZUR TEILSTRING-FALLE, die das Blatt zu diesem Kriterium ausdruecklich benennt:** `grep -ci 'ack'`
+# meldet in `commit-pruefen.sh` FUENF Treffer, und **keiner davon ist ein ACK** — selbst nachgestellt
+# sind es `package` (3x) und `ungetrackt` (2x). **Mit Wortgrenze sind es 0.** *Wer die 5 als Beleg
+# naehme, meldete ein Tor, das es nicht gibt.*
+#
+# **Der Ort der Steuerungsstelle ist konfigurierbar** (`TICKET_STEUERUNG`), damit die Proben in
+# einer Probe-Steuerungsstelle laufen koennen und die echte Ablage nicht anfassen — A-37-22d gilt
+# hier mit. *Der Standardwert bleibt kanonisch; wer nichts setzt, prueft gegen die echte Quelle.*
+STEUERUNG="${TICKET_STEUERUNG:-/Users/yamanuri/.ticket-steuerung}"
+
+# Rueckgabe 7 fuer "die Steuerung sagt: nicht jetzt". NEU in der Codetabelle und bewusst nicht 1
+# oder 5: 1 heisst "Rolle und Baum passen nicht zusammen", 5 "Rollenmarke fehlt oder ist falsch".
+# Beides waere hier gelogen — Rolle und Baum koennen tadellos stimmen, waehrend die Steuerung
+# pausiert. Ein eigener Code haelt die Faelle am Rueckgabewert unterscheidbar, so wie der
+# Plan-Pruefer es fuer 1 gegen 5 durchgesetzt hat.
+# ── A-37-25 — SITZUNGSIDENTITAET: PUNKT 1, 2 UND 6 DER ZIELREGEL ───────────────────────────
+#
+# **Punkt 1: die stabile Identitaet ist allein die Sitzungs-ID.** Sie ueberlebt den Prozess.
+# **Punkt 2: `pid` und `prozess_start` gelten je LAUF**, nicht je Sitzung.
+# **Punkt 6: eine alte PID allein erklaert eine Lease NIEMALS fuer verwaist.**
+#
+# **Der Realfall ist protokolliert, nicht konstruiert:** um 00:17:18 wurde die Planner-Lease mit
+# `owner.pid 88928` erteilt — *dieser Prozess war da bereits tot*, waehrend die Sitzung durchgehend
+# arbeitete und vier Minuten spaeter ihr Blatt schrieb. **Jede eingetragene PID war zum Zeitpunkt
+# ihres Eintrags richtig; sie ist nicht falsch, sondern abgelaufen.**
+#
+# **Am 22.08. traf es diese Rolle selbst:** der Auftrag nannte PID 88088 als meine Sitzung, und
+# `ps` gab dafuer STAT T. Mein tatsaechlicher Lauf war 91834 — dieselbe Sitzung, neuer Lauf.
+# *Aufgefallen ist es nur, weil die alte PID gestoppt war.* **Haette sie gelebt, waere die
+# Lebendprobe gruen gewesen und der Wechsel unbemerkt geblieben** — genau das ist dem Plan-Pruefer
+# am selben Vormittag passiert, der seine tote PID dutzendfach mit exit 0 geprueft hatte.
+#
+# **Daraus die Regel, die dieses Tor anwendet:** *nicht „lebt die eingetragene PID?", sondern
+# „ist sie MEINE?".* Die erste Frage kann gruen sein, waehrend die zweite rot ist.
+sitzung_lebt() {
+  # $1 = Sitzungs-ID. Gesucht wird der LAUF an seiner Kommandozeile, nicht an einer gespeicherten
+  # Zahl. Eine Sitzungs-ID in der Kommandozeile ist ein Lebensnachweis; eine PID in einer Datei
+  # ist eine Aussage mit Verfallsdatum, deren Datum niemand kennt.
+  [ -z "${1:-}" ] && return 1
+  # Ohne Pipe: die Ausgabe wird erst vollstaendig eingelesen und dann geprueft. Ein `grep -q`
+  # hinter einer Pipe beendet sich beim ersten Treffer und kann dem Erzeuger SIGPIPE geben —
+  # unter `pipefail` wird daraus ein Fehlschlag der ganzen Kette. Der Hausgrundsatz dazu steht im
+  # Kopf von rueckweg.py: eine ausgefallene Messung ist KEIN Ergebnis. Hier ist sie einfach
+  # vermeidbar, also wird sie vermieden.
+  #
+  # ⚠ HIER STAND EINE ZUFALLSTREFFER-FALLE, gefunden durch die eigene Negativprobe S3.
+  # Die erste Fassung suchte die Sitzungs-ID irgendwo in der GESAMTAUSGABE von `ps`. Gemessen:
+  # eine Sitzungs-ID, zu der KEIN Prozess existierte, galt als lebend — weil die Probe selbst
+  # `printf ... tote-sitzung-4711 ...` aufgerufen hatte und diese Kommandozeile in `ps` stand.
+  # **Das Muster mass, ob die Zeichenkette irgendwo vorkommt, und nicht, ob die Sitzung laeuft.**
+  # Ein Editor mit der ID im Dateinamen, ein grep, ein Scratchpad-Pfad — jedes davon haette eine
+  # tote Sitzung fuer lebend erklaert, und zwar ausgerechnet in der Richtung, die einen fremden
+  # Commit durchgelassen haette.
+  #
+  # Gezaehlt wird jetzt nur, was ein claude-LAUF ist: das erste Feld der Kommandozeile muss das
+  # Programm `claude` sein. Damit fallen bash, printf, sed und der Scratchpad-Pfad heraus —
+  # letzterer enthaelt uebrigens selbst die Zeichenfolge `claude`, weshalb eine Suche nach dem
+  # blossen Wort ebenfalls nicht genuegt haette.
+  _AUS="$(ps -axo command= 2>/dev/null)"
+  while IFS= read -r _z; do
+    _prog="${_z%% *}"
+    case "$_prog" in
+      */claude|claude) ;;
+      *) continue ;;
+    esac
+    case "$_z" in
+      *"$1"*) return 0 ;;
+    esac
+  done <<< "$_AUS"
+  return 1
+}
+
+# Die eigene Sitzungs-ID. Ohne sie kann dieses Tor keine Sitzung unterscheiden — dann prueft es
+# nicht und sagt das, statt zu raten.
+SITZUNG="${TICKET_SITZUNG:-}"
+
+# ── Committe ich unter einer FREMDEN Lease? ────────────────────────────────────────────────
+#
+# **Abgrenzung, und sie ist Teil des Kriteriums:** A-37-25 baut ein pre-commit-Tor, KEINE
+# Lease-Verwaltung. Hier wird gelesen und verglichen — nie erteilt, nie uebernommen, nie
+# entfernt. Heartbeat-Erneuerung, Uebernahme und Fencing sind Mechanik der Claim-Sperre und
+# gehoeren nach Z0-I2. *Sie hier zu bauen hiesse, Lease-Verwaltung in einen Commit-Haken zu legen.*
+fremde_lease_pruefen() {
+  [ -z "$SITZUNG" ] && return 0
+  LEASEDATEI="$(ls -1 "$STEUERUNG"/leases/*/active/lease.yaml 2>/dev/null | head -1)"
+  [ -f "${LEASEDATEI:-}" ] || return 0
+  LSITZUNG="$(sed -n 's/^[[:space:]]*sitzungs_id:[[:space:]]*\([^[:space:]#]*\).*/\1/p' "$LEASEDATEI" | head -1)"
+  [ -z "$LSITZUNG" ] && return 0
+  [ "$LSITZUNG" = "$SITZUNG" ] && return 0
+
+  # Die Lease gehoert einer anderen Sitzung. Ob sie noch gilt, entscheidet NICHT die eingetragene
+  # PID — Punkt 6 der Zielregel verbietet genau diesen Schluss. Gefragt wird, ob JENE SITZUNG lebt.
+  if sitzung_lebt "$LSITZUNG"; then
+    echo "ROLLEN-TOR  VERSTOSS  eine andere Sitzung haelt die Lease und lebt." >&2
+    echo "            Lease: $LEASEDATEI" >&2
+    echo "            haelt:  $LSITZUNG" >&2
+    echo "            ich:    $SITZUNG" >&2
+    return 7
+  fi
+  # Sie lebt nicht — und trotzdem wird hier NICHTS uebernommen und nichts fuer verwaist erklaert.
+  # Das Tor meldet und laesst durch; die Uebernahme verlangt zusaetzlich einen abgelaufenen
+  # Heartbeat und gehoert der Claim-Sperre (Z0-I2), nicht einem Commit-Haken.
+  echo "ROLLEN-TOR  HINWEIS  die aktive Lease gehoert Sitzung $LSITZUNG, die kein laufender" >&2
+  echo "            Prozess traegt. NICHT als verwaist behandelt — das entscheidet die" >&2
+  echo "            Claim-Sperre ueber Heartbeat und Fencing, nicht dieses Tor." >&2
+  return 0
+}
+
+steuerung_pruefen() {
+  QUELLE="$STEUERUNG/rollen/$STAMM.yaml"
+  DIGESTDATEI="$QUELLE.sha256"
+
+  # Keine Steuerungsstelle: das Tor laeuft auch in Wegwerf-Repos und in Baeumen ohne Anbindung.
+  # Durchlassen und MELDEN — dieselbe Bauform wie K3, K4 und K6. Eine Barriere, die ueberall dort
+  # sperrt, wo sie nichts messen kann, wird abgeschaltet und schuetzt danach nirgends (A-03).
+  if [ ! -f "$QUELLE" ]; then
+    echo "ROLLEN-TOR  HINWEIS  keine Rollenquelle unter $STEUERUNG/rollen/ — Generation UNGEPRUEFT." >&2
+    return 0
+  fi
+
+  # Der Digest wird SELBST gerechnet und nicht uebernommen. Weicht er ab, ist die Quelle nicht die,
+  # als die sie sich ausgibt — dann wird nicht committet, und zwar bevor irgendetwas geschieht.
+  if [ -f "$DIGESTDATEI" ]; then
+    IST="$(shasum -a 256 "$QUELLE" 2>/dev/null | awk '{print $1}')"
+    SOLL="$(awk '{print $1}' "$DIGESTDATEI" 2>/dev/null)"
+    if [ -n "$SOLL" ] && [ "$IST" != "$SOLL" ]; then
+      echo "ROLLEN-TOR  VERSTOSS  Digest der Rollenquelle stimmt nicht." >&2
+      echo "            selbst gerechnet: $IST" >&2
+      echo "            hinterlegt:       $SOLL" >&2
+      echo "            Eine Quelle, die nicht ist, was sie behauptet, traegt keinen Commit." >&2
+      return 7
+    fi
+  fi
+
+  # ── DIE ZAHL WIRD AUS DEM FELD GELESEN, NICHT AUS DER ZEILE ─────────────────────────────
+  #
+  # **Hier stand `awk -F: '/^generation:/ {gsub(/[^0-9]/,"",$2); ...}'` — und das war falsch.**
+  # Gemessen an der echten Rollenquelle, deren generation-Zeile einen Kommentar traegt:
+  # ```text
+  #   generation: 8            # 22.08. 09:07 — DoR der Nachschaerfung ERTEILT ...
+  #   gelesen wurde:  8220809
+  # ```
+  # *`-F:` trennt auch am Doppelpunkt in `09:07`, und `gsub` sammelt anschliessend JEDE Ziffer
+  # der Zeile ein — aus der 8 wurden 8, 22, 08 und 09.* **Die Folge war eine Sperre gegen jeden
+  # Commit: 8 ist kleiner als 8220809, also galt mein aktueller ACK als veraltet.**
+  #
+  # **Warum es die fuenf Proben nicht gefunden haben:** meine Probe-Steuerungsstelle schrieb
+  # `generation: 5` ohne Kommentar. **Die Probe war sauberer als die Wirklichkeit** — und hat
+  # deshalb genau den Fall nicht gestellt, den die Wirklichkeit sofort stellte. *Gefunden hat
+  # ihn die Rueckfallprobe am ECHTEN Tor gegen die ECHTE Quelle, nicht die Probenreihe.*
+  #
+  # `sed` nimmt jetzt die erste Ziffernfolge unmittelbar hinter dem Doppelpunkt und laesst den
+  # Rest der Zeile stehen. Was hinter der Zahl kommt, geht die Zahl nichts an.
+  GEN="$(sed -n 's/^generation:[[:space:]]*\([0-9][0-9]*\).*/\1/p' "$QUELLE" | head -1)"
+  # Dieselbe Klasse, nur noch nicht eingetreten: ein Kommentar hinter der Aktion darf sie nicht
+  # veraendern. Genommen wird das erste Wort hinter dem Doppelpunkt, nicht der Zeilenrest.
+  AKTION="$(sed -n 's/^aktion:[[:space:]]*\([^[:space:]#]*\).*/\1/p' "$QUELLE" | head -1)"
+
+  # Die Aktion entscheidet VOR dem ACK-Alter: pausiert die Steuerung, ist ein aktueller ACK
+  # ebenso wenig eine Erlaubnis wie ein veralteter.
+  # ⚠ HIER STAND `bauen) ;;` ALLEIN — und hat den naechsten echten Auftrag gesperrt.
+  #
+  # **Gemessen am 22.08.:** die Steuerung stellte `aktion: nachbessern` (Generation 9, Evaluator-
+  # Votum NACHBESSERN). Dieses Tor gab Rueckgabe 7 — *„die Steuerung sagt 'nachbessern', nicht
+  # 'bauen'"* — und verhinderte damit genau die Arbeit, die die Steuerung soeben beauftragt hatte.
+  # **Der Auftrag selbst nennt die Bedingung anders:** *„aktion != nachbessern ... -> NICHT
+  # committen"*. Meine Positivliste kannte nur einen einzigen Wert.
+  #
+  # ***Das ist A-03 an meinem eigenen Bau:*** *eine Barriere, die richtige Arbeit sperrt, wird
+  # abgeschaltet — und schuetzt danach auch nicht mehr gegen die Pause, fuer die sie gebaut wurde.*
+  # Die Richtung ist die unangenehmere von beiden: ein Falsch-Positiv haelt die Kette an.
+  #
+  # **Jetzt zwei benannte Listen statt einer.** Arbeit laesst durch, Pause sperrt — und ein Wert,
+  # den keine der beiden kennt, sperrt ebenfalls und sagt es. *Ein Commit unter einer Anweisung,
+  # die niemand einordnen kann, ist genau der Fall, gegen den A-37-22e steht; Durchlassen waere
+  # hier die falsche Vorsicht.*
+  case "$AKTION" in
+    bauen|nachbessern) ;;
+    pausieren|angehalten|angehalten_eingefroren|parken|warten)
+      echo "ROLLEN-TOR  VERSTOSS  die Steuerung sagt '$AKTION' — das ist keine Arbeitsanweisung." >&2
+      echo "            Quelle: $QUELLE (generation ${GEN:-?})" >&2
+      echo "            Am 22.08. fiel ein Commit 3 Minuten 43 nach einer Pause, weil das Tor" >&2
+      echo "            sie nicht gelesen hat. Diese Zeile ist die Antwort darauf." >&2
+      return 7 ;;
+    "")
+      echo "ROLLEN-TOR  HINWEIS  Rollenquelle nennt keine aktion — Generation UNGEPRUEFT." >&2
+      return 0 ;;
+    *)
+      echo "ROLLEN-TOR  VERSTOSS  unbekannte aktion '$AKTION' — weder Arbeit noch Pause." >&2
+      echo "            Quelle: $QUELLE (generation ${GEN:-?})" >&2
+      echo "            Bekannt als Arbeit: bauen nachbessern" >&2
+      echo "            Bekannt als Pause:  pausieren angehalten angehalten_eingefroren parken warten" >&2
+      echo "            Ein Commit unter einer Anweisung, die niemand einordnen kann, faellt aus." >&2
+      return 7 ;;
+  esac
+
+  # Fehlender ACK ist eine Abweisung und kein Hinweis: er ist der einzige gueltige Nachweis, dass
+  # der Auftrag angekommen ist. Wer ohne ihn baut, baut gegen einen Auftrag, den er nicht gelesen hat.
+  # ⚠ HIER STAND `ls -1 .../ereignisse/*/<rolle>-ack.yaml | head -1` — der ERSTE alphabetisch.
+  #
+  # **Gemessen am 22.08., als der zweite Auftrag kam:** es gab drei Ordner mit einem
+  # `generator-ack.yaml`. `head -1` nahm `BAU-generator-A-37` (Generation 8), waehrend die Quelle
+  # auf Generation 9 stand — das Tor haette *„ACK ist veraltet"* gemeldet und den frisch
+  # quittierten Auftrag abgewiesen. **Ein Griff, der zufaellig richtig lag, solange es genau einen
+  # Auftragsordner gab.**
+  #
+  # **Die Quelle nennt den richtigen Pfad selbst** (`ack_pfad:`) — er wird jetzt von dort gelesen
+  # statt geraten. *Wer eine Datei sucht, deren Ort in der Quelle steht, soll ihn nicht erraten.*
+  # Fehlt die Angabe, bleibt die alte Suche als Rueckfall; dann ist sie eine Naeherung und keine
+  # Auskunft, und das steht hier, damit es niemand fuer dasselbe haelt.
+  ACKDATEI="$(sed -n 's/^ack_pfad:[[:space:]]*\([^[:space:]#]*\).*/\1/p' "$QUELLE" | head -1)"
+  if [ -z "$ACKDATEI" ]; then
+    ACKDATEI="$(ls -1 "$STEUERUNG"/ereignisse/*/"$STAMM"-ack.yaml 2>/dev/null | head -1)"
+  fi
+  if [ -z "$ACKDATEI" ] || [ ! -f "$ACKDATEI" ]; then
+    echo "ROLLEN-TOR  VERSTOSS  kein ACK gefunden fuer Rolle '$STAMM'." >&2
+    echo "            Der ACK ist der einzige Nachweis, dass der Auftrag gelesen wurde." >&2
+    return 7
+  fi
+  ACKGEN="$(sed -n 's/^generation:[[:space:]]*\([0-9][0-9]*\).*/\1/p' "$ACKDATEI" | head -1)"
+
+  if [ -z "$GEN" ] || [ -z "$ACKGEN" ]; then
+    echo "ROLLEN-TOR  HINWEIS  Generation nicht lesbar (Quelle '${GEN:-}', ACK '${ACKGEN:-}')." >&2
+    echo "            Eine ausgefallene Messung ist KEIN Ergebnis — durchgelassen und gemeldet." >&2
+    return 0
+  fi
+  if [ "$ACKGEN" -lt "$GEN" ]; then
+    echo "ROLLEN-TOR  VERSTOSS  ACK ist veraltet: quittiert generation $ACKGEN, aktuell ist $GEN." >&2
+    echo "            $ACKDATEI" >&2
+    echo "            Erst quittieren, dann bauen. Ein Auftrag, den niemand gelesen hat," >&2
+    echo "            ist keine Erlaubnis." >&2
+    return 7
+  fi
+  return 0
+}
+
+# Eigener Modus, damit dasselbe Stueck UNMITTELBAR vor dem `git commit` noch einmal laufen kann.
+# **Das ist nicht dieselbe Pruefung zweimal, sondern zwei verschiedene Zeitpunkte:** das Tor laeuft
+# am Anfang von commit-pruefen.sh, der Commit faellt einige hundert Zeilen spaeter — YAML-Koepfe,
+# Modulstand, B5-B8. Eine Pause, die dazwischen veroeffentlicht wird, faende sonst dasselbe Loch
+# wieder vor, nur kleiner. Die Absage-Regel des Kriteriums zielt genau darauf: verlangt ist die
+# Pruefung IM Commit-Gate, nicht davor.
+if [ "${1:-}" = "--steuerung" ]; then
+  steuerung_pruefen || exit $?
+  fremde_lease_pruefen
+  exit $?
+fi
+
+steuerung_pruefen || exit $?
+fremde_lease_pruefen || exit $?
+
 # K4: kein Repo ist KEIN Rollenfehler und wird auch nicht als einer gemeldet.
 BAUM="$(git rev-parse --show-toplevel 2>/dev/null)" || BAUM=""
 if [ -z "$BAUM" ]; then
@@ -208,9 +476,13 @@ case "$STAMM" in
   generator)       SOLL_VERZ="ticket-rolle-generator";    SOLL_ZWEIG="rolle/generator" ;;
   evaluator)       SOLL_VERZ="ticket-rolle-evaluator";    SOLL_ZWEIG="rolle/evaluator" ;;
   release-pruefer) SOLL_VERZ="ticket-rolle-release";      SOLL_ZWEIG="rolle/release-pruefer" ;;
+  # dirigent: siebter Eintrag, 21.08. (Gesamtauftrag v2 Phase 0/2 — nur der Integrator schreibt im
+  # Integrationscheckout; der Dirigent verlaesst ihn in einen eigenen Worktree). Additiv, dieselbe
+  # Zuordnungsform wie die sechs davor; Vollmacht docs/regelwerk/VOLLMACHT-DIRIGENT.md.
+  dirigent)        SOLL_VERZ="ticket-rolle-dirigent";     SOLL_ZWEIG="rolle/dirigent" ;;
   *)
     echo "ROLLEN-TOR  unbekannte Rolle '$ROLLE' (Stamm '$STAMM') — die Tabelle kennt sie nicht." >&2
-    echo "            Bekannt: integrator planner plan-pruefer generator evaluator release-pruefer" >&2
+    echo "            Bekannt: integrator planner plan-pruefer generator evaluator release-pruefer dirigent" >&2
     [ "$NUR_MELDEN" = "1" ] && exit 0
     exit 1 ;;
 esac
@@ -341,7 +613,30 @@ esac
 # **Was ich statt dessen gebaut habe, steht in `commit-pruefen.sh`:** die Abwesenheit meldet sich
 # jetzt selbst. *Das behebt A-37-18 nicht — es macht nur den Zustand, den A-37-18 beschreibt, in
 # jedem betroffenen Baum sichtbar, statt ihn schweigen zu lassen.*
+# ── A-37-24 — DER SCHUTZ ZIEHT MIT DEM INHALT UM ────────────────────────────────
+#
+# **Diese Barriere hiess bis hierher „docs/STATUS.md" und meinte den Ort, nicht die Sache.** Mit
+# `A-42` (Bau `26c46f31`) sind 172 Befundbloecke aus `docs/STATUS.md` nach `docs/BEFUNDNOTIZEN.md`
+# gezogen. **Der Inhalt ist umgezogen, der Schutz ist geblieben, wo er war** — seither kann jede
+# Rolle aus jedem Baum in die Befundnotizen schreiben, und zwar genau die Bloecke, die am Tag
+# davor noch verteidigt wurden.
+#
+# ```text
+#   Basis ab9e837c   rollen-tor.sh      BEFUNDNOTIZEN 0   gegen  STATUS.md 8
+#                    commit-pruefen.sh  BEFUNDNOTIZEN 0   gegen  STATUS.md 9
+# ```
+#
+# ***Das ist kein Vergessen, sondern die Bauform:*** *die Sperre war an einen Dateinamen genagelt
+# und nicht an die Eigenschaft „hat EINEN Schreiber".* **Wer den Namen bewegt, bewegt die Sperre
+# nicht mit.** Deshalb steht der Name jetzt EINMAL, in einer Liste, an einer Stelle.
+#
+# **Welche der geschuetzten Dateien tatsaechlich in der Pfadliste steht, sagt `TOR_STATUS_DATEIEN`.**
+# *Ohne diese Auskunft haette die Meldung weiter „docs/STATUS.md" behauptet, waehrend der Commit
+# die Befundnotizen anfasst* — **eine Barriere, die den falschen Namen nennt, ist beim Nachlesen
+# nicht wiederzufinden.** Fehlt die Variable (Direktaufruf des Tores ohne `commit-pruefen.sh`),
+# bleibt die alte Nennung stehen; die Sperre wirkt dann unveraendert.
 if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]; then
+  GESCHUETZT="${TOR_STATUS_DATEIEN:-docs/STATUS.md}"
   INTEGRATOR_DA="$(git log --all --format=%s --grep='^integrator:' 2>/dev/null | head -1)"
 
   # ── DIE ZWEITE HAELFTE DER ZUENDBEDINGUNG (16.08., nach dem Befund d9fd6471) ──────────────
@@ -395,13 +690,13 @@ if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]; then
   done
 
   if [ -n "$INTEGRATOR_DA" ] && [ "$TOR_ZWEIGE" -gt 0 ] && [ "$TOR_MIT" -lt "$TOR_ZWEIGE" ]; then
-    echo "ROLLEN-TOR  HINWEIS  '$ROLLE' aendert docs/STATUS.md — die Sperre ist NOCH NICHT scharf." >&2
+    echo "ROLLEN-TOR  HINWEIS  '$ROLLE' aendert $GESCHUETZT — die Sperre ist NOCH NICHT scharf." >&2
     echo "            Das Tor liegt in $TOR_MIT von $TOR_ZWEIGE Zweigen. Solange es fehlt, wuerde die" >&2
     echo "            Sperre NUR die Baeume binden, die sie haben — und die uebrigen schrieben weiter." >&2
     echo "            Sie zuendet, sobald der Transport das Tor ueberall hingebracht hat (A-37-18)." >&2
   elif [ -n "$INTEGRATOR_DA" ]; then
-    echo "ROLLEN-TOR  VERSTOSS  '$ROLLE' aendert docs/STATUS.md ausserhalb des Integrations-Checkouts." >&2
-    echo "            Die Statuswahrheit hat EINEN Schreiber: den Integrator." >&2
+    echo "ROLLEN-TOR  VERSTOSS  '$ROLLE' aendert $GESCHUETZT ausserhalb des Integrations-Checkouts." >&2
+    echo "            Statuswahrheit und Befundnotizen haben EINEN Schreiber: den Integrator." >&2
     echo "            gefunden: $VERZ auf $ZWEIG" >&2
     [ "$NUR_MELDEN" = "1" ] && exit 0
     exit 1
@@ -410,9 +705,64 @@ if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]; then
   # Zuendbedingung fiel sie zunaechst mit durch und behauptete „noch KEIN Integrator gestartet",
   # waehrend es seit 16:17 einen gibt — vom ersten Lauf gefangen, nicht vom Nachdenken.
   if [ -z "$INTEGRATOR_DA" ]; then
-    echo "ROLLEN-TOR  HINWEIS  '$ROLLE' aendert docs/STATUS.md — noch KEIN Integrator gestartet." >&2
+    echo "ROLLEN-TOR  HINWEIS  '$ROLLE' aendert $GESCHUETZT — noch KEIN Integrator gestartet." >&2
     echo "            Durchgelassen: die Sperre zuendet erst, wenn ein Schreiber existiert." >&2
     echo "            Bis dahin divergiert die Statuswahrheit je Zweig." >&2
+  fi
+fi
+
+# ── A-37-23 — DER DIRIGENT BEKOMMT EINEN BEREICH, KEINEN SCHLUESSEL ────────────────
+#
+# **Eine Rolle bekannt zu machen, ohne ihren Bereich zu begrenzen, tauscht eine Sperre gegen ein
+# Loch.** Vor diesem Bau wies das Tor `dirigent` mit „unbekannte Rolle" ab — *der Dirigent konnte
+# in seinem eigenen Baum nicht committen*, ein Schutz-Rot. Die K2-Zeile oben behebt das.
+# **Haette der Bau dort geendet, haette derselbe Handgriff ihm `docs/STATUS.md` geoeffnet** — die
+# Datei, die Teil 2 dieses Tores gegen alle uebrigen Rollen verteidigt.
+#
+# **Erlaubt ist eine Positivliste**, nicht eine Verbotsliste: `docs/konzept/`, `docs/regelwerk/`
+# und die Steuerungsblaetter unter `docs/auftraege/`. **Alles uebrige wird abgewiesen** —
+# Produktcode unter `app/` und `resources/` ebenso wie `docs/STATUS.md` und
+# `docs/BEFUNDNOTIZEN.md`. *Eine Verbotsliste haette jede kuenftige Datei stillschweigend
+# erlaubt; sie waechst nicht mit dem Bestand mit, die Positivliste schon.*
+#
+# **Das Tor kannte bis hierher keine Pfade** — Teil 2 bekam nur die Ja/Nein-Auskunft
+# `TOR_STATUS_PFAD`. Fuer eine Bereichsgrenze reicht das nicht, deshalb reicht `commit-pruefen.sh`
+# die Liste jetzt zeilenweise als `TOR_PFADE` herein. *Zeilenweise und nicht per Wortzerlegung:
+# ein Pfad mit Leerzeichen zerfaellt sonst in zwei, und beide Haelften waeren unerlaubt.*
+# **Fuer die sechs uebrigen Rollen aendert sich nichts** — sie lesen die Variable nicht.
+#
+# ## ⚠ GEMESSEN UND HIER BENANNT: diese Grenze haette `5c9afbc7` abgewiesen
+#
+# ```text
+#   git show --name-only --format='' 5c9afbc7
+#     docs/auftraege/GESAMTAUFTRAG-V2-FORTSCHRITTSWAHRHEIT-2026-08-21.md   erlaubt
+#     docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md    erlaubt
+#     scripts/rollen-tor.sh                                                ABGEWIESEN
+# ```
+#
+# **`5c9afbc7` ist der Vorgriff, den dasselbe Kriterium mir woertlich zu uebernehmen auftraegt**
+# — und sein dritter Pfad faellt durch die Grenze, die dasselbe Kriterium mich bauen heisst.
+# *Das ist kein Widerspruch im Bau, sondern einer im Auftrag:* die Positivliste nennt kein
+# `scripts/`, und der Dirigent hat genau dort gebaut. **Ich setze den Wortlaut um und ersetze ihn
+# nicht still** — ob `scripts/` in die Liste gehoert, ist eine Entscheidung ueber den Bereich
+# einer Rolle und liegt beim Evaluator, nicht beim Bauenden.
+if [ "$STAMM" = "dirigent" ] && [ -n "${TOR_PFADE:-}" ]; then
+  TOR_UNERLAUBT=""
+  while IFS= read -r _p; do
+    [ -z "$_p" ] && continue
+    case "$_p" in
+      docs/konzept/*|docs/regelwerk/*|docs/auftraege/*) ;;
+      *) TOR_UNERLAUBT="$TOR_UNERLAUBT$_p"$'\n' ;;
+    esac
+  done <<< "$TOR_PFADE"
+  if [ -n "$TOR_UNERLAUBT" ]; then
+    echo "ROLLEN-TOR  VERSTOSS  Rolle '$ROLLE' schreibt ausserhalb ihres Bereichs." >&2
+    echo "            Erlaubt sind nur: docs/konzept/  docs/regelwerk/  docs/auftraege/" >&2
+    while IFS= read -r _p; do
+      [ -n "$_p" ] && echo "            abgewiesen: $_p" >&2
+    done <<< "$TOR_UNERLAUBT"
+    [ "$NUR_MELDEN" = "1" ] && exit 0
+    exit 1
   fi
 fi
 
@@ -444,6 +794,17 @@ fi
 #
 # **Gemeldet und nicht still entschieden:** wer will, dass der halb installierte Baum SPERRT,
 # gibt A-37-14 einen Rueckgabewert. Dann ist es eine Zeile hier.
+# ⚠ Diese Funktion stand zuerst MITTEN im if/elif-Block darunter — und wurde damit nur
+# definiert, wenn der erste Zweig lief. Der elif rief sie dann ins Leere:
+# "marke_feld: command not found", und das Tor gab exit 6 fuer eine Marke, die stimmte.
+# Vom eigenen Lauf gefangen, nicht vom Nachdenken — dieselbe Klasse wie der Block, der
+# im Kopf dieser Datei einmal hinter einem exit 0 lag und deshalb unerreichbar war.
+marke_feld() {
+  # $1 = Feldname, $2 = Datei. Leer, wenn der Name fehlt. awk trennt bei Whitespace-FOLGEN,
+  # nicht bei jedem einzelnen Zeichen — genau der Unterschied zu cut.
+  awk -v n="$1" '{for (i=1; i<NF; i++) if ($i == n) { print $(i+1); exit }}' "$2" 2>/dev/null
+}
+
 MARKE="$BAUM/node_modules/.aus-lockfile"
 LOCKDATEI="$BAUM/package-lock.json"
 if [ -f "$LOCKDATEI" ]; then
@@ -459,11 +820,33 @@ if [ -f "$LOCKDATEI" ]; then
     fi
     echo "            Marke schreiben: bash scripts/module-nachziehen.sh  (faehrt npm ci)" >&2
     echo "            Durchgelassen und NICHT als gueltig verbucht — s. Kopf dieser Datei." >&2
-  elif [ "$(cut -d' ' -f2 < "$MARKE" 2>/dev/null)" != "$LOCK_HASH" ]; then
+# ── DIE MARKE WIRD UEBER DEN FELDNAMEN GELESEN, NICHT UEBER DIE POSITION ───────────────────
+#
+# **Gefunden beim Gegenpruefen von A-37-13, und der Befund stand in der eigenen Meldung:**
+# die Negativprobe gab aus `geschrieben:    zeit` — also den FELDNAMEN statt des Zeitstempels.
+#
+# **Gemessen, Feld fuer Feld:**
+# ```text
+#   Marke:  hash <sha>  zeit <stempel>  node <v>  npm <v>
+#   cut -f2 -> <sha>        f3 -> (leer)     f4 -> zeit     f5 -> <stempel>
+# ```
+# *Die Marke trennt ihre Felder mit ZWEI Leerzeichen, und `cut -d' '` zaehlt jedes einzeln.*
+# **Jedes Feld ab dem zweiten Trenner liegt um eins daneben** — `-f2` traf nur zufaellig, weil
+# davor ein einfaches Leerzeichen steht.
+#
+# ***A-37-15 verlangt die vier Feldnamen ausdruecklich.*** **Dann ist der Name auch der richtige
+# Zugriff.** Eine Position zaehlt Trennzeichen; ein Name liest, was dasteht. *Wer Feldnamen
+# schreibt und dann nach Position liest, hat die Namen umsonst.*
+#
+# **Nicht behoben, weil ausserhalb meiner erlaubten Pfade und deshalb GEMELDET:**
+# `scripts/module-nachziehen.sh:142` liest `cut -d' ' -f2` fuer den Hash — dieselbe Bauform,
+# heute richtig aus demselben Zufall. Sie bricht, sobald jemand die Feldfolge aendert.
+
+  elif [ "$(marke_feld hash "$MARKE")" != "$LOCK_HASH" ]; then
     echo "ROLLEN-TOR  MODULSTAND  die Module in $VERZ gehoeren nicht zu diesem package-lock.json." >&2
     echo "            Lockfile jetzt: $LOCK_HASH" >&2
-    echo "            Marke sagt:     $(cut -d' ' -f2 < "$MARKE" 2>/dev/null)" >&2
-    echo "            geschrieben:    $(cut -d' ' -f4 < "$MARKE" 2>/dev/null)" >&2
+    echo "            Marke sagt:     $(marke_feld hash "$MARKE")" >&2
+    echo "            geschrieben:    $(marke_feld zeit "$MARKE")" >&2
     echo "            Abhilfe: npm ci in diesem Baum — bash scripts/module-nachziehen.sh" >&2
     echo "            Ein Lauf auf fremden Modulen ist gruen oder rot aus Gruenden, die nicht" >&2
     echo "            im Code stehen. Das ist die Sorte Fehler, die beim naechsten Mal weg ist." >&2
