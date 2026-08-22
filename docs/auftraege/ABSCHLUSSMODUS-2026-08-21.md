@@ -438,6 +438,22 @@ Grenze (Yama): Sofortlösung, noch keine unübergehbare Barriere — Durchsetzun
   oder Aktion pausieren → Commit abgewiesen → planner gen 11; plan-pruefer gen 5 votet erst auf der vollständigen
   Lieferung (99ea9183 + ergänzender Commit mit 22e). `scripts/` bleibt für den Dirigenten gesperrt (Evaluator ändert
   keine Rollenentscheidung). Integrator transportierte `99ea9183` (`eb304cf5`).
+
+### 22.08. 08:23–09:07 — Nachschärfung vollständig, DoR ERTEILT; zwei Identitäts-Befunde
+- **Planner:** `fdc8d7d5` (22e + 22b/22d-Auflösung + Vorab-Commits gekennzeichnet), `96b24ca3` (22b-Messbefehl von
+  Wort- auf Wirkungsmessung, nach Plan-Prüfer-Vormessung); Integrator `2832bdd4`, `968f39f6`. **Plan-Prüfer gen 6:
+  DoR ERTEILT `1ca8d512` über `99ea9183 + fdc8d7d5 + 96b24ca3`** (09:05).
+- **Inventur-Bilanz `06642e35`** (unveränderliche Messbasis, Mess-SHA `eb304cf5`) → drei Steuerungslisten
+  (`4bc2e3ff`): Abnahmerückstand 12, Produkt-Backlog 13 (+Wächter, 2 Yama-Fragen), Steuerungs-Backlog 12 (+2).
+  W0-5-Entscheidung: A `28ca0834` bleibt, B `ef7a8c89` Beleg + Vorrat (Evaluator-Vergleich).
+- **Identitäts-Befund Generator (`generator-befund-pause-und-wecker-wirkungslos.yaml`):** SIGSTOP auf PID 88088 hält
+  einen **Lauf**, nicht die **Sitzung** — nach VS-Code-Neustart (2.1.239, 08:47) lief `aa0cddd3` unter 91834 weiter;
+  der Wecker-Cron überlebt den Laufwechsel nicht. Die Sitzung hat gen 7 gelesen und **organisatorisch** gehalten
+  (HEAD `1155709d`, PAUSIERT-Ereignis) — technisch war sie nicht angehalten. Dieselbe Klasse wie 87659/`7df19ed4`:
+  um 09:04:34 erschienen **neue Läufe** der gesperrten Sitzung `7df19ed4` → sofort SIGSTOP, dazu eine
+  **Dauersperre** (`sperre-7df19ed4.sh`: jeder neue Lauf wird automatisch angehalten) bis A-37 ABGENOMMEN.
+  Lehre: PID-Stopps sind Notbremse je Lauf; die Sitzung hält nur das Commit-Gate (A-37-22e) — genau das wird jetzt gebaut.
+- **Generator gen 8 = bauen** (Sitzung läuft unter 91834; 88088 bleibt als verwaister Lauf `T`).
 Die fünf Negativproben gehen als Kriterien
 in das erweiterte A-37-Blatt (Planner); der Integrator transportiert nichts aufgrund der seit 22:04
 entstandenen Generator-Bauten. Das V2-Konzept (`0d897b0e`) ist bereit für die spätere unabhängige
