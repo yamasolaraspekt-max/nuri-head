@@ -35704,3 +35704,87 @@ Mal einzeln gegenmessen, ob sie noch gelten. **Zweimal heute war die Antwort nei
 Ball: **Integrator** (die beiden `dor_beleg`- und `ballbesitz`-Felder auf mein Votum von 19:30:30
 stellen — der Hinweis von 19:49:53 liegt seit 22 Minuten für ihn bereit) · **Dirigent/Yama**
 (ob A-37-22e sinngemäß auch für die Tafel gelten soll — das ist eine Regelfrage, keine von mir).
+
+## §448 — Meldepflichten Z1-E0-1 erfüllt, die Nicht-Ziel-Grenze exakt gehalten. Und §447 verschärft sich: das Blatt lief von DoR bis CODE_FERTIG, ohne dass die Tafel eine einzige Stufe mitbekam
+
+Messstand: HEAD `0fe0d318`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 20:10–20:14.
+**Ereignis-Schnitt dieser Runde: 20:09:19** (1 neues Ereignis). Abschnittsnummer gegen den frischen
+HEAD gewählt (`grep -c '^## §448'` → 0). Gegenstand: `generator-CODE_FERTIG-Z1-E0-1.yaml` (20:09:51,
+ball `[evaluator, integrator]`).
+
+### Meldepflichten — fünf Punkte, alle selbst gemessen
+
+    SHA existent      3a4aafa1 commit · ad2ac724 commit          Typ gemessen, nicht geraten (§440)
+    SHA in FELDERN    :11 ausgangs_sha · :12 endstand_sha · :13 ergebnis_sha
+    Scope-Diff selbst 3a4aafa1..ad2ac724 -> 9 Dateien, 304+ / 206-
+    Pfadprüfung       8x resources/planner/hausplaner/… (INSEL) · 1x public/hausplaner/hausplaner.js (BUENDEL)
+                      AUSSERHALB: 0     — die React/TypeScript-Insel-Grenze aus CLAUDE.md ist gehalten
+    Erreichbarkeit    von rolle/generator JA · in auto/hausplaner-integration NEIN (Transport steht aus)
+
+### Die Bündel-Frage — gemessen statt erinnert, und das war die Lehre aus §430
+
+`public/hausplaner/hausplaner.js` liegt **im** Commit. Nach der Bündel-Regel von 16:02 wäre das ein
+Verstoß. **In §430 habe ich gegen genau diese Regel votiert, 53 Sekunden nachdem sie aufgehoben
+worden war.** Also diesmal die Quelle gemessen:
+
+    ~/.ticket-steuerung/rollen/generator.yaml  (gen 20, mtime 18:50:05), Z.16:
+      „6: Buendel-Regel 16:02 gilt nur noch fuer Z1-W2-3/4/5/6"
+
+**Z1-E0-1 steht nicht in dieser Liste.** Die Regel gilt hier nicht, das Bündel darf mit — und der
+Generator schreibt es offen hin: *„Bündel gebaut und mitcommittet"* (`:57`). **Kein Verstoß.**
+Positivkontrolle des Suchmusters: 7 Treffer im älteren Z1-W2-3-Ereignis, das Muster greift.
+
+### Die Nicht-Ziel-Grenze — exakt gehalten, und das ist der beste Teil
+
+Der Planner hat um 19:37:35 (`97277281`) die Grenze nachträglich ins Blatt geschrieben; ich habe sie
+in §440 als rein additiv bestätigt. Sie lautet: **E0 vereinheitlicht die Etagen-Kette, die
+Wand-Höhe fasst es nicht an.** Am Diff gemessen:
+
+    wand.height        in geaenderten Zeilen:  0      Positivkontrolle im Bestand:  5 Treffer
+    node.height        in geaenderten Zeilen:  0      (Muster greift also)
+    defaultWallHeight  in geaenderten Zeilen: 13      Positivkontrolle im Bestand: 62 Treffer
+                       — alle 13 in der Etagen-Kette (elevation + defaultWallHeight + floorThickness)
+
+**Beide Nullen sind echte Nullen, keine ausgefallenen Messungen.** Der Generator hat eine Grenze
+eingehalten, die erst *nach* der DoR ins Blatt kam — er hat den Nachtrag also gelesen und befolgt.
+
+Und der Kopfkommentar des neuen SSOT beziffert die Lücke, statt sie zu behaupten:
+
+    deckenMesh.ts:37     naechsteEtageElevationMm   BERUECKSICHTIGT die Decke   Aufrufer 0
+    Kopfrahmen.tsx:172   „Geschoss anlegen"          + floorThickness           kennt die Decke nicht
+    geschossVorlage.ts:54 Duplizieren                + floorThickness           kennt die Decke nicht
+    -> bei floorThickness 200 und Decke 240 sagt die eine Rechnung 2700, die andere 2740
+
+### §447 VERSCHÄRFT SICH — das ist der eigentliche Befund dieser Runde
+
+    19:30:30  meine DoR ERTEILT
+    19:44:42  Statusplatz angelegt … mit „DoR steht aus"        (§447)
+    20:01:05  generator-AUFTRAG_GESTARTET-Z1-E0-1
+    20:09:51  generator-CODE_FERTIG-Z1-E0-1                     Bauzeit: 8 Min 46 Sek
+    20:14     TAFEL:  zustand: ENTWURF · ballbesitz: plan-pruefer · dor_beleg: „steht aus"
+
+> **Das ganze Blatt ist von der DoR bis CODE_FERTIG durchgelaufen — und die Tafel hat keine einzige
+> Stufe davon mitbekommen.** Sie steht nicht „etwas hinterher": sie zeigt **zwei Zustände zurück**
+> und benennt als Ballhalter eine Rolle, die seit 44 Minuten fertig ist.
+>
+> §447 nannte das Loch zwischen Veröffentlichung und Lesen (A-37-22e). **Diese Runde zeigt, was
+> durch das Loch passt: ein vollständiger Auftragsdurchlauf.**
+
+`dor_beleg: "steht aus"` bei E0/E2 in `docs/STATUS.md`: **weiterhin 2 Treffer**, unverändert seit
+19:44:42. Der Integrator hatte seit 19:45:38 keinen Lauf mehr — mein Hinweis von 19:49:53 und der
+Befund aus §447 liegen für ihn bereit.
+
+### Eine eigene ausgefallene Messung, gemeldet statt verschwiegen
+
+Mein erster Messlauf gab „0 Pfade" für den Scope-Diff. **Ursache: `cd` in den Integrations-Checkout,
+aber `$F` war ein relativer Pfad in den Ereignisordner** — `grep` fand die Datei nicht, die
+SHA-Variablen blieben leer, und `git diff ..` verglich nichts mit nichts. **„0 Pfade" hätte gemeldet
+„der Bau ändert nichts".** Gefangen, weil die Ausgabe die `ugrep`-Warnung mitführte und die
+Positivkontrolle fehlte.
+
+**Zehnte Falle in der stehenden Liste: relativer Pfad nach Verzeichniswechsel.** Sie gehört zur
+selben Familie wie der Umlaut aus §445 — **beide liefern eine glatte Null, die wie ein Befund
+aussieht.**
+
+Ball: **keiner von mir** — Z1-E0-1 bleibt bei `[evaluator, integrator]`, Meldepflichten bestätigt.
+Der offene Ball aus §447 (**Integrator**, Tafelfelder) bleibt offen und ist jetzt gravierender.
