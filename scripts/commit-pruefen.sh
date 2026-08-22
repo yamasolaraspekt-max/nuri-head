@@ -1011,6 +1011,88 @@ if [ "$TROCKEN" = "1" ]; then
   exit 0
 fi
 
+# ── A-37-26 — EIN ZUSTANDSCOMMIT, DEN DIE ERZEUGUNG NICHT ERKENNT, DARF NICHT DURCHGEHEN ────
+#
+# **Der Fall liegt im Bestand und ist der gefaehrlichste der drei:** `e9e6ee5b` trug den Betreff
+# `generator: zustand: A-38 · A-42 · CODE_FERTIG · evaluator · bau 0f731c22 26c46f31 — …` —
+# **zwei Kennungen, zwei Bau-SHAs, und der Commit war ausserdem leer.**
+#
+# ***Ein leerer Commit faellt auf. Ein Betreff, den das Muster nicht erkennt, faellt nicht auf:***
+# *er sieht richtig aus und wird still uebergangen.* **Folge im Bestand: weder A-38 noch A-42
+# bekamen aus diesem Commit einen Zustandswechsel**, und `docs/STATUS.md` fuehrte A-42 weiter auf
+# `BEREIT/generator`, obwohl der Bau seit Stunden lag.
+#
+# **DAS MUSTER WIRD AUS `status-erzeugen.sh` GELESEN, NICHT NACHGEBAUT.** Das ist die Absage-Regel
+# des Kriteriums, und sie hat einen Grund: *zwei Muster fuer dieselbe Frage sind eine zweite
+# Wahrheit und driften auseinander.* Waere hier eine Kopie, koennte die Erzeugung ihr Muster
+# schaerfen, waehrend dieses Tor weiter das alte pruefte — und der Betreff, den beide fuer richtig
+# hielten, gaebe es nicht mehr.
+#
+# **Geholt wird ueber ANKER, nicht ueber Zeilennummern** (`KERN = (` bis `WORTLAUT = re.compile`).
+# *Eine Zeilennummer im Beleg ist genau der Mangel, den A-37-19 beschreibt: sie stimmt am Tag des
+# Schreibens und driftet mit dem naechsten Einschub.*
+#
+# **Der Grep auf `zustand:` ist der AUSLOESER, nicht die Pruefung.** Er entscheidet nur, ob dieser
+# Betreff ueberhaupt ein Zustandscommit sein will; geprueft wird danach mit dem geholten Muster.
+if printf '%s' "$A11_ERSTE" | grep -q 'zustand:'; then
+  ZUSTAND_MELDUNG="$(python3 - "$A11_ERSTE" <<'PYENDE'
+import io, re, sys
+
+betreff = sys.argv[1]
+quelle = 'scripts/status-erzeugen.sh'
+try:
+    text = io.open(quelle, encoding='utf-8').read()
+except OSError:
+    # Eine ausgefallene Messung ist KEIN Ergebnis — aber sie ist auch kein Verstoss.
+    print('HINWEIS  %s nicht lesbar — Zustandsmuster UNGEPRUEFT.' % quelle)
+    sys.exit(0)
+
+a = text.find('KERN = (')
+b = text.find('WORTLAUT = re.compile')
+if a < 0 or b < 0 or b < a:
+    print('HINWEIS  KERN/WORTLAUT in %s nicht auffindbar — UNGEPRUEFT.' % quelle)
+    sys.exit(0)
+ende = text.find('\n', text.find('\n', b) - 1)
+raum = {'re': re}
+try:
+    exec(text[a:text.find('\n', b)], raum)          # genau der Block der Quelle, unveraendert
+except Exception as f:
+    print('HINWEIS  Muster aus %s nicht auswertbar (%s) — UNGEPRUEFT.' % (quelle, f))
+    sys.exit(0)
+
+if not raum['WORTLAUT'].match(betreff):
+    print('VERSTOSS  Der Betreff traegt "zustand:", aber die ERZEUGUNG erkennt ihn nicht.')
+    print('          Betreff: %s' % betreff[:120])
+    print('          Erwartet: <rolle>: zustand: <KENNUNG> · <ZUSTAND> · <rolle> · <beleg>')
+    print('          Genau EINE Kennung. Ein Betreff, den status-erzeugen.sh nicht erkennt,')
+    print('          erzeugt keinen Zustandswechsel — und faellt niemandem auf, weil er')
+    print('          richtig aussieht. Genau das ist bei e9e6ee5b geschehen.')
+    sys.exit(1)
+
+# Zweiter Teil des Kriteriums: mehr als EIN Bau-SHA. Das Muster laesst den Beleg-Teil offen
+# (`.*`), es kann diesen Fall also nicht sehen — er wird hier zusaetzlich gemessen und nicht
+# stillschweigend dem Muster zugeschrieben.
+beleg = raum['WORTLAUT'].match(betreff).group('beleg') or ''
+m = re.search(r'\bbau\b(.*)', beleg)
+if m:
+    shas = re.findall(r'\b[0-9a-f]{7,40}\b', m.group(1))
+    if len(shas) > 1:
+        print('VERSTOSS  Der Betreff nennt %d Bau-SHAs: %s' % (len(shas), ' '.join(shas)))
+        print('          Ein Zustandswechsel gehoert zu EINEM Bau. Zwei SHAs in einer Zeile')
+        print('          heissen, dass zwei Lieferungen in einem Commit verschwinden.')
+        sys.exit(1)
+sys.exit(0)
+PYENDE
+)"
+  ZUSTAND_RC=$?
+  [ -n "$ZUSTAND_MELDUNG" ] && printf 'A-37-26   %s\n' "$ZUSTAND_MELDUNG" >&2
+  if [ "$ZUSTAND_RC" -ne 0 ]; then
+    echo "" >&2
+    echo "KEIN COMMIT. Der Zustandsbetreff wird von der Erzeugung nicht erkannt." >&2
+    exit 1
+  fi
+fi
+
 # ── A-37-22e — DIE STEUERUNG WIRD HIER ERNEUT GELESEN, NICHT NUR AM ANFANG ──────────────────
 #
 # **Yamas Wortlaut verlangt zwei Zeitpunkte:** *vor jedem schreibenden Schritt* UND *unmittelbar im
