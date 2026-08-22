@@ -80,9 +80,12 @@ test('GEGENPROBE: eine erfundene id in einer lokalen Regel-Kopie wird als verwai
 test('Fix-Zone = genau die art:werkzeug-Registry-ids in Registry-Reihenfolge', () => {
   const erwartet = TOOL_DEFINITIONS.filter((t) => t.art === 'werkzeug').map((t) => t.id);
   assert.deepEqual(erwartet, [
-    'auswahl', 'wand', 'fenster', 'tuer', 'dach', 'decke', 'treppe',
+    // **Z1-W2-8 (Yama, 22.08.):** die Folge ist jetzt die BAUREIHENFOLGE — wand, fenster,
+    // tuer, treppe, decke, kontur, dach. Vorher stand `dach` vor `decke` und `treppe`; wer die
+    // Leiste von oben nach unten las, bekam das Dach vor der Decke. *Diese Liste bleibt
+    // ausgeschrieben — sie hat sich geaendert, weil jemand sie aendern WOLLTE.*
+    'auswahl', 'wand', 'fenster', 'tuer', 'treppe', 'decke', 'kontur', 'dach',
     'bemassen', 'flaeche-messen',   // <- W-05, gehoben
-    'kontur',
   ]);
 
   // **W-05: „in der Registry" heisst nicht mehr automatisch „in der Fix-Zone".**
@@ -164,7 +167,10 @@ test('Regressionsanker: faehigkeitenNach(werkzeuge) bleibt nach der Fachzuordnun
   // BESTEHENDEN vier nicht gegeneinander verschieben; dass zwei dazukommen, ist der Zweck der
   // Scheibe und kein Bruch.
   // A-35: `trimmen` reiht sich als drittes gehobenes ein — Registry-Reihenfolge, ans Ende gestellt.
-  const vorher = ['auswahl', 'bemassen', 'flaeche-messen', 'kontur', 'loeschen', 'duplizieren', 'trimmen'];
+  // **Z1-W2-8:** `kontur` steht in der Registry jetzt vor den gehobenen Werkzeugen — die Navi
+  // folgt der Registry-Reihenfolge, also wandert sie hier mit. Der Anker bleibt ein Anker: er
+  // haelt die Folge fest, und sie hat sich aus einem benannten Grund geaendert.
+  const vorher = ['auswahl', 'kontur', 'bemassen', 'flaeche-messen', 'loeschen', 'duplizieren', 'trimmen'];
   const ist = faehigkeitenNach('werkzeuge').map((f) => f.id);
   assert.deepEqual(ist, vorher);
 
