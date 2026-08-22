@@ -33620,3 +33620,170 @@ Kopfblock, nicht die Datei.**
 
 Ball: **niemand** für die Zahl (sie ist beauftragt und geliefert) · **Planner**, falls die 36 alten
 `dor_beleg`-Felder nachgezogen werden — das stand schon in §413 und ist keine neue Forderung.
+
+## §423 — Die „13" aus Nachtrag 1.6 ist richtig gemessen und stabil. Aber „Werkzeugleiste-Einträge" ist mehrdeutig: der Code selbst kennt 10 Werkzeuge und 3 Aktionen
+
+Messstand: HEAD `20fd8ec8`, Baum 0, gemessen 18:42–18:44. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §423'` → 0). Vorratsprüfung **(d)**: Alterung einer Zahl mit genanntem Stand.
+
+**Posten 2 zuvor:** Sammelblatt `Z1-V1-1` liegt weiterhin auf **keinem** der drei Zweige.
+
+### Der Gegenstand
+
+Nachtrag 1.6, den ich in §421 erteilt habe, verlangt im Lagebericht-Zusatz:
+
+> *„Werkzeugleiste-Einträge (Quelle `toolRegistry.ts`, **heute 13, Stand 15.08.**)"*
+
+Eine Zahl mit genannter Quelle und einem **sieben Tage alten** Stand — genau der Fall für (d).
+
+### Die Zahl ist stabil, und der Grund ist hart
+
+    Commits an app/tools/toolRegistry.ts seit 2026-08-15:   0
+
+**Die Zahl kann sich nicht geändert haben.** Das ist der bessere Beleg als jedes Nachzählen: nicht
+„ich habe 13 gezählt", sondern „die Datei ist unberührt".
+
+Nachgezählt trotzdem, mit zwei Mustern und Namensprobe:
+
+    ids im TOOL_DEFINITIONS-Block (Z. 37–321):   13
+      auswahl · wand · fenster · tuer · dach · decke · treppe · bemassen ·
+      flaeche-messen · kontur · loeschen · duplizieren · trimmen
+
+### Aber „Werkzeugleiste-Einträge" ist nicht dasselbe wie „Registry-Einträge"
+
+    art: 'werkzeug'   10    auswahl wand fenster tuer dach decke treppe bemassen
+                            flaeche-messen kontur
+    art: 'aktion'      3    loeschen duplizieren trimmen
+    Summenprobe 10 + 3 = 13 = Anzahl der ids
+
+Und der Code selbst zieht diese Grenze — `toolRegistry.ts:381-384`:
+
+    /** Nur die modus-schaltenden Werkzeuge DER WERKZEUGLEISTE (art='werkzeug'), in Anzeigereihenfolge. */
+    export function werkzeugTools(): ToolDefinition[] {
+      return TOOL_DEFINITIONS.filter((t) => t.art === 'werkzeug');
+    }
+
+**Die Funktion, die der Bestand „der Werkzeugleiste" nennt, liefert 10 — nicht 13.**
+
+**Das ist keine Widerlegung der 13.** Sie ist als *Registry*-Zahl richtig. Aber im Lagebericht steht
+sie unter dem Namen „Werkzeugleiste-Einträge", und dafür gibt es im selben Modul zwei
+verteidigbare Werte. **Wer nächste Woche 10 meldet und wer 13 meldet, haben beide recht — und der
+Lagebericht wird unvergleichbar.**
+
+**Vorschlag, keine Forderung:** die Zahl mit der Funktion benennen, die sie liefert —
+*„TOOL_DEFINITIONS 13 (davon werkzeugTools() 10, Aktionen 3)"*. Das kostet eine Klammer und schließt
+die Lücke. Ob der Lagebericht so geführt wird, entscheidet der Dirigent.
+
+### DIE TEILSTRING-FALLE, ZUM DRITTEN MAL HEUTE
+
+    grep -cE "art: '[a-z]+'" ueber die ganze Datei:   14
+    davon echte Felder:                              13
+    Zeile 216:  // Ein achter `art: 'werkzeug'`-Eintrag ist **keine additive Zeile**: …
+
+**Ein Kommentar, der das Feld zitiert.** Datei-weit gezählt kommt 11 + 3 = 14 heraus; über den
+`TOOL_DEFINITIONS`-Block gezählt 10 + 3 = 13, und das deckt sich mit der Zahl der `id`-Zeilen.
+
+Damit ist es heute **dreimal dieselbe Klasse**:
+
+    A-37-22e   'grep -ci ack' -> 5 Treffer, KEINER ist ein ACK (package, ungetrackt)
+    §422       'dor_beleg: steht aus' in einem Fliesstext-Satz und in zwei Codebloecken
+    §423       "art: 'werkzeug'" in einem Kommentar ueber das Feld
+
+**Die Regel aus §422 hat hier zum ersten Mal vorbeugend gegriffen:** *„Die Grundmenge ist der
+Kopfblock, nicht die Datei."* Ich habe von vornherein über den Block gemessen und die Datei-Zahl nur
+als Gegenprobe gefahren — deshalb ist die 14 hier ein Fund und kein Fehler.
+
+**Eine Nebenbeobachtung, ausdrücklich ungeprüft:** derselbe Kommentar spricht von einem **„achten"**
+`art: 'werkzeug'`-Eintrag, während heute **zehn** existieren. Das riecht nach einem Satz, der beim
+Wachsen der Liste stehengeblieben ist. Ich habe die Historie **nicht** gemessen und behaupte nichts
+— es steht hier, damit es beim nächsten Anfassen von `toolRegistry.ts` auffällt.
+
+Ball: **niemand** — die Zahl im Nachtrag ist richtig, der Rest ist ein Vorschlag zur Eindeutigkeit
+und eine Notiz für den nächsten, der die Datei öffnet.
+
+## §424 — DoR Z1-V1-1 (Sammelblatt Spur V): ERTEILT. Alle sechs Vollständigkeitspunkte belegt, alle Zahlen selbst nachgemessen — ein Hinweis zu verschobenen Zeilennummern
+
+Messstand: HEAD `61b9eaad`, Baum 0, gemessen 18:45–18:47. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §424'` → 0). **Auftrag gen 10, Posten 2 — EIN Durchgang, NUR Vollständigkeit.**
+
+Gegenstand: `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md`,
+141 Zeilen, Bau-Commit `3ab3bb88` (18:42:23), `mess_sha 3daf4f1e`. **Blob identisch auf `HEAD` und
+`rolle/planner`** — kein Drift.
+
+### VOTUM: ERTEILT
+
+Die sechs Punkte aus meinem Auftrag, je selbst gemessen:
+
+    1  Modul                    5 Module, alle vorhanden
+                                Zeilenzahlen EXAKT: 153 · 34 · 43 · 67 · 183
+    2  Aufrufer mit Pfad        alle app/rahmen/EigenschaftenPanel.tsx, mit Zeilenangabe
+    3  N4-Bedienweg             je Modul benannt + eigener N4-Abschnitt (Ausloeser/Ort/kein/Ziel)
+    4  Registerzeile            W-09 · W-07 · W-07 · W-21 · W-27, mit registry_id
+    5  kein versteckter Blocker eigener Abschnitt, ACHT Ausschlusszeilen mit Grund UND Ziel
+    6  <= 8 Module              5, mit Begruendung warum nicht acht
+
+### Was ich selbst nachgemessen habe — nicht geglaubt
+
+    V-1, die fuenf Nullen mit dem Blatt-Messbefehl:
+      treppenTyp()  dachVorlage()  projiziereDach()  sparrenTeilstuecke()  analyzeTopology()
+                                                                        alle -> 0
+      POSITIVKONTROLLE  berechneTreppe()  -> 5      das Muster trifft, die Null ist echt
+
+    Sind die gemessenen Funktionen die ECHTEN Exporte?
+      treppenTyp        :47   dachVorlage      :27   projiziereDach   :16
+      sparrenTeilstuecke:37   analyzeTopology :123   — alle fuenf: ja
+
+    Gilt die Null fuer das MODUL oder nur fuer eine Funktion?
+      dachVorlage.ts hat 3 Exporte, sparrenTrennung.ts 2 — die uebrigen selbst gemessen:
+      dachNeigungDefault() -> 0 · istSicherTrennbar() -> 0
+      DACH (const) -> 2 Vorkommen, BEIDE KOMMENTARE (HausplanerApp.tsx:337, dachOeffnung.ts:2)
+      **Die Null gilt fuer das ganze Modul.** Meine Sorge war unbegruendet, und das gehoert gesagt.
+
+    Testdateien: __tests__/{treppenTypen,dachVorlage,dachProjektion,sparrenTrennung,dachTopologie}.test.ts
+                 fuenfmal vorhanden
+
+**Die Teilstring-Falle zum vierten Mal heute** — `DACH` in zwei Kommentaren. Diesmal **vorbeugend
+gefangen**: ich habe die Vorkommen aufgeschlagen, statt die 2 zu melden. Nach A-37-22e, §422 und
+§423 ist das der vierte Fall an einem Tag.
+
+### EIN HINWEIS, KEIN MANGEL: die Zeilennummern sind zweistandsabhängig
+
+    Blatt / mess_sha 3daf4f1e:  selectedRoof :68 · selectedStairParams :70 · Datei 576 Z.
+    Integrations-Checkout HEAD: selectedRoof :69 · selectedStairParams :71 · Datei 581 Z.
+
+**Am genannten `mess_sha` stimmt jede Angabe des Blattes** — ich habe es am Blob nachgeschlagen. Die
+Verschiebung entsteht durch **`d00aeece` (Z1-W2-3, 16:12:31)**, der im Integrationsstand liegt, im
+Planner-Zweigstand aber nicht.
+
+**Das ist kein Belegmangel** — das Blatt nennt seinen Messstand, und gegen den trägt es. **Aber der
+Generator baut nicht zwingend auf diesem Stand.** Wer im Integrations-Checkout `:70` aufschlägt,
+findet `selectedStair`, nicht `selectedStairParams`.
+
+**Halbsatz zum Bau, kein Auflagenlauf:** *„Die Knoten werden über den NAMEN aufgeschlagen
+(`selectedStairParams`, `selectedRoof`), nicht über die Zeilennummer — sie gilt am `mess_sha`
+3daf4f1e und ist im Integrationsstand um eins verschoben."*
+
+Das ist dieselbe Klasse wie §418 (`HausplanerApp.tsx:1261-1269`), nur hier **vor** dem Bau bemerkt
+statt neun Tage danach.
+
+### Was ich ausdrücklich NICHT geprüft habe
+
+Keine Fachprüfung der fünf Module — so steht es im Auftrag: *„die macht die Rot-Probe beim
+Evaluator"*. Ob `analyzeTopology` richtig rechnet, ob `dachVorlage` die richtigen Defaults liefert:
+**nicht mein Gegenstand.** Ich habe geprüft, ob die **Belege vollständig und die Zahlen richtig**
+sind.
+
+Ebenso ungeprüft: die acht Ausschlusszeilen inhaltlich. Ich habe gezählt, dass jede einen **Grund
+und ein Ziel** trägt — nicht, ob der Grund fachlich zutrifft.
+
+### Würdigung
+
+Der Planner hat den **ergänzten** Kriterientext verwendet und die drei Halbsätze wörtlich
+übernommen. Er meldet selbst, dass **Halbsatz 3 seinen eigenen Messbefehl korrigiert hat**
+(*„Ich hatte V-1 über die IMPORTE gemessen — genau die Lesart, die er verwirft"*), und dass ein
+erster Zähllauf 1–2 statt 0 gab, weil der Ausschluss der Definitionsdatei nicht traf. **Beide
+Befehle stehen im Blatt.** Sein Satz dazu trägt: *„Eine Zahl ohne ihr Messmuster ist keine Zahl."*
+
+Ereignis: `plan-pruefer-DOR-Z1-V1-1-ERTEILT.yaml`. **EIN Durchgang**, wie gen 10 verlangt.
+
+Ball: **Generator** (bauen) · **Evaluator** (V-2/V-3 fünfmal, je Modul).
