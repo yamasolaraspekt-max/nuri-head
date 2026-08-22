@@ -108,7 +108,7 @@
 | **Z1-W2-6** Auswechslung anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` |
 | **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | `BEREIT` | **Generator** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 |
 | **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `ENTWURF` | **Plan-Prüfer** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht |
-| **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` |
+| **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `NACHBESSERN` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` · **NACHBESSERN** 19:04:28, 8 von 10 Kriterien, Reifegrad `code-geprueft mit Ausloesung` — zwei Zusagen nennen das Vorhandene statt das Wirkende |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -19454,8 +19454,8 @@ blocker_kriterium_b_faellt: |
 ```yaml
 auftrag: "Z0-I1"
 titel: "Testdatenbank-Isolation — Stufe 1"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: NACHBESSERN
+ballbesitz: generator
 blatt: "docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md"
 blatt_sha: 7791920f
 basis_sha: 161868e9
@@ -19475,6 +19475,26 @@ herkunft_dieses_blocks: |
   zur Stufe 2 gehoeren; der Plan-Pruefer weist 18:06 auf Blattdrift und Z0-I1-8 hin. Beides
   beruehrt den Zuschnitt, nicht den Zustand des Gebauten. Ich trage CODE_FERTIG fuer Stufe 1 ein
   und nenne die zwei offenen Punkte, statt sie zu verrechnen.
+
+votum: |
+  NACHBESSERN — evaluator, 19:04:28, evaluator-NACHBESSERN-z0-i1.yaml.
+  8 von 10 Kriterien · bau_sha 04949151 · ergebnis_sha 6916a567
+  reifegrad: "code-geprueft mit Ausloesung"
+  Beleg: docs/rollenkette/rollen/4-evaluator/VOTUM-Z0-I1-STUFE-1.md
+  SEINE WUERDIGUNG GEHOERT DAZU, weil NACHBESSERN sonst als Verriss gelesen wird: "Der Bau ist
+  in der Substanz stark. Acht Kriterien sind belegt, die meisten AUSGELOEST statt zugesagt."
+  Beim Wegwechsel zu Z0-I1-4 hat der Generator die Abweichung selbst offengelegt, mit dem Satz
+  "Ob das Kriterium damit erfuellt ist, entscheidet der Evaluator und nicht ich" — der Evaluator
+  hat auf ERFUELLT entschieden.
+  DIE ZWEI MAENGEL SIND DIESELBE KLASSE, in seinen Worten: "Beide Zusagen nennen, was VORHANDEN
+  ist, und nicht, was WIRKT." Z0-I1-10 zum Beispiel: zugesagt ist "der Guard gibt den Namen
+  ZURUECK", verlangt ist "jeder Testlauf GIBT den Namen AUS".
+  DAS IST DIESELBE UNTERSCHEIDUNG, an der ich heute Mittag bei A-17 gescheitert bin — Ort ist
+  nicht Wirkung. Ich halte sie hier fest, weil sie in diesem Statustraeger zum dritten Mal
+  denselben Tag traegt.
+  ZUSTAND NACHBESSERN, Ball generator. Der Bau 04949151 bleibt in der Integration; nichts wird
+  zurueckgeraeumt, die Nachbesserung kommt als neuer Stand obendrauf.
+
 ```
 
 
