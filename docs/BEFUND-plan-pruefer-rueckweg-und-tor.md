@@ -25268,3 +25268,67 @@ Beide hätten als Befund getaugt und wären beide falsch gewesen. Erkannt, weil 
 kein Ergebnis ist, solange das Verfahren nicht am bekannten Treffer geprüft wurde.
 
 **Ball:** Yama (ob die Zeiger-Klasse ein eigener Auftrag wird) · P-02-Feld beim Integrator.
+
+## §300 — Posten (b): der stehende Yama-Posten führt „33 Module ohne Ladeweg" — frisch gemessen sind es 27, und sechs davon sind gebaut worden
+
+**Messstand** `1ecafe28` · Baum sauber · 0 neue Commits seit §299. Ballortung beidseitig **1** (P-02,
+`VORLAGE`) und **6** Blattfelder, alle sechs Altstände — nichts in meiner Bahn. Der Evaluator hat um
+**10:16:03** `AUFTRAG_GESTARTET` geschrieben, direkt nach meinem `BESTAETIGT` von 10:12:46; der
+Ballwechsel aus der A-37-Kette greift.
+
+### Die Zahl, die ich jede Runde weiterreiche
+
+Der neunte stehende Posten heißt in meiner Anweisung *„Entscheidung zu §119/§120 (**33 Module ohne
+Ladeweg**)"*. Frisch gefahren mit dem Verfahren, das die Zahl erzeugt hat — BFS ab `main.tsx` über
+**Laufzeit**-Kanten, `import type` zählt nicht:
+
+```
+Stand 1ecafe28   Grundmenge 160 · erreichbar 133 · NICHT erreichbar 27
+Stand d4ee1555   Grundmenge 160 · erreichbar 127 · NICHT erreichbar 33   (§120/§194)
+```
+
+Die Grundmenge ist unverändert und in allen vier Schnitten gleich geblieben: `338` alle `.ts/.tsx`,
+`160` ohne `__tests__` **und** `__domtests__`, `165` ohne `__tests__` aber **mit** ihnen, `5`
+DOM-Testdateien. Die Differenz `38 − 5 = 33` aus §194 gilt weiter — sie war nie ein Fehler, sondern
+eine zweite Menge.
+
+**Bewegt hat sich die Sache selbst:** seit `d4ee1555` liegen **11 Commits** auf
+`resources/planner/hausplaner`, die Baum-Hashes unterscheiden sich (`e7e8f3a2` → `81626c87`).
+Erreichbar stieg von 127 auf 133 — **sechs Module haben einen Ladeweg bekommen.** Die Zahl ist nicht
+falsch gewesen, sie ist *überholt*. Das ist der bessere Grund, sie neu zu messen.
+
+### Zwei Gegenproben, ohne die ich das nicht melde
+
+**Trägt das Urteil an einem bekannten Treffer?** Zwei der 27 einzeln nachgeschlagen:
+
+```
+dachTopologie   Laufzeit-Importe im Produktivpfad 0   in Tests 1
+wandaufbau      Laufzeit-Importe im Produktivpfad 0   in Tests 1
+```
+
+Beide werden ausschließlich von Tests importiert — genau das, was „ohne Ladeweg" behauptet.
+
+**Messe ich am gültigen Stand?** Mein HEAD enthält `05fc2bab` (Integrationszweig) *nicht*. Über
+Commit-Zählung allein wäre das nicht zu entscheiden, deshalb der Baum-Hash:
+
+```
+HEAD:resources/planner/hausplaner       81626c87705bad8fff17f53efc808a2776a981b3
+05fc2bab:resources/planner/hausplaner   81626c87705bad8fff17f53efc808a2776a981b3   identisch
+```
+
+Der Hausplaner-Code ist auf beiden Ständen **byte-gleich**. Die 27 gilt also auch für den
+Integrationsstand, obwohl ich in meinem Rollenbaum gemessen habe.
+
+### Der eigentliche Mangel liegt bei mir
+
+§194 hat den Posten bereits berichtigt auf *„Module ohne Ladeweg — heute 27 von 160 (ohne
+`__tests__`/`__domtests__`)"*, mit dem Satz **„Eine Zahl ohne ihre Menge ist keine Zahl."** Die
+Berichtigung steht in der Befunddatei — **weitergereicht habe ich seither trotzdem die alte Zahl**.
+Eine Korrektur, die nur am Fundort steht und nicht dort, wo die Zahl benutzt wird, ist keine
+Korrektur. Das ist dieselbe Form wie §299: der Beleg existiert, der Weg dorthin trägt nicht.
+
+**Der Posten lautet ab hier:** *„Entscheidung zu §119/§120 — **27 von 160 Modulen ohne Ladeweg**
+(Grundmenge: `.ts/.tsx` unter `resources/planner/hausplaner`, ohne `__tests__`/`__domtests__`;
+§120 zählte 38 von 165, weil die fünf `__domtests__` darin enthalten waren)."*
+
+**Ball:** Yama — die Entscheidung selbst steht weiter aus, jetzt mit der richtigen Zahl und ihrer Menge.
