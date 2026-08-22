@@ -26955,3 +26955,62 @@ Auftragsart variieren darf und wer sie setzt, ist eine Entscheidung über das Le
 gehört zu Z0-I2, nicht zu einer Wache-Runde.
 
 **Ball:** Vorrat Z0-I2 (Planner) · nachrichtlich Dirigent, weil die Zielregel daran hängt.
+
+## §323 — Die Reichweite nachgeprüft: A-37-26 ist wirklich der einzige Fall. Sein Griff war enger als nötig und traf trotzdem
+
+**Messstand** `4ec68ad6` · Baum sauber · 0 neue Commits seit §322 · Integrationszweig `1d50aaae` →
+`63452c63`. Ballortung dreiseitig **1 · 6 · 14**. Die Evaluator-Lease läuft in zwei Minuten ab
+(`11:55:50`), `active/` steht noch.
+
+### Er nimmt seinen Anteil an — und formuliert die Lehre besser als ich
+
+`planner-eigener-anteil-probenvielfalt.yaml` (11:52:00). Zu meinem §321 (*„ich habe geprüft, ob die
+Proben auslösen, nicht, ob sie die Vielfalt herstellen"*) schreibt er: **„Meiner ist der frühere"** —
+die drei Proben stammen aus seiner Feder, und gemessen tragen sie die Kennungen `A-37-26 · A-37-27 ·
+A-38 · A-42 · L-ABH`, **keine einzige Z-Form**. Seine Regel an sich selbst:
+
+> **„Wer ein Kriterium an ein vorhandenes Artefakt bindet, legt eine Probe bei, die dessen ABDECKUNG
+> misst — nicht nur eine, die das Kriterium auslöst."**
+
+Das ist schärfer als meine Fassung in §321 und es gilt für beide Rollen: er entwirft die Probe, ich
+nehme sie ab. **Keiner von uns hat gefragt, ob sie die Formenvielfalt herstellt.**
+
+### Seine Reichweiten-Messung, mit anderem Griff nachgeprüft
+
+Er misst *„nur EIN Kriterium bindet sich an ein FREMDES Artefakt"* über eine Wortsuche. Ich habe
+stattdessen die genannten **Dateien** je Kriterium gezählt:
+
+```
+Kriterien-Abschnitte                                          27
+nennen eine Nicht-Lieferdatei                                 10
+davon mit MASSSTAB-Bindung (nicht Pfadgrenze/Kontext):
+  A-37-26   "gegen das Muster aus scripts/status-erzeugen.sh"   FREMD  <- der Fall
+  A-37-18   "in jedem Baum der Liste aus A-37-22"               EIGEN
+  A-37-27   nennt status-erzeugen.sh nur begründend; verlangt js-yaml in package.json/Lockfile
+  A-37-10 · A-37-23   nennen docs/STATUS.md als PFADGRENZE (Verbot), nicht als Maßstab
+  A-37-6 · 7 · 11 · 24   Kontext, 0 Maßstab-Bindung
+```
+
+**Sein Ergebnis hält.** Mein erster Griff war zu **weit** (10 Dateinennungen sehen nach zehn Fällen
+aus), seiner zu **eng** (eine Wortliste) — und trotzdem ist seine Zahl die richtige. Das ist kein
+Zufall im Ergebnis, sondern einer im Verfahren: **eine enge Suche, die den einen relevanten Wortlaut
+enthält, findet ihn; sie hätte einen zweiten Fall mit anderer Formulierung übersehen.** Deshalb war
+die Gegenprüfung nötig, auch wenn sie ihn bestätigt.
+
+**Eigener Messausfall dabei:** Mein `awk`-Griff zur Abgrenzung eines einzelnen Kriterienabschnitts
+gab den halben Rest des Blattes aus — die Kriterien stehen dort **nicht aufsteigend** (`22`, `22b–e`,
+`23` … stehen zwischen `18` und `19`), also traf die Endbedingung nie. Als Ausfall erkannt; die
+Antwort stand in der ersten Zeile der Ausgabe und war unabhängig davon lesbar.
+
+### Was daraus bleibt
+
+**Ein Einzelfall, aber kein zufälliger** — sein Satz, und er trifft: *„die Bindung an Fremdes ist genau
+die Stelle, an der eine ungeprüfte Voraussetzung entsteht."* Von 27 Kriterien bindet sich genau **eines**
+an etwas, das A-37 nicht selbst herstellt, und genau dieses trägt die Lücke. Die übrigen 26 stehen auf
+eigenen Füßen — entweder prüfen sie den eigenen Bau oder sie verweisen auf ein anderes A-37-Kriterium,
+dessen Abdeckung mit ihm entsteht.
+
+**Ball:** Dirigent, unverändert — Entscheidung A (Muster erweitern), B (Kennungsform vereinheitlichen,
+89 Blätter) oder C (Z-Aufträge ohne maschinellen Zustandswechsel, im Blatt gesagt). Von uns beiden ist
+der Anteil gemeldet; die Entscheidung gehört nicht dem, der die Lücke übersehen hat, und nicht dem,
+der sie geschrieben hat.
