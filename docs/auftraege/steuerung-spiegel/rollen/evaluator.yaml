@@ -1,20 +1,29 @@
-auftrag_id: PROBE-evaluator-A-37-25-wirksamkeit
-generation: 8            # 2026-08-22T12:18:38+0200 — A-37 ABGENOMMEN (0a18446a), Bau transportiert (f6792ec3). Yama: 'bestaetige mir, dass der nackte git commit scheitert' — in JEDEM realen Baum. Weg 3: aktion = Tor-Wort.
+auftrag_id: ABNAHME-evaluator-Z2-W0-5
+generation: 9            # 2026-08-22T13:05:19+0200 — gen 8 abgeschlossen (WIRKSAM 7/7, 16613211). Abnahmewelle beginnt: Posten 1 des Abnahmerueckstands (docs/backlog/abnahmerueckstand-2026-08-22.md, Risikoreihenfolge; Yama: 'Abnahmeseite ist der Engpass').
 rolle: evaluator
 sitzung_erwartet: 303cefb6-35fd-4c36-9aca-ed10515f59b3
 worktree: /Users/yamanuri/Documents/ticket-rolle-evaluator
 branch: rolle/evaluator
-basis_sha: 0a18446a
+basis_sha: 16613211
 prioritaet: P0
-aktion: bauen            # TOR-WORT (befristet, README 6f): Arbeit erlaubt. Du baust nichts.
-taetigkeit: "abnehmen/pruefen (Evaluator): Wirksamkeitsprobe A-37-25 je Baum; kein Produktcode, keine Reparatur"
-hinweg_zuerst: "git merge --no-edit auto/hausplaner-integration im EIGENEN Worktree (kein Rebase, kein Force); bei Konflikt/local-changes NICHTS erzwingen -> BASE_BLOCKED melden; danach <rolle>-BASIS_NACHGEZOGEN.yaml mit Ausgabe von ls -l .githooks/pre-commit und git rev-parse --short HEAD"
-gegenstand: "In JEDEM der sieben realen Baeume (ticket, ticket-rolle-generator, ticket-rolle-planner, ticket-rolle-plan-pruefer, ticket-rolle-evaluator, ticket-release-pruefung, ticket-rolle-dirigent): (a) liegt .githooks/pre-commit (ausfuehrbar) und core.hooksPath=.githooks? (b) scheitert ein NACKTER git commit (ohne TICKET_ROLLE) nachweislich — exit != 0, KEIN Commit entstanden? (c) Positivfall in deinem eigenen Baum: Commit MIT TICKET_ROLLE=evaluator, ACK gen 8, aktion bauen geht durch (dein Votum-Commit selbst ist dieser Beleg)."
-verfahren: "Nebenwirkungsfrei: die Probe darf KEINEN Commit hinterlassen. Empfohlen: in fremden Baeumen NUR lesend messen (Datei, Rechte, hooksPath) + der nackte Commit-Versuch mit --allow-empty und einer Probe-Botschaft; Erwartung: Abweisung. Faellt er wider Erwarten durch: sofort git reset --soft HEAD~1 im selben Baum, dann als MANGEL melden (Baum, Befehl, Ausgabe). Kein TICKET_ROLLE=<fremd> setzen. Baeume ohne pre-commit (Hinweg noch nicht gefahren) als AUSSTEHEND fuehren, nicht als Mangel; beim naechsten Pull erneut; Endvotum bei 7/7 oder spaetestens 60 min nach Start mit Liste (WIRKSAM / AUSSTEHEND / MANGEL je Baum)."
-grenze_benannt: "--no-verify und geaenderter core.hooksPath uebergehen den Haken (Bau + Votum db420cf0 Z.86) — wird nicht geprueft, nur zitiert."
-meldepflicht: "AUFTRAG_GESTARTET mit endstand_sha f6792ec3 (Integration) VOR der Arbeit; Abschluss WIRKSAM_7_VON_7 oder NICHT_WIRKSAM (mit Liste) als ABGENOMMEN/NACHBESSERN-Aequivalent + evaluator-AUFTRAG_ABGESCHLOSSEN.yaml; Votum im eigenen Worktree (commit-pruefen.sh, TICKET_ROLLE=evaluator)."
-verboten: [Produktcode, Reparaturen, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Commit ausserhalb des eigenen Worktrees]
+aktion: bauen            # TOR-WORT = Arbeit erlaubt (README 6f). Du baust nichts.
+taetigkeit: "abnehmen (Evaluator): Z2-W0-5 (A-1..A-4 IDOR GPS/Fotos/Master-Sets/Material)"
+gegenstand: |
+  Unabhaengige Abnahme von Z2-W0-5 am Stand, den Yama entschieden hat (auftraege/W0-5-entscheidung-doppelbau.md): Bau A = 28ca0834
+  (im Checkout, BLEIBT); Bau B = ef7a8c89 (Worktree-Belegzweig) ist NUR Beleg/Vorrat, wird nicht abgenommen. Dein eigener Vergleich
+  (evaluator-w0-5-vergleich.yaml, Empfehlung A) ist Vorarbeit, kein Votum. Blatt: docs/auftraege/aktiv/Z2-W0-5*.md am
+  Integrationsstand (SHA im Startereignis nennen); Kriterien des Blatts wortwoertlich, Messbefehle ZITIEREN (P-02/4).
+pruefen_vollstaendig:
+  - "Jedes Kriterium rot (vor 28ca0834) -> gruen (28ca0834 bzw. Integrationsstand, der ihn enthaelt) mit Rohausgabe; IDOR-Faelle je Ressource: fremde Org/fremder Kunde -> 403/404, eigener -> 200; Negativprobe SELBST ausloesen"
+  - "Grundmenge: alle Routen/Controller der vier Ressourcen (GPS, Fotos, Master-Sets, Material) mit STAND-SHA; keine Route ohne Pruefung"
+  - "RECHTE_ALLE_FUER_ALLE (Schalter, Yama-Entscheidung): Integritaet/Auth-Luecken bleiben Befund, Rechte-Luecken bei true sind KEIN Mangel — beide Schalterstellungen messen, wo das Blatt es verlangt"
+  - "Datenbanklaeufe: NUR gegen eindeutig benannte Test-DB; ist die Isolation nicht gegeben (Z0-I1 offen, Y-13 GRANT steht aus) -> betroffene Kriterien als ENV_BLOCKED mit Befehl+Ausgabe fuehren, NICHT raten, Rest voll messen; Votum dann 'ABGENOMMEN unter ENV_BLOCKED-Liste' oder NACHBESSERN je nach Blatt"
+  - "Kein Produktcode, keine Reparatur; nichts im Integrations-Checkout aendern; Probe-Daten nur in Test-DB"
+meldepflicht: "AUFTRAG_GESTARTET mit endstand_sha (28ca0834) + gelesen_bis; Abschluss ABGENOMMEN/NACHBESSERN + evaluator-AUFTRAG_ABGESCHLOSSEN.yaml mit endstand_sha, ergebnis_sha (Votum-Commit), gelesen_bis (README 6g); Votum im eigenen Worktree (commit-pruefen.sh, TICKET_ROLLE=evaluator, NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules)"
+lease: "leases/ABNAHME-evaluator-Z2-W0-5/ VOR der Pruefung; freigeben nach Votum."
+danach: "Posten 2 (Z2-W0-7, S-1 61 Routen) folgt als gen 10 nach deinem Votum — nicht vorgreifen."
+verboten: [Produktcode, Reparaturen, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Commit ausserhalb des eigenen Worktrees, Produktiv-DB]
 steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/PROBE-evaluator-A-37-25-wirksamkeit/evaluator-ack.yaml
-erstellt: "2026-08-22T12:18:38+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/ABNAHME-evaluator-Z2-W0-5/evaluator-ack.yaml
+erstellt: "2026-08-22T13:05:19+0200 Dirigent (atomar; Uhr: date)"
