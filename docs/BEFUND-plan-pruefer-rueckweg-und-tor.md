@@ -26324,3 +26324,71 @@ fort — dieselbe Form, die Generator und Planner heute dreimal benutzt haben.
 
 **Ball:** keiner. Der Punkt ist zwischen uns geschlossen, die Spezifikation liegt beim Planner,
 A-37-20 beim Evaluator in der Nachprüfung.
+
+## §314 — Posten (d): die neun Yama-Posten sind heute 5 Tage 12 bis 15 Stunden alt, und in dieser Zeit sind 937 Commits gefallen — 22 davon am Produktcode
+
+**Messstand** `77cc19b1` · Baum sauber · 0 neue Commits seit §313 · Integrationszweig `380b2081` →
+`9c9f2655`. Ballortung dreiseitig **1 · 6 · 14**, keine neuen Bälle, nichts angekommen. Die
+Evaluator-Lease für die Nachprüfung ist **aktiv** — er misst A-37-20 gerade nach.
+
+### Die Posten frisch datiert
+
+§194 hatte sie am 21.08. datiert (4 T 16 h bis 4 T 19 h). Heute, über dieselben Erstauftritts-SHAs:
+
+```
+Fach-Gate N-003                7b8dec42   16.08. 20:14   8106 min = 5 T 15 h
+W-21L                          dc6abbd1   16.08. 21:08   8052 min = 5 T 14 h
+Zeiger raumAuswahl.ts          94c98ad0   16.08. 21:46   8013 min = 5 T 13 h
+Regelkollision §3/E1/Beifang   eb713631   16.08. 22:54   7946 min = 5 T 12 h
+A-13-Veröffentlichung          82c3e33b   16.08. 23:10   7930 min = 5 T 12 h
+Tragwerk an die Zeichenfläche  82c3e33b   16.08. 23:10   7930 min = 5 T 12 h
+versatz-Quittung               82c3e33b   16.08. 23:10   7930 min = 5 T 12 h
+Seed-Weg der Prüfbühne         82c3e33b   16.08. 23:10   7930 min = 5 T 12 h
+§119 F-011 unerreichbar        d4ee1555   20.08. 13:52   2728 min = 1 T 21 h
+§120 Erreichbarkeit gesamt     e44825d5   21.08. 09:57   1523 min = 1 T  1 h
+```
+
+**Alle zehn SHAs sind Vorfahren meines HEAD** — die Alterung ist damit belastbar. In §306 war genau
+das *nicht* der Fall, und die Commit-Zahlen dort waren wertlos; hier tragen sie.
+
+**Zehn Erstauftritte, aber neun Posten:** `§119` und `§120` stehen in meiner Anweisung als **ein**
+Posten (*„Entscheidung zu §119/§120"*). Wer die Zeilen zählt, kommt auf zehn — das ist dieselbe Falle
+wie in §313, wo ich Kategorien statt Treffer zählte. Hier zähle ich sie richtig herum.
+
+### Woran in der Wartezeit gearbeitet wurde
+
+```
+seit 7b8dec42 (16.08. 20:14) bis HEAD:
+  Commits gesamt                       937
+  berühren docs/                       774
+  berühren resources/ oder app/         22
+  berühren scripts/ oder .githooks/     29
+  berühren tests/                        9
+  auf resources/planner/hausplaner/     13   (26 Dateien)
+Gegenprobe HEAD..HEAD -- docs/:           0
+```
+
+*(Die Zahlen überlappen — ein Commit kann mehrere Bereiche berühren; sie summieren sich nicht auf 937.)*
+
+**Das ist keine Anklage, sondern die Antwort auf „wie lange schon".** In fünfeinhalb Tagen sind 937
+Commits gefallen, davon **22 am Produktcode** und **13 an der Hausplaner-Insel**. Der ganz
+überwiegende Teil ist Dokumentation, Governance und Werkzeugbau — und der war nötig: A-37 ist die
+technische Barriere, ohne die der Abnahmerückstand (§306) gar nicht laufen darf.
+
+**Der Punkt ist ein anderer:** Vier der neun Posten sind **Fachfragen an genau die Insel**, an der in
+dieser Zeit 13 Commits gefallen sind — Tragwerk an die Zeichenfläche, W-21L, versatz-Quittung, der
+driftende Zeiger `raumAuswahl.ts`. Sie können von niemandem in der Kette entschieden werden; sie
+warten auf Yama. Solange sie warten, wird an der Insel weitergebaut, ohne dass die Fachfrage
+beantwortet ist.
+
+### Der zehnte Posten ist heute dazugekommen
+
+**N3-Regelfrage** (§308, gemeldet 11:01:27, Alter **19 min**): Gilt N3 — Nachvollzugs-Matrix als
+Pflichtzeile der `BEREIT`-Liste — für `docs/auftraege/aktiv/`? 89 von 89 Blättern haben keine, Blätter
+außerhalb haben eine. Das ist ein Regelentscheid, kein Prüfergebnis.
+
+**Und Posten neun trägt seit §300 die berichtigte Zahl:** *„27 von 160 Modulen ohne Ladeweg"* — nicht
+33. Die Grundmenge gehört dazu: `.ts/.tsx` unter `resources/planner/hausplaner`, ohne
+`__tests__`/`__domtests__`.
+
+**Ball:** Yama — neun Posten plus die Regelfrage. Von der Kette ist keiner davon zu lösen.
