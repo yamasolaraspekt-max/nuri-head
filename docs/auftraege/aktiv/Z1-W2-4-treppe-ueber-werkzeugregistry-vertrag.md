@@ -17,10 +17,10 @@ art: "PROBE — beide Ausgaenge sind Ergebnis. KEIN neues Werkzeug, KEINE Fachlo
 mess_sha: 7791920f
 kennung_geprueft: "Z1-W2-4 gemessen: docs/ 0 Treffer, git log --all --grep 0.
                    Z1-W2-0..3 sind von mir vergeben, -4 ist die naechste freie. Frei."
-dor_beleg: "steht aus — plan-pruefer"
+dor_beleg: "ERTEILT — plan-pruefer 2026-08-22T16:21:25, Beleg 7c7b2f63 (plan-pruefer-DOR-Z1-W2-4-ERTEILT.yaml)"
 basis_sha: 7791920f
 prioritaet: P0
-ballbesitz: "plan-pruefer (DoR)"
+ballbesitz: "generator (DoR erteilt — baubar)"
 regelgrundlage: "Planner gen 19 Posten 7 woertlich: 'Kleinblatt Spur W Treppe ueber
                  geometry/werkzeugRegistry-Vertrag registrieren — beide Ausgaenge sind Ergebnis
                  (Weg belegt / Stilllegung begruendet); Stilllegung werkzeugRegistry erst danach.'"

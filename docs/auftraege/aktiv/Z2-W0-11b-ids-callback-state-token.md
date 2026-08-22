@@ -20,10 +20,10 @@ mess_sha: 1146cbe6
 kennung_geprueft: "Z2-W0-11b ist im Teil-A-Blatt als Folgeauftrag benannt
                    (generator-auftrag-z2-w0-11-ids-callback-csrf.md, Abgrenzungstabelle).
                    Vom Auftrag zugewiesen, nicht selbst vergeben."
-dor_beleg: "steht aus — plan-pruefer"
+dor_beleg: "ERTEILT — plan-pruefer 2026-08-22T16:52:38, Beleg 343bd48f (plan-pruefer-DOR-Z2-W0-11b-ERTEILT.yaml)"
 basis_sha: 1146cbe6
 prioritaet: P0
-ballbesitz: "plan-pruefer (DoR)"
+ballbesitz: "generator (DoR erteilt — baubar)"
 regelgrundlage: "Planner gen 19 Posten 9. Einordnung Kategorie 2 der Regel RECHTE_ALLE_FUER_ALLE
                  (Yama 21.08.): Integritaets-/Auth-Luecke bleibt Befund, auch bei offenem Schalter."
 ```

@@ -18,10 +18,10 @@ art: "ANSCHLUSS — vorhandene, geprüfte Fachlogik bekommt einen Produktivpfad.
 mess_sha: 4611267e
 kennung_geprueft: "Z1-W2-2 gemessen: docs/ 0 Treffer, git log --all --grep 0. Z1-W2-1 ist von mir
                    selbst vergeben (4611267e), Z1-W2-2 ist die naechste freie. Frei."
-dor_beleg: "steht aus — plan-pruefer"
+dor_beleg: "ERTEILT — plan-pruefer 2026-08-22, Beleg c2e8dd20 (plan-pruefer-DOR-Z1-W2-2-und-3-ERTEILT.yaml)"
 basis_sha: 4611267e
 prioritaet: P0
-ballbesitz: "plan-pruefer (DoR)"
+ballbesitz: "generator (DoR erteilt — baubar)"
 regelgrundlage: "ANSCHLUSS-entscheidung-2026-08-22.md: Paket 3 zuerst.
                  Kriterium (a) zweigleisig, Praezisierung des Dirigenten 14:15:26.
                  N4 Bedienweg (ARBEITSREGELN-NACHTRAG-1-5-V3, in Kraft 14:20:19)."

@@ -17,10 +17,10 @@ art: "ANSCHLUSS — vorhandene, geprüfte Fachlogik bekommt einen Produktivpfad.
 mess_sha: 281a60f9
 kennung_geprueft: "Z1-W2-6 gemessen: docs/ 1 Treffer — das Zuschnittblatt, das die Kennung vergibt;
                    git log --all --grep 0. Frei und ausdruecklich zugewiesen."
-dor_beleg: "steht aus — plan-pruefer"
+dor_beleg: "ERTEILT — plan-pruefer 2026-08-22T16:42:40, Beleg c9466cc0; BERICHTIGUNG (Achsenregel, 49141f90) BESTAETIGT 17:20:45, Beleg b7437e8a"
 basis_sha: 281a60f9
 prioritaet: P0
-ballbesitz: "plan-pruefer (DoR)"
+ballbesitz: "generator (DoR erteilt — baubar)"
 regelgrundlage: "ANSCHLUSS-entscheidung-2026-08-22.md (Paket 1) ·
                  paket-1-zuschnitt-2026-08-22.md (Klasse A, mit Operanden-Praezisierung)."
 zielreifegrad: BROWSERABGENOMMEN
