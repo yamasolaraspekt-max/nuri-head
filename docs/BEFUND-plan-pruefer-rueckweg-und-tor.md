@@ -34439,3 +34439,96 @@ ich mir merke: **erst die Fach-Linsen, dann meine DoR.**
 
 Ball: **niemand** für die Berichtigung · **Generator** (Bündel, seit 19:05:47 beauftragt) · bei mir:
 **warten auf Z1-E0-1 und Z1-E2-1.**
+
+## §433 — Z1-V1-1 CODE_FERTIG: Meldepflichten erfüllt, vier von fünf Modulen. Alle drei Halbsätze aus §421 sind angewandt, und die Nachschärfung aus §428 auch
+
+Messstand: HEAD `3c2546ce`, Baum 0, gemessen 19:17–19:19. **Messzeit des Ereignisbefehls dieser
+Runde: 19:17:25** *(nach §432 der Schnitt für die nächste Runde).* Abschnittsnummer gegen den
+frischen HEAD gewählt (`grep -c '^## §433'` → 0).
+**Ereignis dieses Abschnitts:** `ereignisse/BAU-generator-spur-V-1/plan-pruefer-MELDEPFLICHTEN-Z1-V1-1-GEPRUEFT.yaml`
+
+### Meldepflichten — selbst gemessen
+
+    ausgangs_sha  5617dc4c   commit, existent
+    endstand_sha  1c6b7601   commit, existent      beide IN EINEM FELD
+    ergebnis_sha  1c6b7601   commit, existent
+
+    blatt: "…Z1-V1-1-sammelblatt-….md @ rolle/planner 3ab3bb88
+            (gegen die Spitze 262ed5c7 als unveraendert gegengeprueft)"
+    dor:   "plan-pruefer f443f057 — Kriterientext Spur V mit drei Halbsaetzen"
+
+    Scope-Diff, mein eigener Lauf an 1c6b7601:
+      public/hausplaner/hausplaner.js
+      app/rahmen/DachKennzahlen.tsx · EigenschaftenPanel.tsx · TreppentypAnzeige.tsx
+      ausserhalb Insel UND Buendel:  0
+
+**Das `blatt:`-Feld nennt Pfad, Zweigstand UND eine Gegenprobe gegen die Spitze** — die Form aus
+§426, jetzt mit einer Zeile mehr, als ich verlangt hatte.
+
+### MEINE DREI HALBSÄTZE AUS §421 SIND ANGEWANDT — jeder einzeln nachweisbar
+
+    V-1  "Aufrufstelle MIT KLAMMER: TreppentypAnzeige.tsx:55 · treppenTyp({...}).
+          Gegen die Teilstring-Falle …"
+         und bei dachVorlage: "Roh 4 Treffer, davon 3 meine JSDoc-Zeilen"
+                                                    <- Rohzahl UND bereinigte, genau wie verlangt
+    V-4  "git diff 5617dc4c..1c6b7601 -- …/treppenTypen.ts -> 0 Zeilen. BEIDE SHA GENANNT."
+    V-6  "0 Pfade ausserhalb resources/planner/hausplaner, DAS BUENDEL AUSGENOMMEN"
+
+**Und die Nachschärfung aus §428 ebenfalls:** Ich habe V-1 mit dem verschärften Muster gegengeprüft
+— **ohne** Definitionszeile:
+
+    treppenTyp()          2      dachVorlage()        4
+    projiziereDach()      2      sparrenTeilstuecke() 2
+    analyzeTopology()     0      <- und genau dieses Modul ist herausgenommen
+
+**Vier Module erfüllen V-1, das fünfte nicht — meine unabhängige Messung deckt sich mit seiner
+Herausnahme.** Das ist die beste Gegenprobe, die es hier gibt: ich habe die Zahl gemessen, bevor ich
+den Grund gelesen hatte.
+
+### Der Ausschluss trägt — und er erweitert die Blattregel richtig
+
+`geometry/dachTopologie.ts` braucht je Polygonkante einen Typ
+(`TRAUFE | GIEBEL | PULT_WAND | WALM | TEILWALM`). Seine Belege, von mir nachgemessen:
+
+    'TRAUFE' ausserhalb der Moduldatei        0      Positivkontrolle: 3 IN der Datei
+    'EdgeTopologyConfig' ausserhalb           0
+    'edgeConfigs' ausserhalb                  0
+    dachGeometrie.ts exportiert               pruefeRechteckigeKontur · dachFlaechen  (genau zwei)
+
+**Kein Ort im Bestand leitet Kantentypen her.** Und sein Satz trifft die Grenze aus CLAUDE.md
+präzise:
+
+> *„Die Zuordnung zu erfinden wäre eine **Fachentscheidung des Dachdeckerhandwerks**, keine
+> Verdrahtung: bei Walm und Teilwalm entstehen genau die Grate, wegen derer es die Klassifikation
+> gibt, und **eine falsche Kante erzeugt eine plausible falsche Aussage**."*
+
+**Sein Regelbezug ist die eigentliche Leistung:** Das Blatt sieht nur vor, dass ein Modul
+herausfällt, *wenn V-4 fällt* (Fachlogik müsste angefasst werden). Er schreibt:
+
+> *„Hier fällt nicht V-4, sondern der **EINGANG**."*
+
+**Das ist eine Erweiterung der Blattregel, und sie ist richtig.** Ein Modul, dessen Eingang im Modell
+nicht existiert, ist ebenso wenig Spur V wie eines, dessen Fachlogik angefasst werden müsste — in
+beiden Fällen ist mehr zu tun als zu verdrahten. **Ich halte sie als Präzisierung fest**, damit sie
+beim nächsten Sammelblatt nicht neu erfunden werden muss.
+
+### Ein eigener Baufehler, gefunden und behoben
+
+> *„`projiziereDach` WIRFT `DachGeometrieUngueltig` bei nicht-rechteckiger Traufkontur. Ohne
+> try/catch riss der Wurf beim Anwählen eines U-Dachs den GANZEN Panelbaum ab."*
+
+Nachgemessen: `dachProjektion.ts:10` dokumentiert die Propagation aus `dachFlaechen()`, und
+`DachKennzahlen.tsx` enthält **einen** `try {`-Block. **Der Fix ist drin.**
+
+**Das ist ein Fehler, den nur der Bau finden konnte** — kein Blatt und keine DoR hätten ihn
+vorhergesagt. Er hat ihn gemeldet, statt ihn stillschweigend zu beheben.
+
+### Der Bündel-Posten aus §431 ist erledigt
+
+`generator-ANTWORT-buendel-erledigt.yaml`, 19:16:18: *„Das Bündel ist gebaut und committet — der
+Hinweis und mein Commit kreuzten sich in derselben Minute."* **Und `public/hausplaner/hausplaner.js`
+steht in den Pfaden von `1c6b7601`.** Damit ist der Posten geschlossen — und die Kreuzung erklärt,
+warum mein Hinweis ihn nicht mehr erreichte.
+
+Ball: **Evaluator** (Abnahme, V-2/V-3 viermal) · **Integrator** (Transport) · **Planner** (eigenes
+Blatt für `dachTopologie` mit Fach-Linse Dachdecker/Zimmerer).
