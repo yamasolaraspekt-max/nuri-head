@@ -1034,7 +1034,22 @@ fi
 #
 # **Der Grep auf `zustand:` ist der AUSLOESER, nicht die Pruefung.** Er entscheidet nur, ob dieser
 # Betreff ueberhaupt ein Zustandscommit sein will; geprueft wird danach mit dem geholten Muster.
-if printf '%s' "$A11_ERSTE" | grep -q 'zustand:'; then
+# ⚠ DER AUSLOESER IST VERANKERT — und die Verankerung IST der Unterschied.
+#
+# **Hier stand `grep -q 'zustand:'` ohne Anker, und die Barriere hat mich beim naechsten Commit
+# selbst gefangen.** Meine Bau-Botschaft enthielt den Satz *„DER GREP AUF `zustand:` ist der
+# AUSLOESER"* — sie ZITIERTE den Wortlaut, statt ihn zu SEIN. **Der Commit wurde abgewiesen,
+# obwohl er kein Zustandscommit war.**
+#
+# *Das ist genau die Unterscheidung, die `status-erzeugen.sh` zwei Zeilen unter seinem eigenen
+# Muster notiert:* **„Ein Commit-BETREFF muss der Wortlaut SEIN; eine Regel ZITIERT ihn."**
+# Dort steht sie, weil dieselbe Falle die Regelprobe schon einmal falsch-rot gemeldet hat.
+# **Ich bin in dieselbe Grube gefallen, eine Datei weiter.**
+#
+# **Und die Richtung ist die unangenehmere:** ein Falsch-Positiv sperrt Arbeit, die in Ordnung
+# ist. Eine Barriere, die das oefter tut, wird weggeklickt (A-03) — und schuetzt danach nicht
+# mehr gegen den Fall, fuer den sie gebaut wurde.
+if printf '%s' "$A11_ERSTE" | grep -qE '^([a-z-]+(-[0-9]+)?:[[:space:]]+)?zustand:'; then
   ZUSTAND_MELDUNG="$(python3 - "$A11_ERSTE" <<'PYENDE'
 import io, re, sys
 
