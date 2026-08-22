@@ -102,7 +102,7 @@
 | **Z1-W2-0** Bedienbarkeits-Probe: das Messgeraet fuer alle Werkzeugblaetter | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 14:5x · Basis `592df395` | **Blatt** `docs/auftraege/aktiv/Z1-W2-0-*.md` · **DoR ERTEILT** (plan-pruefer 15:02, Pruefstand `adf03d32`) · Bau `ee6ce517` · Matrix `0d97a57c` · **ABGENOMMEN** 18:11:23, 8 von 8 Kriterien, **ohne Browser** — am Blatt nachgeprueft |
 | **Z1-W2-1** Integrationsabgleich anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 14:2x · Basis `767fb730` | **Blatt** `docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 14:25, Pruefstand `4611267e`) · Bau `1c80a1d8` · Matrix `1d193535` · **ABGENOMMEN (BROWSER)** 16:25:16, Reifegrad `BROWSERABGENOMMEN`, 6 von 6 Kriterien, drei Bildbelege · **Buendel** `be4f637c` transportiert |
 | **Z1-W2-2** Aufbautenstatus anschliessen | `ZURUECKGESTELLT` | **Planner** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-2-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae · **ZURUECKGESTELLT** — RoofAufbau ohne `surfaceId`, Flaechen ohne gespeicherte Kennung: nur "nie warnen" oder "immer warnen" moeglich, beides kein Anschluss · Dirigent 15:52:21 · **kein Bau-SHA** |
-| **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · **DoR ERTEILT** (plan-pruefer §353, `c2e8dd20`) · Bau `d00aeece` · Matrix `161868e9` · CODE_FERTIG 16:13:25 · **BERICHTIGUNG:** mein Commit `217fd547` fuehrte hier ZURUECKGESTELLT — das war seit 15:53:35 ueberholt |
+| **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · **DoR ERTEILT** (plan-pruefer §353, `c2e8dd20`) · Bau `d00aeece` · Matrix `161868e9` · **ABGENOMMEN (BROWSER)** 18:37:10, 7 von 7, Reifegrad `browserabgenommen`, vier Bildbelege · zuvor von mir faelschlich ZURUECKGESTELLT (`217fd547`), berichtigt in `f3fc3c44` |
 | **Z1-W2-4** Treppe ueber den Werkzeugregistry-Vertrag anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md` · **DoR ERTEILT** (plan-pruefer 16:21:25) · Planner-Blatt `418bcb6c` |
 | **Z1-W2-5** Wandflaeche anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` |
 | **Z1-W2-6** Auswechslung anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` |
@@ -19167,8 +19167,8 @@ zustand_nachgezogen: |
 ```yaml
 auftrag: "Z1-W2-3"
 titel: "Grundriss-Eckenanalyse anschliessen"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: dirigent
 blatt: "docs/auftraege/aktiv/Z1-W2-3-..."
 blatt_sha: 59c82dae
 basis_sha: f1ff0498
@@ -19216,6 +19216,23 @@ berichtigung_meines_eigenen_zustands: |
   Z1-W2-2 bleibt ZURUECKGESTELLT — der Generator bestaetigt Commit b91ea441 ausdruecklich
   als richtig. Nur diese eine Kennung war falsch.
   KEIN RESET, KEIN AMEND: 217fd547 bleibt stehen, diese Zeile berichtigt ihn (Auflage 2).
+
+votum: |
+  ABGENOMMEN (BROWSER) — evaluator, 18:37:10, evaluator-VOTUM-z1-w2-3.yaml,
+  ABNAHME-evaluator-welle-1b, Sitzung 303cefb6, fencing_token 1, generation 16.
+  7 von 7 Kriterien · reifegrad browserabgenommen · blattstand 39260edd · bau d00aeece
+  endstand 161868e9 · ergebnis f76373fa
+  Beleg: docs/rollenkette/rollen/4-evaluator/VOTUM-Z1-W2-3.md, vier Bildbelege unter belege/
+  SEIN KERN, weil er die Rot-Probe an der richtigen Stelle gefuehrt hat: zwei Browserlaeufe an
+  der U-Fixture, ausgeloest durch BEDIENUNG (Dachform-Select) und nicht durch praeparierte
+  Daten — U-Dach 2/2 passt, L-Dach 2/1 Abweichung mit Wortlaut. Rot-Probe aus dem Vorstand
+  b593357c in einer Wegwerf-Auspackung unter TMPDIR: derselbe Bedienweg, [data-pruefung] 0,
+  kein Befundtext, und "Dachform" weiterhin sichtbar — also am richtigen Ort gemessen.
+zum_ballbesitz: |
+  Das Votum nennt "ball: integrator". Gemeint ist genau dieser Zustandsnachzug, und mit diesem
+  Commit ist er erledigt. Ich setze den Ball deshalb auf dirigent — wie bei Z1-W2-0 und
+  Z1-W2-1, deren Voten ihn ausdruecklich dorthin gegeben haben. Was danach mit dem Reifegrad
+  geschieht, ist keine Integratorentscheidung.
 
 ```
 
