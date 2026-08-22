@@ -104,7 +104,7 @@
 | **Z1-W2-2** Aufbautenstatus anschliessen | `ZURUECKGESTELLT` | **Planner** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-2-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae · **ZURUECKGESTELLT** — RoofAufbau ohne `surfaceId`, Flaechen ohne gespeicherte Kennung: nur "nie warnen" oder "immer warnen" moeglich, beides kein Anschluss · Dirigent 15:52:21 · **kein Bau-SHA** |
 | **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · **DoR ERTEILT** (plan-pruefer §353, `c2e8dd20`) · Bau `d00aeece` · Matrix `161868e9` · **ABGENOMMEN (BROWSER)** 18:37:10, 7 von 7, Reifegrad `browserabgenommen`, vier Bildbelege · zuvor von mir faelschlich ZURUECKGESTELLT (`217fd547`), berichtigt in `f3fc3c44` |
 | **Z1-W2-4** Treppe ueber den Werkzeugregistry-Vertrag anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md` · **DoR ERTEILT** (plan-pruefer 16:21:25) · Planner-Blatt `418bcb6c` |
-| **Z1-W2-5** Wandflaeche anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` · Bau `5617dc4c` · CODE_FERTIG 18:52:39 · **die Wandflaeche erreicht den Benutzer** |
+| **Z1-W2-5** Wandflaeche anschliessen | `NACHBESSERN` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` · Bau `5617dc4c` · CODE_FERTIG 18:52:39 · **die Wandflaeche erreicht den Benutzer** · **NACHBESSERN** 19:15:00 — 6 von 7 browserabgenommen, Kriterium b unbelegt |
 | **Z1-W2-6** Auswechslung anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` |
 | **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 · Bau `1c6b7601` · CODE_FERTIG 19:14:05 · **Buendel im Bau-Commit** (V-5) |
 | **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `BEREIT` | **Generator** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht · **DoR ERTEILT** 19:06:40 mit zwei Halbsaetzen (§429) — Bau kann sofort beginnen |
@@ -19260,8 +19260,8 @@ herkunft_dieses_blocks: |
 ```yaml
 auftrag: "Z1-W2-5"
 titel: "Wandflaeche anschliessen"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: NACHBESSERN
+ballbesitz: generator
 blatt: "docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md"
 blatt_sha: 418bcb6c
 basis_sha: 161868e9
@@ -19287,6 +19287,27 @@ zustand_nachgezogen: |
   Das Ereignis nennt ball: [evaluator, dirigent]. In der Tafel steht Evaluator, weil dort die
   naechste Handlung liegt; der Dirigent ist mitadressiert und nicht uebergangen.
   Spur W, also ist der Bau mit diesem Lauf in der Integration.
+
+votum: |
+  NACHBESSERN — evaluator, 19:15:00, evaluator-NACHBESSERN-z1-w2-5.yaml,
+  bau_sha 5617dc4c, ergebnis_sha 7a5ba2d0.
+  "NACHBESSERN — 6 von 7 Kriterien browserabgenommen, eines unbelegt"
+  reifegrad: "browserabgenommen fuer a c d e f g; b offen"
+  ball: [dirigent, generator] — in der Tafel steht Generator.
+  SECHS VON SIEBEN SIND IM BROWSER BELEGT, und das ist der Unterschied zu einem Verriss: das
+  Werkzeug ist bedienbar, nur der Nachweis fuer b fehlt. Der Dirigent hat dafuer 19:05:47
+  bereits den Weg entschieden — eine Fixture ?fixture=wand-schichten als Pruefmittel, danach
+  "ABGENOMMEN (BROWSER) MIT VORBEHALT". Nach seiner Entscheidung ZAEHLT Z1-W2-5 als
+  angeschlossenes Modul, weil das Werkzeug selbst bedienbar ist.
+buendel_erledigt: |
+  Mein Befund von 18:59 ist abgearbeitet. Das Buendel im Bau-Commit 1c6b7601 traegt die
+  Wandflaechen-Anzeige: data-pruefung="wandflaeche" ist im ausgelieferten hausplaner.js
+  vorhanden (alt 0, neu 1), im Kontext nachgeschlagen und gegen die Quelle geprueft —
+  WandflaechenAnzeige.tsx Zeile 61 traegt genau diese Marke.
+  MEINE ERSTE SONDE WAR FALSCH GEWAEHLT, und das gehoert hierher: ich hatte auf "wandFlaeche"
+  in CamelCase gesucht, also auf den FUNKTIONSNAMEN. Der wird beim Bau wegminimiert und gibt
+  auch im richtigen Buendel 0. Belastbar ist nur die sichtbare Marke — das Datenattribut.
+  Die Teilstring- und Schreibweisenfalle zum fuenften Mal heute, diesmal bei mir.
 
 ```
 
