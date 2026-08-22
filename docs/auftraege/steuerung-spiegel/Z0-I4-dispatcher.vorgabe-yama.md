@@ -54,6 +54,17 @@ nicht eingeführt") — **historischer Architekturentscheid**, keine technische 
 Entscheidung Yamas. Falls später gewünscht: ausschließlich strategische Portfolio-/Priorisierungsaufgaben; weder
 Dirigentenrouting noch Yamas Freigaberecht duplizieren.
 
+## Risiken beim Bau — Vergleich mit dem heutigen Zustand (Dirigent, 22.08. 09:58; gemessen, nicht vermutet)
+| # | Gefahr | woran gemessen | Gegenmaßnahme (Pflicht für Spezifikation/Abnahme) |
+|---:|---|---|---|
+| R1 | **Doppelläufe derselben Sitzung** in der Übergangsphase: Dispatcher weckt per `claude -p --resume`, während die alten Sitzungs-Crons UND der interaktive VS-Code-Lauf derselben Sitzung weiterlaufen (heute: `aa0cddd3` lief als 88088 **und** 91834) | Befund Generator 09:00, Plan-Prüfer „fünf falsche PIDs" | Single-Flight prüft **alle** Läufe einer Sitzungs-ID (`ps`: `--resume=<id>` **und** interaktive Läufe), nicht nur eigene Starts; alte Wecker erst **nach** ABGENOMMEN entfernen, bis dahin weckt der Dispatcher **nicht** (Schattenbetrieb: nur beobachten/melden) → eigene Pflichtprobe „Rolle aktiv durch fremden Lauf → kein Start" |
+| R2 | **Headless-Lauf mit `bypassPermissions`, gestartet von einem Daemon** — die Steuerungsdateien in `~/.ticket-steuerung/rollen/` sind für jeden lokalen Prozess schreibbar; ein manipulierter Auftrag würde vollautomatisch ausgeführt | heute: Dateirechte 644, keine Signatur | Dispatcher startet nur Aufträge, deren `.sha256` **und** ein zweites, nur dem Dirigenten/Yama zugängliches Siegel (z. B. Signatur mit Schlüssel in `~/.ticket-steuerung/.schluessel/`, 0600) stimmen; Rollenläufe ohne `bypassPermissions` wo möglich; Entscheidung Yama |
+| R3 | **Neue Commit-Gates (A-37-22e/25) brechen legitime Commits aller Rollen**, sobald sie transportiert sind (`core.hooksPath=.githooks` ist je Worktree wirksam; nach Nachziehen überall) | A-37-Bau läuft im Generator-Baum; Integration noch ohne `pre-commit` | Evaluator prüft **Positivfälle je Rolle** (jede Rolle committet im eigenen Baum mit gültiger ACK/Lease; Integrator-Integrationscommit) **vor** dem Transport; Rollback-Pfad: Hook-Datei ist Text, ein Revert-Commit stellt den alten Stand her |
+| R4 | **Dispatcher als neuer Single Point of Failure** (Daemon stirbt, launchd startet neu, offene Aufträge „vergessen") | heute gar kein Dispatcher; Planner-Takt im Scratchpad | Neustart-Rekonstruktion aus Dateien (Pflichtprobe), `DISPATCH_BLOCKED`-Meldung, Heartbeat-Datei des Dispatchers; bis zur Abnahme bleibt der manuelle Dirigenten-Weg gültig |
+| R5 | **Transport durch den Dispatcher** (er „weckt" den Integrator — aber er darf nie selbst `rueckweg.py` fahren) | Vorfall Generator 08:06 | A-37-22b Preflight gilt auch für Dispatcher-gestartete Läufe: nur die Integrator-Sitzung im kanonischen Checkout transportiert |
+| R6 | **Wecken des falschen Baums/der falschen Sitzung** nach Umbenennungen (Beleg-Baum `ticket-rolle-generator-beleg-2026-08-21`) | A-37-22c | Dispatcher liest Worktree/Branch ausschließlich aus der Rollendatei und prüft `git rev-parse --abbrev-ref HEAD` im Ziel vor dem Wecken |
+**Schlussfolgerung:** nichts davon betrifft den heutigen Betrieb (Dispatcher existiert nicht); alles davon muss in die Planner-Spezifikation und die Evaluator-Pflichtproben von Z0-I4. Schattenbetrieb (beobachten/melden, nicht wecken) ist die sichere erste Stufe.
+
 ## Abgrenzung
 | Instanz | darf | darf nicht |
 |---|---|---|
