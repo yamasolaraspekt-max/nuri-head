@@ -36444,3 +36444,91 @@ beschädigt haben."* **Der Reifegrad, den er vergibt, ist die Konsequenz daraus.
 
 Ball: **keiner von mir** · **Integrator** (26 Commits, jetzt auch Z1-W2-4 und die Abnahmen) ·
 **Dirigent** (Generation 21) · **Yama** (§443/§444, Pfadfrage Z0-I1).
+
+## §456 — Die Nachlieferung zu (c) ist da, und sie berichtigt MEINEN §454: die Streichung von (b) macht (c) nicht nur unberührt, sondern zwingend
+
+Messstand: HEAD `fdf7bcee`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 20:43–20:47.
+**Ereignis-Schnitt dieser Runde: 20:42:11** (2 neue Ereignisse). Abschnittsnummer gegen den frischen
+HEAD gewählt (`grep -c '^## §456'` → 0). Anlass:
+`generator-NACHLIEFERUNG-Z1-W2-8-kriterium-c.yaml` (20:43:14) — **zitiert, nicht nachgebaut**.
+
+### Meldepflichten — erfüllt, selbst gemessen
+
+    SHA existent      5820cc7d commit · 7500bb7d commit
+    SHA in FELDERN    :11 ausgangs_sha · :12 endstand_sha · :13 ergebnis_sha
+    Scope-Diff selbst 5820cc7d..7500bb7d -> 2 Dateien, 11+ / 3-
+                      toolRegistry.ts (INSEL) · hausplaner.js (BUENDEL)   AUSSERHALB: 0
+
+### Hälfte 2 ist geliefert — die Gegenmessung zu §454
+
+    in §454 gemessen (@ 8460f98f):   Zwischendecke 0  ·  Abschlussdecke 0
+    jetzt        (@ 7500bb7d):       Zwischendecke 1  ·  Abschlussdecke 1
+    Positivkontrolle 'tooltip' in derselben Datei: 13 Treffer — das Muster greift
+
+    -  tooltip: { title: 'Decke / Bodenplatte', body: 'Massive oder mehrschichtige Decke erzeugen.', …
+    +  tooltip: { title: 'Decke', body: 'Zwischendecke oder Abschlussdecke erzeugen — massiv oder
+    +             mehrschichtig.', …
+
+**`Bodenplatte` steht in der Werkzeugleiste nur noch in zwei Kommentarzeilen** (`:146`, `:151`), die
+den historischen Grund tragen. **Kein Bedienelement heißt mehr so.** Dieselbe Disziplin wie beim
+Planner heute: *nicht gelöscht, sondern erklärt.*
+
+### Er benennt den Kurzschluss selbst — und trifft die Klasse genau
+
+> *„Ich habe von der Streichung des einen auf die des anderen geschlossen, weil beide die
+> Bodenplatte erwähnen. **Das ist derselbe Kurzschluss, den ich heute anderswo als Mangel gemeldet
+> habe: aus der Nähe zweier Dinge auf ihre Gleichheit schließen.**"*
+
+**Das ist dieselbe Familie wie mein §434** (Rot-Lage am falschen Ort gemessen, weil beide Dateien
+„Registry" heißen) **und mein §437** (Spur-V-Kriterium auf ein Spur-W-Blatt angewandt, „weil beide im
+selben Auftragsordner liegen"). **Nähe ist kein Argument — und sie überzeugt trotzdem.**
+
+### UND ER GEHT ÜBER MEINEN §454 HINAUS — das ist der eigentliche Gewinn dieser Runde
+
+**Ich hatte in §454 geschrieben:** *„Hälfte 2 steht — sie hängt nicht an (b)."*
+**Er zeigt, dass das zu schwach ist:**
+
+> *„‚Decke / Bodenplatte' war eine **Ankündigung**, solange die Bodenplatte ein eigener Eintrag
+> werden sollte. Nachdem die DoR (b) gestrichen und einen Eintrag auf `bauteilKind: 'ceiling'`
+> **untersagt** hat, verspricht der Titel einen Bedieneintrag, den es nicht geben wird. **DER
+> TOOLTIP WURDE DURCH DIE STREICHUNG UNEHRLICHER, NICHT HARMLOSER.**"*
+
+> **Er hat recht, und es berichtigt meine eigene Formulierung.** Ich habe (c) als *von (b)
+> unberührt* beschrieben. **Richtig ist: (c) wird durch die Streichung von (b) erst zwingend.**
+> Solange (b) geplant war, war der Doppeltitel eine Vorankündigung. Mit der Streichung wurde er ein
+> Versprechen ohne Deckung — **und zwar durch meinen Halbsatz.**
+
+### Meine §454-Regel war zu schwach formuliert
+
+    §454 sagte:   „Wer ein Kriterium streicht, benennt, WAS DARAN HAENGT und was nicht."
+    Richtig ist:  „… und WAS DADURCH ERST NOETIG WIRD."
+
+> **Eine Streichung hat zwei Wirkungsrichtungen, und ich hatte nur eine gesehen:**
+>
+>     abwaerts  was faellt mit?          -> Haelfte 1 (Bodenplatten-Tooltip), gegenstandslos
+>     aufwaerts was wird dadurch faellig? -> Haelfte 2, weil der Titel ohne (b) unehrlich wird
+>
+> **Die Abwärts-Richtung ist die naheliegende; die Aufwärts-Richtung ist die, die man vergisst.**
+> Und sie ist die gefährlichere: ein zu viel gestrichenes Kriterium fällt auf, sobald jemand es
+> sucht. **Ein durch die Streichung nötig gewordenes Kriterium fällt niemandem auf — es steht in
+> keiner Liste.**
+
+**Vierte Formregel an mein Votum heute**, nach `blatt_sha` (§450), Zahlen nachrechnen (§451) und
+Reichweite abwärts (§454): **bei Streichungen auch die Aufwärts-Wirkung prüfen.**
+
+### Was ich ausdrücklich nicht bewerte
+
+**Ob der Titelwechsel `Decke / Bodenplatte` → `Decke` innerhalb von (c) liegt oder darüber
+hinausgeht.** Der Planner hat es benannt und ausdrücklich nicht bewertet, weil es nicht seine Rolle
+ist; der Generator hält es für denselben Gegenstand und begründet es fachlich. **Beide haben ihre
+Rolle gewahrt. Die Bewertung gehört dem Evaluator, und ich nehme sie ihm nicht ab** — mein Beitrag
+ist die Messung, dass Hälfte 2 jetzt vorliegt, und die Berichtigung meiner eigenen Reichweitenregel.
+
+### Stand, frisch
+
+    Commits NICHT in der Integration   28    (vorige Runde 26, davor 24, davor 21)
+    Integrator-Stille                  57 Minuten
+    §447 „steht aus" bei E0/E2         unveraendert 2
+
+Ball: **Evaluator** (Bewertung von (c) samt Titelfrage) · **Integrator** (28 Commits, 57 Minuten) ·
+**Dirigent** (Generation 21) · **Yama** (§443/§444, Pfadfrage Z0-I1).
