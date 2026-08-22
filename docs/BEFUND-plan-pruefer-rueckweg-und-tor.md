@@ -37478,3 +37478,86 @@ Produktcode, außerhalb meiner Rolle, und der Dirigent hat ihn dem Generator nac
 
 Ball: **Dirigent** — zweite Postenmessung, `entscheidungsreif: ja`. **Geht sofort als Ereignis**
 (§463: alles mit Ball einzeln).
+
+## §468 — Postenmessung 3/9: die „versatz-Quittung" ist keine Quittung. Und ich habe die Regel, die ich heute dreimal neu entdeckt habe, schon einmal selbst formuliert
+
+Messstand: HEAD `bd90e832`, Baum 0 · Integration `57e661bd`, Baum 0 · **Rückstand `HEAD..auto` = 153**
+· gemessen 21:24–21:31. **Ereignis-Schnitt dieser Runde: 21:23:04** (0 neue Ereignisse).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §468'` → 0).
+**Dritter Posten für den Dirigenten-Auftrag von 14:48:57.**
+
+### Der Posten trägt einen falschen Namen — meinen
+
+    Meine Postenliste sagt:  „versatz-Quittung"
+    Gemessen, was dahintersteht — VORLAGE-AN-YAMA-2026-08-12.md:137:
+      „| **Fahrplan** | **`versatz`: neu oder verschoben?** | Soll ein Parallelversatz eine NEUE
+         Wand erzeugen oder die vorhandene [verschieben]? |"
+
+**Das ist eine FACHFRAGE an Yama, keine ausstehende Quittung.** Ich führe den Posten seit Runden
+unter einem Namen mit, der eine Bestätigung suggeriert, wo eine Produktentscheidung offen ist.
+**Vierter Namensbefund heute** — nach `Decke / Bodenplatte` (§456), `berechneHoehenkette` (§457) und
+`deckenOberkanteMm` (§460). **Die ersten drei waren fremd, dieser ist meiner.**
+
+### Beantwortet der Bau die Frage? Gemessen: nein — und der Grund ist sauber
+
+    geometry/geradenGeometrie.ts:223   export function parallelVersatz(
+                                         start, ende, abstandMm, seite
+                                       ): VersetzteAchse | null
+    -> Rueckgabe ist eine ACHSE, keine Wand. Die Geometrie ist in der Frage NEUTRAL.
+
+    Produktivaufrufer von parallelVersatz:  KEINE
+      app/tools/werkzeugLandkarte.ts:137   ein Kommentar
+      app/tools/werkzeugLandkarte.ts:140   { werkzeugId: 'versatz', marke: 'fehlt', … }
+    Positivkontrolle: „versatz" in resources/ -> 8 Dateien (das Muster greift)
+
+**A-32 ist `BETRIEBSBESTAETIGT`, `ballbesitz: —`** — die Geometrie ist gebaut und abgenommen.
+**Die Fachfrage bleibt offen, weil sie erst an der Aufrufstelle entschieden wird — und die gibt es
+nicht.** Die Werkzeugleiste führt `versatz` selbst als **`marke: 'fehlt'`**.
+
+    entscheidungsreif: JA — aber nicht dringlich.
+    Die Frage ist klar gestellt und jederzeit entscheidbar; gebraucht wird die Antwort erst beim
+    Anschluss, und der steht nicht an. Sie blockiert NICHTS: die Geometrie ist neutral gebaut,
+    beide Antworten bleiben ohne Umbau moeglich.
+
+### Der schwerere Fund dieser Runde betrifft mich
+
+Auf dem Weg zum Posten stieß ich auf meinen eigenen Abschnitt (Z. 29710 ff.):
+
+> *„**Warum das die schlimmere Sorte Fehler ist:** P2 zeigt auf eine leere Zeile — das merkt man. Die
+> anderen drei zeigen auf plausibel aussehenden anderen Text. … **Ein Zeiger, der ins Leere geht,
+> meldet sich; einer, der auf etwas anderes zeigt, wird gelesen.** Das ist Punkt (a) des
+> Vorratsauftrags, wörtlich, und er trifft mich selbst."*
+>
+> *„**Abhilfe an mir, ab sofort:** Belege in `docs/STATUS.md` über **Inhaltsmuster**
+> (`grep -n 'WEG C entschieden'`), nie über eine Zeilennummer."*
+
+> **Ich habe diese Regel schon einmal formuliert — und sie heute dreimal neu entdeckt:** §449
+> („ein Zeilenverweis in eine wachsende Datei hat ein Verfallsdatum"), §462 („ein alter Befund ist
+> kein bestätigter Befund"), §465 (92 von 147 Verweisen sind meine).
+>
+> **Und schärfer als beim Generator:** Sein Satz lautet *„eine Lehre, die nur die eine Stelle
+> repariert, an der sie entstand, ist keine Lehre."* **Meine hat nicht einmal die eine Stelle
+> repariert** — nach der Formulierung dieser „Abhilfe ab sofort" habe ich weiter Zeilenverweise
+> gesetzt, bis §465 zweiundneunzig davon zählte.
+>
+> **Vierte Instanz derselben Einsicht, und ich habe sie jedes Mal für neu gehalten.** Das ist die
+> genaue Form von §462, auf mein eigenes Lernen angewandt: **eine alte Einsicht ist keine
+> angewandte Einsicht.**
+
+**Was ich daraus ziehe — und diesmal prüfbar:** Die Inhaltsmuster-Regel geht in die Sammelmeldung
+als **fünfte Formbedingung**, neben `blatt_sha` (§450), Zahlen nachrechnen (§451/§459),
+Streichung abwärts (§454) und aufwärts (§456). **Nicht als Vorsatz — als Bedingung an ein Wort,
+in der Form, die der Generator in §464 vorgemacht hat:** *steht in einem meiner Belege eine
+Zeilennummer in `docs/STATUS.md`, ist der Beleg unvollständig, solange kein Inhaltsmuster
+danebensteht.*
+
+### Lage, jetzt gemessen (21:24:14)
+
+    Commits NICHT in der Integration      40
+    Integrator-Stille                     98 Minuten
+    §447 „steht aus" bei E0/E2             2
+    Baelle beim Integrator (ganzes Haus)  21
+    Rueckstand mein Baum -> Integration   153
+
+Ball: **Dirigent** — dritte Postenmessung, `entscheidungsreif: ja (nicht dringlich)`. **Geht sofort
+als Ereignis** (§463).
