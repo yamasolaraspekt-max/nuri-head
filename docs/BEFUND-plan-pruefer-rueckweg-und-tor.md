@@ -29732,3 +29732,82 @@ anlegt** und dass **kein Auftrag** den Bau trägt.
 Ball: **niemand von mir aus.** Ich melde den Posten als fehladressiert und liefere die Messung; die
 Umbuchung von Yamas Liste auf einen Planner-Auftrag ist Sache des Dirigenten. Kein Blatt berührt,
 kein Votum geändert.
+
+## §367 — Acht Scheinbälle, null echte: fünf Blätter und drei Blöcke nennen mich, und die Schnittmenge ist leer
+
+Messstand: HEAD `b0b11a36`, Baum 0, gemessen 15:25:17–15:29. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §367'` → 0). Nichts Neues angekommen seit 15:24:37, `Z2-W0-5b` weiter ohne
+Auslöser. Diese Runde galt der **zweiseitigen Ballortung (P-03)** — und sie hat sich gelohnt.
+
+### Die Zahl
+
+    STATUS-Bloecke mit ball plan-pruefer (Zustandsfilter negativ):   3
+    Blaetter in aktiv/ mit ballbesitz: plan-pruefer:                 5
+    SCHNITTMENGE:                                                    0
+
+**Acht Vorgänge nennen mich, und kein einziger steht auf beiden Listen.** Wer nur eine Seite liest,
+sieht drei Bälle oder fünf — nie die acht, und nie dieselben.
+
+### Alle acht einzeln nachgemessen — keiner liegt bei mir
+
+    Vorgang        STATUS sagt                  Blatt sagt                  wirklich
+    P-02           VORLAGE / plan-pruefer       —                           votiert, Dirigent ANGENOMMEN
+    Z1-W2-0        ENTWURF / plan-pruefer       —                           ERTEILT 15:02:26
+    Z1-W2-1        ENTWURF / plan-pruefer       —                           ERTEILT (Paket 3)
+    A-09           BETRIEBSBESTAETIGT / —       ball plan-pruefer           erledigt
+    A-11           BETRIEBSBESTAETIGT / —       ball plan-pruefer           erledigt
+    A-37           ABGENOMMEN / release-pruefer ENTWURF, "plan-pruefer(DoR)" dreifach votiert
+    A-38           BEREIT / generator           ENTWURF, "plan-pruefer(DoR)" ERTEILT Runde 2, §156
+    A-08-NACHTRAG  kein Block                   ball plan-pruefer           kein Auftrag
+
+A-37 belegt durch meine eigenen Ereignisse: `ERTEILT` 00:49:39, Nachschärfung `ERTEILT` 09:05:12 mit
+`AUFTRAG_ABGESCHLOSSEN` 09:30:38, Errata `BESTAETIGT` 10:12:46 nebst sieben Nachträgen bis 12:18.
+
+### Der Punkt: die Fehlerquelle wechselt die Seite
+
+    P-02, Z1-W2-0, Z1-W2-1   ->  STATUS ist veraltet, das Blatt hat recht
+    A-09, A-11, A-37, A-38   ->  das BLATT ist veraltet, STATUS hat recht
+
+**Es gibt keine verlässliche Seite.** Hätte ich mich auf STATUS verlassen — §16 macht sie zum einzigen
+Statusträger —, hätte ich A-37 und A-38 nie angesehen und die fünf Blattbälle nie bemerkt. Hätte ich
+mich auf die Blätter verlassen, hätte ich für A-38 eine vierte DoR-Runde gefahren, die niemand
+braucht. Genau das ist die Lage, die der Tor-Kommentar vom 16.08. vorhergesagt hat und die ich in
+§333/§337/§341/§355 vier Mal einzeln gemessen habe — hier steht sie erstmals **als Verteilung**:
+sieben von acht Fällen sind Nachzieh-Rückstände, und sie liegen auf **beiden** Seiten.
+
+### A-38 — der Fall, der mich fast eine Runde gekostet hätte
+
+Das Blatt (unverändert seit 16.08. 20:57, sechs Tage) trägt:
+
+    dor_beleg: "NICHT ERTEILT — 3. Runde, siehe docs/STATUS.md. Restpunkte 16.08. behoben."
+    ballbesitz: "plan-pruefer (DoR)"
+
+Gelesen wie es dasteht, liegt bei mir eine vierte DoR-Runde. **Der Datensatz sagt das Gegenteil**, und
+zwar ausführlich: `dor_beleg: ERTEILT — plan-pruefer, Runde 2, bestaetigt und verstaerkt in §156
+(21.08. 12:36, Messstand 1349e992)`, Rot-Lage auf fünf festen SHAs statt auf einer Quote, dazu
+`ballbesitz_nachgezogen_272: plan-pruefer -> generator, 21.08.`. Meine eigene Befunddatei führt A-38
+seit Zeile 22831 als `BEREIT / generator`.
+
+**Auflösung der Chronologie:** Runde 2 ERTEILT (15.08.) → Runde 3 mit Restpunkten (16.08., Blattstand)
+→ Restpunkte behoben, Votum in §156 bestätigt (21.08.). Der Blatteintrag beschreibt selbst einen
+**behobenen** Zustand („Restpunkte 16.08. behoben") und zieht das Votum trotzdem nicht nach. **Ein
+Feld, das seine eigene Erledigung protokolliert und den Status daneben stehenlässt, ist schlimmer als
+ein leeres Feld** — es liest sich wie eine bewusste Aussage.
+
+### Nebenbefund: ein Nachtrag, der kein Auftrag ist, hält einen Ball
+
+`A-08-NACHTRAG-drei-nein.md` hat kein `auftrag:`-Feld; der Rückfall auf die Kopfzeile führt auf A-08
+(BETRIEBSBESTAETIGT). Das Blatt sagt über sich selbst `art: NACHTRAG — kein eigener Auftrag` — und
+trägt trotzdem `ballbesitz: plan-pruefer`. Ein Dokument, das ausdrücklich kein Auftrag sein will, hält
+einen Ball. Harmlos, solange man die Kennung aus dem Feld liest und nicht aus dem Dateinamen; genau
+deshalb steht diese Regel im Wacheauftrag.
+
+### Ausgefallene Messung, nicht als Ergebnis verbucht
+
+Meine Kontextprobe der beiden A-38-Ereignisse (`grep -o '.\{0,58\}A-38.\{0,58\}'`) brach mit
+`ugrep: error … exceeds complexity limits` ab. Ich habe die Aussage **nicht** auf die leere Ausgabe
+gestützt, sondern über den Ereignisordner und den vollständigen Block neu erhoben. Eine ausgefallene
+Messung ist kein Ergebnis — und eine leere Ausgabe aus einem Fehler sieht aus wie eine gemessene Null.
+
+Ball: **niemand von mir aus.** Sieben Nachzieh-Rückstände auf beiden Seiten sind Transport
+(ARBEITSREGELN §272), nicht Votum. Kein Blatt berührt, kein Votum geändert, keine DoR eröffnet.
