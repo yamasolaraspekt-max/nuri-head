@@ -31824,3 +31824,70 @@ Dirigenten-Ereignissen** in derselben Zeit.
 
 Ball: **Dirigent** (gen 12 für den Integrator, oder eine ausdrückliche Transportanweisung zum Bündel)
 · **nicht** der Integrator, wie ich in §394 geschrieben hatte.
+
+## §399 — Meine 26 aus §383 ist ebenfalls die falsche Grundmenge: drei Typmodule gehören nicht hinein
+
+Messstand: HEAD `ff4f147d`, Baum 0, gemessen 17:07–17:11. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §399'` → 0).
+
+### Zuerst die kleine Prüfung: meine eigene Nummernkonvention
+
+`YAMA-KONVENTION-NUMMERN-UND-INSTANZEN.md` verlangt: *„eindeutig JA — Pflicht. Zwei Abschnitte mit
+derselben Nummer sind ein Fehler … aufsteigend NEIN — keine Anforderung."* Gemessen:
+
+    Abschnitte '^## §N'      293
+    eindeutige Nummern       293      -> KEINE Dublette, die Pflicht ist erfuellt
+    Reihenfolgebrueche         2      (115->113, 116->114) — ausdruecklich erlaubt
+    Luecken in 5..398        101      fast alle niedrig (6, 10–61, 100–105), aus der Fruehzeit
+
+**Kein Befund.** Die 101 Lücken sind keine Kollision: §10 etwa existiert in
+`docs/release/release-vorbereitung.md` — **eine andere Serie in einem anderen Dokument.**
+
+### Der eigentliche Fund: der Planner misst denselben Graphen
+
+`planner-CODE_FERTIG-verfallsdatum-grundmenge.yaml`, 17:08:03. Er misst für Posten 7 dieselbe
+Erreichbarkeit wie ich in §383:
+
+    er (17:08)   160 Dateien · 133 erreichbar · 27 UNERREICHT
+    ich (§383)   161 Dateien · 135 erreichbar · 26 unerreicht
+
+**Zwei Verfahren, zwei Antworten** — nach der Hausregel gilt damit keine von beiden, bis der
+Unterschied aufgelöst ist. Er nennt seinen Zuschnitt ausdrücklich: *„dynamisches `import()` und
+`export *` zählen mit"* — **mein Verfahren zählt beides nicht.** Die Differenz von einer Datei und
+zwei Kanten ist damit erklärbar, aber **nicht aufgelöst**; ich habe sie nicht nachgerechnet und melde
+sie als offen.
+
+### Und sein Befund trifft meine Zahl genauso
+
+> *„DER BEFUND: 27 IST DIE FALSCHE GRUNDMENGE. Drei der 27 sind reine Typmodule; für sie gibt es zur
+> Laufzeit KORREKTERWEISE keine Kante … `domain/scene.types.ts` IST DAS ZENTRALE DATENMODELL. Ihm
+> eine Kopfzeile ‚zuletzt geprüft · sonst STILLLEGUNG' zu geben wäre grob falsch."*
+
+**Selbst nachgemessen, an meiner eigenen Menge aus §383:**
+
+    domain/scene.types.ts        IN meiner Menge     68 Importeure, 68 per import type
+    app/tools/toolTypes.ts       IN meiner Menge
+    app/tools/werkzeugArten.ts   IN meiner Menge      5 Importeure,  5 per import type
+    -> meine 26 nach Abzug der drei:  23
+
+**Alle drei standen in meiner Liste** — sie waren sogar in der Stichprobe, die ich in §383 abgedruckt
+habe. **Meine „26 tote Module" ist damit dieselbe falsche Grundmenge wie seine 27**, und ich habe sie
+als Alterungsergebnis für Yama-Posten 9 gemeldet.
+
+**Was ich NICHT behaupte:** Bei `app/tools/toolTypes.ts` weicht meine Zählung von seiner ab (er: 17
+Nutzer, 17 per `import type`; ich messe 23 und 22). **Mein Zählbefehl war unsauber** — `grep -c … |
+wc -l` zählt Dateien statt Treffer, und mein Muster war ungenau. **Ich stelle meine Zahl nicht gegen
+seine; ich melde die Abweichung als offen.** Belastbar ist nur, dass alle drei in meiner Menge waren.
+
+### Die Lehre, und sie ist heute die zehnte ihrer Art
+
+**Ein Modul ohne Laufzeitkante ist nicht dasselbe wie ein Modul ohne Zweck.** Ein reines Typmodul hat
+**korrekterweise** keine Kante — die Messung ist richtig, die Schlussfolgerung wäre falsch. Genau
+deshalb hat §383 den Posten bei Yama gelassen: *„Was mit den 26 geschieht … ist eine Entscheidung,
+keine Messung."* **Der Satz hält — nur ist die Zahl darin um drei zu groß.**
+
+Und es ist derselbe Schnitt wie neunmal zuvor heute: **nicht die Messung war falsch, sondern die
+Grundmenge.** Diesmal hat sie ein anderer gefunden, nicht ich.
+
+Ball: **niemand von mir aus.** Posten 9 bleibt bei Yama, mit berichtigter Zahl: **23 statt 26** — und
+dem Vorbehalt, dass mein Verfahren und das des Planners noch nicht abgeglichen sind.
