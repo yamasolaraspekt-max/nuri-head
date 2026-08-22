@@ -54,8 +54,10 @@ test('werkzeugTools = genau die modus-schaltenden Werkzeuge der Leiste (UI-3)', 
     // tuer, treppe, decke, kontur, dach. Vorher stand `dach` vor `decke` und `treppe`; wer die
     // Leiste von oben nach unten las, bekam das Dach vor der Decke. *Diese Liste bleibt
     // ausgeschrieben — sie hat sich geaendert, weil jemand sie aendern WOLLTE.*
-    'bodenplatte',   // Z1-E4-1: Platz 1 der Leiste (Yama 22.08. 22:08)
-    'auswahl', 'wand', 'fenster', 'tuer', 'treppe', 'decke', 'kontur', 'dach',
+    // **Yama, 23.08. 00:0x:** Markieren ganz oben — `auswahl` ist kein Bauteil, sondern der
+    // Griff. Danach die Bauteile in Baureihenfolge, unten nach oben.
+    'auswahl',
+    'bodenplatte', 'wand', 'fenster', 'tuer', 'treppe', 'decke', 'kontur', 'dach',
     'bemassen', 'flaeche-messen',   // <- W-05
   ]);
   // Und die Verbindung zur Hebeliste, damit beide nicht auseinanderlaufen koennen.

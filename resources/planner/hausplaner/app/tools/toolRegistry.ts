@@ -36,6 +36,26 @@ const AUSWAEHLBAR = ['wall', 'window', 'door', 'opening', 'zone', 'object', 'rou
  */
 export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
   {
+    id: 'auswahl',
+    // AUF-35a: sichtbar heisst das Werkzeug **Markieren** (Yamas Referenz vom 25.07.). Die id
+    // bleibt `auswahl`, das Kuerzel bleibt `V` — beides ist gespeicherte bzw. eingeuebte Wahrheit
+    // und haette ohne Not 101 Icon-Dateinamen und jede Tastaturgewohnheit angefasst.
+    label: 'Markieren',
+    icon: 'auswahl',
+    art: 'werkzeug',
+    groupId: 'global',
+    supportedWorkspaces: [],
+    supportedViews: [],
+    shortcut: 'V',
+    helpText: 'Objekte anklicken zum Markieren, ziehen zum Bewegen.',
+    // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
+    //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'select' war dasselbe Werkzeug.
+    meaning: 'Einzelne Objekte auswählen.',
+    usageArea: 'Alle Workspaces; Ausgangspunkt jeder Bearbeitung.',
+    group: 'Auswahl',
+    tooltip: { title: 'Auswahl', body: 'Einzelne Objekte auswählen.', usage: 'Einsatzbereich: Alle Workspaces; Ausgangspunkt jeder Bearbeitung.' },
+  },
+  {
     // **Z1-E4-1 — die Bodenplatte, endlich als eigener Eintrag.**
     //
     // Der Kommentar am Decken-Eintrag unten sagte: *„Die Bodenplatte kommt als eigener Knoten mit
@@ -66,26 +86,6 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
       body: 'Tragende Bodenplatte auf der untersten Etage — eigener Knoten, nicht die Zwischendecke.',
       usage: 'Einsatzbereich: Architektur, Statik, Heizlast.',
     },
-  },
-  {
-    id: 'auswahl',
-    // AUF-35a: sichtbar heisst das Werkzeug **Markieren** (Yamas Referenz vom 25.07.). Die id
-    // bleibt `auswahl`, das Kuerzel bleibt `V` — beides ist gespeicherte bzw. eingeuebte Wahrheit
-    // und haette ohne Not 101 Icon-Dateinamen und jede Tastaturgewohnheit angefasst.
-    label: 'Markieren',
-    icon: 'auswahl',
-    art: 'werkzeug',
-    groupId: 'global',
-    supportedWorkspaces: [],
-    supportedViews: [],
-    shortcut: 'V',
-    helpText: 'Objekte anklicken zum Markieren, ziehen zum Bewegen.',
-    // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
-    //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'select' war dasselbe Werkzeug.
-    meaning: 'Einzelne Objekte auswählen.',
-    usageArea: 'Alle Workspaces; Ausgangspunkt jeder Bearbeitung.',
-    group: 'Auswahl',
-    tooltip: { title: 'Auswahl', body: 'Einzelne Objekte auswählen.', usage: 'Einsatzbereich: Alle Workspaces; Ausgangspunkt jeder Bearbeitung.' },
   },
   {
     id: 'wand',
