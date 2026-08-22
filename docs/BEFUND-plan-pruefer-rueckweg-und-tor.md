@@ -39181,3 +39181,84 @@ Das ist dieselbe Sorte Fehler wie §477: die Blockstruktur zu grob gefasst.
 Ich ziehe kein einziges dieser Felder nach. Blätter zu ändern ist mir verboten (Rollenquelle gen 11,
 `verboten: [Blaetter selbst aendern]`), und `docs/STATUS.md` schreibt allein der Integrator (§16).
 Dies ist ein Befund, kein Auftrag — und die 35 sind **eine** Aufräumbewegung, nicht 35 einzelne.
+
+## §488 — Vorratsposten (a): alle 16 Codeverweise des E4-Blattes treffen; mein Nachfassen nicht
+
+Stand: HEAD `58e8ee60`, Baum 0, gen 11, Digest gleich. Zeit 22:48.
+
+Meine Bahn war leer, der Generator baut. Also der Ort, an dem eine Prüfung jetzt am meisten nützt:
+**die Verweise, nach denen gerade gebaut wird.** Ein Verweis, der auf etwas anderes zeigt, wird beim
+Bauen zum falschen Griff — und dann ist es teuer.
+
+### Ergebnis: grün, und zwar vollständig
+
+16 eindeutige Code-Zeilenverweise im E4-Blatt (Bau-Stand `998ff9f2`), jeder einzeln gegen den
+Integrationsstand aufgelöst:
+
+```
+Datei nicht gefunden:      0
+Zeile leer/außerhalb:      0
+zeigt auf etwas anderes:   0
+```
+
+Stichproben, gegen die **Behauptung** geprüft, nicht nur auf Existenz:
+
+| Verweis | Blatt behauptet | steht dort |
+|---|---|---|
+| `toolPresentation.ts:72` | „Fix-Zone beginnt mit `auswahl`" | `{ toolId: 'auswahl', zone: 'fix', ordnung: 1` |
+| `applyCommand.ts:112` | Muster für Kriterium (b) | `function pruefeDeckeProLevel(` |
+| `scene.types.ts:18` | `SCHEMA_VERSION = 3` | `export const SCHEMA_VERSION = 3 as const;` |
+| `scene.types.ts:386` | „heute `null`" | `boden: { … } \| null` |
+| `hoehenkette.ts:37/:49` | die zwei E0-Exporte | beide |
+| `package.json:7` | Schema-Tor vor Build | `npm run schema:hausplaner:check &&` |
+
+Das ist bemerkenswert für ein Blatt, das heute Abend zweimal überarbeitet wurde. Bei meiner
+GP-0-Prüfung lagen 2 von 16 daneben (Drift 5–6 Zeilen); hier **keiner**.
+
+### Eine Ungenauigkeit, benannt statt übergangen
+
+Das Blatt nennt `wandaufbau.ts:75` und `:79` als „die zwei Summen". Gemessen:
+
+```
+75  const schichtR = schichten.map((s) => (s.lambda > 0 ? s.dicke/1000/s.lambda : 0));
+76  const rBauteil = schichtR.reduce((a, b) => a + b, 0);        <- die Summe
+79  const gesamtdicke = schichten.reduce((a, s) => a + s.dicke, 0);
+```
+
+`:75` ist die **map**, die Summe steht auf `:76`. Inhaltlich richtig — `map` und `reduce` bilden
+zusammen die Summe, und die `map` ist zwar reihenfolge-**erhaltend**, speist aber eine kommutative
+Summe. Eine Zeile daneben, keine falsche Aussage. Meine Anmerkung 2 aus §484 bleibt davon
+unberührt: sie betrifft die **Domäne** (`dicke` gegen `dickeMm`), nicht die Zeilennummer.
+
+### Die Absage-Regel zu (f), fachlich gegengeprüft
+
+Das Blatt begründet, warum ein aus der Deckenprojektion abgeleiteter Wert Kriterium (f) **nicht**
+erfüllt: „Boden und Decke sind im CRM getrennte Bauteiltypen." Belegt mit
+`UWertService.php:26-27`. Gemessen:
+
+```
+26   'decke' => [0.10, 0.04],  // oberste Geschossdecke, aufwärts
+27   'boden' => [0.17, 0.00],  // abwärts, gegen Erdreich/unbeheizt
+```
+
+Beide Werte treffen, und die Kommentare tragen die Fachlogik: Rsi 0,10 aufwärts gegen 0,17 abwärts,
+Rse 0,04 belüftet gegen 0,00 erdberührt. **Die Trennung ist keine Behauptung des Blattes, sondern
+steht im Bestand.** Der Verweis überschreitet auch die Inselgrenze nicht — er zitiert CRM-Werte als
+Beleg, er koppelt nichts an.
+
+### Mein eigener Fehler in dieser Runde: §467 zum fünften Mal
+
+Für die Gegenprobe zu `UWertService.php` habe ich den Pfad **geraten** — `app/Services/`. Die Datei
+liegt in `app/Services/Heizlast/`. Die Messung kam leer zurück, **und ich hatte die Fachprobe schon
+danebengeschrieben**, als wäre sie belegt.
+
+Aufgefallen beim Gegenlesen, vor dem Melden. Dann den Pfad über `ls-tree` aufgelöst und die Werte
+tatsächlich gemessen — sie stimmen, aber das wusste ich in dem Moment nicht, in dem ich es
+hinschrieb.
+
+Der lehrreiche Teil: **Der systematische Griff war richtig, mein Handgriff war es nicht.** Die
+16er-Prüfung löste jeden Verweis über
+`git ls-tree -r --name-only | grep -E "(^|/)datei$"` auf und fand `UWertService.php` korrekt. Erst
+als ich *einen* davon genauer ansehen wollte, habe ich den Pfad selbst getippt — und daneben
+gegriffen. Ein Verfahren, dem ich gerade 16 Verweise anvertraut habe, war mir für den siebzehnten
+nicht gut genug.
