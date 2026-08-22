@@ -25888,3 +25888,78 @@ Befund", ohne die Fundstelle zu haben. **Zwei Ablagen, eine Suche — das ist di
 
 **Ball:** Generator (A-37-20, ein Kriterium). Danach erneute Abnahme nur dieses Kriteriums plus
 Gegenprobe, dass die übrigen 30 unberührt bleiben. Bei mir liegt nichts.
+
+## §308 — Ich habe in beiden DoR-Runden zu A-37 einen Pflichtpunkt meiner eigenen Prüfliste nicht geprüft: die Nachvollzugs-Matrix
+
+**Messstand** `5a4f8012` · Baum sauber · 0 neue Commits seit §307 · Integrationszweig `a42414b7` →
+`6de33adb`. Ballortung beidseitig **1** und **6**. Die Kette läuft: der Generator hat
+`NACHBESSERUNG-generator-A-37` gestartet (10:57:22), der Evaluator die Nachprüfung quittiert
+(10:55:40). **Diese Runde ist kein Vorratsposten, sondern die Stopp-Regel.**
+
+### Was der Planner gemeldet hat
+
+`planner-befund-nachvollzugs-matrix-fehlt.yaml` (10:55:12). Er korrigiert Anmerkung 4 des
+Evaluator-Votums in einem Punkt, der zählt: **die Matrix ist nicht ungefüllt — es gibt sie nicht.**
+*„Eine ungefüllte und eine fehlende Matrix sind nicht dasselbe: die erste bittet um Zahlen, die
+zweite um eine Struktur. Wer ‚ungefüllt' liest, sucht Platzhalter und findet keine — und hält die
+Sache dann für erledigt."* Er meldet dabei seinen eigenen Regex-Fehler (`n.U.` unescaped traf 6,
+literal 0) und sagt, was er **nicht** tut: keine Matrix nachtragen, das wäre eine Blattänderung
+während der laufenden Nachbesserung.
+
+### Was er nicht sagen konnte — und was mir gehört
+
+Selbst gemessen in `docs/ARBEITSREGELN.md`, **§5 „Definition of Ready"** (beginnt `:229`, die Stelle
+liegt darin):
+
+> *„jedes Abnahmekriterium steht in einer Zeile der Nachvollzugs-Matrix `Kriterium → Arbeitspaket →
+> (nach Umsetzung) Commit-SHA → Testbeleg`; ein Kriterium ohne Matrixzeile macht den Auftrag nicht
+> `BEREIT`-fähig. **Der Plan-Prüfer prüft die Matrix vor dem Bau auf Vollständigkeit**, der Evaluator
+> prüft gegen sie."*  — `:280–283`
+
+Dazu `:1914` als eigener Abschnitt N3 und `:1149` als *„neue Pflichtzeile der `BEREIT`-Liste (§5)"*.
+
+```
+A-37-Blatt (c11f97ac):  Kriterien 31 · 'Nachvollzugs-Matrix' 0 · 'Arbeitspaket' 0
+mein DoR-Votumsblatt:   'Matrix' 0        (Gegenprobe 'Kriterium' 18 — der Griff greift)
+meine Befunddatei:      'Nachvollzugs-Matrix' 0 in 307 Abschnitten
+```
+
+**Ich habe die DoR zu A-37-22 bis 27 zweimal geführt — NICHT ERTEILT, dann ERTEILT (`1ca8d512`) —
+und die Matrix in keiner der beiden Runden geprüft. Sie kommt in meinen Blättern kein einziges Mal
+vor.** Das ist keine Auslegungsfrage: die Pflicht steht wörtlich in §5 und nennt meine Rolle.
+
+### Der Umfang, selbst nachgezählt
+
+```
+Blätter in docs/auftraege/aktiv/            89
+davon mit Nachvollzugs-Matrix                0
+Gegenprobe: Blätter mit 'Kriterium'         78   (der Griff greift)
+```
+
+**Die Zahl des Planners stimmt.** Kein einziges der 89 aktiven Blätter trägt eine Matrix, während
+Blätter außerhalb von `aktiv/` (Z0-I1) eine haben. Das ist systematisch und älter als A-37 — **es
+entlastet mich aber nicht.** Eine Pflicht, die 89-mal übergangen wurde, ist beim 90. Mal nicht
+erfüllt; sie ist 90-mal übergangen. Und geprüft hätte sie ich gemusst, nicht der Planner: er schreibt
+das Blatt, ich nehme es ab.
+
+### Was ich daraus NICHT mache
+
+**Kein Widerruf des Votums.** Die Kriterien sind seit `1ca8d512` eingefroren, der Generator baut
+gerade an A-37-20, der Evaluator hat 30 von 31 abgenommen. Ein Widerruf hielte die Kette an, ohne
+etwas zu verbessern — der Mangel liegt nicht an den Kriterien, sondern an einer fehlenden **Struktur**
+neben ihnen, und *„rückwirkendes Befüllen beweist nichts"* (N3 selbst). **Ob N3 für `docs/auftraege/aktiv/`
+überhaupt gilt oder für diese Blattgattung nie galt, ist eine Regelfrage** — sie gehört dem Dirigenten
+und Yama, nicht mir, und der Planner hat sie bereits gestellt.
+
+**Was ich ändere:** Ab sofort steht N3 als eigener Punkt in jeder DoR, die ich führe — geprüft, bevor
+ich über Kriterien urteile. Fehlt die Matrix, ist das ein Restpunkt und keine Anmerkung, weil §5 sie
+zur `BEREIT`-Bedingung macht.
+
+### Warum es mich trifft und nicht ihn
+
+In dieser Sitzung habe ich mehrfach Rot-Belege beanstandet, die etwas anderes maßen als die Zusage
+verspricht. **Hier habe ich eine Zusage meiner eigenen Rolle 31-mal nicht gemessen** — für jedes
+Kriterium, das ich abgenommen habe. Der Unterschied zu den bisherigen eigenen Fehlern dieser Sitzung
+ist der Rang: die anderen waren Messfehler, dieser ist ein **übersprungener Prüfschritt**.
+
+**Ball:** Dirigent (Regelfrage N3 für `aktiv/`) · A-37 selbst unverändert beim Generator.
