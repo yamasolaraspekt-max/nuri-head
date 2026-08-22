@@ -35474,3 +35474,81 @@ Produktivbestand hier gar nicht messen, und ich beschaffe mir den Zugang nicht.
 
 Ball: **Yama/Dirigent** (die `.env`-Frage im Rollenbaum **und** die Regelfrage aus §443 — es sind
 zwei, nicht eine) · **Generator** (der Zeitbezug).
+
+## §445 — Meldepflichten Z1-W2-4 GEPRÜFT und bestätigt. Und eine neue Messfalle: der Umlaut
+
+Messstand: HEAD `2a9f306e`, Baum 0, gemessen 19:59–20:01. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §445'` → 0). Gegenstand: `generator-CODE_FERTIG-Z1-W2-4.yaml` (19:48:43,
+ball `[evaluator, planner]`).
+
+### Meldepflichten — alle fünf selbst gemessen, keine übernommen
+
+    SHA existent?         ba6fc673  commit        1c28d529  commit          beide vorhanden
+    SHA in einem FELD?    :11 ausgangs_sha · :12 endstand_sha · :13 ergebnis_sha   JA, nicht nur im Fliesstext
+    Scope-Diff selbst:    ba6fc673..1c28d529 -> 1 file changed, 127 insertions(+)
+                          docs/rollenkette/rollen/3-generator/PROBE-Z1-W2-4-treppe-werkzeugregistry.md
+    Erreichbarkeit:       von rolle/generator JA · in auto/hausplaner-integration NEIN (Transport steht aus, normal)
+    Ballwechsel:          [evaluator, planner] — richtig, (f) verlangt eine Vorlage, ueber die der Planner entscheidet
+
+**Kriterium (e) „Kein Code verlässt die Probe" ist damit ERFÜLLT und zwar am schärfsten möglichen
+Maß:** nicht „wenig Code", sondern **genau ein Pfad, und der liegt unter `docs/`**. Eine Probe, die
+127 Zeilen Bericht und null Zeilen Code hinterlässt, kann den Bestand nicht beschädigt haben.
+
+### Kriterium (f) — mein Verdacht war falsch, und warum das Verfahren ihn gefangen hat
+
+Das Ereignis-YAML trägt in `art:` **beide** Sätze:
+
+> *„Der Ausgang ist **WEG BELEGT** — technisch. Die Empfehlung lautet trotzdem **STILLLEGUNG
+> BEGRÜNDET**; das ist kein Widerspruch, sondern der Unterschied zwischen ‚geht' und ‚bringt etwas'."*
+
+(f) verlangt aber *„genau EINER der Sätze"*. **Ich war im Begriff, eine Verletzung zu melden.**
+Gerettet hat mich Wache-Punkt 7 — **Grundmenge gegen die Frage prüfen statt gegen das Verfahren:**
+
+> **Das Kriterium heißt „Der BERICHT entscheidet nicht — er legt vor".** Sein Gegenstand ist der
+> Bericht, nicht die Ereignismeldung. **Im Bericht gemessen:**
+
+    STILLLEGUNG BEGRÜNDET  ->  1   (:107, als Ueberschrift)
+    WEG BELEGT             ->  0
+    Verweis auf (b) und (d) im selben Absatz  ->  (b) 1x, (d) 2x, in den Punkten 1-3
+
+**(f) ist erfüllt.** Der Generator hat im Bericht genau einen Satz gesetzt und im Ereignis erläutert,
+warum die technische Machbarkeit die Empfehlung nicht umstößt. **Das ist keine Abweichung, sondern
+die Trennung, die (f) gerade will.** Hätte ich das Ereignis-YAML für den Gegenstand gehalten, wäre
+mein Befund die dritte falsche Meldung dieser Art gewesen — nach §434 (falscher Ort) und §437
+(falsches Kriterium).
+
+### DIE NEUE MESSFALLE: der Umlaut. Meine erste Messung fiel aus, und sie sah aus wie ein Ergebnis
+
+    Mein Muster:      grep -c 'BEGRUENDET'   ->  0      <- sah aus wie "Satz fehlt"
+    Im Bericht steht: STILLLEGUNG BEGRÜNDET  ->  1      <- mit Ü
+    Positivkontrolle: grep -c 'Treppe'       ->  17     <- Datei und grep arbeiten einwandfrei
+
+**Das Kriterium schreibt `BEGRUENDET` in ASCII (Ereignis-YAML), der Bericht schreibt `BEGRÜNDET` mit
+Umlaut.** Wer das Muster aus dem Kriterium kopiert und im Bericht sucht, misst **null** — und null
+liest sich hier wie „Kriterium nicht erfüllt".
+
+> **Die Falle ist perfider als die Teilstring-Falle**, die heute achtmal zuschlug: die liefert **zu
+> viele** Treffer und fällt beim Nachsehen auf. **Der Umlaut liefert null** — und null ist im
+> Prüfgeschäft eine gängige, plausible Antwort. Sie sieht nicht nach einem Werkzeugfehler aus,
+> sondern nach einem Befund.
+
+**Gefangen allein durch die Positivkontrolle** (Wache-Punkt 7: *„eine ausgefallene Messung ist KEIN
+Ergebnis"*). In §437 hatte ich drei ausgefallene Messungen **nicht** gemeldet, weil die
+Positivkontrolle fehlte. Hier lief sie zuerst — und deshalb steht hier ein Ergebnis statt eines
+Fehlurteils.
+
+**Aufgenommen in die stehende Fallenliste als neunte:** Teilstring · geratener Pfad · Vorkommen statt
+Aufruf · Blob↔Commit · `git grep` nicht-rekursiv · Python-`re` ohne `re.M` · Zonen/UTC · falscher
+Baum/falsches Kriterium · **ASCII-Umschrift gegen Umlaut**.
+
+### Nebenlehre aus derselben Runde, an mir selbst
+
+Mein Ereignis zu §444 war beim ersten Schreiben **nicht einlesbar** — die erste Zeile eines
+`|`-Blocks stand vier Leerzeichen tief und setzte damit die Basiseinrückung für alle folgenden.
+Gefangen durch die Rückleseprobe, die ich aus `generator-befund-sha-als-zahl-gelesen.yaml`
+übernommen habe. **Seine Lehre trägt über die Fehlerklasse hinaus, für die er sie fand:** er fand
+sie an einem SHA, der als Zahl gelesen wurde; bei mir fing sie eine Einrückung. *„Eine Datei, die
+sich einlesen lässt, ist nicht dieselbe wie eine, die das Richtige enthält"* — meine ließ sich
+nicht einmal einlesen, und ohne Rücklesen wäre sie für jeden Empfänger unsichtbar gewesen.
+
+Ball: **keiner** — Z1-W2-4 bleibt bei `[evaluator, planner]`, Meldepflichten bestätigt.
