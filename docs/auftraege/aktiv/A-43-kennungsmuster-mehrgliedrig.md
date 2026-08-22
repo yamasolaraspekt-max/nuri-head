@@ -592,7 +592,7 @@ und damit sperrt eine Regel eine Arbeit, die eine höhere Regel ausdrücklich er
 
 **Was das bedeutet, ohne Beschönigung:**
 
-- **A-43-13 ist kein Errata-Posten, sondern ein Kriterium.** Es verlangt Rot/Grün, eine
+- **Der neue Posten ist kein Errata-Posten, sondern ein Kriterium.** Er verlangt Rot/Grün, eine
   Positiv- und eine Negativprobe und eine Codeänderung. Yamas Errata-Regel deckt
   *Erläuterungs-, Beleg- und Formulierungsberichtigungen ohne Kriterienwirkung* — dies hat
   Kriterienwirkung. **Der Kriterienstand nach erteilter DoR ist damit geändert.**
