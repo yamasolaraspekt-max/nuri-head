@@ -99,20 +99,20 @@
 | **Z1-W1-3** Eine Formel, eine Stelle: polygonM2-Kopie zusammenfuehren | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md` · **DoR NICHT ERTEILT** (plan-pruefer §145), offen: Kriterien A und D · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §179, 21.08.), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
 | **Z1-W1-4** dachWerte: eine Quelle, Stilllegung statt Loeschung | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` · **DoR ERTEILT** (plan-pruefer §146) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §146), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Generator** |
 | **Z1-W1-5** insulationType: der tote Zweig sagt, dass er tot ist | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §147), offen: die Zahl · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §180), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
-| **Z1-W2-0** Bedienbarkeits-Probe: das Messgeraet fuer alle Werkzeugblaetter | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 14:5x · Basis `592df395` | **Blatt** `docs/auftraege/aktiv/Z1-W2-0-*.md` · **DoR ERTEILT** (plan-pruefer 15:02, Pruefstand `adf03d32`) · Bau `ee6ce517` · Matrix `0d97a57c` · **ABGENOMMEN** 18:11:23, 8 von 8 Kriterien, **ohne Browser** — am Blatt nachgeprueft |
-| **Z1-W2-1** Integrationsabgleich anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 14:2x · Basis `767fb730` | **Blatt** `docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 14:25, Pruefstand `4611267e`) · Bau `1c80a1d8` · Matrix `1d193535` · **ABGENOMMEN (BROWSER)** 16:25:16, Reifegrad `BROWSERABGENOMMEN`, 6 von 6 Kriterien, drei Bildbelege · **Buendel** `be4f637c` transportiert |
+| **Z1-W2-0** Bedienbarkeits-Probe: das Messgeraet fuer alle Werkzeugblaetter | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. 14:5x · Basis `592df395` | **Blatt** `docs/auftraege/aktiv/Z1-W2-0-*.md` · **DoR ERTEILT** (plan-pruefer 15:02, Pruefstand `adf03d32`) · Bau `ee6ce517` · Matrix `0d97a57c` · **ABGENOMMEN** 18:11:23, 8 von 8 Kriterien, **ohne Browser** — am Blatt nachgeprueft |
+| **Z1-W2-1** Integrationsabgleich anschliessen | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. 14:2x · Basis `767fb730` | **Blatt** `docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 14:25, Pruefstand `4611267e`) · Bau `1c80a1d8` · Matrix `1d193535` · **ABGENOMMEN (BROWSER)** 16:25:16, Reifegrad `BROWSERABGENOMMEN`, 6 von 6 Kriterien, drei Bildbelege · **Buendel** `be4f637c` transportiert |
 | **Z1-W2-2** Aufbautenstatus anschliessen | `ZURUECKGESTELLT` | **Planner** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-2-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae · **ZURUECKGESTELLT** — RoofAufbau ohne `surfaceId`, Flaechen ohne gespeicherte Kennung: nur "nie warnen" oder "immer warnen" moeglich, beides kein Anschluss · Dirigent 15:52:21 · **kein Bau-SHA** |
-| **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · **DoR ERTEILT** (plan-pruefer §353, `c2e8dd20`) · Bau `d00aeece` · Matrix `161868e9` · **ABGENOMMEN (BROWSER)** 18:37:10, 7 von 7, Reifegrad `browserabgenommen`, vier Bildbelege · zuvor von mir faelschlich ZURUECKGESTELLT (`217fd547`), berichtigt in `f3fc3c44` |
-| **Z1-W2-4** Treppe ueber den Werkzeugregistry-Vertrag anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md` · **DoR ERTEILT** (plan-pruefer 16:21:25) · Planner-Blatt `418bcb6c` · Bau `1c28d529` · **ABGENOMMEN** 20:39:48, 6 von 6, Reifegrad `probe-abgenommen` — keine Codewirkung, kein Browser verlangt |
-| **Z1-W2-5** Wandflaeche anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` · Bau `5617dc4c` · CODE_FERTIG 18:52:39 · **die Wandflaeche erreicht den Benutzer** · **NACHBESSERN** 19:15:00 — 6 von 7 browserabgenommen, Kriterium b unbelegt · **ABGENOMMEN (BROWSER, Vorbehalt b)** 20:19:27 — b per Pruefmittel `?fixture=wand-schichten`, Schichten-Erzeugungsweg fehlt (AUF-76) · **zaehlt als angeschlossenes Modul** |
-| **Z1-W2-6** Auswechslung anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` · Bau `a7d1e9a6` · CODE_FERTIG 19:28:03 · **Weg A** — Fixture als Pruefmittel, Reifegrad hoechstens `ABGENOMMEN (CODE, Fixture)` · **ABGENOMMEN (CODE, Fixture)** 20:19:27 — **zaehlt NICHT als angeschlossenes Modul**, der Erzeugungsweg fehlt (Dirigent 18:33:35) |
-| **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 · Bau `1c6b7601` · CODE_FERTIG 19:14:05 · **Buendel im Bau-Commit** (V-5) · **ABGENOMMEN (BROWSER)** 19:33:20 — vier von vier Modulen, V-1 bis V-6 je Modul, Reifegrad `browserabgenommen` |
-| **Z1-W2-8** Werkzeugleiste in Baureihenfolge | **`ABGENOMMEN`** | **Dirigent** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht · **DoR ERTEILT** 19:06:40 mit zwei Halbsaetzen (§429) — Bau kann sofort beginnen · Bau `3a4aafa1` · CODE_FERTIG 19:59:36 · **Kriterium (c) nachgeliefert** `7500bb7d` 20:43 · Weg A nach der Pfadgrenzen-Entscheidung 19:44:38 · **ABGENOMMEN (BROWSER)** 22:13 — fuenf von fuenf gueltigen, gegen den berichtigten Blattstand `8460f98f` gemessen |
-| **Z1-E0-1** Hoehenkette — eine Wahrheit statt drei Rechnungen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E0-1-hoehenkette-eine-wahrheit.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) · Bau `ad2ac724` · CODE_FERTIG 20:09:51 · **drei Mangelanzeigen offen** (Planner 20:26 und 20:51, Evaluator 20:56) · **ABGENOMMEN (BROWSER)** 22:26:14, fuenf von fuenf — die drei Mangelanzeigen sind damit erledigt |
-| **Z1-E2-1** Etagen-Integritaet — Wachen und Mitnahme | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E2-1-etagen-integritaet.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) · Bau `51b0ddfb` · CODE_FERTIG 20:18:30 · **ABGENOMMEN (BROWSER)** 22:47:41 — sechs von sechs, Reifegrad `browserabgenommen` |
+| **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · **DoR ERTEILT** (plan-pruefer §353, `c2e8dd20`) · Bau `d00aeece` · Matrix `161868e9` · **ABGENOMMEN (BROWSER)** 18:37:10, 7 von 7, Reifegrad `browserabgenommen`, vier Bildbelege · zuvor von mir faelschlich ZURUECKGESTELLT (`217fd547`), berichtigt in `f3fc3c44` |
+| **Z1-W2-4** Treppe ueber den Werkzeugregistry-Vertrag anschliessen | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md` · **DoR ERTEILT** (plan-pruefer 16:21:25) · Planner-Blatt `418bcb6c` · Bau `1c28d529` · **ABGENOMMEN** 20:39:48, 6 von 6, Reifegrad `probe-abgenommen` — keine Codewirkung, kein Browser verlangt |
+| **Z1-W2-5** Wandflaeche anschliessen | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` · Bau `5617dc4c` · CODE_FERTIG 18:52:39 · **die Wandflaeche erreicht den Benutzer** · **NACHBESSERN** 19:15:00 — 6 von 7 browserabgenommen, Kriterium b unbelegt · **ABGENOMMEN (BROWSER, Vorbehalt b)** 20:19:27 — b per Pruefmittel `?fixture=wand-schichten`, Schichten-Erzeugungsweg fehlt (AUF-76) · **zaehlt als angeschlossenes Modul** |
+| **Z1-W2-6** Auswechslung anschliessen | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` · Bau `a7d1e9a6` · CODE_FERTIG 19:28:03 · **Weg A** — Fixture als Pruefmittel, Reifegrad hoechstens `ABGENOMMEN (CODE, Fixture)` · **ABGENOMMEN (CODE, Fixture)** 20:19:27 — **zaehlt NICHT als angeschlossenes Modul**, der Erzeugungsweg fehlt (Dirigent 18:33:35) |
+| **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 · Bau `1c6b7601` · CODE_FERTIG 19:14:05 · **Buendel im Bau-Commit** (V-5) · **ABGENOMMEN (BROWSER)** 19:33:20 — vier von vier Modulen, V-1 bis V-6 je Modul, Reifegrad `browserabgenommen` |
+| **Z1-W2-8** Werkzeugleiste in Baureihenfolge | **`ABGENOMMEN`** | **Release-Prüfer** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht · **DoR ERTEILT** 19:06:40 mit zwei Halbsaetzen (§429) — Bau kann sofort beginnen · Bau `3a4aafa1` · CODE_FERTIG 19:59:36 · **Kriterium (c) nachgeliefert** `7500bb7d` 20:43 · Weg A nach der Pfadgrenzen-Entscheidung 19:44:38 · **ABGENOMMEN (BROWSER)** 22:13 — fuenf von fuenf gueltigen, gegen den berichtigten Blattstand `8460f98f` gemessen |
+| **Z1-E0-1** Hoehenkette — eine Wahrheit statt drei Rechnungen | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E0-1-hoehenkette-eine-wahrheit.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) · Bau `ad2ac724` · CODE_FERTIG 20:09:51 · **drei Mangelanzeigen offen** (Planner 20:26 und 20:51, Evaluator 20:56) · **ABGENOMMEN (BROWSER)** 22:26:14, fuenf von fuenf — die drei Mangelanzeigen sind damit erledigt |
+| **Z1-E2-1** Etagen-Integritaet — Wachen und Mitnahme | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E2-1-etagen-integritaet.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) · Bau `51b0ddfb` · CODE_FERTIG 20:18:30 · **ABGENOMMEN (BROWSER)** 22:47:41 — sechs von sechs, Reifegrad `browserabgenommen` |
 | **Z1-E4-1** Bodenplatte als eigenes Bauteil (GP-0) | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 22:25:33 · Basis `54163b25` | **Blatt** `docs/auftraege/aktiv/Z1-E4-1-bodenplatte-als-eigenes-bauteil.md` @ `54163b25` · **auf Yamas Anweisung vorgezogen** (22:08) · neun Kriterien, acht rot · **DoR ERTEILT** 22:32:20 · Bau `3b4e8f6b` · CODE_FERTIG 23:18 |
-| **Z1-E0-1b** Umbenennung `deckenOberkanteMm` -> `wandOberkanteMm` | **`ABGENOMMEN`** | **Dirigent** | Bauplatz 22.08. 22:32:23 · Basis `3b4e8f6b` | **KEIN Blatt, kein DoR-Durchgang** — Kriterien a-d stehen im Bauplatz selbst, so ausdruecklich verfuegt · Bau `d5e88f15` · CODE_FERTIG 23:23:20 · **ABGENOMMEN (CODE)** 23:28:31 — vier von vier, Reifegrad `code-abgenommen per Diff-Lesung und Suite`, **kein Browserlauf, wie vorgesehen** |
-| **Z0-I1** Testdatenbank-Isolation — Stufe 1 | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` · **NACHBESSERN** 19:04:28, 8 von 10 Kriterien, Reifegrad `code-geprueft mit Ausloesung` — zwei Zusagen nennen das Vorhandene statt das Wirkende · **nachgebessert** `ba6fc673` 19:42:03, Kriterien 10 und 12 · **ABGENOMMEN** 23:00:11 — **zehn von zehn**, Reifegrad `code-geprueft mit Ausloesung` |
+| **Z1-E0-1b** Umbenennung `deckenOberkanteMm` -> `wandOberkanteMm` | **`ABGENOMMEN`** | **Release-Prüfer** | Bauplatz 22.08. 22:32:23 · Basis `3b4e8f6b` | **KEIN Blatt, kein DoR-Durchgang** — Kriterien a-d stehen im Bauplatz selbst, so ausdruecklich verfuegt · Bau `d5e88f15` · CODE_FERTIG 23:23:20 · **ABGENOMMEN (CODE)** 23:28:31 — vier von vier, Reifegrad `code-abgenommen per Diff-Lesung und Suite`, **kein Browserlauf, wie vorgesehen** |
+| **Z0-I1** Testdatenbank-Isolation — Stufe 1 | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` · **NACHBESSERN** 19:04:28, 8 von 10 Kriterien, Reifegrad `code-geprueft mit Ausloesung` — zwei Zusagen nennen das Vorhandene statt das Wirkende · **nachgebessert** `ba6fc673` 19:42:03, Kriterien 10 und 12 · **ABGENOMMEN** 23:00:11 — **zehn von zehn**, Reifegrad `code-geprueft mit Ausloesung` |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -19054,7 +19054,7 @@ herkunft_dieses_datensatzes: |
 auftrag: "Z1-W2-0"
 titel: "Bedienbarkeits-Probe — das Messgeraet fuer alle Werkzeugblaetter"
 zustand: ABGENOMMEN
-ballbesitz: dirigent
+ballbesitz: release-pruefer
 blatt: "docs/auftraege/aktiv/Z1-W2-0-..."
 blatt_sha: adf03d32
 basis_sha: 592df395
@@ -19098,7 +19098,7 @@ votum: |
 auftrag: "Z1-W2-1"
 titel: "Integrationsabgleich anschliessen"
 zustand: ABGENOMMEN
-ballbesitz: dirigent
+ballbesitz: release-pruefer
 blatt: "docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md"
 blatt_sha: 4611267e
 basis_sha: 767fb730
@@ -19184,7 +19184,7 @@ zustand_nachgezogen: |
 auftrag: "Z1-W2-3"
 titel: "Grundriss-Eckenanalyse anschliessen"
 zustand: ABGENOMMEN
-ballbesitz: dirigent
+ballbesitz: release-pruefer
 blatt: "docs/auftraege/aktiv/Z1-W2-3-..."
 blatt_sha: 59c82dae
 basis_sha: f1ff0498
@@ -19256,7 +19256,7 @@ zum_ballbesitz: |
 auftrag: "Z1-W2-4"
 titel: "Treppe ueber den Werkzeugregistry-Vertrag anschliessen"
 zustand: ABGENOMMEN
-ballbesitz: dirigent
+ballbesitz: release-pruefer
 blatt: "docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md"
 blatt_sha: 418bcb6c
 basis_sha: 161868e9
@@ -19285,7 +19285,7 @@ votum: |
 auftrag: "Z1-W2-5"
 titel: "Wandflaeche anschliessen"
 zustand: ABGENOMMEN
-ballbesitz: dirigent
+ballbesitz: release-pruefer
 blatt: "docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md"
 blatt_sha: 418bcb6c
 basis_sha: 161868e9
@@ -19351,7 +19351,7 @@ votum_2_abgenommen: |           # das gueltige Votum
 auftrag: "Z1-W2-6"
 titel: "Auswechslung anschliessen"
 zustand: ABGENOMMEN
-ballbesitz: dirigent
+ballbesitz: release-pruefer
 blatt: "docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md"
 blatt_sha: e1c3f425
 basis_sha: 161868e9
@@ -19394,7 +19394,7 @@ votum: |
 auftrag: "Z1-V1-1"
 titel: "Sammelblatt Spur V — Anzeige am ausgewaehlten Objekt, fuenf Module"
 zustand: ABGENOMMEN
-ballbesitz: dirigent
+ballbesitz: release-pruefer
 blatt: "docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md"
 blatt_sha: 3ab3bb88
 basis_sha: 3daf4f1e
@@ -19484,7 +19484,7 @@ votum: |
 auftrag: "Z1-W2-8"
 titel: "Werkzeugleiste in Baureihenfolge"
 zustand: ABGENOMMEN
-ballbesitz: dirigent
+ballbesitz: release-pruefer
 blatt: "docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md"
 blatt_sha: 6549ab61
 basis_sha: 06956916
@@ -19613,7 +19613,7 @@ votum: |
 auftrag: "Z1-E0-1"
 titel: "Hoehenkette — eine Wahrheit statt drei Rechnungen"
 zustand: ABGENOMMEN
-ballbesitz: dirigent
+ballbesitz: release-pruefer
 blatt: "docs/auftraege/aktiv/Z1-E0-1-hoehenkette-eine-wahrheit.md"
 blatt_sha: 4746d9c5
 basis_sha: fd2575ce
@@ -19671,7 +19671,7 @@ votum: |
 auftrag: "Z1-E2-1"
 titel: "Etagen-Integritaet — Wachen und Mitnahme"
 zustand: ABGENOMMEN
-ballbesitz: dirigent
+ballbesitz: release-pruefer
 blatt: "docs/auftraege/aktiv/Z1-E2-1-etagen-integritaet.md"
 blatt_sha: 4746d9c5
 basis_sha: fd2575ce
@@ -19769,7 +19769,7 @@ zustand_nachgezogen: |
 auftrag: "Z1-E0-1b"
 titel: "Umbenennung deckenOberkanteMm -> wandOberkanteMm"
 zustand: ABGENOMMEN
-ballbesitz: dirigent
+ballbesitz: release-pruefer
 blatt: "KEINES — dirigent-BAUPLATZ-umbenennung-wandOberkanteMm.yaml (22:32:23), Posten 0b"
 blatt_sha: "keiner"
 basis_sha: 3b4e8f6b
@@ -19821,7 +19821,7 @@ zweite_berichtigung_derselben_art_heute: |
 auftrag: "Z0-I1"
 titel: "Testdatenbank-Isolation — Stufe 1"
 zustand: ABGENOMMEN
-ballbesitz: dirigent
+ballbesitz: release-pruefer
 blatt: "docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md"
 blatt_sha: 7791920f
 basis_sha: 161868e9
