@@ -97,7 +97,7 @@
 | **Z1-W1-1** Das DIN-18065-Badge sagt, was es nicht geprueft hat | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-1-din-badge-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §143), offen: drei Punkte · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §181), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
 | **Z1-W1-2** Walmdach: ungueltige Kontur wird abgelehnt statt still falsch gerechnet | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-2-walmdach-sperre.md` · **DoR ERTEILT** (plan-pruefer §144) · **Bau** `60c04eef` (21.08. 13:33) · offen: Kriterium E Browserabnahme, dazu ein Widerspruch an `dachformVorlagen.ts:478` beim Planner (§169) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §144), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Evaluator** |
 | **Z1-W1-3** Eine Formel, eine Stelle: polygonM2-Kopie zusammenfuehren | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md` · **DoR NICHT ERTEILT** (plan-pruefer §145), offen: Kriterien A und D · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §179, 21.08.), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
-| **Z1-W1-4** dachWerte: eine Quelle, Stilllegung statt Loeschung | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` · **DoR ERTEILT** (plan-pruefer §146) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §146), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Generator** |
+| **Z1-W1-4** dachWerte: eine Quelle, Stilllegung statt Loeschung | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` · **DoR ERTEILT** (plan-pruefer §146) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §146), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Generator** |
 | **Z1-W1-5** insulationType: der tote Zweig sagt, dass er tot ist | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §147), offen: die Zahl · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §180), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | `BEREIT` | **Generator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
@@ -18892,7 +18892,7 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z1-W1-4"
 titel: "dachWerte: eine Quelle, Stilllegung statt Loeschung"
-zustand: CODE_FERTIG
+zustand: ABGENOMMEN
 zustand_beleg_meldung: |
   Nachgezogen 21.08. 20:0x vom integrator. TRANSPORT, keine Entscheidung.
   Der Generator hat es angesagt, in 928680d6 (21.08. 19:49, NULL Dateien — reine
@@ -18909,7 +18909,13 @@ zustand_beleg_transport: |
   ausdruecklich zu: "alle fuenf Z1-W1 koennen weiter, die Voten stehen vollstaendig hier."
   ANMERKUNG: der Bau liegt VOR diesem Schritt. Die Stufe wird nachgetragen, nicht
   durchlaufen — siehe Paragraf 170, dort an Yama adressiert.
-ballbesitz: evaluator
+ballbesitz: release-pruefer
+abnahme_beleg: |
+  Evaluator, Votum 36eb8b63 — vier von vier Kriterien, je selbst gemessen. Bau b2371d7e,
+  Basis 11f7c4c3.
+zustand_beleg: |
+  Gesetzt vom integrator auf Weisung gen 10 Punkt 2c. TRANSPORT, keine Bewertung.
+  Wie Z1-W1-3 erst nach dem A-43-Transport moeglich; das Votum lag seit dem 21.08. vor.
 ballbesitz_nachgezogen: |
   generator -> evaluator, 21.08. vom integrator. TRANSPORT: Paragraf 146 hatte den
   Ball beim Generator "fuer den Bau"; der Bau ist erfolgt (b2371d7e, 13:42). Paragraf
