@@ -28964,3 +28964,65 @@ den bloßen Namen. Eine Nennung im Fließtext ist keine Registerzeile. Ort ist n
 
 **Ball: Planner** (ein Zeichen in zwei Blättern) · Paket 3 ist damit aus meiner Sicht vollständig
 spezifiziert und baureif.
+
+## §354 — Selbstprüfung: drei Spur-W-Voten erteilt, ohne die Spur-W-Regel zu prüfen — und ein Ball zu viel gesetzt
+
+Gewählt gegen HEAD `b42d2673` (Baum sauber, 14:39:33, Hinweg gefahren: 30 Commits, Konfliktprobe
+vorher 0). §354 als Überschrift 0 Treffer. Rollenquelle gen 9, Dateizeit 13:58:44, Digest ok.
+
+**Der Nachtrag 1.5 ist jetzt transportiert** — in §349 lag er noch allein auf `rolle/dirigent`, mit
+dem Hinweg ist er in meinem Baum (60 Zeilen). **Damit konnte ich zum ersten Mal gegen den vollen
+Wortlaut prüfen statt gegen den Auszug**, und dabei fällt zweierlei auf.
+
+**(1) Ich habe drei Spur-W-Blätter erteilt, ohne die Spur-W-Eignung zu prüfen.** Der Nachtrag
+definiert sie: *„Spur W … verdient durch **vier Eigenschaften**, begrenzt durch fünf Zahlen"*. In
+§350 und §353 habe ich N3, N4, Kriterienzahl, Rot-Lagen und Rückweg geprüft — **die vier
+Eigenschaften als solche nicht.** Nachgeholt:
+
+    Blatt      Kriterien  <=8   Browserabnahme  Rot-Probe "ohne Werkzeug"  Rueckweg=Revert  Rechte/Geld/DB/Auth
+    Z1-W2-1        6       ja        ja                ja                       ja                 0
+    Z1-W2-2        7       ja        ja                ja                       ja                 0
+    Z1-W2-3        7       ja        ja                ja                       ja                 0
+
+**Alle vier Eigenschaften sind in allen drei Blättern erfüllt; die Voten halten.** *Das Ergebnis
+entlastet — der Prüfweg tat es nicht: ich habe die Regel angewandt, ohne sie gelesen zu haben, weil
+sie zum Zeitpunkt meiner Voten in meinem Baum nicht lag (§349).*
+
+**Beinahe-Fehler, und es ist meine eigene Falle.** Mein erster Griff auf Eigenschaft 2 meldete für
+Z1-W2-3 **2 Treffer** auf *Rechte|Auth|Migration|Schema|Preis|Betrag* — das wäre ein
+Spur-W-Ausschluss gewesen (*„Rechte/Geld/DB/Auth sind nie Spur W"*). Aufgeschlagen:
+
+    exportiert   GrundrissForm ('rechteck'|'l-form'|'t-form'|'u-form')
+
+**`rechteck` enthält `rechte`.** Mit Wortgrenze: **0** in allen drei Blättern. Gegenprobe:
+`'rechteck'` trifft als Teilstring 1×, mit Wortgrenze 0×, ein echtes *„die Rechte prüfen"* 1×.
+**Die Teilstring-Falle steht wörtlich in meiner eigenen Arbeitsregel** — und ich hätte um ein Haar
+einem Blatt die Spur abgesprochen, weil dort eine Grundrissform steht.
+
+**(2) Ein Ball zu viel, dreimal gesetzt.** Der Nachtrag sagt wörtlich:
+
+> *„… **ein** DoR-Durchgang (ERTEILT / NICHT ERTEILT; **Halbsätze werden im Votum mitgeliefert und
+> gelten als Teil des Blatts** — keine Auflagen-Schleife)"*
+
+**Meine drei Voten endeten mit „Ball: Planner — Halbsatz eintragen".** Nach der Regel ist das
+**überflüssig**: der Halbsatz **gilt bereits**, er ist Teil des Blatts, sobald er im Votum steht.
+Der Planner muss nichts nachtragen, und ich hätte keinen Ball setzen dürfen. *Ich habe die
+Auflagen-Schleife vermieden und sie durch eine Ball-Schleife ersetzt — dieselbe Runde, anderer
+Name.*
+
+**Berichtigt hiermit:** Zu **Z1-W2-1** (§350, Erwartung/Definitionsdatei), **Z1-W2-2 und Z1-W2-3**
+(§353, `grep -rlE`) liegt **kein Ball beim Planner**. Die Halbsätze sind Teil der Blätter; **die
+drei Voten sind vollständig und die Blätter baureif.** Ob er sie zusätzlich einträgt, ist seine
+Entscheidung, keine Bringschuld.
+
+**Was daraus für mich folgt.** Zwei Regeln aus demselben Absatz, die ich beide erst nach dem Votum
+gelesen habe: die Spur-W-Eignung und die Halbsatz-Geltung. **Eine Regel, die ich nicht im Baum habe,
+prüfe ich nicht — aber ich wende sie an, sobald sie im Auftrag steht.** Mein Auftrag gen 9 zitierte
+*„keine Auflagen-Schleife"* bereits um 13:58:44, die Regel selbst kam 14:20:19, in meinen Baum
+14:39. **Zwischen Zitat und Wortlaut lagen 41 Minuten, und in dieser Zeit habe ich dreimal
+votiert.** Für künftige Fälle: **wenn der Auftrag eine Regel zitiert, die ich nicht im Baum habe,
+hole ich sie aus dem Zweig, auf dem sie liegt** — `git show rolle/dirigent:<pfad>` hätte um 14:25
+genügt.
+
+**Ball: niemand.** Keine Nachforderung, keine neue Runde. Die drei Voten stehen, ergänzt um die
+Feststellung, dass sie keinen Ball tragen.
