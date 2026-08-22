@@ -33366,3 +33366,94 @@ eingetreten ist, anders zu lesen ist als einer, der einmal auffiel.
 Ball: **Planner** (Z0-I2, seit 612 Minuten) · **Release-Prüfer** (der kaputte Stempel, unverändert)
 · **Yama**, falls Z0-I2 nicht vor der nächsten Lease-Übernahme kommt — dann ist es keine
 Werkzeugfrage mehr, sondern eine Frage der Reihenfolge.
+
+## §420 — Yamas Entscheidung „Spur V gilt": die Zahlen, auf denen sie beruht, sind nachgemessen und tragen. Vier Produkt-Commits, erste Produktänderung 15:24:49
+
+Messstand: HEAD `cc750e55`, Baum 0, gemessen 18:27–18:30. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §420'` → 0). Kein Vorratsposten — Punkt 6 der Wache: lesen, was angekommen
+ist. Um **18:27:43** ist eine Yama-Entscheidung eingegangen.
+
+### Was entschieden ist
+
+`STEUERUNG-dirigent/yama-ENTSCHEIDUNG-spur-V-gilt.yaml`, `ball: dirigent`. Yamas Wortlaut:
+*„kannst du das mit sehr schnellen methode gemeinsam mit dirigent das loesen ich moechte das
+schnell geloest haben . es dauert ewig"* — und auf die drei Punkte: *„ja ich will das"*.
+
+    1  SPUR V          Verdrahtung als eigene Risikoklasse, SECHS FESTE Kriterien V-1..V-6.
+                       DIE DoR WIRD EINMAL AUF DEN KRITERIENTEXT ERTEILT, NICHT JE BLATT.
+    2  SAMMELBLATT     Strukturgleiche Module einer Klasse in EINEM Blatt.
+    3  PRODUKT VOR     Pro Tag mindestens EIN angeschlossenes Modul, bevor neue
+       APPARAT         Steuerungsauftraege geschnitten werden.
+
+**Punkt 1 ändert meine Arbeitsweise unmittelbar.** Statt je Blatt ein DoR-Votum: **ein Votum auf den
+Kriterientext**, danach je Modul nur noch Belege. Das nehme ich an — es ist Yamas Entscheidung,
+nicht meine, und ich bewerte sie nicht.
+
+### DIE ZAHLEN, AUF DENEN SIE BERUHT — nachgemessen
+
+Die Wache verlangt: *„JEDE Zahl frisch messen, auch die aus fremden Berichten."* Yama hat auf vier
+Zahlen entschieden. Alle vier gemessen am Integrations-Checkout:
+
+    Vorschlag (18:25:26)              meine Messung (18:28)          Urteil
+    Commits heute gesamt   451        455 (4 min spaeter)            TRAEGT
+    Hausplaner-Insel         3        3                              EXAKT
+    app/ routes/ database    1        1                              EXAKT
+    docs/ + scripts/       438        304 ohne Merges                s.u.
+    erste Produktaenderung 15:24:49   15:24:49  (1c80a1d8)           EXAKT
+
+**Die tragende Zahl — VIER Commits am Produkt — ist exakt bestätigt.** Namentlich:
+
+    1c80a1d8  15:24:49  Z1-W2-1 gebaut — der Integrationsabgleich erreicht den Benutzer
+    ee6ce517  15:44:13  Z1-W2-0 gebaut — die Bedienbarkeits-Probe geht jedem Werkzeug nach
+    d00aeece  16:12:31  Z1-W2-3 gebaut — die Eckenanalyse sagt, ob die Kontur zur Dachform passt
+    48b52294  16:02:25  Z2-W0-5b gebaut — linked fragt, ob der Punkt den Aufrufer etwas angeht
+
+### Die Summenprobe des Vorschlags geht nicht auf — und ich kann sie schließen
+
+    3 + 1 + 438 = 442,  gemeldet sind 451.   Luecke: NEUN.
+
+**Die neun sind gemessen und benannt:** `tests/` (12 Dateien), `phpunit.xml` (2), `public/` (2),
+`.githooks/` (2), `package.json`/`package-lock.json` (je 1). Sie fehlen in der Aufzählung des
+Vorschlags, existieren aber. **Mit ihnen geht die Summe auf: 3 + 1 + 438 + 9 = 451.** Der Vorschlag
+war intern konsistent; nur eine Zeile fehlte.
+
+### Zwei Nuancen, die die Aussage NICHT schwächen
+
+**Erstens, die Merges.** Von 455 Commits heute sind **145 Merge-Commits** und 312 Nicht-Merges.
+Das Verhältnis Apparat zu Produkt hängt daran:
+
+    mit Merges     447 : 4  =  112 : 1     (Vorschlag: "rund 110 : 1"  -> TRIFFT)
+    ohne Merges    308 : 4  =   77 : 1
+
+**Beide Lesarten sind gültig, und beide tragen die Aussage.** Der Vorschlag hat die günstigere
+*nicht* gewählt — er nennt die höhere Zahl, die seine These stützt. Das ist zu sagen, ändert aber am
+Befund nichts: auch 77:1 ist ein Missverhältnis.
+
+**Zweitens, die Grenze „Produkt".** `tests/` und `phpunit.xml` sind die **Z0-I1-Lieferungen**
+(Testdatenbank-Isolation) — das ist Infrastruktur, nicht Steuerungsapparat. Ob sie als „Produkt"
+zählen, ist eine Definitionsfrage, die ich nicht entscheide. **Als Apparat sind sie jedenfalls
+falsch einsortiert**, und sie stehen in der Lücke von neun.
+
+### V-1 bis V-6 vorgeprüft, damit die DoR nicht wartet
+
+Alle sechs sind **messbar**, die genannten Werkzeuge existieren:
+
+    V-1  Aufrufer 0 -> mindestens 1, Aufrufstelle mit Pfad      messbar (Funktionsname, nicht Datei)
+    V-2  Wirkung im Browser, Eingabe und Ergebnis woertlich     messbar
+    V-3  ROT-PROBE gegen den Stand OHNE das Modul + Ortsbeleg   messbar
+    V-4  git diff auf das Modul -> leer                          messbar
+    V-5  Insel-Suite gruen, tsc 0, Buendel gebaut               "test:hausplaner", ":dom",
+                                                                 "build:hausplaner" existieren
+    V-6  kein Produktcode ausserhalb resources/planner/hausplaner  messbar
+
+**V-2 und V-3 bleiben ausdrücklich unverkürzt** — der Vorschlag sagt es selbst: *„Sie haben heute
+den falschen `oeffnungBreite`-Anschluss und den blinden grep gefangen. Wer daran spart, spart am
+einzigen Teil, der sich bezahlt macht."* Dem stimme ich aus eigener Messung zu: die Rot-Probe mit
+Ortsbeleg ist der Grund, warum Z1-W2-3 heute nicht mit einer stillen Null durchging.
+
+**Eine Anmerkung zu V-1, die ich beim ersten Sammelblatt einbringen werde:** „Aufrufer 0 → 1" muss
+über den **Funktionsnamen** gemessen werden, nicht über den Dateinamen — das ist P7 (*„Ort ≠
+Wirkung"*), und es ist heute zweimal schiefgegangen.
+
+Ball: **Dirigent** (Umsetzung, Sammelblatt schneiden) · bei mir: **bereit für die einmalige DoR auf
+den Kriterientext**, sobald er als Blatt vorliegt.
