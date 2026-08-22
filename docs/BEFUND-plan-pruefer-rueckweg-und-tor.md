@@ -36350,3 +36350,97 @@ Zweigstände stand — nicht durch eine Kontrolle.**
 
 Ball: **Evaluator** (der Planner hat ihn dorthin gegeben; meine Auslegungsklarstellung liegt jetzt
 vor) · **Integrator** unverändert (jetzt **24** Commits, Stille **50 Minuten**).
+
+## §455 — Der Generator findet eine Lücke in seinem Prüffenster. Ich habe sie an meinem gemessen: sie ist geschlossen, und der Beleg fiel heute in genau dieses Fenster
+
+Messstand: HEAD `dc9afa8c`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 20:40–20:43.
+**Ereignis-Schnitt dieser Runde: 20:38:52** (2 neue Ereignisse). Abschnittsnummer gegen den frischen
+HEAD gewählt (`grep -c '^## §455'` → 0). Anlass: `generator-KLARSTELLUNG-drei-zahlen-Z1-E0-1.yaml`
+(20:38:54) — **zitiert, nicht nachgebaut** (P-02 Punkt 4).
+
+### Er löst den Zahlenwiderspruch — und es ist meine eigene Lehre, von ihm angewandt
+
+    Muster 'elevation + .*defaultWallHeight', ohne __tests__, ohne hoehenkette.ts
+      Planner    am BLATTSTAND d2890e85, DATEIEN, ohne Kommentarfilter   ->  5
+      Evaluator  am BAU ad2ac724,        DATEIEN, ohne Kommentarfilter   ->  2
+      Generator  am BAU,                 ZEILEN,  MIT Kommentarfilter    ->  1
+      ECHTE RECHNUNGEN (return/=, ohne // und *)                         ->  0
+
+> *„Beide Zahlen sind richtig für ihre Grundmenge; keine widerlegt die andere. **Die Zahl, auf die es
+> ankommt, ist die vierte: null echte Rechnungen außerhalb der Höhenkette.**"*
+
+**Das ist wörtlich das Verfahren aus §449 und §453** — *Grundmenge gegen die Frage prüfen* —, hier
+auf drei fremde Zahlen angewandt, ohne eine davon für falsch zu erklären. **Und er zieht die vierte
+Zahl nach, die keiner gemessen hatte: die, die die Sache entscheidet.**
+
+Und er meldet den eigenen Anteil: *„In meinem CODE_FERTIG steht ‚erwartet 0, gemessen 1'. Die 1 ist
+richtig für meine Grundmenge, aber ich habe die Grundmenge nicht danebengeschrieben. **Genau das
+habe ich heute anderen als Mangel gemeldet — eine Zahl ohne ihr Messmuster ist keine Zahl. Hier gilt
+es gegen mich.**"*
+
+### Seine Fenster-Lücke — und warum ich sie an meinem Verfahren messen musste
+
+> *„Ich prüfe neue Ereignisse mit `find -newer <meine letzte Meldung>`. Drei Evaluator-Meldungen von
+> 20:19, 20:22 und 20:28 habe ich damit **übersehen** — sie sind älter als meine eigene
+> Nachbesserungsmeldung von 20:36. **Wer zwischen zwei eigenen Meldungen etwas schreibt, fällt aus
+> meinem Fenster.**"*
+
+**Ich fahre dasselbe Werkzeug.** Also nicht angenommen, sondern gemessen — **und der Beleg fiel heute
+in genau dieses Fenster:**
+
+    mein Messbefehl der Vorrunde     20:38:52
+    generator-KLARSTELLUNG-…yaml     20:38:54     <- ZWEI Sekunden spaeter
+    meine Meldung der Vorrunde       20:39:20     <- 26 Sekunden danach
+
+> **Hätte ich seinen Anker — die letzte eigene Meldung —, wäre dieses Ereignis durchgefallen.**
+> Mein Schnitt liegt auf der **Messzeit**, deshalb steht es heute vor mir. **Das ist kein
+> theoretisches Argument: es ist der Fall, an dem diese Runde hängt.**
+
+**Gegenprobe über alle Ereignisse mit meinem Ball seit 19:00** — Antworten im **ganzen** Baum
+gesucht, nicht nur im Ordner (Lehre §446):
+
+    19:05:32  planner-BERICHTIGUNG-zwei-zahlen-und-V1-nachschaerfung   beantwortet (25 Folgemeldungen)
+    19:06:16  integrator-ANTWORT-blattdrift-Z1-W2-8-ist-behoben         beantwortet (25)
+    19:25:24  planner-CODE_FERTIG-Z1-E0-1-und-Z1-E2-1                   beantwortet (19)
+
+**Keine Lücke.**
+
+### Und das ist die Lehre, die heute einmal gehalten hat
+
+**In §432 hat mich genau diese Lücke erwischt:** Ich habe einen Integrator-Befund nachgebaut, weil
+mein Folgeschnitt hinter seiner Schreibzeit lag — sein Befund entstand 3 Sekunden nach meiner
+Messung. **Daraus wurde die Regel: Schnitt = Uhrzeit des Messbefehls, nicht der Schreibzeit, nicht
+der Meldung.**
+
+> **Diese Korrektur trägt heute — im Unterschied zu dreien, die ich heute wiederholt gebrochen habe**
+> (Umlaut §445, Verzeichnis nach `cd` §448/§454, Schlüssel mit Leerzeichen §445/§447).
+> **Der Unterschied: die Schnitt-Regel steht im Wache-Auftrag und wird jede Runde ausgeführt. Die
+> anderen drei stehen nur in meinen Befunden — und Befunde liest man, Regeln fährt man.**
+>
+> **Das ist die brauchbare Form des Generator-Satzes** *„eine Lehre, die nur die eine Stelle
+> repariert, ist keine Lehre"*: **Eine Lehre hält, wenn sie in den Ablauf wandert, nicht in den
+> Text.**
+
+**Für ihn, ohne ihm die Wahl abzunehmen:** Sein neuer Anker (der ACK) schließt die Lücke **nur, wenn
+der ACK vor jeder Messung neu gesetzt wird**. Der Messzeit-Anker braucht diese Bedingung nicht — er
+ist per Konstruktion lückenlos. Welchen er nimmt, ist seine Entscheidung; der Unterschied ist
+gemessen.
+
+### Z1-W2-4 ist ABGENOMMEN — meine §445-Kette ist geschlossen
+
+    evaluator-ABGENOMMEN-z1-w2-4.yaml  20:39:48   ergebnis_sha e3a44214
+    reifegrad: „probe-abgenommen; keine Codewirkung, kein Browser verlangt"
+    ball: [integrator, dirigent]
+
+**Das deckt sich exakt mit meiner Meldepflichtprüfung aus §445:** ein Pfad, 127 Zeilen, null Code —
+*„eine Probe, die 127 Zeilen Bericht und null Zeilen Code hinterlässt, kann den Bestand nicht
+beschädigt haben."* **Der Reifegrad, den er vergibt, ist die Konsequenz daraus.**
+
+### Der Stau, frisch gemessen
+
+    Commits NICHT in auto/hausplaner-integration   26      (vorige Runde 24, davor 21)
+    Integrator-Stille                              54 Minuten
+    §447 dor_beleg „steht aus" bei E0/E2           unveraendert 2
+
+Ball: **keiner von mir** · **Integrator** (26 Commits, jetzt auch Z1-W2-4 und die Abnahmen) ·
+**Dirigent** (Generation 21) · **Yama** (§443/§444, Pfadfrage Z0-I1).
