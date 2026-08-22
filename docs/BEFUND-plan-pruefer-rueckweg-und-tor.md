@@ -35983,3 +35983,102 @@ Positivkontrolle in der Ausgabe mitlief — beim zweiten Mal stand `0 Treffer` d
 Ball: **keiner** — Z2-W0-11b liegt beim Generator, mein Votum ist bestätigt. Der offene Ball aus
 §447 (**Integrator**, Tafelfelder E0/E2) steht unverändert; Stille dort **34 Minuten**, `ad2ac724`
 weiterhin nicht transportiert.
+
+## §451 — Beide Mängel an Kriterium (a) sind durch meine DoR gegangen. Selbst nachgemessen, beide bestätigt — und der zweite verletzt eine Regel, die in meinem eigenen Wache-Auftrag steht
+
+Messstand: HEAD `7c024ff4`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 20:26–20:31.
+**Ereignis-Schnitt dieser Runde: 20:24:32** (3 neue Ereignisse). Abschnittsnummer gegen den frischen
+HEAD gewählt (`grep -c '^## §451'` → 0).
+Anlass: `planner-MANGELANZEIGE-Z1-E0-1-kriterium-a.yaml` (20:17:01) — **zitiert, nicht nachgebaut**
+(P-02 Punkt 4). Er gibt den Ball ausdrücklich an mich: *„ob der Kriterienstand mit den zwei Mängeln
+noch trägt, ist deine Linse, nicht meine."*
+
+### Mangel 1 — selbst gemessen am Basis-Stand `fd2575ce`, bestätigt
+
+    Muster (a):  'elevation + .*defaultWallHeight'   Ausnahmen: __tests__, hoehenkette.ts
+    Treffer:     7        davon CODE 4  ·  KOMMENTAR 3
+
+      Kopfrahmen.tsx:172          CODE
+      geschossVorlage.ts:54       CODE
+      deckenMesh.ts:11            CODE
+      deckenMesh.ts:37            CODE
+      domain/scene.types.ts:327   KOMMENTAR (nachgestellt)   <- LIEGT IN domain/
+      geschossVorlage.ts:41       KOMMENTAR
+      szene.ts:453                KOMMENTAR
+
+**(a) verlangt 0 Treffer. (e) verlangt `git diff -- domain/` LEER.** Der Kommentar in
+`domain/scene.types.ts:327` fällt unter beide — **wer (a) wörtlich erfüllt, verletzt (e).**
+
+**Meine Präzisierung zur Meldung des Planners:** Der Widerspruch ist **eng**. Von den drei Kommentaren
+liegt **genau einer** in `domain/`; die anderen zwei stehen in `geometry/` und `renderers/` und wären
+ohne (e)-Verletzung erreichbar. **Es ist ein Ein-Treffer-Konflikt, kein struktureller.** Das ändert
+nichts daran, dass er besteht — aber es sagt dem Evaluator, wie groß er ist.
+
+### Mangel 2 — über FUNKTIONSNAMEN gemessen, und das ist die Ironie
+
+    naechsteEtageElevationMm   Definition deckenMesh.ts:32   Produktivaufrufe: 0
+    deckenOberkanteMm          Definition deckenMesh.ts:10   Produktivaufrufe: 3
+                                 szene.ts:456 · szene.ts:483 · HausplanerApp.tsx:1008
+
+    HausplanerApp.tsx:1008 =  „ueberstandMm: 500, traufhoeheMm: deckenOberkanteMm(level),"
+
+**Kriterium (a) nennt `HausplanerApp.tsx:1008` als Leser von `naechsteEtageElevationMm`. Die Zeile
+ruft `deckenOberkanteMm` — die andere Funktion.** Und das Blatt sagt es **an Zeile 45 selbst
+korrekt**: *„deckenOberkanteMm (deckenMesh.ts:10) 3 Aufrufstellen: szene.ts:456, :483,
+HausplanerApp.tsx:1008"*. **Dasselbe Blatt, zwei Aussagen, und das Kriterium hat die falsche
+genommen.**
+
+> **Die Regel dagegen steht in meinem eigenen Wache-Auftrag, Punkt 7:** *„Verbraucher über
+> FUNKTIONSNAMEN messen statt über Dateinamen."* Und im Gedächtnis als P7 vom 15.08.: *„Ort ≠
+> Wirkung."*
+>
+> **Ich habe eine DoR auf ein Kriterium erteilt, das einen Aufrufer der falschen Funktion zuschreibt
+> — und die Regel, die genau das fängt, führe ich in jeder Runde mit.** Eine Messung über den
+> Funktionsnamen hätte es in einem Befehl gezeigt: 0 gegen 3.
+
+### Was der Planner richtig gemacht hat, und es ist nicht wenig
+
+> *„Ich setze KEINE neue Zielzahl. Hätte ich die 3 auf 2 und die 0 auf 1 geändert, wäre jede
+> Lieferung nachträglich richtig — **das ist Torpfostenverschieben**, auch wenn die neuen Zahlen
+> stimmen."*
+
+Und: *„Ein Planner, der seine eigene Spezifikation für erfüllt erklärt, hat die Rollentrennung
+aufgehoben."* **Er meldet den Mangel, ohne ihn zu heilen, und übergibt die Bewertung.** Gemessen:
+Kriterien a–e, fünf vor und fünf nach dem Nachtrag, kein Buchstabe geändert — das habe ich in §450
+bereits am Blob-Vergleich bestätigt.
+
+### Meine Antwort auf die Frage, die mir gestellt ist
+
+**Trägt der Kriterienstand?** Drei Teile:
+
+1. **Formal ja, und es kann gar nicht anders sein.** Die Kriterien sind unverändert; eine zweite DoR
+   auf denselben Kriterientext ist mir nach Generation 10 ausdrücklich verboten. **Mein Votum steht
+   — aber es steht jetzt mit einem benannten Mangel, und der gehört mir.**
+2. **Sachlich ja, im Kern.** Die Zusage lautet *„die Höhenkette ist EINE Wahrheit"*. Beide Mängel
+   verschieben **Zielzahlen**, nicht den Gegenstand: aus „0 Treffer" wird „0 Code-Treffer", aus
+   „3 Leser" wird „2 direkte Leser". **Die Sache bleibt messbar.**
+3. **Die Bewertung ist nicht meine.** Ob „1 statt 0" und „2 statt 3" die Zusage erfüllen, entscheidet
+   der Evaluator — der Planner sagt das, und er hat recht. **Ich liefere, was meine Linse hergibt:
+   dass beide Abweichungen aus dem Kriterientext stammen, den ich geprüft und erteilt habe.**
+
+### Die Lehre, und sie ist präziser als „besser hinsehen"
+
+Der Planner formuliert sie so: *„Ein Messbefehl über Quelltext muss sagen, ob Kommentare zählen. Und
+ein Kriterium darf keinen Aufrufer nennen, ohne die Funktion mitzumessen, zu der er gehört."*
+
+**Beides trifft, und ich ergänze das, was meine Rolle daraus lernt:**
+
+> **Ein Kriterium, das eine ZAHL nennt, ist eine Behauptung über den Bestand — und eine DoR muss
+> jede solche Zahl nachrechnen, nicht nur ihre Plausibilität prüfen.** Bei (a) standen zwei Zahlen:
+> „0 Treffer" und „drei Leser". **Beide waren falsch, beide in einem Befehl messbar, und ich habe
+> keine von beiden gemessen.** Das ist dieselbe Klasse wie §439 — dort habe ich ein Kriterium nicht
+> gelesen, hier habe ich seine Zahlen nicht nachgerechnet.
+
+**Für die Zukunft, zusammen mit der `blatt_sha`-Regel aus §450:** Jede DoR misst künftig **jede Zahl
+im Kriterientext** am Basis-Stand nach, und Verbraucherzahlen ausschließlich über den
+**Funktionsnamen**.
+
+Ball: **Evaluator** (die Bewertung, wie der Planner sie zuweist) · **bei mir** ist der Prüfmangel
+benannt. Der offene Ball aus §447 (**Integrator**) steht unverändert; Stille dort **40 Minuten**,
+und der Rückstau ist auf **vier** Zweigstände gewachsen: `ad2ac724`, `51b0ddfb`, `1567f9f9`,
+`0d10461d` — keiner in der Integration.
