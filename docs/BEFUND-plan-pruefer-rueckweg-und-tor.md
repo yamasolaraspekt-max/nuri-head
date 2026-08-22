@@ -39704,3 +39704,75 @@ meine Zahl war es nicht wert, ohne Standangabe gemeldet zu werden.
 
 **Ab sofort**: Jede Zahl, die in eine Vorlage oder einen Auftrag geht, nennt den SHA, gegen den sie
 gemessen wurde. Nicht „gemessen am Integrationsstand", sondern der Wert.
+
+## §495 — Das GP-0-Referenzhaus widerspricht Kriterium (e), und die Absage-Regel fängt den Grenzfall nicht
+
+Stand: HEAD `79e95a94`, Baum 0, gen 11, Digest gleich. Zeit 23:12. Vorratsposten (c).
+**Gemessen am fixierten Stand `9b18f616`**, GP-0-Blob `32ca62a1` (neue Selbstbindung aus §494).
+
+Der Generator baut E4. Also habe ich die Formel durchgerechnet, die er gerade baut — die
+Höhenkette **unterhalb** ±0,00, die es bisher nicht gab.
+
+### Die Rechnung
+
+```
+Operand 1 (Yama, 22:08):  ±0,00 = OK Fertigfußboden EG
+Auflage 4 (übernommen):   floorThickness 180
+  OK Platte   =    0 − 180  =  −180 mm
+  Plattendicke 250
+  UK Platte   = −180 − 250  =  −430 mm
+Gegenprobe nach oben (unberührt):
+  deckenOberkanteMm(EG) = 0 + 2500 = 2500 mm
+```
+
+**`oberkanteMm` gehört auf −180.**
+
+### Befund 1: Das GP-0-Referenzhaus trägt noch 0 — und nennt die Frage „offen"
+
+```
+GP-0 :220   Bodenplatte: dickeMm 250, oberkanteMm 0 (= Bezugshöhe, Fachfrage 8 offen), erdberuehrt true
+GP-0 :260   1. Bezugshöhe ±0,00: OK-Fertigfußboden EG oder OK-Bodenplatte? …
+```
+
+Beides steht **nach** der Auflagen-Einarbeitung von 22:33 noch so da. Die Fachfrage ist aber seit
+**22:31:46** beantwortet (`dirigent-ANTWORT-gp0-neun-fachfragen-sind-beantwortet.yaml`):
+
+> „1_bezugshoehe: **OK Fertigfußboden EG**; `oberkanteMm` der Platte bei `erdberuehrt=true`
+> **negativ** (Yama 22:08)"
+
+Meine fünf Auflagen betrafen die Abschnitte (1), (3), (6-Fixturewert) und (7) — **nicht** die
+Fachfragenliste (8) und nicht diesen Referenzhaus-Wert. Der Nachzug fehlt also nicht aus
+Nachlässigkeit, sondern weil ihn niemand beauftragt hat: Die Fachfragen wurden **nach** meinem
+Votum beantwortet.
+
+**Wirksam ist der Widerspruch trotzdem.** Das Referenzhaus (6) ist die Fixture-Vorlage. Wer sie
+nimmt, baut `oberkanteMm 0` — und Kriterium (e) verlangt ausdrücklich
+
+```
+E4 :151   Verlangt: OK Platte = ±0,00 − Fußbodenaufbau
+E4 :157   Referenzhaus-Fixture: oberkanteMm der Platte < 0 bei erdberuehrt=true
+```
+
+### Befund 2: Die Absage-Regel fängt genau diesen Fall nicht
+
+```
+E4 :165   Absage-Regel: Eine POSITIVE oberkanteMm bei erdberuehrt=true erfüllt (e) NICHT
+```
+
+**0 ist nicht positiv.** Der Wert aus dem GP-0-Referenzhaus fiele also **durch die Absage-Regel
+hindurch** — und verletzt Kriterium (e) trotzdem, weil dort `< 0` steht.
+
+Das ist die schmalste Form eines Kriterienlecks: Verlangt wird `< 0`, abgesagt wird `> 0`, und
+dazwischen liegt genau der Wert, der heute im Referenzhaus steht. Ein Bau mit `oberkanteMm 0`
+könnte an der Absage-Regel vorbeikommen und wäre trotzdem falsch — die Bodenplatte läge dann
+bündig mit dem Fertigfußboden, also **ohne Fußbodenaufbau**.
+
+Vorschlag, ausdrücklich als Vorschlag: die Absage-Regel auf „**nicht negativ**" ziehen. Ein Wort,
+und der Grenzfall ist drin.
+
+### Was ich nicht tue
+
+Ich ändere weder Blatt noch Konzeptplan (Rollenquelle gen 11: `verboten: [Blaetter selbst aendern]`).
+Beides sind Befunde. Und die fachliche Seite — ob ein Fußbodenaufbau im Referenzhaus 180 mm
+misst — ist Yamas Entscheidung, nicht meine; ich rechne nur die Kette durch, die aus seinen
+Operanden folgt.
