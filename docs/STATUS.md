@@ -113,7 +113,7 @@
 | **Z1-E4-1** Bodenplatte als eigenes Bauteil (GP-0) | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. 22:25:33 · Basis `54163b25` | **Blatt** `docs/auftraege/aktiv/Z1-E4-1-bodenplatte-als-eigenes-bauteil.md` @ `54163b25` · **auf Yamas Anweisung vorgezogen** (22:08) · neun Kriterien, acht rot · **DoR ERTEILT** 22:32:20 · Bau `3b4e8f6b` · CODE_FERTIG 23:18 · **ABGENOMMEN (BROWSER)** 00:06:32 — acht Kriterien voll belegt, zwei mit benanntem Restpunkt |
 | **Z1-E0-1b** Umbenennung `deckenOberkanteMm` -> `wandOberkanteMm` | **`ABGENOMMEN`** | **Release-Prüfer** | Bauplatz 22.08. 22:32:23 · Basis `3b4e8f6b` | **KEIN Blatt, kein DoR-Durchgang** — Kriterien a-d stehen im Bauplatz selbst, so ausdruecklich verfuegt · Bau `d5e88f15` · CODE_FERTIG 23:23:20 · **ABGENOMMEN (CODE)** 23:28:31 — vier von vier, Reifegrad `code-abgenommen per Diff-Lesung und Suite`, **kein Browserlauf, wie vorgesehen** |
 | **Z1-E1-1** Wo bin ich — Etagenkontext als Vertrag | `BEREIT` | **Generator** | Schnitt 23.08. 00:01:40 · Basis `97c610ca` | **Blatt** `docs/auftraege/aktiv/Z1-E1-1-wo-bin-ich-etagenkontext-als-vertrag.md` @ `31ff1600` · **Spur A** · **DoR ERTEILT** 00:07:38 · auf Dirigenten-Anweisung 23:50 geschnitten |
-| **Z1-E3-1** Decke aenderbar und Rolle abgeleitet | `ENTWURF` | **Plan-Prüfer** | Schnitt 23.08. 00:01:40 · Basis `97c610ca` | **Blatt** `docs/auftraege/aktiv/Z1-E3-1-decke-aenderbar-und-rolle-abgeleitet.md` @ `31ff1600` · **Spur A** · **DoR steht aus** · auf Dirigenten-Anweisung 23:50 geschnitten |
+| **Z1-E3-1** Decke aenderbar und Rolle abgeleitet | `BEREIT` | **Generator** | Schnitt 23.08. 00:01:40 · Basis `97c610ca` | **Blatt** `docs/auftraege/aktiv/Z1-E3-1-decke-aenderbar-und-rolle-abgeleitet.md` @ `31ff1600` · **Spur A** · **DoR ERTEILT** 00:07:38 · auf Dirigenten-Anweisung 23:50 geschnitten |
 | **Z0-I1** Testdatenbank-Isolation — Stufe 1 | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` · **NACHBESSERN** 19:04:28, 8 von 10 Kriterien, Reifegrad `code-geprueft mit Ausloesung` — zwei Zusagen nennen das Vorhandene statt das Wirkende · **nachgebessert** `ba6fc673` 19:42:03, Kriterien 10 und 12 · **ABGENOMMEN** 23:00:11 — **zehn von zehn**, Reifegrad `code-geprueft mit Ausloesung` |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
@@ -19863,12 +19863,14 @@ herkunft_dieses_blocks: |
 ```yaml
 auftrag: "Z1-E3-1"
 titel: "Decke aenderbar und Rolle abgeleitet"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 blatt: "docs/auftraege/aktiv/Z1-E3-1-decke-aenderbar-und-rolle-abgeleitet.md"
 blatt_sha: 31ff1600
 basis_sha: 97c610ca
-dor_beleg: "steht aus — planner-CODE_FERTIG-Z1-E3-1.yaml nennt ball: [plan-pruefer]"
+dor_beleg: |
+  ERTEILT — plan-pruefer, 00:07:38, plan-pruefer-DOR-ERTEILT-Z1-E3-1.yaml, ball [generator].
+  Sechs Minuten nach dem Schnitt, beide Blaetter im selben Durchgang.
 bau_sha: "noch offen"
 herkunft_dieses_blocks: |
   Statusplatz vom integrator im selben Takt wie der Transport angelegt.
