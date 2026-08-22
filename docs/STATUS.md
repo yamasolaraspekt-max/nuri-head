@@ -106,7 +106,7 @@
 | **Z1-W2-4** Treppe ueber den Werkzeugregistry-Vertrag anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md` · **DoR ERTEILT** (plan-pruefer 16:21:25) · Planner-Blatt `418bcb6c` |
 | **Z1-W2-5** Wandflaeche anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` |
 | **Z1-W2-6** Auswechslung anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` |
-| **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | `BEREIT` | **Generator** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT auf den Kriterientext** (plan-pruefer 18:37:20, Nachtrag 1.6 V-1..V-6) — **nicht je Blatt**, das ist der Punkt von Spur V · erstes Blatt nach Yamas Entscheidung 18:27 |
+| **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | `BEREIT` | **Generator** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 |
 | **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
@@ -19332,6 +19332,28 @@ herkunft_dieses_blocks: |
   Komponente existiert und ruft berechneTreppe schon an Zeile 494.
   TRANSPORT UND EINTRAG, KEINE BEWERTUNG: ob der Zuschnitt traegt, entscheiden Plan-Pruefer
   und Generator, nicht ich.
+
+berichtigung_dor: |
+  MEINE ANNAHME WAR FALSCH, und sie stand in genau dem Satz, mit dem ich mich absichern wollte.
+  In a9317ac2 habe ich geschrieben: es gebe kein DoR-Ereignis fuer Z1-V1-1, "und es soll auch
+  keines geben". Der erste Teil war zum Zeitpunkt der Messung richtig. Der zweite Teil war
+  keine Messung, sondern mein Schluss aus dem Wortlaut von Nachtrag 1.6 — und er ist widerlegt:
+  DER PLAN-PRUEFER HAT 18:4x EINE BLATTBEZOGENE DoR ERTEILT, Paragraf 424, Commit d30be815.
+  Beleg ist ein Befundabschnitt, kein Ereignis unter ereignisse/ — deshalb fand mein Griff
+  nichts, und deshalb war "nicht vorhanden" richtig und "soll auch nicht entstehen" falsch.
+  WAS 424 GEPRUEFT HAT, in einem Durchgang und nur auf Vollstaendigkeit: alle sechs Punkte
+  belegt, die fuenf Modulzeilenzahlen exakt (153, 34, 43, 67, 183), die fuenf V-1-Nullen selbst
+  nachgemessen samt Positivkontrolle berechneTreppe = 5, Blob identisch auf HEAD und
+  rolle/planner. Ausdruecklich NICHT geprueft: die Fachlichkeit der fuenf Module — die macht
+  die Rot-Probe beim Evaluator.
+  EIN HINWEIS AUS 424, DER DEN BAU BETRIFFT UND NICHT MICH: die Zeilennummern im Blatt gelten
+  am mess_sha 3daf4f1e; im Integrationsstand sind sie um eins verschoben (selectedRoof 68 -> 69,
+  selectedStairParams 70 -> 71), weil d00aeece hier liegt und im Planner-Zweig nicht. Wer im
+  Integrations-Checkout Zeile 70 aufschlaegt, findet selectedStair statt selectedStairParams.
+  Sein Halbsatz dazu: die Knoten ueber den NAMEN aufschlagen, nicht ueber die Zeilennummer.
+  DIE LEHRE FUER MICH: ich darf schreiben, was ich gemessen habe. Was daraus folgen SOLL, ist
+  eine Regelauslegung und gehoert nicht in einen Beleg meiner Hand.
+
 ```
 
 ```yaml
