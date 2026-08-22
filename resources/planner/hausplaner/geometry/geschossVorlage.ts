@@ -1,3 +1,4 @@
+import { naechsteEtageElevationMm } from './hoehenkette';
 /**
  * Hausplaner — Geschoss als Vorlage duplizieren (Reuse-Pfeiler, klein & ohne Risiko).
  *
@@ -38,7 +39,9 @@ export interface GeschossDuplikat<N extends NodeBasis, R extends RoofBasis> {
 /**
  * Dupliziert `quelle` (Geschoss) samt `nodes`/`roof` in ein neues Geschoss DARÜBER.
  * `neueId` liefert frische IDs (z. B. uuid); `neuerName` benennt das neue Geschoss.
- * Neue Höhenlage = elevation + defaultWallHeight + floorThickness (ein Stockwerk höher).
+ * Neue Höhenlage: **Z1-E0-1 — die Höhenkette rechnet sie**, nicht diese Datei. Wird `decke`
+ * übergeben, geht ihre Dicke ein; ohne sie bleibt es bei `floorThickness` — bitgleich zum
+ * bisherigen Verhalten.
  */
 export function dupliziereGeschoss<N extends NodeBasis, R extends RoofBasis>(
   quelle: LevelVorlage,
@@ -46,12 +49,14 @@ export function dupliziereGeschoss<N extends NodeBasis, R extends RoofBasis>(
   roof: R | null,
   neueId: () => string,
   neuerName: string,
+  /** Z1-E0-1, additiv: die Decke des Quellgeschosses. Fehlt sie, gilt `floorThickness`. */
+  decke?: { dickeMm: number },
 ): GeschossDuplikat<N, R> {
   const neuesLevelId = neueId();
   const level: LevelVorlage = {
     id: neuesLevelId,
     name: neuerName,
-    elevation: quelle.elevation + quelle.defaultWallHeight + quelle.floorThickness,
+    elevation: naechsteEtageElevationMm(quelle, decke),
     defaultWallHeight: quelle.defaultWallHeight,
     floorThickness: quelle.floorThickness,
     sortOrder: quelle.sortOrder + 1,

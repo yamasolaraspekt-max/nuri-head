@@ -191,11 +191,48 @@ function dachAufbauten(): SceneDocument {
   };
 }
 
+/**
+ * **Prüfmittel für Z1-E0-1-(b)** — das Geschoss mit einer Decke, die NICHT so dick ist wie der
+ * Fußbodenaufbau.
+ *
+ * **Warum es sie braucht:** Die Höhenkette unterscheidet sich vom alten Rechenweg nur dort, wo
+ * `decke.dickeMm` von `level.floorThickness` abweicht. **Diesen Fall kann heute niemand über die
+ * Bedienung herstellen** — das Deckenwerkzeug setzt `dickeMm: level.floorThickness`
+ * (`HausplanerApp.tsx:1070`), ein Panel-Feld für die Deckendicke gibt es nicht (`dickeMm` in
+ * `EigenschaftenPanel.tsx`: 0), und `UPDATE_CEILING` ruft im App-Code niemand.
+ *
+ * ```text
+ * EG   elevation 0 · defaultWallHeight 2500 · floorThickness 200 · Decke dickeMm 240
+ * alt  0 + 2500 + 200  =  2700      (floorThickness, die Decke wird nicht gelesen)
+ * neu  0 + 2500 + 240  =  2740      (die Decke geht ein)
+ * ```
+ * Das sind genau die beiden Zahlen, die das Blatt nennt. *An den vier übrigen Fixtures ändert die
+ * Höhenkette nichts — dort ist die Deckendicke gleich `floorThickness`, und das ist der Beleg für
+ * Kriterium (c).*
+ */
+function etagenHoehenkette(): SceneDocument {
+  const eg: Level = { ...EG, defaultWallHeight: 2500 };
+  const decke: CeilingNode = {
+    id: 'ceiling-hk', type: 'ceiling', levelId: eg.id,
+    visible: true, locked: false, tags: [], createdAt: ISO, updatedAt: ISO,
+    polygon: RECHTECK_UMRISS, dickeMm: 240,
+    geometrieHerkunft: 'manuell', freigabe: 'bestaetigt',
+  };
+  return {
+    id: 'fixture-etagen-hoehenkette', projectId: 1, schemaVersion: 3, revision: 1, units: 'mm',
+    settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
+    levels: [eg], nodes: umrissZuWaenden(RECHTECK_UMRISS, eg.id), materials: [], roofs: [],
+    ceilings: [decke],
+    metadata: { createdAt: ISO, updatedAt: ISO },
+  };
+}
+
 export const STUDIO_FIXTURES: Record<string, () => SceneDocument> = {
   'u-dach': uDach,
   'decke-treppe': deckeTreppe,
   'wand-schichten': wandSchichten,
   'dach-aufbauten': dachAufbauten,
+  'etagen-hoehenkette': etagenHoehenkette,
 };
 
 /** Fixture-Name aus dem Query-String (`?fixture=u-dach`). Reine Funktion ⇒ testbar. */

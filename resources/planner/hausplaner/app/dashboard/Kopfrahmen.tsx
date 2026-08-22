@@ -25,6 +25,7 @@
  * bleibt der Zustand hier erhalten und der Befund geht als eigener Punkt an den Planner.
  */
 import React from 'react';
+import { naechsteEtageElevationMm } from '../../geometry/hoehenkette';
 import type { Level, SceneDocument, WallNode } from '../../domain/scene.types';
 import type { HausplanerModus } from '../../store/hausplanerStore';
 import type { Achse } from '../../geometry/editierGeometrie';
@@ -169,7 +170,12 @@ export function Kopfrahmen({
             const neu = {
               id: uuid(),
               name: `Geschoss ${scene.levels.length + 1}`,
-              elevation: oben.elevation + oben.defaultWallHeight + oben.floorThickness,
+              // Z1-E0-1: die Hoehenkette rechnet, nicht der Kopfrahmen. Die Decke des oberen
+              // Geschosses geht ein — genau sie fehlte hier und erzeugte 2700 statt 2740.
+              elevation: naechsteEtageElevationMm(
+                oben,
+                (scene.ceilings ?? []).find((c) => c.levelId === oben.id),
+              ),
               defaultWallHeight: oben.defaultWallHeight,
               floorThickness: oben.floorThickness,
               sortOrder: oben.sortOrder + 1,

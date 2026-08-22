@@ -112,7 +112,7 @@ import type { ObjectType, ViewType } from './tools/toolTypes';
 import { type Achse } from '../geometry/editierGeometrie';
 import { dupliziereGeschoss } from '../geometry/geschossVorlage';
 import { befehleLoeschen, befehleDuplizieren, befehleSpiegeln, befehleGeschossDuplizieren } from './sammelBefehle';
-import { deckenOberkanteMm, naechsteEtageElevationMm } from '../renderers/three-d/deckenMesh';
+import { deckenOberkanteMm } from '../geometry/hoehenkette';
 import { befehleTrimmen, TRIMM_MELDUNG } from './tools/trimmen';
 import { treppeZuParametern, parametereZuTreppe, type TreppeParams } from '../geometry/treppeObjekt';
 
@@ -742,6 +742,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       roof,
       uuid,
       `${level.name} (Kopie)`,
+      // Z1-E0-1: die Decke dieses Geschosses geht in die Hoehenkette ein. Ohne sie rechnete
+      // das Duplizieren mit `floorThickness` weiter — dieselbe Luecke wie im Kopfrahmen.
+      scene?.ceilings?.find((c) => c.levelId === level.id),
     );
     // A-31: vorher N+2 Undo-Schritte für EIN Geschoss — Geschoss, jede Wand einzeln, Dach.
     const st = store.getState();
