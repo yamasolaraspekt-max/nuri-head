@@ -1,5 +1,5 @@
 auftrag_id: NACHSCHAERFUNG-planner-A-37
-generation: 9            # 22.08. 08:2x — Yama: A-37 braucht eine kurze Nachschaerfung VOR dem ersten Bau-Commit (Ausfuehrungsberechtigung, Doppelgaenger, Probenverfahren). Das Parken (gen 8) gilt fuer Z0-I1 weiter; diese Arbeit ist A-37.
+generation: 10           # 22.08. 08:2x — KORREKTUR VOR DEINEM COMMIT (Yama): 22b und 22d widersprachen sich (Positivprobe im echten Checkout vs. Transportproben nur im Wegwerf-Repo). Aufloesung unten ist verbindlich. Ausserdem: der erste Bau-Commit 49972884 existiert bereits und ist als Vor-Nachschaerfungsstand zu kennzeichnen.
 rolle: planner
 sitzung_erwartet: ef8ec540-263d-4f06-8a02-5a2f1beeb572
 worktree: /Users/yamanuri/Documents/ticket-rolle-planner
@@ -7,16 +7,29 @@ branch: rolle/planner
 basis_sha: 762243b9
 prioritaet: P0
 aktion: spezifizieren_nachschaerfung
-parked_draft_bleibt: "Die 198 uncommittierten Z0-I1-Zeilen (planner-PARKED_DRAFT.yaml) bleiben UNANGETASTET im Worktree. Dein Commit enthaelt NUR das A-37-Blatt (pfadbegrenzt committen: commit-pruefen.sh mit genau diesem einen Pfad)."
-gegenstand: "Kurze Nachschaerfung des A-37-Blatts (docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md) um drei Unterkriterien zu A-37-22 (Kriterienaenderung nach DoR = kurze DoR-Runde beim Plan-Pruefer):"
-neue_unterkriterien_vorgabe_yama:
-  - "A-37-22b AUSFUEHRUNGSBERECHTIGUNG: Nur der Integrator darf den echten Rueckweg ausfuehren. scripts/rueckweg.py prueft VOR jeder Aenderung: TICKET_ROLLE == integrator UND Arbeitsverzeichnis == Integrations-Checkout (/Users/yamanuri/Documents/ticket, Zweig auto/hausplaner-integration); sonst Abbruch mit Meldung und Exit != 0, ohne einen Baum zu beruehren. Negativprobe: Aufruf als generator (und ohne TICKET_ROLLE) wird abgelehnt; Positivprobe: Aufruf als integrator im Checkout laeuft. Produkt/Schutz-Rot heute: grep -c TICKET_ROLLE scripts/rueckweg.py -> 0 (kein Rollencheck)."
-  - "A-37-22c DOPPELGAENGER PER AEHNLICHKEIT: die Baumauswahl erkennt Namens-Aehnliche (Praefix/Teilstring, z.B. ticket-rolle-generator-beleg-2026-08-21, Scratchpad-Klone) und MELDET sie ausdruecklich als ausgeschlossen; ein Vergleich auf exakt gleichen Verzeichnisnamen reicht nicht. Rot heute: git worktree list zeigt ticket-rolle-generator-beleg-2026-08-21, rueckweg.py kennt keine Aehnlichkeitspruefung."
-  - "A-37-22d PROBENVERFAHREN: alle Pfad-, Zweig-, Doppelgaenger- und Transportproben fuer Bau UND Abnahme laufen ausschliesslich in einem temporaeren Wegwerf-Repository (Scratchpad; Aufbau als reproduzierbares Skript); am Bestand wird nur die Ablehnung (Exit-Code vor jeder Aenderung) gemessen. Hintergrund: Generator-Lauf von rueckweg.py am 22.08. 08:06 hat drei fremde Baeume fast-forwarded (kein Schaden, aber unzulaessig)."
-form: "Kriterien im Stil der 27 bestehenden (Messbefehl, Rot-Art, heutiges Rot, erwartetes Gruen); Yamas Anweisung als Beleg; Errata-Regel beachten: EIN Commit, keine Nebenberichtigungen."
+parked_draft_bleibt: "Die 198 uncommittierten Z0-I1-Zeilen (planner-PARKED_DRAFT.yaml) bleiben UNANGETASTET. Dein Commit enthaelt NUR das A-37-Blatt (pfadbegrenzt)."
+widerspruch_aufgeloest_yama_woertlich: |
+  Im echten Integrationscheckout werden NUR nebenwirkungsfreie Autorisierungspruefungen und die Ablehnung fuer
+  Nicht-Integratoren gemessen. Der vollstaendige positive Transportlauf erfolgt AUSSCHLIESSLICH im
+  Wegwerf-Repository. Dafuer erhaelt das Pruefverfahren einen ausdruecklich begrenzten Probe-Root; der
+  Produktivbetrieb akzeptiert weiterhin ausschliesslich den kanonischen Integrationscheckout.
+  Technische Trennung (so ins Blatt):
+    1. preflight_authorisierung() prueft Rolle (TICKET_ROLLE == integrator), echten Checkout
+       (/Users/yamanuri/Documents/ticket) und Zweig (auto/hausplaner-integration) OHNE Aenderung; Exit != 0 sonst.
+    2. Der Transportkern erhaelt fuer Tests einen temporaeren Root (z.B. Parameter/Umgebungsvariable
+       RUECKWEG_PROBE_ROOT), unter dem ausschliesslich gearbeitet wird.
+    3. Der Produktiv-Einstieg ruft den Transportkern NUR nach bestandenem echten Preflight auf.
+    4. Ein Probe-Modus darf ausschliesslich unter einem temporaeren Verzeichnis laufen und MUSS auf realen
+       Rollen-Worktrees ablehnen (Probe-Root darf nie /Users/yamanuri/Documents/ticket* sein).
+neue_unterkriterien:
+  - "A-37-22b AUSFUEHRUNGSBERECHTIGUNG (Preflight): preflight_authorisierung() lehnt jeden Aufruf ab, der nicht integrator im kanonischen Checkout/Zweig ist — vor jeder Aenderung, Exit != 0, Meldung. Messung am echten Bestand NUR die Ablehnung (Generator-Aufruf, Aufruf ohne TICKET_ROLLE, Aufruf aus fremdem Verzeichnis -> abgelehnt, kein Baum beruehrt); die Positivprobe des Preflights selbst (integrator im Checkout -> 'erlaubt') ebenfalls nebenwirkungsfrei messbar (Preflight ohne Transport). Rot heute: grep -c TICKET_ROLLE scripts/rueckweg.py -> 0."
+  - "A-37-22c DOPPELGAENGER PER AEHNLICHKEIT: Baumauswahl erkennt Namens-Aehnliche (Praefix/Teilstring, z.B. ticket-rolle-generator-beleg-2026-08-21, Scratchpad-Klone) und MELDET sie als ausgeschlossen; exakte Namensgleichheit reicht nicht. Rot heute: git worktree list zeigt den Belegbaum, rueckweg.py prueft keine Aehnlichkeit."
+  - "A-37-22d PROBENVERFAHREN: der vollstaendige positive Transportlauf (Auswahl ueber (Pfad,Zweig), Zweigpruefung, Doppelgaenger-Meldung, Fast-forward, Nicht-FF-Meldung) laeuft AUSSCHLIESSLICH im Wegwerf-Repo unter dem Probe-Root (Aufbau als reproduzierbares Skript fuer Bau und Abnahme); am echten Bestand NUR Preflight/Ablehnung. Probe-Modus auf realen Rollen-Worktrees -> Ablehnung (Negativprobe)."
+bestehender_bau_commit: "Der Generator hat VOR der Pause bereits 49972884 (08:09:41, A-37-22 Teil) auf rolle/generator committet. Im Blatt kennzeichnen: 'Vor-Nachschaerfungsstand, nicht abnahmefaehig; ergaenzender Bau-Commit nach dieser DoR; der Evaluator prueft beide Commits als EINE A-37-Lieferung.' Kein Reset, kein Umschreiben."
+form: "Kriterien im Stil der bestehenden (Messbefehl, Rot-Art, heutiges Rot, erwartetes Gruen); Yamas Anweisung als Beleg; EIN Commit, keine Nebenberichtigungen; Kriterien 1-27 sonst unveraendert."
 lease: "leases/NACHSCHAERFUNG-planner-A-37/ nach README; freigeben bei CODE_FERTIG."
-commit: "NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules TICKET_ROLLE=planner bash scripts/commit-pruefen.sh '<Botschaft>' docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md — NUR dieser Pfad."
-ergebnis: "ereignisse/NACHSCHAERFUNG-planner-A-37/planner-CODE_FERTIG.yaml mit Ergebnis-SHA; Ball an den Plan-Pruefer (kurze DoR-Runde)."
+commit: "NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules TICKET_ROLLE=planner bash scripts/commit-pruefen.sh '<Botschaft>' docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md — NUR dieser Pfad. Falls du unter gen 9 schon committet hast: ergaenzender Commit mit der Aufloesung, kein Umschreiben."
+ergebnis: "ereignisse/NACHSCHAERFUNG-planner-A-37/planner-CODE_FERTIG.yaml mit Ergebnis-SHA; Ball an den Plan-Pruefer."
 erlaubte_pfade:
   - docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md
 verboten:
