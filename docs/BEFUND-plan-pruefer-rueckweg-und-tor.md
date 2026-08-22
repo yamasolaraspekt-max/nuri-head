@@ -39628,3 +39628,79 @@ Eine **Negativprobe**, die belegt, dass `DB_DATABASE=ticket` mit Exit-Code 3 abg
 dem alten Wortlaut („`ticket` darf in keinem Test-/Probebefehl stehen") wäre sie zu entfernen
 gewesen — und danach hätte niemand mehr gemerkt, wenn die Bühne `ticket` durchlässt. Es sind also
 nicht nur die zwei Stellen aus §491; die erlaubte Nennung trägt mindestens **drei** Prüfungen.
+
+## §494 — Meine 35 aus §487 ist nicht reproduzierbar, und mein Griff ordnete einen fremden Wert zu
+
+Stand: HEAD `072f9c06`, Baum 0, gen 11, Digest gleich. Zeit 23:11. Vorratsposten (e), am eigenen
+Befund von vor 27 Minuten.
+
+Der Planner hat um 23:01 die Blattköpfe berichtigt (`c09a91d6`) — auf Auftrag des Dirigenten, der
+sich auf **meine Zahl 35** stützte. Sein Bericht nennt **34** und legt die Ableitung offen. Ich habe
+meine Zahl daraufhin nachgemessen. **Sie hält nicht.**
+
+### Befund 1: mein awk-Griff hat keine Blockgrenze und ordnet fremde Werte zu
+
+Der A-36-Block in `docs/STATUS.md` (Z. 17741) enthält:
+
+```yaml
+auftrag: "A-36"
+zustand: ZURUECKGEZOGEN   # V-02, Yama 14.08.
+```
+
+**Kein `dor_beleg`.** Mein Griff setzt `f=1` beim `auftrag:` und nimmt dann das *nächste*
+`dor_beleg:` — es gibt keine Bedingung, die beim nächsten `auftrag:` abbricht, **bevor** der Fund
+eintritt. Also nahm er das Feld des **folgenden** Blocks und schrieb `"BEREIT — 2. Runde 15.08."`
+dem Auftrag A-36 zu.
+
+Der Planner hat es unabhängig richtig gemessen: *„A-36 hat gar keine Aussage im Datensatz, die
+Quelle fehlt, also keine Berichtigung ohne Quelle."* **Er hat recht, ich hatte unrecht.**
+
+Das ist §477 in verschärfter Form. Dort lieferte die zu grobe Blockmessung eine **falsche Null**;
+hier liefert sie eine **falsche Zuordnung** — und die ist gefährlicher, weil eine Null zum
+Nachfragen einlädt und ein plausibler Wert nicht.
+
+### Befund 2: die Zahl ist nicht reproduzierbar, weil ich den Stand nicht fixiert habe
+
+Dieselbe Messung, dreimal:
+
+```
+§487 gemeldet (22:44, gegen die Arbeitskopie)   35
+Wiederholung gegen f05897bb                     36
+Wiederholung gegen 998ff9f2                     34
+```
+
+**Keine Wiederholung trifft die gemeldete Zahl.** Die Ursache ist nicht die Messung, sondern der
+Stand: `998ff9f2` liegt auf `rolle/planner`, `f05897bb` auf `rolle/plan-pruefer`, und zwischen
+beiden unterscheiden sich **15 Blätter**. `docs/STATUS.md` ist zwischen ihnen unverändert — die
+Differenz kommt allein aus den Blättern, die aus verschiedenen Rollenzweigen einlaufen.
+
+Meine §487-Messung lief gegen die **Arbeitskopie** des Integrations-Checkouts. Die war zu diesem
+Zeitpunkt korrekt — aber ich habe **keinen Stand genannt**, und damit ist die Zahl nicht
+nachfahrbar. Das ist genau der Mangel, den die lesende Sitzung heute um 16:08 an sich selbst
+gemeldet und vom Planner übernommen hat: *„Ein Beleg ohne Standangabe ist kein Beleg."* Ich habe
+den Satz gelesen, zitiert — und sechs Stunden später selbst verletzt.
+
+Punkt 1 des Wache-Auftrags sagt „Messstand FIXIEREN". Ich fixiere ihn seit Runden für HEAD und Baum
+— und habe ihn ausgerechnet für die **Zahl** nicht fixiert, die zum Auftrag wurde.
+
+### Was daraus folgt, und was nicht
+
+**Kein Schaden entstanden.** Der Planner hat nicht meine Liste abgearbeitet, sondern selbst
+gemessen — und dabei drei Fälle richtig ausgesondert, die ich falsch oder gar nicht eingeordnet
+hatte:
+
+| Fall | ich | er | richtig |
+|---|---|---|---|
+| A-36 | in der Liste (fremder Wert zugeordnet) | ausgeschlossen, „keine Quelle" | **er** |
+| A-41, W-17/1 | gefiltert (Filter greift, geprüft) | als stimmig benannt | **beide** |
+
+Seine 35 und meine 35 waren zufällig dieselbe Zahl über **verschiedene Mengen**: seine „mit Aussage
+im Datensatz" (inkl. der zwei, die „steht aus" sagen), meine „Datensatz sagt etwas anderes". Dass
+beide 35 lauteten, hat die Abweichung verdeckt, statt sie zu zeigen.
+
+**Der Sachbefund selbst steht weiter**: Es gab Dutzende Blattköpfe mit „steht aus", während der
+Datensatz eine Entscheidung führte, die älteste seit dem 12.08. Daran ändert sich nichts — nur
+meine Zahl war es nicht wert, ohne Standangabe gemeldet zu werden.
+
+**Ab sofort**: Jede Zahl, die in eine Vorlage oder einen Auftrag geht, nennt den SHA, gegen den sie
+gemessen wurde. Nicht „gemessen am Integrationsstand", sondern der Wert.
