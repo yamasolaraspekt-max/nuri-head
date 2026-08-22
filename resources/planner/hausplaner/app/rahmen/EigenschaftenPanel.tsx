@@ -23,6 +23,8 @@ import type { ObjectNode, OpeningNode, RoofNode, RoofAnbauMasse, SceneNode, Wall
 import { istVerschneidungsForm } from '../../domain/roofShape';
 import { GrundrissformHinweis } from './GrundrissformHinweis';
 import { WandflaechenAnzeige } from './WandflaechenAnzeige';
+import { DachKennzahlen } from './DachKennzahlen';
+import { TreppentypAnzeige } from './TreppentypAnzeige';
 import { T, FARBEN, OP_TOKEN } from '../studioDaten';
 import { opKnopfBild } from '../dashboard/opKnopfZustand';
 import { PANEL_TABS, type PanelTabId } from '../dashboard/panelTabs';
@@ -321,6 +323,9 @@ export function EigenschaftenPanel({
               </>
             );
           })()}
+          {/* Z1-V1-1 Module 2-4: Vorlage, projizierte Flaeche und Sparrentrennung stehen
+              am ausgewaehlten Dach — dort, wo Form, Neigung und Kontur schon stehen. */}
+          <DachKennzahlen dach={selectedRoof} scene={store.getState().scene} />
           <button type="button" style={{ ...knopf(false), width: '100%', marginTop: 4 }} onClick={() => { store.getState().executeCommand({ type: 'REMOVE_ROOF', roofId: selectedRoof.id }); store.getState().selectNodes([]); }}>Dach entfernen</button>
         </>
       ) : selectedWall ? (
@@ -545,6 +550,9 @@ export function EigenschaftenPanel({
           <label style={panelLabel}>Ziel-Steigungshöhe (mm, optional)
             <input type="number" min={0} value={selectedStairParams.gewuenschteSteigung ?? ''} onChange={(e) => { const v = Math.round(Number(e.target.value)); aktualisiereTreppe({ gewuenschteSteigung: v > 0 ? v : undefined }); }} style={panelInput} />
           </label>
+          {/* Z1-V1-1 Modul 1: Bauform und Grundflaeche. Der Rechentyp fehlt im Modell und
+              wird deshalb gewaehlt, nicht aus der Bauart-ID erraten. */}
+          <TreppentypAnzeige params={selectedStairParams} />
           <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 8 }}>Stufung wird automatisch nach DIN 18065 gerechnet. Bewegen: Treppe im Plan ziehen.</div>
           <div className="hp-ep-knopfreihe">
             <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
