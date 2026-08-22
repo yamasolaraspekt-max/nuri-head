@@ -581,7 +581,28 @@ ausnahmslos eine **ausgelöste** Negativprobe mit Rohausgabe und `echo $?`, nich
 
   **Negativproben (ausgelöst, mit Rohausgabe und `echo $?`):** Aufruf als `generator` → abgewiesen;
   Aufruf **ohne** `TICKET_ROLLE` → abgewiesen; Aufruf als `integrator` **außerhalb** des
-  Integrations-Checkouts → abgewiesen. **Positivprobe:** `integrator` im Checkout läuft durch.
+  Integrations-Checkouts → abgewiesen. **Positivprobe:** `integrator` im Checkout kommt durch den
+  Preflight — **siehe die Auflösung unten, sie ist Teil dieses Kriteriums.**
+
+  **⚠ AUFLÖSUNG DES WIDERSPRUCHS ZWISCHEN `A-37-22b` UND `A-37-22d`** *(22.08., Yama/Dirigent —
+  der Widerspruch war meiner: `22b` verlangte eine Positivprobe im echten Checkout, `22d` verbietet
+  genau dort jeden Transportlauf)*. **Aufgelöst durch Trennung in vier Stücke:**
+
+  | Stück | was es tut | wo es geprüft wird |
+  |---|---|---|
+  | `preflight_authorisierung()` | prüft Rolle, Checkout, Zweig — **ohne jede Änderung** | **echter Checkout**: erlaubt |
+  | Transportkern | zieht Bäume nach, mit **temporärem Root** als Parameter | **nur Wegwerf-Repo** |
+  | Produktiv-Einstieg | ruft den Kern **erst nach echtem Preflight**, nur auf dem kanonischen Checkout | echter Checkout |
+  | Probe-Modus | läuft **nur** unter einem temporären Verzeichnis und **lehnt reale Rollen-Worktrees ab** | Wegwerf-Repo |
+
+  **Damit ist die Positivprobe im echten Checkout auf den nebenwirkungsfreien Teil begrenzt:**
+  *„Preflight bestanden" wird dort gemessen, **der vollständige positive Transportlauf ausschließlich
+  im Wegwerf-Repo.*** **Am Bestand wird also nur zweierlei gemessen: die Ablehnung für
+  Nicht-Integratoren und das Bestehen des Preflights — beides berührt keinen Baum.**
+  **Absage-Regel dazu:** Ein Bau, bei dem der Transportkern **ohne** Root-Parameter auskommt und
+  damit im Probe-Modus doch auf die echten Bäume zeigen kann, erfüllt weder `22b` noch `22d`.
+  *Der Probe-Modus muss die realen Rollen-Worktrees aktiv ablehnen, nicht nur zufällig woanders
+  hinzeigen.*
   **Absage-Regel:** Die Prüfung muss **vor** der ersten Baumänderung stehen. *Ein Tor, das nach dem
   ersten `merge --ff-only` greift, hat den Schaden bereits zugelassen — bei diesem Werkzeug ist die
   Reihenfolge das Kriterium, nicht das Vorhandensein.*
@@ -647,6 +668,74 @@ ausnahmslos eine **ausgelöste** Negativprobe mit Rohausgabe und `echo $?`, nich
   **Absage-Regel:** Wer eine Transportprobe am Bestand fährt und sie mit *„es ist ja nichts kaputt
   gegangen"* begründet, hat `A-37-22d` **nicht** erfüllt. *Genau diese Begründung trug der Vorfall
   vom 08:06 — und sie stimmte sogar; unzulässig war er trotzdem.*
+
+  **⚠ BERICHTIGUNG DER ROT-ZEILE (22.08., Anmerkung des Plan-Prüfers, zutreffend):** oben stand
+  *„kein Wegwerf-Repo **und kein Aufbauskript** vorhanden"*. **Der zweite Teil greift zu weit.**
+  Gemessen: `grep -n 'mkdtempSync' scripts/__tests__/*.mjs` → **15 Treffer** in drei Dateien, u. a.
+  `buehnenWaechter.test.mjs:56` (`zz-a04-wegwerf-`) und `commitPruefen.test.mjs:56` (`w09-tor-`),
+  jeweils mit `rmSync`-Aufräumung und **0** Bezug auf `Documents/ticket` oder `worktree`
+  (Gegenprobe: `assert` trifft 319×). **Für TRANSPORT-Proben gibt es tatsächlich keines — die
+  Rot-Lage hält** —, aber die **Bauform** ist im Bestand vorhanden und nach CLAUDE.md zuerst zu
+  prüfen. *Verlangt ist daher: das Wegwerf-Repo folgt diesen Mustern, statt ein drittes zu erfinden.*
+
+- **A-37-22e** · **DAS COMMIT-TOR PRÜFT GENERATION UND DIGEST GEGEN DIE ZENTRALE ROLLENQUELLE — VOR JEDER ÄNDERUNG.**
+  *(Nachschärfung 22.08., Yamas Wortlaut.)*
+
+  **Verlangt, wörtlich:** *„Vor jedem schreibenden Schritt und unmittelbar im Commit-Gate muss die
+  aktuelle Generation samt Digest erneut gegen die zentrale Rollenquelle
+  (`/Users/yamanuri/.ticket-steuerung/rollen/<rolle>.yaml` + `.sha256`) geprüft werden. Ist der lokale
+  ACK älter, fehlt er oder lautet die Aktion `pausieren` (bzw. angehalten/parken), muss der Commit vor
+  jeder Änderung beziehungsweise spätestens vor dem Commit abgewiesen werden. Nur ‚beim nächsten Takt
+  lesen' reicht nicht."*
+  **Gilt für `scripts/commit-pruefen.sh` UND `.githooks/pre-commit`.**
+
+  **Messbefehle und heutiges (rotes) Ergebnis — je Tor:**
+  ```
+                        commit-pruefen.sh   .githooks/commit-msg
+  grep -ci 'generation'          0                  0
+  grep -ci 'sha256'              0                  0
+  grep -ci 'ticket-steuerung'    0                  0
+  grep -ci 'rollen/'             0                  0
+  grep -cw 'ACK'                 0                  0
+  ```
+  **⚠ Zur Teilstring-Falle, weil sie hier zuschlägt:** `grep -ci 'ack'` meldet in
+  `commit-pruefen.sh` **5** Treffer — **keiner davon ist ein ACK**: es sind `package.json`
+  (2×), `getrackt`, `gestagt` und ein weiterer Wortteil. **Mit Wortgrenze sind es 0.**
+  *Der Plan-Prüfer hat dieselbe Falle heute zweimal gemeldet (`lease` → 27 Treffer, alle
+  „Release-Prüfer"). Ein Teilstring ist kein Wort — wer die 5 als Beleg nähme, meldete ein
+  vorhandenes Tor, das es nicht gibt.*
+  **Art des Rot: Schutz.**
+
+  **Der Beleg, dass die Lücke wirkt — und er ist von heute:**
+  ```
+  08:12:54   Pause (gen 6) für den Generator veröffentlicht
+  08:16:37   Generator-Commit 1155709d — trotzdem gesetzt
+  ```
+  *Der Generator hat nicht gegen eine Regel verstoßen: sein Takt hatte die Pause noch nicht gelesen.
+  **Genau das ist der Punkt.** Eine Steuerung, die erst beim nächsten Takt wirkt, hat zwischen
+  Veröffentlichung und Lesen ein Loch — und der Commit fällt hinein.*
+
+  **Negativproben (ausgelöst, mit Rohausgabe und `echo $?`):** veralteter ACK → abgewiesen ·
+  **fehlender** ACK → abgewiesen · `aktion: pausieren`/`parken` → abgewiesen.
+  **Positivprobe:** aktueller ACK **und** `aktion: bauen` → Commit läuft.
+  **Messbar im Wegwerf-Repo mit einer Probe-Steuerungsstelle** (eigener Root für `rollen/`), damit
+  die echte Steuerungsablage für die Proben nicht angefasst wird — `A-37-22d` gilt hier mit.
+  **Absage-Regel:** Ein Tor, das die Generation nur beim Sitzungsstart liest und dann zwischenspeichert,
+  erfüllt `A-37-22e` **nicht**. *Verlangt ist die Prüfung **im** Commit-Gate, nicht davor.*
+
+### ⚠ Zwei Bau-Commits liegen VOR dieser Nachschärfung — Stand, nicht Mangel
+
+**Gemessen am 22.08.:**
+```
+49972884  08:09:41  generator: A-37-22 gebaut   (scripts/rueckweg.py +78/-6)
+1155709d  08:16:37  generator: A-37-23 gebaut   (rollen-tor.sh: dirigent mit begrenztem Schreibbereich)
+beide: existent · nur auf rolle/generator · in rolle/planner NEIN · in der Integration NEIN
+```
+**Beide sind gegen den Stand *vor* `A-37-22b/c/d/e` gebaut und damit NICHT abnahmefähig.**
+*Sie bleiben stehen — kein Reset, kein Umschreiben.* **Nach der DoR liefert der Generator einen
+ergänzenden Bau-Commit; der Evaluator prüft alle A-37-Commits als EINE Lieferung.**
+*Ein Vorab-Stand, der als solcher benannt ist, kostet nichts. Einer, der unbenannt bleibt, wird
+irgendwann als Erfüllung gelesen.*
 
 - **A-37-23** · **DAS ROLLEN-TOR KENNT DEN `dirigent` — MIT TECHNISCH BEGRENZTEM SCHREIBBEREICH.**
 
