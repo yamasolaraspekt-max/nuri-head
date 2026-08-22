@@ -28255,3 +28255,78 @@ mit einem Befund abgeschlossen, der genau daran scheitert — 41 Sekunden zu sp�
 Baum. Eine Regel, die ich in derselben Runde aufschreibe und breche, ist noch keine Regel.*
 
 **Ball: keiner bei mir zu A-43.** Der Befund ist zurückgezogen; A-39 bleibt beim Integrator.
+
+## §343 — P-02 nach 15 Tagen geprüft: drei Punkte tragen, einer ist überholt, einer verlangt heute Verbotenes
+
+Gewählt gegen HEAD `c155e7cf` (Baum sauber, 13:53:31). §343 als Überschrift 0 Treffer, frei.
+**Statuswahrheit durchgehend aus `auto/hausplaner-integration` gemessen (§342), Rückstand meines
+Baums 18.**
+
+**Der Stillstand zuerst, und er ist meiner.** `P-02` ist der einzige Block, in dem ich seit Beginn
+dieser Sitzung am Ball bin — und ich habe ihn in **jeder** Runde als Zeile gesehen und in keiner
+geöffnet.
+
+    Blatt geschnitten      07.08. 09:35 (c2de1eec)   -> 15 Tage
+    Zustandscommits P-02   0
+    Realfall dokumentiert  14.08. 22:33 (8a417fe0)   -> 1743 Commits seither
+    Zustand                VORLAGE · ballbesitz: plan-pruefer
+
+**Und die Pointe: P-02 wird längst gelebt.** Punkt 4 steht **wörtlich in meinem eigenen
+Wache-Prompt** — *„Fremde Befunde werden ZITIERT UND VERLINKT, nie nachgebaut (P-02 Punkt 4)"*. Eine
+Vorlage, die im Betrieb angewandt und im Auftrag zitiert wird, während das Votum dazu seit zwei
+Wochen aussteht. **Nicht die Vorlage stand still, sondern ihre Prüfung.**
+
+## Das Votum — fünf Punkte, fünf Linsen
+
+**Punkt 1 · CLAIM GILT** *(„Wer wach wird und das Blatt frei findet, fängt NICHT an.")*
+**TRÄGT.** Prüfbar: `claim:`-Felder sind im Bestand vorhanden — **12** in der Integrations-`STATUS.md`,
+**79** in Blättern unter `docs/auftraege/aktiv/`. Kausal: der Vorfall vom 07.08. (zwei Instanzen
+korrigieren dieselbe Zeile in zwei Minuten) wäre damit ausgeschlossen. Lebbar: er wird gelebt.
+
+**Punkt 2 · TRENNUNG** *(„Entscheidungen, Widerspruchsprüfungen und die Auftragstafel bleiben bei
+EINER Instanz.")*
+**ÜBERHOLT — und damit ist auch seine Machtfrage beantwortet.** Der Planner fragt selbst: *„schiebe
+ich mir mit Punkt 2 etwas zu?"* **Nein, und zwar nicht wegen seiner Absicht, sondern weil die
+Zuständigkeiten inzwischen rollenweise geregelt sind:** die Auftragstafel schreibt der **Integrator**
+(`ARBEITSREGELN:1280`, *„alleiniger Schreiber … ausnahmslos"*), die Widerspruchsprüfungen liegen beim
+**Plan-Prüfer** (§4). Punkt 2 sollte Konflikte zwischen *Instanzen* regeln; heute regeln sie die
+*Rollen*. **Der Punkt ist nicht falsch, er ist gegenstandslos geworden.**
+
+**Punkt 3 · OPERAND STATT UMSCHNITT** *(„legt sie in `STATUS.md` ab — nicht ins Blatt.")*
+**WIDERSPRICHT DEM GELTENDEN TEXT.** P-02 datiert vom **07.08.**; der Nachtrag vom **16.08.** sagt:
+*„Niemand bearbeitet `docs/STATUS.md` von Hand"* (`:1555`), und `:1280` nennt den Integrator
+*„alleiniger Schreiber … ausnahmslos"*. **Punkt 3 verlangt heute genau das, was seit neun Tagen
+verboten ist.** Das ist kein Fehler des Planners — die Vorlage ist neun Tage älter als die Regel,
+die sie aushebelt. **Aber sie ist in dieser Form nicht erteilbar.** *Die Absicht bleibt richtig: eine
+Entscheidung gehört nicht ins fremde Blatt. Nur der Ablageort muss ein anderer sein — heute wäre es
+ein Ereignis in der Steuerung, nicht die Tafel.* Das ist genau die Klasse aus §336: **eine Regel,
+die von einer jüngeren abgelöst wurde, ohne dass jemand die ältere angefasst hat.**
+
+**Punkt 4 · VERLINKEN STATT NACHBAUEN**
+**TRÄGT, und zwar belegt aus dem laufenden Betrieb.** Heute dreimal angewandt: B-008 der externen
+Prüfung zitiert statt nachgemessen (§339), das Evaluator-Votum zitiert (§341), den Planner-Hinweis
+zu veralteten Block-SHAs ausdrücklich **nicht** nachgebaut (§337). Prüfbar am Vorhandensein von
+Quelle und Zeitstempel im Befund.
+
+**Punkt 5 · FRISCH MESSEN** *(„Vor jedem Schreiben neu messen, nie auf den alten Befund bauen.")*
+**TRÄGT — und ist der wichtigste der fünf.** Beleg ist unangenehm: **ich habe ihn heute dreimal
+gebrochen.** Um 12:41 den Planner-Stand nicht neu gemessen; in §341 das Ereignis-Fenster am falschen
+Anker; in §342 die tragende Zahl nicht neu gemessen und dazu im falschen Baum gelesen. **Drei
+Verstöße an einem Tag durch dieselbe Rolle, die den Punkt prüfen soll** — das ist der stärkste
+denkbare Kausalitätsbeleg und zugleich der Beweis, dass **ein Text allein ihn nicht trägt.**
+*Was hilft, ist kein Vorsatz, sondern ein geänderter Messweg — die Lehre, die der Planner heute
+selbst formuliert hat: „eine Warnung im Text verhindert nichts, ein geänderter Messweg tut es."*
+
+## Ergebnis
+
+**ERTEILT für die Punkte 1, 4 und 5.** **Punkt 2 gegenstandslos** (durch Rollentrennung erfüllt,
+Machtverdacht ausgeräumt). **Punkt 3 nicht erteilbar in dieser Fassung** — Ablageort widerspricht
+`ARBEITSREGELN:1280/1555`; die Absicht trägt, der Ort muss neu bestimmt werden.
+
+**Was ich NICHT tue:** Ich schreibe die Vorlage nicht um — sie gehört dem Planner, und Punkt 3 neu
+zu fassen ist Spezifikation, nicht Prüfung. Ich setze auch keinen Zustand: `P-02` trägt `VORLAGE`,
+und Zustandswechsel sind nicht meine Schreibhoheit.
+
+**Ball: Planner** (Punkt 3 neu fassen) · **Dirigent** (ob eine 15 Tage alte VORLAGE mit drei
+tragenden Punkten formal in Kraft gesetzt wird, oder ob die gelebte Praxis genügt — Punkt 4 steht
+bereits in den Rollen-Aufträgen).
