@@ -50,7 +50,11 @@ class SceneDocumentValidator
 
     /**
      * Zod-superRefine und dokumentweite Referenzen sind nicht als JSON Schema ausdrueckbar.
-     * Diese Regeln spiegeln exakt sceneDocumentSchema + validateSceneIntegrity.
+     * Diese Regeln spiegeln sceneDocumentSchema + validateSceneIntegrity.
+     *
+     * **Seit Z1-E4-1 (d2) gilt das auch fuer die drei Sammlungen** nodes/ceilings/roofs/
+     * foundationSlabs — vorher stand hier „exakt", und fuer ceilings/roofs stimmte es nicht.
+     * *Was den Satz traegt, sind die Feature-Tests je Sammlung, nicht dieser Satz.*
      *
      * @param array<string, mixed> $scene
      * @return list<string>
@@ -61,6 +65,34 @@ class SceneDocumentValidator
         $levelIds = [];
         foreach ($scene['levels'] as $level) {
             $levelIds[(string) $level['id']] = true;
+        }
+
+        // **Z1-E4-1 (d2) — die drei Sammlungen, die bis heute NICHT gespiegelt waren.**
+        //
+        // `validateSceneIntegrity` (domain/validation.ts) prueft `ceilings`, `roofs` und seit
+        // diesem Blatt `foundationSlabs` gegen die Level-Liste; PHP pruefte nur `nodes`. **Der
+        // Kommentar oben sagte trotzdem „spiegeln exakt".** Damit lehnte der Client ab, was der
+        // Server annahm — eine Decke auf einem geloeschten Geschoss kam durch den Speicherweg.
+        //
+        // *Gefunden beim Lesen fuer den Schema-Sprung, gemeldet statt im Vorbeigehen behoben;
+        // der Dirigent hat die Behebung diesem Blatt zugewiesen, weil E4 diese Datei ohnehin
+        // anfasst und es nach Schema 4 eine Migration waere.* **Drei Schleifen, drei Tests** —
+        // der Kommentar wird durch Zusagen wahr gemacht, nicht durch Behauptung.
+        foreach ([
+            'ceilings' => 'Decke',
+            'roofs' => 'Dach',
+            'foundationSlabs' => 'Bodenplatte',
+        ] as $sammlung => $bezeichnung) {
+            foreach (($scene[$sammlung] ?? []) as $eintrag) {
+                if (! is_array($eintrag)) {
+                    continue;
+                }
+                $levelId = (string) ($eintrag['levelId'] ?? '');
+                if (! isset($levelIds[$levelId])) {
+                    $id = (string) ($eintrag['id'] ?? '?');
+                    $fehler[] = "{$bezeichnung} {$id}: unbekanntes Level {$levelId}.";
+                }
+            }
         }
 
         $waende = [];

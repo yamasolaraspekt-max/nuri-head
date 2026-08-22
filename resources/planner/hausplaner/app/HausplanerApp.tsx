@@ -29,7 +29,7 @@ import { fange, toleranzAusZoom, FANG_TEXT, type FangArt } from '../geometry/fan
 import { dachFlaechen, DachGeometrieUngueltig } from '../geometry/dachGeometrie';
 // Z-05: die Konturpruefung ist reine Geometrie und wohnt dort, nicht hier.
 import { pruefeKontur, konturStatusText, KONTUR_MIN_PUNKTE, type KonturGrund } from '../geometry/kontur';
-import { herkunftFuerNeueDecke, herkunftFuerNeuesDach } from '../geometry/freigabe';
+import { herkunftFuerNeueDecke, herkunftFuerNeuesDach, herkunftFuerNeueBodenplatte } from '../geometry/freigabe';
 import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type FensterTyp } from '../geometry/oeffnungsTypen';
 import { DreiDBereich } from './DreiDBereich';
 import { aufloeseAuswahlmodus, wendeAuswahlAn, klickInsLeere } from './tools/auswahlModus';
@@ -112,7 +112,8 @@ import type { ObjectType, ViewType } from './tools/toolTypes';
 import { type Achse } from '../geometry/editierGeometrie';
 import { dupliziereGeschoss } from '../geometry/geschossVorlage';
 import { befehleLoeschen, befehleDuplizieren, befehleSpiegeln, befehleGeschossDuplizieren } from './sammelBefehle';
-import { deckenOberkanteMm } from '../geometry/hoehenkette';
+import { deckenOberkanteMm, bodenplatteOberkanteMm } from '../geometry/hoehenkette';
+import { hinweisBodenplatte, istErdberuehrtVorbelegung } from '../geometry/bodenplatte';
 import { befehleTrimmen, TRIMM_MELDUNG } from './tools/trimmen';
 import { treppeZuParametern, parametereZuTreppe, type TreppeParams } from '../geometry/treppeObjekt';
 
@@ -333,6 +334,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    * Objekt zu speichern — das ist Schema und damit K-05, ausdrücklich ausserhalb dieser Scheibe.*
    */
   const [deckeNaeherung, setDeckeNaeherung] = useState<boolean | null>(null);
+  /** Z1-E4-1 (c): der Hinweis „darunter liegt noch ein Geschoss" — Text oder null, keine Ablehnung. */
+  const [bodenplatteHinweis, setBodenplatteHinweis] = useState<string | null>(null);
   // Z-07: dasselbe fuer das Dach. Getrennt gefuehrt, nicht zusammengelegt — wer eine Decke aus
   // Kontur und danach ein Dach aus dem Umriss anlegt, soll den Hinweis zum DACH sehen.
   const [dachNaeherung, setDachNaeherung] = useState<boolean | null>(null);
@@ -467,6 +470,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       ? dachAbsage
       : dachNaeherung === true
       ? 'Dach als Näherung aus dem Gebäude-Umriss — für ein exaktes Dach zuerst eine Kontur zeichnen'
+      : bodenplatteHinweis !== null
+        ? bodenplatteHinweis
       : deckeNaeherung === true
         ? 'Decke als Näherung aus dem Gebäude-Umriss — für eine exakte Decke zuerst eine Kontur zeichnen'
         : null;
@@ -599,6 +604,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
 
   // D-c: genau EIN ausgewähltes Dach ⇒ Parameter-Panel; Änderungen laufen als UPDATE_ROOF-Command.
   const selectedRoof = scene?.roofs?.find((r) => primaerId === r.id) ?? null;
+  /** Z1-E4-1: dieselbe Form wie beim Dach — eigene Sammlung, eigene Auswahl. */
+  const selectedFoundationSlab = scene?.foundationSlabs?.find((b) => primaerId === b.id) ?? null;
   // AUF-48 Scheibe 4d: `aktDach` ist mit dem Eigenschaften-Panel umgezogen.
 
   // P2b-1: Mauerwerk-Katalog (materialId-Wert + Anzeige) + gängige Wandstärken (mm).
@@ -1042,6 +1049,40 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       setDachAbsage(null);
       store.getState().executeCommand({ type: 'ADD_ROOF', roof: dach });
       setDachNaeherung(!ausKontur);
+      setWerkzeug('auswahl');
+
+      return;
+    }
+
+    if (werkzeug === 'bodenplatte') {
+      // **Z1-E4-1 — die Platte entsteht auf der AKTIVEN Etage, nicht zwangsweise auf der untersten.**
+      //
+      // Kriterium (a) beschreibt den Normalfall (man arbeitet im EG, und das IST die unterste);
+      // Kriterium (c) entscheidet den Sonderfall ausdrücklich anders: *„Platte auf OG bei
+      // vorhandenem EG → Hinweis sichtbar, Platte ENTSTEHT."* Ein Zwang auf die unterste Etage
+      // würde (c) verletzen und den Keller mit eigener Sohle verbauen — den Yamas „eine je
+      // Geschoss" gerade möglich machen soll.
+      //
+      // Kontur schlägt Umriss, wie bei Decke und Dach — dieselbe Begründung, dieselbe Form.
+      const jetzt = new Date().toISOString();
+      const ausKontur = letzteKontur !== null && letzteKontur.length >= KONTUR_MIN_PUNKTE;
+      const erdberuehrt = istErdberuehrtVorbelegung((scene?.levels ?? []), level.id);
+      store.getState().executeCommand({
+        type: 'ADD_FOUNDATION_SLAB',
+        slab: {
+          id: uuid(), type: 'foundation_slab', levelId: level.id, visible: true, locked: false, tags: [],
+          createdAt: jetzt, updatedAt: jetzt,
+          polygon: ausKontur ? letzteKontur : gebaeudeUmriss(),
+          dickeMm: level.floorThickness,
+          // **Ohne erfassten Aufbau ist die Oberkante die Bezugshöhe selbst** — und genau deshalb
+          // schreibt das Panel dort „Aufbau nicht erfasst" statt einer Tiefe. Sobald Schichten
+          // gepflegt sind, wandert der Wert ins Negative (Yama 22.08. 22:08).
+          oberkanteMm: bodenplatteOberkanteMm(undefined, level.elevation),
+          erdberuehrt,
+          ...herkunftFuerNeueBodenplatte(ausKontur),
+        },
+      });
+      setBodenplatteHinweis(hinweisBodenplatte((scene?.levels ?? []), level.id));
       setWerkzeug('auswahl');
 
       return;
@@ -1496,6 +1537,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           selectedWall={selectedWall}
           selectedOpening={selectedOpening}
           selectedRoof={selectedRoof}
+          selectedFoundationSlab={selectedFoundationSlab}
           selectedStair={selectedStair}
           selectedStairParams={selectedStairParams}
           selectedObjekt={selectedObjekt}

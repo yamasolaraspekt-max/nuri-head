@@ -682,6 +682,21 @@ export const WERKZEUG_VERTRAEGE: readonly WerkzeugVertrag[] = [
     dienstMethode: 'services.architektur.execute(\'roof-window\', input)',
   },
   {
+    // Z1-E4-1. **`FoundationSlabCommand`, nicht `SlabCommand`** — den Namen fuehrt die Decke
+    // bereits (unten). Zwei Vertraege unter einer commandId waeren genau die Verwechslung,
+    // die dieses Blatt beendet.
+    werkzeugId: 'bodenplatte',
+    commandId: 'FoundationSlabCommand',
+    familie: 'create',
+    eingaben: ['placement', 'parameters', 'activeLevelId'],
+    ergebnisse: ['createdObjectIds'],
+    vorbedingungen: ['project.open', 'permission.edit', 'activeLevel.exists'],
+    seiteneffekte: ['model.revision.increment', 'autosave.markDirty', 'dependentResults.invalidate', 'renderer.refreshAffectedObjects'],
+    umkehrbar: true,
+    protokollpflichtig: true,
+    dienstMethode: 'services.architektur.execute(\'foundation-slab\', input)',
+  },
+  {
     werkzeugId: 'decke',
     commandId: 'SlabCommand',
     familie: 'create',

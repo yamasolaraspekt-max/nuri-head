@@ -4,11 +4,14 @@
  * Erzeugt je erkanntem Raum exakt die `raum_geometrien`-Struktur der Heizlast
  * (wberechnung/ticket): polygon (mm), wand_segmente mit grenzflaeche innen/aussen,
  * ABGELEITETEM azimut_grad (nur außen; Nord = +y) und den Öffnungen der Wand.
- * decke/boden: in P0 ehrlich null (kein erfundener bauteil_typ — Operanden-Gate).
+ * decke: in P0 ehrlich null (kein erfundener bauteil_typ — Operanden-Gate).
+ * boden: seit Z1-E4-1 'erdreich'/'boden', SOBALD eine erdberuehrte Bodenplatte gereicht wird —
+ * ohne sie unveraendert null. Der Grundsatz ist derselbe geblieben: gesetzt wird nur, was
+ * jemand modelliert hat.
  * Der spätere ProjektionsService (P2) ruft genau diese Funktion — der Vertrag ist
  * ab P0 durch das Fixture eingefroren (Abnahmekriterium 9).
  */
-import type { OpeningNode, RaumGeometrieProjektion, SceneNode, WallNode } from '../domain/scene.types';
+import type { FoundationSlabNode, OpeningNode, RaumGeometrieProjektion, SceneNode, WallNode } from '../domain/scene.types';
 import type { ErkannterRaum } from '../geometry/roomDetection';
 import { signierteFlaeche } from '../geometry/roomDetection';
 import { azimutDerNormalen } from '../geometry/wallGeometry';
@@ -26,6 +29,9 @@ const OEFFNUNGS_TYP = { window: 'fenster', door: 'tuer', opening: 'oeffnung' } a
  * @param nodes       Szene-Nodes des Geschosses (Öffnungen je Wand)
  * @param geschoss    Level-sortOrder
  * @param hoeheMm     Geschoss-Standardhöhe
+ * @param bodenplatte Z1-E4-1, OPTIONAL und additiv: die Bodenplatte dieses Geschosses, falls es
+ *                    eine gibt. **Ohne sie bleibt `boden` null wie bisher** — die fünf
+ *                    Bestandsaufrufer sind damit unverändert gültig.
  */
 export function projiziereRaum(
   raum: ErkannterRaum,
@@ -33,6 +39,7 @@ export function projiziereRaum(
   nodes: SceneNode[],
   geschoss: number,
   hoeheMm: number,
+  bodenplatte?: Pick<FoundationSlabNode, 'erdberuehrt'>,
 ): RaumGeometrieProjektion {
   // Kanten-Nutzung zählen: dieselbe ungerichtete Kante in ZWEI Räumen ⇒ Innenwand.
   const kantenSchluessel = (von: { x: number; y: number }, bis: { x: number; y: number }): string => {
@@ -120,6 +127,20 @@ export function projiziereRaum(
       };
     }),
     decke: null, // P0: ehrlich unbestimmt — kein erfundener Aufbau (Operanden-Gate)
-    boden: null,
+    /**
+     * **Z1-E4-1 (f) — die Grenzfläche Erdreich, sobald eine erdberührte Platte da ist.**
+     *
+     * `bauteil_typ: 'boden'` ist NICHT frei gewählt: das ist der Bauteiltyp, den der CRM führt
+     * (`UWertService.php` — `'boden' => [0.17, 0.00]`, *„abwärts, gegen Erdreich/unbeheizt"*).
+     * **Ein aus der Decke abgeleiteter Wert wäre falsch** — die Absage-Regel des Blattes nennt
+     * genau das, und die Zahlen belegen es: die Decke rechnet mit `[0.10, 0.04]` aufwärts.
+     *
+     * **Ohne erdberührte Platte bleibt es bei `null`, nicht bei einem geratenen Typ.** Was unter
+     * einer aufgestelzten Platte oder über einer Tiefgarage liegt, weiß hier niemand — und das
+     * Operanden-Gate verbietet, es zu erfinden. *Ehrlich unbestimmt schlägt plausibel falsch.*
+     */
+    boden: bodenplatte?.erdberuehrt === true
+      ? { grenzflaeche: 'erdreich', bauteil_typ: 'boden' }
+      : null,
   };
 }

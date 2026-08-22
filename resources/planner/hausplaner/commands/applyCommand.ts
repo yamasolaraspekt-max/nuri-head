@@ -11,7 +11,7 @@
  * - Ablehnung = CommandAbgelehnt-Throw VOR jeder Mutation relevanter Werte; der Store
  *   verwirft den Draft, die Szene bleibt unverändert.
  */
-import type { SceneDocument, SceneNode, WallNode, OpeningNode, RoofNode, RoofAufbau, CeilingNode, CeilingOeffnung } from '../domain/scene.types';
+import type { SceneDocument, SceneNode, WallNode, OpeningNode, RoofNode, RoofAufbau, CeilingNode, CeilingOeffnung, FoundationSlabNode } from '../domain/scene.types';
 import { CommandAbgelehnt, type HausplanerCommand } from '../domain/commands.types';
 import { wandLaenge } from '../geometry/wallGeometry';
 import { parametereZuTreppe } from '../geometry/treppeObjekt';
@@ -112,6 +112,31 @@ function pruefeDeckeGanzzahlig(ceiling: CeilingNode): void {
 function pruefeDeckeProLevel(draft: SceneDocument, ceiling: CeilingNode): void {
   if ((draft.ceilings ?? []).some((c) => c.id !== ceiling.id && c.levelId === ceiling.levelId)) {
     throw new CommandAbgelehnt(`Level ${ceiling.levelId} hat bereits eine Decke (max. 1 je Level).`, 'decke_pro_level_vorhanden');
+  }
+}
+
+/** mm-Invariante der Bodenplatten-Geometrie (Umriss + Durchbrüche + Dicke + Oberkante). */
+function pruefeBodenplatteGanzzahlig(slab: FoundationSlabNode): void {
+  const koords = slab.polygon.flatMap((p) => [p.x, p.y]);
+  const lochKoords = (slab.durchbrueche ?? []).flatMap((d) => d.polygon.flatMap((p) => [p.x, p.y]));
+  // `oberkanteMm` ist hier MIT geprüft und darf negativ sein — pruefeGanzzahlig prüft Ganzzahligkeit,
+  // nicht das Vorzeichen. Bei erdberührter Platte IST der Wert negativ (Yama 22.08. 22:08).
+  pruefeGanzzahlig([...koords, ...lochKoords, slab.dickeMm, slab.oberkanteMm], 'Bodenplatte');
+}
+
+/**
+ * **Je Level max. 1 Bodenplatte — nicht je Gebäude.**
+ *
+ * *Yamas Entscheidung vom 22.08., 22:08.* Eine gebäudeweite Sperre wäre die naheliegende und
+ * falsche Lesart: sie verbaut den Keller mit eigener Sohle. Die Prüfung liegt deshalb auf
+ * derselben Ebene wie `pruefeDeckeProLevel` — dieselbe Frage, dieselbe Antwortform.
+ */
+function pruefeBodenplatteProLevel(draft: SceneDocument, slab: FoundationSlabNode): void {
+  if ((draft.foundationSlabs ?? []).some((b) => b.id !== slab.id && b.levelId === slab.levelId)) {
+    throw new CommandAbgelehnt(
+      `Level ${slab.levelId} hat bereits eine Bodenplatte (max. 1 je Geschoss).`,
+      'bodenplatte_pro_level_vorhanden',
+    );
   }
 }
 
@@ -325,6 +350,51 @@ export function applyCommand(draft: SceneDocument, command: HausplanerCommand, j
       draft.ceilings = draft.ceilings.filter((c) => c.id !== command.ceilingId);
       if (draft.ceilings.length === vorher) {
         throw new CommandAbgelehnt(`Decke ${command.ceilingId} existiert nicht.`, 'decke_unbekannt');
+      }
+      break;
+    }
+
+    case 'ADD_FOUNDATION_SLAB': {
+      const slab = command.slab;
+      if (!draft.levels.some((l) => l.id === slab.levelId)) {
+        throw new CommandAbgelehnt(`Level ${slab.levelId} existiert nicht.`, 'level_unbekannt');
+      }
+      if (!Array.isArray(draft.foundationSlabs)) {
+        draft.foundationSlabs = []; // Robustheit für Drafts ohne die Sammlung (Migration ist Lade-seitig).
+      }
+      pruefeBodenplatteProLevel(draft, slab);
+      // **KEINE automatischen Durchbrüche.** Die Decke bekommt hier ihr Treppenauge; die
+      // Bodenplatte nicht — unter ihr liegt kein Geschoss, in das eine Treppe führen könnte.
+      // Das ist die fachliche Abgrenzung, nicht eine vergessene Zeile.
+      const gespeichert: FoundationSlabNode = { ...slab, createdAt: jetztIso, updatedAt: jetztIso };
+      pruefeBodenplatteGanzzahlig(gespeichert);
+      draft.foundationSlabs.push(gespeichert);
+      break;
+    }
+
+    case 'UPDATE_FOUNDATION_SLAB': {
+      if (!Array.isArray(draft.foundationSlabs)) {
+        draft.foundationSlabs = [];
+      }
+      const slab = draft.foundationSlabs.find((b) => b.id === command.slabId);
+      if (!slab) {
+        throw new CommandAbgelehnt(`Bodenplatte ${command.slabId} existiert nicht.`, 'bodenplatte_unbekannt');
+      }
+      Object.assign(slab as object, command.changes);
+      slab.updatedAt = jetztIso;
+      pruefeBodenplatteProLevel(draft, slab); // falls levelId geändert wurde
+      pruefeBodenplatteGanzzahlig(slab);
+      break;
+    }
+
+    case 'REMOVE_FOUNDATION_SLAB': {
+      if (!Array.isArray(draft.foundationSlabs)) {
+        draft.foundationSlabs = [];
+      }
+      const vorher = draft.foundationSlabs.length;
+      draft.foundationSlabs = draft.foundationSlabs.filter((b) => b.id !== command.slabId);
+      if (draft.foundationSlabs.length === vorher) {
+        throw new CommandAbgelehnt(`Bodenplatte ${command.slabId} existiert nicht.`, 'bodenplatte_unbekannt');
       }
       break;
     }

@@ -134,6 +134,10 @@ export const WERKZEUG_THEMEN: readonly WerkzeugThema[] = [
       'fenster',
       'tuer',
       'treppe',
+      // Z1-E4-1: die Bodenplatte gehoert zur Architektur wie die Decke — sie steht direkt neben
+      // ihr, weil beide dasselbe missverstaendlich benachbarte Bauteil sind und der Leser sie
+      // hier auseinanderhalten koennen muss.
+      'bodenplatte',
       'decke',
       // Z-05-N1: die Kontur ist der Umriss eines Bauteils und gehoert damit zur Architektur —
       // nicht zu den Zeichen-Primitiven, die stillgelegt sind.

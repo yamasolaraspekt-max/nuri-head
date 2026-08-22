@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
+use App\Domain\Hausplaner\Models\HausplanerDocument;
 
 /**
  * W-A — Übernehmen-Knopf (Szene → Auslegung): POST-Route + Rechte-Gate + Staleness-Anzeige.
@@ -75,7 +76,7 @@ class UebernahmeKnopfTest extends TestCase
         return [
             'id' => "doc-{$alt}",
             'projectId' => $alt,
-            'schemaVersion' => 3,
+            'schemaVersion' => HausplanerDocument::SCHEMA_VERSION,
             'units' => 'mm',
             'revision' => 1,
             'settings' => ['gridSize' => 100, 'snapEnabled' => true, 'angleSnap' => 15],
@@ -269,7 +270,7 @@ class UebernahmeKnopfTest extends TestCase
         $geaendert = $this->zweiRaumSzene($alt);
         $geaendert['nodes'][6] = $this->wall('mid', 6000, 0, 6000, 5000);
         $this->actingAs($u)->putJson("/admin/hausplaner/objekt/{$alt}/dokument", [
-            'base_revision' => 1, 'schema_version' => 3, 'scene' => $geaendert,
+            'base_revision' => 1, 'schema_version' => HausplanerDocument::SCHEMA_VERSION, 'scene' => $geaendert,
         ])->assertOk();
 
         // **Ein Fund, den die alte Anzeige verdeckt hat:** `szene_revision` fuehrt hier die
@@ -325,7 +326,7 @@ class UebernahmeKnopfTest extends TestCase
         $geaendert = $this->zweiRaumSzene($alt);
         $geaendert['nodes'][6] = $this->wall('mid', 6000, 0, 6000, 5000);
         $this->actingAs($u)->putJson("/admin/hausplaner/objekt/{$alt}/dokument", [
-            'base_revision' => 1, 'schema_version' => 3, 'scene' => $geaendert,
+            'base_revision' => 1, 'schema_version' => HausplanerDocument::SCHEMA_VERSION, 'scene' => $geaendert,
         ])->assertOk();
 
         $res = $this->actingAs($u)->post("/admin/hausplaner/objekt/{$alt}/uebernehmen");

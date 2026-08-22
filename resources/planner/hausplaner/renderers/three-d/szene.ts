@@ -91,6 +91,10 @@ const FARBE_WAND = 0xd9dee5;      // heller Putz — Form über Schatten + Kante
 const FARBE_BODEN = 0xe3d8c4;     // warmer, klar erkennbarer Bodenton (hebt sich von Wänden/Hintergrund ab)
 const FARBE_DECKE = 0xeef0f2;     // helle, kühle Decke — nur von unten/innen sichtbar (Rückseiten-Culling)
 const FARBE_DACH = 0xc0895f;      // Terrakotta/Braun (neutral, keine Statusfarbe)
+const FARBE_BODENPLATTE = 0x9aa0a6;  // Z1-E4-1: Sichtbeton-Grau — bewusst KÜHLER und dunkler als
+                                    // FARBE_DECKE, damit Platte und Zwischendecke im selben Bild
+                                    // unterscheidbar bleiben (genau der Verwechslungsfall, den
+                                    // dieses Blatt beendet).
 const FARBE_AUSWAHL = 0xa3e635;   // #a3e635 Lime — einzige Akzentfarbe dieses Renderers; NICHT T.brand (#7fae1c)
 const FARBE_GEKLEMMT = 0xe8b93c;  // Amber — Kante 2 sichtbar markiert
 
@@ -502,6 +506,46 @@ export class HausplanerDreiDSzene implements RendererAdapter {
       mesh.position.y = aussen.y;
       mesh.receiveShadow = true;
       mesh.userData.nodeId = decke.id;
+      this.inhalt.add(mesh);
+    }
+
+    // **Bodenplatte (Z1-E4-1): additiver Block, kein Renderer-Umbau.**
+    //
+    // Struktur wie die Geschossdecke — Shape mit Löchern, selektierbar über `userData.nodeId`.
+    // **Zwei Unterschiede, beide fachlich:**
+    //   1. Die Höhe kommt aus `slab.oberkanteMm` und wird NICHT aus dem Level abgeleitet. Die
+    //      Platte liegt unter ±0,00 (Yama 22.08. 22:08); ein `deckenOberkanteMm` hier wäre die
+    //      Wandoberkante und damit rund 2,5 m zu hoch.
+    //   2. `durchbrueche` statt `oeffnungen`, und es gibt keine Treppen-Automatik — unter der
+    //      Platte liegt nichts, in das eine Treppe führen könnte.
+    for (const platte of (dokument.foundationSlabs ?? []).filter((b) => b.levelId === level.id && b.visible !== false)) {
+      if (platte.polygon.length < 3) {
+        continue;
+      }
+      const aussen = bodenPunkteThree(platte.polygon, platte.oberkanteMm);
+      const form = new THREE.Shape();
+      aussen.punkte.forEach((p, i) => (i === 0 ? form.moveTo(p.x, -p.z) : form.lineTo(p.x, -p.z)));
+      for (const loch of platte.durchbrueche ?? []) {
+        if (loch.polygon.length < 3) {
+          continue;
+        }
+        const l = bodenPunkteThree(loch.polygon, platte.oberkanteMm);
+        const pfad = new THREE.Path();
+        l.punkte.forEach((p, i) => (i === 0 ? pfad.moveTo(p.x, -p.z) : pfad.lineTo(p.x, -p.z)));
+        pfad.closePath();
+        form.holes.push(pfad);
+      }
+      const mesh = new THREE.Mesh(
+        new THREE.ShapeGeometry(form),
+        new THREE.MeshStandardMaterial({
+          color: this.ausgewaehlt.has(platte.id) ? FARBE_AUSWAHL : FARBE_BODENPLATTE,
+          side: THREE.DoubleSide,
+        }),
+      );
+      mesh.rotation.x = -Math.PI / 2;
+      mesh.position.y = aussen.y;
+      mesh.receiveShadow = true;
+      mesh.userData.nodeId = platte.id;
       this.inhalt.add(mesh);
     }
 

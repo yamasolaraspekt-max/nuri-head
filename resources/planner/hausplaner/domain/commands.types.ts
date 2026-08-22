@@ -3,7 +3,7 @@
  * Szene; jede Änderung ist ein Command. Der Store führt Commands über Immer
  * `produceWithPatches` aus — die inversen Patches sind die Undo-Historie.
  */
-import type { SceneNode, RoofNode, RoofAufbau, CeilingNode, Level } from './scene.types';
+import type { SceneNode, RoofNode, RoofAufbau, CeilingNode, FoundationSlabNode, Level } from './scene.types';
 
 export type HausplanerCommand =
   | { type: 'ADD_NODE'; node: SceneNode }
@@ -29,6 +29,13 @@ export type HausplanerCommand =
   | { type: 'ADD_CEILING'; ceiling: CeilingNode }
   | { type: 'UPDATE_CEILING'; ceilingId: string; changes: Record<string, unknown> }
   | { type: 'REMOVE_CEILING'; ceilingId: string }
+  // Bodenplatte-Commands (Z1-E4-1): operieren auf SceneDocument.foundationSlabs (Muster ceilings,
+  // Teil des Immer-Drafts ⇒ Undo/Redo/409 automatisch). **Je LEVEL max. 1 Platte, nicht je
+  // Gebäude** (Yama 22.08. 22:08) — ein Keller mit eigener Sohle bleibt damit möglich. Anders als
+  // die Decke bekommt die Platte KEINE automatischen Treppendurchbrüche: unter ihr liegt nichts.
+  | { type: 'ADD_FOUNDATION_SLAB'; slab: FoundationSlabNode }
+  | { type: 'UPDATE_FOUNDATION_SLAB'; slabId: string; changes: Record<string, unknown> }
+  | { type: 'REMOVE_FOUNDATION_SLAB'; slabId: string }
   | {
       type: 'MOVE_NODE';
       nodeId: string;
@@ -61,7 +68,9 @@ export type AblehnungsGrund =
   | 'dach_unbekannt'
   | 'aufbau_unbekannt'
   | 'decke_pro_level_vorhanden'
-  | 'decke_unbekannt';
+  | 'decke_unbekannt'
+  | 'bodenplatte_pro_level_vorhanden'
+  | 'bodenplatte_unbekannt';
 
 /**
  * Definierter Fehlerzustand: Command verletzt eine Regel — Szene bleibt unverändert.

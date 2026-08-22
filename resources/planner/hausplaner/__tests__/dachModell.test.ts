@@ -10,6 +10,8 @@ import type { SceneDocument, RoofNode, WallNode } from '../domain/scene.types';
 import { applyCommand } from '../commands/applyCommand';
 import { CommandAbgelehnt, type HausplanerCommand } from '../domain/commands.types';
 import { sceneDocumentSchema, migriereSzene } from '../domain/validation';
+// Z1-E4-1: die Versionszahl kommt aus der Konstante, nicht aus einer Kopie.
+import { SCHEMA_VERSION } from '../domain/scene.types';
 
 enablePatches();
 
@@ -19,7 +21,7 @@ function leereSzene(): SceneDocument {
   return {
     id: 'doc-test',
     projectId: 1,
-    schemaVersion: 3,
+    schemaVersion: SCHEMA_VERSION,
     revision: 1,
     units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
@@ -76,7 +78,7 @@ function fuehreAus(scene: SceneDocument, command: HausplanerCommand) {
 // ist jetzt 3. *Die tragende Aussage bleibt Wort für Wort dieselbe — „sonst UNVERÄNDERT" — und
 // sie wird unten um die zwei neuen Felder ERWEITERT, nicht ersetzt.* Kein Vergleich ist
 // weggefallen; die Liste der byte-gleichen Felder steht vollständig wie zuvor.
-test('Migration v1→v3: setzt schemaVersion 3 + roofs [], sonst UNVERÄNDERT', () => {
+test('Migration v1→v4: setzt schemaVersion 4 + roofs/ceilings/foundationSlabs [], sonst UNVERÄNDERT', () => {
   const v1 = {
     id: 'doc-v1',
     projectId: 7,
@@ -92,8 +94,11 @@ test('Migration v1→v3: setzt schemaVersion 3 + roofs [], sonst UNVERÄNDERT', 
 
   const m = migriereSzene(v1) as Record<string, unknown>;
 
-  assert.equal(m.schemaVersion, 3);
+  assert.equal(m.schemaVersion, SCHEMA_VERSION);
   assert.deepEqual(m.roofs, []);
+  // Z1-E4-1: die neue Sammlung kommt LEER dazu. `[]` heißt „nicht erfasst", nicht „es gibt keine" —
+  // eine aus dem Umriss abgeleitete Platte wäre geraten, nicht migriert.
+  assert.deepEqual(m.foundationSlabs, []);
   // Kein stilles Umschreiben von Bestand: alle anderen Felder byte-gleich.
   assert.equal(m.id, v1.id);
   assert.equal(m.projectId, v1.projectId);

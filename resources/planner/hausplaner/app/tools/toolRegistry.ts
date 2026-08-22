@@ -36,6 +36,38 @@ const AUSWAEHLBAR = ['wall', 'window', 'door', 'opening', 'zone', 'object', 'rou
  */
 export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
   {
+    // **Z1-E4-1 — die Bodenplatte, endlich als eigener Eintrag.**
+    //
+    // Der Kommentar am Decken-Eintrag unten sagte: *„Die Bodenplatte kommt als eigener Knoten mit
+    // GP-0; bis dahin wird sie hier nicht versprochen."* GP-0 liegt vor, das Blatt ist erteilt —
+    // hier steht sie.
+    //
+    // **`bauteilKind: 'foundation_slab'`, ausdrücklich NICHT `'ceiling'`.** Die Absage-Regel von
+    // Kriterium (a) nennt genau das: ein Eintrag auf `ceiling` sperrt die Zwischendecke desselben
+    // Geschosses oder ist von ihr nicht zu unterscheiden. *Das war der Blocker, der `Z1-W2-8-b`
+    // gestrichen hat.*
+    id: 'bodenplatte',
+    label: 'Bodenplatte',
+    icon: 'bodenplatte',
+    art: 'werkzeug',
+    groupId: 'gebaeude',
+    supportedWorkspaces: [WORKSPACE_ARCHITEKTUR],
+    supportedViews: ['2d', 'split'],
+    // **Kürzel `B`** — frei geprüft gegen die vorhandenen (W/F/T/D/K/S/A/…); siehe Zusage in
+    // werkzeugRegistry.test.ts, die doppelte Kürzel ablehnt.
+    shortcut: 'B',
+    bauteilKind: 'foundation_slab',
+    helpText: 'Bodenplatte auf der untersten Etage aufsetzen — das untere Ende der Höhenkette.',
+    meaning: 'Tragende Bodenplatte mit Dicke, Höhenlage und Aufbau erzeugen.',
+    usageArea: 'Architektur, Statik, Heizlast.',
+    group: 'Architektur',
+    tooltip: {
+      title: 'Bodenplatte',
+      body: 'Tragende Bodenplatte auf der untersten Etage — eigener Knoten, nicht die Zwischendecke.',
+      usage: 'Einsatzbereich: Architektur, Statik, Heizlast.',
+    },
+  },
+  {
     id: 'auswahl',
     // AUF-35a: sichtbar heisst das Werkzeug **Markieren** (Yamas Referenz vom 25.07.). Die id
     // bleibt `auswahl`, das Kuerzel bleibt `V` — beides ist gespeicherte bzw. eingeuebte Wahrheit
@@ -148,7 +180,8 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     // und einen Eintrag auf `bauteilKind: 'ceiling'` ausdruecklich UNTERSAGT hat, verspricht
     // derselbe Titel einen Bedieneintrag, den es nicht geben wird — er wurde durch die
     // Streichung UNEHRLICHER, nicht harmloser. Genau davor schuetzt (c).
-    // Die Bodenplatte kommt als eigener Knoten mit GP-0; bis dahin wird sie hier nicht versprochen.
+    // Die Bodenplatte ist seit Z1-E4-1 ein eigener Eintrag (oben, `id: 'bodenplatte'`) — der
+    // Satz „bis dahin wird sie hier nicht versprochen" ist damit eingelöst, nicht mehr offen.
     meaning: 'Zwischendecke oder Abschlussdecke erzeugen — massiv oder mehrschichtig.',
     usageArea: 'Architektur, Statik, Heizlast.',
     group: 'Architektur',
@@ -367,7 +400,11 @@ export const PAKET_WERKZEUGE = 110;
 export const AUS_PAKET_GEHOBEN = ['bemassen', 'flaeche-messen', 'trimmen'] as const;
 
 /** Werkzeuge, die NACH dem 110er-Fachpaket dazugekommen sind. */
-export const EIGENE_WERKZEUGE = ['kontur'] as const;
+// Z1-E4-1: `bodenplatte` ist das zweite. **Diese Liste ist der eigentliche Ort der Erweiterung** —
+// FIX_ZONE, WERKZEUGE_GESAMT und die Vertrags-/Themen-Bilanzen rechnen aus ihr, statt Zahlen zu
+// tippen. *Wer hier einträgt, zieht ein Dutzend Zusagen automatisch mit; wer es vergisst, sieht
+// sie alle rot — und genau das ist die Absicht.*
+export const EIGENE_WERKZEUGE = ['kontur', 'bodenplatte'] as const;
 
 /** Die erwartete Gesamtzahl — eine Stelle, acht Leser. */
 export const WERKZEUGE_GESAMT = PAKET_WERKZEUGE + EIGENE_WERKZEUGE.length;

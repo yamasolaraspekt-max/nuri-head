@@ -89,6 +89,19 @@ export function herkunftFuerNeueDecke(ausKontur: boolean): Pick<MitFreigabe, 'ge
 }
 
 /**
+ * **Welchen Status bekommt eine FRISCH ANGELEGTE Bodenplatte?** — Z1-E4-1.
+ *
+ * Zeichengleich mit `herkunftFuerNeueDecke` und `herkunftFuerNeuesDach`: dieselbe Frage am
+ * dritten Bauteil, deshalb dieselbe Form. *Drei Bauteile mit derselben Regel duerfen nicht drei
+ * Regeln haben.*
+ */
+export function herkunftFuerNeueBodenplatte(ausKontur: boolean): Pick<MitFreigabe, 'geometrieHerkunft' | 'freigabe'> {
+  return ausKontur
+    ? { geometrieHerkunft: 'manuell', freigabe: 'bestaetigt' }
+    : { geometrieHerkunft: 'abgeleitet', freigabe: 'vorschlag' };
+}
+
+/**
  * **Welchen Status bekommt ein FRISCH ANGELEGTES Dach?** — Z-07.
  *
  * Bis heute stand hier eine Konstante mit der Begründung *„es gibt keinen Weg, das Dach aus einer

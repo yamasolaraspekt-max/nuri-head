@@ -23,8 +23,12 @@ class HausplanerDocument extends Model
      * naechsten Anheben auseinander — und zwar still, weil beide fuer sich gruen bleiben.*
      * Die TypeScript-Seite fuehrt dieselbe Zahl in `domain/scene.types.ts` (`SCHEMA_VERSION`);
      * die zwei Sprachen koennen sich keine Konstante teilen, aber je Sprache genuegt eine.
+     *
+     * Z1-E4-1: 3 -> 4 (Bodenplatte als eigene Sammlung `foundationSlabs`). Das JSON-Schema, gegen
+     * das SceneDocumentValidator prueft, wird aus Zod ERZEUGT (`npm run schema:hausplaner`) — es
+     * traegt die neue Sammlung automatisch und wurde nicht von Hand gepflegt.
      */
-    public const SCHEMA_VERSION = 3;
+    public const SCHEMA_VERSION = 4;
 
     protected $table = 'hausplaner_documents';
 

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
+use App\Domain\Hausplaner\Models\HausplanerDocument;
 
 /** P2-Vertrag: Nur eine vollständig Zod-ladbare v2-Szene darf persistiert werden. */
 class HausplanerSpeichernNutzlastTest extends TestCase
@@ -33,7 +34,7 @@ class HausplanerSpeichernNutzlastTest extends TestCase
             // Z-06-N1: Spalte und Szene tragen dieselbe Version. Ein Fixture, dessen Spalte 2
             // sagt und dessen `scene_json` 3 ist, widerspricht sich selbst — und der Widerspruch
             // wandert in jede Zusage, die darauf aufsetzt.
-            'schema_version' => 3,
+            'schema_version' => HausplanerDocument::SCHEMA_VERSION,
             'revision' => $revision,
             'scene_json' => json_encode($scene),
             'checksum' => 'checksum-vorher',
@@ -67,7 +68,7 @@ class HausplanerSpeichernNutzlastTest extends TestCase
         return [
             'id' => "doc-{$alt}",
             'projectId' => $alt,
-            'schemaVersion' => 3,
+            'schemaVersion' => HausplanerDocument::SCHEMA_VERSION,
             'revision' => 1,
             'units' => 'mm',
             'settings' => ['gridSize' => 100, 'snapEnabled' => true, 'angleSnap' => 15],
@@ -108,11 +109,13 @@ class HausplanerSpeichernNutzlastTest extends TestCase
     }
 
     /** @param array<string, mixed> $scene */
-    private function speichere(int $alt, array $scene, int $baseRevision = 1, int $schemaVersion = 3)
+    // Z1-E4-1: der Vorgabewert folgt der Konstante statt einer Kopie — beim Sprung 3→4 hat
+    // genau diese getippte 3 alle Speicher-Zusagen auf 422 gedreht.
+    private function speichere(int $alt, array $scene, int $baseRevision = 1, ?int $schemaVersion = null)
     {
         return $this->actingAs($this->user())->putJson("/admin/hausplaner/objekt/{$alt}/dokument", [
             'base_revision' => $baseRevision,
-            'schema_version' => $schemaVersion,
+            'schema_version' => $schemaVersion ?? HausplanerDocument::SCHEMA_VERSION,
             'scene' => $scene,
         ]);
     }
@@ -145,11 +148,153 @@ class HausplanerSpeichernNutzlastTest extends TestCase
         // Z-06-N1: die Spalte FOLGT der Szene (`SpeichereHausplanerDokument:39`), und die Szene
         // ist seit dem N1-Bau v3. Die Zusage misst weiterhin dasselbe — dass Spalte und Szene
         // nicht auseinanderlaufen —, nur gegen die Version, die heute gilt.
-        $this->assertSame(3, (int) $doc['schema_version']);
+        $this->assertSame(HausplanerDocument::SCHEMA_VERSION, (int) $doc['schema_version']);
         $this->assertSame((int) $gespeichert['schemaVersion'], (int) $doc['schema_version'],
             'Spalte und Szene müssen dieselbe Schema-Version tragen.');
         $this->assertSame(2, (int) $doc['revision']);
         $this->assertSame($antwort->json('checksum'), $doc['checksum']);
+    }
+
+    /**
+     * **Z1-E4-1 (d) — die Bodenplatte erreicht den Speicherweg.**
+     *
+     * Die Absage-Regel des Blattes zu Kriterium (i) nennt den Grund: *„Ein neues Modellfeld ohne
+     * PHP-Test erreicht den Speicherweg nicht — und der Speicherweg ist bei einem Schema-Sprung
+     * die riskanteste Stelle."*
+     *
+     * Geprueft wird 200 UND die vollstaendige Persistenz: ein Feld, das der Validator durchlaesst
+     * und die Ablage danach abschneidet, waere gruen und trotzdem verloren.
+     */
+    public function test_szene_mit_bodenplatte_wird_gespeichert_und_vollstaendig_persistiert(): void
+    {
+        $alt = $this->objekt(560);
+        $scene = $this->v2SzeneMitDach($alt);
+        $scene['foundationSlabs'] = [[
+            ...$this->basisNode('b1', 'foundation_slab'),
+            'polygon' => [['x' => 0, 'y' => 0], ['x' => 8000, 'y' => 0], ['x' => 8000, 'y' => 10000], ['x' => 0, 'y' => 10000]],
+            'dickeMm' => 250,
+            // NEGATIV — Yamas Bezugshoehe (22.08. 22:08). Genau der Wert, den ein `mmPos` im
+            // Zod-Schema abgelehnt haette, und deshalb steht er hier und nicht eine 180.
+            'oberkanteMm' => -180,
+            'erdberuehrt' => true,
+            'schichten' => [['materialId' => 'daemmung', 'dickeMm' => 120], ['materialId' => 'estrich', 'dickeMm' => 60]],
+            'geometrieHerkunft' => 'manuell',
+            'freigabe' => 'bestaetigt',
+        ]];
+
+        $this->speichere($alt, $scene)->assertOk();
+
+        $gespeichert = json_decode($this->dokumentZeile($alt)['scene_json'], true);
+        $erwartet = $scene;
+        $erwartet['revision'] = 2;
+        $this->assertEquals($erwartet, $gespeichert, 'Die Bodenplatte muss unbeschnitten persistiert werden.');
+        $this->assertSame(-180, $gespeichert['foundationSlabs'][0]['oberkanteMm'],
+            'Das Vorzeichen der Hoehenkote hat den Speicherweg nicht ueberlebt.');
+    }
+
+    /**
+     * **Z1-E4-1 (d) — und der Bestand bleibt unberuehrt.**
+     *
+     * Ein Dokument OHNE die Sammlung muss weiterhin 200 liefern. *Waere `foundationSlabs`
+     * pflichtig geworden, waere jedes Bestandsdokument ab sofort ein 422* — und der Fehler faellt
+     * genau dort auf, wo niemand mehr hinsieht: beim Speichern eines alten Hauses.
+     */
+    public function test_szene_ohne_bodenplatte_bleibt_speicherbar(): void
+    {
+        $alt = $this->objekt(570);
+        $scene = $this->v2SzeneMitDach($alt);
+        $this->assertArrayNotHasKey('foundationSlabs', $scene, 'die Vorlage traegt schon eine Platte — die Zusage misst dann nichts');
+
+        $this->speichere($alt, $scene)->assertOk();
+
+        $gespeichert = json_decode($this->dokumentZeile($alt)['scene_json'], true);
+        $this->assertArrayNotHasKey('foundationSlabs', $gespeichert,
+            'dem Bestandsdokument wurde eine leere Sammlung untergeschoben — leer heisst nicht erfasst, nicht "es gibt keine"');
+    }
+
+    /**
+     * **Z1-E4-1 (d2) — die Spiegelung, je Sammlung eine Zusage.**
+     *
+     * Der Dirigent, 22:52, in Yamas Namen: *„Bauform: ein TEST, der die Spiegelung prueft — kein
+     * Kommentar, der sie behauptet."* Genau deshalb steht der Fall hier dreimal und nicht einmal
+     * mit einer Schleife: **faellt eine Sammlung aus der Spiegelung, soll GENAU sie rot werden**,
+     * nicht „irgendeine der drei".
+     *
+     * **Die Huellenversion ist die AKTUELLE.** Mit einer alten Version käme der 422 aus der
+     * Versionsregel (`in:SCHEMA_VERSION`) und die Zusage waere grün, ohne die Level-Pruefung je
+     * berührt zu haben — ein Test, der aus dem falschen Grund besteht.
+     *
+     * @param array<string, mixed> $eintrag
+     */
+    private function assert422WegenUnbekanntemLevel(int $seed, string $sammlung, array $eintrag, string $bezeichnung): void
+    {
+        $alt = $this->objekt($seed);
+        $vorher = $this->dokumentZeile($alt);
+        $scene = $this->v2SzeneMitDach($alt);
+        $scene[$sammlung] = [$eintrag];
+
+        $antwort = $this->speichere($alt, $scene)->assertStatus(422);
+
+        $this->assertStringContainsString('unbekanntes Level', json_encode($antwort->json()),
+            "Der 422 nennt den Grund nicht — er koennte aus einer ganz anderen Regel stammen.");
+        $this->assertStringContainsString($bezeichnung, json_encode($antwort->json()),
+            "Die Meldung nennt die Sammlung nicht beim Namen ({$bezeichnung}).");
+        $this->assertSame($vorher, $this->dokumentZeile($alt), '422 darf nichts veraendert haben.');
+    }
+
+    public function test_decke_auf_unbekanntem_level_wird_abgelehnt(): void
+    {
+        $this->assert422WegenUnbekanntemLevel(580, 'ceilings', [
+            ...$this->basisNode('c1', 'ceiling'),
+            'levelId' => 'gibt-es-nicht',
+            'polygon' => [['x' => 0, 'y' => 0], ['x' => 8000, 'y' => 0], ['x' => 8000, 'y' => 10000]],
+            'dickeMm' => 200,
+            'geometrieHerkunft' => 'manuell', 'freigabe' => 'bestaetigt',
+        ], 'Decke');
+    }
+
+    public function test_dach_auf_unbekanntem_level_wird_abgelehnt(): void
+    {
+        $this->assert422WegenUnbekanntemLevel(590, 'roofs', [
+            ...$this->basisNode('r9', 'roof'),
+            'levelId' => 'gibt-es-nicht',
+            'polygon' => [['x' => 0, 'y' => 0], ['x' => 8000, 'y' => 0], ['x' => 8000, 'y' => 10000]],
+            'roofType' => 'sattel', 'neigungGrad' => 35, 'firstAzimutGrad' => 90,
+            'ueberstandMm' => 500, 'traufhoeheMm' => 2500,
+            'geometrieHerkunft' => 'manuell', 'freigabe' => 'bestaetigt',
+        ], 'Dach');
+    }
+
+    public function test_bodenplatte_auf_unbekanntem_level_wird_abgelehnt(): void
+    {
+        $this->assert422WegenUnbekanntemLevel(600, 'foundationSlabs', [
+            ...$this->basisNode('b9', 'foundation_slab'),
+            'levelId' => 'gibt-es-nicht',
+            'polygon' => [['x' => 0, 'y' => 0], ['x' => 8000, 'y' => 0], ['x' => 8000, 'y' => 10000]],
+            'dickeMm' => 250, 'oberkanteMm' => -180, 'erdberuehrt' => true,
+            'geometrieHerkunft' => 'manuell', 'freigabe' => 'bestaetigt',
+        ], 'Bodenplatte');
+    }
+
+    /**
+     * **Die Gegenprobe zu den drei — sonst waere „422" auch mit einer Sammlung erfuellt, die
+     * IMMER abgelehnt wird.** Dieselben drei Eintraege auf einem EXISTIERENDEN Level gehen durch.
+     */
+    public function test_alle_drei_sammlungen_auf_bekanntem_level_gehen_durch(): void
+    {
+        $alt = $this->objekt(610);
+        $scene = $this->v2SzeneMitDach($alt);
+        $scene['ceilings'] = [[
+            ...$this->basisNode('c1', 'ceiling'), 'polygon' => [['x' => 0, 'y' => 0], ['x' => 8000, 'y' => 0], ['x' => 8000, 'y' => 10000]],
+            'dickeMm' => 200, 'geometrieHerkunft' => 'manuell', 'freigabe' => 'bestaetigt',
+        ]];
+        $scene['foundationSlabs'] = [[
+            ...$this->basisNode('b1', 'foundation_slab'), 'polygon' => [['x' => 0, 'y' => 0], ['x' => 8000, 'y' => 0], ['x' => 8000, 'y' => 10000]],
+            'dickeMm' => 250, 'oberkanteMm' => -180, 'erdberuehrt' => true,
+            'geometrieHerkunft' => 'manuell', 'freigabe' => 'bestaetigt',
+        ]];
+
+        $this->speichere($alt, $scene)->assertOk();
     }
 
     public function test_unbekanntes_zukunftsfeld_ohne_schemawechsel_wird_abgelehnt(): void

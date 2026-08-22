@@ -58,7 +58,9 @@ test('Leiste == Fix-Zone: dieselben ids in derselben Reihenfolge wie die alte Re
     'A2 muss fuer die nicht gehobenen Werkzeuge verhaltensneutral sein — sonst wandern Icons',
   );
   // **Z1-W2-8:** Baureihenfolge statt gewachsener Folge — `dach` steht jetzt hinten.
-  assert.deepEqual(neu, ['auswahl', 'wand', 'fenster', 'tuer', 'treppe', 'decke', 'kontur', 'dach']);
+  // **Z1-E4-1:** `bodenplatte` kommt an Platz 1 dazu (Yama 22.08. 22:08) — die uebrigen acht
+  // ruecken geschlossen nach, ihre Folge zueinander ist unveraendert.
+  assert.deepEqual(neu, ['bodenplatte', 'auswahl', 'wand', 'fenster', 'tuer', 'treppe', 'decke', 'kontur', 'dach']);
 });
 
 // --- 2) Es gibt nur noch EINE zuständige Stelle (Abnahmekriterium 5) ---------------------------

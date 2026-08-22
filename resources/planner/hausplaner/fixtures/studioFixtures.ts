@@ -8,7 +8,10 @@
  * Rein Daten (kein three/WebGL, keine Date.now → feste ISO-Zeit) ⇒ unit-testbar durch die volle
  * Pipeline (migriereSzene → Schema → Integrität). Additiv/hinter Flag: ohne `?fixture=` unverändert.
  */
-import type { SceneDocument, WallNode, RoofNode, CeilingNode, ObjectNode, Level } from '../domain/scene.types';
+import type { SceneDocument, WallNode, RoofNode, CeilingNode, FoundationSlabNode, ObjectNode, Level } from '../domain/scene.types';
+// Z1-E4-1: die Fixtures schrieben die Versionszahl hart und brachen beim Sprung 3→4 alle fünf.
+// Ab hier lesen sie die Konstante — dieselbe Wahrheit, die das Schema prüft.
+import { SCHEMA_VERSION } from '../domain/scene.types';
 import { treppeZuParametern } from '../geometry/treppeObjekt';
 
 /** U-Grundriss (mm): Außenrechteck 12×10 m, Kerbe/Innenhof 5×4 m aus der oberen Kante. Ganze mm. */
@@ -78,7 +81,7 @@ function deckeTreppe(): SceneDocument {
   return {
     id: 'fixture-decke-treppe',
     projectId: 1,
-    schemaVersion: 3,
+    schemaVersion: SCHEMA_VERSION,
     revision: 1,
     units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
@@ -103,7 +106,7 @@ function uDach(): SceneDocument {
     geometrieHerkunft: 'manuell', freigabe: 'bestaetigt',
   };
   return {
-    id: 'fixture-u-dach', projectId: 1, schemaVersion: 3, revision: 1, units: 'mm',
+    id: 'fixture-u-dach', projectId: 1, schemaVersion: SCHEMA_VERSION, revision: 1, units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
     levels: [EG], nodes: umrissZuWaenden(U_UMRISS, EG.id), materials: [], roofs: [dach],
     metadata: { createdAt: ISO, updatedAt: ISO },
@@ -141,7 +144,7 @@ function wandSchichten(): SceneDocument {
     ],
   }));
   return {
-    id: 'fixture-wand-schichten', projectId: 1, schemaVersion: 3, revision: 1, units: 'mm',
+    id: 'fixture-wand-schichten', projectId: 1, schemaVersion: SCHEMA_VERSION, revision: 1, units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
     levels: [EG], nodes: waende, materials: [], roofs: [],
     metadata: { createdAt: ISO, updatedAt: ISO },
@@ -184,7 +187,7 @@ function dachAufbauten(): SceneDocument {
     ],
   };
   return {
-    id: 'fixture-dach-aufbauten', projectId: 1, schemaVersion: 3, revision: 1, units: 'mm',
+    id: 'fixture-dach-aufbauten', projectId: 1, schemaVersion: SCHEMA_VERSION, revision: 1, units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
     levels: [EG], nodes: umrissZuWaenden(RECHTECK_UMRISS, EG.id), materials: [], roofs: [dach],
     metadata: { createdAt: ISO, updatedAt: ISO },
@@ -219,10 +222,54 @@ function etagenHoehenkette(): SceneDocument {
     geometrieHerkunft: 'manuell', freigabe: 'bestaetigt',
   };
   return {
-    id: 'fixture-etagen-hoehenkette', projectId: 1, schemaVersion: 3, revision: 1, units: 'mm',
+    id: 'fixture-etagen-hoehenkette', projectId: 1, schemaVersion: SCHEMA_VERSION, revision: 1, units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
     levels: [eg], nodes: umrissZuWaenden(RECHTECK_UMRISS, eg.id), materials: [], roofs: [],
     ceilings: [decke],
+    metadata: { createdAt: ISO, updatedAt: ISO },
+  };
+}
+
+/**
+ * **Z1-E4-1 — das Referenzhaus mit Bodenplatte.**
+ *
+ * Die Fixture, gegen die Kriterium (e) misst. **Die Zahlen sind so gewählt, dass sie
+ * unterscheidungsfähig sind** — die Lehre aus der Höhenketten-Fixture, wo `floorThickness` und
+ * Deckendicke beide 200 waren und deshalb beide Zweige dasselbe lieferten:
+ *
+ * ```text
+ *   Fussbodenaufbau  60 Estrich + 120 Dämmung  = 180 mm
+ *   ±0,00 = OK Fertigfussboden EG
+ *   oberkanteMm = 0 − 180                      = −180   ← NEGATIV (Yama 22.08. 22:08)
+ *   dickeMm (tragende Platte)                  =  250
+ * ```
+ *
+ * **180 ≠ 250 ≠ 240 ≠ 200** — keine zwei Größen dieser Fixture sind gleich, also kann keine
+ * Verwechslung zufällig grün werden. *Genau das war der vierte Befund des Plan-Prüfers.*
+ *
+ * Die Schichtfolge ist **erdseitig zuerst** (`SCHICHT_REIHENFOLGE`): Dämmung liegt auf der Platte,
+ * der Estrich darüber.
+ */
+function bodenplatteReferenz(): SceneDocument {
+  const eg: Level = { ...EG, defaultWallHeight: 2500 };
+  const platte: FoundationSlabNode = {
+    id: 'slab-ref', type: 'foundation_slab', levelId: eg.id,
+    visible: true, locked: false, tags: [], createdAt: ISO, updatedAt: ISO,
+    polygon: RECHTECK_UMRISS,
+    dickeMm: 250,
+    oberkanteMm: -180,
+    erdberuehrt: true,
+    schichten: [
+      { materialId: 'daemmung', dickeMm: 120 },  // erdseitig zuerst
+      { materialId: 'estrich', dickeMm: 60 },
+    ],
+    geometrieHerkunft: 'manuell', freigabe: 'bestaetigt',
+  };
+  return {
+    id: 'fixture-bodenplatte', projectId: 1, schemaVersion: SCHEMA_VERSION, revision: 1, units: 'mm',
+    settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
+    levels: [eg], nodes: umrissZuWaenden(RECHTECK_UMRISS, eg.id), materials: [], roofs: [],
+    foundationSlabs: [platte],
     metadata: { createdAt: ISO, updatedAt: ISO },
   };
 }
@@ -233,6 +280,7 @@ export const STUDIO_FIXTURES: Record<string, () => SceneDocument> = {
   'wand-schichten': wandSchichten,
   'dach-aufbauten': dachAufbauten,
   'etagen-hoehenkette': etagenHoehenkette,
+  'bodenplatte': bodenplatteReferenz,
 };
 
 /** Fixture-Name aus dem Query-String (`?fixture=u-dach`). Reine Funktion ⇒ testbar. */

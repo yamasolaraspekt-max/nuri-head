@@ -15,7 +15,12 @@ import type { RoofShape } from './roofShape';
 
 // v3 (Z-06-N1): Herkunft und Freigabe an Decke und Dach, beide PFLICHT. Die Anhebung ist der
 // Grund, warum eine v2-Datei nicht stillschweigend als v3 durchgeht — siehe migriereSzene.
-export const SCHEMA_VERSION = 3 as const;
+//
+// v4 (Z1-E4-1): die Bodenplatte als eigene Sammlung `foundationSlabs`. Warum die Version steigt,
+// obwohl das Feld optional ist: bei gleichbleibender 3 wäre ein Dokument OHNE Platte nicht mehr
+// unterscheidbar — hat es keine, oder stammt es aus der Zeit vor der Platte? Genau diese
+// Unterscheidung war schon bei v3 der Grund (s. o.), und sie gilt hier gleich.
+export const SCHEMA_VERSION = 4 as const;
 
 // ---------------------------------------------------------------- Dokument
 
@@ -52,6 +57,18 @@ export interface SceneDocument {
    * Bestandsdokumente ohne die Sammlung bleiben gültig (Konsumenten nutzen `?? []`). Kein 422.
    */
   ceilings?: CeilingNode[];
+
+  /**
+   * Bodenplatten (Z1-E4-1). Eigene Sammlung NEBEN nodes[]/roofs[]/ceilings[] — additiv (Muster
+   * ceilings), damit die Node-Union und ihre Konsumenten unberührt bleiben.
+   *
+   * **Je Level max. 1 Platte — nicht je Gebäude** (Yama 22.08., 22:08). *Ein Keller mit eigener
+   * Sohle ist ein gültiger Fall; eine gebäudeweite Sperre würde ihn verbauen.*
+   *
+   * OPTIONAL/additiv: Bestandsdokumente ohne die Sammlung bleiben gültig (Konsumenten nutzen
+   * `?? []`). Kein 422.
+   */
+  foundationSlabs?: FoundationSlabNode[];
 
   metadata: {
     createdAt: string;        // ISO-8601
@@ -126,9 +143,8 @@ export interface WallNode extends BaseNode {
    * **Nicht** `geometry/wandaufbau.Schicht`: das ist ein Rechentyp mit `dicke` und `lambda`, dies ist
    * ein Modellfeld mit `dickeMm`. Sie zusammenzuziehen ist eine eigene Entscheidung.
    *
-   * **Die Reihenfolge trägt (noch) keine Bedeutung** — innen→außen liegt nahe, ist aber eine
-   * Festlegung und keine Beobachtung. Sie ist als Frage zurückgegeben; bis sie beantwortet ist,
-   * darf sich niemand auf die Reihenfolge verlassen.
+   * **Die Reihenfolge ist festgelegt — außen → innen.** Siehe den Block *SCHICHTFOLGE* unter
+   * `SCHICHT_REIHENFOLGE` weiter unten; für die Wand heißt das `schichten[0]` = **außen**.
    */
   schichten?: Array<{ materialId?: string; dickeMm: number }>;
 }
@@ -300,6 +316,34 @@ export interface RoofAnbauMasse {
  * *Ein Feld für beides hätte den Fall „geraten, aber geprüft und in Ordnung" nicht ausdrücken
  * können — und genau den braucht Z-06-N3.*
  */
+/**
+ * ## SCHICHTFOLGE — **außen → innen**, für alle feldgleichen `schichten`-Felder
+ *
+ * **Yamas Entscheidung vom 22.08.2026, 22:08** — wörtlich: *„AUSSEN → INNEN, gilt für Bodenplatte
+ * und Wandaufbau gleich."* Damit ist die Frage beantwortet, die `WallNode.schichten` seit dem
+ * 26.07. offen zurückgegeben hatte (*„eine Festlegung und keine Beobachtung"*).
+ *
+ * | Bauteil | `schichten[0]` | zuletzt |
+ * |---|---|---|
+ * | **Wand** | außen (Witterungsseite) | raumseitig |
+ * | **Bodenplatte** | erdseitig | Belag |
+ * | **Decke** | unten (Geschoss darunter) | oben |
+ * | **Dach** | außen (Eindeckung zur Witterung) | raumseitig |
+ *
+ * *Bei den liegenden Bauteilen ist „außen" die erdzugewandte bzw. wetterzugewandte Seite — die
+ * Regel ist eine, die Leserichtung folgt daraus.*
+ *
+ * **Was diese Festlegung NICHT tut:** sie ändert keine Rechnung. Yama hat es selbst nachgemessen —
+ * von 18 `schichten`-Treffern verarbeiten zwei die Reihenfolge (`geometry/wandaufbau.ts:75` und
+ * `:79`), und **beide sind Summen.** *Addition ist kommutativ.* Die Festlegung schließt eine offene
+ * Frage; sie erzeugt keine Nacharbeit an bestehenden Werten.
+ *
+ * **Bestandsdaten werden nicht umsortiert.** Wo bisher niemand eine Reihenfolge zusichern durfte,
+ * kann auch niemand wissen, in welcher sie liegen — ein automatisches Umdrehen wäre geraten, nicht
+ * migriert. Ab hier geschriebene Schichten folgen der Regel.
+ */
+export const SCHICHT_REIHENFOLGE = 'aussen_nach_innen' as const;
+
 export type GeometrieHerkunft = 'manuell' | 'abgeleitet' | 'erkannt' | 'geschaetzt';
 export type Freigabe = 'bestaetigt' | 'vorschlag' | 'zu_pruefen' | 'abgelehnt';
 
@@ -353,8 +397,68 @@ export interface CeilingNode extends BaseNode, MitHerkunft {
   dickeMm: number;
   /** Durchbrüche (z. B. Treppenauge) — Loch-Polygone in mm. */
   oeffnungen?: CeilingOeffnung[];
-  /** Fußbodenaufbau (Feature B) — in Feature A leer/optional; feldgleich mit wandaufbau.Schicht. */
+  /** Fußbodenaufbau (Feature B) — in Feature A leer/optional; feldgleich mit wandaufbau.Schicht.
+   *  Reihenfolge: siehe SCHICHT_REIHENFOLGE — unten (Geschoss darunter) → oben. */
   schichten?: Array<{ materialId?: string; dickeMm: number }>;
+}
+
+/** Durchbruch in einer Bodenplatte — Loch-Polygon in mm. Muster CeilingOeffnung. */
+export interface FoundationSlabDurchbruch {
+  polygon: Array<{ x: number; y: number }>;
+}
+
+/**
+ * **Bodenplatte (Z1-E4-1, additiv).** Der eigene Knoten für das untere Ende des Hauses.
+ *
+ * **Warum kein zweckentfremdeter Deckeneintrag:** eine Platte, die als `CeilingNode` geführt wird,
+ * sperrt die Zwischendecke desselben Geschosses (max. 1 je Level) oder ist von ihr nicht zu
+ * unterscheiden. *Genau dieser Blocker hat `Z1-W2-8-b` gestrichen.* Deshalb eine eigene Sammlung.
+ *
+ * **Die Höhenlage ist eigenständig, nicht abgeleitet.** Die Decke sitzt auf der Wandoberkante und
+ * rechnet sich aus dem Level; die Platte liegt UNTER dem Fertigfußboden und braucht ihr eigenes
+ * Maß — siehe `oberkanteMm`.
+ */
+export interface FoundationSlabNode extends BaseNode, MitHerkunft {
+  type: 'foundation_slab';
+
+  /** Umriss in mm (Default = Gebäude-Umriss des Levels). */
+  polygon: Array<{ x: number; y: number }>;
+
+  /** Plattendicke in mm — die TRAGENDE Platte, ohne Fußbodenaufbau (der steckt in `schichten`). */
+  dickeMm: number;
+
+  /**
+   * **Oberkante der tragenden Platte in mm, bezogen auf ±0,00 = OK Fertigfußboden EG**
+   * (Yama 22.08., 22:08 — Bauzeichnungs-Konvention).
+   *
+   * **Bei `erdberuehrt: true` ist der Wert NEGATIV**: die Platte liegt um den gesamten
+   * Fußbodenaufbau tiefer als der Nullpunkt. *Eine positive Oberkante hieße, die Platte läge über
+   * dem fertigen Fußboden.*
+   *
+   * `mm` (nicht `mmPos`) in Zod — Unterkellerung und Erdberührung brauchen negative Werte.
+   */
+  oberkanteMm: number;
+
+  /** Liegt die Platte auf dem Erdreich? Randbedingung für die Grenzfläche der Heizlast. */
+  erdberuehrt: boolean;
+
+  /** Material der tragenden Platte (einfach, kein Array — der Aufbau steckt in `schichten`). */
+  materialId?: string;
+
+  /**
+   * Fußbodenaufbau ÜBER der tragenden Platte. Getrennt von `dickeMm` und von `materialId` —
+   * *Aufbau und Tragschicht sind zwei Angaben, keine Summe.*
+   *
+   * Reihenfolge: siehe `SCHICHT_REIHENFOLGE` — **`schichten[0]` = erdseitig**, zuletzt der Belag.
+   */
+  schichten?: Array<{ materialId?: string; dickeMm: number }>;
+
+  /**
+   * Durchbrüche — **nur ausdrücklich gesetzte, keine Automatik.** Bewusste Abgrenzung zur Decke:
+   * dort erzeugt eine Treppe im Level automatisch ein Loch (`treppenDurchbrueche`). Eine
+   * Bodenplatte bekommt kein Treppenauge, weil unter ihr nichts liegt.
+   */
+  durchbrueche?: FoundationSlabDurchbruch[];
 }
 
 // ------------------------------------------- Projektions-Kontrakt (▲K2, P0-Fixture)

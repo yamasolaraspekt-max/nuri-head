@@ -146,6 +146,47 @@ export function Buehne({
         {rasterAn && rasterLinien}
         {massElemente}
 
+        {/* **Bodenplatte (Z1-E4-1) — minimal, aber vorhanden.**
+
+            **Sie steht VOR den Räumen und damit unter allem anderen.** Das ist kein Geschmack:
+            die Platte ist das unterste Bauteil, und ein Umriss, der über dem Grundriss liegt,
+            verdeckt genau das, was der Zeichner sehen will. *Die Referenzunterlage steht aus dem
+            gleichen Grund als erstes Kind.*
+
+            **„Minimal" heißt Umriss und Beschriftung — nicht Füllung.** Eine gefüllte Fläche
+            wäre von der Raumfüllung darüber kaum zu unterscheiden; die Strichlinie sagt
+            „Bauteilkante", und die Beschriftung nennt Dicke und Höhenlage, damit niemand die
+            Platte mit der Zwischendecke verwechselt. */}
+        {(scene.foundationSlabs ?? []).filter((b) => b.levelId === level.id && b.visible !== false).map((b) => {
+          const cx = b.polygon.reduce((s, p) => s + p.x, 0) / b.polygon.length;
+          const cy = b.polygon.reduce((s, p) => s + p.y, 0) / b.polygon.length;
+          const ausgewaehlt = selectedNodeIds.includes(b.id);
+          const farbe = ausgewaehlt ? FARBEN.auswahl : FARBEN.gedaempft;
+          // Die Höhenlage steht in mm im Modell und wird hier in m gezeigt — dieselbe Einheit,
+          // die ein Bauzeichner an eine Höhenkote schreibt. Das Vorzeichen bleibt stehen: „−0,18"
+          // ist die Aussage, „0,18" wäre die Verfälschung.
+          const kote = (b.oberkanteMm / 1000).toFixed(2).replace('.', ',');
+          return (
+            <Group key={b.id}>
+              <Line
+                points={b.polygon.flatMap((p) => [p.x, p.y])}
+                closed stroke={farbe} strokeWidth={50} dash={[500, 250]}
+                onClick={(e) => {
+                  if (werkzeug === 'auswahl') {
+                    e.cancelBubble = true;
+                    waehleAn(b.id, e.evt);
+                  }
+                }}
+              />
+              <Text
+                x={cx - 1500} y={cy + 400} width={3000} align="center" scaleY={-1}
+                text={`Bodenplatte · ${b.dickeMm} mm · OK ${kote} m${b.erdberuehrt ? ' · erdberührt' : ''}`}
+                fontSize={200} fill={FARBEN.gedaempft} listening={false}
+              />
+            </Group>
+          );
+        })}
+
         {/* Räume: Füllung + Fläche (m², aus mm² gerundet auf 2 Stellen)
             W-05/2: die Gruppe trug `listening={false}` — der Raum war sichtbar und tot. Jetzt
             hört sie zu, aber NUR beim Werkzeug 'auswahl'; dasselbe Muster wie die Wände (:165).

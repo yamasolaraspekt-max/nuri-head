@@ -71,8 +71,10 @@ test('Metadaten sind mitgekommen: umkehrbar 78/33, protokollpflichtig 92/19', ()
   // (sie schreibt nichts). Deshalb waechst nur die erste Zahl. **Bewusst hart und nicht
   // `+ EIGENE_WERKZEUGE.length`:** ob ein Werkzeug umkehrbar ist, ist eine Aussage ueber
   // dieses Werkzeug, keine Bilanz — eine Formel wuerde hier eine Regel behaupten, die es nicht gibt.
-  assert.equal(WERKZEUG_VERTRAEGE.filter((v) => v.umkehrbar).length, 78);
-  assert.equal(WERKZEUG_VERTRAEGE.filter((v) => v.protokollpflichtig).length, 92);
+  // 78 -> 79: Z1-E4-1, der Bodenplatten-Vertrag ist umkehrbar (Immer-Draft ⇒ Undo/Redo).
+  assert.equal(WERKZEUG_VERTRAEGE.filter((v) => v.umkehrbar).length, 79);
+  // 92 -> 93: Z1-E4-1, der Bodenplatten-Vertrag ist protokollpflichtig wie Decke und Dach.
+  assert.equal(WERKZEUG_VERTRAEGE.filter((v) => v.protokollpflichtig).length, 93);
   assert.equal(vertraegeDerFamilie('selection').length, 4);
   assert.equal(vertrag('wand')?.commandId, 'WallCommand');
 });
