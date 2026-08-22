@@ -28850,3 +28850,53 @@ Zeiger, kein Duplikat.** Der Befund ist dadurch kleiner und richtiger geworden.
 **Ball: niemand.** Keine Forderung, kein DoR-Gegenstand. Die Zahl **34 von 39** geht als Lesewarnung
 weiter: **`dor_beleg` im Blatt ist kein Statusträger — maßgeblich ist der Block.** Wer das Blatt
 liest, muss den Block dazunehmen; das gilt für mich zuerst.
+
+## §352 — Früher Hinweis, kein Votum: das zweite Geschwisterblatt trägt einen Messbefehl, der immer 0 gibt
+
+Gewählt gegen HEAD `43e80cbb` (Baum sauber, 14:34). §352 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok.
+
+**Lage und Grenze zuerst.** `Z1-W2-2-aufbautenstatus-anschliessen.md` liegt im Planner-Worktree als
+**ungetrackte** Datei (`??`), der Planner-HEAD ist unverändert (`4611267e`), **keine Meldung liegt
+vor**. **Das Blatt ist damit nicht in meiner Bahn — kein Auslöser, kein `CODE_FERTIG`, kein Ball.
+Dies ist ausdrücklich kein Votum und keine DoR.** Lesen steht mir frei; prüfen und votieren werde
+ich erst, wenn es gemeldet ist.
+
+**Warum ich trotzdem melde.** In §350 habe ich zu den Geschwisterblättern geschrieben: *„wenn sie
+denselben Messbefehl tragen, tragen sie denselben Mangel."* Nachgesehen — **sie tragen einen
+anderen, und er ist schwerer.**
+
+    Z1-W2-1 (gemeldet, ERTEILT):
+      grep -rl 'pruefeOeffnungsIntegration\|pruefePaketIntegration'   -> 1   BRE-Alternative, korrekt
+      Mangel: Erwartung "0", tatsaechlich 1 (die Definitionsdatei)    -> Halbsatz, §350
+
+    Z1-W2-2 (ungetrackt, nicht gemeldet):
+      grep -rl 'aufbautenOhneFlaeche|istAufbauPruefpflichtig|AUFBAUTEN_WARNUNG'  -> 0
+      dieselbe Menge mit -E                                                      -> 1
+      Gegenprobe: die Zeichenfolge mit literalem '|' kommt im Baum 0 mal vor
+      Gegenprobe des Griffs: 'dachFlaechen' mit -E -> 9 Dateien
+
+**Ohne `-E` ist `|` in `grep` kein Alternativ-Zeichen, sondern ein gewöhnliches Zeichen.** Der
+Befehl sucht die *Zeichenfolge* `aufbautenOhneFlaeche|istAufbauPruefpflichtig|AUFBAUTEN_WARNUNG` —
+die es nirgends gibt und nie geben wird. **Er gibt 0, und zwar immer.**
+
+**Das ist gefährlicher als der Mangel in Z1-W2-1, weil die Zahl richtig aussieht.** Die Rot-Lage
+erwartet 0 und bekommt 0 — **der Befund scheint bestätigt.** Aber nach dem Bau, wenn Verbraucher
+existieren, gibt derselbe Befehl **weiterhin 0**; die Abnahme läse die Rot-Lage als unverändert und
+müsste den Bau für wirkungslos halten. **Ein Messbefehl, der jede Rot-Lage bestätigt und keine
+widerlegen kann, misst nichts.**
+
+*Es ist dieselbe Metazeichen-Klasse wie heute schon zweimal: §334 (`$` als Zeilenend-Anker statt
+Dollarzeichen) und A-43-11 (`\|` als literales Pipe statt Alternative). **Drittes Mal an einem Tag,
+drittes Zeichen, dieselbe Ursache** — ein Muster, das in einer anderen Grammatik gelesen wird als
+gedacht. Und das Geschwisterblatt zeigt, dass es nicht an einer Person hängt: **Z1-W2-1 macht
+denselben Fall richtig** (`\|` in BRE), zwanzig Minuten früher geschrieben.*
+
+**Abhilfe, ein Zeichen:** `grep -rlE` — oder `\|` wie im Schwesterblatt. **Und wenn das Blatt
+gemeldet wird, gehört zusätzlich der Halbsatz aus §350 hinein:** die Erwartung ist dann **1** (die
+Definitionsdatei `geometry/aufbautenStatus.ts`), nicht 0.
+
+**Ball: niemand — das Blatt ist nicht gemeldet.** Der Hinweis geht als eigenes Ereignis an den
+Planner (P-02 Punkt 3), damit er es vor der Meldung anfassen kann statt danach. **Ein Hinweis vor
+der Meldung spart die Runde, die eine Auflage kosten würde** — und genau das verlangt mein Auftrag
+gen 9 mit *„keine Auflagen-Schleife"*.
