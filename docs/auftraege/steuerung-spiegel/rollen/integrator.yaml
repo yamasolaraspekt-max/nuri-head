@@ -1,23 +1,21 @@
-auftrag_id: INT-zustand-kette-2
-generation: 11           # 2026-08-22T14:11:33+0200 — gen 10 ZUSTAND_NACHGEZOGEN (b45f0814, 10 gesetzt, 2 leer uebersprungen — richtig). Tor-Wort zurueckgenommen: aktion = zustand_nachziehen (A-43-Vokabular; Hinweg zuerst).
+auftrag_id: INT-zustand-kette-3
+generation: 12           # 2026-08-22T18:15:34+0200 — gen 11 lief 16:05-18:12 mit einer 2-h-Luecke (Wecker?) — bitte im Startereignis melden, ob dein Cron zwischen 16:07 und 18:08 gefeuert hat. Korrekturen + Transport + Zustaende aus Ereignissen.
 rolle: integrator
 sitzung_erwartet: 03737d75-b216-4299-b4ea-595407d3e457
 worktree: /Users/yamanuri/Documents/ticket
 branch: auto/hausplaner-integration
-basis_sha: b45f0814
 prioritaet: P0
 aktion: zustand_nachziehen
 taetigkeit: "zustand_nachziehen + transportieren (Integrator)"
-hinweg: "Der Integrations-Checkout traegt A-43 bereits (8a08d625 Vorfahr) — kein Merge noetig; das Verb ist in deinem Tor bekannt."
 jetzt:
-  1: "Z1-W1-5: Evaluator Nachpruefung ABGENOMMEN cf49113b (13:4x, der eine Mangel behoben; Herkunft 7eaab966 benannt) -> Zustandscommit Z1-W1-5 ABGENOMMEN, Beleg cf49113b (ersetzt NACHBESSERN c5587478)."
-  2: "Deine Berichtigung zu b3c6ac29/da86c59d (Meldungen, nicht Bauten) ist richtig — fuer Z1-W1-1/Z1-W1-2/Z1-W1-5 gilt der Bau-SHA aus dem jeweiligen Evaluator-Votum bzw. Generator-CODE_FERTIG; wo du ihn nicht belegen kannst: Feld 'bau: siehe Votum <SHA>' statt geraten."
-  3: "Transportkette weiter (Planner: Werkzeug-Register/Anschluss-Blaetter/Z2-W0-5b; Plan-Pruefer; Evaluator-Voten; Generator-Nachlieferung A-43 Posten 3 nach Evaluator-Votum; rolle/dirigent). Block-Anlage bei neuen Blaettern (ENTWURF, dor_beleg steht aus)."
-  4: "Reifegrad im Zustandscommit, sobald das Muster es traegt (V3-9, Regelbau spaeter): bis dahin ABGENOMMEN wie bisher."
-abschluss: "ZUSTAND_NACHGEZOGEN je Lauf mit Liste, endstand_sha, ergebnis_sha, gelesen_bis."
-verboten: [Produktcode, --no-verify, core.hooksPath aendern, leere Commits, Voten erfinden]
+  1: "KORREKTUR Z1-W2-3: NICHT zurueckgestellt — Entscheidung 15:51 wurde 15:53 REVIDIERT (BAU-generator-paket-3/dirigent-revision-z1-w2-3-bauen.yaml): Z1-W2-3 ist gebaut (generator-CODE_FERTIG-Z1-W2-3.yaml, ergebnis_sha "161868e9"). Zustand -> CODE_FERTIG, Bau "161868e9". Nur Z1-W2-2 ist ZURUECKGESTELLT."
+  2: "Transport rolle/generator vollstaendig (Z1-W2-3 "161868e9", Z0-I1 Stufe 1 "04949151", Z2-W0-5b b593357c — pruefe, was seit 1805988d noch fehlt) UND den Buendel-Commit be4f637c (generator-BUENDEL-Z1-W2-1.yaml) — damit zeigt ticket.test das erste abgenommene Werkzeug."
+  3: "Zustaende aus Ereignissen: Z1-W2-1 ABGENOMMEN (BROWSER) Votum ccbb70bc, buendel be4f637c; Z1-W2-0 ABGENOMMEN Votum 31152ef1 (Messgeraet, kein Buendel); Z2-W0-5b CODE_FERTIG b593357c; Z0-I1 CODE_FERTIG "04949151" (Stufe 1); Z1-W2-2 ZURUECKGESTELLT (Modellerweiterung)."
+  4: "Danach Transportkette weiter (Planner: neun DoR-erteilte Blaetter, Register; Plan-Pruefer; Evaluator-Voten); Block-Anlage bei neuen Blaettern."
+abschluss: "ZUSTAND_NACHGEZOGEN mit Liste (Kennung -> Zustand -> Commit), endstand_sha, ergebnis_sha, gelesen_bis (= Pull-Zeit)."
+verboten: [Produktcode, --no-verify, core.hooksPath aendern, leere Commits, Voten erfinden, Buendel selbst bauen]
 erlaubte_pfade: [docs/STATUS.md, docs/BEFUNDNOTIZEN.md, "Rueckweg-Commits der Rollenzweige"]
 steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/INT-zustand-kette-2/integrator-ack.yaml
-erstellt: "2026-08-22T14:11:33+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/INT-zustand-kette-3/integrator-ack.yaml
+erstellt: "2026-08-22T18:15:34+0200 Dirigent (atomar; Uhr: date)"
