@@ -1,10 +1,18 @@
-# A-43 — Das Kennungsmuster erkennt mehrgliedrige Kennungen nicht
+# A-43 — Zwei Wortlisten des Tors kennen die eigene Wirklichkeit nicht
+
+*Teil 1: das Kennungsmuster erkennt mehrgliedrige Kennungen nicht.
+Teil 2: die Aktionsliste erkennt neun von elf Rollentätigkeiten nicht.*
 
 ```yaml
 auftrag: "A-43"
 werkzeug: "— (Werkzeug der Rollenkette, kein Hausplaner-Werkzeug)"
-art: "MUSTERKORREKTUR — EIN regulaerer Ausdruck in scripts/status-erzeugen.sh wird erweitert.
+art: "WORTLISTEN-KORREKTUR — zwei Aufzaehlungen in scripts/ werden erweitert:
+      das Kennungsmuster (status-erzeugen.sh) und das Aktionsvokabular (rollen-tor.sh).
       KEIN Produktcode, KEINE Aenderung an docs/STATUS.md durch den Bau, KEIN Blattumbau."
+zwei_posten: "Posten 1 Kennungsmuster (Dirigent gen 13, Weg A) · Posten 2 Aktionsvokabular
+              (Dirigent gen 14, nach Befunden Evaluator 12:04, Plan-Pruefer 12:06,
+              Integrator 12:1x, externe Pruefung B-005). Ein Blatt, weil beide dieselbe
+              Bauform haben: eine Aufzaehlung im Tor, die die Wirklichkeit nicht abbildet."
 spur: A
 heimat_app: ticket
 dor_beleg: "steht aus — plan-pruefer (NACH der A-37-Nachpruefung, so der Dirigent)."
@@ -18,17 +26,22 @@ kennung_geprueft: "A-43 gemessen, nicht geraten: docs/ 0 Treffer, Steuerungsabla
                    (ein VORSCHLAG in meiner eigenen Frage-Datei vom 21.08., kein vergebener
                    Auftrag), gemeinsamer Checkout 0, git log --all --grep 1 Treffer (derselbe
                    Vorschlag zitiert). KEIN Blatt, KEINE Tafelzeile, KEIN Datensatz. Frei.
-                   ACHTUNG — offener Punkt zur Kennungsvergabe: siehe Abschnitt 'Vorbehalt'."
+                   Zaehlung der offenen Regelbauten 12:26 berichtigt (A-42 ist ABGENOMMEN):
+                   drei offen, A-43 ist die vierte — Yamas Maximum erreicht, nicht ueberschritten."
 gebaut_in: "ticket-rolle-generator (rolle/generator)"
 staut_hinter: "A-37 ABGENOMMEN (erfuellt, Evaluator 12:04) UND Transport in die Integration.
                Vorher nicht bauen: der Bau beruehrt eine Datei, die A-37 gerade transportiert."
-regelgrundlage: "Entscheidung des Dirigenten unter Vollmacht, 22.08. 12:03:49 — Weg A
-                 (ereignisse/ERRATA-planner-A-37/dirigent-entscheidung-kennungsmuster.yaml)."
+regelgrundlage: "Posten 1: Entscheidung des Dirigenten unter Vollmacht 22.08. 12:03:49, Weg A
+                 (ereignisse/ERRATA-planner-A-37/dirigent-entscheidung-kennungsmuster.yaml).
+                 Posten 2: Rollenquelle planner gen 14 (12:17:32), posten_2_aktionsvokabular;
+                 Uebergangsregel README 6f befristet bis zum Transport dieses Baus."
 anlass: "Planner-Befund 22.08. 11:44 (planner-befund-kennungsmuster-kennt-Z-nicht.yaml):
          das Muster erkennt Z0-I1, Z1-W1-1, Z2-W0-1 und A-37-22b nicht. Zusammen mit dem
          Plan-Pruefer-Befund 11:39 (leerer Commit 96d59689) die zweite Ursache dafuer, dass
          fuenf Z1-W1-Auftraege seit 15 h auf BEREIT stehen."
 ```
+
+# Teil 1 — Das Kennungsmuster
 
 ## Worum es geht — in einem Satz
 
@@ -141,7 +154,7 @@ commits nachgeholt (Folgeposten unten). *Der Bau repariert das Muster, nicht die
 
 ---
 
-## Abnahmekriterien
+## Abnahmekriterien Teil 1
 
 - **A-43-1** · **ACHT FORMEN, JEDE EINZELN AUSGELÖST.**
 
@@ -288,6 +301,155 @@ commits nachgeholt (Folgeposten unten). *Der Bau repariert das Muster, nicht die
 
 ---
 
+# Teil 2 — Das Aktionsvokabular des Tors
+
+**Dieselbe Bauform, eine Datei weiter.** `scripts/rollen-tor.sh:361-362` führt zwei Wortlisten:
+
+```
+Arbeit:  bauen | nachbessern
+Pause:   pausieren | angehalten | angehalten_eingefroren | parken | warten
+sonst:   "unbekannte aktion" -> Rueckgabe 7
+```
+
+**Keine der neun Tätigkeiten, die die Rollen tatsächlich ausüben, steht darin.** Vier Rollen
+meldeten das unabhängig: Evaluator (12:04, Befund 1 im Abnahme-Votum), Plan-Prüfer (12:06, um
+`spezifizieren` ergänzt), Integrator (12:1x), externe Prüfung (B-005, S1 ab dem Transport).
+
+## Rot gemessen — die echte `case`-Anweisung, nicht nachgebaut
+
+Zeilen 360–378 aus `c82df498` **unverändert extrahiert** und in einem Wegwerf-Verzeichnis unter
+`TMPDIR` (A-37-22d) als Funktion gefahren; je Wort Rückgabewert und Meldung:
+
+| Wort | RC | Meldung |
+|---|---|---|
+| `spezifizieren` (Planner) | **7** | unbekannte aktion |
+| `pruefen` · `erteilen` (Plan-Prüfer) | **7** · **7** | unbekannte aktion |
+| `abnehmen` · `nachpruefen` (Evaluator) | **7** · **7** | unbekannte aktion |
+| `transportieren` · `zustand_nachziehen` (Integrator) | **7** · **7** | unbekannte aktion |
+| `steuern` (Dirigent) | **7** | unbekannte aktion |
+| `release_pruefen` (Release-Prüfer) | **7** | unbekannte aktion |
+| `bauen` · `nachbessern` | 0 · 0 | durchgelassen |
+| `warten` · `parken` | 7 · 7 | *keine Arbeitsanweisung* (Pause, korrekt) |
+| `warten_dann_nachpruefen` · `rueckweg_…` | **7** · **7** | unbekannte aktion |
+
+**Neun von elf Rollentätigkeiten sind dem Tor unbekannt.** Zwei sind es nicht — und beide gehören
+derselben Rolle, dem Generator.
+
+> **Warum das heute nicht knallt:** die Übergangsregel README 6f (Dirigent 12:17). Jede Rollenquelle
+> trägt seit 12:17 ein **Tor-Wort** in `aktion:` (`bauen`, auch wenn die Rolle nichts baut) und die
+> echte Tätigkeit in `taetigkeit:`. **Gemessen, alle sieben Rollen:** `aktion` ist 5× `bauen`,
+> 2× `parken`; `taetigkeit` trägt die Wahrheit (`spezifizieren`, `steuern`, `abnehmen/pruefen`,
+> `transportieren + zustand_nachziehen`, `pruefen/erteilen`, 2× `warten`).
+> **Das ist eine Krücke mit Ablaufdatum, keine Lösung** — und sie erzeugt genau die zweite Wahrheit,
+> die dieses Haus sonst bekämpft: das Feld, das das Tor liest, sagt etwas anderes als das Feld, das
+> die Rolle beschreibt.
+
+## Die Falle von Teil 2 — und sie ist die Zwillingsschwester der Falle aus Teil 1
+
+**Pause und Unbekannt geben BEIDE `7` zurück.** Gemessen: `warten` → 7, `spezifizieren` → 7.
+Unterscheidbar sind sie **nur an der Meldung** (*„keine Arbeitsanweisung"* gegen *„unbekannte
+aktion"*).
+
+> **Teil 1 hatte dasselbe Problem mit der 0:** `UNGEPRUEFT` und „bestanden" sind beide 0.
+> **Zweimal in einem Auftrag ist der Rückgabewert allein nicht aussagekräftig.** Wer hier nur
+> `echo $?` misst, kann nicht sehen, ob ein Wort als Pause **anerkannt** oder als Müll
+> **abgelehnt** wurde — und genau das ist der Unterschied, den Posten 2 herstellen soll.
+
+---
+
+## Abnahmekriterien Teil 2
+
+- **A-43-8** · **JEDE ROLLE HAT EIN ANERKANNTES ARBEITSVERB.**
+
+  **Verlangt:** Die Arbeitsliste kennt für **jede** der sieben Rollen mindestens ein
+  rollengerechtes Verb: `spezifizieren` (Planner), `pruefen`/`erteilen` (Plan-Prüfer),
+  `abnehmen`/`nachpruefen` (Evaluator), `transportieren`/`zustand_nachziehen` (Integrator),
+  `steuern` (Dirigent), `release_pruefen` (Release-Prüfer), `bauen`/`nachbessern` (Generator).
+
+  **Messbefehl:** je Wort ein Lauf gegen die **echte** `case`-Anweisung (Zeilen aus
+  `scripts/rollen-tor.sh` extrahiert, nicht nachgebaut), Rückgabewert **und** Meldung notiert;
+  erwartet **RC 0, keine Meldung**.
+
+  **Heutiges (rotes) Ergebnis:** **9 von 9** neuen Verben geben **7 „unbekannte aktion"**
+  (Rohausgabe in der Tabelle oben). `bauen` und `nachbessern` geben 0.
+
+  **Absage-Regel:** Eine Liste, die nur `spezifizieren` ergänzt, erfüllt A-43-8 nicht. Der Befund
+  ist nicht „ein Wort fehlt", sondern „die Liste kennt die Rollen nicht" — belegt an neun Wörtern
+  aus sechs Rollen.
+
+- **A-43-9** · **PAUSE WIRD ALS PAUSE ERKANNT — NACHGEWIESEN AN DER MELDUNG.**
+
+  **Verlangt:** `warten` **und die `warten_dann_*`-Formen** werden als **Pause** anerkannt: sie
+  sperren weiterhin (Rückgabe 7), aber mit der **Pause-Meldung**, nicht mit *„unbekannte aktion"*.
+  Ebenso bleiben `pausieren`, `angehalten`, `angehalten_eingefroren`, `parken` Pause.
+
+  **Messbefehl:** je Wort Rückgabewert **und Meldungstext**; erwartet
+  `RC 7` **und** *„das ist keine Arbeitsanweisung"*.
+
+  **Heutiges (rotes) Ergebnis:** `warten` → 7 *„keine Arbeitsanweisung"* (**richtig**);
+  `warten_dann_nachpruefen` → 7 *„unbekannte aktion"* (**falsch benannt**).
+  *Am Rückgabewert sind beide gleich — der Unterschied steht nur im Text.*
+
+  **Absage-Regel:** Ein Nachweis über `echo $?` allein erfüllt A-43-9 **nicht**. Pause und
+  Unbekannt sind beide 7; wer nur die Zahl liest, kann die Erfüllung nicht von der Rot-Lage
+  unterscheiden. **Das ist dieselbe Falle wie A-43-3, nur mit 7 statt 0.**
+
+- **A-43-10** · **UNBEKANNT BLEIBT UNBEKANNT.**
+
+  **Verlangt:** Ein Wort, das weder Arbeit noch Pause ist, wird weiterhin mit **7 und
+  *„unbekannte aktion"*** abgewiesen. Die Erweiterung darf die Liste nicht durch eine
+  Präfix-Regel oder ein `*`-Muster ersetzen, das alles durchlässt.
+
+  **Messbefehl:** `aktion: quatsch` und `aktion: bauenX` → erwartet je **7 „unbekannte aktion"**.
+  Zusätzlich der Leerfall `aktion:` (leer) → heute **RC 0 mit HINWEIS**; dieses Verhalten bleibt
+  unverändert und wird ausdrücklich mitgemessen, damit es nicht nebenbei kippt.
+
+  **Heutiges (grünes) Ergebnis:** `rueckweg_x` → 7 *„unbekannte aktion"*, selbst gemessen.
+  **Regressionsschutz** — ausdrücklich als heute-grün gekennzeichnet.
+
+  **Absage-Regel:** Eine Erweiterung über `warten*` als Glob, die auch `wartenXYZ` durchlässt,
+  erfüllt A-43-10 nicht — sie tauscht eine zu enge Liste gegen eine zu weite.
+
+- **A-43-11** · **EINE LISTE, KEINE ZWEITE DEFINITION.**
+
+  **Verlangt:** Nach dem Bau gibt es weiterhin **genau eine** Stelle, an der die Aktionswörter
+  aufgezählt sind. `commit-pruefen.sh` und `.githooks/pre-commit` definieren **keine eigene**.
+
+  **Messbefehl:**
+  ```
+  grep -rnE 'bauen\|nachbessern|pausieren\|angehalten' scripts/ .githooks/   -> genau 1 Fundstelle
+  ```
+
+  **Heutiges (grünes) Ergebnis:** `scripts/rollen-tor.sh:361` und `:362` — **eine** `case`-Anweisung;
+  `commit-pruefen.sh` **0**, `.githooks/pre-commit` **0**. **Regressionsschutz.**
+
+  **Absage-Regel:** Dieselbe Absage wie bei A-43-2. Zwei Wortlisten für dieselbe Frage sind eine
+  zweite Wahrheit — und die zweite altert unbemerkt, weil niemand sie liest.
+
+- **A-43-12** · **DIE GRUNDMENGE LÄUFT DURCH — GEMESSEN, NICHT AUFGEZÄHLT.**
+
+  **Verlangt:** Alle in `rollen/*.yaml` **tatsächlich gesetzten** Werte laufen nach dem Bau
+  korrekt: jedes `aktion`-Wort und jedes `taetigkeit`-Wort wird entweder als Arbeit (RC 0) oder
+  als Pause (RC 7 mit Pause-Meldung) erkannt — **keines fällt in „unbekannt".**
+
+  **Messbefehl:**
+  ```
+  für f in rollen/*.yaml: aktion- und taetigkeit-Wert auslesen und je einzeln durchs Tor fahren;
+  gezaehlt mit wc -l, Ergebnis je Wort als Zeile
+  ```
+
+  **Heutiges (rotes) Ergebnis, gemessen 12:3x:**
+  `aktion` = 5× `bauen`, 2× `parken` → laufen (Übergangsregel 6f wirkt).
+  `taetigkeit` = `spezifizieren`, `steuern`, `abnehmen/pruefen`, `transportieren + zustand_nachziehen`,
+  `pruefen/erteilen`, 2× `warten` → **die fünf Arbeitsverben fallen alle in „unbekannt".**
+
+  **Absage-Regel:** Eine Prüfung gegen eine im Blatt aufgeschriebene Wortliste erfüllt A-43-12
+  nicht. Gemessen wird gegen die **Rollenquellen zum Zeitpunkt des Baus** — die Werte wandern,
+  und eine Liste im Blatt altert. *Belegt: zwischen 12:03 und 12:17 haben alle sieben Rollen ihre
+  `aktion` gewechselt.*
+
+---
+
 ## Nicht-Ziele
 
 - **Die Kennungsform der 89 Blätter wird NICHT vereinheitlicht** (Weg B). Der Dirigent hat das
@@ -316,9 +478,19 @@ vorgeschriebene Form: eine rückwirkend gefüllte Matrix beweist nichts.*
 | A-43-5 Mehrfachkennung abgewiesen | AP-2 (Negativproben) | n.U. | n.U. |
 | A-43-6 keine Kennung bleibt keine | AP-2 (Negativproben) | n.U. | n.U. |
 | A-43-7 kein Produktcode | AP-4 Diff-Beleg | n.U. | n.U. |
+| A-43-8 Arbeitsverb je Rolle | AP-5 Arbeitsliste erweitern | n.U. | n.U. |
+| A-43-9 Pause an der Meldung | AP-5 (Pause-Liste) | n.U. | n.U. |
+| A-43-10 unbekannt bleibt unbekannt | AP-6 Negativproben Aktion | n.U. | n.U. |
+| A-43-11 eine Liste | AP-6 (Abgrenzungsbeleg) | n.U. | n.U. |
+| A-43-12 Grundmenge Rollenquellen | AP-7 Nachweis gegen rollen/*.yaml | n.U. | n.U. |
 
 **Arbeitspakete:** AP-1 Muster · AP-2 Tor und Proben · AP-3 Nachweis über die Grundmenge ·
-AP-4 Abgrenzungsbeleg.
+AP-4 Abgrenzungsbeleg · AP-5 Aktionslisten · AP-6 Negativproben Aktion · AP-7 Nachweis gegen die
+Rollenquellen.
+
+**Reihenfolge der Pakete:** AP-5 bis AP-7 (Teil 2) sind **dringlicher** als AP-1 bis AP-4 (Teil 1).
+Teil 2 hält heute nur durch eine befristete Übergangsregel; Teil 1 kostet einen ausgefallenen
+Zustandswechsel, der sichtbar ist. *Wer beides in einem Bau macht, macht Teil 2 zuerst.*
 
 ---
 
@@ -344,10 +516,23 @@ revertiert, stehen Z-Zustände in `docs/STATUS.md`, die das alte Muster nicht me
 3. **`Z1-W1-1..5` als Bereichsangabe** ist keine Kennung und wird es auch nach A-43 nicht. Ob die
    Schreibweise künftig zulässig sein soll, ist eine Entscheidung über die Kennungssystematik —
    Yama und Dirigent, nicht dieser Auftrag.
+4. **Die Übergangsregel README 6f wird zurückgenommen** — Auftrag des Dirigenten (12:26), **Folge-
+   posten für ihn, ausdrücklich kein Kriterium.** Sobald das erweiterte Aktionsvokabular
+   transportiert ist, tragen die Rollenquellen ihre echte Tätigkeit wieder in `aktion:`, und die
+   Tor-Wörter (`aktion: bauen` bei Rollen, die nichts bauen) entfallen.
+   **Warum das nicht vergessen werden darf:** solange die Krücke steht, sagt `aktion` etwas anderes
+   als `taetigkeit`. *Eine befristete zweite Wahrheit, die niemand zurücknimmt, ist eine
+   unbefristete.* Sichtbar wird das Ende an A-43-12: wenn die echten Tätigkeiten durchlaufen,
+   braucht kein Tor-Wort mehr gesetzt zu werden.
+5. **Der Hinweg des Planners ist blockiert** (`planner-BASE_BLOCKED.yaml`, 12:3x) — kein Kriterium,
+   aber für die Bau-Reihenfolge wichtig: der Planner-Baum trägt bis auf Weiteres das **alte** Tor,
+   weil `git merge` an der geparkten Z0-I1-Datei abbricht. **Belege dieses Blattes, die am Bau-Stand
+   `c82df498` gemessen sind, sind darum über `git show` erhoben, nicht am Arbeitsbaum** — das ist
+   im jeweiligen Messbefehl genannt.
 
 ---
 
-## Vorbehalt zur Kennungsvergabe — gemessen, nicht entschieden
+## Zur Kennungsvergabe — gemessen, offengelegt, berichtigt
 
 **Der Auftrag verlangt die nächste freie A-Kennung samt Messung, dass sie frei ist.** Sie ist frei
 (siehe `kennung_geprueft`). **Beim Messen bin ich auf eine ältere Anweisung Yamas gestoßen und
@@ -356,28 +541,42 @@ lege sie offen**, statt sie zu übergehen:
 > `43771e3b` (16.08., Planner): *„Yama hat vier offene Regelbauten als Maximum gesetzt, A-41 und
 > A-42 sind bereits fünf und sechs; ein A-43 wäre der siebte gegen seine ausdrückliche Anweisung."*
 
-**Stand heute selbst gemessen** (Zustände aus `docs/STATUS.md`):
+### BERICHTIGT — meine erste Zählung stand auf einem veralteten Stand
 
-| Auftrag | Zustand | offen? |
+**Ich hatte A-42 als `BEREIT`/offen gezählt und daraus „A-43 wäre die fünfte" gefolgert. Das war
+falsch.** Der Dirigent hat es 12:26 berichtigt; **selbst nachgemessen statt übernommen**:
+
+```
+git log --all --format=%s | grep -E '^([a-z-]+: )?zustand: A-42'
+  -> integrator: zustand: A-42 · ABGENOMMEN · release-pruefer · abnahme b1c0c2d4 — elf von elf
+git show auto/hausplaner-integration:docs/STATUS.md | grep 'A-42'
+  -> | **A-42** Befundnotizen ziehen um | `ABGENOMMEN` | Release-Prüfer | … Abnahme b1c0c2d4 |
+```
+
+| Auftrag | Zustand (Integrationsstand) | offen? |
 |---|---|---|
-| A-37 | `CODE_FERTIG` → **ABGENOMMEN** (Evaluator 12:04) | schließt sich mit dem Transport |
-| A-38 | `BEREIT` | **offen** |
-| A-39 | `BEREIT` | **offen** |
+| A-37 | **ABGENOMMEN** (Evaluator 12:04) | geschlossen |
+| A-38 | `BEREIT` | **offen** (geparkt, wird nicht gebaut) |
+| A-39 | `BEREIT` | **offen** (geparkt, wird nicht gebaut) |
 | A-40 | `ENTWURF` | **offen** |
 | A-41 | `BETRIEBSBESTAETIGT` | geschlossen |
-| A-42 | `BEREIT` | **offen** |
+| A-42 | **`ABGENOMMEN`** | geschlossen |
 
-**Nach A-37s Transport sind es genau vier offene — A-43 wäre die fünfte.** Die Lage ist damit
-deutlich besser als am 16.08. (damals sechs), aber die Zahl liegt weiterhin **eine über** dem
-genannten Maximum.
+**Offen sind drei. A-43 ist die vierte — Yamas Maximum ist damit erreicht, nicht überschritten.
+Es gibt keinen Governance-Konflikt.** Der Vorbehalt entfällt; die Frage bleibt Yama zur Kenntnis
+vorgelegt (`planner-frage-kennungsmaximum.yaml`, Antwort des Dirigenten 12:26 samt Berichtigung).
 
-**Was ich getan habe und was nicht:** Ich habe das Blatt geschrieben, weil der Dirigent es unter
-Vollmacht beauftragt hat und die Sacharbeit von der Kennungsfrage unabhängig ist. **Ich habe die
-Frage nicht still gelöst.** Ob A-43 bleibt, ob der Auftrag als Unterkriterium an ein bestehendes
-Blatt andockt, oder ob Yamas Maximum überholt ist, entscheiden Yama und der Dirigent —
-gemeldet als `planner-frage-kennungsmaximum.yaml`.
+> **Warum ich falsch lag, und warum das hierher gehört:** ich habe die Tafelzeile aus **meinem
+> Worktree** (`c11f97ac`) gelesen. Der Zustandscommit für A-42 kam danach in die Integration.
+> **Das ist exakt der Gegenstand dieses Blattes** — ein Zustand entsteht aus einem Commit, und wer
+> an einem alten Stand misst, liest einen alten Zustand. *Ein Beleg ohne Standangabe ist kein
+> Beleg;* dieselbe Klasse wie der Errata-Posten 4 zu A-37-22c.
 
-*Sollte die Kennung wechseln, ist der Umbau billig: Dateiname, `auftrag:`-Feld und die
+**Was bleibt:** Ich habe das Blatt geschrieben, weil der Dirigent es unter Vollmacht beauftragt hat
+und die Sacharbeit von der Kennungsfrage unabhängig ist. **Ich habe die Frage nicht still gelöst,
+und ich habe die Berichtigung nicht still eingearbeitet** — beides steht hier.
+
+*Sollte die Kennung dennoch wechseln, ist der Umbau billig: Dateiname, `auftrag:`-Feld und die
 Kriterienpräfixe. Der gemessene Inhalt bleibt unberührt.*
 
 ---
