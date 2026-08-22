@@ -39900,3 +39900,139 @@ cannot be assembled, too long" ab und lieferte eine **leere** letzte Meldung. Er
 Nichts in meiner Bahn. Ich warte auf den neuen Blatt-SHA von Z1-E4-1, um die Halbsätze zu
 Kriterium d und e zu quittieren — der Dirigent hat mich um 23:04 und 23:12 zweimal darum gebeten,
 ausdrücklich **ohne** neuen Durchgang (Nachtrag 1.5).
+
+## §498 — Quittung zu Kriterium d: eingearbeitet. Posten 30 aber nicht — 69 Sekunden zu spät
+
+Stand: HEAD `6d699137`, Baum 0, gen 11, Digest gleich. Zeit 23:21.
+**Messstand `b7de5e37`**, Blatt-Blob **`19a97b2b`** (war `5a43528b` bei meiner DoR-Bestätigung),
+337 Zeilen (war 298).
+
+Der Dirigent hat mich zweimal um eine Quittung gebeten (23:04:26 und 23:12:40): *„Halbsätze zu d und
+e als Teil des Blatts quittieren (Nachtrag 1.5) — kein neuer Durchgang."* Ich quittiere **eines von
+beiden**.
+
+### QUITTIERT: Posten 28, Kriterium d ist getrennt
+
+```
+:128   **Z1-E4-1-d1** · LADEN — UND DER BESTAND LÄDT UNVERÄNDERT.
+:151   **Z1-E4-1-d2** · SPEICHERN — UND DER PHP-VALIDATOR SPIEGELT ALLE VIER SAMMLUNGEN.
+:184   „…und es betrifft nur das Speichern, nicht das Laden (d1)."
+```
+
+Die Trennung, die ich in §492 verlangt hatte, ist sauber gezogen — bis in die Begründung hinein.
+Kriterienzahl **9 → 10** (a, b, c, **d1, d2**, e, f, g, h, i), Matrix mitgezogen, PHP-Spiegelung in
+d2 mit eigener Absage-Regel: *„Drei Schleifen ohne die drei Tests erfüllen (d2) nicht."*
+
+**Das ist Halbsatz-Form, kein neuer Durchgang. DoR bleibt gültig.** Der Zuwachs von 9 auf 10
+entsteht durch **Aufteilung**, nicht durch neuen Umfang — der Umfang kam aus Posten 28, den der
+Dirigent angeordnet hat.
+
+### NICHT QUITTIERBAR: Posten 30 ist nicht im Blatt
+
+Angeordnet um **23:12:40**, gemessen am Blatt von **23:13:49**:
+
+| angeordnet | im Blatt |
+|---|---|
+| Absage-Regel (e) auf **`>= 0`** (Null eingeschlossen) | `:203` steht weiter **„eine positive `oberkanteMm`"** |
+| Fußbodenaufbau **Pflichtfeld** | `Pflichtfeld` **0 Treffer**, `pflicht` **0** |
+| Fixture 180 / −180 / 250 | **je 0 Treffer** |
+
+**Die Lücke aus §495 ist also offen.** Genau der Grenzfall, den der Dirigent schließen wollte —
+`oberkanteMm 0` fällt weiter durch die Absage-Regel hindurch.
+
+**Kein Vorwurf an den Planner.** Zwischen Entscheidung und Commit liegen **69 Sekunden**; er hat
+mit an Sicherheit grenzender Wahrscheinlichkeit geschrieben, als sie eintraf. Das ist dasselbe
+Muster wie bei der Umbenennungs-Reihenfolge (§485, dort **drei** Sekunden) und bei der
+Fachfragen-Antwort, die meine Auflage 4 überholte: **Eine Entscheidung, die während eines
+Schreibvorgangs eintrifft, erreicht ihn nicht mehr.**
+
+Dreimal heute derselbe Hergang. Das ist kein Zufall mehr, sondern eine Eigenschaft des Betriebs:
+Bei Taktzeiten von einer Minute ist die Zustellung nicht schneller als die Arbeit. Wer eine
+Entscheidung trifft, während gebaut wird, muss damit rechnen, dass der nächste Stand sie noch nicht
+trägt — und danach fragen, statt sie als eingearbeitet anzunehmen.
+
+### Warum das jetzt zählt
+
+Der Generator baut seit 22:37 und zieht auf den neuen Blatt-SHA nach. Nimmt er `19a97b2b`, baut er
+die Fixture **ohne** die Werte 180 / −180 / 250 und **ohne** das Pflichtfeld — und die Absage-Regel
+lässt ihn dabei durch. Die Zahlen stehen nur im Ereignis des Dirigenten, nicht im Blatt, nach dem
+gebaut wird.
+
+### Zwei eigene Messausfälle, beide gefangen
+
+1. Mein Muster `Z1-E4-1-[a-i]` gab **8** Kriterien — es fängt `d1`/`d2` nicht, weil nach `d` eine
+   Ziffer steht. Mit `[a-i][0-9]?` sind es **10**. Eine Zahl, die *kleiner* wird, während das Blatt
+   *wächst*, hätte als „Kriterium gestrichen" durchgehen können.
+2. `grep -c '-180'` scheiterte, weil `-180` als Option gelesen wurde („no search PATTERN
+   specified"). Mit `-e '-180'`: **0 Treffer** — dieselbe Zahl, aber jetzt gemessen statt
+   abgestürzt.
+
+## §499 — Meine Sorge aus §498 war unbegründet: der Generator hat Posten 30 gebaut, bevor er im Blatt stand
+
+Stand: HEAD `87113b45`, Baum 0, gen 11, Digest gleich. Zeit 23:24. Messstand `fdc71f7d`.
+
+In §498 hatte ich gewarnt: *„Nimmt er `19a97b2b`, baut er die Fixture ohne die Werte 180 / −180 /
+250 und ohne das Pflichtfeld."* **Gemessen am Bau-Commit `3b4e8f6b` (23:17:48) — er hat alles
+gebaut.** Und zwar **drei Minuten bevor** meine Warnung um 23:20:52 abgelegt war.
+
+### Was tatsächlich im Bau steht
+
+```
++  dickeMm: 250, oberkanteMm: -180, erdberuehrt: true
++  assert.equal(…[data-feld="oberkanteMm"]…?.value, '-180')
++  import { bodenplatteOberkanteMm, fussbodenaufbauDickeMm, fussbodenaufbauErfasst } …
++  applyCommand(…, slab: platte({ oberkanteMm: -180.5 }) …)      ← Ganzzahligkeits-Probe
+```
+
+`180` 28 Treffer · `-180` 15 · `250` 24 · `aufbau` 42 · `Pflicht` 2 — alles in hinzugefügten Zeilen.
+Er hat die Werte aus dem **Ereignis** des Dirigenten genommen, nicht aus dem Blatt. Genau der Weg,
+den ich empfehlen wollte — nur hat er ihn selbst gefunden, bevor die Empfehlung geschrieben war.
+
+**Meine Warnung war richtig gedacht und überflüssig.** Das gehört gesagt: Ich habe eine Lücke
+gemeldet, die real ist (das Blatt trägt Posten 30 bis jetzt nicht), und daraus eine Gefahr
+abgeleitet, die nicht eintrat, weil der Generator nicht nur das Blatt liest.
+
+### Kriterium (e) vorgezogen geprüft — erfüllt
+
+Das Blatt verlangt: *„`git diff hoehenkette.ts` nur **additiv**."*
+
+```
+hoehenkette.ts:  62 hinzugefügt / 0 gelöscht
+```
+
+**Null Löschungen.** Die Bestandsfunktionen `deckenOberkanteMm` und `naechsteEtageElevationMm`
+sind unberührt.
+
+### Die neue Formel durchgerechnet (mein Pflichtfeld)
+
+```ts
+:77   fussbodenaufbauDickeMm(schichten) = (schichten ?? []).reduce((s, x) => s + x.dickeMm, 0)
+:88   fussbodenaufbauErfasst(schichten) = (schichten ?? []).length > 0
+:116  bodenplatteOberkanteMm(schichten, bezugshoeheMm = 0)
+        = Math.round(bezugshoeheMm − fussbodenaufbauDickeMm(schichten))
+```
+
+Eingesetzt: eine Schicht à 180 mm → `Math.round(0 − 180)` = **−180**. Das ist exakt die Kette aus
+§495/§496 und die Zahl aus Posten 30.
+
+**Drei Beobachtungen, alle positiv:**
+
+1. Der Aufbau ist als **Schichtenliste** modelliert, nicht als einzelner mm-Wert. Das ist reicher,
+   als der Dirigent verlangte („Fußbodenaufbau (mm) ist Pflichtfeld") — und **konsistent mit
+   Operand 2** (Schichtfolge außen→innen). Die Summe ist kommutativ, also kostet die Reihenfolge
+   auch hier nichts (§489).
+2. `fussbodenaufbauErfasst` ist die **Pflichtfeld-Probe** in Funktionsform: leere Liste → `false`.
+   Damit ist „ehrlich statt Null" messbar, nicht nur verlangt.
+3. `bezugshoeheMm = 0` als Default ist **Operand 1** im Code. Und `Math.round` deckt die
+   Ganzzahligkeit, die der Test mit `-180.5` gegenprobt.
+
+**Meinen §496-Punkt löst er nebenbei sauber:** `floorThickness` bleibt unangetastet, der
+Fußbodenaufbau bekommt einen **eigenen Typ**. Die zwei Größen, die ich verwechselt hatte, sind im
+Code getrennt.
+
+### Kein Votum, nur eine Zwischenmessung
+
+Der `CODE_FERTIG` liegt noch nicht vor. Dies ist eine **vorgezogene** Prüfung, kein Urteil — die
+Meldepflichten (SHA in einem Feld, Scope-Diff, Ballwechsel) prüfe ich, wenn er meldet. Offen bleibt
+für die dann fällige Prüfung: die vier PHP-Schleifen aus d2, die Tests je Sammlung, und ob
+`SceneDocumentValidator.php` (34 Zeilen im Diff) den Kommentar `:51-52` wahr macht oder streicht.
