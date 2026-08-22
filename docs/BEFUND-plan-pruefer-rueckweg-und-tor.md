@@ -35383,3 +35383,94 @@ Stelle** — und wer einen Schnitt setzt, misst sie doppelt oder gar nicht.
 
 Ball: **Yama** (die Regelfrage) · **Dirigent** (Vorlage) · **Planner** (der Zeitstempel; und der
 Messbefehl `:433` aus §439 ist weiterhin offen).
+
+## §444 — Die Ursache kehrt sich um: der Vorgabewert ist RICHTIG. Der Testcode umgeht ihn aktiv — als einziger im Bestand
+
+Messstand: HEAD `d8395720`, Baum 0, gemessen 19:56–19:58. **Ereignis-Schnitt dieser Runde: 19:50:23.**
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §444'` → 0). **Sicherheitsbefund.**
+Anlass: `generator-SELBSTMELDUNG-produktiv-db-zweiter-fall.yaml` (19:55:40) — **zitiert, nicht nachgebaut** (P-02 Punkt 4).
+
+### Was der Generator meldet — und seine Ursachenanalyse stimmt, aber nur für SEINEN Fall
+
+> *„Zum zweiten Mal gegen die Produktiv-Datenbank gelesen. **Das ist kein Ausrutscher mehr, sondern
+> ein Muster.**"* … *„In diesem Baum zeigt `.env` auf die Produktiv-Datenbank. Jeder artisan-Aufruf
+> ohne ausdrückliche Umleitung landet dort. **Nicht der einzelne Aufruf ist die Lücke, sondern der
+> Vorgabewert.**"*
+
+**Für `artisan`/`tinker` trifft das zu — selbst gemessen, Standangabe Integrations-Checkout
+`/Users/yamanuri/Documents/ticket`:**
+
+    ticket/.env            DB_DATABASE=ticket          <- artisan liest das. Seine Analyse haelt.
+    ticket/.env.testing    DB_DATABASE=ticket_testing
+
+**Und seine Lehre über die Lehre ist die eigentliche Einsicht:**
+
+> *„Ich habe sie im Skript umgesetzt — und eine Stunde später denselben Fehler an einer Stelle
+> gemacht, an die ich die Lehre nicht angewandt hatte. **Eine Lehre, die nur die eine Stelle
+> repariert, an der sie entstand, ist keine Lehre.**"*
+
+### Für den TESTLAUF gilt das Gegenteil — und das ändert die Behebung
+
+    phpunit.xml:28   <env name="DB_DATABASE" value="ticket_testing" force="true"/>
+
+**Der Vorgabewert beim Testlauf ist RICHTIG, und er ist mit `force="true"` festgenagelt.** Ein
+Testlauf landet von sich aus auf `ticket_testing`. **`.env` spielt hier keine Rolle** — `APP_ENV`
+steht auf `testing` (`:22`).
+
+**Der Test aus §443 erreicht die Produktivdatenbank NUR, weil er diesen Schutz aktiv aushebelt:**
+
+    tests/Unit/TestDatenbankGuardTest.php
+      :30  config(['database.connections.mysql.database' => $db]);   <- ueberschreibt force="true" zur Laufzeit
+      :76  $this->verbindeMit('ticket');
+
+**Und er ist damit allein — gemessen über den gesamten Testbestand:**
+
+    config([...database.connections.*.database']) in tests/  ->  1 DATEI, 2 Zeilen (:30, :38)
+    Positivkontrolle des Musters am bekannten Treffer        ->  2   (Muster greift)
+
+**Kein anderer Test im Bestand tut das.** Es ist keine verbreitete Praxis, der man folgt — es ist
+eine Einzelstelle.
+
+### Warum diese Unterscheidung die Behebung entscheidet
+
+> **Zwei Fälle, ein Symptom, ZWEI VERSCHIEDENE URSACHEN:**
+>
+> | Fall | Ursache | Behebung |
+> |---|---|---|
+> | `artisan`/`tinker` (Generator, 2×) | **Vorgabewert** `.env` → `ticket` | `.env` im Rollenbaum, oder `DB_DATABASE=` voranstellen |
+> | `phpunit` (§443, jeder Suite-Lauf) | **Testcode umgeht den korrekten Vorgabewert** | der Test darf `config()` nicht auf `ticket` setzen |
+>
+> **WER SIE ZUSAMMENWIRFT, BEHEBT DEN FALSCHEN.** Repariert man nur `.env` — die Ursache, die der
+> Generator (richtig) für seinen Fall benennt —, dann **läuft `TestDatenbankGuardTest.php:76`
+> unverändert weiter gegen `ticket`**, weil er sich seine Datenbank selbst setzt und `force="true"`
+> überschreibt.
+
+### Präzisierung meines eigenen §443 — das Ergebnis hält, die Begründung war unvollständig
+
+§443 sagt: *„Jeder, der `./vendor/bin/phpunit` fährt, verbindet gegen die Produktivdatenbank."*
+**Das bleibt richtig und ist jetzt genauer belegt.** Unvollständig war die Begründung: ich hatte
+nicht gemessen, ob der Vorgabewert des Testlaufs überhaupt trägt. **Er trägt** — was den Befund
+nicht entlastet, sondern verschärft: **der Schutz war da und wurde umgangen.**
+
+### Nebenbefund: ein Zeitbezug, der 23 Minuten danebenliegt — und in die Zukunft zeigte
+
+    Generator nennt als Bezug den ersten Fall mit "(19:58)"
+    gemessen im ersten Fall:  zeit: 19:35:27  ·  mtime 19:35:27
+    seine eigene Schreibzeit:       19:55:40   -> "19:58" lag beim Schreiben in der ZUKUNFT
+
+**Zweiter Zeitstempel-Befund binnen zehn Minuten** (Planner: `zeit 19:52:00` bei mtime `19:50:01`,
+§443). Kein Schaden, aber wer die Kette der Produktiv-DB-Fälle über die genannten Zeiten
+rekonstruiert, findet den ersten Fall nicht — er sucht 23 Minuten zu spät.
+
+### Was der Generator selbst richtig an das Haus zurückgibt
+
+> *„Ob ein Rollenbaum überhaupt eine `.env` tragen sollte, die auf ‚ticket' zeigt. **Z0-I1-12 hat
+> gerade den Weg gebaut, der ohne `.env` auskommt** — damit wäre der Vorgabewert entschärft. Das ist
+> eine Entscheidung für Dirigent und Yama, keine von mir."*
+
+**Gegenprobe dazu, selbst gemessen:** `.env` liegt in `ticket` (JA) und `ticket-rolle-generator` (JA)
+— **in `ticket-rolle-plan-pruefer` NICHT.** Das belegt zugleich meine §443-Grenze: ich könnte den
+Produktivbestand hier gar nicht messen, und ich beschaffe mir den Zugang nicht.
+
+Ball: **Yama/Dirigent** (die `.env`-Frage im Rollenbaum **und** die Regelfrage aus §443 — es sind
+zwei, nicht eine) · **Generator** (der Zeitbezug).
