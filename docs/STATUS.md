@@ -117,7 +117,7 @@
 | **Z2-W0-4** Wächter: keine neue Web-Route ohne permission: — Ratschen-Test mit Baseline | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-4-route-permission-waechter.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §258): Kriterium C zaehlt drei Routen, es sind sechs · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-5** Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md` · **DoR ERTEILT** (plan-pruefer §259) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · **Blockade-Vermerk berichtigt** (plan-pruefer §259): Y-6 blockiert W0-5 NICHT; offen ist stattdessen beim Planner, wer das Routen-Gate fuer `/planner/*` baut · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-5b** linked gibt Master-Sets fremder Auftragspunkte | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 15:2x · Basis `78e5fb3e` | **Blatt** `docs/auftraege/aktiv/Z2-W0-5b-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR ERTEILT**, berichtigt 15:3x · Bau `48b52294` · Matrix `b593357c` · CODE_FERTIG 16:03:25 |
-| **Z2-W0-11b** IDS: callback, state und token | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z2-W0-11b-ids-callback-state-token.md` · **DoR ERTEILT** (plan-pruefer 16:52:38) · Ball geteilt: Generator baut, Planner schuldet einen Halbsatz zu Kriterium c · Planner-Blatt `418bcb6c` |
+| **Z2-W0-11b** IDS: callback, state und token | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z2-W0-11b-ids-callback-state-token.md` · **DoR ERTEILT** (plan-pruefer 16:52:38) · Ball geteilt: Generator baut, Planner schuldet einen Halbsatz zu Kriterium c · Planner-Blatt `418bcb6c` · Bau `46c4a57c` · CODE_FERTIG 20:29:01 — der IDS-Rueckweg traegt einen einmaligen Token |
 | **Z2-W0-6** Nuriva-API: die vier Token-Abilities werden durchgesetzt — oder sie verschwinden | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-6-api-token-abilities.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §260): Dateiname im Ist-Beleg berichtigen · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-7** Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.) | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-7-rechte-schalter-planner-item.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §261) · **VORRANG vor Z2-W0-1** (plan-pruefer §260) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-8** secure.image und Geschwister: Recht + Bindung statt bloßem auth | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-8-secure-image-gate.md` · **DoR ERTEILT** (plan-pruefer §262) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -20006,8 +20006,8 @@ zustand_nachgezogen: |
 ```yaml
 auftrag: "Z2-W0-11b"
 titel: "IDS: callback, state und token"
-zustand: BEREIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 blatt: "docs/auftraege/aktiv/Z2-W0-11b-ids-callback-state-token.md"
 blatt_sha: 418bcb6c
 basis_sha: 161868e9
@@ -20018,10 +20018,17 @@ dor_beleg: |
   · generator (bauen — der Halbsatz hindert ihn nicht)". In der Tafel steht Generator,
   weil dort die naechste WIRKSAME Handlung liegt; der Planner-Halbsatz ist im Datensatz
   vermerkt und geht nicht verloren.
-bau_sha: "noch offen"
+bau_sha: 46c4a57c
 herkunft_dieses_blocks: |
   Statusplatz vom integrator angelegt, verspaetet aus demselben Grund wie Z1-W2-4.
   Blatt fertig 16:49, DoR 16:52:38. Spur A (IDS/Auth) — Transport also erst nach ABGENOMMEN.
+
+zustand_nachgezogen: |
+  CODE_FERTIG aus generator-CODE_FERTIG-Z2-W0-11b.yaml, 20:29:01, endstand und ergebnis
+  46c4a57c, ball [evaluator, integrator].
+  Sein Betreff: "der IDS-Rueckweg traegt einen einmaligen Token statt eines wiederverwendbaren".
+  Spur A — Transport erfolgt, Zustand bleibt bis zum Votum CODE_FERTIG.
+
 ```
 
 ```yaml
