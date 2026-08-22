@@ -26104,3 +26104,82 @@ schlösse. Das ist meine Korrektur am **Gebrauchsort** — dieselbe Lehre wie §
 
 **Ball:** Planner (Z0-I2-Spezifikation, mit berichtigter Zuordnung) · Release-Prüfer nachrichtlich für
 den **zweiten** kaputten Zeitstempel.
+
+## §311 — Der Wegwerf-Root schützt den Bestand und verbirgt zugleich seine Vielfalt: die ACK-Suche lag richtig, solange es einen Ordner gab
+
+**Messstand** `21e6e406` · Baum sauber · 0 neue Commits seit §310 · Integrationszweig `1c14579a` →
+`a69e50ed`. Ballortung dreiseitig **1 · 6 · 14**, keine neuen Bälle.
+
+### CODE_FERTIG zur Nachbesserung — Meldepflichten selbst gemessen
+
+```
+c82df498  existent (exit 0) · Elter c0dd4f83 = gemeldeter endstand_sha
+SHAs in FELDERN: 2   endstand_sha UND ergebnis_sha
+Scope   scripts/commit-pruefen.sh 58/9 · scripts/rollen-tor.sh 43/5   (zwei erlaubte Pfade)
+Produktcode-Diff c0dd4f83..c82df498 -- resources/ app/   LEER
+```
+
+**Die Regel von 10:48 ist bereits befolgt:** Punkt 4 der externen Prüfung verlangt `endstand_sha`
+*und* `ergebnis_sha` „ab dem nächsten Pull" — diese Meldung, zwanzig Minuten später, trägt beide.
+**Ballwechsel bestätigt:** Ball beim Evaluator.
+
+Der Mangel selbst ist an der Ursache behoben: *„Es fehlte kein Wissen, es fehlte die Weitergabe"* —
+der eingebettete Prüfer gab `2`/`3`/`4` bereits zurück und wurde eine Zeile später auf `FEHLER=1`
+eingeebnet. Die Zuordnung stammt aus der Codetabelle des Blattes, nicht aus eigener Wahl.
+
+### Zwei Mängel an 22e — dem Kriterium, das ich abgenommen habe
+
+**Erster:** Der Aktions-Zweig kannte nur `bauen` und wies `nachbessern` mit Rückgabe 7 ab — *„eine
+Barriere, die richtige Arbeit sperrt."* Gemessen am Kriterium:
+
+> *„Ist der lokale ACK älter, fehlt er oder lautet die Aktion `pausieren` (bzw. angehalten/parken),
+> muss der Commit … abgewiesen werden."* — **das ist eine Negativliste.**
+> **Positivprobe:** *„aktueller ACK **und** `aktion: bauen` → Commit läuft."* — **ein einziger Wert.**
+
+**Der Verlangt-Text trägt, kein Restpunkt.** Aber die Anmerkung ist es wert: **eine Positivprobe, die
+genau einen Wert nennt, lädt zur Positivliste ein.** Der Bau hat die Probe als Spezifikation gelesen
+und aus dem Beispiel eine Erlaubnisliste gemacht — die dann genau den Auftrag sperrte, den die
+Steuerung soeben erteilt hatte. Der Schaden war real: exit 7 bei jedem Commit-Versuch.
+
+**Zweiter, und der wiegt schwerer:** Die ACK-Suche nahm `ls … | head -1` über **alle**
+Auftragsordner.
+
+```
+'generator-ack.yaml' existiert heute in   3 Ordnern
+'head -1' in rollen-tor.sh                c0dd4f83: 7  ->  c82df498: 10
+'ack_pfad'                                c0dd4f83: 0  ->  c82df498: 2   (behoben)
+'nachbessern'                             c0dd4f83: 0  ->  c82df498: 5   (behoben)
+```
+
+Der Griff nahm `BAU-generator-A-37` (Generation 8), während die Quelle auf 9 steht — das Tor hätte
+den **frisch quittierten** Auftrag als „ACK ist veraltet" abgewiesen. *„Ein Griff, der zufällig
+richtig lag, solange es genau einen Ordner gab."*
+
+### Das Kriterium sagt nicht, wie der ACK gefunden wird — und die Probe konnte es nicht zeigen
+
+```
+in A-37-22e:  'ack_pfad' 0 · 'Auftragsordner' 0 · 'Pfad' 0 · 'finden' 0
+Gegenprobe:   'ACK' 6   (der Griff greift, die Nullen sind echt)
+```
+
+Es war nie Gegenstand — **kein DoR-Mangel.** Aber der Grund, warum es niemand bemerkt hat, steht im
+Kriterium selbst: *„Messbar im Wegwerf-Repo mit einer Probe-Steuerungsstelle (eigener Root für
+`rollen/`)."* **Dort gibt es genau einen Auftragsordner.** Die Isolation, die 22d zu Recht erzwingt,
+schließt die Mehrdeutigkeit strukturell aus — und damit auch den Fall, der im Bestand entsteht.
+
+**Das ist keine Kritik an 22d und keine am Evaluator.** Seine Proben waren ausgelöst und grün; sie
+waren grün, weil die Probe-Umgebung einwertig ist. **Wer im Wegwerf-Root probt, muss die Vielfalt des
+Bestands selbst herstellen** — hier: mehr als einen ACK-Ordner anlegen. Sonst prüft man ein Werkzeug
+in einer Welt, in der der Fehler nicht vorkommen kann.
+
+### Und wie er es gemeldet hat
+
+Beide Mängel meldet der Generator als **Voraussetzung, nicht als Kriterienarbeit** — ohne sie war der
+Auftrag nicht ausführbar. Dazu drei eigene Messfehler, darunter der beste Satz der Runde: *„Nicht der
+Bau war rot, meine Probe war falsch."* Und: seine Syntax-Probe setzte den Fehler in den Frontmatter,
+während der Prüfer nur `yaml`-Codeblöcke liest — *„wer ein Werkzeug prüfen will, muss zuerst prüfen,
+ob seine Probe den Fall überhaupt herstellt."* Genau das ist auch der Kern des ACK-Befundes oben.
+
+**Ball:** Evaluator — Nachprüfung von A-37-20 plus Gegenprobe, dass die übrigen 30 unberührt sind.
+Für 22e wäre die Vielfalt-Probe (mehrere ACK-Ordner) der Fall, den die alte Probe nicht herstellen
+konnte; ob er in die Nachprüfung gehört, entscheidet er.
