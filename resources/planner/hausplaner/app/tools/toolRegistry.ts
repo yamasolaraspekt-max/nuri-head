@@ -141,10 +141,18 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     helpText: 'Geschossdecke aus dem Grundriss aufsetzen (Treppen werden ausgespart) — Etagen-Basis.',
     // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
     //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'slab' war dasselbe Werkzeug.
-    meaning: 'Massive oder mehrschichtige Decke erzeugen.',
+    // Z1-W2-8 (c) Haelfte 2: der Tooltip nennt BEIDE Decken, die dieses eine Werkzeug setzt.
+    //
+    // ⚠ **Der Titel hiess bis 22.08. „Decke / Bodenplatte".** Solange die Bodenplatte ein
+    // eigener Eintrag werden sollte, war das eine Ankuendigung. Nachdem die DoR (b) gestrichen
+    // und einen Eintrag auf `bauteilKind: 'ceiling'` ausdruecklich UNTERSAGT hat, verspricht
+    // derselbe Titel einen Bedieneintrag, den es nicht geben wird — er wurde durch die
+    // Streichung UNEHRLICHER, nicht harmloser. Genau davor schuetzt (c).
+    // Die Bodenplatte kommt als eigener Knoten mit GP-0; bis dahin wird sie hier nicht versprochen.
+    meaning: 'Zwischendecke oder Abschlussdecke erzeugen — massiv oder mehrschichtig.',
     usageArea: 'Architektur, Statik, Heizlast.',
     group: 'Architektur',
-    tooltip: { title: 'Decke / Bodenplatte', body: 'Massive oder mehrschichtige Decke erzeugen.', usage: 'Einsatzbereich: Architektur, Statik, Heizlast.' },
+    tooltip: { title: 'Decke', body: 'Zwischendecke oder Abschlussdecke erzeugen — massiv oder mehrschichtig.', usage: 'Einsatzbereich: Architektur, Statik, Heizlast.' },
   },
 
   // --- Globale Aktionen (§6): keine Zeichenwerkzeuge, aber Teil der Registry, damit die
