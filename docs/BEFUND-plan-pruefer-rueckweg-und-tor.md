@@ -31361,3 +31361,71 @@ diesen Nachtrag unberührt. Falsch war eine **Zuschreibung**, nicht eine Messung
 und wird hier berichtigt, nicht überschrieben.
 
 Ball: **niemand.** Kein Auftrag berührt.
+
+## §392 — Der Riegel hat seinen eigenen Erbauer gefangen: DB-Lease von counter 1 auf 7 in sechzehn Minuten
+
+Messstand: HEAD `7ad56e3b`, Baum 0, gemessen 16:47–16:49. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §392'` → 0). Alterungsprüfung zu meinem eigenen §386 — ausgelöst durch
+`BAU-generator-Z2-W0-5b/generator-nachbesserung-Z0-I1-AP3.yaml`, 16:47:22.
+
+### Was der Generator meldet — zitiert, nicht nachgebaut
+
+Zwei eigene Fehler in AP-3, und **drei Anläufe zur Ursache**, die er alle nennt:
+
+> *„ANLAUF 1 (falsch) … ANLAUF 2 (falsch) … ANLAUF 3 (richtig): `TestDbLease` hielt EINE Ressource
+> in einem statischen Feld … **Der Schaden entsteht beim ZIEHEN, nicht beim Freigeben** … Ich nenne
+> die beiden Fehlversuche, weil eine Korrektur ohne sie aussähe, als hätte ich die Ursache gleich
+> gehabt. Hatte ich nicht."*
+
+Und der Satz, um den es hier geht:
+
+> *„Die nächste Weck-Runde meldete die DB-Lease als BELEGT — **mein eigener Riegel blockierte meine
+> eigenen Testläufe. OHNE DIESE SPERRE HÄTTE ICH ES NICHT BEMERKT:** der Bau war grün, die sechs
+> Zusagen waren grün, und die Wirkung im Betrieb war trotzdem falsch."*
+
+### Selbst gemessen
+
+    counter                    §386 (16:31): 1   ->   heute (16:48): 7
+    active/lease.yaml          fehlt = frei                        (seine Angabe: active=0)
+    Meldepflichten             72ba2a1c · 2a338cee   beide: commit
+    Scope 2a338cee             phpunit.xml · tests/TestDbLease.php · tests/Unit/TestDbLeaseTest.php
+                               3 Dateien, kein Beifang, kein Produktcode ausserhalb
+    APP_TIMEZONE in phpunit.xml (seine Abhilfe)                     1 Treffer
+
+**Die Zeitkonvention, an der Lease selbst geprüft:**
+
+    lease-token7-2026-08-22-164614.yaml   erteilt: "2026-08-22T16:45:52+0200"   <- Ortszeit, behoben
+    freigegeben-token-1.yaml              erteilt: "2026-08-22T16:05:45+0200"
+    PHP-CLI date_default_timezone_get()   UTC        <- seine Ursachenanalyse, unabhaengig bestaetigt
+    System jetzt                          +0200
+
+### Was die Ablage erzählt und der Bericht nicht sagt
+
+    freigegeben/  lease-token7-…-164614.yaml
+                  lease-token6-verwaist.yaml
+                  lease-token5-verwaist-164338.yaml
+                  lease-token4-verwaist-2026-08-22-164128.yaml
+
+**Drei verwaiste Leases hintereinander — token 4, 5, 6 — und erst token 7 lief sauber durch.** Das
+sind exakt seine drei Anläufe, als Spur in der Ablage. Der Riegel hat ihn **dreimal** gefangen, bevor
+er die Ursache hatte.
+
+### Warum das der stärkste Wirksamkeitsbeleg ist, den es gibt
+
+In §386 habe ich die Lease am Zähler gemessen und geschrieben: *„die Lease wurde benutzt, nicht bloß
+zugesagt."* Sechzehn Minuten später ist der Zähler bei 7 — **und der, den sie zuletzt aufhielt, war
+ihr eigener Erbauer.**
+
+**Ein Riegel, den der Bauende umgehen könnte und der stattdessen ihn selbst blockiert, ist nicht
+theoretisch wirksam, sondern praktisch.** Und der Nachweis war nicht geplant: er entstand, weil der
+Riegel im Betrieb tat, was die grüne Suite nicht zeigen konnte. Sein eigener Satz trifft es:
+
+> *„Eine grüne Suite ist kein Beleg dafür, dass der Riegel im Betrieb tut, was er soll … nicht die
+> Probe war falsch gebaut, sondern die Frage, ob der Bau IM BETRIEB wirkt, wurde gar nicht gestellt."*
+
+**Das ist dieselbe Klasse wie meine vier Anführungszeichen-Fallen** (§390), eine Ebene höher: dort
+maß ich sauber am falschen Muster, hier prüfte er sauber die falsche Frage. **Beide Male ist das
+Ergebnis grün, und beide Male fängt es nur eine Probe, die von außen kommt.**
+
+Ball: **Generator** (der Bau läuft) · bei mir nichts. Meine DoR zu Z0-I1 bleibt unberührt: die
+Nachbesserung betrifft die Umsetzung, kein Kriterium.
