@@ -40485,3 +40485,52 @@ kann `nodes` treffen, und dann fehlt der Wächter für den Teil, den alle für e
 
 Das ist auch eine Antwort auf meine eigene Praxis: Ich messe **Bestandsteile** regelmäßig als
 „steht schon" ab — in §490 wörtlich. „Steht schon" heißt „ist gebaut", nicht „ist bewacht".
+
+## §506 — Vorratsposten (b): alle Testzahlen der drei Lieferungen stimmen. Brutto hätte ich fünf zu viel gemeldet
+
+Stand: HEAD `8946dbdd`, Baum 0, gen 11, Digest gleich. Zeit 23:46. Messstand `17bbcd51`.
+
+Meine Bahn war leer, also Zahlen nachzählen — und zwar die, auf die sich das Votum des Evaluators
+stützen wird.
+
+### Die gemeldete Kette
+
+```
+CODE_FERTIG Z1-E4-1   1809 bestanden (1785 + 24 neue)   ·  PHP 969 (965 + 4)
+NACHBESSERUNG         1814 bestanden (1809 + 5 neue)    ·  DOM 41 (40 + 1, einer umgeschrieben)
+NACHLIEFERUNG d2      1814 unverändert — reines PHP     ·  PHP 970 (969 + 1)
+```
+
+Die „1814 unverändert" hatte ich zunächst für einen Widerspruch zu „1809" gehalten. **Sie ist
+keiner:** Sie bezieht sich auf die Nachbesserung, nicht auf das CODE_FERTIG, und die Nachlieferung
+änderte nur eine PHP-Testdatei. **Gemessen statt gemeldet — die Vermutung ist an der Kette
+gestorben.**
+
+### Am Diff nachgezählt: netto stimmt jede Zahl
+
+| Lieferung | `+test(` | `−test(` | netto | gemeldet |
+|---|---|---|---|---|
+| E4-Bau, `__tests__` | 29 | 5 | **24** | 24 |
+| Nachbesserung, `__tests__` | 5 | 0 | **5** | 5 |
+| Nachbesserung, `__domtests__` | 2 | 1 | **1** | 1 |
+| Nachlieferung, PHP | 1 | 0 | **1** | 1 |
+
+Je Datei aufgeschlüsselt: `bodenplatte.test.ts` **+24/−0**, `dachModell.test.ts` **+1/−1** (netto 0).
+
+**Meine erste Zählung gab 29 und wäre eine Abweichung von fünf gewesen** — weil sie nur `+`-Zeilen
+zählte. Fünf Tests wurden **ersetzt**, nicht hinzugefügt. Dasselbe beim DOM-Lauf: 2 neu, 1 entfernt,
+und der Generator schreibt es sogar dazu (*„einer umgeschrieben, weil sein Fall nicht mehr…"*).
+
+Das ist die Grundmengen-Falle zum dritten Mal (§494 die 35, §500 die 14/14, jetzt die 24). Der
+Fehler ist immer derselbe: **Ich zähle, was dazukam, und vergesse, was wegging.** Eine Netto-Zahl
+braucht beide Seiten — genau das, was der Wache-Auftrag mit „miss BEIDE Seiten" überschreibt.
+
+### Ein ausgefallener Messbefehl, benannt
+
+Meine Schleife über die Wertepaare (`set -- $P`) lieferte **leere Variablen und zwei Nullzeilen**
+(`+0 -0 = netto 0`, „gemeldet " ohne Wert) und endete mit Exit 1. Die Zahlen darunter stammen aus
+den Einzelmessungen, nicht aus der Schleife.
+
+Hätte ich nur die Schleife gehabt, stünde hier „netto 0 gegen gemeldet 24" — eine Abweichung von
+24 aus einer Messung, die gar nicht gelaufen ist. **Eine ausgefallene Messung ist kein Ergebnis**,
+und diese sah aus wie eines: Sie lieferte eine Tabelle, Zahlen und ein Gleichheitszeichen.
