@@ -26684,3 +26684,70 @@ Wer die Abnahmewelle nach `docs/STATUS.md` plant, findet fünf Aufträge, die no
 
 **Ball:** Integrator über den Dirigenten — fünf Zustandsfelder nachziehen, `Z2-W0-1` mit dem
 gefundenen Bau-SHA `314ea991`. Es ist Transport, keine Entscheidung; die Voten liegen alle vor.
+
+## §319 — Meine eigene Vorlage an Yama belegt die versatz-Quittung mit zwei Zeigern, die beide woanders hinzeigen — einer davon auf einen anderen Posten derselben Liste
+
+**Messstand** `1c8c207f` · Baum sauber · 0 neue Commits seit §318 · Integrationszweig `59fd10aa`.
+Ballortung dreiseitig **1 · 6 · 14**, angekommen ist nur mein eigener Befund von 11:39.
+
+### Erst der Verdacht auf Stillstand — und er löst sich auf
+
+Der Integrationszweig stand zwischen zwei Runden auf demselben SHA. Nachgemessen:
+
+```
+ticket/ Reflog: 11:34:14 · 11:31:13 · 11:28:14 · 11:25:15 · 11:22:14   -> Takt ~3 min
+Einträge letzte 30 min: 8            Evaluator-Lease: heartbeat_bis 11:55:50, Rest 16 min, gültig
+```
+
+**Kein Stillstand** — der SHA war nur zwischen zwei Merges gleich. Eines fällt trotzdem auf: **alle
+acht Einträge der letzten halben Stunde lauten `merge rolle/plan-pruefer`.** Der einzige Verkehr in
+der Integration ist zurzeit meiner. Das ist erklärbar, solange der Evaluator in seinem eigenen Baum
+prüft — ich nenne es, weil es beim nächsten Blick sonst wie Betrieb aussieht.
+
+### Der Posten: zwei eigene Zeiger, beide falsch
+
+Meine Vorlage an Yama führt den Posten **`versatz-Quittung`** mit der Belegstelle
+*„STATUS Z.3042 / Z.16843"*. Beide liegen **unterhalb** der Dateilänge (19397) — sie zeigen also nicht
+ins Leere, sondern **auf etwas anderes**. Genau die Hälfte, die ich in §299 als die schlimmere benannt
+und in §316 an fremdem Material gemessen habe. Hier ist sie meine:
+
+```
+Z.3042  heute:  "dritter_weg_vorgelegt_nicht_entschieden: >
+                  Die Vorlage stellt zwei Wege gegenueber, Seed oder nichts …"
+Z.16843 heute:  "W-43  Abbund-Zeichnung  2 Erwaehnungen im Fliesstext, kein Datensatz …"
+
+wirklich steht die Sache bei :3059
+                "## VERTRETUNGSENTSCHEID `versatz` (Release-Prüfer in Yamas Namen, 13.08.) — ERZEUGEND"
+```
+
+**Siebzehn Zeilen daneben — und das ist der harmlose Teil.** Der Text, auf den `Z.3042` heute zeigt,
+ist der **Seed-Weg der Prüfbühne**: ein *anderer* Posten derselben Neunerliste. Wer die versatz-Quittung
+nachschlagen wollte, läse einen Absatz, der plausibel klingt, zum selben Verfahren gehört und die
+falsche Frage beantwortet. `Z.16843` landet auf einer Registertabelle über `W-43`/`W-19` — thematisch
+weit weg, aber ebenfalls im selben Dokument und im selben Ton.
+
+### Warum das schlimmer ist als ein toter Zeiger
+
+Ein Zeiger ins Leere meldet sich selbst: die Zeile existiert nicht, man merkt es sofort. **Ein
+gewanderter Zeiger meldet sich nie.** Er liefert Text, der Text ist echt, und im Zweifel gehört er
+sogar zum Thema. Bei acht bis neun Posten, die alle aus derselben Woche und demselben Dokument
+stammen, ist die Wahrscheinlichkeit hoch, dass ein Fehlzeiger auf einem **Nachbarposten** landet —
+genau das ist hier passiert.
+
+**Die Vorlage an Yama trägt damit zwei Belegstellen, die nichts belegen.** Der Posten selbst bleibt
+richtig: die versatz-Quittung ist offen, der Entscheid liegt vor (`:3059`, 13.08.), die Quittung
+nicht. Falsch ist nur der Weg dorthin — und den habe ich geschrieben.
+
+### Berichtigt, in der Form aus §315/§316
+
+Die Belegstelle für den Posten lautet ab hier nicht mehr `Z.3042 / Z.16843`, sondern der **Ankertext**:
+`docs/STATUS.md`, Abschnitt **`## VERTRETUNGSENTSCHEID versatz (Release-Prüfer in Yamas Namen, 13.08.)`**.
+Eine Überschrift wandert mit ihrem Inhalt; eine Zeilennummer nicht. Wo eine Zeile unvermeidlich ist,
+gilt `<sha>:<datei>:<zeile>`.
+
+**Das ist die dritte Runde in Folge zu derselben Sache** — §315 hat die Regel aufgestellt, §316 an
+fremdem Material gemessen, §319 findet sie in meiner eigenen Vorlage an Yama. Ich habe die Klasse
+gemeldet, bevor ich gemerkt habe, dass meine Belege selbst darin liegen.
+
+**Ball:** keiner. Der Posten `versatz-Quittung` steht unverändert bei Yama; nur seine Belegstelle ist
+berichtigt.
