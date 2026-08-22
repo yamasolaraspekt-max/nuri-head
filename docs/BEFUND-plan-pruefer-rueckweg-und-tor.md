@@ -27306,3 +27306,75 @@ in denselben Vorrat wie Code 7 aus §312 — sie gehört ins Blatt, wenn es nach
 
 **Ball:** Planner (Codetabelle, zusammen mit §312) · Integrator (A-37-Zustand nachziehen, sobald der
 Transport läuft) · Dirigent (Aktionsnamen aus §327).
+
+## §329 — Der Fall aus §327 ist eingetreten, und meine Zahl war zu klein: nicht drei von fünf, sondern vier von SECHS — den Integrator hatte ich gar nicht gemessen
+
+**Messstand** `4fb4ebfe` · Baum sauber · 0 neue Commits seit §328 · Integrationszweig `f6792ec3`.
+Ballortung dreiseitig **1 · 6 · 14**.
+
+### Der Fall ist real
+
+`integrator-BEFUND-tor-weist-vier-rollen-ab.yaml` (12:12:06). Erster eigener Commit nach dem
+**Transport des A-37-Baus** (`f6792ec3`) — abgewiesen, Rückgabe **7**, wörtlich:
+
+> *„unbekannte aktion `rueckweg_planner_bis_HEAD_dann_kette` — weder Arbeit noch Pause.
+> Bekannt als Arbeit: bauen nachbessern"*
+
+Kein `--no-verify`. Die fertige Änderung an `docs/STATUS.md` (numstat 15/3, Zählungen gegengeprüft)
+liegt unverändert im Arbeitsbaum. **Und der Satz, der die Lage beschreibt, ist seiner:**
+
+> **„Das Tor blockiert die Eintragung seiner eigenen Abnahme."**
+
+`docs/STATUS.md` schreibt allein der Integrator. Solange seine Aktion nicht einzuordnen ist, kann die
+Statuswahrheit **überhaupt nicht** fortgeschrieben werden — auch nicht der Zustandscommit, der A-37
+als abgenommen einträgt.
+
+### Meine Zahl aus §327 war zu klein, und der Fehler ist die Grundmenge
+
+```
+Rollenquellen in .ticket-steuerung/rollen/:   6
+  evaluator · generator · integrator · plan-pruefer · planner · release-pruefer
+in §327 gemessen:                             5   -> integrator.yaml fehlte in meiner Schleife
+```
+
+**Ich habe „drei von fünf" gemeldet; es sind vier von sechs.** Die fehlende ist ausgerechnet die
+folgenreichste: der Integrator ist der **einzige Schreiber** des Statusträgers. Meine Zahl war für
+meine Grundmenge richtig — die Grundmenge war es nicht. **Ich habe die Rollen aus dem Gedächtnis
+aufgezählt, statt das Verzeichnis zu lesen.** Genau das, was meine eigene Anweisung verbietet:
+*Grundmenge gegen die Frage prüfen, nicht gegen das Verfahren.*
+
+### Meine eigene Lage, gemessen statt vermutet
+
+```
+f6792ec3 Vorfahr meines HEAD                      exit 1  -> NEIN
+mein scripts/rollen-tor.sh: 'unbekannte aktion'   0 Treffer  (am Endstand c82df498: 1)
+mein scripts/commit-pruefen.sh prüft AKTION       0 Treffer · ruft rollen-tor.sh   5x
+```
+
+**Ich kann noch committen — weil mein Worktree den Bau nicht hat.** Das ist kein Verdienst und keine
+Ausnahme, sondern die Transportreihenfolge: der Integrator zieht die Rollenbäume nach, und genau er
+ist blockiert. **Solange er blockiert ist, bleibt mein Tor alt und ich arbeitsfähig.** Sobald er
+durchkommt und meinen Baum nachzieht, gilt für mich dasselbe: `warten_dann_errata_bestaetigen` steht
+in keiner der beiden Listen.
+
+### Was der Integrator richtig macht
+
+Kein `--no-verify` (der Dirigent hat es 12:04:47 ausdrücklich verlangt). Kein Ändern von
+`scripts/rollen-tor.sh` — *„das ist Produktcode und mir verboten"*. Kein Ändern der eigenen `aktion` —
+*„dort schreibt nur der Dirigent"*. Die Arbeit bleibt im Baum stehen statt zurückgeräumt zu werden,
+weil Zurückräumen die Auflage verletzen würde. **Er hat die Abweisung als Befund abgelegt und wartet.**
+Das ist die Form, die eine Sperre erst nützlich macht: sie hält, und der Gehaltene meldet statt zu
+umgehen.
+
+### Was daraus folgt
+
+**Es ist kein Baumangel.** Das Tor tut, was A-37-22e verlangt, und A-37 ist zu Recht abgenommen — die
+Kriterien verlangten die Sperre, nicht die Vollständigkeit der Aktionsliste. **Es ist die Naht zwischen
+Werkzeug und Steuerung:** das Tor kennt sieben Wörter, die Rollenquellen tragen sechs Aktionen, und
+vier davon sind nicht darunter. Beide Seiten sind für sich richtig.
+
+**Ball:** Dirigent — beide Enden liegen bei ihm, die Aktionsnamen und der nächste Schritt. Von den zwei
+Wegen, die der Integrator nennt, ist der zweite (*„die aktion auf ein Wort setzen, das das Tor kennt"*)
+ausdrücklich als **Anpassung der Steuerung ans Werkzeug** gekennzeichnet — er nennt ihn und empfiehlt
+ihn nicht. Das halte ich für richtig und schließe mich an: die Entscheidung gehört nicht dem, der
+gesperrt wird.
