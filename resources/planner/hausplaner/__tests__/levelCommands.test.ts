@@ -123,6 +123,33 @@ test('REMOVE_LEVEL lehnt ein Geschoss mit Nodes ab (kein stilles Löschen)', () 
   );
 });
 
+test('Z1-E2-1: REMOVE_LEVEL lehnt ein Geschoss mit DECKE ab — sie zaehlt wie ein Dach', () => {
+  // Bis Z1-E2-1 prueften nur `nodes` und `roofs`. Eine Etage MIT Decke liess sich loeschen,
+  // und die CeilingNode blieb verwaist im Dokument zurueck — sichtbar wurde das nie.
+  let szene = leereSzene();
+  szene = anwenden(szene, { type: 'ADD_LEVEL', level: level('og', 1, 2500) });
+  szene = anwenden(szene, {
+    type: 'ADD_CEILING',
+    ceiling: {
+      id: 'c1', type: 'ceiling', levelId: 'og', visible: true, locked: false, tags: [],
+      createdAt: JETZT, updatedAt: JETZT,
+      polygon: [{ x: 0, y: 0 }, { x: 4000, y: 0 }, { x: 4000, y: 4000 }, { x: 0, y: 4000 }],
+      dickeMm: 200, geometrieHerkunft: 'manuell', freigabe: 'bestaetigt',
+    },
+  });
+  assert.throws(
+    () => anwenden(szene, { type: 'REMOVE_LEVEL', levelId: 'og' }),
+    (e: unknown) => e instanceof CommandAbgelehnt && e.grund === 'level_nicht_leer',
+  );
+  // Der Grund wird BENANNT — sonst liest der Benutzer „enthaelt noch Elemente" und sieht nichts.
+  try {
+    anwenden(szene, { type: 'REMOVE_LEVEL', levelId: 'og' });
+    assert.fail('haette ablehnen muessen');
+  } catch (e) {
+    assert.ok(e instanceof CommandAbgelehnt && /Decke/.test(e.message), `Meldung nennt die Decke nicht: ${String(e)}`);
+  }
+});
+
 test('REMOVE_LEVEL lehnt ein Geschoss mit Dach ab', () => {
   let szene = leereSzene();
   szene = anwenden(szene, { type: 'ADD_LEVEL', level: level('og', 1, 2500) });

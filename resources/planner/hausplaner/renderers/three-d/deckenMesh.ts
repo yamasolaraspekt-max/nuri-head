@@ -1,15 +1,14 @@
 /**
  * Decke (Feature A) — REINE, testbare Geometrie-Helfer (kein three/WebGL). Der three-Aufsatz (szene.ts)
  * baut aus dem Decken-Polygon minus `oeffnungen` eine Shape-mit-Löchern auf der Wand-Oberkante. Hier nur
- * die belastbaren Kennwerte + die EINE Etagen-Stapel-Ableitung (eine Wahrheit, kein zweiter Rechenweg).
+ * die belastbaren Kennwerte. Die Etagen-Stapel-Ableitung liegt seit Z1-E0-1 in geometry/hoehenkette.ts.
  */
-import type { CeilingNode, Level } from '../../domain/scene.types';
+import type { CeilingNode } from '../../domain/scene.types';
 import { polygonFlaecheM2 } from '../../geometry/polygonFlaeche';
 
-/** Höhe der Decken-Unterkante = Wand-Oberkante des Levels (mm). */
-export function deckenOberkanteMm(level: Pick<Level, 'elevation' | 'defaultWallHeight'>): number {
-  return level.elevation + level.defaultWallHeight;
-}
+// Z1-E0-1: `deckenOberkanteMm` und `naechsteEtageElevationMm` wohnen jetzt in
+// `geometry/hoehenkette.ts` — die Hoehenkette ist Fachgeometrie und gehoert keinem
+// Darstellungsweg. Diese Datei rechnet sie nicht mehr; wer sie braucht, liest sie dort.
 
 /** mm² pro m² — polygonFlaecheM2 rechnet KEINE Einheit um (Input in mm ⇒ Ergebnis mm²). */
 const MM2_PRO_M2 = 1_000_000;
@@ -24,15 +23,3 @@ export function deckenNettoFlaecheM2(ceiling: CeilingNode): number {
   return Math.max(0, brutto - loch) / MM2_PRO_M2;
 }
 
-/**
- * Etagen-Stapel (eine Wahrheit): Elevation der NÄCHSTEN Etage = untere Elevation + Wandhöhe + Deckendicke.
- * Fehlt die Decke, wird `level.floorThickness` als Deckendicke angesetzt (dokumentierter Rückfall, kein
- * Rateswert der Höhe selbst). Ganzzahlig (mm-Invariante).
- */
-export function naechsteEtageElevationMm(
-  level: Pick<Level, 'elevation' | 'defaultWallHeight' | 'floorThickness'>,
-  decke: CeilingNode | undefined,
-): number {
-  const deckeDickeMm = decke ? decke.dickeMm : level.floorThickness;
-  return Math.round(level.elevation + level.defaultWallHeight + deckeDickeMm);
-}

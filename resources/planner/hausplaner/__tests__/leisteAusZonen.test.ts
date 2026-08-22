@@ -57,7 +57,8 @@ test('Leiste == Fix-Zone: dieselben ids in derselben Reihenfolge wie die alte Re
     alt.filter((id) => !(AUS_PAKET_GEHOBEN as readonly string[]).includes(id)),
     'A2 muss fuer die nicht gehobenen Werkzeuge verhaltensneutral sein — sonst wandern Icons',
   );
-  assert.deepEqual(neu, ['auswahl', 'wand', 'fenster', 'tuer', 'dach', 'decke', 'treppe', 'kontur']);
+  // **Z1-W2-8:** Baureihenfolge statt gewachsener Folge — `dach` steht jetzt hinten.
+  assert.deepEqual(neu, ['auswahl', 'wand', 'fenster', 'tuer', 'treppe', 'decke', 'kontur', 'dach']);
 });
 
 // --- 2) Es gibt nur noch EINE zuständige Stelle (Abnahmekriterium 5) ---------------------------

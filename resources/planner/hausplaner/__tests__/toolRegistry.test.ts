@@ -50,9 +50,12 @@ test('werkzeugTools = genau die modus-schaltenden Werkzeuge der Leiste (UI-3)', 
   // ihre Erwartung aus dem Pruefling holt, ist immer gruen. *Was hier steht, ist Yamas Leiste —
   // sie soll sich nur aendern, wenn jemand sie aendern WOLLTE.*
   assert.deepEqual(ids, [
-    'auswahl', 'wand', 'fenster', 'tuer', 'dach', 'decke', 'treppe',
+    // **Z1-W2-8 (Yama, 22.08.):** die Folge ist jetzt die BAUREIHENFOLGE — wand, fenster,
+    // tuer, treppe, decke, kontur, dach. Vorher stand `dach` vor `decke` und `treppe`; wer die
+    // Leiste von oben nach unten las, bekam das Dach vor der Decke. *Diese Liste bleibt
+    // ausgeschrieben — sie hat sich geaendert, weil jemand sie aendern WOLLTE.*
+    'auswahl', 'wand', 'fenster', 'tuer', 'treppe', 'decke', 'kontur', 'dach',
     'bemassen', 'flaeche-messen',   // <- W-05
-    'kontur',
   ]);
   // Und die Verbindung zur Hebeliste, damit beide nicht auseinanderlaufen koennen.
   // **A-35 (15.08.):** ein gehobenes Werkzeug muss in der Leiste ANKOMMEN — als modus-schaltendes

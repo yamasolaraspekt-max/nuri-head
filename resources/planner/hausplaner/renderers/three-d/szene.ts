@@ -35,7 +35,7 @@ import { erkenneRaeume } from '../../geometry/roomDetection';
 import { dachMeshWelt, dachflaechen, type DachFlaeche } from './dachMesh';
 import { nichtDarstellbareDaecher, type NichtDarstellbar } from './nichtDarstellbar';
 import { flaecheZuFrame, aufbauKoerper, type AufbauFrame } from './dachAufbautenMesh';
-import { deckenOberkanteMm } from './deckenMesh';
+import { deckenOberkanteMm } from '../../geometry/hoehenkette';
 import { DachGeometrieUngueltig } from '../../geometry/dachGeometrie';
 
 /**

@@ -80,3 +80,34 @@ test('hängende hostWallId (Wirtswand nicht mitkopiert) wird gedroppt statt alte
   const fenster = neu.find((n) => n.type === 'window')!;
   assert.equal(fenster.hostWallId, undefined); // gedroppt, NICHT 'fehlt'
 });
+
+// ── Z1-E2-1 — die Decke wandert mit, wie das Dach ───────────────────────────────────────────
+//
+// Bis hierher kannte `dupliziereGeschoss` nur `roof`. Ein dupliziertes Geschoss stand ohne Decke
+// da — die Etage war da, der Raumabschluss fehlte, und niemand meldete es.
+
+test('Z1-E2-1: Decke wird mitkopiert (neue id, neues Geschoss)', () => {
+  const decke = { id: 'c1', levelId: 'eg', dickeMm: 240 };
+  const { level, ceiling } = dupliziereGeschoss(eg, [], null, idFolge(), 'OG', undefined, decke);
+  assert.ok(ceiling);
+  assert.notEqual(ceiling!.id, 'c1');
+  assert.equal(ceiling!.levelId, level.id);
+  assert.equal((ceiling as typeof decke).dickeMm, 240);
+});
+
+test('Z1-E2-1: ohne Decke bleibt ceiling null', () => {
+  const { ceiling } = dupliziereGeschoss(eg, [], null, idFolge(), 'OG');
+  assert.equal(ceiling, null);
+});
+
+test('Z1-E2-1: das neue Geschoss hat eigene sortOrder UND eigene elevation', () => {
+  // Die Absage-Regel des Blattes: dieselbe sortOrder fuer beide Level erfuellt (b) NICHT —
+  // dann ist die Reihenfolge der Etagen nicht mehr entscheidbar und die Hoehenkette aus
+  // Z1-E0-1 rechnete auf einer mehrdeutigen Kette.
+  const decke = { id: 'c1', levelId: 'eg', dickeMm: 240 };
+  const { level } = dupliziereGeschoss(eg, [], null, idFolge(), 'OG', decke, decke);
+  assert.notEqual(level.sortOrder, eg.sortOrder);
+  assert.notEqual(level.elevation, eg.elevation);
+  // Und die Hoehenkette hat gerechnet, nicht der Duplizierer: mit Decke 240 statt floorThickness.
+  assert.equal(level.elevation, eg.elevation + eg.defaultWallHeight + 240);
+});

@@ -111,42 +111,6 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     tooltip: { title: 'Tür', body: 'Türöffnung und Türelement platzieren.', usage: 'Einsatzbereich: Architektur, Bad, Küche.' },
   },
   {
-    id: 'dach',
-    label: 'Dach',
-    icon: 'dach',
-    art: 'werkzeug',
-    groupId: 'gebaeude',
-    supportedWorkspaces: [WORKSPACE_ARCHITEKTUR],
-    supportedViews: ['2d', 'split'],
-    shortcut: 'D',
-    bauteilKind: 'roof',
-    helpText: 'Dach über den Gebäudeumriss aufsetzen — dann in 3D betrachten.',
-    // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
-    //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'roof' war dasselbe Werkzeug.
-    meaning: 'Dach aus Kontur oder Dachform erzeugen.',
-    usageArea: 'Dachplanung und Bauphysik.',
-    group: 'Architektur',
-    tooltip: { title: 'Dach', body: 'Dach aus Kontur oder Dachform erzeugen.', usage: 'Einsatzbereich: Dachplanung und Bauphysik.' },
-  },
-  {
-    id: 'decke',
-    label: 'Decke',
-    icon: 'decke',
-    art: 'werkzeug',
-    groupId: 'gebaeude',
-    supportedWorkspaces: [WORKSPACE_ARCHITEKTUR],
-    supportedViews: ['2d', 'split'],
-    shortcut: 'K',
-    bauteilKind: 'ceiling',
-    helpText: 'Geschossdecke aus dem Grundriss aufsetzen (Treppen werden ausgespart) — Etagen-Basis.',
-    // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
-    //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'slab' war dasselbe Werkzeug.
-    meaning: 'Massive oder mehrschichtige Decke erzeugen.',
-    usageArea: 'Architektur, Statik, Heizlast.',
-    group: 'Architektur',
-    tooltip: { title: 'Decke / Bodenplatte', body: 'Massive oder mehrschichtige Decke erzeugen.', usage: 'Einsatzbereich: Architektur, Statik, Heizlast.' },
-  },
-  {
     id: 'treppe',
     label: 'Treppe',
     icon: 'treppe',
@@ -163,6 +127,89 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     usageArea: 'Erschließung und Schnittplanung.',
     group: 'Architektur',
     tooltip: { title: 'Treppe', body: 'Treppe zwischen Ebenen parametrisch erzeugen.', usage: 'Einsatzbereich: Erschließung und Schnittplanung.' },
+  },
+  {
+    id: 'decke',
+    label: 'Decke',
+    icon: 'decke',
+    art: 'werkzeug',
+    groupId: 'gebaeude',
+    supportedWorkspaces: [WORKSPACE_ARCHITEKTUR],
+    supportedViews: ['2d', 'split'],
+    shortcut: 'K',
+    bauteilKind: 'ceiling',
+    helpText: 'Geschossdecke aus dem Grundriss aufsetzen (Treppen werden ausgespart) — Etagen-Basis.',
+    // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
+    //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'slab' war dasselbe Werkzeug.
+    // Z1-W2-8 (c) Haelfte 2: der Tooltip nennt BEIDE Decken, die dieses eine Werkzeug setzt.
+    //
+    // ⚠ **Der Titel hiess bis 22.08. „Decke / Bodenplatte".** Solange die Bodenplatte ein
+    // eigener Eintrag werden sollte, war das eine Ankuendigung. Nachdem die DoR (b) gestrichen
+    // und einen Eintrag auf `bauteilKind: 'ceiling'` ausdruecklich UNTERSAGT hat, verspricht
+    // derselbe Titel einen Bedieneintrag, den es nicht geben wird — er wurde durch die
+    // Streichung UNEHRLICHER, nicht harmloser. Genau davor schuetzt (c).
+    // Die Bodenplatte kommt als eigener Knoten mit GP-0; bis dahin wird sie hier nicht versprochen.
+    meaning: 'Zwischendecke oder Abschlussdecke erzeugen — massiv oder mehrschichtig.',
+    usageArea: 'Architektur, Statik, Heizlast.',
+    group: 'Architektur',
+    tooltip: { title: 'Decke', body: 'Zwischendecke oder Abschlussdecke erzeugen — massiv oder mehrschichtig.', usage: 'Einsatzbereich: Architektur, Statik, Heizlast.' },
+  },
+
+  // --- Globale Aktionen (§6): keine Zeichenwerkzeuge, aber Teil der Registry, damit die
+  //     Activation-Engine Auswahl-/Rechte-Bedingungen datengetrieben liefert. ---
+  {
+    // Z-05-N1 — **das Konturwerkzeug, jetzt erreichbar.**
+    //
+    // Z-05 hat es gebaut; der Eintrag hier fehlte, und ohne ihn gab es weder Knopf noch Kuerzel.
+    // Ein achter `art: 'werkzeug'`-Eintrag ist **keine additive Zeile**: er bewegt die Fix-Zone
+    // (7 -> 8), braucht eine Themen-Bindung, einen Vertrag und eine Praesentationsregel. Genau
+    // deshalb ist er ein eigenes Blatt geworden und nicht in Z-05 mitgelaufen.
+    //
+    // **Das Icon heisst `raum`, nicht `polygon`** — und das ist kein Geschmack, sondern N1-07.
+    // Mein erster Entwurf nahm `polygon`, weil die Datei da ist und das Bild passt. Die Zusage
+    // zaehlt aber die ZEICHENKETTE `'polygon'` in dieser Datei und kann ein Bild nicht von einer
+    // Werkzeug-id unterscheiden — sie ging sofort rot. *Die Zusage hat recht behalten, auch wenn
+    // meine Absicht harmlos war:* eine Datei, in der `'polygon'` steht, laesst sich nicht mehr
+    // per Blick von einer Wiederbelebung unterscheiden. `raum` ist ausserdem das ehrlichere Bild —
+    // eine Kontur ist der Umriss einer Flaeche. Die sechs Primitive bleiben stillgelegt.
+    //
+    // **Kein `bauteilKind`:** eine Kontur ist kein Bauteil. Sie wird zu einem, wenn Z-06 sie zur
+    // Decke macht — dort gehoert die Zuordnung hin.
+    id: 'kontur',
+    label: 'Kontur',
+    icon: 'raum',
+    art: 'werkzeug',
+    groupId: 'gebaeude',
+    supportedWorkspaces: [WORKSPACE_ARCHITEKTUR],
+    supportedViews: ['2d', 'split'],
+    shortcut: 'U',
+    helpText: 'Mehrpunkt-Umriss zeichnen (L-, T-, U-Form) — Klick auf den ersten Punkt oder Enter schliesst.',
+    meaning: 'Freien Umriss aus mehreren Punkten aufnehmen.',
+    usageArea: 'Architektur — Grundlage fuer Decke und Dach.',
+    group: 'Architektur',
+    tooltip: {
+      title: 'Kontur',
+      body: 'Mehrpunkt-Umriss zeichnen. Klick auf den ersten Punkt oder Enter schliesst, Esc verwirft.',
+      usage: 'Einsatzbereich: Flaechen, die keine Rechtecke sind — L-, T- und U-Formen.',
+    },
+  },
+  {
+    id: 'dach',
+    label: 'Dach',
+    icon: 'dach',
+    art: 'werkzeug',
+    groupId: 'gebaeude',
+    supportedWorkspaces: [WORKSPACE_ARCHITEKTUR],
+    supportedViews: ['2d', 'split'],
+    shortcut: 'D',
+    bauteilKind: 'roof',
+    helpText: 'Dach über den Gebäudeumriss aufsetzen — dann in 3D betrachten.',
+    // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
+    //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'roof' war dasselbe Werkzeug.
+    meaning: 'Dach aus Kontur oder Dachform erzeugen.',
+    usageArea: 'Dachplanung und Bauphysik.',
+    group: 'Architektur',
+    tooltip: { title: 'Dach', body: 'Dach aus Kontur oder Dachform erzeugen.', usage: 'Einsatzbereich: Dachplanung und Bauphysik.' },
   },
 
   // --- W-05: aus dem Paket in die Leiste GEHOBEN ------------------------------------------
@@ -205,45 +252,6 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     usageArea: 'Räume, Fassaden, Dächer.',
     group: 'Messen',
     tooltip: { title: 'Fläche messen', body: 'Geschlossene Fläche ermitteln.', usage: 'Einsatzbereich: Räume, Fassaden, Dächer.' },
-  },
-
-  // --- Globale Aktionen (§6): keine Zeichenwerkzeuge, aber Teil der Registry, damit die
-  //     Activation-Engine Auswahl-/Rechte-Bedingungen datengetrieben liefert. ---
-  {
-    // Z-05-N1 — **das Konturwerkzeug, jetzt erreichbar.**
-    //
-    // Z-05 hat es gebaut; der Eintrag hier fehlte, und ohne ihn gab es weder Knopf noch Kuerzel.
-    // Ein achter `art: 'werkzeug'`-Eintrag ist **keine additive Zeile**: er bewegt die Fix-Zone
-    // (7 -> 8), braucht eine Themen-Bindung, einen Vertrag und eine Praesentationsregel. Genau
-    // deshalb ist er ein eigenes Blatt geworden und nicht in Z-05 mitgelaufen.
-    //
-    // **Das Icon heisst `raum`, nicht `polygon`** — und das ist kein Geschmack, sondern N1-07.
-    // Mein erster Entwurf nahm `polygon`, weil die Datei da ist und das Bild passt. Die Zusage
-    // zaehlt aber die ZEICHENKETTE `'polygon'` in dieser Datei und kann ein Bild nicht von einer
-    // Werkzeug-id unterscheiden — sie ging sofort rot. *Die Zusage hat recht behalten, auch wenn
-    // meine Absicht harmlos war:* eine Datei, in der `'polygon'` steht, laesst sich nicht mehr
-    // per Blick von einer Wiederbelebung unterscheiden. `raum` ist ausserdem das ehrlichere Bild —
-    // eine Kontur ist der Umriss einer Flaeche. Die sechs Primitive bleiben stillgelegt.
-    //
-    // **Kein `bauteilKind`:** eine Kontur ist kein Bauteil. Sie wird zu einem, wenn Z-06 sie zur
-    // Decke macht — dort gehoert die Zuordnung hin.
-    id: 'kontur',
-    label: 'Kontur',
-    icon: 'raum',
-    art: 'werkzeug',
-    groupId: 'gebaeude',
-    supportedWorkspaces: [WORKSPACE_ARCHITEKTUR],
-    supportedViews: ['2d', 'split'],
-    shortcut: 'U',
-    helpText: 'Mehrpunkt-Umriss zeichnen (L-, T-, U-Form) — Klick auf den ersten Punkt oder Enter schliesst.',
-    meaning: 'Freien Umriss aus mehreren Punkten aufnehmen.',
-    usageArea: 'Architektur — Grundlage fuer Decke und Dach.',
-    group: 'Architektur',
-    tooltip: {
-      title: 'Kontur',
-      body: 'Mehrpunkt-Umriss zeichnen. Klick auf den ersten Punkt oder Enter schliesst, Esc verwirft.',
-      usage: 'Einsatzbereich: Flaechen, die keine Rechtecke sind — L-, T- und U-Formen.',
-    },
   },
   {
     id: 'loeschen',

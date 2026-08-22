@@ -4,6 +4,7 @@ namespace Tests\Feature\Security;
 
 use App\Models\ImportedIdsItem;
 use App\Models\User;
+use App\Services\Product\IDS\IdsRueckwegToken;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
@@ -35,10 +36,9 @@ use Tests\TestCase;
  * nichts trifft, schuetzt niemanden — sie verdeckt nur, welche Schreibpfade wirklich ohne CSRF
  * laufen. Die Ratsche unten laesst kuenftig keine neue ins Haus.
  *
- * **NICHT hier:** Teil B (signierter State fuer den echten IDS-Rueckweg) haengt an Y-12 —
- * wie der externe Shop zurueckliefert, ist im Haus nicht messbar. Die Kriterien A und B der
- * Nachvollzugs-Matrix des Auftrags gehoeren dorthin. Deshalb bleibt die Ausnahme fuer
- * `ids/callback` vorerst stehen.
+ * **Teil B ist seit Z2-W0-11b gebaut** (22.08., Operand Y-12 geliefert): der Rueckweg traegt
+ * einen einmaligen State-Token, und die CSRF-Ausnahme fuer `ids/callback` ist **entfernt**.
+ * Die Zusagen dazu stehen unten; der Satz „bis dahin bleibt sie" hat sich damit erledigt.
  *
  * Laeuft ausschliesslich gegen `ticket_testing` (`phpunit.xml` erzwingt `DB_DATABASE`).
  */
@@ -87,7 +87,7 @@ class IdsCallbackZuschreibungTest extends TestCase
         $artikelNr = 'W011A-' . random_int(100000, 999999);
 
         $this->actingAs($angemeldet)
-            ->post('/ids/callback?uid=' . $fremd->id . '&auto=0', [
+            ->post('/ids/callback?uid=' . $fremd->id . '&auto=0&' . $this->token($angemeldet), [
                 'warenkorb' => $this->warenkorb($artikelNr),
             ])
             ->assertOk();
@@ -123,7 +123,7 @@ class IdsCallbackZuschreibungTest extends TestCase
         $angemeldet = $this->nutzer();
 
         $this->actingAs($angemeldet)
-            ->post('/ids/callback', ['warenkorb' => $this->warenkorb('W011B-' . random_int(100000, 999999))])
+            ->post('/ids/callback?' . $this->token($angemeldet), ['warenkorb' => $this->warenkorb('W011B-' . random_int(100000, 999999))])
             ->assertOk();
 
         Log::shouldHaveReceived('info')
@@ -215,7 +215,100 @@ class IdsCallbackZuschreibungTest extends TestCase
             $this->assertNotContains($tot, $ausnahmen, "Tote Ausnahme wieder eingetragen: {$tot}");
         }
 
-        // Und die, die wirkt, ist noch da — Teil B haengt an Y-12, bis dahin bleibt sie.
-        $this->assertContains('ids/callback', $ausnahmen);
+        // Z2-W0-11b: sie ist FORT. Der Satz „bis dahin bleibt sie" bezog sich auf Y-12; der
+        // Operand ist geliefert, der State-Token ersetzt sie. Die Ratsche oben bleibt unberuehrt.
+        $this->assertNotContains('ids/callback', $ausnahmen);
+    }
+
+    // ── Z2-W0-11b — der einmalige State-Token ───────────────────────────────────────────────
+    //
+    // Vier Laeufe, je HTTP-Code UND Zeilenzahl. Die Zeilenzahl ist die eigentliche Zusage:
+    // ein abgewiesener Aufruf darf NICHTS anlegen — `autoPromoteItem` fasst Produkt,
+    // Lieferant und Preis an, und ein zurueckgerollter Import ist kein verhinderter.
+
+    /** Ein gueltiger Query-Anteil `state=…` fuer diesen Nutzer. */
+    private function token(User $nutzer): string
+    {
+        return http_build_query([
+            IdsRueckwegToken::PARAMETER => IdsRueckwegToken::erzeuge($nutzer->id, 'test-sitzung'),
+        ]);
+    }
+
+    public function test_z2w011b_gueltiger_token_laesst_den_import_durch(): void
+    {
+        Event::fake();
+        $nutzer = $this->nutzer();
+        $artikelNr = 'W011B-OK-' . random_int(100000, 999999);
+        $vorher = ImportedIdsItem::count();
+
+        $this->actingAs($nutzer)
+            ->post('/ids/callback?' . $this->token($nutzer), ['warenkorb' => $this->warenkorb($artikelNr)])
+            ->assertOk();
+
+        $this->assertSame($vorher + 1, ImportedIdsItem::count(), 'Der gueltige Weg muss anlegen — sonst misst die Zusage nichts.');
+    }
+
+    public function test_z2w011b_ohne_token_wird_abgewiesen_und_legt_nichts_an(): void
+    {
+        Event::fake();
+        $nutzer = $this->nutzer();
+        $vorher = ImportedIdsItem::count();
+
+        $this->actingAs($nutzer)
+            ->post('/ids/callback', ['warenkorb' => $this->warenkorb('W011B-KEIN-' . random_int(100000, 999999))])
+            ->assertForbidden();
+
+        $this->assertSame($vorher, ImportedIdsItem::count(), 'Ohne Token darf KEINE Zeile entstehen.');
+    }
+
+    public function test_z2w011b_fremder_token_wird_abgewiesen_und_legt_nichts_an(): void
+    {
+        Event::fake();
+        $nutzer = $this->nutzer();
+        $fremd = $this->nutzer();
+        $vorher = ImportedIdsItem::count();
+
+        // Der Token gehoert dem FREMDEN, angemeldet ist ein anderer.
+        $this->actingAs($nutzer)
+            ->post('/ids/callback?' . $this->token($fremd), ['warenkorb' => $this->warenkorb('W011B-FREMD-' . random_int(100000, 999999))])
+            ->assertForbidden();
+
+        $this->assertSame($vorher, ImportedIdsItem::count(), 'Ein fremder Token darf KEINE Zeile anlegen.');
+    }
+
+    public function test_z2w011b_verbrauchter_token_traegt_kein_zweites_mal(): void
+    {
+        Event::fake();
+        $nutzer = $this->nutzer();
+        $abfrage = $this->token($nutzer);
+
+        $this->actingAs($nutzer)
+            ->post('/ids/callback?' . $abfrage, ['warenkorb' => $this->warenkorb('W011B-EIN-' . random_int(100000, 999999))])
+            ->assertOk();
+
+        $nachErstem = ImportedIdsItem::count();
+
+        // DERSELBE Token ein zweites Mal — das ist die Einmaligkeit, ausgeloest.
+        $this->actingAs($nutzer)
+            ->post('/ids/callback?' . $abfrage, ['warenkorb' => $this->warenkorb('W011B-ZWEI-' . random_int(100000, 999999))])
+            ->assertForbidden();
+
+        $this->assertSame($nachErstem, ImportedIdsItem::count(), 'Der zweite Lauf auf denselben Token darf nichts anlegen.');
+    }
+
+    public function test_z2w011b_auto_kommt_an_einem_ungueltigen_token_nicht_vorbei(): void
+    {
+        Event::fake();
+        $nutzer = $this->nutzer();
+        $vorher = ImportedIdsItem::count();
+        $produkteVorher = \App\Models\Product::count();
+
+        // `?auto=1` OHNE Token: der Auto-Modus wird erst NACH der Wache gelesen.
+        $this->actingAs($nutzer)
+            ->post('/ids/callback?auto=1', ['warenkorb' => $this->warenkorb('W011B-AUTO-' . random_int(100000, 999999))])
+            ->assertForbidden();
+
+        $this->assertSame($vorher, ImportedIdsItem::count(), 'auto=1 ohne Token darf keine Zeile anlegen.');
+        $this->assertSame($produkteVorher, \App\Models\Product::count(), 'auto=1 ohne Token darf kein Produkt anlegen.');
     }
 }
