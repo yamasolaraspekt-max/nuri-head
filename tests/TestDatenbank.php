@@ -25,11 +25,59 @@ use RuntimeException;
  */
 final class TestDatenbank
 {
-    /** Die Rollen des Zyklus. Wer keine ist, bekommt keine eigene Datenbank. */
-    public const ROLLEN = ['generator', 'evaluator', 'planner', 'pruefer'];
+    /**
+     * Die Rollen des Zyklus. Wer keine ist, bekommt keine eigene Datenbank.
+     *
+     * **Z0-I1-3, additiv erweitert (22.08.):** `security` und `browser` kamen hinzu, weil der
+     * Auftrag sie nennt und sie heute abgewiesen würden. `planner` und `pruefer` bleiben —
+     * *wer sie entfernte, nähme zwei Rollen ihre eigene Datenbank, und das ist eine Entscheidung
+     * über Daten.* Das Blatt nennt die Listenfrage ausdrücklich „kein Bauentscheid des
+     * Generators"; die additive Fassung ist die einzige, bei der niemand etwas verliert, und sie
+     * wurde vorab gemeldet und nicht beanstandet.
+     */
+    public const ROLLEN = ['generator', 'evaluator', 'planner', 'pruefer', 'security', 'browser'];
 
     /** Der Name ohne Rolle — der gemeinsame Schreibtisch, und die Vorgabe. */
     public const BASIS = 'ticket_testing';
+
+    /**
+     * **Z0-I1-4 — `TEST_ROLLE` ist Pflicht. Der stille Rückfall entfällt.**
+     *
+     * Gibt die geprüfte Rolle zurück; wirft, wenn sie fehlt oder unbekannt ist.
+     *
+     * **Warum das eine eigene Funktion ist und `name()` unangetastet bleibt:** in Stufe 1 gibt es
+     * **eine** Datenbank (`ticket_testing`), und `TEST_ROLLE` benennt dort den **Lease-Halter**,
+     * nicht die Datenbank. `name()` beantwortet die andere Frage — welche DB eine Rolle in Stufe 2
+     * bekäme — und ihre Zusage bleibt gültig. *Zwei Fragen, zwei Funktionen; eine Funktion, die
+     * beides täte, wäre beim Umschalten auf Stufe 2 die Stelle, an der es schiefgeht.*
+     *
+     * **Der Rückfall war ausdrücklich als Angebot gebaut** („keine neue Pflicht"). Genau dieses
+     * Angebot ist der Vorfall: ein Lauf ohne gesetzte Rolle landete auf der Sammelbühne und
+     * räumte sie leer, während eine Browserabnahme darauf lief. *Was weder gesetzt noch geprüft
+     * ist, ist unbekannt und damit unsicher* (`buehnen-waechter.sh:20`).
+     */
+    public static function verlangeRolle(?string $rolle): string
+    {
+        $rolle = trim((string) $rolle);
+
+        if ($rolle === '') {
+            throw new RuntimeException(
+                'Z0-I1-4: TEST_ROLLE ist nicht gesetzt. Es gibt keinen Rueckfall mehr auf '
+                .self::BASIS.' — ein Lauf ohne benannten Halter hat die Sammelbuehne geleert, '
+                .'waehrend eine Browserabnahme darauf lief. Erlaubt: '.implode(', ', self::ROLLEN)
+                .'. Kein Lauf, keine Datenbank angefasst.',
+            );
+        }
+
+        if (! in_array($rolle, self::ROLLEN, true)) {
+            throw new RuntimeException(
+                "Z0-I1-4: TEST_ROLLE='{$rolle}' ist keine bekannte Rolle. Erlaubt: "
+                .implode(', ', self::ROLLEN).'. Kein Lauf, keine Datenbank angefasst.',
+            );
+        }
+
+        return $rolle;
+    }
 
     /**
      * Liefert den Datenbanknamen fuer diese Rolle.

@@ -159,6 +159,34 @@ test('A-04-4 KONTROLLE: der Waechter beendet und aendert nichts (must_preserve)'
   assert.doesNotMatch(code, /\b(rm|mv) /, 'der Waechter veraendert Dateien — er darf nur lesen');
 });
 
+test('Z0-I1-5: ALLE DREI Orte nennen denselben Namen — auch die PHP-Quelle', () => {
+  // **Der dritte Ort kam am 22.08. dazu.** Die Zusage darunter fing die Drift zwischen den beiden
+  // Skripten; seit `TestDatenbank::BASIS` den Namen ebenfalls traegt und der Testlauf ihn von dort
+  // nimmt, sind es DREI. *Eine Zusage, die zwei von drei Orten vergleicht, meldet Einigkeit, wo
+  // eine Abweichung liegt.*
+  //
+  // **Warum die Duplikation bleibt und nicht aufgeloest wird:** die Begruendung im Bestand traegt
+  // weiter — eine gemeinsame Namensdatei waere der achtzehnte Ort dieses Namens, nicht der erste.
+  // Das Blatt laesst ausdruecklich BEIDE Wege zu (gemeinsame Quelle ODER eine Zusage ueber alle
+  // Orte) und nennt die Wahl einen Bauentscheid. *Dies ist der zweite Weg, und er kostet eine
+  // Zeile statt eines Umbaus an zwei Skripten, die heute funktionieren.*
+  const PHP = new URL('../../tests/TestDatenbank.php', import.meta.url).pathname;
+
+  const ausBuehne = /ERWARTETE_DB=([A-Za-z0-9_]+)/.exec(readFileSync(BUEHNE, 'utf8'));
+  const ausWaechter = /ERWARTETE_DB=([A-Za-z0-9_]+)/.exec(readFileSync(WAECHTER, 'utf8'));
+  const ausPhp = /public const BASIS = '([A-Za-z0-9_]+)'/.exec(readFileSync(PHP, 'utf8'));
+
+  assert.ok(ausPhp, 'tests/TestDatenbank.php traegt keine BASIS-Konstante mehr');
+  assert.equal(
+    ausPhp[1], ausBuehne[1],
+    `TestDatenbank::BASIS ist '${ausPhp[1]}', browser-buehne.sh erwartet '${ausBuehne?.[1]}'`,
+  );
+  assert.equal(
+    ausPhp[1], ausWaechter[1],
+    `TestDatenbank::BASIS ist '${ausPhp[1]}', buehnen-waechter.sh erwartet '${ausWaechter?.[1]}'`,
+  );
+});
+
 test('Drift-Zusage (Rest 1): beide Skripte nennen DENSELBEN erlaubten Namen', () => {
   // Der erlaubte Name ist BEWUSST dupliziert (eine Namensdatei waere der achtzehnte Ort,
   // nicht der erste). Der Preis der Duplikation ist diese Zusage: laufen die beiden

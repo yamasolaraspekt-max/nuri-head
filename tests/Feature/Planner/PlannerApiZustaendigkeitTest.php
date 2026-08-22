@@ -367,6 +367,66 @@ class PlannerApiZustaendigkeitTest extends TestCase
     // Kriterium E — ein Baustein, keine vier Kopien
     // =====================================================================
 
+    // =====================================================================
+    // Z2-W0-5b — `linked` gab die Master-Sets FREMDER Auftragspunkte heraus
+    // =====================================================================
+
+    /**
+     * Z2-W0-5b, die Sperre — und sie steht hier und nicht in einer eigenen Datei.
+     *
+     * **Warum im Vertragstest:** die Zusage „ein fremder Auftragspunkt geht mich nichts an" wird
+     * hier schon für `materials` (A-4) und für das Schreiben (A-3) geführt. Eine zweite Datei
+     * daneben prüfte dieselbe Zusage an zwei Orten, und **zwei Orte altern unterschiedlich**.
+     *
+     * `linked` war der einzige der fünf Endpunkte am Punkt ohne Wache: `int $plannerItemId` ging
+     * direkt in die Query. *Wo kein Modell gebunden wird, fällt auch nicht auf, dass niemand es
+     * prüft.*
+     */
+    public function test_z2w05b_linked_fremdes_item_ist_verboten(): void
+    {
+        [$ich] = $this->mitarbeiterKonto();
+        [, $fremdItem] = $this->planUndPunkt($this->kunde(), null);
+
+        Sanctum::actingAs($ich, self::ABILITIES);
+
+        $this->getJson("/api/planner/items/{$fremdItem}/master-sets")->assertStatus(403);
+    }
+
+    /** Z2-W0-5b, die Gegenprobe: ohne sie belegt die Sperre nur, dass der Endpunkt tot ist. */
+    public function test_z2w05b_linked_eigenes_item_geht_durch(): void
+    {
+        [$ich, $meineEmp] = $this->mitarbeiterKonto();
+        [, $meinItem] = $this->planUndPunkt($this->kunde(), $meineEmp);
+
+        Sanctum::actingAs($ich, self::ABILITIES);
+
+        $this->getJson("/api/planner/items/{$meinItem}/master-sets")
+            ->assertStatus(200)
+            ->assertJson(['ok' => true]);
+    }
+
+    /**
+     * Z2-W0-5b, der Kern des Kriteriums (b): **bei OFFENEM Schalter ebenso.**
+     *
+     * Der Endpunkt folgte dem Schalter nicht — er **umging** ihn. Ein Nachweis nur bei
+     * geschlossenem Schalter wäre deshalb keiner: er ließe offen, ob die Wache greift oder ob
+     * bloß der Schalter zu war.
+     */
+    public function test_z2w05b_linked_offener_schalter_oeffnet_fremde_master_sets_nicht(): void
+    {
+        config(['rechte.alle_fuer_alle' => true]);
+
+        [$ich, $meineEmp] = $this->mitarbeiterKonto();
+        [, $fremdItem] = $this->planUndPunkt($this->kunde(), null);
+        [, $meinItem] = $this->planUndPunkt($this->kunde(), $meineEmp);
+
+        Sanctum::actingAs($ich, self::ABILITIES);
+
+        $this->getJson("/api/planner/items/{$fremdItem}/master-sets")->assertStatus(403);
+        // Und der offene Schalter sperrt das Eigene nicht aus — sonst hätte die Wache zu viel zu.
+        $this->getJson("/api/planner/items/{$meinItem}/master-sets")->assertStatus(200);
+    }
+
     /**
      * Kriterium E, als Ratsche statt als einmaliger grep.
      *

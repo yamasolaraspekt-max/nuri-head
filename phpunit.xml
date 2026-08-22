@@ -26,6 +26,22 @@
              Test-DB ticket_testing, NIE gegen die reale Dev-DB ticket. force=true schlaegt .env. -->
         <env name="DB_CONNECTION" value="mysql" force="true"/>
         <env name="DB_DATABASE" value="ticket_testing" force="true"/>
+        <!-- Z0-I1-12: der VERBINDUNGSWEG gehoert in eine Quelle, die jeder Baum hat.
+             Der Name stand hier seit jeher; Host und Port nicht — sie kamen aus `.env`, und die
+             ist nach `.gitignore:13` bewusst unversioniert und fehlt in 2 von 5 Baeumen. Dort
+             griffen die Laravel-Vorgaben `127.0.0.1:3306`, und AUF 3306 LAUSCHT NICHTS (gemessen:
+             3307, 3317, 33060). Zugangsdaten bleiben ausdruecklich draussen — verlangt ist der
+             Weg, nicht das Kennwort. -->
+        <env name="DB_HOST" value="127.0.0.1" force="true"/>
+        <env name="DB_PORT" value="3307" force="true"/>
+        <!-- Z0-I1-9: die Ablage der DB-Lease. Sie liegt AUSSERHALB des Repos, weil fuenf Baeume
+             sich EINE Datenbank teilen — eine Lease im Repo saehe nur der eigene Baum und
+             serialisierte nichts. `${HOME}` loest `TestDbLease::wurzel()` auf; hier steht kein
+             absoluter Pfad eines einzelnen Rechners. -->
+        <!-- Z0-I1-9: die Lease wird VOR dem Bootstrap gezogen; dort gibt es keinen Container
+             und PHP steht auf UTC. Die Zeitzone kommt deshalb aus derselben versionierten Quelle. -->
+        <env name="APP_TIMEZONE" value="Europe/Berlin" force="true"/>
+        <env name="TESTDB_LEASE_WURZEL" value="${HOME}/.ticket-steuerung/leases" force="true"/>
         <env name="MAIL_MAILER" value="array"/>
         <!-- Wächter-Baseline E4 (2026-07-16): ohne diesen Wert faellt config/broadcasting.php
              auf reverb zurueck => Broadcast-Events im Test versuchen localhost:6001 (cURL 7,

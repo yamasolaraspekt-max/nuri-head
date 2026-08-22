@@ -161,6 +161,21 @@ class PlannerMasterSetController extends Controller
 
     public function linked(Request $request, int $plannerItemId)
     {
+        // Z2-W0-5b: die Wache stand hier NICHT — zwischen Eingang und Datenbank lag keine Zeile,
+        // und der Endpunkt gab die Master-Sets fremder Auftragspunkte heraus. Er folgte dem
+        // Rechte-Schalter nicht, er UMGING ihn; deshalb greift dies in BEIDEN Schalterstellungen.
+        //
+        // Derselbe Baustein wie bei `link` und `unlink` — keine eigene `if`-Pruefung. Eine zweite
+        // Fassung der Regel waere eine zweite Wahrheit darueber, wann ein Punkt jemanden etwas
+        // angeht, und genau dagegen wurde der Baustein gebaut.
+        //
+        // `…FuerItem` und nicht `…FuerPlan`: `linked` haengt an einem BESTEHENDEN Punkt. `addToPlan`
+        // nimmt `…FuerPlan`, weil dort der Punkt erst entsteht — wer das hier verwechselt, hat eine
+        // Wache, die die falsche Frage stellt.
+        //
+        // VOR jedem Datenbankzugriff. Eine Wache hinter der Query haette die Daten schon gelesen.
+        $this->verlangeZustaendigkeitFuerItem($plannerItemId);
+
         $rows = \App\Models\PlannerItemMasterSet::query()
             ->where('planner_item_id', $plannerItemId)
             ->join('master_sets', 'master_sets.id', '=', 'planner_item_master_sets.master_set_id')

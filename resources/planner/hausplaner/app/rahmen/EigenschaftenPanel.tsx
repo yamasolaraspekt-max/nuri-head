@@ -21,6 +21,7 @@ import React from 'react';
 import { useHausplanerStore } from '../../store/hausplanerStore';
 import type { ObjectNode, OpeningNode, RoofNode, RoofAnbauMasse, SceneNode, WallNode } from '../../domain/scene.types';
 import { istVerschneidungsForm } from '../../domain/roofShape';
+import { GrundrissformHinweis } from './GrundrissformHinweis';
 import { T, FARBEN, OP_TOKEN } from '../studioDaten';
 import { opKnopfBild } from '../dashboard/opKnopfZustand';
 import { PANEL_TABS, type PanelTabId } from '../dashboard/panelTabs';
@@ -254,6 +255,10 @@ export function EigenschaftenPanel({
               <option value="u-shape">U-Dach</option>
             </select>
           </label>
+          {/* Z1-W2-3: die Eckenanalyse sitzt DIREKT unter der Formauswahl — dort faellt die
+              Entscheidung, und dort gehoert die Antwort hin. Sie rechnet hier nicht selbst;
+              `geometry/grundriss.ts` liefert das Urteil, diese Stelle stellt nur die Frage. */}
+          <GrundrissformHinweis dach={selectedRoof} />
           <label style={panelLabel}>Neigung (°)
             <input type="number" min={0} max={89} value={selectedRoof.neigungGrad} onChange={(e) => aktualisiereDach({ neigungGrad: Math.max(0, Math.min(89, Number(e.target.value))) })} style={panelInput} />
           </label>

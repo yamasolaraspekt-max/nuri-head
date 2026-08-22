@@ -178,11 +178,11 @@ alle Routen unter /items/{...} (jede Methode)                         6
 
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
-| Z2-W0-5b-a Baustein gerufen | AP-1 Wache in `linked` | n.U. | n.U. |
-| Z2-W0-5b-b fremd 403/404, beide Schalter | AP-2 vier Läufe | n.U. | n.U. |
-| Z2-W0-5b-c Vertragstest erweitert | AP-3 Testfall | n.U. | n.U. |
-| Z2-W0-5b-d Grundmenge 2 von 2 | AP-4 Routen-Nachweis | n.U. | n.U. |
-| Z2-W0-5b-e Nutzlast unverändert | AP-4 (Vorher/Nachher) | n.U. | n.U. |
+| Z2-W0-5b-a Baustein gerufen | AP-1 Wache in `linked` | `48b52294` | Aufrufe im Controller **2 → 3**; `:177` steht **vor** der Query `:179`; kein eigener Baustein, keine `if`-Prüfung |
+| Z2-W0-5b-b fremd 403/404, beide Schalter | AP-2 vier Läufe | `48b52294` | fremd→**403** / eigen→**200**, bei geschlossenem *und* offenem Schalter (`config rechte.alle_fuer_alle = true`) |
+| Z2-W0-5b-c Vertragstest erweitert | AP-3 Testfall | `48b52294` | `tests/Feature/Planner/PlannerApiZustaendigkeitTest.php`, drei neue Fälle `test_z2w05b_linked_*`; **17/17**, keine zweite Datei |
+| Z2-W0-5b-d Grundmenge 2 von 2 | AP-4 Routen-Nachweis | `48b52294` | `/items/{` → 2 GET-Routen (`:339` linked, `:359` materials/index), beide mit `…FuerItem`. Gegenprobe: `{plannerItem}` fände nur **1** |
+| Z2-W0-5b-e Nutzlast unverändert | AP-4 (Vorher/Nachher) | `48b52294` | eigenes Item vorher/nachher: Status 200, Hülle `ok,items`, Satzfelder `id,name,description`, Satzzahl und Sortierung nach `name` — alles gleich |
 
 ## N4 — Bedienweg
 

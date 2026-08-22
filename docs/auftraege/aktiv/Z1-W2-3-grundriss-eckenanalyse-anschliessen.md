@@ -183,13 +183,13 @@ Codebefund, gilt der Befund** — dann ist dieses Blatt zu ändern, nicht der Co
 
 | Kriterium | Arbeitspaket | Commit-SHA | Testbeleg |
 |---|---|---|---|
-| Z1-W2-3-a Hinweis sichtbar | AP-1 Anzeigekomponente | n.U. | n.U. |
-| Z1-W2-3-b unpassende Kontur löst aus | AP-2 Aufruf im Bearbeitungsweg | n.U. | n.U. |
-| Z1-W2-3-c Rot-Probe | AP-3 Vorher/Nachher-Lauf | n.U. | n.U. |
-| Z1-W2-3-d vier Formen unverändert | AP-4 (Typ + Browser) | n.U. | n.U. |
-| Z1-W2-3-e Inselgrenze | AP-4 Diff-Beleg | n.U. | n.U. |
-| Z1-W2-3-f Browserabnahme | AP-3 (Bühne, headful) | n.U. | n.U. |
-| Z1-W2-3-g Fachlogik unberührt, Suiten benannt | AP-4 (Diff + zwei Suiten) | n.U. | n.U. |
+| Z1-W2-3-a Hinweis sichtbar | AP-1 Anzeigekomponente | `d00aeece` | `app/rahmen/GrundrissformHinweis.tsx`; Aufrufer im Produktivpfad **0 → 1**; Bild `z1w23-gruen-2-abweichung.png` |
+| Z1-W2-3-b unpassende Kontur löst aus | AP-2 Aufruf im Bearbeitungsweg | `d00aeece` | Dachform **L-Dach** bei U-Kontur → `data-ergebnis="abweichung"`, „erwartet 1 …, die Kontur hat 2"; **U-Dach** → `passt` |
+| Z1-W2-3-c Rot-Probe | AP-3 Vorher/Nachher-Lauf | `d00aeece` | Bündel **ohne** den Anschluss, gleicher Weg: Panel zeigt „Dachform" (Ortsbeleg hält), `[data-pruefung]` **null** |
+| Z1-W2-3-d vier Formen unverändert | AP-4 (Typ + Browser) | `d00aeece` | `GrundrissForm` = `rechteck\|l-form\|t-form\|u-form`; `grundriss.ts` **0 Änderungen**; keine fünfte Form im Anschluss |
+| Z1-W2-3-e Inselgrenze | AP-4 Diff-Beleg | `d00aeece` | Diff nur `resources/planner/hausplaner/**` (zwei Dateien) |
+| Z1-W2-3-f Browserabnahme | AP-3 (Bühne, headful) | `d00aeece` | Puppeteer **headful**, `?fixture=u-dach`, Port 8098; **4 von 4 Schritten belegt**, drei Bildbelege |
+| Z1-W2-3-g Fachlogik unberührt, Suiten benannt | AP-4 (Diff + zwei Suiten) | `d00aeece` | `git diff -- geometry/grundriss.ts` → leer; die zwei mittelbaren Suiten `dachformVorlagen` + `dachAusschnitt` laufen in **1778/1778**, DOM **36/36** |
 
 ## Rückweg
 
