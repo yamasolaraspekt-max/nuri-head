@@ -45,6 +45,11 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
    **Zustellnachweis ist ausschließlich die gültige ACK-Datei** (Rolle, Sitzungs-ID, Generation, Digest) — ein
    Dateizugriff oder eine Zugriffszeit ist kein Nachweis.
 6. Jede Meldung in der Berichtsform: Ausgangs-SHA · Ergebnis-SHA · geänderte Pfade · Votum · Browser · Abweichung · nächster Ball.
+6a. **Auslöser sind Muster, keine exakten Dateinamen** (Befund Planner 22.08. 10:2x: `generator-CODE_FERTIG-nachtrag.yaml` fiel
+    durch einen Exakt-Filter): `*-CODE_FERTIG*.yaml`, `*-ERTEILT*.yaml`, `*-BESTAETIGT*.yaml`, `*-ABGENOMMEN*.yaml`,
+    `*-NACHBESSERN*.yaml`. Ein `<ereignis>-nachtrag*.yaml` ist die **Fortschreibung desselben Ereignisses** und ersetzt dessen
+    Ergebnis-SHA; wer ein Ereignis zitiert, zitiert den jüngsten Stand (per SHA, nicht per Wort). Nachträge nennen ausdrücklich,
+    welchen SHA sie ablösen.
 6b. **Antworten des Dirigenten** stehen unter `ereignisse/<auftrag_id>/dirigent-*.yaml` — bei jedem Pull mitlesen.
     Eine Antwort ändert den Auftrag nicht; ändert sich der Auftrag, steigt `generation` (dann neues ACK).
 6c. **Nachziehen** des eigenen Worktrees gegen `auto/hausplaner-integration` nur als **Fast-Forward**
@@ -109,6 +114,14 @@ Bei anderer Kennung setzt ausschließlich der Dirigent `vorrang: nach_abschluss 
    ist ein Fehler des Dirigenten, kein Handlungsanlass der Rolle).
 **Zeitkonvention:** jede `zeit:` ist **gemessen** (`date '+%Y-%m-%dT%H:%M:%S%z'`), ISO-8601 **mit Ortszeit-Offset** (`+0200`);
 kein geschätzter Wert, kein UTC-`Z` (Befund Evaluator: zwei Konventionen gemischt). Transkript-mtime ist kein Zustellzeitpunkt.
+
+## Externe Prüfung (Yama, 22.08.2026 — Bekanntmachung verteilt)
+Eine Instanz **außerhalb** der Rollenkette (`/Users/yamanuri/.ticket-externe-pruefung/`): misst alle 20 Minuten lesend den
+Stand des Hauses, prüft in letzter Instanz (nach Evaluator und Plan-Prüfer, die Prüfenden eingeschlossen), legt dem Dirigenten
+**Vorschläge** vor. Sie hält keine Rollenquelle, kein ACK, keine Lease, keine Generation; sie baut, entscheidet, blockiert und
+schreibt nichts (nicht in `.ticket-steuerung/`, keinen Worktree, keinen Checkout). Für die Rollen ändert sich nichts; Befunde
+erreichen sie nur über den Dirigenten. `docs/STATUS.md` bleibt der einzige Statusträger; `ZUSTAND.md` dort ist Außenansicht.
+V-001 (Zustellweg): der Dirigent verteilt als `dirigent-*.yaml` in die Auftragsordner.
 
 ## Aktueller Stopp
 Generator-Sitzung `7df19ed4` (PID 87659, committete direkt im gemeinsamen Checkout) ist per `SIGSTOP` angehalten. Stopp-SHA `4e02c273`.
