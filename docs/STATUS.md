@@ -106,7 +106,7 @@
 | **Z1-W2-4** Treppe ueber den Werkzeugregistry-Vertrag anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md` · **DoR ERTEILT** (plan-pruefer 16:21:25) · Planner-Blatt `418bcb6c` |
 | **Z1-W2-5** Wandflaeche anschliessen | `NACHBESSERN` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` · Bau `5617dc4c` · CODE_FERTIG 18:52:39 · **die Wandflaeche erreicht den Benutzer** · **NACHBESSERN** 19:15:00 — 6 von 7 browserabgenommen, Kriterium b unbelegt |
 | **Z1-W2-6** Auswechslung anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` |
-| **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 · Bau `1c6b7601` · CODE_FERTIG 19:14:05 · **Buendel im Bau-Commit** (V-5) |
+| **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 · Bau `1c6b7601` · CODE_FERTIG 19:14:05 · **Buendel im Bau-Commit** (V-5) · **ABGENOMMEN (BROWSER)** 19:33:20 — vier von vier Modulen, V-1 bis V-6 je Modul, Reifegrad `browserabgenommen` |
 | **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `BEREIT` | **Generator** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht · **DoR ERTEILT** 19:06:40 mit zwei Halbsaetzen (§429) — Bau kann sofort beginnen |
 | **Z1-E0-1** Hoehenkette — eine Wahrheit statt drei Rechnungen | `ENTWURF` | **Plan-Prüfer** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E0-1-hoehenkette-eine-wahrheit.md` @ `4746d9c5` · **Spur A** · **DoR steht aus** · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) |
 | **Z1-E2-1** Etagen-Integritaet — Wachen und Mitnahme | `ENTWURF` | **Plan-Prüfer** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E2-1-etagen-integritaet.md` @ `4746d9c5` · **Spur A** · **DoR steht aus** · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) |
@@ -19339,8 +19339,8 @@ herkunft_dieses_blocks: |
 ```yaml
 auftrag: "Z1-V1-1"
 titel: "Sammelblatt Spur V — Anzeige am ausgewaehlten Objekt, fuenf Module"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: dirigent
 blatt: "docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md"
 blatt_sha: 3ab3bb88
 basis_sha: 3daf4f1e
@@ -19412,6 +19412,17 @@ zustand_nachgezogen: |
   DachKennzahlen.tsx, TreppentypAnzeige.tsx und EigenschaftenPanel.tsx.
   Das Ereignis nennt ball: [evaluator, integrator]. Mein Teil ist Transport und dieser Eintrag,
   beides erledigt; in der Tafel steht Evaluator.
+
+votum: |
+  ABGENOMMEN (BROWSER) — evaluator, 19:33:20, evaluator-ABGENOMMEN-z1-v1-1.yaml,
+  bau_sha 1c6b7601, ergebnis_sha 187e4eae, reifegrad browserabgenommen.
+  "vier von vier gelieferten Modulen, V-1 bis V-6 je Modul"
+  DAS ERSTE SPUR-V-SAMMELBLATT IST DURCH, und der Plan-Pruefer hat die Spanne gemessen
+  (Paragraf 438): 65 Minuten von Yamas Satz bis zur Browserabnahme. Zum Vergleich derselbe
+  Tag, vorher: drei Module mit zusammen 206 Zeilen kosteten rund sechs Stunden.
+  VIER VON VIER GELIEFERTEN, nicht vier von fuenf geplanten — das Blatt nennt fuenf Module,
+  geliefert und abgenommen sind vier. Ich schreibe die Zahl so, wie sein Votum sie fuehrt,
+  und rechne sie nicht auf das Blatt hoch.
 
 ```
 
