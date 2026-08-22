@@ -37,6 +37,13 @@ Rollenanteil mit rollenspezifischem Begriff (SPEZIFIZIERT · ERTEILT/NICHT ERTEI
 TRANSPORTIERT/ZUSTAND_NACHGEZOGEN · RELEASE_FREI/NICHT RELEASE_FREI · ZUGEWIESEN/ENTSCHIEDEN), strukturiert als Ereignis,
 technisch geprüft durch den zentralen Monitor (Z0-I3/Z0-I4). Nie „alles erledigt".
 
+**Architekturentscheid „kein Intendant" (historisch, bestätigt Yama 22.08.2026):** Quelle
+[`../konzept/arbeitsregeln-1-5-orchestra-nachtrag.md`](../konzept/arbeitsregeln-1-5-orchestra-nachtrag.md) §5 („Dirigent
+wird einmal definiert; Intendant wird nicht eingeführt") — keine siebte Steuerungsrolle; kein Rollenordner, keine
+Rollenquelle, kein Branch, kein Worktree. Yama entscheidet und gibt frei; der Dirigent steuert operativ; ein künftiger
+**Dispatcher** (Z0-I4) ist reine Zustellinfrastruktur, keine Rolle. Ein Intendant käme nur auf separate Entscheidung Yamas
+und nur strategisch (Portfolio, Priorisierung), nie mit Routing oder Freigaberecht.
+
 **Aufgehoben, aber erhalten:** [`docs/HAUSREGELN.md`](../HAUSREGELN.md) trägt seit 12.08.2026
 keinen Regelinhalt mehr — ihr Inhalt steht in ARBEITSREGELN §18a. Nicht gelöscht, weil der Weg
 dorthin nachvollziehbar bleiben soll.
