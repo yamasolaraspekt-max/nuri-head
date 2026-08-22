@@ -52,6 +52,33 @@ VERWERFEN-Empfehlungen gescheitert sind.*
 
 ---
 
+## Die drei Typmodule — **AUSDRÜCKLICH KEIN ANSCHLUSSGEGENSTAND**
+
+**Seit N4 (in Kraft 14:20:19) hat dieses Register Sperrwirkung:** *„eine Kennung, die dort nicht
+steht, kann kein Blatt anschließen."* **Damit genügt eine Erwähnung im Fließtext nicht mehr** — die
+drei brauchen eine eigene Zeile, sonst sind sie nicht *ausgeschlossen*, sondern
+**anschlussunfähig, ohne dass es jemand entschieden hätte.**
+
+| Modul | Z. | Typen / Funktionen | Einordnung |
+|---|---|---|---|
+| `domain/scene.types.ts` | 406 | 21 / **0** | **Typmodul — kein Anschluss, kein Rückstand** |
+| `app/tools/toolTypes.ts` | 116 | 10 / **0** | **Typmodul — kein Anschluss, kein Rückstand** |
+| `app/tools/werkzeugArten.ts` | 21 | 1 / **0** | **Typmodul — kein Anschluss, kein Rückstand** |
+
+**Begründung, gemessen:** null exportierte Funktionen oder Werte. Ein Modul ohne Laufzeit-Export
+**kann** keinen Ladeweg bekommen — das ist kein „noch nicht angeschlossen", sondern ein
+„nicht anschließbar, und das ist richtig so". *Sie gehören aus jeder künftigen Rückstandszahl
+herausgerechnet, sonst trägt man drei Dauerposten mit, die nie kleiner werden.*
+
+> **Befund des Plan-Prüfers (§349), nachgemessen und bestätigt:** vor N4 war das eine
+> Zähl-Unschärfe, **mit N4 ist es eine Sperre**. *Unsere Zahlen wichen ab — er maß **0** über den
+> vollen Pfad, ich **1** über den bloßen Namen.* **Seine trifft die Frage:** eine Nennung im
+> Fließtext (`scene.types` in der `werkzeugRegistry`-Begründung, `toolTypes.ts:8` als
+> Abgrenzungsbeleg) ist **keine Registerzeile**. *Ort ist nicht Wirkung — diesmal an meinem
+> eigenen Dokument, und ich hätte es mit meinem Messweg nicht gesehen.*
+
+---
+
 ## Register — die 24 Anschlusskandidaten
 
 Reifegrad-Stufen dieser Tabelle: **CODE** (Fachlogik da, geprüft) · **PRODUKTWEG** (erreichbar im
