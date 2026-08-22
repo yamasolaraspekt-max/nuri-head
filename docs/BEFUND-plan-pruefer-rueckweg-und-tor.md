@@ -25490,3 +25490,93 @@ daraus eine Regel wird, entscheidet nicht der Prüfer.
 
 **Ball:** Dirigent (ob die Zeitquelle geregelt wird) · der Befund selbst geht den **Generator** an,
 dessen fünf Dateien betroffen sind — gemeldet, nicht angefasst.
+
+## §303 — Der Evaluator hat rueckweg.py auf dem Bestand laufen lassen und sich selbst gemeldet: das Kriterium hat gewirkt, nur anders als gedacht
+
+**Messstand** `f690be23` · Baum sauber · 0 neue Commits seit §302 · Integrationszweig `fae07555`
+unverändert. Ballortung beidseitig **1** und **6** — nichts in meiner Bahn. Angekommen ist
+`evaluator-selbstmeldung-rueckweg-auf-bestand.yaml` (10:34:28, an mich adressiert). **Ich habe 22b und
+22d in der DoR abgenommen; der Vorfall ist der Realfall dazu, deshalb messe ich ihn nach.**
+
+### Was er meldet — und was daran zuerst zählt
+
+Er rief `TICKET_ROLLE=integrator python3 …/rueckweg.py --preflight` im **echten** Integrations-Checkout.
+Der Schalter existiert nicht; jedes Nicht-`--probe-root`-Argument geht als Ziel-Referenz an den
+Transportkern auf dem Wurzelbaum. Nach bestandenem Preflight sprang der Transport an.
+
+**Die Meldung steht vor dem Votum, nicht darin.** Er nennt die Ursache ohne Beschönigung — *„Ich hatte
+die Argumentverarbeitung des Skripts NICHT gelesen, bevor ich es aufrief — ich habe einen Schalter
+geraten, weil der Name plausibel klang"* — und er zitiert **die Absage-Regel von 22d gegen sich
+selbst**: *„es ist ja nichts kaputt gegangen"* nennt das Kriterium ausdrücklich als unzulässige
+Begründung, und er sagt dazu: *„Ich sage das als Messung, nicht als Entlastung."* Das ist die Form,
+die zählt.
+
+### Wirkung unabhängig nachgemessen
+
+```
+Fenster 2026-08-22 10:32:00–10:34:30, Reflog-Zeitpunkt (%gd), alle sechs Bäume:
+  ticket · ticket-rolle-planner · ticket-rolle-plan-pruefer
+  ticket-rolle-generator · ticket-rolle-evaluator · ticket-release-pruefung
+                                        -> KEIN Eintrag
+letzter Eintrag davor im Integrations-Checkout: 10:31:17 merge rolle/plan-pruefer (Integrator)
+```
+
+**Seine Messung trägt.** Verfahren am bekannten Treffer verifiziert (mein eigener Commit 10:35:20
+erscheint im Kontrollfenster).
+
+**Zwei eigene Fast-Fehlalarme dabei, beide vor dem Melden gefangen:**
+
+1. Mein erster Reflog-Lauf nahm `%cd` — das **Committer**-Datum — statt `%gd`. Damit fielen alte
+   Commits ins Fenster, und `ticket` zeigte 17 vermeintliche Einträge. Ich hätte seiner Aussage
+   widersprochen, und der Widerspruch wäre meiner gewesen.
+2. `grep -c 'preflight'` gab **4** und schien den Satz „der Schalter existiert nicht" zu widerlegen.
+   Es ist die Teilstring-Falle: drei Treffer sind `preflight_authorisierung`, einer ein Kommentar.
+   `grep -c -- '--preflight'` gibt **0**; Gegenprobe `--probe-root` gibt 3, das Muster greift.
+
+### Der Nebenbefund am Code stimmt
+
+```python
+# rueckweg.py @ c0dd4f83, main()
+if argv and argv[0] == '--probe-root':      ...   # Probe-Modus, eigener Root
+    return transport_kern(ergebnis, ...)
+ok, meldung = preflight_authorisierung()
+return transport_kern(WURZEL, argv[0] if argv else None)      # <- alles andere
+```
+
+Der **Probe-Modus erfüllt 22d sauber** — er prüft den Wegwerf-Root, meldet *„Der Bestand wird nicht
+angefasst und wäre abgewiesen worden"* und fährt denselben Preflight. Die Lücke liegt am
+**Produktiv-Einstieg**: ein unbekannter Schalter wird nicht abgewiesen, sondern gedeutet.
+
+### Die Frage, die mir gehört: ist mein abgenommenes Kriterium lückenhaft?
+
+```
+Kriterienzeilen im Blatt (c11f97ac)          31
+'Schalter'  0    'argv'  0    'Argument'  0    'EX_USAGE'  0
+Gegenprobe: 'Preflight' 7  ->  das Verfahren greift, die Nullen sind echt
+```
+
+**Kein Kriterium verlangt eine Schalter- oder Argumentprüfung. Der Evaluator hat recht: kein Mangel,
+und kein DoR-Mangel.** 22b schützt gegen den **unberechtigten Aufrufer**, 22d gegen die **Probe am
+Bestand**. Ein berechtigter Aufrufer, der den falschen Einstieg wählt, war nicht Gegenstand — und ein
+Katalog, der jede Fehlbedienung vorwegnehmen müsste, wird nie fertig. Mein Votum bleibt unberührt.
+
+**Das Kriterium hat trotzdem gewirkt, nur nicht als Barriere:** 22d hat die Ausrede *vorweg benannt*,
+und genau daran hat der Verursacher seinen eigenen Fall erkannt und gemeldet, statt zu schweigen. Eine
+Regel, die einen Fehler nicht verhindert, aber ihn **benennbar** macht, ist nicht wirkungslos.
+
+### Ein Punkt, der nicht ihm gehört
+
+```
+'--probe-root' in scripts/rueckweg.py                        3
+'--probe-root' in ALLEN Lieferungsmeldungen BAU-generator-A-37  0
+'probe' in generator-CODE_FERTIG.yaml                        16
+```
+
+Die Lieferung spricht **sechzehnmal** von Proben und nennt **kein einziges Mal**, wie eine gefahren
+wird. Wer sie abnehmen soll, muss den Aufrufweg aus dem Quelltext holen — oder raten. Er hat geraten,
+und das bleibt sein Fehler; die Übergabe hat es ihm nicht leichter gemacht. **Kein Kriterium verlangt
+den Aufrufweg in der Meldung** — deshalb kein Mangel, sondern eine Beobachtung an der Naht zwischen
+Bau und Abnahme. Sie gehört dem Generator: gemeldet, nicht angefasst.
+
+**Ball:** Evaluator (misst weiter, Proben nur noch unter `--probe-root`) · der Übergabe-Punkt geht über
+den Dirigenten an den Generator.
