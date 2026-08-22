@@ -1,5 +1,5 @@
-auftrag_id: BAU-generator-welle-1b
-generation: 19           # 2026-08-22T18:15:34+0200 — gen 18 abgeschlossen (Z2-W0-5b, Z1-W2-3, Z0-I1 Stufe 1 CODE_FERTIG; Buendel Z1-W2-1). Neun Blaetter sind DoR-erteilt; Reihenfolge nach Yamas Massstab (Werkzeuge zuerst).
+auftrag_id: BAU-generator-etagen-1
+generation: 21           # 2026-08-22T22:01:46+0200 — gen 20 abgearbeitet (Z1-V1-1, Z1-W2-8, Z1-W2-4/5b/6, E0, E2, Z2-W0-11b, Z0-I1-Nachbesserung; 'NICHTS FREI' 20:30). Etagen-Welle: heute Nacht Nachbesserungen, morgen E1/E3/E4.
 rolle: generator
 sitzung_erwartet: aa0cddd3-90ff-4b32-9df6-dfd3cc747db8
 sitzung_gesperrt: 7df19ed4-4ea7-42c6-84f4-3cfa9bdbdb0b   # Vermerk
@@ -7,16 +7,16 @@ worktree: /Users/yamanuri/Documents/ticket-rolle-generator
 branch: rolle/generator
 prioritaet: P0
 aktion: bauen
-taetigkeit: "bauen (Generator): Paket 1 Klasse A (Z1-W2-5, Z1-W2-6) -> Treppe-Probe Z1-W2-4 -> Z2-W0-11b (Spur A) -> Dach-2-Blaetter sobald geschnitten+DoR; dazwischen Buendel-Commits nach Browser-Voten"
+taetigkeit: "bauen (Generator): STOPP-REGEL .env -> ticket_testing; Nachbesserungen aus Voten (E0, Z1-W2-8, Z0-I1-10); morgen E1 -> E3 -> E4 sobald DoR; danach Z1-E0-2, Dach-2"
 reihenfolge:
-  - "Z1-W2-5, Z1-W2-6 (Paket 1 Massenermittlung/Holzbau, Klasse A; DoR ERTEILT; Z1-W2-6 Achsenregel-Berichtigung 49141f90 BESTAETIGT) — je EINE Lieferung, Spur W, Blatt @ rolle/planner (Stand aus dem juengsten planner-CODE_FERTIG/BERICHTIGUNG)"
-  - "Z1-W2-4 Treppe-Probe ueber den werkzeugRegistry-Vertrag (DoR ERTEILT) — beide Ausgaenge sind Ergebnis; KEINE Stilllegung in diesem Blatt"
-  - "Z2-W0-11b CSRF ids/callback Teil B (Spur A, DoR ERTEILT; Operand Y-12 = IDS-Connect, eigener state-Token in der hookUrl; Tests gegen ticket_testing NUR mit DB-Lease 6j)"
-  - "Dach-2 (Paket 2) Blaetter, sobald planner-CODE_FERTIG-Z1-W2-7*/DoR ERTEILT vorliegen (Muster)"
-  - "BUENDEL-REGEL gilt weiter: nach jedem evaluator-ABGENOMMEN*(BROWSER) eigener Buendel-Commit + generator-BUENDEL-<Kennung>.yaml"
-regeln: "Hinweg vor jeder Lieferung (Herkunftszeile); Blattstand = juengster Planner-SHA (zitieren); Messbefehle zitieren, Defekt melden statt nachbauen; Herkunftsvermerke je FUNKTION lesen; CODE_FERTIG je Kennung (generator-CODE_FERTIG-<Kennung>.yaml) mit endstand_sha/ergebnis_sha/gelesen_bis(=Pull-Zeit); Commits nur via commit-pruefen.sh (TICKET_ROLLE=generator, NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules); DB-Tests nur mit leases/TESTDB-ticket_testing/ (6j); Produktcode nur im Blatt-Umfang; Z1-W2-2 NICHT anfassen (zurueckgestellt)."
-verboten: [Produktcode ausserhalb des Blatt-Umfangs (Ausnahme Buendel-Commit), Produktiv-DB, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Rebase/Amend/Force, eigene Abnahme, surfaceId/Pruefpflicht-Listen erfinden, DB-Tests ohne DB-Lease]
+  - "0 JETZT (Stopp-Regel, Punkt 1 der Entscheidung 22:0x): im eigenen Worktree sed -i '' 's/^DB_DATABASE=ticket$/DB_DATABASE=ticket_testing/' .env ; Beleg grep -c -> 1; Ereignis generator-ENV-ticket_testing.yaml. Kein Probe-Skript verbindet sich je mit 'ticket'."
+  - "1 Nachbesserungen, sobald Voten kommen: Z1-E0-1 (drei Maengelanzeigen Evaluator/Planner — Kriterium a 'eine Funktion/eine Stelle', Zielsatz), Z1-W2-8 (nach Browser-Votum), Z0-I1-10 Gegenprobe gegen information_schema sobald das Blatt (3 Stellen) vom Planner geaendert ist."
+  - "2 MORGEN 23.08.: Z1-E1-1 'Wo bin ich' -> Z1-E3-1 'Decke bedienbar + Rolle abgeleitet' -> Z1-E4-1 'Bodenplatte slab' (Schema 3->4: Zod + scene-document-v2.schema.json + PHP-Validator + migriereSzene; Schichtfolge-Kommentarblock fuer alle drei Felder; Leiste Platz 1), je sobald DoR ERTEILT; Fach-Linsen-Voten (Maurer/Statiker) sind Teil des E4-Blatts."
+  - "3 Danach: Z1-E0-2 (zweite Haelfte Hoehenkette, Wandhoehe + Maurer-Befund 2), Dach-2 ('Dachaufbau setzen' zuerst), Sammelblatt 'Pruefung ehrlich' (Schrittmass, Restpfeiler)."
+  - "4 Nichts frei -> NICHTS_FREI melden und warten; keine Eigenausruestung, kein Blatt ohne Kriterium."
+regeln: "Hinweg vor jeder Lieferung; Blattstand = juengster Planner-SHA (zitieren; Integration kann hinterherhinken — gegen rolle/planner messen); Buendel Teil jeder Lieferung (V-5); Messbefehle zitieren; git diff <basis>..<endstand> -- <modul> fuer Fachlogik-Unberuehrtheit; Commits nur via commit-pruefen.sh (TICKET_ROLLE=generator, NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules); DB-Tests nur mit DB-Lease 6j und nur gegen ticket_testing; Produktcode nur im Blatt-Umfang."
+verboten: [Produktiv-DB 'ticket' (auch lesend, auch als Probe), Produktcode ausserhalb des Blatt-Umfangs, Kriterien erfinden, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Rebase/Amend/Force, eigene Abnahme, DB-Tests ohne DB-Lease]
 steuerungshandlungen_erlaubt: [ACK, Lease-Heartbeat, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/BAU-generator-welle-1b/generator-ack.yaml
-erstellt: "2026-08-22T18:15:34+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/BAU-generator-etagen-1/generator-ack.yaml
+erstellt: "2026-08-22T22:01:46+0200 Dirigent (atomar; Uhr: date)"
