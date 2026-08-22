@@ -40835,3 +40835,71 @@ Zustand VORLAGE). Der Gedankenstrich-Fall zeigt, dass ein Ballfeld drei Zuständ
 Rolle, ein Abschlussvermerk, oder nichts** — und mein Griff nur den ersten sieht. Für mich ist das
 folgenlos, weil ich nach meinem eigenen Namen suche. Wer aber „wo liegt überhaupt etwas" fragt,
 zählt mit `grep -c '^ballbesitz:'` auch die geschlossenen mit.
+
+## §512 — Die ENV-Umstellung erfasste vier von neunzehn Bäumen. Beim fünften ist die Lücke gerade eingetreten
+
+Stand: HEAD `93cc12b9`, Baum 0, gen 11, Digest gleich. Zeit 00:04. Aus meinem Worktree gemessen.
+
+Um **00:00:30** hat der Release-Prüfer einen STOPP gemeldet: Die `.env` in **seinem eigenen**
+Worktree zeigt auf `ticket` — die Produktivdatenbank. Er hat die Sacharbeit vor Posten 0
+angehalten.
+
+### Der Zusammenhang zu §480/§481
+
+Das Dirigenten-Ereignis vom 22.08. hält fest:
+
+> „Der Dirigent hat den wortgleichen `sed` in den Rollenbäumen **generator, evaluator, planner,
+> plan-pruefer** ausgeführt."
+
+**Vier Bäume.** Der `release-pruefer` war nicht dabei — er stand zu diesem Zeitpunkt auf
+`aktion: parken` (Rollenquelle gen 4, von mir in §497 gemessen). Um 23:53 wurde er entparkt, gen 5,
+`aktion: release_pruefen`. **Seine `.env` war noch im Stand vom 5. August.**
+
+Gemessen an den Worktrees des Repositories — Verzeichnisnamen, **keine fremden Inhalte**:
+
+```
+19 Worktrees insgesamt
+ 4 von der Umstellung erfasst
+```
+
+Neben den vier stehen unter anderem `ticket-rolle-dirigent`, `ticket-rolle-release`,
+`ticket-release-pruefung`, `ticket-main`, `ticket-a01`, `ticket-g1b-0`, vier `ticket-strang-*` und
+`ticket-rolle-generator-beleg-2026-08-21` — der Doppelgänger, den A-37-22c als bewusste Sicherung
+benennt.
+
+**Ich behaupte nicht, dass diese Bäume eine falsche `.env` haben.** Ich weiß es nicht und darf es
+nicht messen: Die Dirigenten-Entscheidung vom 22:01:46 verbietet den Zugriff auf `ticket` auch
+lesend, §510 verbietet mir fremde Arbeitsbäume, und die Grenzfrage aus §480/§481 (`grep -c` auf
+fremde `.env`) ist bis heute **offen**. Was ich sage, ist eine Aussage über die **Grundmenge der
+Maßnahme**: Sie war 4, die Menge der Bäume ist 19, und beim fünften ist der Fall eingetreten.
+
+### Der eigentliche Befund ist die Reihenfolge
+
+Eine Schutzmaßnahme, die nur die **gerade aktiven** Rollen erfasst, lässt die **geparkten**
+zurück — und geparkte Rollen werden später entparkt. Genau das ist heute Nacht passiert, mit
+sieben Stunden Abstand: Umstellung 22:09, Entparkung 23:53, STOPP 00:00:30.
+
+Der Auftrag des Release-Prüfers enthielt die Probe („`grep -c '^DB_DATABASE=ticket_testing$' .env`
+melden; ist es 0, stoppen"), und **sie hat gegriffen**. Das ist die richtige Bauform: Nicht darauf
+vertrauen, dass die Umstellung alle erreicht hat, sondern beim Start selbst messen.
+
+**Was daraus folgt, entscheide ich nicht.** Ob die Umstellung auf alle Bäume auszudehnen ist oder
+ob die Start-Probe als Schutz genügt, ist eine Datenbank- und Konfigurationsentscheidung —
+CLAUDE.md nimmt sie ausdrücklich von der stillen Automatisierung aus.
+
+### Was ich am Release-Prüfer würdige
+
+Er hat die Null **nicht geglaubt**, sondern über **acht Schreibweisen** gegengeprüft — Zeilen mit
+`DB_DATABASE` überhaupt, am Zeilenanfang, auskommentiert, exakt, irgendwo, in Anführungszeichen,
+mit Leerzeichen am Ende — und erst dann gemeldet: *„exakt `ticket`: 1 ← DAS IST DIE
+PRODUKTIV-DATENBANK."* Das ist genau die Sorgfalt, an der ich heute fünfmal eine falsche Null
+gefangen habe (§502, §504).
+
+Und drei Grenzen hat er eingehalten, ohne dass jemand sie ihm einzeln nennen musste: **kein
+`artisan`, kein Test, keine Bühne** — *„hätte ich die Prüfkette gefahren, wären PHP-Suite und Bühne
+gegen die Produktivdaten gelaufen"*; **keine Änderung an der `.env`** — *„Konfiguration ist nicht
+mein Pfad"*; und **der Wert steht nicht im Ereignis**.
+
+Dazu eine Zahl, die er selbst berichtigt: *„Der Auftrag nennt 487 Commits Rückstand (Stand 23:53).
+Gemessen um 23:59: 504 […] ich nenne die Zahl meiner Messung und nicht die des Auftrags."*
+Vierte Rolle heute, die das so hält.
