@@ -40274,3 +40274,69 @@ vermieden — `[a-i][0-9]?` statt `[a-i]`, und `grep -e '-180'` statt `grep -c '
 ausdrücklich als Begründung dafür, warum er so misst.
 
 Und er meldet den Blob (`a8924820`), nicht nur den Commit. Zweite Rolle heute, die das aufnimmt.
+
+## §503 — Der Evaluator-Befund zu (e) ist durch die Nachbesserung erledigt, 28 Sekunden vor seiner Meldung. Und das Muster hat jetzt jede Rolle einmal getroffen
+
+Stand: HEAD `1a450e1f`, Baum 0, gen 11, Digest gleich. Zeit 23:39. Messstand `4ada01dd`.
+
+Der Evaluator meldet um **23:33:40**, Kriterium (e) sei in der geltenden Fassung nicht erfüllt: der
+alte Weg (Posten 25.6, „Aufbau nicht erfasst → 0") stehe, das Pflichtfeld fehle. **Sein Befund
+trifft — für `3b4e8f6b`.** Die Nachbesserung `4ada01dd` liegt seit **23:32:30**, also **28 Sekunden
+vor seiner Meldung**, und sie baut genau das, was er vermisst.
+
+### Selbst gemessen an `4ada01dd`
+
+```ts
+function pruefeBodenplatteAufbau(slab: FoundationSlabNode): void {
+  if (!slab.erdberuehrt) return;
+  if ((slab.schichten ?? []).length === 0)
+    throw new CommandAbgelehnt('Bodenplatte ohne Fußbodenaufbau: ±0,00 ist OK Fertigfußboden …',
+                               'bodenplatte_ohne_aufbau');
+  if (slab.oberkanteMm >= 0)
+    throw new CommandAbgelehnt('… eine erdberührte Platte liegt unter dem Fertigfußboden …',
+                               'bodenplatte_oberkante_nicht_negativ');
+}
+```
+
+Das ist die Absage-Regel des Blatts **im Code** — `>= 0` mit der Null eingeschlossen, und das
+Pflichtfeld als Ablehnung mit Grund. Aufgerufen in **ADD (`:402`) und UPDATE (`:423`)**, mit dem
+Kommentar *„auch beim Ändern: der Aufbau darf nicht wegfallen"*. Damit ist auch die Umgehung in zwei
+Schritten geschlossen — die hätte niemand verlangt.
+
+### Der verbleibende „nicht erfasst"-Weg ist kein Rest, sondern die Ausnahme
+
+Der Evaluator zählt richtig, dass `data-zustand="nicht-erfasst"` und die
+`hoehenkette.ts`-Kommentare stehen geblieben sind. **Sie sind aber nicht tot** — die Wache kehrt bei
+`!slab.erdberuehrt` sofort zurück, und das Panel begründet es:
+
+> *„Nicht erdberührt: hier ist ein fehlender Aufbau zulässig. Eine Platte über einer Tiefgarage hat
+> keine Bezugshöhe zum Erdreich, und ±0,00 ist für sie kein Maßstab."*
+
+Fachlich richtig: Die Pflicht folgt aus Yamas Bezugshöhe, und die gilt für erdberührte Platten. Wer
+den Zweig entfernte, verböte die Tiefgaragen-Platte.
+
+### Das Muster hat heute jede Rolle einmal getroffen — und die Abstände schrumpfen
+
+| Zeit | wer meldete gegen einen überholten Stand | Abstand |
+|---|---|---|
+| 22:32:23 | **Dirigent** — Bauplatz „solange die DoR nicht vorliegt", sie lag 3 s vorher | **3 s** |
+| 23:13:49 | **Planner** — Commit ohne Posten 30, entschieden 69 s vorher | **69 s** |
+| 23:23:42 | **ich** — „Blatt trägt Posten 30 nicht", eingearbeitet 46 s vorher | **46 s** |
+| 23:33:40 | **Evaluator** — „(e) nicht erfüllt", nachgebessert 28 s vorher | **28 s** |
+
+Viermal, vier verschiedene Rollen, **keine davon nachlässig**: Jede hat korrekt gegen den Stand
+gemessen, den sie beim Beginn ihrer Arbeit vorfand. Der Fehler liegt nicht in einer Rolle, sondern
+darin, dass **die Prüfung länger dauert als der Abstand zwischen zwei Ständen.**
+
+Ich habe das in §498 als Eigenschaft des Betriebs benannt und bin ihm in §499 selbst erlegen. Die
+Lehre ist nicht „schneller messen" — das geht nicht. Sie ist: **den Stand nennen, gegen den gemessen
+wurde**, und beim Melden eines Mangels den Stand noch einmal prüfen. Beides steht seit §494 in
+meiner Selbstbindung; der Evaluator nennt seinen Stand ebenfalls sauber (`gelesen_bis: 23:29:10`),
+und **genau daran ist die Lage aufzulösen, statt in einem Vorwurf zu enden.**
+
+### Was ich dem Evaluator melde
+
+Seine Zeitachse ist bis auf diesen einen Punkt vollständig richtig, und seine Zurückhaltung ist es
+auch: *„Ich melde die Lage, damit sie nicht als sein Fehler gelesen wird — und damit er es erfährt,
+bevor mein Votum kommt."* Genau so. Nur ist die Lage seit 28 Sekunden vor seiner Meldung eine andere,
+und er soll das erfahren, **bevor** er das Votum schreibt.
