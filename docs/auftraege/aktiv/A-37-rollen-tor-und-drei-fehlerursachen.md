@@ -567,17 +567,45 @@ ausnahmslos eine **ausgelöste** Negativprobe mit Rohausgabe und `echo $?`, nich
   (`/Users/yamanuri/Documents/ticket` auf `auto/hausplaner-integration`). Trifft eines nicht zu:
   **Abbruch mit Meldung und Rückgabe ≠ 0, ohne einen einzigen Baum zu berühren.**
 
-  **Messbefehle und heutiges (rotes) Ergebnis:**
+  **Messbefehl — er misst die WIRKUNG, nicht ein Wort:**
   ```
-  grep -c 'TICKET_ROLLE'          scripts/rueckweg.py  -> 0
-  grep -c 'integrator'            scripts/rueckweg.py  -> 0
-  grep -c 'berechtig'             scripts/rueckweg.py  -> 0
-  grep -c 'erlaubt'               scripts/rueckweg.py  -> 0
-  grep -c 'Integrations-Checkout' scripts/rueckweg.py  -> 0
-  Gegenprobe, dass der Griff trägt:  grep -c 'BAEUME' -> 3
+  grep -cE 'TICKET_ROLLE|getenv|os\.environ|preflight'  scripts/rueckweg.py
   ```
-  **Art des Rot: Schutz.** *Das Werkzeug fragt heute nicht, wer es aufruft — es fragt nur, ob der
-  Zielbaum sauber ist. Wer es startet, zieht fremde Bäume nach, ohne dass irgendetwas widerspricht.*
+  **Heutiges (rotes) Ergebnis, gegen ALLE DREI Stände gemessen** *(je eigene Ausgabedatei, kein
+  Wiederverwenden derselben Zwischendatei — siehe Warnung unten)*:
+  ```
+  Stand       Zeilen   TICKET_ROLLE|getenv|os.environ|preflight
+  762243b9      175                 0
+  49972884      247                 0     (A-37-22 gebaut)
+  1155709d      247                 0     (A-37-23 gebaut; rueckweg.py unverändert, cmp identisch)
+  ```
+  **Gegenprobe, dass der Griff greifen *kann*:** `TICKET_ROLLE` trifft in `scripts/` in **4** anderen
+  Dateien. *Der Griff findet das Wort anderswo — er ist also nicht blind, sondern die Datei ist leer.*
+  **Ergänzend, weil ein Zähler allein nicht trägt:** die Datei führt bei `1155709d` die Funktionen
+  `gleichnamige_ausserhalb()`, `git()`, `lage()`, `main()` — **keine** davon fragt eine Rolle ab, und
+  `main()` beginnt unmittelbar mit dem Ziel-`rev-parse`. *Verbraucher über Funktionsnamen geprüft,
+  nicht über den Dateikopf.*
+  **Art des Rot: Schutz.** *Das Werkzeug fragt nicht, wer es aufruft — nur, ob der Zielbaum sauber
+  ist. Wer es startet, zieht fremde Bäume nach, ohne dass irgendetwas widerspricht.*
+
+  > **⚠ BERICHTIGUNG DES MESSBEFEHLS (22.08., Vormessung des Plan-Prüfers, zutreffend).**
+  > Hier stand als Rot-Beleg `grep -c 'Integrations-Checkout' scripts/rueckweg.py → 0`.
+  > **Nach dem Bau von `A-37-22` findet derselbe Befehl 2 Treffer** — beide reiner **Text**
+  > (`:111` Docstring, `:177` Fehlermeldung), **keine Prüfung**. *Wer nach dem nächsten Commit
+  > `grep -c 'Integrations-Checkout'` fährt, findet 2 und könnte `22b` für erfüllt halten, obwohl
+  > keine Zeile fragt, wer aufruft.* **Ein Rot-Beleg, der ein WORT zählt, misst nach dem nächsten
+  > Commit die Wortwahl statt die Wirkung.**
+  > **Das ist dieselbe Klasse wie `A-37-11` (feste Zahl 1750) und `A-37-18` (feste Zahl „sechs"),
+  > eine Stufe subtiler: nicht die Zahl driftet, sondern ihre Bedeutung.**
+  > *Die Rot-Lage selbst hält unverändert — sie hängt an der Abwesenheit jeder Rollenabfrage, und
+  > die ist in allen drei Ständen belegt.*
+  >
+  > **⚠ Und eine Warnung zum Messen selbst, aus eigenem Ausfall:** eine Schleife, die für mehrere
+  > Stände **dieselbe** Zwischendatei beschreibt und sofort wieder liest, lieferte hier zweimal
+  > falsche Zahlen (`3`/`0` statt `2`/`2`, Zeilenzahlen `113`/`105` statt `247`/`247`) — auffällig
+  > geworden, weil sie eine Trefferzeile `:177` in einer angeblich 105 Zeilen langen Datei nannte.
+  > **Wer diese Stände misst, schreibt je Stand in eine eigene Datei und prüft mit `cmp` gegen, ob
+  > zwei Stände identisch sind.** *Zwei Verfahren, zwei Antworten — dann gilt keine von beiden.*
 
   **Negativproben (ausgelöst, mit Rohausgabe und `echo $?`):** Aufruf als `generator` → abgewiesen;
   Aufruf **ohne** `TICKET_ROLLE` → abgewiesen; Aufruf als `integrator` **außerhalb** des
