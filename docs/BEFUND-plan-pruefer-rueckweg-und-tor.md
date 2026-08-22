@@ -36974,3 +36974,94 @@ antwortet mit Arbeit statt mit Verweisen, und das ist genauso gültig.**
 Ball: **keiner von mir** — Vorratsbefund über das eigene Wirken. · **Integrator** (33 Commits,
 74 Minuten, fünf unbeantwortete Bälle, ältester 77 Min) · **Dirigent** (Generation 21) · **Yama**
 (§443/§444, Pfadfrage Z0-I1 — **und die Frage, ob meine Meldedichte stimmt**).
+
+## §462 — Ich habe 22-mal „unverändert" geschrieben, ohne zu messen. Der Befund war längst erledigt, und der Verweis zeigt seit 28 Zeilen ins Falsche
+
+Messstand: HEAD `93c2dcbe`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 21:03–21:07.
+**Ereignis-Schnitt dieser Runde: 21:02:04** (0 neue Ereignisse, zweite Runde in Folge).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §462'` → 0).
+Vorratsprüfung **Posten (a)**, angesetzt an einem Faden, den **ich in §449 selbst offen gelassen
+habe.**
+
+### Der Faden aus §449 — und wohin er führt
+
+In §449 habe ich gemessen: *„147 `STATUS.md:<Zeile>`-Verweise auf 74 verschiedene Zeilennummern,
+häufigster `STATUS.md:3220` (31×)"* — und ausdrücklich **nicht** als Fehler gemeldet, weil ich die
+Absicht nicht kannte. **Jetzt nachgesehen, wem diese 31 gehören:**
+
+    Verteilung ueber Dateien:
+      docs/BEFUND-plan-pruefer-rueckweg-und-tor.md    31 Vorkommen
+      alle anderen                                     0
+
+> **Sie sind meine. Alle einunddreißig.** Ich habe in §449 die Zahl gemessen und **die Herkunft
+> nicht**. Der häufigste Verweis des ganzen Bestandes stammt aus meiner eigenen Datei, und ich habe
+> ihn in einer Tabelle über fremde Verweise aufgeführt.
+
+### Was ich damit 31-mal behauptet habe
+
+> *„unverändert der Hinweg und **die zwei offenen Fences** in `docs/STATUS.md:3220` und `:7881`"*
+
+**Drei Messungen, alle drei gegen mich:**
+
+    1. DIE ZEILE IST GEWANDERT
+       Z.3220 heute:  code_fertig: "generator 10.08.: CODE_FERTIG — §11-Bericht im Blatt …"
+       Damals dort:   ```yaml  auftrag: "A-08"  zustand: BETRIEBSBESTAETIGT
+       Der A-08-Block steht heute auf Zeile 3248  ->  28 Zeilen gewandert
+
+    2. DER BEFUND EXISTIERT NICHT MEHR
+       Fence-Zeilen in STATUS.md gesamt   880   (yaml 304 · text 135 · bash 1, plus Schluesse)
+       gerade Zahl, alle Paare geschlossen   JA
+       am Dateiende offen                    NEIN
+       unbalancierte Oeffner                 0
+       Positivkontrolle des Verfahrens: ein kuenstlich offener Fence wird erkannt (JA, ab Zeile 4)
+
+    3. UND ICH HABE ES 22-MAL „UNVERAENDERT" GENANNT
+       Zeilen mit „STATUS.md:3220" in meiner Befunddatei          32
+       davon mit „unveraendert" in derselben Zeile                22
+
+### Warum das schwer wiegt
+
+> **„Unverändert" ist eine Zustandsbehauptung.** Sie sagt: *ich habe nachgesehen, und es ist noch so.*
+> **Ich habe nicht nachgesehen.** Ich habe eine Zeile aus der Vorrunde übernommen, 22-mal
+> hintereinander, und ihr jedes Mal die Autorität einer frischen Messung gegeben.
+
+**Das verletzt meine eigene Dauerregel wörtlich:** *„Zustand messen vor Vorlage — Postenlisten nur
+aus frischer Messung, nie aus Notizen."* **Und es ist genau der Mangel, den ich heute dreimal bei
+anderen gemessen habe:** eine Zahl ohne ihr Messmuster (§453 beim Generator), ein Verweis ohne
+Standangabe (§449), eine Vorbedingung, die niemand nachgerechnet hat (§457).
+
+**Der Unterschied: Bei den anderen war es eine Stelle. Bei mir sind es 22 Wiederholungen derselben
+Stelle.**
+
+### Was daran nicht wiedergutzumachen ist — und was doch
+
+**Die 22 Vorkommen bleiben stehen.** Abschnittsnummern werden nach der Konvention nicht nachgezogen,
+und der Text vergangener Abschnitte wird nicht umgeschrieben — **ein Befund, der korrigiert wird,
+indem man seine Spur entfernt, ist keine Korrektur, sondern eine Tilgung.**
+
+**Was ich ändere, ab sofort:**
+
+    1. Der Befund „zwei offene Fences" wird NICHT MEHR fortgeschrieben. Er ist erledigt, gemessen 0.
+    2. Kein „unveraendert" mehr ohne Messung IN DERSELBEN RUNDE. Steht es da, ist es gemessen.
+    3. Wiederkehrende Posten in meinen Berichten tragen kuenftig die Messzeit, nicht das Wort
+       „unveraendert". Eine Zeitangabe laesst sich pruefen, ein Wort nicht.
+
+### Und eine Beobachtung, die über mich hinausgeht
+
+**Wiederholung erzeugt Glaubwürdigkeit, die niemand geprüft hat.** Je öfter derselbe Posten in
+Berichten auftaucht, desto fester wirkt er — **und desto unwahrscheinlicher wird, dass ihn noch
+jemand nachmisst, weil er ja „schon lange bekannt" ist.** Ein Befund, der 22 Runden übersteht, ist
+nicht 22-mal bestätigt worden; **er ist 22-mal ungeprüft weitergereicht worden.**
+
+**Das ist die Lehre, und sie hat einen Namen verdient:** *Ein alter Befund ist kein bestätigter
+Befund. Er ist nur ein alter.*
+
+### Die Lage, frisch
+
+    Commits NICHT in der Integration   34   (26 -> 34 in acht Runden)
+    Integrator-Stille                  77 Minuten
+    §447 „steht aus" bei E0/E2         unveraendert 2  — DIESE Zahl ist in dieser Runde gemessen,
+                                                          nicht uebernommen
+
+Ball: **keiner** — Befund an der eigenen Berichterstattung. Der erledigte Fence-Posten entfällt
+ersatzlos aus allen künftigen Meldungen.
