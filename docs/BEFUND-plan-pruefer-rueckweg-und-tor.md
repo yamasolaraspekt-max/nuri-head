@@ -30161,3 +30161,85 @@ acht" gemacht, weil es nur die fünf Ausnahmen sah.
 
 Ball: **niemand.** §367 bleibt stehen und wird hier berichtigt, nicht überschrieben — die falschen
 Zahlen sind Teil des Belegs.
+
+## §373 — Die Prämisse meiner DoR ist fünf Minuten später gefallen. Und das Errata, das sie ersetzt, nennt einen Ort, den zwei von fünf Rollenbäumen nicht haben
+
+Messstand: HEAD `fc854518`, Baum 0, gemessen 15:51–15:56. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §373'` → 0).
+
+### Was angekommen ist
+
+Zwei fremde Befunde, **zitiert und verlinkt, nicht nachgebaut** — und ich darf sie ohnehin nicht
+nachbauen, denn beide beruhen auf DB-Läufen, die für mich gesperrt sind:
+
+- `STEUERUNG-dirigent/yama-lesesitzung-BEFUND-db-praemisse-weicht-ab.yaml`, **15:48:01**. Eine zweite,
+  unabhängige Messung: *„Die Rechteliste nennt `ticket_testing` NICHT, und der Lesezugriff darauf
+  GELINGT … Zwei Verfahren, zwei Antworten: nach der Hausregel gilt damit KEINE von beiden."*
+- `STEUERUNG-dirigent/dirigent-berichtigung-db-praemisse.yaml`, **15:49:53**. Dritte Messung, beide
+  Wege: *„Mein Satz ‚die Sperre lag am Weg' war FALSCH — eine Rechteliste als Zugriffsaussage
+  gelesen … Was fehlt, ist NICHT Zugriff, sondern ISOLATION."*
+
+### Meine DoR aus §370 hält — und zwar aus dem Grund, den sie selbst benannt hat
+
+Ich hatte fünf Minuten zuvor geschrieben:
+
+> *„Die tragende Lage des Umschnitts … habe ich **nicht nachgemessen**. DB-Läufe sind bis Z0-I1
+> gesperrt … Ich habe sie nicht als bestätigt verbucht und stütze das Votum nicht darauf: Sie ist der
+> **Grund** des Umschnitts, nicht sein Kriterium. **Fällt sie anders aus, fällt der Umschnitt** — das
+> ist dann ein Befund des Bauenden am `grant_beleg`."*
+
+**Sie ist anders ausgefallen.** Das Votum fällt nicht mit, weil es nie darauf ruhte. Das ist keine
+Vorsicht, die sich ausgezahlt hat, sondern der Normalfall einer benannten Prüfgrenze: **wer die Naht
+ausweist, an der er aufgehört hat zu messen, macht den Bruch dort billig statt teuer.** Die
+Folgerung „Stufe 1 ohne `root` baubar" bleibt laut Dirigent bestehen — getragen jetzt vom dreifach
+gemessenen Zugriff statt vom Kausalsatz.
+
+### Yama-Posten 10 ist nach sechs Minuten gegenstandslos — und mehr als das
+
+Ich hatte 15:43 gefragt, ob Auflage 1 („nur gegen `ticket_testing`") mit `ticket_g1b1_testing` als
+erfüllt gilt. Der Dirigent: *„Die Frage an Yama ist damit gegenstandslos: keine Änderung an Konten
+nötig."* **Selbst nachgemessen, statisch und ohne DB-Lauf:**
+
+    phpunit.xml (VERSIONIERT) :28   <env name="DB_DATABASE" value="ticket_testing" force="true"/>
+
+Der versionierte Ort trägt **genau Yamas Namen**. Der Posten ist damit nicht nur gegenstandslos,
+sondern **positiv erfüllt**. Ich streiche ihn; die Yama-Liste steht wieder bei neun.
+
+### Der neue Befund: `.env.testing` ist nicht versioniert und fehlt in zwei von fünf Rollenbäumen
+
+Der Dirigent schreibt dem Planner ins Errata: *„DB-Ziel = `ticket_testing` über den **in
+`.env.testing` konfigurierten Weg** (TCP)."* **Gemessen, welche Bäume diese Datei überhaupt haben:**
+
+    ticket (Hauptbaum)           .env.testing DA    DB_DATABASE=ticket_testing
+    ticket-rolle-generator       .env.testing DA    DB_DATABASE=ticket_testing
+    ticket-rolle-evaluator       .env.testing DA    DB_DATABASE=ticket_testing
+    ticket-rolle-planner         .env.testing FEHLT
+    ticket-rolle-plan-pruefer    .env.testing FEHLT   (meiner)
+
+    versioniert?  git ls-tree -> 0        .gitignore:13 -> .env.testing
+
+**Das ist die Vitest-Klasse zum vierten Mal heute** (`$`-Anker · fehlendes `-E` · Vitest · jetzt
+`.env.testing`): **ein Ort in einem Messbefehl, den nicht jede Rolle fahren kann.** Diesmal aber
+schärfer, denn die Datei ist bewusst **nicht versioniert** — sie kann gar nicht mitwandern, und sie
+kann in zwei Bäumen andere Werte tragen, ohne dass es auffällt.
+
+**Zwei Folgerungen, beide belegt und keine davon eine Weisung:**
+
+1. **Für das Errata:** Der verbindliche Ort ist `phpunit.xml` (versioniert, `force="true"`), nicht
+   `.env.testing` (ignoriert, in 2 von 5 Bäumen abwesend). Wer `.env.testing` als *Beleg* zitiert,
+   zitiert eine Datei, die der Leser womöglich nicht hat.
+2. **Für die Prämissengeschichte selbst:** Der Satz *„`.env.testing` zeigt auf den TCP-Weg"* stammt
+   aus dem Planner-Baum — **und dort gibt es die Datei nicht.** Er kann sie nur im Hauptbaum gemessen
+   haben. Das ist zulässig, aber es ist **eine Messung an einem fremden Baum ohne Standangabe** — und
+   genau diese Klasse hat der Planner am 22.08. selbst als Lehre notiert: *„Ein Beleg ohne
+   Standangabe ist kein Beleg."*
+
+### Mein Ball
+
+Der Dirigent setzt `ball: planner (Errata), plan-pruefer (Bestätigung)`. **Das Errata liegt noch nicht
+vor** — kein Ereignis, kein Blattstand. Ich bestätige nichts, was ich nicht gelesen habe. Sobald es
+kommt, prüfe ich die vier Punkte (a) Kausalsatz gestrichen, (b) DB-Ziel, (c) Isolationskriterien
+unverändert, (d) Belegzeile — **ohne neue Runde**, wie angeordnet, und mit dem Punkt aus diesem
+Abschnitt als mitgeliefertem Halbsatz.
+
+Ball: **Planner** (Errata) · bei mir **wartend**, nicht offen.
