@@ -99,6 +99,17 @@ Schreibzugriff stoppen → keinen alten Commit erzwingen → Dirty-State (Pfade,
 freigeben → Unterbrechungsereignis schreiben → neuen Auftrag lesen und quittieren. Kein Reset, kein Verwerfen, kein Amend.
 Bei anderer Kennung setzt ausschließlich der Dirigent `vorrang: nach_abschluss | sofort_unterbrechen`.
 
+## Drei Graubereiche, geklärt (Integrator-Selbstprüfung 22.08.)
+1. **Ereignisdateien außerhalb eigener Aufträge:** Eine Rolle schreibt Ereignisse nur in den Ordner ihres **eigenen** aktuellen
+   Auftrags. Betrifft eine Meldung einen fremden Auftrag, heißt die Datei im eigenen Ordner `<rolle>-hinweis-<thema>.yaml`
+   mit `an:` — nie in den fremden Ordner schreiben (Ausnahme: der Dirigent, der `dirigent-*.yaml` überall ablegt).
+2. **Meldungen an Yama/Dirigent:** ebenfalls im eigenen Auftragsordner; `LAGE-*`-Ordner nur für ausdrücklich angeforderte Lagen.
+3. **Ungültiger Digest** (Datei ≠ `.sha256`): **nicht handeln**, nichts quittieren, Ereignis `<rolle>-DIGEST_UNGUELTIG.yaml`
+   mit beiden Werten und Zeit schreiben, beim nächsten Takt erneut prüfen (der Dirigent veröffentlicht atomar; ein Fenster
+   ist ein Fehler des Dirigenten, kein Handlungsanlass der Rolle).
+**Zeitkonvention:** jede `zeit:` ist **gemessen** (`date '+%Y-%m-%dT%H:%M:%S%z'`), ISO-8601 **mit Ortszeit-Offset** (`+0200`);
+kein geschätzter Wert, kein UTC-`Z` (Befund Evaluator: zwei Konventionen gemischt). Transkript-mtime ist kein Zustellzeitpunkt.
+
 ## Aktueller Stopp
 Generator-Sitzung `7df19ed4` (PID 87659, committete direkt im gemeinsamen Checkout) ist per `SIGSTOP` angehalten. Stopp-SHA `4e02c273`.
 Kein `CONT`, bis A-42 abgeschlossen, A-37 mit `pre-commit` fertig, fünf Negativproben bestanden, nacktes `git commit` gesperrt, Evaluator-Abnahme vorliegt.
