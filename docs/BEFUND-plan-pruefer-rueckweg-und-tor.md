@@ -28425,3 +28425,61 @@ Prüfung, ob der Digest stimmt, sagt nichts darüber, ob die Generation dieselbe
 vom Planner erfüllt und von mir nachgemessen, P-02 votiert. **Gen 9 ist quittiert** (ACK 14:03,
 Digest selbst gerechnet und zeichengleich), der Hinweg ist gefahren. **Neuer Gegenstand: DoR für
 Z2-W0-5b.**
+
+## §345 — P-02 ist vollständig: Punkt 3 neu gefasst, damit sind alle fünf Punkte erteilbar
+
+Gewählt gegen HEAD `b0c03cbe` (Baum sauber, 14:07). §345 als Überschrift 0 Treffer, frei.
+Rollenquelle geprüft mit **generation UND Dateizeit** (neue Prüfliste aus §344): gen 9, `pruefen`,
+13:58:44, Digest ok — unverändert seit meinem ACK.
+
+**Der Planner hat auf mein Votum von 13:55 (§343) geantwortet** — Blatt `6e37d2b5`, 122 Zeilen
+(vorher 72), Meldung `planner-CODE_FERTIG-p02-punkt3.yaml` (14:04:01). Selbst nachgemessen:
+
+**Punkt 3, neu gefasst:**
+
+    3  OPERAND STATT   Wer eine Entscheidung hat, die ein geclaimtes Blatt braucht, legt sie als
+       UMSCHNITT       EIGENES EREIGNIS in der Steuerung ab - nicht ins Blatt und nicht in
+                       STATUS.md. Sie kostet die andere Instanz einen Befehl.
+
+**Damit ist Punkt 3 erteilbar.** Widerspruchsfrei: Ereignisse abzulegen ist ausdrücklich erlaubt
+(`steuerungshandlungen_erlaubt`), und `STATUS.md` wird jetzt **namentlich ausgeschlossen** statt
+verlangt. Prüfbar: das Ereignis existiert oder nicht. Kausal: der Vorfall vom 07.08. war ein
+Umschnitt im fremden Blatt — ein Ereignis hätte ihn verhindert. **Die Absicht war nie falsch, nur
+der Ablageort war neun Tage jünger überholt worden.**
+
+**Punkt 2** trägt jetzt `[UEBERHOLT 22.08. - heute rollenweise geregelt, siehe Nachtrag. Bleibt als
+Beleg stehen, nicht geloescht.]` — gekennzeichnet statt gestrichen, mit Nachtrag ab Zeile 79. Das
+ist die richtige Form: **wer den Punkt löscht, nimmt der Vorlage ihren Anlassfall.**
+
+**Ein eigener Beinahe-Fehler, gefangen durch Messen.** `grep -c 'STATUS.md'` gibt im Blatt weiterhin
+**5** Treffer, einer davon **in Punkt 3 selbst** (Zeile 42). Ich hatte den Verdacht, die Neufassung
+sei unvollständig und der Planner habe mit `grep -c 'in STATUS.md ab'` (0 Treffer) ein zu enges
+Muster für seine eigene Gegenprobe gewählt. **Falsch:** die Erwähnung ist Teil der **Verbotsklausel**
+*„nicht ins Blatt und nicht in `STATUS.md`"*. **Ein Treffer auf einen Dateinamen ist kein Mangel,
+wenn er in einem Verbot steht** — dieselbe Klasse wie die Teilstring-Fallen von heute früh, nur
+umgekehrt: nicht ein Muster, das zu viel trifft, sondern ein Treffer, den ich falsch gedeutet hätte.
+*Mein erster Griff `grep -A3 '^  3 '` gab zudem nichts aus — als Ausfall gewertet und den Kasten im
+Ganzen gelesen.*
+
+**Votum zu P-02, vollständig:**
+
+    Punkt 1  CLAIM GILT                 ERTEILT   (13:55, unveraendert)
+    Punkt 2  TRENNUNG                   ueberholt, gekennzeichnet — kein Erteilungsgegenstand mehr
+    Punkt 3  OPERAND STATT UMSCHNITT    ERTEILT   (neu gefasst, hiermit)
+    Punkt 4  VERLINKEN STATT NACHBAUEN  ERTEILT   (13:55)
+    Punkt 5  FRISCH MESSEN              ERTEILT   (13:55)
+
+**Damit ist mein Restpunkt aus §343 erledigt und P-02 aus Prüfersicht abgeschlossen** — nach 15
+Tagen auf `VORLAGE`. Den Zustandswechsel setze ich nicht: `docs/STATUS.md` schreibt der Integrator.
+
+**Zur Kenntnis, nicht in meiner Bahn:** Eine lesende Sitzung in Yamas Auftrag hat um 14:05:01 eine
+Fachmessung zum Dachpaket abgelegt (`yama-lesesitzung-hinweis-dachpaket-fachmessung.yaml`, an
+Dirigent und Planner, `mess_sha 51eb1d0e`) — *„von sieben Modulen nur zwei echte Verdrahtung"*. Sie
+nennt ihren eigenen Zustellmangel beim Namen: *„Die Messung war um 14:0x fertig und lag in Yamas
+Chatfenster, nicht in der Steuerung … derselbe Zustellmangel, den B-008 beschreibt."* **Dritter Fall
+derselben Klasse heute** — nach B-008 (falscher Ordner) und meinem §341 (falsches Zeitfenster).
+Zitiert, nicht nachgebaut; der Ball liegt beim Dirigenten.
+
+**Ball: niemand bei mir zu P-02.** Der Auslöser für die DoR **Z2-W0-5b** liegt noch **nicht** vor:
+der einzige Treffer auf `planner-CODE_FERTIG*.yaml` im Ordner trägt `kennung: P-02`, nicht
+`Z2-W0-5b`. **Das Muster trifft, die Kennung nicht** — und mein Auftrag verlangt beides.
