@@ -1,17 +1,21 @@
-auftrag_id: DOR-plan-pruefer-w0-5b
-generation: 9            # 2026-08-22T13:58:44+0200 — gen 8 abgeschlossen (A-43 ERTEILT_MIT_AUFLAGE, Posten 3 bestaetigt). Tor-Wort zurueckgenommen: aktion = pruefen.
+auftrag_id: DOR-plan-pruefer-spur-V
+generation: 10           # 2026-08-22T18:29:58+0200 — Nachtrag 1.6 Spur V in Kraft (Yama 18:2x 'ja ich will das'). Gen 9 abgeschlossen (sieben DoRs erteilt). Deine Stillstandsmeldung: Integrator lebt seit 18:08 (gen 12 ZUSTAND_NACHGEZOGEN) — erledigt. Alte neun Posten: GEPARKT hinter dem ersten angeschlossenen Modul (Produkt vor Apparat), ausser Sicherheitsbefunde.
 rolle: plan-pruefer
-sitzung_erwartet: 3870df7a-b0ad-4c78-bcb2-c5aa83a4c09d
+sitzung_erwartet: 1d7c4fec-9ba4-4264-9e4c-7c7d9ae12f88
 worktree: /Users/yamanuri/Documents/ticket-rolle-plan-pruefer
 branch: rolle/plan-pruefer
-prioritaet: P1
+prioritaet: P0
 aktion: pruefen
-taetigkeit: "pruefen/erteilen (Plan-Pruefer): Befundblatt weiterfuehren; DoR Z2-W0-5b nach SPEZIFIZIERT; Werkzeug-Register gegenlesen (Konzept, kein DoR)"
-hinweg_zuerst: "ZUERST Hinweg: git merge --no-edit -m "<rolle>: Hinweg — A-43-Stand" auto/hausplaner-integration im EIGENEN Worktree (kein Rebase/Force; Konflikt -> BASE_BLOCKED melden). Erst danach ist das Rollenverb in deinem Tor bekannt; <rolle>-BASIS_NACHGEZOGEN.yaml mit HEAD."
-ausloeser_dor: ["ereignisse/SPEZ-planner-werkzeugregister-und-w0-5b/planner-CODE_FERTIG*.yaml mit kennung Z2-W0-5b (Muster; juengster Stand)"]
-dor_pruefen: "Blatt Z2-W0-5b gegen §5 inkl. N3 + N4; Messbefehle mit ORT (Test-DB/Probe-Root); ERTEILT/NICHT ERTEILT (keine Auflagen-Schleife: Halbsaetze im Votum mitliefern, V3 Spur-Regel als Versuch). endstand_sha, ergebnis_sha, gelesen_bis."
-verboten: [Produktcode, Kriterien selbst schreiben, --no-verify]
+taetigkeit: "pruefen (Plan-Pruefer): DoR EINMAL auf den Kriterientext V-1..V-6; dann je Sammelblatt nur Vollstaendigkeit der Belege"
+jetzt:
+  1: "DoR auf den KRITERIENTEXT Spur V (docs/regelwerk/ARBEITSREGELN-NACHTRAG-1-6-SPUR-V.md @ rolle/dirigent, V-1..V-6): messbar? rotprobenfaehig (V-3)? Grenze V-4 scharf? ERTEILT / NICHT ERTEILT mit Halbsaetzen (gelten als Teil des Textes, keine Auflagen-Schleife). Ereignis plan-pruefer-DOR-SPUR-V-KRITERIENTEXT.yaml. EIN Durchgang."
+  2: "Sammelblatt Z1-V1-1 (Planner gen 20, heute): NUR Vollstaendigkeit je Modulzeile (Modul, Aufrufer mit Pfad, N4-Bedienweg, Registerzeile, kein versteckter Blocker, <= 8 Module). Keine neuen Kriterien, keine Fachpruefung der Module (die macht die Rot-Probe beim Evaluator). ERTEILT/NICHT ERTEILT in EINEM Durchgang, Ereignis plan-pruefer-DOR-Z1-V1-1-*.yaml."
+  3: "Danach Paket-5-Blatt (Naht Szene->Heizlast, Spur A) wenn es kommt; Dach-2-Sammelblatt mit Zimmerer-Linse als Pflichtkriterium."
+  4: "Zaehlmuster C gilt (Posten 20): 'dor_beleg' beginnt mit 'steht aus', Grundmenge docs/auftraege/aktiv/ — jede Zahl mit Muster."
+abschluss: "ERTEILT / NICHT ERTEILT je Gegenstand mit endstand_sha/ergebnis_sha/gelesen_bis (= Pull-Zeit)."
+verboten: [Produktcode, Blaetter selbst aendern, Auflagen-Schleifen, zweite DoR auf denselben Kriterientext, Vorlagen an Yama zu Posten 13-23]
+erlaubte_pfade: [docs/BEFUND-plan-pruefer-rueckweg-und-tor.md, docs/auftraege/aktiv/ (nur Voten-Dateien)]
 steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/DOR-plan-pruefer-w0-5b/plan-pruefer-ack.yaml
-erstellt: "2026-08-22T13:58:44+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/DOR-plan-pruefer-spur-V/plan-pruefer-ack.yaml
+erstellt: "2026-08-22T18:29:58+0200 Dirigent (atomar; Uhr: date)"
