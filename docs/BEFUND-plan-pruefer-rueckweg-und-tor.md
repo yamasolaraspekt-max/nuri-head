@@ -28728,3 +28728,67 @@ werde ich N4 prüfen.**
 
 **Ball: Planner** (die zwei Module ins Register, jetzt mit Sperrwirkung) · **Dirigent** (ob N4
 rückwirkend gilt — ich lege meine Auslegung offen, entscheiden muss er). Bei mir sonst nichts offen.
+
+## §350 — DoR Z1-W2-1: ERTEILT, mit dem Halbsatz statt einer Auflagen-Schleife
+
+Gewählt gegen HEAD `ff3eaae8` (Baum sauber, 14:25:45). §350 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok. **Prüfstand: Blatt `4611267e`** (= Planner-HEAD).
+
+**Wie der Ball zu mir kam.** `planner-CODE_FERTIG-Z1-W2-1.yaml` (14:23:30), `ball: [plan-pruefer,
+planner]`, im Blatt `ballbesitz: "plan-pruefer (DoR)"` und `dor_beleg: "steht aus — plan-pruefer"`.
+**Mein Auftrag gen 9 nennt als Auslöser Z2-W0-5b, nicht Z1-W2-1** — ich fahre die DoR trotzdem: DoR
+ist die Rollenaufgabe (§4/§5), der Auftrag setzt den Schwerpunkt, und das Blatt ist P0 mit
+ausstehendem `dor_beleg` in meiner Bahn. **Ich lege das offen, statt es stillschweigend zu tun.**
+
+**Der erste Testfall für N4 — und er ist bestanden.** Das Blatt ist 3 Minuten nach Inkrafttreten der
+Regel geschnitten (N4 seit 14:20:19, Blatt 14:23:30) und trägt einen eigenen Abschnitt *„## N4 —
+Bedienweg"* mit allen fünf Angaben: **Auslöser** (die Bearbeitung selbst), **Ort der Meldung** (am
+Objekt bzw. Statusbereich, Komponente im Bau zu benennen), **tragendes Werkzeug** (W-40), **kein**
+(Leisteneintrag/Menüpunkt/Registry-Kennung), **Zielreifegrad** `BROWSERABGENOMMEN`. Der Kopf trägt
+zusätzlich `registry_kennung: "KEINE … (siehe N4)"`. **Das ist die von N4 verlangte
+Zweitform — nicht „Bedienweg", sondern ausdrücklich „kein Leisteneintrag, Anschluss über W-40".**
+
+**Selbst nachgemessen, nicht übernommen:**
+
+    Kriterien Z1-W2-1-a..f            6      N3-Matrixzeilen  6      deckungsgleich
+    Messbefehle                       6      Absage-Regeln    4
+    Rot-Lagen benannt                 a, b, c, e   (d und f sind Schutzbelege am Bau-Diff)
+    Rueckweg-Abschnitt                vorhanden   Nicht-Ziele  vorhanden
+    basis_sha = mess_sha = d3efc5c8   beide genannt
+
+**Die Rot-Lage von (a), selbst gefahren — und hier sitzt der eine Mangel.** Das Blatt schreibt:
+*„`grep -rl 'pruefeOeffnungsIntegration\|pruefePaketIntegration'` über den Produktivpfad (ohne
+`__tests__`/`__domtests__`) → **0**"*. Gemessen:
+
+    Produktivpfad, beide Funktionsnamen        -> 1 Datei: geometry/integrationAbgleich.ts
+    dieselbe Menge ohne die Definitionsdatei   -> 0
+    Gegenprobe des Griffs: 'dachFlaechen' 6 Dateien · erfundener Name 0
+
+**Der Befehl trifft die Datei mit, die die Funktionen *definiert*.** Die Sache stimmt — es gibt
+**keinen Verbraucher** —, aber die Erwartung `0` verfehlt der eigene Messbefehl um genau diese eine
+Datei. **Bei der Abnahme misst der Evaluator 1 gegen 0 und müsste rot geben, obwohl der Zustand rot
+*ist* und bleiben soll.** *Dieselbe Klasse wie A-43-11 (Erwartung 1, Ergebnis 2), nur umgekehrt.*
+
+**Kein Auflagen-Pingpong — der Halbsatz steht hier.** Mein Auftrag gen 9 verlangt es wörtlich:
+*„ERTEILT/NICHT ERTEILT (keine Auflagen-Schleife: Halbsätze im Votum mitliefern)"*. Also:
+
+> **(a) Messbefehl, ergänzt:** `… über den Produktivpfad (ohne `__tests__`/`__domtests__`) **und
+> ohne die Definitionsdatei `geometry/integrationAbgleich.ts` selbst** → **0**.
+> *Alternativ ohne Änderung des Befehls: Erwartung „**1** — und zwar nur die Definitionsdatei".*
+
+## Votum: ERTEILT
+
+Sechs Kriterien, sechs Matrixzeilen, N3 und N4 vollständig, Rot-Lagen benannt und von mir an der
+tragenden Stelle nachgemessen, Rückweg und Nicht-Ziele vorhanden, `basis_sha` und `mess_sha`
+genannt. **Der eine Mangel ist ein Halbsatz am Messbefehl von (a) und steht oben** — er blockiert
+nichts und braucht keine zweite Runde.
+
+**Was gut ist und ich nicht erneut prüfe:** Die Absage-Regeln greifen die richtigen Fehlerbilder ab
+— *„Ein Konsolen-Log erfüllt (a) nicht"*, *„Ein Test, der die Funktion direkt aufruft, erfüllt (b)
+nicht"*, *„`headless` erfüllt (e) nicht — die Szene rendert dann nicht"*. **Das ist Bedienbarkeit
+als Abnahmemaßstab, genau wie N4 sie verlangt**, und die (c)-Rotprobe verhindert, dass (b) nur
+belegt, *dass irgendetwas* erscheint.
+
+**Ball: Planner** (Halbsatz eintragen, keine neue DoR nötig) · die zwei Geschwisterblätter folgen
+laut seiner Meldung und sind strukturgleich — **wenn sie denselben Messbefehl tragen, tragen sie
+denselben Mangel.**
