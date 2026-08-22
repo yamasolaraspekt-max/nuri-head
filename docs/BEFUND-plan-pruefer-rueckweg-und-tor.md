@@ -40710,3 +40710,65 @@ Das ist keine Fehlfunktion — die Landkarte beschreibt, sie steuert nicht. Aber
 **Zuordnung, die nach E4 nicht mehr stimmt**, und sie gehört in dieselbe Fachentscheidung wie die
 Frage des Generators: Ist `boden` der Bodenbelag (dann `ADD_CEILING` mit `erdberuehrt`-Kontext) oder
 die Platte (dann `ADD_FOUNDATION_SLAB`)? **Das entscheidet nicht der Plan-Prüfer.**
+
+## §510 — Ich messe seit Stunden im Integrations-Checkout. Ab sofort nicht mehr
+
+Stand: HEAD `01154005`, Baum 0, gen 11, Digest gleich. Zeit 23:57. Integration `97c610ca`.
+
+Der Dirigent hat um **23:53:59** eine Warnung an den Release-Prüfer abgelegt, dessen Sitzung im
+Integrations-Checkout startete:
+
+> „`/Users/yamanuri/Documents/ticket` — das ist der **INTEGRATIONSCHECKOUT** (ticket.test, Zweig
+> `auto/hausplaner-integration`, **`.env` = Produktiv-DB `ticket`**) […] **KEINE git-Operation, KEIN
+> artisan, KEIN Test, KEINE Bühne im Integrationscheckout** […] Schutzgrenze Produktivdaten +
+> Rollentrennung (Integrationscheckout schreibt nur der Integrator)."
+
+**Sie ist nicht an mich adressiert** (`an: [release-pruefer, integrator, yama]`). **Aber ich tue
+seit Stunden dasselbe.**
+
+### Selbstprüfung: was ich dort getan habe
+
+```
+git --no-optional-locks log / show / grep / rev-parse / diff / ls-tree   LESEND
+grep / sed / awk / wc auf Dateien                                        LESEND
+```
+
+**Nie** `add`/`commit`/`checkout`/`merge`, nie `artisan`, nie ein Test, nie eine Bühne, nie `.env`.
+Meine Commits laufen ausnahmslos über das Rollen-Tor in meinem eigenen Worktree. `--no-optional-locks`
+habe ich durchgehend gesetzt, damit keine Lock-Dateien entstehen.
+
+**Der Schaden ist also null** — aber die Warnung sagt „**keine** git-Operation", und `git log` ist
+eine. Die Rollentrennung ist nicht nur eine Schreibregel: Wer im fremden Checkout arbeitet, kann
+dort auch versehentlich etwas anfassen, und `.env` zeigt dort auf die **Produktivdatenbank**.
+
+### Abhilfe, sofort und ohne Verlust
+
+Worktrees teilen dasselbe Repository. Vier Proben aus **meinem** Worktree:
+
+| Probe | Ergebnis |
+|---|---|
+| `rev-parse auto/hausplaner-integration` | `97c610ca` |
+| Blatt-Blob am Integrationsstand | `a8924820` |
+| `git grep ADD_FOUNDATION_SLAB` im fremden Stand | 22 Treffer |
+| `git show …:docs/STATUS.md` | 20 483 Zeilen |
+
+**Alle vier identisch mit der Messung im Integrations-Checkout.** Ich verliere nichts.
+
+**Selbstbindung ab sofort** (zusätzlich zu §494 und §496): Jede Messung läuft aus
+`/Users/yamanuri/Documents/ticket-rolle-plan-pruefer`. Fremde Stände lese ich über die Ref
+(`auto/hausplaner-integration:pfad`), nicht über den fremden Arbeitsbaum. Das erzwingt nebenbei
+etwas, das ich ohnehin schulde: **einen benannten Stand statt einer Arbeitskopie** — genau der
+Mangel aus §494, wo meine Zahl 35 nicht reproduzierbar war, weil sie gegen eine Arbeitskopie
+gemessen wurde.
+
+### Was ich nicht selbst entscheide
+
+Ob die Warnung auch für **rein lesende** Rollen gilt, ist eine Regelfrage. Ich stelle sie nicht als
+Bitte um Ausnahme — ich habe die Praxis bereits umgestellt. Aber sie betrifft andere: Jede Rolle,
+die den Integrationsstand prüft, steht vor derselben Wahl, und die Warnung ist bisher an drei
+Adressaten gegangen.
+
+Ein Punkt gehört dazu, weil er älter ist: In §480/§481 habe ich `grep -c` auf **fremde `.env`**
+gefahren, um die ENV-Anweisung zu prüfen. Das war schon damals eine Grenzfrage, und ich habe sie
+dem Dirigenten vorgelegt statt sie selbst zu beantworten. Sie ist bis heute offen — und die neue
+Warnung nennt `.env` im Integrations-Checkout ausdrücklich als Produktiv-Zugang.
