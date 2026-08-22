@@ -215,10 +215,17 @@ DIE VORLAGEN, die kopiert werden:
 
 ---
 
-## ⚠ DREI STELLEN, AN DENEN DER GP-0-PLAN ÜBERHOLT IST
+## ⚠ DREI STELLEN, AN DENEN DER GP-0-PLAN ÜBERHOLT WAR — **seit `6e527e10` dort berichtigt**
 
-**Der Dirigent nennt „Konzept E4 (berichtigt) + GP-0 §7" als Quellen. Sie widersprechen sich an
-drei Stellen — hier gilt jeweils die jüngere:**
+> **Stand 22.08. 22:3x:** Der Plan-Prüfer hat GP-0 **freigegeben mit fünf Auflagen** (Votum
+> `43761baf`), und ich habe sie in einem Durchgang eingearbeitet (`6e527e10`). **GP-0 trägt die
+> Korrekturen jetzt selbst** — die Tabelle bleibt als Nachweis stehen, nicht als offener Posten.
+> *Zwei der fünf Auflagen deckten sich mit dem, was ich beim Zuschnitt selbst gefunden hatte; die
+> übrigen drei kamen von ihm — darunter die einzige, die man nur beim Durchrechnen sieht
+> (Auflage 4, unten).*
+
+**Der Dirigent nennt „Konzept E4 (berichtigt) + GP-0 §7" als Quellen. Sie widersprachen sich an
+drei Stellen — es gilt jeweils die jüngere:**
 
 | GP-0 sagt | überholt durch | es gilt |
 |---|---|---|
@@ -226,9 +233,22 @@ drei Stellen — hier gilt jeweils die jüngere:**
 | §7-3 nennt `berechneHoehenkette(...)` | E0 gebaut (`ad2ac724`) | die Funktion heißt so **nicht** — gebaut sind `deckenOberkanteMm:37` und `naechsteEtageElevationMm:49` |
 | Nicht-Ziel „**kein** 2D-Rendering zwingend" | Konzept E4 + Dirigent 22:10 | **2D minimal ist Gegenstand** (Kriterium a) |
 
-*Der Plan-Prüfer hat zudem GP-0 **Abschnitt 1** als überholt gemeldet (§482) — er beschreibt die
-IST-Höhenkette vor E0.* **Alles übrige aus GP-0 trägt** und ist die Bauvorlage: Typ, Zod-Stellen,
+*Der Plan-Prüfer hat zudem GP-0 **Abschnitt 1 und 3** als überholt gemeldet (§483) — sie beschreiben
+die IST-Höhenkette vor E0.* **Alles übrige aus GP-0 trägt** und ist die Bauvorlage: Typ, Zod-Stellen,
 Command-Plan, Abhängigkeitsmatrix.
+
+**Eine vierte Sache, die ich beim Zuschnitt NICHT gefunden hatte** — sie stammt vom Plan-Prüfer und
+betrifft das Referenzhaus, gegen das dieses Blatt in (e) misst:
+
+```
+Das Referenzhaus setzte floorThickness 200 UND Zwischendecke dickeMm 200.
+naechsteEtageElevationMm waehlt genau zwischen diesen beiden (hoehenkette.ts:49-56).
+BEI GLEICHEM WERT LIEFERN BEIDE ZWEIGE 2700 — die Fixture kann nicht zeigen,
+welcher genommen wurde.  Berichtigt auf floorThickness 180 (6e527e10).
+```
+
+> **Kein Rechenfehler: die Kette stimmte, sie war nur nicht unterscheidungsfähig.** *Das sieht man
+> erst beim Durchrechnen, nicht beim Lesen — und deshalb steht es hier, wo der Bau (e) misst.*
 
 ## Eine technische Entscheidung, die mir gehört
 
