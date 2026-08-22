@@ -36788,3 +36788,97 @@ Das ist teurer als die Korrektur — und der Grund, warum die Korrektur später 
 Ball: **Evaluator** (drei Abweichungen an (a); meine Rangfolge-Antwort liegt vor) · **Dirigent**
 (Generation 21; Vorbedingung E0 aus §457) · **Integrator** (31 Commits, 67 Minuten) · **Yama**
 (§443/§444, Pfadfrage Z0-I1).
+
+## §460 — Vorratsprüfung (c): die Höhenketten-Formel durchgerechnet. Sie stimmt, der Rückfall hält den Bestand bitgleich — und der Name der Funktion sagt das Gegenteil dessen, was sie liefert
+
+Messstand: HEAD `7d8ab73d`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 20:56–21:00.
+**Ereignis-Schnitt dieser Runde: 20:54:53** (0 neue Ereignisse, nichts in meiner Bahn).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §460'` → 0).
+Vorratsprüfung **Posten (c) — tragende Formeln durchrechnen**, am Bau-Stand `7500bb7d`.
+
+### Die Formel, wie sie im Code steht
+
+    deckenOberkanteMm(level)          = level.elevation + level.defaultWallHeight
+    naechsteEtageElevationMm(level,d) = Math.round(deckenOberkanteMm(level) + deckeDickeMm)
+                                        mit deckeDickeMm = d ? d.dickeMm : level.floorThickness
+
+### Durchgerechnet mit den Blattzahlen (EG: elevation 0 · Wand 2500 · floorThickness 200 · Decke 240)
+
+    deckenOberkanteMm       = 0 + 2500      = 2500
+    MIT Decke               = 2500 + 240    = 2740      Blatt sagt 2740   ✓
+    OHNE Decke (Rueckfall)  = 2500 + 200    = 2700      Blatt sagt 2700   ✓
+    Differenz                                  40 mm
+
+**Beide Zahlen des Blattes sind nachgerechnet und stimmen.**
+
+### Der Rückfall hält den Bestand bitgleich — die Behauptung ist belegt
+
+Der Code behauptet: *„die beiden alten Rechnungen addierten `floorThickness`, und das tut dieser
+Zweig auch."* **Am alten Stand `fd2575ce` gegengeprüft:**
+
+    Kopfrahmen.tsx:172       elevation: oben.elevation   + oben.defaultWallHeight   + oben.floorThickness
+    geschossVorlage.ts:54    elevation: quelle.elevation + quelle.defaultWallHeight + quelle.floorThickness
+    neuer Rueckfall          deckenOberkanteMm(level) + level.floorThickness        = dasselbe
+
+**Solange niemand eine Decke modelliert hat, ändert sich kein einziger Wert.** Das ist die
+Regressionssicherheit, und sie ist nicht behauptet, sondern nachrechenbar.
+
+### Und jetzt der Befund: der Name sagt das Gegenteil dessen, was die Funktion liefert
+
+    Kommentar (Z.32):  „Hoehe der Decken-UNTERKANTE = Wand-Oberkante des Levels (mm)."
+    Rechnung  (Z.38):  return level.elevation + level.defaultWallHeight;
+    Funktionsname:     deckenOberkanteMm
+
+> **Die Funktion heißt „Oberkante" und liefert die Decken-UNTERkante.** Die Decken-Oberkante wäre
+> `+ dickeMm` — und das ist genau `naechsteEtageElevationMm`. **Der Kommentar sagt es selbst; der
+> Name widerspricht ihm.**
+
+**Der Name ist GEERBT, nicht neu:** am Stand `fd2575ce` steht `export function deckenOberkanteMm` in
+`renderers/three-d/deckenMesh.ts:10`. **Der Generator hat ihn übernommen, nicht erfunden** — und
+beim Zusammenführen den klarstellenden Kommentar dazugeschrieben.
+
+### Alle drei Produktivaufrufer geprüft — die Verwendung ist richtig
+
+    HausplanerApp.tsx:1013   traufhoeheMm: deckenOberkanteMm(level)
+                             -> die Traufe ist die Hoehe, auf der das Dach die Wand trifft.
+                                WANDOBERKANTE. Fachlich richtig.
+    szene.ts:456             const deckenHoehe = …   Kommentar: „obere Raumabschluesse … auf Wandhoehe
+                                (level.elevation + defaultWallHeight)". Dekorativer Raumabschluss.
+                                Fachlich richtig.
+    szene.ts:483             const oberkante = …     zeichnet die MODELLIERTE Geschossdecke auf dieser Hoehe.
+                                Der Variablenname traegt die Verwirrung weiter.
+
+> **Der Name ist falsch, die Verwendung ist richtig.** Das ist die Umkehrung von §434: dort habe ich
+> am falschen Ort gemessen und die Sache verfehlt; hier steht der falsche Name über der richtigen
+> Sache.
+
+### Warum das trotzdem gemeldet gehört
+
+**Weil der nächste Leser es nicht besser wissen kann.** Wer die Decken-**Oberkante** braucht und eine
+Funktion namens `deckenOberkanteMm` findet, ruft sie auf — **und liegt um die Deckendicke zu tief,
+im Beispiel 240 mm.** Der Kommentar schützt nur den, der ihn liest; **der Name erreicht auch den,
+der es eilig hat.**
+
+**Das ist dieselbe Klasse wie das ganze heutige Blatt:** `Decke / Bodenplatte` versprach einen
+Eintrag, den es nicht gibt (§456). `berechneHoehenkette` benannte eine Funktion, die es nicht gibt
+(§457). `deckenOberkanteMm` benennt eine Größe, die sie nicht liefert. **Drei Namensbefunde an einem
+Abend, alle im selben Modul-Umfeld.**
+
+### Was ich ausdrücklich NICHT sage
+
+- **Nicht, dass die Decke falsch gezeichnet wird.** Ob `szene.ts:483` nach oben oder unten
+  extrudiert, habe ich **nicht gemessen** — dazu gehört der Browser, und der gehört dem Evaluator.
+  **Ohne diese Messung ist jede Aussage über die Darstellung eine Vermutung.**
+- **Keine Umbenennung.** Ein geerbter Name mit drei Produktivaufrufern und einem Test ist eine
+  Änderung mit Reichweite, kein Nebenbei — und Produktcode ist ohnehin außerhalb meiner Rolle.
+
+### Die Lage, frisch
+
+    Commits NICHT in der Integration   32    (26 -> 28 -> 29 -> 30 -> 31 -> 32)
+    Integrator-Stille                  70 Minuten
+    §447 „steht aus" bei E0/E2         unveraendert 2
+
+Ball: **keiner von mir** — Vorratsbefund. Nachrichtlich an **Planner/Generator**: der Name
+`deckenOberkanteMm` widerspricht seinem eigenen Kommentar; ob das ein eigenes Blatt wert ist,
+entscheidet der Planner. · **Integrator** (32 Commits, 70 Minuten) · **Dirigent** (Generation 21) ·
+**Yama** (§443/§444, Pfadfrage Z0-I1).
