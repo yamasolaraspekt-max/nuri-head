@@ -27130,3 +27130,56 @@ Nachbesserung seit 11:08 vorliegt. Danach bleibt Z0-I1 — dessen Abschluss alle
 Musterentscheidung A/B/C aus §321/§323 hängt.
 
 **Ball:** Evaluator (läuft) · Dirigent (A/B/C) · bei mir nichts.
+
+## §326 — Posten (e): §318 verfolgt — nichts bewegt, und von fünfzehn Commits der letzten halben Stunde sind acht meine
+
+**Messstand** `a700c418` · Baum sauber · 0 neue Commits seit §325 · Integrationszweig `cd332670` →
+`2dd76e38`. Ballortung dreiseitig **1 · 6 · 14**, nichts angekommen. Die Nachprüfung läuft seit
+**45 Minuten**, Evaluator-Baum unverändert `e39cbccc` — in §324 gemeldet, nicht wiederholt.
+
+### §318 verfolgt
+
+```
+Z2-W0-1 · W0-3 · W0-7 · W0-8 · W0-9      alle fünf: BEREIT / generator   (unverändert)
+Commits auf docs/STATUS.md seit 11:37    0
+Integrator-Ereignisse seit 11:37         0
+Dirigenten-Antworten seit 11:37          0
+```
+
+**Das ist keine Beanstandung.** Meine Meldung ist fünfundzwanzig Minuten alt, A-37 läuft, und der
+Integrator arbeitet sichtbar — er merged alle drei Minuten. Nur eben nichts von dem, was ich gemeldet
+habe. **Fünfundzwanzig Minuten sind kein Rückstand;** ich halte den Punkt fest, damit er beim nächsten
+Mal eine Zahl hat statt eines Eindrucks.
+
+### Ein eigener Messfehler, dritte Variante derselben Falle
+
+Meine erste Messung fragte `1c8c207f..auto/hausplaner-integration -- docs/STATUS.md` und fand **einen**
+Commit. Der ist von **08:22** — also drei Stunden **vor** meinem §318. Der Bereich `X..Y` zeigt alles,
+was in `Y` liegt und nicht in `X`, und weil mein Zweig und die Integration **divergieren**, gehören
+dazu auch ältere fremde Commits. **Ich habe einen Divergenz-Bereich gemessen und ihn als Zeitfenster
+gelesen.**
+
+Das ist dieselbe Falle wie in §306 (dort: `X..HEAD` bei einem SHA, der kein Vorfahr ist) und in §314
+(dort richtig gemacht, weil ich die Vorfahr-Eigenschaft vorher geprüft hatte). **Dritte Begegnung,
+zweiter Fehler.** Richtig ist hier `--since='…'`: **0** Commits, Gegenprobe **15** im selben Fenster
+ohne Pfadfilter.
+
+### Und die Zahl, die mir gilt
+
+```
+Commits im ganzen Repo seit 11:37   15
+davon von mir (plan-pruefer)         8
+```
+
+**Mehr als die Hälfte.** Meine Commits sind Befunde, keine Begleitmeldungen, und die Wache verlangt sie
+ausdrücklich (*„ist nichts offen, nicht stehenbleiben"*). Trotzdem steht Yamas Satz daneben:
+**„Begleitverkehr begrenzen."** Acht von fünfzehn ist die Zahl dazu — ich nenne sie, weil ich sie sonst
+von niemandem hören würde, und weil eine Wache, die den Takt der Kette überstimmt, aufhört, eine Wache
+zu sein.
+
+**Was ich daraus mache:** Solange die Kette an einem Prüfschritt und einer Entscheidung hängt (Evaluator,
+Dirigent A/B/C) und bei mir nichts offen ist, halte ich die Runden kurz — messen, prüfen, und nur
+schreiben, wo eine Messung etwas Neues zeigt.
+
+**Ball:** unverändert — Evaluator (Nachprüfung), Dirigent (A/B/C, N3), Integrator (fünf Zustände),
+Yama (neun Posten). Bei mir nichts.
