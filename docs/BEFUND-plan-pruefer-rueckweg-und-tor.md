@@ -30724,3 +30724,44 @@ hat, wie der Verlauf zeigt, seinen Zweck erfüllt: der Integrator meldete 15:58,
 entschied 16:02.
 
 Ball: **Evaluator** (Z1-W2-3, `npm run build:hausplaner` vorher) · bei mir nichts.
+
+## §381 — Ein SHA, den YAML als Zahl liest: 99 eigene Ablagen geprüft, 131 Felder ohne Anführungszeichen, null betroffen
+
+Messstand: HEAD `0b0881a4`, Baum 0, gemessen 16:16–16:18. Abschnittsnummer gegen den frischen HEAD
+gewählt. **Die in §380 gesetzte Regel hat sofort gegriffen:** die Nachmessung der Ereignisse vor dem
+Schreiben fand `generator-befund-sha-als-zahl-gelesen.yaml`, 16:14:04 — angekommen **zwischen** meiner
+Rundenmessung (16:13:47) und meinem Commit (16:15:27).
+
+**Fremder Befund, zitiert und verlinkt:** Der Generator meldet an der eigenen Meldung:
+
+    ergebnis_sha: 161868e9   ->   eingelesen als   161868000000000  (Typ number)
+
+*„Ein Kurz-SHA aus Ziffern mit einem `e` in der Mitte ist gültige wissenschaftliche Notation."* Und
+der Grund, warum es auffiel: *„Ohne das Rücklesen wäre die Datei syntaktisch gültig gewesen und der
+Fehler unsichtbar. **Eine Datei, die sich einlesen lässt, ist nicht dieselbe wie eine, die das
+Richtige enthält.**"*
+
+### Meine eigene Grundmenge, zwei unabhängige Verfahren
+
+    Verfahren 1 (Muster):   99 Ablagen · 131 SHA-Felder ohne Anfuehrungszeichen · 0 betroffen
+      Gegenprobe am bekannten Treffer:  161868e9 -> 1   ·   0b0881a4 -> 0     Muster greift
+    Verfahren 2 (js-yaml):  99 Dateien geladen · SHA-Felder mit typeof 'number': 0
+
+**Null, und zwar belegt.** Ich melde die Grundmenge mit, weil eine Null ohne sie keine Aussage ist —
+dieselbe Form, die der Generator für seine 53 Meldungen gewählt hat.
+
+### Warum ich die Regel trotzdem übernehme
+
+131 meiner SHA-Felder stehen ohne Anführungszeichen. Heute trifft es keines. **Der Generator benennt
+den Grund, warum das nichts wert ist:** *„Eine Regel, die nur bei auffälligen Werten greift, wird beim
+unauffälligen vergessen."* Ein Kurz-SHA hat acht Stellen; jede ist mit 1/16 ein `e`. Das ist kein
+Ausnahmefall, sondern ein wartender.
+
+Bemerkenswert ist die Fehlerrichtung: Ich habe SHAs bisher **dann** gequotet, wenn sie **nur aus
+Ziffern** bestanden — intuitiv richtig, aber aus dem falschen Grund. `161868e9` sieht wie Hex aus und
+ist doch eine Zahl. **Meine Faustregel hätte genau diesen Fall durchgelassen.**
+
+**Regel an mich, ab sofort:** Jeder SHA in Anführungszeichen — nicht nur der, der zufällig danach
+aussieht.
+
+Ball: **niemand.** Kein Auftrag berührt, keine fremde Datei angefasst.
