@@ -33274,3 +33274,95 @@ lese — hier hat genau das die Null als Ausfall entlarvt (`glob` 118 = `find` 1
 
 Ball: **Planner** (die drei zusätzlichen Stellen in W-12-1, davon zwei in meinem Votumsteil) ·
 **Integrator** (`docs/STATUS.md:75`, P-02-Tafelzeile) · **Dirigent** (29 unparsebare Zeitfelder).
+
+## §419 — Mein Zeitformat-Befund liegt seit 10 Stunden. Heute ist er dreimal fast eingetreten, die Grundmenge ist auf das 6,8-fache gewachsen — und ich selbst schreibe inzwischen zwei Formate
+
+Messstand: HEAD `a1de7c81`, Baum 0, gemessen 18:23–18:26. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §419'` → 0). Vorratsprüfung (e), Fortsetzung — **kein neuer Befund, sondern
+die Verfolgung eines eigenen** (P-02 Punkt 4: nicht nachbauen).
+
+### Der Befund existiert seit heute früh
+
+`VORRAT-Z0-I2/plan-pruefer-befund-zeitformate.yaml`, **08:12:23**, `ball: planner`:
+
+> *„`heartbeat_bis` wird in VIER Formaten geschrieben. Wer sie gleich liest, entzieht einer
+> arbeitenden Rolle die Lease."*
+
+Er ist vollständig: vier Formate gezählt, der Schaden am eigenen Fehlversuch belegt (*„mein erster
+Lauf meldete ABGELAUFEN, obwohl der Prozess lief"*), §8-Bezug, plus der kaputte Stempel
+`2026-08-22T00:2x+02:00`.
+
+### Was in 612 Minuten daraus geworden ist
+
+    Format                      08:12    18:26     Faktor
+    +0200  (ohne Doppelpunkt)      68      742       10,9
+    +02:00 (mit Doppelpunkt)       24       81        3,4
+    ohne Zone                      25       28        1,1
+    Z (UTC)                        11       20        1,8
+    Summe                         128      871        6,8
+
+**Alle vier Formen wachsen weiter.** Der kaputte Stempel steht unverändert:
+`PARKEN-release-pruefer/release-pruefer-standmeldung.yaml:5  zeit: "2026-08-22T00:2x+02:00"`.
+
+**Entlastend, und das gehört dazu:** Die sieben Rollenquellen in `rollen/` sind **einheitlich
+`+HHMM`** — alle sieben. Ich hatte das Gegenteil vermutet und die Vermutung an der Messung
+verloren. Die zentrale Quelle ist konsistent; die Streuung sitzt in Ereignissen und Leases.
+
+### DREIMAL FAST EINGETRETEN, HEUTE
+
+    08:12  ich selbst   Generator-Lease als ABGELAUFEN gelesen (Z naiv als Ortszeit)
+                        -> im Befund dokumentiert, verworfen und richtig gerechnet
+    09:36  Evaluator    UTC-Stempel in der Zone der Datei angezeigt, 2 Stunden zu alt
+                        -> "ein Anzeigefehler, kein Messfehler", sofort berichtigt
+    18:23  Generator    date -j -f '%Y-%m-%dT%H:%M:%S%z' las "…19:16:19+02:00" als VERFALLEN,
+                        weil %z den Doppelpunkt im Offset nicht kennt
+
+**Der dritte Fall ist der schwerste, und er ist der Beweis, dass der Befund nicht theoretisch ist.**
+Der Generator schreibt selbst:
+
+> *„Hätte ich der Zahl geglaubt, hätte ich die fremde Lease für verwaist gehalten und übernommen."*
+
+Nachgemessen, zonenbewusst: die Lease ist **gültig** — `fencing_token 11`, `rolle: evaluator`,
+`heartbeat_bis 19:16:19`, Rest **51 Minuten**, Zweck *„Browserabnahme Z1-W2-3 … Bühne mit
+Anmeldung"*. **Der Evaluator nimmt in diesem Moment die Lieferung des Generators ab.** Hätte sein
+Werkzeug ihn getäuscht, hätte er dem Evaluator mitten im Bedienweg die Anmeldung weggeräumt — genau
+der Vorfall von 16:00:33, den er selbst verursacht hat und dessentwegen die Lease gebaut wurde.
+
+**Drei Rollen, drei verschiedene Werkzeuge, dieselbe Klasse.** Das ist kein Anwenderfehler mehr,
+das ist die Form.
+
+### IN EIGENER SACHE — ich bin selbst uneinheitlich geworden
+
+Mein Befund von 08:12 sagt:
+
+> *„Meine 16 Ereignisdateien tragen durchgehend die Form `+02:00`; 0 kaputte Zeitwerte. Das ist kein
+> Verdienst, sondern Zufall der Werkzeugwahl."*
+
+Frisch gemessen über alle meine Dateien:
+
+    +HH:MM   56
+    +HHMM    44
+
+**Der „Zufall der Werkzeugwahl" hat sich gedreht, und ich habe es nicht bemerkt.** Meine neuen
+Ereignisse schreibe ich von Hand mit `+0200`; die alten entstanden über ein `sed`, das den
+Doppelpunkt einsetzte. In §411 habe ich mich auf **einen Schlüssel** festgelegt (`zeit:`) — über das
+**Format** habe ich nichts gesagt, und genau dort bin ich abgedriftet.
+
+**Das ist derselbe Fehler wie in §418**, nur in der anderen Richtung: dort habe ich eine alte eigene
+Zahl für einen Messwert gehalten; hier habe ich eine alte eigene Zusage für noch gültig gehalten.
+**Beides ist „die Notiz lesen statt messen", und beides an mir selbst.**
+
+**Ich lege mich fest, und zwar auf das Format der Rollenquellen:** ab sofort `+HHMM`, weil `rollen/`
+es einheitlich so führt und die zentrale Quelle den Ausschlag gibt. Die 56 alten rühre ich nicht an
+— Rückdatierung wäre schlimmer als Uneinheitlichkeit.
+
+### Was ich NICHT tue
+
+Kein zweiter Befund, keine Formatvorgabe für andere. Welches Format Z0-I2 festlegt, ist
+Planner-Arbeit — das stand schon um 08:12 in meinem Befund und gilt unverändert. Ich liefere die
+**Entwicklung** und den **dritten Schadensfall**, weil ein Befund, der in zehn Stunden dreimal fast
+eingetreten ist, anders zu lesen ist als einer, der einmal auffiel.
+
+Ball: **Planner** (Z0-I2, seit 612 Minuten) · **Release-Prüfer** (der kaputte Stempel, unverändert)
+· **Yama**, falls Z0-I2 nicht vor der nächsten Lease-Übernahme kommt — dann ist es keine
+Werkzeugfrage mehr, sondern eine Frage der Reihenfolge.
