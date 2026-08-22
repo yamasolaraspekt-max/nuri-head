@@ -28483,3 +28483,60 @@ Zitiert, nicht nachgebaut; der Ball liegt beim Dirigenten.
 **Ball: niemand bei mir zu P-02.** Der Auslöser für die DoR **Z2-W0-5b** liegt noch **nicht** vor:
 der einzige Treffer auf `planner-CODE_FERTIG*.yaml` im Ordner trägt `kennung: P-02`, nicht
 `Z2-W0-5b`. **Das Muster trifft, die Kennung nicht** — und mein Auftrag verlangt beides.
+
+## §346 — Werkzeug-Register gegengelesen (Auftrag gen 9): die Grundmenge ist 43, nicht 37
+
+Gewählt gegen HEAD `f3ec1ffb` (Baum sauber, 14:10:35, Rückstand 6 — **Produktcode und Register
+durchgehend aus `auto/hausplaner-integration` gemessen**, §342). §346 als Überschrift 0 Treffer.
+Rollenquelle gen 9, Dateizeit 13:58:44, Digest ok.
+
+**Anlass: beauftragt, nicht Vorrat.** Mein Auftrag gen 9 nennt als Tätigkeit *„Werkzeug-Register
+gegenlesen (Konzept, kein DoR)"*. Das Zieldokument `docs/konzept/werkzeug-register.md` **existiert
+noch nicht** — es ist Posten 1 des Planners (gen 17, 14:03:22). Gegengelesen habe ich deshalb die
+**Quelle**, auf der es aufbauen soll: `docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md` und
+`resources/planner/hausplaner/app/tools/toolRegistry.ts`.
+
+**Die Zahlen aus meinem eigenen §300, frisch nachgemessen:**
+
+    toolRegistry.ts   13 Werkzeuge · letzte Aenderung ec12e9b3, 15.08. 11:05
+                      auswahl wand fenster tuer dach decke treppe bemassen flaeche-messen
+                      kontur loeschen duplizieren trimmen
+    Register          37 BESCHRIEBEN · 2 ENTWORFEN     -> §300 EXAKT BESTAETIGT
+
+**Was §300 nicht nannte und heute dazugehört:**
+
+    Zeilen mit Kennung W-NN am Zeilenanfang        43
+      davon BESCHRIEBEN                            37
+            ENTWORFEN                               2
+            GEBAUT                                  1   (W-27 Dachkantentypen)
+            GEGENSTANDSLOS                          3   (W-19, W-24, W-32)
+      Summenprobe  37+2+1+3 = 43                        schliesst
+
+**Der Hinweis für den Planner, und er betrifft seine Grundmenge.** Sein Auftrag lautet
+*„`docs/konzept/werkzeug-register.md`: Registerzeile **(37)** ↔ Modulpfad ↔ toolRegistry-Kennung ↔
+Reife"*. **Die Registerzeilen sind 43, nicht 37.** Wer 37 verknüpft, lässt **drei aktive** Zeilen
+liegen (2 ENTWORFEN, 1 GEBAUT) — und die drei `GEGENSTANDSLOS`-Zeilen brauchen keinen Modulpfad,
+sollten aber als solche benannt sein, damit später niemand sie für vergessen hält. *Das ist kein
+Mangel am Auftrag: „37" war meine Zahl aus §300, und sie war für BESCHRIEBEN richtig. Sie ist nur
+nicht die Grundmenge.*
+
+**Zwei eigene Messfehler auf dem Weg, beide durch Gegenproben gefunden.**
+
+**(1) Wortvorkommen statt Zeilen.** Mein erster Griff gab **69 BESCHRIEBEN · 10 ENTWORFEN ·
+8 GEBAUT** — `grep -oE` über die ganze Datei zählt jedes Vorkommen, auch in Prosa: **87 Vorkommen
+gesamt, davon 23 außerhalb jeder Tabellenzeile.** Pro Reifegrad-Spalte gezählt sind es 37/2/1.
+**Dieselbe Klasse wie §337** (Zeile gegen isolierte Extraktion), und mein §300 war die ganze Zeit
+richtig — falsch war der Griff von heute.
+
+**(2) Die Grundmenge des Musters war zu klein.** Ich habe fünf Reifegrade gesucht
+(`BESCHRIEBEN|ENTWORFEN|GEBAUT|BROWSERABGENOMMEN|VERWORFEN`) und bekam 40 von 43 Zeilen — **drei
+ohne Treffer.** Gefunden habe ich sie nur, weil die **Summenprobe nicht schloss** (41 Zeilen mit
+Wort gegen 40 in der Spalte, dann 43 W-Zeilen gegen 40). Die drei tragen **`GEGENSTANDSLOS`** — ein
+sechster Reifegrad, den mein Muster nicht kannte. *Ein Muster, das die eigene Wirklichkeit nicht
+kennt — der Gegenstand von A-43, hier an meinem eigenen Griff.* **Ohne Summenprobe hätte ich „40
+Registerzeilen" gemeldet und drei stillschweigend verloren.**
+
+**Ball: niemand.** Kein DoR-Gegenstand (der Auftrag sagt ausdrücklich *„Konzept, kein DoR"*), kein
+Mangel gegen jemanden. Die Zahl **43 statt 37** geht als Hinweis an den Planner, bevor er Posten 1
+schneidet — **nach Punkt 3 der heute erteilten P-02-Fassung als eigenes Ereignis, nicht in sein
+Blatt.**
