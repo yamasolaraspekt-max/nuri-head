@@ -27956,3 +27956,377 @@ diese Zeile wie ein Widerspruch aussieht.**
 **Ball: Evaluator** (zur Kenntnis vor der Abnahme) und **Planner** (eine Wortkorrektur am
 Rot-Beleg, wenn er das Blatt ohnehin anfasst — kein Auftrag von mir). Ein Votum gebe ich hier
 nicht ab: der Bau wird vom Evaluator abgenommen, nicht von mir.
+
+## §339 — DoR für A-43-13 (Errata): Rot-Lage trägt, aber der Messbefehl nennt keinen Ort
+
+Gewählt gegen HEAD `4d566d96` (Baum sauber, 13:34:31). §339 als Überschrift 0 Treffer, frei.
+
+**Wie der Ball zu mir kam — nicht über meinen Auslöser.** Der Planner hat um 13:32:01 die
+A-43-Errata abgelegt (`planner-CODE_FERTIG-nachtrag-posten3.yaml`, `ball: [plan-pruefer, generator]`),
+aber im Ordner seines **neuen** Auftrags `KONZEPT-planner-anschluss` (gen 15). Mein Auslöser zeigt
+auf die A-43-Ordner; ich hätte sie dort nicht gefunden. **Gefunden hat es die externe Prüfung**
+(`externe-pruefung-BEFUND-B-008-lieferung-unauffindbar.yaml`, 13:33:34, S2) — zitiert, nicht
+nachgebaut. Ihr Satz trifft die Lage: *„Zwei richtige Regeln arbeiten gegeneinander, weil für den
+Fall ‚eigener Auftrag wechselt, während eine Nachlieferung für den alten aussteht' keine von beiden
+gemacht ist."* Die Regelfrage gehört dem Dirigenten; für mich zählt: **ein Ball lag zwei Minuten
+lang unauffindbar in meiner Bahn.**
+
+**Angeordnet, nicht eigenmächtig.** Ich habe geprüft, ob ein 13. Kriterium nach eingefrorenem
+Kriterienstand zulässig ist: `rollen/planner.yaml` gen 15 (13:29:42, Digest ok) trägt
+`posten_1_zuerst_kurz: „A-43 Errata-Posten 3 … ein Nachtrag ins A-43-Blatt"`. Es ist eine **Errata
+auf Anweisung des Dirigenten** (`dirigent-errata-posten3-dirigent-bereich.yaml`, 13:25), keine
+nachgeschobene Verschärfung. Der Planner vermerkt die Chronologie selbst im Blatt.
+
+**Die Rot-Lage selbst nachgemessen** — über den Inhalt gesucht, nicht über die Zeilennummer, weil
+der Bau `rollen-tor.sh` bewegt hat:
+
+    scripts/rollen-tor.sh:754   docs/konzept/*|docs/regelwerk/*|docs/auftraege/*) ;;
+    scripts/rollen-tor.sh:760   echo "  Erlaubt sind nur: docs/konzept/  docs/regelwerk/  docs/auftraege/"
+    'docs/backlog/'      Treffer in rollen-tor.sh: 0        Gegenprobe 'docs/konzept/': 3
+    'docs/fortschritt/'  Treffer in rollen-tor.sh: 0
+    im gebauten Generator-Stand 8a08d625 ebenfalls: 0
+
+**Beide Zeilennummern stimmen exakt, beide behaupteten Lücken bestehen, auch nach dem Bau.** Die
+Rot-Lage trägt. Und der Planner hat meinen §334-Hinweis übernommen und selbst benannt: `:760`
+wiederholt die Liste als **Meldungstext** — *„Wer nur die `case`-Zeile erweitert, lässt die Auskunft
+falsch stehen"*. Dass er die Beleghälften trennt (*„die Positivliste habe ich gelesen, die
+ausgelöste Abweisung hat der Dirigent gefahren"*), ist die richtige Form für ein Schutz-Rot, das er
+nach A-37-22d nicht selbst auslösen durfte.
+
+**Die Auflage: der Messbefehl nennt keinen Ort.** Er verlangt vier Läufe:
+
+    Positivprobe : Commit als dirigent mit Pfad unter docs/backlog/      -> erwartet 0
+                   desgleichen unter docs/fortschritt/                   -> erwartet 0
+    Negativprobe : Commit als dirigent mit docs/STATUS.md                -> erwartet 1
+                   desgleichen mit scripts/                              -> erwartet 1
+
+**Vier Commits mit `TICKET_ROLLE=dirigent`** — und genau das ist im realen Checkout nach **A-37-22d**
+untersagt. Der Planner weiß es und schreibt es für **seine eigene** Messung hin; für die **Abnahme**
+steht es nicht da. Wer den Messbefehl so ausführt, wie er dasteht, verstößt gegen A-37-22d — oder
+er hält an und fragt. **Ein Kriterium, dessen Probe nur an einem Ort zulässig ist, muss den Ort
+nennen.** Abhilfe: ein Halbsatz (*„im Wegwerf-Repo unter `TMPDIR`, A-37-22d"*), wie A-43-1 ihn für
+seinen eigenen Nachweis bereits trägt.
+
+**Votum zu A-43-13: ERTEILT MIT AUFLAGE.** Dieselbe Form und derselbe Grund wie in Runde 2: das
+Kriterium ist tragfähig, die Rot-Lage von mir nachgemessen, 13 Kriterien und 13 Matrixzeilen
+deckungsgleich — offen ist die **Ausführbarkeit** der Probe, nicht ihr Inhalt. Der Bau ist davon
+nicht blockiert; betroffen ist die Abnahme.
+
+## Zweiter Teil — Vorratsprüfung: was liegt außerhalb der Integration, und ist es gesichert?
+
+**Zuerst mein eigener Fehler.** Ich habe diese Runde mit *„ein Zweig ist neu, den es in meiner
+letzten Probe nicht gab"* begonnen — `salvage/evaluator-bd2043d`. **Falsch.** Der Zweig trägt das
+Commitdatum **12.07.2026**; neu war nicht der Zweig, sondern mein **Filter**: ich hatte
+`ls-remote | grep -E 'plan-pruefer|integration|planner|generator'` gefahren und diesmal `evaluator`
+ergänzt. **Ich habe eine Änderung am Messgriff für eine Änderung der Welt gehalten.** Als Regel an
+mich: *wer den Griff ändert, misst nicht mehr dasselbe — eine Bewegung im Ergebnis kann vom
+Gegenstand kommen oder vom Werkzeug, und das ist vor dem Melden zu trennen.*
+
+**Die Messung, systematisch.** 29 Alt-Zweige (ohne `rolle/*` und Integration) gegen den
+Integrationsstand:
+
+    Zweige mit Pfaden, die in der Integration fehlen:  5 von 29   (42 Pfade)
+      auto/hausplaner-dach-ui 29 · strang/C 7 · salvage/evaluator-bd2043d 4
+      auto/energie-verdrahtung 1 · bewahrt/z2-w0-5-supervisor-kette 1
+    davon Produktcode/Tests: 8 — und sieben davon liegen in GENAU EINEM Zweig:
+      FensterSpec.php · AnforderungsprofilKlimaAdapter.php · AnforderungsprofilUWertAdapter.php
+      KlimaPlzService.php · +2 zugehoerige Tests            -> alle nur strang/C
+      WpBivalenzVerdrahtungTest.php                          -> nur auto/energie-verdrahtung
+      PlannerZustaendigkeit.php                              -> zwei Zweige
+
+Griff gegengeprüft: eine bekannte Datei trifft in **21** Zweigen, eine erfundene in **0**.
+
+**Die Sicherungsfrage, und sie ist der Punkt.** `strang/C`, `auto/energie-verdrahtung` und
+`salvage/evaluator-bd2043d` sind auf `fork` **gesichert** (Remote-SHA gleich lokal). Aber:
+
+    NICHT GEPUSHT: bewahrt/z2-w0-5-supervisor-kette · rolle/generator-beleg-2026-08-21
+                   tmp-a03 · work/a01-generator                        4 von 37 Zweigen
+
+**`app/Traits/PlannerZustaendigkeit.php` liegt in genau zwei Zweigen — und beide sind nicht
+gepusht.** Diese Datei existiert damit ausschließlich auf dieser Maschine; es gibt keine Kopie
+außerhalb. Das ist die Lage, die der Governance-Rahmen benennt: *„nicht gepusht heißt nicht
+unordentlich, sondern kein Backup"* — und `rolle/generator-beleg-2026-08-21` ist ausgerechnet der
+Zweig, der heute Nacht als **Sicherung** dreier Commits angelegt wurde (A-37-22c).
+
+**Kein Vorwurf und kein Auftrag.** Ob die Datei noch gebraucht wird, ist eine Sachfrage, die ich
+nicht entscheide; `strang/C` etwa trägt Heizlast-Adapter, deren Cut-over eigene Gates hat. Gemeldet
+wird nur: **an einer Stelle hängt Code an genau zwei lokalen Zweigen ohne Remote-Kopie.**
+
+**Drei Messausfälle in dieser Runde, alle erkannt und wiederholt.**
+**(1)** `for Z in $ZWEIGE` — zsh splittet unquoted Variablen nicht; die 29 Zweige wurden **ein**
+Wort, Ergebnis eine Zeile mit `0 0`. **Das ist dieselbe Falle wie in §299 und §318 — zum dritten
+Mal.** Sie steht wörtlich in meiner eigenen Wache-Regel. Behoben mit `while read`.
+**(2)** Ein Lauf gab **gar keine Ausgabe** — als Ausfall gewertet und schrittweise wiederholt.
+**(3)** Eine Prüfung auf `PlannerZustaendigkeit.php` gab leer, während dieselbe Frage kurz zuvor
+zwei Zweige geliefert hatte. Zwei Verfahren, zwei Antworten, **also galt keine**; mit dem Pfad aus
+der Messdatei statt getippt wiederholt — zwei Zweige, bestätigt.
+
+**Ball: Planner** (Ortsangabe im Messbefehl von A-43-13, ein Halbsatz) · **Dirigent** (die
+Ordner-Regel aus B-008, und die Frage der vier ungesicherten Zweige).
+
+## §340 — A-43-13 ist vollständig: die Auflage ist erfüllt, und die Probe wäre sogar ohne Wegwerf-Repo gegangen
+
+Gewählt gegen HEAD `907397a9` (Baum sauber, 13:42). §340 als Überschrift 0 Treffer, frei.
+
+**Die Auflage ist erfüllt.** Der Planner hat sie um **13:40:47** eingetragen (Blatt `3aa7c730`,
+`planner-CODE_FERTIG-nachtrag-auflage-a43-13.yaml`). Selbst nachgemessen im neuen Blattstand:
+
+    A-43-13 ab Zeile 549 · Zeile 558:
+      "ORT: alle vier Laeufe im WEGWERF-REPO unter TMPDIR (--probe-root), nach A-37-22d."
+    13 Kriterien / 13 Matrixzeilen, deckungsgleich.
+
+**Damit ist A-43-13 aus meiner Sicht baureif.** Mein Votum `ERTEILT_MIT_AUFLAGE` von 13:38 bleibt;
+ein erneutes brauche ich dafür nicht, wie angekündigt.
+
+**Beinahe einen überholten Stand committet.** Mein Abschnitt war fertig geschrieben mit dem Satz
+*„Stand der Auflage: offen … Ball bleibt bei ihm"* — die Meldung kam **13:40:47**, mitten hinein.
+Gefangen hat es die Regel, den Messstand **vor** dem Schreiben neu zu messen; die Datei war noch
+nicht committet und wurde zurückgesetzt. **Zum zweiten Mal heute hat diese Regel einen falschen
+Bericht verhindert** — nachdem sie mir um 12:41 einmal gefehlt hat.
+
+**Eine eigene Vermutung geprüft und verworfen.** Zeile 231 des Blattes lautet *„selbst geprobt im
+Wegwerf-Verzeichnis. **Das Tor lässt dann alles durch.**"* Das las sich wie ein Einwand gegen meine
+eigene Auflage. Im Kontext gemessen: Der Satz gehört zu **A-43-3** und betrifft die **Probe-Bauform**
+„Konstante vor `KERN`", die `HINWEIS … nicht auswertbar — UNGEPRÜFT` bei Rückgabewert **0** liefert.
+**Nicht der Ort lässt alles durch, sondern das unauswertbare Muster.** Kein Widerspruch — und ich
+hätte es fast als solchen gemeldet.
+
+**Eine Messung, die bleibt: die Probe wäre billiger zu haben.** Die Pfadprüfung des
+Dirigent-Bereichs ist eine **vierzeilige `case`-Anweisung** (`scripts/rollen-tor.sh:753-756`), die
+nur `$_p` und `$TOR_UNERLAUBT` braucht — **kein Repo, kein Commit, keine Rollenmarke**. Extrahiert
+statt nachgebaut und selbst gefahren:
+
+    docs/backlog/eintrag.md      ABGEWIESEN     <- die Rot-Lage von A-43-13, reproduziert
+    docs/fortschritt/beleg.md    ABGEWIESEN     <- desgleichen
+    docs/STATUS.md               ABGEWIESEN     soll so bleiben
+    scripts/rollen-tor.sh        ABGEWIESEN     soll so bleiben
+    docs/konzept/x.md            durchgelassen  heute gruen
+    docs/auftraege/y.md          durchgelassen  heute gruen
+
+**Der gewählte Weg (Wegwerf-Repo mit `--probe-root`) ist zulässig und erfüllt die Auflage** — ich
+fordere nichts nach. Aber die Rot-Lage lässt sich auch **ohne jedes Repo** auslösen, auf demselben
+Weg, den A-43-1 für `KERN` vorschreibt (*„Ausschnitt auslesen und ausführen"*) und den ich für
+A-43-8…10 gefahren bin. **Zur Kenntnis für den Evaluator**, falls ihm der Aufbau eines Wegwerf-Repos
+für eine Pfadliste unverhältnismäßig erscheint.
+
+**Grenze der eigenen Probe, ausdrücklich.** Meine Extraktion beginnt bei Zeile **753**; Zeile 752
+trägt `[ -z "$_p" ] && continue` und ist **nicht** mit drin — deshalb weist meine Probe den leeren
+Pfad ab, während das Tor ihn überspringt. Für die sechs geprüften Pfade ohne Folge, aber es gehört
+gesagt. Und grundsätzlich: **die isolierte Probe misst den Pfadvergleich, nicht die ganze Kette**
+(Rolle erkennen → Pfade sammeln → vergleichen). Sie ist **eine zulässige Form, kein Ersatz** für
+einen Nachweis, der die Kette meint. *Genau diese Unterscheidung habe ich in §338 zu spät gemacht —
+dort Form gegen Betreff, hier Teilprüfung gegen Kette. Diesmal steht sie da, bevor jemand danach
+misst.*
+
+**B-008 ist praktisch gelöst, ohne Regeländerung.** Der Planner hat zusätzlich einen **Zeiger** im
+Ordner `BAU-generator-A-43` abgelegt (`planner-zeiger-auflage-a43-13.yaml`, ausdrücklich *„KEIN
+Auslöser für den Bau"*), der auf seine Meldung im anderen Ordner verweist. Seine Begründung nennt
+den Vorfall beim Namen: *„Meine vorige Meldung lag in einem Ordner, in den die A-43-Prüfer nicht
+schauen … zwei Minuten unauffindbar in der Bahn des Plan-Prüfers."* Die Regelfrage bleibt beim
+Dirigenten; der heutige Fall ist damit erledigt.
+
+**Ball: niemand bei mir.** A-43 ist gebaut (13:24) und mit 13 Kriterien vollständig spezifiziert;
+die Abnahme liegt beim Evaluator.
+
+## §341 — Mein Messfenster hat eine strukturelle Lücke, und die A-43-Abnahme ist hineingefallen
+
+Gewählt gegen HEAD `29415edc` (Baum sauber, 13:46:12). §341 als Überschrift 0 Treffer, frei.
+
+**A-43 ist ABGENOMMEN.** Der Evaluator hat um **13:36:22** entschieden
+(`ABNAHME-evaluator-A-43/evaluator-ABGENOMMEN.yaml`, Votum `fbb8a73a`, Ball **dirigent**):
+*„12 von 12 Kriterien erfüllt. Posten 3 ausdrücklich nicht Teil dieser Lieferung."* Die acht Formen
+über den **echten** Ausleseweg, rot 4/8 → grün 8/8, und dieselben acht gegen `BEINAHE`
+deckungsgleich. **Ich habe in meiner letzten Runde geschrieben, „die Abnahme liegt beim
+Evaluator" — sie lag da schon sieben Minuten zurück.**
+
+**Die Ursache ist mein eigenes Verfahren, nicht ein Versehen.** Ich setze den Fensterbeginn auf den
+Zeitstempel **meiner letzten Ablage**, führe die Messung aber am **Rundenbeginn** durch — und
+zwischen beiden liegt die Arbeitszeit der Runde:
+
+    Runde 13:29–13:38   gemessen ~13:34 mit "seit 13:28:51"   -> Datei existierte noch nicht
+    Runde 13:38–13:43   gemessen 13:38:46 mit "seit 13:38:08"  -> 13:36:22 liegt DAVOR, faellt durch
+    Runde 13:43–...     gemessen 13:43:40 mit "seit 13:43:06"  -> faellt wieder durch
+
+**Alles, was zwischen meiner letzten Messung und meiner letzten Ablage entsteht, fällt strukturell
+durch** — und je länger eine Runde dauert, desto größer wird das Loch. Gemessen für das Fenster
+13:34–13:38:08: **vier Dateien**, darunter beide Abnahme-Meldungen zu A-43 und zwei
+Integrator-Meldungen (`dirigent-hinweis-w0-5-doppelbau-aufraeumen`,
+`integrator-bedingung-erfuellt-elf-posten`).
+
+**Das ist dieselbe Bauart wie A-37-22e**, die ich selbst geprüft habe: *„eine Steuerung, die erst
+beim nächsten Takt wirkt, hat zwischen Veröffentlichung und Lesen ein Loch, und der Commit fällt
+hinein."* Bei mir ist es kein Commit, sondern eine Abnahme — **und ich habe das Loch selbst
+gebaut, indem ich den bequemen Anker gewählt habe.** Der Zeitstempel meiner Ablage war leicht zu
+bekommen; richtig wäre der Zeitpunkt meiner letzten **Messung** gewesen.
+
+**Abhilfe als Prüfliste, nicht als Vorsatz** — ein Vorsatz hat bei §301 schon einmal nicht
+getragen:
+
+    Fensterbeginn = Zeitpunkt der LETZTEN MESSUNG, nicht der letzten Ablage.
+    Im Zweifel ueberlappen: lieber zweimal dasselbe lesen als einmal nichts.
+    Beim Rundenabschluss den Messzeitpunkt notieren — er ist der Anker der naechsten Runde.
+
+## Nebenbefund — A-43 ist abgenommen, und die Tafel weiß nichts davon
+
+    Zustandscommits fuer A-43 : 0
+    Datensatz                 : zustand: BEREIT · ballbesitz: generator
+    Tafelzeile Z.94           : `BEREIT` · **Generator**
+
+**Ein Auftrag, der gebaut (13:24) und abgenommen (13:36) ist, steht in der Statuswahrheit als
+`BEREIT` mit dem Ball beim Generator.** Das ist die **dritte Variante** derselben Klasse an einem
+Tag: §333 — kein Platz in der Statuswahrheit (behoben); §337 — Zustandscommit vorhanden, Block nicht
+nachgezogen (A-39, offen); **jetzt — Meldungen vorhanden, aber kein Zustandscommit, also kann der
+Block gar nicht nachziehen.**
+
+Der Generator hat seine Meldepflicht als Ereignis erfüllt (`generator-CODE_FERTIG.yaml`, 13:24:11,
+`ball: evaluator`, mit vollständigen Belegen zu allen zwölf Kriterien), der Evaluator ebenso. **Was
+fehlt, ist der Betreff** — bei A-39 hat der Generator ihn geschrieben
+(`generator: zustand: A-39 · CODE_FERTIG · evaluator · bau 824f8512`), hier nicht.
+
+*Bemerkenswert daran:* A-43 ist der Auftrag, der **genau diesen Mechanismus** repariert — und sein
+eigener Zustandswechsel ist nie als Betreff gemeldet worden. Nicht wegen des Musters, das der
+Evaluator soeben grün gemessen hat, sondern weil der Betreff fehlt. **Ein repariertes Muster nützt
+nichts, wenn niemand den Satz schreibt, den es lesen soll.**
+
+**Eigener Messfehler auf dem Weg.** Meine Übersichtstabelle meldete für A-37 *„(kein Block)"*.
+Falsch: `grep -c '^auftrag: "A-37"'` gibt **1**. Ursache war mein `grep -A3 … | grep -m1 '^zustand:'`
+— bei A-42 folgt `zustand:` direkt auf `auftrag:`, bei A-37 nicht, und drei Zeilen Fenster waren zu
+eng. **Ein Fensterfehler in der Zeile, während ich einen Fensterfehler in der Zeit untersuche.**
+
+**Ball: Dirigent** (A-43-Abnahme liegt dort; Zustandscommit und Tafel sind nicht meine Schreibhoheit)
+· **Integrator** (§337, A-39 unverändert `UNGEKLAERT`). Bei mir nichts offen.
+
+## §342 — Zwei Fehler übereinander: ich habe die Statuswahrheit in meinem eigenen, 17 Commits alten Baum gemessen
+
+Gewählt gegen HEAD `e8c9b598` (Baum sauber, 13:49). §342 als Überschrift 0 Treffer, frei.
+**Dies berichtigt den Nebenbefund aus §341 und das Ereignis
+`plan-pruefer-BEFUND-a43-ohne-zustandscommit.yaml` (13:47:47) — beide Hälften waren falsch.**
+
+**Was ich behauptet habe:** *„A-43 ist gebaut und ABGENOMMEN — die Tafel führt ihn als `BEREIT`
+beim Generator, weil kein Zustandscommit existiert."* Ball gesetzt auf Integrator und Dirigent.
+
+**Was stimmt:**
+
+    4950bf41  13:47:06  integrator: zustand: A-43 · ABGENOMMEN · release-pruefer · abnahme fbb8a73a
+    in auto/hausplaner-integration enthalten · vom gebauten Muster korrekt als 'A-43' erkannt
+    Tafel in der Integration: zustand: ABGENOMMEN · ballbesitz: release-pruefer
+
+**Der erste Fehler ist ein Zeitfehler.** Gemessen 13:46:12 (*„Zustandscommits: 0"* — zu dem
+Zeitpunkt richtig), abgelegt 13:47:47; dazwischen, um **13:47:06**, entstand der Commit. Mein
+„Messstand vor dem Schreiben" um 13:47:18 prüfte nur **meinen HEAD** — und der bewegt sich nicht,
+wenn ein anderer committet. **Ich habe die Regel aus §341 formal befolgt und trotzdem genau den
+Fehler gemacht, den sie verhindern soll:** geprüft wurde der Träger, nicht die **tragende Zahl**.
+
+**Der zweite Fehler wiegt schwerer, und er ist ein Ortsfehler.** Ich habe den Zustand der
+**Statuswahrheit** in meinem eigenen Rollen-Worktree gelesen. `docs/STATUS.md` wird im
+Integrations-Checkout gepflegt; mein Baum ist per Bauart hinterher. **Ich hatte den Rückstand sogar
+gemessen — 17 Commits — und trotzdem aus dem eigenen Baum geschlossen.**
+
+    mein Baum          zustand: BEREIT      ballbesitz: generator          (17 Commits zurueck)
+    Integration        zustand: ABGENOMMEN  ballbesitz: release-pruefer    (der gepflegte Stand)
+
+**Wer die Statuswahrheit misst, muss den Baum nehmen, in dem sie gepflegt wird.** Das ist dieselbe
+Klasse wie P7 (*Ort ≠ Wirkung*) und wie mein §338 (*Form ≠ Betreff*): ich hatte die Datei zur Hand
+und habe nicht gefragt, ob sie an diesem Ort die Wahrheit trägt.
+
+**Wen es entlastet:** Integrator und Generator trifft nichts. Der Integrator hat den Zustandscommit
+41 Sekunden vor meiner Ablage geschrieben **und die Tafel im selben Zug nachgezogen**. Mein Befund
+hat eine erledigte Sache als offen gemeldet und ihm einen Ball zugewiesen, den er nicht hat.
+
+**Was von §341 trägt und was fällt.**
+**Trägt:** die Lücke im Ereignis-Fenster — vier Dateien am Fenster 13:34–13:38:08 vorbei, darunter
+beide A-43-Abnahmemeldungen — und die Abhilfe, den Anker auf die letzte **Messung** zu setzen.
+*Diese Runde hat der neue Anker bereits gegriffen: das Fenster „seit 13:47:22" fing genau eine
+Datei, meine eigene.*
+**Fällt:** der Nebenbefund *„A-43 ohne Zustandscommit, dritte Variante derselben Klasse"*.
+**A-39 aus §337 bleibt unberührt und offen** — dort liegt der Zustandscommit seit 21.08. 22:17 und
+der Block sagt weiterhin `BEREIT`; das ist nach wie vor der einzige `UNGEKLAERT` im Vergleichslauf.
+
+**Abhilfe als Prüfliste — die dritte Verschärfung derselben Regel an einem Tag:**
+
+    1. Vor dem Ablegen die TRAGENDE ZAHL neu messen, nicht nur den eigenen HEAD.
+    2. Statuswahrheit IMMER gegen auto/hausplaner-integration messen
+       (git show auto/hausplaner-integration:docs/STATUS.md), nie gegen den eigenen Worktree.
+    3. Rueckstand ist kein Nebenwert: steht er ueber 0, ist jede Aussage aus dem eigenen Baum
+       ueber gepflegte Fremddateien vorlaeufig.
+
+*Bemerkenswert und unangenehm: §341 war der Befund über ein zu enges Zeitfenster, und ich habe ihn
+mit einem Befund abgeschlossen, der genau daran scheitert — 41 Sekunden zu spät und im falschen
+Baum. Eine Regel, die ich in derselben Runde aufschreibe und breche, ist noch keine Regel.*
+
+**Ball: keiner bei mir zu A-43.** Der Befund ist zurückgezogen; A-39 bleibt beim Integrator.
+
+## §343 — P-02 nach 15 Tagen geprüft: drei Punkte tragen, einer ist überholt, einer verlangt heute Verbotenes
+
+Gewählt gegen HEAD `c155e7cf` (Baum sauber, 13:53:31). §343 als Überschrift 0 Treffer, frei.
+**Statuswahrheit durchgehend aus `auto/hausplaner-integration` gemessen (§342), Rückstand meines
+Baums 18.**
+
+**Der Stillstand zuerst, und er ist meiner.** `P-02` ist der einzige Block, in dem ich seit Beginn
+dieser Sitzung am Ball bin — und ich habe ihn in **jeder** Runde als Zeile gesehen und in keiner
+geöffnet.
+
+    Blatt geschnitten      07.08. 09:35 (c2de1eec)   -> 15 Tage
+    Zustandscommits P-02   0
+    Realfall dokumentiert  14.08. 22:33 (8a417fe0)   -> 1743 Commits seither
+    Zustand                VORLAGE · ballbesitz: plan-pruefer
+
+**Und die Pointe: P-02 wird längst gelebt.** Punkt 4 steht **wörtlich in meinem eigenen
+Wache-Prompt** — *„Fremde Befunde werden ZITIERT UND VERLINKT, nie nachgebaut (P-02 Punkt 4)"*. Eine
+Vorlage, die im Betrieb angewandt und im Auftrag zitiert wird, während das Votum dazu seit zwei
+Wochen aussteht. **Nicht die Vorlage stand still, sondern ihre Prüfung.**
+
+## Das Votum — fünf Punkte, fünf Linsen
+
+**Punkt 1 · CLAIM GILT** *(„Wer wach wird und das Blatt frei findet, fängt NICHT an.")*
+**TRÄGT.** Prüfbar: `claim:`-Felder sind im Bestand vorhanden — **12** in der Integrations-`STATUS.md`,
+**79** in Blättern unter `docs/auftraege/aktiv/`. Kausal: der Vorfall vom 07.08. (zwei Instanzen
+korrigieren dieselbe Zeile in zwei Minuten) wäre damit ausgeschlossen. Lebbar: er wird gelebt.
+
+**Punkt 2 · TRENNUNG** *(„Entscheidungen, Widerspruchsprüfungen und die Auftragstafel bleiben bei
+EINER Instanz.")*
+**ÜBERHOLT — und damit ist auch seine Machtfrage beantwortet.** Der Planner fragt selbst: *„schiebe
+ich mir mit Punkt 2 etwas zu?"* **Nein, und zwar nicht wegen seiner Absicht, sondern weil die
+Zuständigkeiten inzwischen rollenweise geregelt sind:** die Auftragstafel schreibt der **Integrator**
+(`ARBEITSREGELN:1280`, *„alleiniger Schreiber … ausnahmslos"*), die Widerspruchsprüfungen liegen beim
+**Plan-Prüfer** (§4). Punkt 2 sollte Konflikte zwischen *Instanzen* regeln; heute regeln sie die
+*Rollen*. **Der Punkt ist nicht falsch, er ist gegenstandslos geworden.**
+
+**Punkt 3 · OPERAND STATT UMSCHNITT** *(„legt sie in `STATUS.md` ab — nicht ins Blatt.")*
+**WIDERSPRICHT DEM GELTENDEN TEXT.** P-02 datiert vom **07.08.**; der Nachtrag vom **16.08.** sagt:
+*„Niemand bearbeitet `docs/STATUS.md` von Hand"* (`:1555`), und `:1280` nennt den Integrator
+*„alleiniger Schreiber … ausnahmslos"*. **Punkt 3 verlangt heute genau das, was seit neun Tagen
+verboten ist.** Das ist kein Fehler des Planners — die Vorlage ist neun Tage älter als die Regel,
+die sie aushebelt. **Aber sie ist in dieser Form nicht erteilbar.** *Die Absicht bleibt richtig: eine
+Entscheidung gehört nicht ins fremde Blatt. Nur der Ablageort muss ein anderer sein — heute wäre es
+ein Ereignis in der Steuerung, nicht die Tafel.* Das ist genau die Klasse aus §336: **eine Regel,
+die von einer jüngeren abgelöst wurde, ohne dass jemand die ältere angefasst hat.**
+
+**Punkt 4 · VERLINKEN STATT NACHBAUEN**
+**TRÄGT, und zwar belegt aus dem laufenden Betrieb.** Heute dreimal angewandt: B-008 der externen
+Prüfung zitiert statt nachgemessen (§339), das Evaluator-Votum zitiert (§341), den Planner-Hinweis
+zu veralteten Block-SHAs ausdrücklich **nicht** nachgebaut (§337). Prüfbar am Vorhandensein von
+Quelle und Zeitstempel im Befund.
+
+**Punkt 5 · FRISCH MESSEN** *(„Vor jedem Schreiben neu messen, nie auf den alten Befund bauen.")*
+**TRÄGT — und ist der wichtigste der fünf.** Beleg ist unangenehm: **ich habe ihn heute dreimal
+gebrochen.** Um 12:41 den Planner-Stand nicht neu gemessen; in §341 das Ereignis-Fenster am falschen
+Anker; in §342 die tragende Zahl nicht neu gemessen und dazu im falschen Baum gelesen. **Drei
+Verstöße an einem Tag durch dieselbe Rolle, die den Punkt prüfen soll** — das ist der stärkste
+denkbare Kausalitätsbeleg und zugleich der Beweis, dass **ein Text allein ihn nicht trägt.**
+*Was hilft, ist kein Vorsatz, sondern ein geänderter Messweg — die Lehre, die der Planner heute
+selbst formuliert hat: „eine Warnung im Text verhindert nichts, ein geänderter Messweg tut es."*
+
+## Ergebnis
+
+**ERTEILT für die Punkte 1, 4 und 5.** **Punkt 2 gegenstandslos** (durch Rollentrennung erfüllt,
+Machtverdacht ausgeräumt). **Punkt 3 nicht erteilbar in dieser Fassung** — Ablageort widerspricht
+`ARBEITSREGELN:1280/1555`; die Absicht trägt, der Ort muss neu bestimmt werden.
+
+**Was ich NICHT tue:** Ich schreibe die Vorlage nicht um — sie gehört dem Planner, und Punkt 3 neu
+zu fassen ist Spezifikation, nicht Prüfung. Ich setze auch keinen Zustand: `P-02` trägt `VORLAGE`,
+und Zustandswechsel sind nicht meine Schreibhoheit.
+
+**Ball: Planner** (Punkt 3 neu fassen) · **Dirigent** (ob eine 15 Tage alte VORLAGE mit drei
+tragenden Punkten formal in Kraft gesetzt wird, oder ob die gelebte Praxis genügt — Punkt 4 steht
+bereits in den Rollen-Aufträgen).
