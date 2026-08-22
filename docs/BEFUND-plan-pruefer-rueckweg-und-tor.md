@@ -34532,3 +34532,97 @@ warum mein Hinweis ihn nicht mehr erreichte.
 
 Ball: **Evaluator** (Abnahme, V-2/V-3 viermal) · **Integrator** (Transport) · **Planner** (eigenes
 Blatt für `dachTopologie` mit Fach-Linse Dachdecker/Zimmerer).
+
+## §434 — Kriterium (a) und (f) von Z1-W2-8 schließen einander aus. Der Generator hat es gefunden — ich habe die Rot-Lage am falschen Ort gemessen und den Messbefehl durchgewinkt
+
+Messstand: HEAD `28e83b9d`, Baum 0, gemessen 19:21–19:24. **Messzeit des Ereignisbefehls dieser
+Runde: 19:21:07.** Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §434'` → 0).
+**Ereignis dieses Abschnitts:** `ereignisse/BAU-generator-spur-V-1/plan-pruefer-BESTAETIGT-pfadgrenze-und-eigener-pruefmangel.yaml`
+
+### Der Widerspruch, den der Generator gefunden hat
+
+    (a) verlangt   Reihenfolge in LEISTE UND MENUE, Absage-Regel woertlich:
+                   "Nur die Registry umzusortieren erfuellt (a) NICHT, wenn Leiste oder Menue
+                    ihre Folge woanders herleiten."
+    (f) erlaubt    NUR toolRegistry.ts und werkzeugGruppen.ts (+ Tests + Buendel)
+    gebraucht      toolRegistry.ts + toolPresentation.ts (Leiste) + werkzeugThemen.ts (Menue)
+
+**Sein Kernsatz, und er sitzt:** *„`werkzeugGruppen.ts` ist die eine Datei, die man **nicht**
+anfassen muss — sie leitet nur ab. Die beiden, die man anfassen **muss**, nennt (f) nicht."*
+
+### Selbst nachgemessen — alle drei Belege
+
+    toolPresentation.ts:218   .map((regel, index) => ({ regel, index }))
+    toolPresentation.ts:222   .sort((a,b) => (a.regel.ordnung - b.regel.ordnung) || (a.index - b.index))
+                              ^ 'index' ist der Index in den REGELN, nicht in TOOL_DEFINITIONS
+
+    TOOL_PRESENTATION_RULES (:72-81)
+      auswahl 1 · wand 2 · fenster 3 · tuer 4 · DACH 5 · decke 6 · treppe 7 · kontur 8
+                                       ^^^^^^ genau die Folge, die (a) beheben soll
+
+    werkzeugGruppen.ts:47     WERKZEUG_GRUPPEN = WERKZEUG_THEMEN.map(t => ({...}))
+                              ^ eine ABLEITUNG — die Folge kommt aus WERKZEUG_THEMEN
+
+    Gegenprobe: 'ordnung' in toolPresentation.ts 114 Treffer · 'a.index - b.index' genau 1
+
+**Eine Umsortierung von `TOOL_DEFINITIONS` ändert die Leiste nicht.** Der Befund trägt vollständig.
+
+### MEIN PRÜFMANGEL, und er ist der eigentliche Inhalt dieses Abschnitts
+
+In §429 habe ich geschrieben:
+
+> *„**Rot-Lagen selbst nachgemessen:** `dach :114` steht vor `decke :132` und `treppe :150` —
+> **trifft**."*
+
+**Gemessen habe ich in `toolRegistry.ts`. Dort wirkt die Reihenfolge nicht.** Die Leiste liest
+`ordnung` aus `toolPresentation.ts`, das Menü die Folge aus `werkzeugThemen.ts`. **Ich habe die
+Rot-Lage am falschen Ort bestätigt.**
+
+**Und schlimmer: Ich habe den Messbefehl durchgewinkt.** Kriterium (a) nennt als Messbefehl
+
+    grep -nE "^    id: '" app/tools/toolRegistry.ts   ->  die acht in dieser Folge
+
+— **derselbe falsche Ort.** Meine DoR prüft ausdrücklich „jede Behauptung selbst am Basis-Stand
+nachmessen"; ich habe die Behauptung nachgemessen und dabei **denselben Fehler wiederholt**, statt
+zu fragen, ob der Ort der richtige ist.
+
+> **Das ist P7 in Reinform — „Ort ≠ Wirkung", und es steht seit 15.08. in meinem eigenen
+> Gedächtnis.** Ich habe gemessen, wo die Reihenfolge *steht*, nicht wo sie *wirkt*. Genau der
+> Fehler, den ich in §428 als Halbsatz 3 für V-1 verhindert habe — dort über Aufrufstellen, hier
+> über Renderpfade.
+
+**Der Generator benennt die Wurzel präziser, als ich es könnte:**
+
+> *„Der Planner hat die Herleitung korrekt BENANNT … Beide Sätze stimmen. Nur endet die Kette dort
+> nicht: `zoneTools` liest `ordnung` aus `toolPresentation`, `WERKZEUG_GRUPPEN` liest die Folge aus
+> `werkzeugThemen`. **Es ist H-8 eine Stufe tiefer — der Ort, an dem etwas GERENDERT wird, ist nicht
+> der Ort, an dem es ENTSCHIEDEN wird.**"*
+
+### Was von meinem Votum bleibt
+
+**Die zwei Halbsätze gelten unverändert** — sieben Einträge, kein `bodenplatte`, kein
+`bauteilKind: 'ceiling'`. Der Generator bestätigt: *„Beides beachtet."*
+
+**Was fehlt, ist ein dritter Halbsatz**, den ich hätte finden müssen. Ich formuliere ihn hier, damit
+er vorliegt, wenn der Dirigent entscheidet:
+
+> **Halbsatz 3 zu (f):** *„Die erlaubten Pfade sind `app/tools/toolRegistry.ts`,
+> `app/tools/toolPresentation.ts` (Leiste, `TOOL_PRESENTATION_RULES.ordnung`) und
+> `app/tools/werkzeugThemen.ts` (Menü, Thema `07-architektur`) — plus nachziehende Tests und das
+> Bündel. `werkzeugGruppen.ts` wird **nicht** gebraucht: es leitet nur ab."*
+
+**Das ist keine Erweiterung des Umfangs, sondern seine Berichtigung** — dieselbe Zusage an der
+Stelle, an der sie wirkt. Der Generator empfiehlt denselben Weg A und schätzt den Aufwand
+unverändert auf 30 Minuten.
+
+**Die Entscheidung liegt beim Dirigenten**, nicht bei mir: (f) ist eine Pfadgrenze im Blatt, und
+Blätter ändere ich nicht. Ich liefere den Wortlaut und die Messung.
+
+### Was der Generator richtig gemacht hat
+
+**Er baut nicht.** *„Ich baue NICHT, bis das entschieden ist, und arbeite solange am nächsten Posten
+weiter."* Ein Einschub mit 30-Minuten-Zusage und hoher Dringlichkeit — und er hält an, statt eine
+der beiden bindenden Regeln zu brechen. **Genau das ist die Absage-Regel, die dafür da ist.**
+
+Ball: **Dirigent** (Pfadgrenze in (f)) · **Planner** (Messbefehl von (a) zeigt auf den falschen Ort)
+· bei mir: **der dritte Halbsatz liegt vor.**
