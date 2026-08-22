@@ -31564,3 +31564,70 @@ Rückstand.**
 
 Ball: **Integrator** (Transport von `be4f637c`, danach Zustandscommit mit `buendel: <SHA>`, wie die
 Regel es vorsieht) · bei mir nichts.
+
+## §395 — Posten 6 ist gebaut: neun Tage lag der Beschluss, dann 91 Minuten von der Meldung bis zum Skript
+
+Messstand: HEAD `3b0b1322`, Baum 0, gemessen 16:56–16:59. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §395'` → 0). Vorratsprüfung (e): eigenen Befund **bis ans Ende** verfolgen.
+
+### Die Kette, mit Zeiten
+
+    13.08.     Yama entscheidet WEG C mit drei Auflagen — und nichts geschieht
+    15:22      §366: "ENTSCHIEDEN OHNE EMPFAENGER" — 9 Tage, a24 2x verwendet, 0x angelegt
+    15:25:28   der Dirigent bucht den Posten zu Posten 8 um
+    15:36:41   der Planner schneidet ihn als Z0-I1-11 ins Blatt
+    15:43:47   ich erteile die DoR (§370)
+    16:53:43   der Generator liefert scripts/pruefstand-saeen.sh (04949151)
+
+**Neun Tage lag der Beschluss ohne Empfänger. Von der Meldung bis zum gebauten Skript vergingen
+91 Minuten.**
+
+### Was gebaut wurde — und warum es kein Seeder ist
+
+    scripts/pruefstand-saeen.sh   98 Zeilen
+    'a24-abnahme@example.test' in database/   0 Dateien   <- unveraendert
+                               in scripts/    JETZT angelegt statt nur verwendet
+
+Der Generator schreibt es selbst dazu: *„KEIN Seeder unter `database/` — ‚a24' dort weiterhin 0
+mal."* **Das ist richtig so**, und es ist Yamas Wortlaut: *„Das **Prüfskript** stellt seine
+Vorbedingung selbst her."*
+
+### Meine §366-Null war richtig — aber am falschen Ort gemessen
+
+`scripts/pruefstand-saeen.sh` entstand **16:53:43**; ich maß um **15:22**. **Die Null war korrekt.**
+
+**Trotzdem war meine Grundmenge falsch gedacht.** Ich habe `database/` gemessen — die Seeder-Konvention
+— und daraus „0 Anleger" geschlossen. **Yamas Weg C nennt aber das Prüfskript, nicht einen Seeder.**
+Hätte das Skript damals schon existiert, hätte ich es übersehen und dieselbe Null gemeldet. **Eine
+Null, die aus dem falschen Grund stimmt, ist kein Ergebnis, sondern ein Zufall** — und zum sechsten
+Mal heute dieselbe Wurzel: nicht die Messung war falsch, sondern die Grundmenge.
+
+### Die drei Auflagen, selbst gemessen
+
+    Auflage 1  FAIL CLOSED, ZWEI Sperren:
+               :39-45 Bash — "KEINE AUSKUNFT  SELECT DATABASE() lieferte nichts.
+                              Ohne Auskunft wird nicht gesaet."   exit 3
+               :56-57 PHP  — if ($db !== "ticket_testing") { "ZWEITE SPERRE"; exit(3); }
+    Auflage 2  ERWARTETE_DB=ticket_testing   "EIN Name, exakt — ticket_testing_kopie traegt
+               dieselben Daten"      (die A-03-1-Lehre, woertlich uebernommen)
+    Auflage 3  'idempot' 5 Treffer · ":69 idempotent heisst nicht 'einmal und nie wieder'"
+
+**Der stärkste Teil ist die Begründung zu Auflage 1:** die Prüfung läuft **am Kindprozess**, nicht am
+Elternprozess — *„`php artisan serve` reicht `DB_*` nicht durch, sondern setzt nicht durchgereichte
+Variablen aktiv auf `false`. Wer die Aufrufform am Elternprozess prüft, bekommt die richtige Antwort
+und sät danach in die falsche Datenbank. **Gefragt wird die VERBINDUNG, nicht die Konfiguration**."*
+
+**Das ist P7 in einem Satz** — Ort ist nicht Wirkung —, angewandt auf eine Datenbank statt auf einen
+Funktionsaufruf. Und es ist keine neue Erfindung: `ERWARTETE_DB` steht **3× im Skript und 4× in
+`buehnenWaechter.test.mjs`**. **Die Bauform war da; sie wurde benutzt, nicht nachgebaut** — genau was
+CLAUDE.md verlangt.
+
+### Was noch fehlt, und er sagt es selbst
+
+*„Drei Dinge fehlen, und ich nenne sie, statt sie im CODE_FERTIG zu überspringen: a) DIE ROT-PROBE ZU
+-11 ist nicht gefahren…"* — deshalb `TEILLIEFERUNG` und nicht `CODE_FERTIG`, Ball beim Generator.
+Dazu zwei eigene Fehler, darunter *„ICH HABE DIE SPALTE `lead_name` GERATEN"* mit der Einordnung
+*„Erst messen, dann bauen — zum zweiten Mal heute."*
+
+Ball: **Generator** (Rot-Probe zu -11) · bei mir nichts. **Posten 6 verlässt meine Yama-Liste nicht
+durch eine Entscheidung, sondern durch einen Bau.**
