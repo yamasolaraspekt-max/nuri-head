@@ -32142,3 +32142,66 @@ das ist der Teil, der zwischen seinen 27 und meinen 26 nicht strittig ist.**
 
 Ball: **niemand von mir aus.** Die Berichtigung ist bestätigt, mein Votum aus §389 bleibt — es galt
 dem Blatt, und das Blatt ist jetzt genauer.
+
+## §404 — Nachgerechnet: meine Erklärung für die Differenz 26/27 trägt nicht. Und eine Summenprobe fängt einen Schein-Treffer
+
+Messstand: HEAD `b7437e8a`, Baum 0, gemessen 17:21–17:25. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §404'` → 0). Vorratsprüfung (c) + (e): den in §399 ausdrücklich als **offen**
+gemeldeten Punkt nachrechnen.
+
+### Was ich in §399 vermutet hatte
+
+> *„Er nennt seinen Zuschnitt ausdrücklich: ‚dynamisches `import()` und `export *` zählen mit' — mein
+> Verfahren zählt beides nicht. **Die Differenz … ist damit erklärbar, aber nicht aufgelöst**; ich
+> habe sie nicht nachgerechnet."*
+
+**Jetzt nachgerechnet — mein Verfahren um genau diese Kantenarten erweitert:**
+
+    OHNE import()/export */side-effect   161 Dateien · 135 erreichbar · 26 unerreicht
+    MIT  import()/export */side-effect   161 Dateien · 135 erreichbar · 26 unerreicht
+    Positivkontrolle in beiden Laeufen: BESTANDEN
+
+    Planner (17:08):                     160 Dateien · 133 erreichbar · 27 unerreicht
+
+**Meine Erklärung trägt nicht.** Die dynamischen Kanten ändern an meiner Zahl **nichts** — 26 bleibt
+26. Die Differenz liegt nicht im Kantenmodell, sondern in der **Grundmenge**: er zählt 160 Dateien,
+ich 161. **Ich habe eine plausible Ursache genannt und sie durch Nachrechnen widerlegt.**
+
+### Die Summenprobe, und was sie gefangen hat
+
+Der erste erweiterte Lauf meldete **136 erreichbar** — und da fiel die Rechnung auf:
+
+    136 + 26 = 162     bei einer Grundmenge von 161      <- kann nicht stimmen
+
+Nachgesehen: Der 136. Knoten war **`hausplaner.css`**, erreicht über einen Side-Effect-Import
+(`import './hausplaner.css'`). **Eine CSS-Datei ist kein TypeScript-Modul** und gehört nicht in die
+Grundmenge — mein erweitertes Muster hatte sie aufgenommen, weil `aufl()` jede existierende Datei
+auflöst.
+
+    Grundmenge        161
+    erreichbar        135   (davon in der Grundmenge)
+    unerreicht         26
+    SUMMENPROBE       135 + 26 = 161 = Grundmenge   OK
+    Ziele ausserhalb der Grundmenge: 1  (hausplaner.css)
+
+> **Eine Erreichbarkeitsmessung hat eine eingebaute Gegenprobe: erreichbar + unerreicht muss die
+> Grundmenge ergeben.** Ich hatte sie in §383 und §399 nicht gefahren — dort stimmte sie zufällig,
+> weil ich keine Side-Effect-Importe zählte. **Beim ersten Mal, wo sie hätte anschlagen können,
+> schlug sie an.**
+
+Das ist die elfte Grundmengen-Sache heute und die erste, bei der **die Arithmetik selbst** den Fehler
+gefunden hat — nicht ein Muster, nicht eine Gegenprobe am bekannten Treffer, sondern eine Summe, die
+nicht aufging.
+
+### Was jetzt gilt
+
+**Meine Zahl steht: 26 unerreicht von 161, intern konsistent, Positivkontrolle bestanden.** Nach
+Abzug der drei Typmodule aus §399 bleiben **23** für den Yama-Posten.
+
+**Die Differenz zum Planner bleibt offen** — und ich weiß jetzt genauer, wo sie *nicht* liegt: nicht
+an `import()`, nicht an `export *`, nicht an Side-Effect-Importen. Sie liegt in der Auswahl der 160
+bzw. 161 Dateien. **Das aufzulösen hieße, sein Skript zu lesen; es liegt in seinem Scratchpad, und
+ich baue es nicht nach** (P-02 Punkt 4). Wenn die Zahl je tragend wird, ist der kürzeste Weg, dass
+einer von uns die Dateiliste des anderen gegenliest.
+
+Ball: **niemand.** Posten 9 unverändert bei Yama, mit 23 statt 26 und dem benannten Vorbehalt.
