@@ -36152,3 +36152,100 @@ nicht gefragt, ob es weitere gibt.
 
 Ball: **unverändert Dirigent/Yama** (§443/§444 Regelfrage · jetzt zusätzlich die Pfadfrage des
 Planners: wer darf das Z0-I1-Blatt ändern) · **Planner** hat gemeldet und wartet auf Zuweisung.
+
+## §453 — Der Transportstau ist zum Produktionsstopp geworden. Alle Zahlen frisch gemessen — und der größte Posten im Stau bin ich
+
+Messstand: HEAD `93f179eb`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 20:32–20:36.
+**Ereignis-Schnitt dieser Runde: 20:31:24** (0 neue Ereignisse, nichts in meiner Bahn).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §453'` → 0).
+Wache-Punkt 3 **„Stillstand → auflösen"** + Vorratsprüfung **(d) Alterung** und **(b) Zahlen
+nachzählen**. Der Anlass ist fremd und wird **zitiert, nicht nachgebaut**:
+`generator-NICHTS-FREI.yaml` (20:30:51).
+
+### Der Stillstand, gemessen
+
+    Integrator: letzter Commit          19:45:38  (57e661bd)
+                letztes Ereignis        19:46:25
+                Stille                  46 Minuten
+    Ereignisse mit ball=integrator seit 19:40, unbearbeitet:   15
+    Commits in Rollenzweigen, NICHT in auto/hausplaner-integration:  21
+    Zweigstaende offen: ad2ac724 (23 Min) · 0d10461d (16) · 51b0ddfb (15) · 1567f9f9 (14) · 46c4a57c (4)
+
+**Die Integration steht seit 46 Minuten auf `57e661bd`, während vier Rollen weitergearbeitet haben.**
+
+### Der Generator meldet fertig — und tut es vorbildlich
+
+> *„Alle Posten der Generation 20 sind geliefert. **Nichts frei — ich erfinde keine Arbeit.**"*
+
+Er zählt je Kennung Commits gegen `CODE_FERTIG`-Ereignisse, findet **eine** Kennung auf 0/0
+(`Z1-W2-2`) und belegt, dass sie ausdrücklich gesperrt ist. Er gibt die Lease frei. **Und er meldet
+seinen eigenen Messfehler mit:**
+
+> *„Der erste Durchlauf gab bei allen Kennungen 0/0. Ursache: mein Regex hing einen Bindestrich an
+> (`Z1-E0-1-`) … **Wieder ein Muster, das die Schreibweise misst statt der Sache.** Ich nenne es,
+> weil die Zahl sonst als Beleg für ‚nichts geliefert' hätte gelesen werden können."*
+
+**Das ist dieselbe Familie wie mein Umlaut (§445) und mein Leere-Mengen-Vergleich (§450):** ein
+Muster, das an der Schreibweise scheitert und dabei eine plausible Zahl liefert. **Dritte Rolle, die
+diese Klasse heute an sich selbst meldet.**
+
+### Seine Lagezahlen selbst nachgezählt — die Wache verlangt es
+
+**Zahl 1 — „elf Abnahmen beim Evaluator": BESTÄTIGT.**
+
+    Grundmenge: generator-CODE_FERTIG-*.yaml ohne zugehoeriges evaluator-ABGENOMMEN,
+    Kennung EXAKT verglichen (nicht als Teilstring)
+      offen 11  ·  abgenommen 3      Positivkontrolle: 13 ABGENOMMEN-Dateien im Bestand
+    Offen: Z0-I1 · Z0-I1-Nachbesserung · Z1-E0-1 · Z1-E2-1 · Z1-W2-3 · Z1-W2-4 · Z1-W2-5
+           Z1-W2-6 · Z1-W2-8 · Z2-W0-5b · Z2-W0-11b
+
+**Zahl 2 — „zehn Commits zum Transport": meine Messung ergibt 21. Kein Widerspruch, zwei
+Grundmengen.**
+
+    alle Rollen, alle Commits seit 19:45:38, nicht in der Integration   21
+      davon rolle/plan-pruefer   12    <- Befundtexte, kein Produktcode
+            rolle/generator       5
+            rolle/planner         3
+            rolle/evaluator       1
+      produkt-/blattwirksam (ohne meine)                                 9
+
+**Seine „zehn" ist die Zahl der wirksamen Stände, meine 21 zählt alles.** *Grundmenge gegen die
+Frage prüfen statt gegen das Verfahren* — dieselbe Lehre wie bei den 11/15 Verweisen in §449. **Ich
+korrigiere ihn nicht; ich nenne die zweite Grundmenge.**
+
+### Der größte Posten im Stau bin ich — und das relativiert meine eigene Wirkung
+
+**12 der 21 offenen Commits gehören mir** (§441 bis §452). Sie liegen in `rolle/plan-pruefer` und
+sind im Integrations-Checkout **nicht lesbar**.
+
+> **Meine Ereignisse erreichen die Rollen — die Ablage unter `~/.ticket-steuerung/` ist gemeinsam.
+> Meine Befundabschnitte erreichen sie nicht.** Wer §443 (Sicherheitsbefund Produktiv-DB), §447
+> (Tafel gegen Bau) oder §451 (beide Mängel an Kriterium a) im Volltext lesen will, findet sie im
+> Integrationsstand nicht. **Das ist kein Vorwurf an den Integrator — es ist die ehrliche Grenze
+> meiner eigenen Wirksamkeit in dieser Stunde.**
+
+### Die Lage in einem Satz je Rolle, jede Zahl frisch
+
+    Generator    fertig, Lease freigegeben, wartet. Alle Posten gen 20 geliefert.
+    Evaluator    11 Abnahmen offen; arbeitet (zwei Vorpruefungen 20:22:49 und 20:28:43).
+    Planner      hat gemeldet und wartet: Z0-I1-Blatt liegt ausserhalb seiner Pfade (§452).
+    Integrator   46 Minuten still. 15 Ereignisse mit seinem Ball, 21 Commits offen.
+    Dirigent     Generation 21 oder neue Zuteilung — der Generator fragt ausdruecklich danach.
+    Plan-Pruefer nichts offen in meiner Bahn; 12 eigene Commits im Stau.
+
+> **Der Engpass ist eindeutig und er ist nicht strittig: Transport (Integrator) und nächste
+> Zuteilung (Dirigent).** Alles andere hat geliefert. **Ein Haus, in dem vier Rollen fertig sind und
+> eine fünfte 46 Minuten schweigt, hat kein Kapazitäts-, sondern ein Übergabeproblem.**
+
+### Was ich NICHT tue
+
+- **Nicht transportieren.** Der Rückweg gehört dem Integrator; ARBEITSREGELN §16, und A-37-22b
+  verlangt Rolle = integrator **vor** jeder Baumänderung.
+- **Nicht die Tafel stellen.** Auch §447 bleibt sein Ball.
+- **Keine Vermutung, warum er still ist.** Ich habe die Entlastungsprobe gefahren (jüngste Spur im
+  ganzen Ereignisbaum, jüngster Commit über alle Zweige) — **er ist still, warum, weiß ich nicht,
+  und ich rate es nicht.**
+
+Ball: **Integrator** (Transport, 21 Commits · 15 Ereignisse · §447-Tafelfelder) · **Dirigent**
+(Generation 21, ausdrücklich vom Generator erfragt) · **Yama** unverändert §443/§444 + Pfadfrage
+Z0-I1.
