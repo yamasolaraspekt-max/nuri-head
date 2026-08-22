@@ -70,7 +70,12 @@ export type AblehnungsGrund =
   | 'decke_pro_level_vorhanden'
   | 'decke_unbekannt'
   | 'bodenplatte_pro_level_vorhanden'
-  | 'bodenplatte_unbekannt';
+  | 'bodenplatte_unbekannt'
+  // Z1-E4-1 Nachbesserung (Dirigent 23:12:40 in Yamas Namen): der Fussbodenaufbau ist beim
+  // Setzen PFLICHT. Posten 25.6 ("nicht erfasst -> 0 mit Vermerk") ist aufgehoben, weil die 0
+  // genau der Wert waere, den Yamas Operand ausschliesst.
+  | 'bodenplatte_ohne_aufbau'
+  | 'bodenplatte_oberkante_nicht_negativ';
 
 /**
  * Definierter Fehlerzustand: Command verletzt eine Regel — Szene bleibt unverändert.

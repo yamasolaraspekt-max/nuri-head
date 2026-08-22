@@ -38,7 +38,12 @@ function platte(over: Partial<FoundationSlabNode> = {}): FoundationSlabNode {
   return {
     id: 'b1', type: 'foundation_slab', levelId: 'l1', visible: true, locked: false, tags: [],
     createdAt: ISO, updatedAt: ISO, polygon: UMRISS, dickeMm: 250, oberkanteMm: -180,
-    erdberuehrt: true, geometrieHerkunft: 'manuell', freigabe: 'bestaetigt', ...over,
+    erdberuehrt: true,
+    // **Pflicht seit der Entscheidung vom 22.08. 23:12** — eine erdberuehrte Platte OHNE Aufbau
+    // lehnt der Command ab. Die Fabrik liefert deshalb den Normalfall; die Zusagen, die das
+    // Fehlen pruefen, setzen `schichten: undefined` ausdruecklich.
+    schichten: [{ dickeMm: 120 }, { dickeMm: 60 }],
+    geometrieHerkunft: 'manuell', freigabe: 'bestaetigt', ...over,
   };
 }
 
@@ -137,6 +142,80 @@ test('Z1-E4-1-b: KEINE automatischen Durchbrueche — die Abgrenzung zur Decke i
   const doc = baseDoc();
   applyCommand(doc, { type: 'ADD_FOUNDATION_SLAB', slab: platte() }, ISO);
   assert.equal(doc.foundationSlabs?.[0].durchbrueche, undefined);
+});
+
+// --- Nachbesserung 23:12 — der Fussbodenaufbau ist PFLICHT ----------------------------------
+
+test('Z1-E4-1: erdberuehrte Platte OHNE Fussbodenaufbau wird abgelehnt — mit lesbarem Grund', () => {
+  // **Posten 25.6 ist aufgehoben** (Dirigent 22.08. 23:12:40, in Yamas Namen): „Aufbau nicht
+  // erfasst → 0 mit Vermerk" wuerde genau die Null erzeugen, die Yamas Operand ausschliesst.
+  assert.throws(
+    () => applyCommand(baseDoc(), { type: 'ADD_FOUNDATION_SLAB', slab: platte({ schichten: undefined, oberkanteMm: 0 }) }, ISO),
+    (e: unknown) => e instanceof CommandAbgelehnt && e.grund === 'bodenplatte_ohne_aufbau',
+  );
+  assert.throws(
+    () => applyCommand(baseDoc(), { type: 'ADD_FOUNDATION_SLAB', slab: platte({ schichten: [], oberkanteMm: 0 }) }, ISO),
+    (e: unknown) => e instanceof CommandAbgelehnt && e.grund === 'bodenplatte_ohne_aufbau',
+  );
+  // Der Grund muss lesbar sein, nicht nur maschinell: die Meldung nennt die Bezugshoehe.
+  try {
+    applyCommand(baseDoc(), { type: 'ADD_FOUNDATION_SLAB', slab: platte({ schichten: undefined, oberkanteMm: 0 }) }, ISO);
+    assert.fail('nicht abgelehnt');
+  } catch (e) {
+    assert.match((e as Error).message, /Fußbodenaufbau/);
+    assert.match((e as Error).message, /Fertigfußboden/);
+  }
+});
+
+test('Z1-E4-1: oberkanteMm >= 0 bei erdberuehrt=true wird abgelehnt — NULL EINGESCHLOSSEN', () => {
+  // **Die Absage-Regel, auf die der Plan-Pruefer gezeigt hat:** „null ist nicht positiv", also
+  // fiel der Wert 0 durch die alte Fassung hindurch und verletzte (e) trotzdem.
+  for (const ok of [0, 1, 250]) {
+    assert.throws(
+      () => applyCommand(baseDoc(), { type: 'ADD_FOUNDATION_SLAB', slab: platte({ oberkanteMm: ok }) }, ISO),
+      (e: unknown) => e instanceof CommandAbgelehnt && e.grund === 'bodenplatte_oberkante_nicht_negativ',
+      `oberkanteMm ${ok} kam durch`,
+    );
+  }
+  // Gegenprobe: negativ geht durch.
+  const doc = baseDoc();
+  applyCommand(doc, { type: 'ADD_FOUNDATION_SLAB', slab: platte({ oberkanteMm: -1 }) }, ISO);
+  assert.equal(doc.foundationSlabs?.length, 1);
+});
+
+test('Z1-E4-1: beide Regeln haengen an der ERDBERUEHRUNG, nicht am Bauteil', () => {
+  // Eine Platte ueber einer Tiefgarage hat keine Bezugshoehe zum Erdreich: kein Aufbau noetig,
+  // Oberkante darf >= 0 sein. Wer die Regel ans Bauteil haengt statt an erdberuehrt, verbietet
+  // diesen Fall — und er ist baulich normal.
+  const doc = baseDoc();
+  applyCommand(doc, {
+    type: 'ADD_FOUNDATION_SLAB',
+    slab: platte({ erdberuehrt: false, schichten: undefined, oberkanteMm: 0 }),
+  }, ISO);
+  assert.equal(doc.foundationSlabs?.length, 1);
+});
+
+test('Z1-E4-1: auch UPDATE darf den Aufbau nicht wegnehmen', () => {
+  // Sonst waere die Pflicht nur beim Anlegen wirksam und liesse sich in zwei Schritten umgehen.
+  const doc = baseDoc();
+  applyCommand(doc, { type: 'ADD_FOUNDATION_SLAB', slab: platte() }, ISO);
+  assert.throws(
+    () => applyCommand(doc, { type: 'UPDATE_FOUNDATION_SLAB', slabId: 'b1', changes: { schichten: [] } }, ISO),
+    (e: unknown) => e instanceof CommandAbgelehnt && e.grund === 'bodenplatte_ohne_aufbau',
+  );
+});
+
+test('Z1-E4-1: die Referenzhaus-Fixture haelt die verschaerfte Regel aus', () => {
+  const doc = STUDIO_FIXTURES['bodenplatte']();
+  const b = doc.foundationSlabs![0];
+  assert.ok(b.oberkanteMm < 0, 'die Fixture wuerde jetzt abgelehnt');
+  assert.equal(fussbodenaufbauDickeMm(b.schichten), 180, 'Aufbau 180 mm, wie 23:12 verfuegt');
+  assert.equal(b.dickeMm, 250);
+  assert.equal(b.oberkanteMm, -180);
+  // UK Platte = -180 - 250 = -430, die Rechnung des Plan-Pruefers.
+  assert.equal(b.oberkanteMm - b.dickeMm, -430);
+  // Und der Aufbau ist NICHT level.floorThickness — das war seine eigene Berichtigung 23:15.
+  assert.notEqual(fussbodenaufbauDickeMm(b.schichten), doc.levels[0].floorThickness);
 });
 
 // --- (c) Geschoss darunter → Hinweis, kein Zwang -------------------------------------------

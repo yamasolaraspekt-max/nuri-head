@@ -335,6 +335,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    */
   const [deckeNaeherung, setDeckeNaeherung] = useState<boolean | null>(null);
   /** Z1-E4-1 (c): der Hinweis „darunter liegt noch ein Geschoss" — Text oder null, keine Ablehnung. */
+  /** Z1-E4-1: Fussbodenaufbau in mm, PFLICHT vor dem Setzen. null = nicht eingetragen. */
+  const [bodenplatteAufbauMm, setzeBodenplatteAufbauMm] = useState<number | null>(null);
   const [bodenplatteHinweis, setBodenplatteHinweis] = useState<string | null>(null);
   // Z-07: dasselbe fuer das Dach. Getrennt gefuehrt, nicht zusammengelegt — wer eine Decke aus
   // Kontur und danach ein Dach aus dem Umriss anlegt, soll den Hinweis zum DACH sehen.
@@ -1067,6 +1069,13 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       const jetzt = new Date().toISOString();
       const ausKontur = letzteKontur !== null && letzteKontur.length >= KONTUR_MIN_PUNKTE;
       const erdberuehrt = istErdberuehrtVorbelegung((scene?.levels ?? []), level.id);
+      // **Der Aufbau kommt aus der Eingabe, nicht aus einer Vorbelegung.** Fehlt er, wird die
+      // Platte trotzdem an den Command gereicht — die ABLEHNUNG gehoert der Fachlogik, nicht
+      // diesem Handler. Sonst gaebe es zwei Stellen, die dieselbe Regel kennen, und die eine
+      // waere nur ueber den Browser pruefbar.
+      const schichten = bodenplatteAufbauMm !== null && bodenplatteAufbauMm > 0
+        ? [{ dickeMm: bodenplatteAufbauMm }]
+        : undefined;
       store.getState().executeCommand({
         type: 'ADD_FOUNDATION_SLAB',
         slab: {
@@ -1077,8 +1086,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           // **Ohne erfassten Aufbau ist die Oberkante die Bezugshöhe selbst** — und genau deshalb
           // schreibt das Panel dort „Aufbau nicht erfasst" statt einer Tiefe. Sobald Schichten
           // gepflegt sind, wandert der Wert ins Negative (Yama 22.08. 22:08).
-          oberkanteMm: bodenplatteOberkanteMm(undefined, level.elevation),
+          oberkanteMm: bodenplatteOberkanteMm(schichten, level.elevation),
           erdberuehrt,
+          ...(schichten ? { schichten } : {}),
           ...herkunftFuerNeueBodenplatte(ausKontur),
         },
       });
@@ -1563,6 +1573,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         letzteAblehnung={letzteAblehnung}
         pausenHinweis={pausenText(zeichenZustand)}
         konturHinweis={fussHinweis}
+        bodenplatteAufbauMm={bodenplatteAufbauMm}
+        setzeBodenplatteAufbauMm={setzeBodenplatteAufbauMm}
         fangHinweis={FANG_TEXT[fangArt]}
         massHinweis={massEingabeText(massEingabe)}
         paletteOffen={paletteOffen}

@@ -140,6 +140,42 @@ function pruefeBodenplatteProLevel(draft: SceneDocument, slab: FoundationSlabNod
   }
 }
 
+/**
+ * **Der Fußbodenaufbau ist beim Setzen PFLICHT — und die Oberkante muss negativ sein.**
+ *
+ * *Dirigent, 22.08. 23:12:40, in Yamas Namen:* der frühere Posten 25.6 („Aufbau nicht erfasst →
+ * 0 mit Vermerk") ist **aufgehoben**, weil er genau die Null erzeugt hätte, die Yamas Operand
+ * ausschließt. Wörtlich: *„Wer den Aufbau nicht kennt, setzt die Platte erst, wenn er ihn kennt —
+ * ehrlich statt Null."*
+ *
+ * **Beide Prüfungen gelten nur bei `erdberuehrt: true`.** Eine Platte über einer Tiefgarage oder
+ * auf Stelzen hat keine Bezugshöhe zum Erdreich; für sie ist eine Oberkante ≥ 0 richtig, und ein
+ * Aufbau kann fehlen. *Die Regel hängt an der Erdberührung, nicht am Bauteil.*
+ *
+ * **Die zweite Prüfung ist keine Wiederholung der ersten.** Der Aufbau kann gepflegt sein und die
+ * Oberkante trotzdem falsch, wenn jemand sie von Hand setzt — `oberkanteMm` ist ein eigenes Feld
+ * und wird nicht aus den Schichten gerechnet.
+ */
+function pruefeBodenplatteAufbau(slab: FoundationSlabNode): void {
+  if (!slab.erdberuehrt) {
+    return;
+  }
+  if ((slab.schichten ?? []).length === 0) {
+    throw new CommandAbgelehnt(
+      'Bodenplatte ohne Fußbodenaufbau: ±0,00 ist OK Fertigfußboden — ohne den Aufbau ist die '
+      + 'Höhenlage der Platte unbekannt. Aufbau eintragen, dann setzen.',
+      'bodenplatte_ohne_aufbau',
+    );
+  }
+  if (slab.oberkanteMm >= 0) {
+    throw new CommandAbgelehnt(
+      `Bodenplatte mit Oberkante ${slab.oberkanteMm} mm: eine erdberührte Platte liegt unter dem `
+      + 'Fertigfußboden, ihre Oberkante ist negativ.',
+      'bodenplatte_oberkante_nicht_negativ',
+    );
+  }
+}
+
 /** Treppendurchbrüche: je Treppe im Level ein Loch-Rechteck (Lauflinie ± halbe Laufbreite), mm-ganzzahlig. */
 function treppenDurchbrueche(draft: SceneDocument, levelId: string): CeilingOeffnung[] {
   const loecher: CeilingOeffnung[] = [];
@@ -363,6 +399,7 @@ export function applyCommand(draft: SceneDocument, command: HausplanerCommand, j
         draft.foundationSlabs = []; // Robustheit für Drafts ohne die Sammlung (Migration ist Lade-seitig).
       }
       pruefeBodenplatteProLevel(draft, slab);
+      pruefeBodenplatteAufbau(slab);
       // **KEINE automatischen Durchbrüche.** Die Decke bekommt hier ihr Treppenauge; die
       // Bodenplatte nicht — unter ihr liegt kein Geschoss, in das eine Treppe führen könnte.
       // Das ist die fachliche Abgrenzung, nicht eine vergessene Zeile.
@@ -383,6 +420,7 @@ export function applyCommand(draft: SceneDocument, command: HausplanerCommand, j
       Object.assign(slab as object, command.changes);
       slab.updatedAt = jetztIso;
       pruefeBodenplatteProLevel(draft, slab); // falls levelId geändert wurde
+      pruefeBodenplatteAufbau(slab);          // auch beim Aendern: der Aufbau darf nicht wegfallen
       pruefeBodenplatteGanzzahlig(slab);
       break;
     }
