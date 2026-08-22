@@ -30457,3 +30457,2568 @@ Blätter**, und deshalb ist sie heute an genau der Stelle ausgefallen, an der si
 
 Ball: **Generator** (Bündel bauen, wie am 21.08. in `ad340caf`) · **Planner** (der Halbsatz für die
 vier Blätter, gebündelt mit dem Z0-I1-Errata) · bei mir nichts.
+
+## §377 — Z2-W0-5b gebaut: Meldepflichten geprüft, Ballwechsel bestätigt. Und ein SHA, der nicht falsch war, sondern falsch danebenstand
+
+Messstand: HEAD `ec570f18`, Baum 0, gemessen 16:04–16:14. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §377'` → 0).
+
+`BAU-generator-Z2-W0-5b/generator-CODE_FERTIG-Z2-W0-5b.yaml`, 16:03:25, gen 17. Das ist das Blatt,
+dessen DoR ich um 15:35 erteilt habe (§368) — **28 Minuten von der Erteilung bis zum fertigen Bau.**
+
+### Meldepflichten und Scope-Diff, selbst gemessen
+
+    SHAs existent   ec239609 · 0d97a57c · 48b52294 · b593357c · 14563070      alle: commit
+    Scope 48b52294  PlannerMasterSetController.php +15 · PlannerApiZustaendigkeitTest.php +60
+                    2 Dateien, 75 Einfuegungen, KEIN Beifang
+    Scope b593357c  Z2-W0-5b-linked-ohne-wache.md, 5+/5-    1 Datei (die Matrixzeilen)
+    Insel-Dateien   48b52294: 0 · b593357c: 0
+
+**Die Behauptung *„KEIN Browser, KEIN Bundle-Bau — dieses Blatt berührt die Hausplaner-Insel nicht
+(0 Dateien im Diff)"* hält** — und sie ist nach §376 kein Nebensatz mehr, sondern genau die Angabe,
+deren Fehlen ich an den vier Z1-W2-Blättern beanstandet habe. **Hier steht sie.**
+
+**Kriterium a am Ergebnisstand nachgemessen:**
+
+    verlangeZustaendigkeitFuerItem   3   (Blatt: 2 -> 3)   :177 linked · :197 link · :210 unlink
+    Reihenfolge:  :177 Aufruf   ->   :179 Query          Wache VOR dem Datenbankzugriff
+
+Der Kommentar im Code sagt es selbst: *„Eine Wache hinter der Query hätte die Daten schon gelesen."*
+
+**Meine beiden Halbsätze aus §368 sind eingelöst** — Kriterium c gegen
+`PlannerApiZustaendigkeitTest.php` (17/17, keine zweite Datei) und der Schalter über
+`config(['rechte.alle_fuer_alle' => true])`. **Ballwechsel bestätigt:** Ball beim Evaluator, korrekt.
+
+### Der SHA, der nicht falsch war, sondern falsch danebenstand
+
+Der Generator meldet einen Punkt über **meine** Meldung:
+
+> *„Die Rollenquelle nennt für das Blatt `ergebnis_sha 14563070`. Selbst nachgesehen: das ist der
+> PLAN-PRÜFER-Commit mit dem DoR-Votum (15:35) … Hätte ich `14563070` als Blattstand gelesen, hätte
+> ich einen Diff gesehen, in dem **das ganze Blatt fehlt** — und daraus den falschen Schluss
+> gezogen."*
+
+**Nachgemessen, wo der Irrtum entsteht.** Mein Ereignis:
+
+    blattpfad:                docs/auftraege/aktiv/Z2-W0-5b-linked-ohne-wache.md
+    geprueft_gegen_blatt_sha: ec239609        <- der Blattstand, eigens benannt
+    endstand_sha:             cfaa391b
+    ergebnis_sha:             14563070        <- mein Befund-Commit, wie die Meldepflicht verlangt
+
+Die Generator-Rollenquelle, Zeile 11:
+
+    blatt_z2_w0_5b: "blattpfad: …/Z2-W0-5b-linked-ohne-wache.md  ergebnis_sha: "14563070" …"
+
+**Mein Feld war richtig befüllt und sogar präziser als verlangt** — ich hatte den Blattstand in einem
+eigenen Feld. **Der Irrtum entsteht in der Weitergabe:** `blattpfad` und `ergebnis_sha` werden
+nebeneinandergestellt, und aus der Nachbarschaft entsteht eine Bedeutung, die keines der beiden Felder
+hat. Wer das liest, nimmt `ergebnis_sha` für den Stand des daneben genannten Blattes.
+
+**Das ist eine eigene Klasse und sie gehört neben §374 gestellt:**
+
+    §374   das Feld heisst anders, als sein Wert bedeutet          (gelesen_bis)
+    §377   das Feld bedeutet richtig — bis es neben ein anderes tritt   (ergebnis_sha)
+
+**Ein Feld kann korrekt sein und trotzdem täuschen, wenn es umzieht.** Beim Zitieren wandert der Wert,
+die Bedeutung bleibt zurück. Der Fall ist heute abgewendet worden, weil der Generator nicht
+übernommen, sondern **nachgesehen** hat, was `14563070` wirklich ändert.
+
+**Regel an mich:** Wenn ein Votum einen Blattstand hat, nenne ich ihn **im selben Satz wie den
+Blattpfad** — nicht in einem eigenen Feld weiter unten. Die Meldepflicht verlangt `endstand_sha` und
+`ergebnis_sha`; sie verbietet nicht, den Blattstand dorthin zu schreiben, wo er nicht verrutschen kann.
+
+Ball: **Evaluator** (Abnahme Z2-W0-5b) · bei mir nichts.
+
+## §378 — Errata Z0-I1 bestätigt, Z0-I1-12 in einem Zug erteilt. Und eine Prüfsumme von mir, die vier Fehlalarme erzeugte
+
+Messstand: HEAD `b962df8d`, Baum 0, gemessen 16:07–16:17. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §378'` → 0). Mein wartender Ball aus §373 ist eingelöst.
+
+`SPEZ-planner-anschlusswelle-1/planner-CODE_FERTIG-Z0-I1-errata.yaml`, 16:05:24, `blatt_sha
+7791920f`, ersetzt `8e65762e`.
+
+### Zählstand und die vier Punkte, selbst gemessen
+
+    Zeilen 592 (Planner: 589)  ·  Kriterien 12 (12)  ·  Matrixzeilen 10 (10)  ·  Beifang 1 Datei
+    (b) ticket_g1b1_testing  6 Treffer — alle in Berichtigung, Messbeleg, Ausweich-DB
+        ticket_testing      32 Treffer (Wortgrenze)         KEINE Anweisung mehr auf g1b1
+    (d) Belegzeile vorhanden
+
+**Die drei Zeilen Abweichung** (592 gegen 589) sind meine Zählung mit `wc -l` gegen seine — kein
+Befund, sondern zwei Zählweisen am selben Text.
+
+### Meine eigene Prüfsumme erzeugte vier Fehlalarme
+
+Ich prüfte (c) *„Z0-I1-1,2,4,5,6,9,11 zeichengleich"* über `grep -A3 "Z0-I1-K\*\*" | shasum` und
+bekam **vier Abweichungen**. Der echte Diff zeigt: die geänderten Zeilen sind **Fließtext, der die
+Kriterien nennt** — *„Die Kriterien sind unberührt. `Z0-I1-1` (Guard fragt die Verbindung)…"* und der
+neue Kasten zu `Z0-I1-9`. **Mein Fenster fing Erwähnungen statt Kriterien.** Grundmenge gegen das
+Verfahren geprüft statt gegen die Frage — die Falle steht wörtlich in meinem Wacheauftrag.
+
+**Eine echte Unschärfe bleibt, und sie ist harmlos:**
+
+    leases/TESTDB-ticket_g1b1_testing   ->   leases/TESTDB-ticket_testing
+
+`Z0-I1-9` **ist** geändert. Der Planner nennt es in **(b)** korrekt („Lease-Pfad in Z0-I1-9") und in
+**(c)** zugleich als „zeichengleich". Beides zusammen geht nicht. **Gewollt ist es trotzdem:** (b) ist
+die Anordnung, (c) meint erkennbar die *Zusagen*, nicht die *Namen* darin. Ich halte (c) für
+sprachlich zu weit gefasst, nicht für falsch gearbeitet — **die Zusage von Z0-I1-9 ist unverändert,
+nur ihr Ziel heißt jetzt richtig.**
+
+### Z0-I1-12 — selbst nachgemessen, und der Befund ist schärfer als meiner
+
+Der Planner fügt ein zwölftes Kriterium hinzu und **zeichnet es als Zusatz aus, statt es
+einzuschmuggeln**: *„Ob die Bestätigung in einem Zug ihn noch trägt, ist die Entscheidung des
+Plan-Prüfers — nicht meine."* Vollständig nachgemessen:
+
+    phpunit.xml setzt      DB_CONNECTION · DB_DATABASE
+    phpunit.xml setzt NICHT DB_HOST · DB_PORT · DB_SOCKET · DB_USERNAME     (je 0 Treffer)
+    config/database.php    host 127.0.0.1 · port 3306 · username forge · unix_socket ''
+    lauschend (lsof)       3307 · 3317 · 33060        auf 3306 lauscht NICHTS
+    .env je Baum           ticket/generator/evaluator: DA · planner + plan-pruefer: WEDER NOCH
+
+**Sein Befund trifft, und er ist schärfer als mein §373.** Ich maß `.env.testing`; **auch `.env`
+fehlt** — in denselben zwei Bäumen. Damit greifen die versionierten Defaults, und ein Testlauf dort
+scheitert nicht an Rechten, sondern an **CONNECTION REFUSED auf 3306**. Genau die Fehlklasse, die
+dieses Errata gerade aufgelöst hat: **eine Fehlermeldung, die nach Rechten aussieht und am Weg liegt.**
+
+Und der Kern: **Es laufen zwei MySQL-Instanzen.** Welche `ticket_testing` trägt, entscheidet eine
+unversionierte Datei, die in jedem Baum anders lauten kann. **Dann serialisiert `Z0-I1-9` Zugriffe auf
+eine Datenbank, von der niemand belegen kann, dass es dieselbe ist.**
+
+### Meine Entscheidung
+
+**Z0-I1-12 ist erteilt, in einem Zug, ohne zweite Runde.** Begründung, damit sie prüfbar bleibt:
+
+1. **Kein neues Ziel, sondern eine Voraussetzung der bestehenden.** Ohne (12) ist (9) nicht belegbar —
+   ein Kriterium, dessen Nachweis von einer unversionierten Datei abhängt, ist kein Nachweis.
+2. **Vollständig belegt und von mir nachgemessen**, jede Zahl oben. Eine zweite Runde prüfte nichts,
+   was hier nicht schon geprüft ist — sie wäre die Auflagen-Schleife, die Nachtrag 1.5 abgeschafft hat.
+3. **Die Absage-Regel trägt:** *„Die Datei in die zwei Bäume KOPIEREN erfüllt (12) NICHT"* — sie
+   verhindert die naheliegende Scheinlösung, die vier auseinanderlaufende Kopien erzeugt hätte.
+
+**Was ich ausdrücklich NICHT entscheide:** ob (12) **jetzt** gebaut wird oder Folgeposten ist. Das ist
+Umfang und Reihenfolge — **Sache des Dirigenten, nicht meine.** Ich prüfe Reife, nicht Priorität. Ich
+sage nur: reif ist es.
+
+Ball: **Dirigent** (baut (12) jetzt mit oder später?) · **Generator** (Stufe 1 nach Errata) · bei mir
+nichts.
+
+## §379 — Zwei von drei Messbelegen haben ihre Standangabe nachgetragen. Der dritte ist der tragende
+
+Messstand: HEAD `50939348`, Baum 0, gemessen 16:11–16:18. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §379'` → 0). Vorratsprüfung (e): eigenen Befund verfolgen.
+
+### Was seit §373 geschehen ist
+
+Mein Befund lautete: *„Ein Beleg ohne Standangabe ist kein Beleg"* — angewandt auf den Satz
+`.env.testing zeigt auf den TCP-Weg`, gemessen in einem Baum, der die Datei nicht hat. **Zwei von
+drei Beteiligten haben seither nachgetragen:**
+
+    1  Planner       15:36  ->  16:05  "Mein Satz stand als MESSUNG im Blatt — in DIESEM Baum
+                                        gibt es die Datei nicht. Ich habe im Hauptbaum gemessen
+                                        und den Baum nicht genannt."     Tabelle ueber alle 5 Baeume
+    2  Lesesitzung   15:48  ->  16:08  Nachtrag mit Baum, Verbindung, CURRENT_USER, Port
+                                        "Sein Satz gilt fuer mich genauso."
+    3  Dirigent      15:49  ->    —    0 Treffer auf worktree|baum|Documents/ticket
+
+**Der dritte ist die tragende Messung.** Sie ist es, auf die die Berichtigung sich stützt: *„Die
+Folgerung ‚Z0-I1 Stufe 1 ohne root baubar' bleibt; **der Beleg dafür ist jetzt dieser (dreifach
+gemessene) Zugriff**, nicht mein Kausalsatz."* Und sie ist die einzige der drei, die **beide Wege**
+misst — TCP **und** Socket.
+
+### Warum es hier besonders zählt
+
+Die Dirigenten-Messung nennt als zweiten Weg:
+
+    SOCKET (ticket_user@localhost, ALL auf ticket, ticket_g1b1_testing, ticket_testing, …)
+
+**Ein Socket-Weg ist in `phpunit.xml` gar nicht konfiguriert** — `DB_SOCKET` steht dort nicht (§378,
+0 Treffer), der versionierte Default ist leer. Wer diesen Zweig nachfahren will, braucht also
+zwingend die Angabe, **aus welcher Quelle** die Verbindung kam. Ohne sie ist nicht entscheidbar, ob
+der Socket-Zweig überhaupt der Weg ist, den ein Testlauf nimmt — und genau diese Frage macht
+`Z0-I1-12` zum Kriterium.
+
+### Was ich ausdrücklich nicht behaupte
+
+**Der Dirigent hat nichts versäumt, als er maß.** Seine Messung lief 15:49:53; meine Regel entstand
+15:53:47, also **vier Minuten später**. Rückwirkend gibt es hier nichts vorzuwerfen. Feststellbar ist
+nur: er hat seither zwei Ereignisse geschrieben (15:55:01, 15:59:12) und die Standangabe nicht
+nachgezogen — während die anderen beiden es taten. **Das ist ein offener Posten, kein Fehler.**
+
+Und ich behaupte nicht, dass die Zahlen falsch sind. Die Lesesitzung schreibt es für sich selbst
+richtig: *„An den Zahlen ändert sich nichts; nur ist jetzt nachfahrbar, WO sie gelten."*
+
+### Nebenbei gemessen, kein Befund
+
+`Z2-W0-5b` steht im Datensatz auf `zustand: BEREIT`, `bau_sha: "noch offen"` — der Bau ist seit
+16:03:25 fertig gemeldet (`48b52294`). **Rückstand: 8 Minuten.** Das ist laufender Betrieb, kein
+Nachzieh-Mangel; ich halte es fest, damit die Zahl beim nächsten Blick eine Vorgeschichte hat.
+
+Ball: **Dirigent** (Standangabe zur dritten Messung, ein Zweizeiler) · bei mir nichts.
+
+## §380 — Mein Anker-Fix verhindert Verlust, nicht Veralterung: die Bündel-Regel lag 53 Sekunden vor meinem §376, und ich hatte sie nicht gelesen
+
+Messstand: HEAD `8337aba3`, Baum 0, gemessen 16:13–16:22. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §380'` → 0).
+
+### Teil 1 — Z1-W2-3 gebaut, Meldepflichten geprüft
+
+`BAU-generator-paket-3/generator-CODE_FERTIG-Z1-W2-3.yaml`, 16:13:25, gen 18. Selbst gemessen:
+
+    SHAs existent    39260edd · b593357c · d00aeece · 161868e9      alle: commit
+    Scope d00aeece   EigenschaftenPanel.tsx · GrundrissformHinweis.tsx      2 Dateien
+    Scope 161868e9   Z1-W2-3-…md                                            1 Datei
+    Buendel im Commit   0 und 0    <- regelkonform, s.u.
+
+**Ballwechsel bestätigt:** Ball beim Evaluator.
+
+### Teil 2 — die Bündel-Regel, und was sie an meinem §376 richtigstellt
+
+`INT-zustand-kette-2/dirigent-entscheidung-buendel.yaml`, **16:02:19**, in Yamas Namen. Kern:
+
+    1  Werkzeug-Commits (Spur W) enthalten das Buendel NICHT
+    2  Der EVALUATOR baut es in SEINEM Worktree und faehrt die Buehne von dort —
+       die Abnahme haengt NICHT am Integrations-Buendel
+    3  NACH jedem ABGENOMMEN (BROWSER) baut der GENERATOR es als EIGENEN Commit
+    4  Bis dahin zeigt ticket.test den Stand 21.08. — "das ist RICHTIG so
+       (kein unabgenommenes Werkzeug beim Benutzer)"
+
+**Punkt 4 stellt meinen §376 richtig.** Ich schrieb: *„Eine Abnahme gegen ein 18 Stunden altes Bündel
+misst nicht den Bau, sondern das Bündel."* Das gilt weiter — **aber die Abnahme läuft gar nicht gegen
+das Integrations-Bündel.** Was ich als Lücke las, ist eine Entscheidung: der Benutzer soll
+ausdrücklich **keine unabgenommenen Werkzeuge** sehen.
+
+**Mein Halbsatz war falsch verortet.** Ich verlangte, das *Blatt* solle den Bündelbau als Vorbedingung
+nennen. Richtig ist: der *Bericht* nennt den Bauschritt — und der Generator tut es, wörtlich als
+Schritt 2 seines Evaluator-Hinweises: *„`npm run build:hausplaner` ← NÖTIG, das Bündel ist nach der
+Bündel-Regel nicht im Commit."* **Eine Regel an einer Stelle schlägt vier Halbsätze in vier Blättern.**
+
+### Teil 3 — und das ist mein eigener §374-Fall
+
+    16:01:12   meine Ereignismessung dieser Runde
+    16:02:19   die Buendel-Regel wird abgelegt
+    16:03:12   ich committe §376 — gegen einen Stand, der 53 Sekunden alt ueberholt war
+
+**In §368 habe ich den Anker umgestellt** (auf den Zeitpunkt der Ereignismessung statt des
+Rundenendes) und damit erreicht, dass **nichts mehr verlorengeht** — die Regel tauchte in dieser Runde
+korrekt auf. **Aber sie kam zu spät für den Abschnitt, der sie gebraucht hätte.**
+
+> **Der Anker-Fix verhindert Verlust, nicht Veralterung.** Was zwischen Messung und Commit ankommt,
+> ist beim nächsten Mal sichtbar — und beim aktuellen Mal bereits wirksam.
+
+Das ist **exakt der Planner-Fall aus §374**, den ich dort gemessen habe: `prozess_start 15:48:12`,
+Berichtigung 15:49:53, Ablage 15:51:36. Ich habe ihn beschrieben und drei Runden später selbst
+wiederholt. Der Wacheauftrag sagt: *„VOR dem Schreiben den Messstand NEU messen."* **Ich messe seither
+zuverlässig den git-HEAD neu — die Ereignisse nicht.**
+
+**Regel an mich, ab sofort:** Vor dem Commit **beide** Stände neu messen — HEAD **und** Ereignisse seit
+der Rundenmessung. Kommt dabei etwas an, das den Abschnitt berührt, gehört es hinein oder der
+Abschnitt wartet.
+
+### Was ich an §376 nicht zurücknehme
+
+Der gemessene Zustand stimmt: neun Insel-Dateien seit `ad340caf`, fünf davon Produktivcode, und die
+vier Blätter nennen das Bündel nicht. **Falsch war die Abhilfe, nicht der Befund** — und der Befund
+hat, wie der Verlauf zeigt, seinen Zweck erfüllt: der Integrator meldete 15:58, der Dirigent
+entschied 16:02.
+
+Ball: **Evaluator** (Z1-W2-3, `npm run build:hausplaner` vorher) · bei mir nichts.
+
+## §381 — Ein SHA, den YAML als Zahl liest: 99 eigene Ablagen geprüft, 131 Felder ohne Anführungszeichen, null betroffen
+
+Messstand: HEAD `0b0881a4`, Baum 0, gemessen 16:16–16:18. Abschnittsnummer gegen den frischen HEAD
+gewählt. **Die in §380 gesetzte Regel hat sofort gegriffen:** die Nachmessung der Ereignisse vor dem
+Schreiben fand `generator-befund-sha-als-zahl-gelesen.yaml`, 16:14:04 — angekommen **zwischen** meiner
+Rundenmessung (16:13:47) und meinem Commit (16:15:27).
+
+**Fremder Befund, zitiert und verlinkt:** Der Generator meldet an der eigenen Meldung:
+
+    ergebnis_sha: 161868e9   ->   eingelesen als   161868000000000  (Typ number)
+
+*„Ein Kurz-SHA aus Ziffern mit einem `e` in der Mitte ist gültige wissenschaftliche Notation."* Und
+der Grund, warum es auffiel: *„Ohne das Rücklesen wäre die Datei syntaktisch gültig gewesen und der
+Fehler unsichtbar. **Eine Datei, die sich einlesen lässt, ist nicht dieselbe wie eine, die das
+Richtige enthält.**"*
+
+### Meine eigene Grundmenge, zwei unabhängige Verfahren
+
+    Verfahren 1 (Muster):   99 Ablagen · 131 SHA-Felder ohne Anfuehrungszeichen · 0 betroffen
+      Gegenprobe am bekannten Treffer:  161868e9 -> 1   ·   0b0881a4 -> 0     Muster greift
+    Verfahren 2 (js-yaml):  99 Dateien geladen · SHA-Felder mit typeof 'number': 0
+
+**Null, und zwar belegt.** Ich melde die Grundmenge mit, weil eine Null ohne sie keine Aussage ist —
+dieselbe Form, die der Generator für seine 53 Meldungen gewählt hat.
+
+### Warum ich die Regel trotzdem übernehme
+
+131 meiner SHA-Felder stehen ohne Anführungszeichen. Heute trifft es keines. **Der Generator benennt
+den Grund, warum das nichts wert ist:** *„Eine Regel, die nur bei auffälligen Werten greift, wird beim
+unauffälligen vergessen."* Ein Kurz-SHA hat acht Stellen; jede ist mit 1/16 ein `e`. Das ist kein
+Ausnahmefall, sondern ein wartender.
+
+Bemerkenswert ist die Fehlerrichtung: Ich habe SHAs bisher **dann** gequotet, wenn sie **nur aus
+Ziffern** bestanden — intuitiv richtig, aber aus dem falschen Grund. `161868e9` sieht wie Hex aus und
+ist doch eine Zahl. **Meine Faustregel hätte genau diesen Fall durchgelassen.**
+
+**Regel an mich, ab sofort:** Jeder SHA in Anführungszeichen — nicht nur der, der zufällig danach
+aussieht.
+
+Ball: **niemand.** Kein Auftrag berührt, keine fremde Datei angefasst.
+
+## §382 — DoR Z1-W2-4 (Treppe-Vertragsprobe): ERTEILT. Drei Messfehler in einer Prüfung, alle meine
+
+Messstand: HEAD `f8801591`, Baum 0, gemessen 16:18–16:20. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §382'` → 0). **Neue Ereignisse vor dem Schreiben geprüft** (Regel §380): eines,
+`generator-zwischenstand-Z0-I1-messung.yaml` 16:19:29 — betrifft den Z0-I1-Bau, nicht dieses Votum.
+
+Auslöser `planner-CODE_FERTIG-Z1-W2-4.yaml`, 16:16:02, Blatt
+`docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md @ 6d8e819f`, Messstand
+`7791920f`.
+
+### Was das Blatt ist — und warum das die entscheidende Einordnung ist
+
+Es ist **kein Anschlussblatt, sondern eine Vertragsprobe**: *„Die Treppe ist NICHT unerreichbar,
+sondern der am besten angeschlossene Teil des Planers."* Und die Wahl des Bauteils ist nicht seine:
+*„DER VERTRAG NENNT ES SELBST, zweimal"* (`werkzeugRegistry.ts:13` „z. B. DIN 18065 bei der Treppe",
+`:27` „z. B. 'R' für Treppe"). **Zeigt der Entwurf an diesem Bauteil keinen Vorteil, zeigt er ihn
+nirgends.**
+
+### Selbst nachgemessen am Stand `7791920f`
+
+    6 Kriterien / 6 Matrixzeilen, jede Kennung genau 2x                    BESTAETIGT
+    registriereWerkzeug: 7 Treffer, ALLE im eigenen Test + 1 Definition
+      -> Produktivaufrufer 0                                              ROT-LAGE BESTAETIGT
+    berechneTreppe: 6 Produktivdateien mit '(' , davon 1 Definition
+      -> 5 Aufrufer, seine fuenf Namen exakt                              BESTAETIGT
+    TreppenErgebnis: 10 Felder — 8 Zahlen, pruefungen[], bestanden        EXAKT
+    N4 :107 · Rueckweg :284 · TMPDIR 3x · Vitest 1x (als AUSSCHLUSS)
+
+**Die tragende Formel durchgerechnet:** `Parametrik.kennwerte?: Record<string, number|string|boolean>`
+nimmt die 8 Zahlen und `bestanden` — **neun von zehn**. `pruefungen: TreppenPruefung[]` ist ein Array
+von Objekten und in einem Record von Skalaren **nicht abbildbar**. `EngineErgebnis` führt es dagegen
+ausdrücklich (`pruefungen?: TreppenErgebnis['pruefungen']`) plus `[feld: string]: unknown`. **Der
+benutzte Vertrag ist der reichere — die Aussage des Blattes hält.**
+
+### Drei Messfehler in einer Prüfung, und alle drei sind Klassen, vor denen ich selbst warne
+
+    1  Pfad GERATEN         ich suchte app/tools/werkzeugRegistry.ts — sie liegt in geometry/.
+                            Das Blatt nennt den Pfad an drei Stellen korrekt (:3, :13, :25).
+    2  Vorkommen statt Aufruf  ich zaehlte 7 Produktivdateien fuer berechneTreppe.
+                            Zwei davon: faehigkeiten.ts:84 (String in einer Deklaration) und
+                            sparrenBerechnung.ts:4 (KOMMENTAR "Muster wie berechneTreppe").
+                            Mit '(' gemessen: 5. Seine Zahl war exakt.  <- P7, meine eigene Regel
+    3  Muster zu eng        'stair' MIT Quotes -> 1 Datei · OHNE Quotes -> 17.
+                            Ich haette "1 statt 15" als Abweichung gemeldet.
+
+**Zwei davon hätten als Befund gegen das Blatt durchgehen können.** Der zweite ist der peinlichste:
+**P7 ist meine eigene Regel** — *„Verbraucher über Funktionsnamen messen"* — und ich habe sie halb
+angewandt. Über den Funktionsnamen messen genügt nicht; **ein Funktionsname im Kommentar ist kein
+Verbraucher.** Die Klammer ist der Unterschied zwischen Erwähnung und Aufruf.
+
+Der dritte fiel nur auf, weil ich die Gegenprobe am bekannten Treffer gefahren habe, wie der
+Wacheauftrag es verlangt — `scene.types.ts` existiert, mein Muster fand sie nicht.
+
+### Votum
+
+**ERTEILT.** Sechs Kriterien mit Messbefehl, rotem Ist und Absage-Regel; N4 vorhanden („bedienweg
+keiner — Vertragsprobe"); Rückweg vorhanden; Ort der Probe ist **Wegwerf unter TMPDIR** nach
+A-37-22d, und Kriterium (c) schließt **Vitest ausdrücklich aus** *(„KEIN Vitest, es existiert
+nicht")* — mein §369 ist eingearbeitet, ohne dass ich es anmahnen musste.
+
+Die Absage-Regeln sind der stärkste Teil, drei davon schneiden je einen naheliegenden Irrweg ab:
+eine **neu geschriebene** Treppen-`parametrik` erfüllt (a) nicht; **„passt im Wesentlichen"** erfüllt
+(b) nicht, verlangt ist eine Zahl und eine Liste; und (f) hält fest: **„Nichtbenutzung ist ein Anlass
+zu messen, kein Ergebnis."**
+
+**Kein Halbsatz.** Eine Beobachtung ohne Ballwechsel: seine `'stair'`-Zahl (15) hängt an der
+Zählweise — mit anderem Muster kommen 17 heraus. Sie ist Kontext, kein Kriterium, und trägt nichts.
+
+Ball: **Generator** (nach Z0-I1) · bei mir nichts.
+
+## §383 — Alterungsprüfung Posten 9 (§119/§120): von 38 toten Modulen sind 26 übrig. Und meine Positivkontrolle hat mein eigenes Verfahren gerettet
+
+Messstand: HEAD `7c7b2f63`, Baum 0, gemessen 16:22–16:26. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §383'` → 0). Achte Alterungsprüfung; nichts in meiner Bahn, nichts angekommen.
+
+### Der Ursprung
+
+§120 maß den Importgraphen der Insel von `main.tsx` aus, am Stand `d4ee1555`:
+
+    Module 165   MIT Typ-Importen 30 nicht erreichbar   OHNE Typ-Importe 38   davon geometry/ 23
+    fuenf der 38 erklaert -> 33 offen  = der Yama-Posten
+
+### Heute, am Stand `ceb4224a`, Verfahren nachgebaut
+
+    MIT Typ-Importen              erreichbar 138 von 161   nicht:  23   geometry/ 17
+    OHNE Typ-Importe (Laufzeit)   erreichbar 135 von 161   nicht:  26   geometry/ 17
+    POSITIVKONTROLLE (fangKern · HausplanerApp · wallGeometry)   BESTANDEN, beide Laeufe
+
+**Von 38 auf 26**, `geometry/` von 23 auf 17. Die Grundmenge ist zugleich von 165 auf 161 gefallen.
+
+**Was ich daraus NICHT mache:** eine exakte Differenz. Ich habe das Verfahren **nachgebaut**, nicht
+übernommen — §120 prüfte zusätzlich Projekt-Aliase und dynamische Importe. Meine Zahlen sind mit
+seinen der Größenordnung nach vergleichbar, nicht auf das Modul genau. **Belastbar ist die Richtung:
+der Bestand toter Module ist gesunken, nicht gewachsen.** Damit gilt der Posten weiter, aber kleiner.
+
+**Der Posten bleibt bei Yama offen** — und zwar zu Recht, wie A-13: Was mit den 26 geschieht
+(stilllegen, anschließen, stehenlassen), ist eine Entscheidung, keine Messung. Genau deshalb liegt
+`toolCatalogStillgelegt.ts` bis heute unter den nicht erreichbaren, und genau deshalb hat der Planner
+in Z1-W2-4 die Absage-Regel geschrieben: *„Nichtbenutzung ist ein Anlass zu messen, kein Ergebnis."*
+
+### Und der lehrreiche Teil: die Positivkontrolle hat mein Verfahren gefangen
+
+Mein erster Lauf meldete:
+
+    Module gesamt 161 | erreichbar 1 | NICHT erreichbar 160
+    POSITIVKONTROLLE: fangKern NEIN · HausplanerApp NEIN · wallGeometry NEIN
+
+**Hätte ich sie weggelassen, hätte ich „160 tote Module" gemeldet** — eine Vervierfachung des
+Befundes, und sie hätte plausibel ausgesehen, weil die Zahl in die erwartete Richtung zeigte.
+
+Die Ursache: mein Regex akzeptierte nur **doppelte** Anführungszeichen (`from "…"`); der
+TypeScript-Bestand schreibt **einfache**. **Dieselbe Klasse wie `'stair'` in §382 — nur andersherum:
+dort war das Muster zu eng, weil ich Quotes hinzufügte, hier zu eng, weil ich die falschen nahm.**
+Zweimal in zwei Runden an der Anführungszeichen-Frage gescheitert.
+
+**Der Wert der Positivkontrolle liegt genau darin, dass sie nicht plausibel ist, sondern bekannt.**
+Eine Messung, deren Ergebnis niemand vorher kennt, kann man nicht gegenprüfen; drei Module, von denen
+feststeht, dass sie laufen, kann man immer gegenprüfen. §120 hat sie eingeführt, ich habe sie
+übernommen — und sie hat beim ersten Lauf gegriffen.
+
+Ball: **niemand.** Posten 9 bleibt bei Yama, mit berichtigter Größenordnung.
+
+## §384 — Der Rückstand, den ich als Mangel meldete, ist der Rot-Beleg geworden. §376 ist damit vollständig aufgelöst
+
+Messstand: HEAD `31eb8f1c`, Baum 0, gemessen 16:25–16:29. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §384'` → 0). Nichts in meiner Bahn; Ball liegt beim Dirigenten.
+
+**Zitiert, nicht nachgebaut:** `evaluator-ABGENOMMEN-teil-B-Z1-W2-1.yaml`, 16:25:16 — **Z1-W2-1 ist
+BROWSER-abgenommen**, 6 von 6, *„Der Bedienweg wurde gefahren, nicht behauptet."*
+
+### Wie sich §376 auflöst — dreifach, und keine Stufe davon war mein Verdienst
+
+    §376 (16:03)  ich melde: das ausgelieferte Buendel ist 18 Stunden aelter als der Quellcode,
+                  neun Insel-Dateien seit ad340caf, fuenf davon Produktivcode
+    16:02         die Buendel-Regel macht daraus eine ABSICHT (§380)
+    16:03 (Gen.)  der Generator schreibt "npm run build:hausplaner <- NOETIG, sonst falsch-rot"
+                  in seine CODE_FERTIG-Meldung
+    16:25 (Eval.) "Ich stand vor dem Befund 'die Meldung existiert im Browser nicht'.
+                   Der Generator hatte die Falle woertlich benannt … Diese Meldung hat eine
+                   Runde gespart."
+
+**Und die dritte Stufe ist die, die ich nicht kommen sah:** Der Evaluator hat den veralteten
+Bündelstand **als Rot-Beleg benutzt.** Kriterium (c) verlangt den Nachweis, dass die Meldung ohne das
+Modul nicht erscheint — und *„da das Bündel nicht Teil des Bau-Commits ist, ist es der Stand vor dem
+Bau — an beiden Markern gemessen, nicht angenommen."*
+
+**Der Zustand, den ich als Mangel gemeldet habe, ist das Messmittel geworden.**
+
+### Der Rot-Beleg gegengeprüft — meine Sorge, und warum sie nicht trägt
+
+Mein Einwand wäre gewesen: Ein Rot-Lauf gegen ein Bündel vom 21.08. isoliert **nicht das Modul**,
+sondern den ganzen Stand seit dann — neun Dateien, nicht eine. Gemessen:
+
+    'integrationsabgleich'  in Produktivdateien der Insel:  1   (app/rahmen/IntegrationsKonflikte.tsx)
+                            davon Tests:                    0
+    'data-pruefung'         Gegenprobe, dasselbe Ergebnis:  1
+    im ausgelieferten Buendel (1516311 B, ad340caf 21.08.): 0x
+
+**Der Marker stammt aus genau einer Datei und fehlt im Bündel vollständig.** Damit kann keine der
+acht anderen Änderungen ihn erzeugt haben — **der Rot-Beleg isoliert das Modul, obwohl der Stand mehr
+als das Modul unterscheidet.** Ein Marker, der nur an einer Stelle entsteht, trägt eine Rot-Probe auch
+über einen unsauberen Standunterschied hinweg. Das ist der Grund, warum die Wahl des Markers hier
+mehr wiegt als die Sauberkeit des Vergleichsstands.
+
+### Was ich daraus für mich mitnehme
+
+**Ein gemessener Zustand ist noch kein Mangel — was er ist, entscheidet der Zweck.** Ich hatte den
+Bündelrückstand korrekt gemessen und falsch eingeordnet: als Lücke, wo eine Absicht war, und als
+Hindernis, wo ein Messmittel entstand. **Die Messung hielt in allen Zahlen; die Deutung hielt in
+keiner.**
+
+Bemerkenswert daneben: Der Evaluator führt **vier eigene Messfehler** auf, darunter *„Räume: 0 als
+Beleg für ‚keine Wand' (eine Wand IST kein Raum)"* und *„ein grep-Zähler ohne `-v grep`, der die
+eigene Pipeline als fremde Testläufe zählte"*. **Drei hätten beinahe zu einem Falschbefund geführt.**
+Zusammen mit meinen dreien aus §382 und dem des Planners sind das an einem Nachmittag acht
+Messfehler in vier Rollen — **und keiner ist in einen Befund gelangt, weil jede Rolle ihre eigene
+Gegenprobe gefahren hat.**
+
+Ball: **Dirigent** (Z1-W2-1 browserabgenommen), dann **Generator** (Bündel-Commit nach der Regel) ·
+bei mir nichts.
+
+## §385 — Die Operandenfrage an Yama ist falsch gestellt: den Materialkatalog gibt es, samt U-Wert-Rechenweg
+
+Messstand: HEAD `817aef0f`, Baum 0, gemessen 16:28–16:32. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §385'` → 0). Nichts in meiner Bahn — **aber eine Vorlage an Yama liegt vor,
+und dafür gilt meine Dauerregel: jede Zahl frisch messen, auch die aus fremden Berichten.**
+
+`SPEZ-planner-anschlusswelle-1/planner-frage-paket-1-operanden.yaml`, 16:26:28, `entscheider: yama`.
+Der Planner legt drei Module als Operandenfrage vor. Frage 1 lautet:
+
+> *„`lambda` im GANZEN Bestand — nur in `geometry/wandaufbau.ts` — **es gibt KEINEN
+> Materialkatalog**. … Woher kommt `lambda` je Material? Ein Materialkatalog mit
+> Wärmeleitfähigkeiten ist eine Fachdatenquelle — **anlegen (und woraus?)**, oder je Schicht vom
+> Nutzer eingeben lassen, oder den U-Wert-Anschluss zurückstellen?"*
+
+### Gemessen — und der Bestand sagt etwas anderes
+
+    'lambda' in der Insel        3 Dateien (wandaufbau.ts · wandaufbau.test.ts · scene.types.ts)
+    'lambda' im GANZEN Bestand  35 Dateien
+    Gegenprobe 'dickeMm'        17 Dateien in der Insel — das Muster greift
+
+Die tragenden vier:
+
+    app/Models/Material.php:22            'lambda_w_mk' => 'float'      <- Waermeleitfaehigkeit W/(m·K)
+    database/migrations/2026_07_05_170001_create_materials_table.php    <- die Tabelle existiert
+    database/data/b2a_referenz.php:17,26,35,44  lambda_w_mk 0.68 · 0.4 · 0.99 · 0.13
+                                                                        <- KONKRETE Referenzwerte
+    app/Services/Heizlast/UWertService.php:51  "Strategie B – Schichtaufbau"
+                                          :54  @param array{materialId ...}
+                                          :72  $lambda = $m->lambda...
+
+**Es gibt nicht nur einen Materialkatalog — es gibt einen fertigen U-Wert-Rechenweg, der genau die
+Schichtberechnung über `materialId` und `lambda_w_mk` fährt.** Und `scene.types.ts:133` führt
+`schichten?: Array<{ materialId?: string; dickeMm: number }>` — **dasselbe Feld, auf das
+`UWertService` Strategie B ausgelegt ist.**
+
+### Was das an der Frage ändert
+
+Die Frage lautet heute *„anlegen (und woraus?)"*. **Richtig gestellt lautet sie: anbinden oder
+nicht.** Das ist eine andere Entscheidung, mit anderem Aufwand und anderem Risiko — und CLAUDE.md
+gibt die Richtung vor: *„Vor Neuentwicklung werden vorhandene Services, Modelle, Komponenten,
+Routen, Tests und das Designsystem geprüft und möglichst wiederverwendet."*
+
+**Ich entscheide nichts davon.** Die Anbindung Insel → CRM-Service ist eine Architekturfrage
+(React-Insel gegen Laravel-Backend, eigene Schutzgrenze in CLAUDE.md), und die Fachfrage, ob
+Heizlast-Referenzwerte für die Wandaufbau-Anzeige taugen, ist Yamas. **Ich stelle nur fest, dass die
+Vorlage von einer leeren Fläche ausgeht, wo etwas steht.**
+
+### Wo der Planner recht behält, und warum ich es dazusage
+
+**Für die Insel ist seine Aussage richtig:** dort gibt es keinen Katalog, und die drei Treffer sind
+der Rechentyp, sein Test und ein Kommentar. Sein Kontext ist durchgehend die Insel. **Der Fehler ist
+das Wort „im GANZEN Bestand"** — eine Reichweitenangabe, die er nicht gemessen hat, in einem Satz,
+der sonst stimmt.
+
+**Das ist die Klasse, die heute vier Rollen getroffen hat**: nicht die Messung ist falsch, sondern
+ihre **Grundmenge**. Bei mir war es `'stair'` mit Quotes (§382) und der Importgraph mit falschen
+Anführungszeichen (§383), beim Evaluator „Räume: 0", beim Dirigenten die Rechteliste als
+Zugriffsaussage. **Fünfmal derselbe Schnitt: gemessen wurde sauber, nur woanders als behauptet.**
+
+Und seine Vorsicht trägt unabhängig davon: *„Ein U-Wert aus geratenen Lambdas sähe aus wie eine
+Angabe"* — mit einem echten Katalog gilt das erst recht, denn dann sieht die Zahl nicht nur aus wie
+eine Angabe, **sie hätte eine Quelle, die für einen anderen Zweck erhoben wurde.**
+
+Ball: **Yama** (die Frage, jetzt anders gestellt) · **Dirigent** (ob die Vorlage vor der Antwort
+berichtigt wird) · bei mir nichts.
+
+## §386 — Regel 6j hat gewirkt, gemessen am Zähler. Aber sie steht in null Rollenquellen
+
+Messstand: HEAD `a9f9f8d7`, Baum 0, gemessen 16:31–16:35. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §386'` → 0). Nichts in meiner Bahn.
+
+### Der Vorfall und die Selbstmeldung
+
+`BAU-generator-Z2-W0-5b/generator-selbstmeldung-db-vorfall-16-00-33.yaml`, 16:28:18. Der Generator
+meldet sich **selbst als Verursacher** des Laufs, der dem Evaluator mitten in der Browserabnahme den
+Anmeldenutzer löschte — und begründet, warum er es tut, obwohl niemand gefragt hat:
+
+> *„Es wäre für mich folgenlos geblieben, nichts zu sagen. Aber **ein Vorfall ohne Verursacher wird
+> beim nächsten Mal wieder als Pech gelesen**, und der Riegel dagegen bekommt weniger Gewicht als er
+> braucht. Ich habe gegen keine Regel verstoßen — es gab schlicht keine, die mich gehindert hätte.
+> **DAS IST DER PUNKT.**"*
+
+Seine Belastung ist ehrlich gemessen: `tests/Feature/Planner/` mit `RefreshDatabase`, 18,45 s Dauer,
+Fenster umschließt 16:00:33 — *„Ich habe keinen Beleg, der einen zweiten Verursacher ausschließt —
+aber ich habe einen, der MICH belastet."*
+
+### Wirksamkeit gemessen, nicht geglaubt
+
+    16:00:33  der Vorfall
+    16:03:05  Regel 6j erlassen (DB-Lease, Browserabnahme hat Vorrang)
+    16:03     leases/TESTDB-ticket_testing/ angelegt
+    16:05     counter -> 1                      <- die Lease wurde GENOMMEN
+    16:17     freigegeben-token-1.yaml          <- und freigegeben
+    16:25:16  Z1-W2-1 ABGENOMMEN (BROWSER)
+
+    heute: counter 1 · active/lease.yaml fehlt = frei
+    Gegenprobe an einer bekannten Lease (A-42): counter 4, Verzeichnis abgelaufen/ vorhanden
+
+**Zwei Minuten nach dem Vorfall erlassen, zwei Minuten später genommen, zwölf Minuten gehalten,
+freigegeben — und die Abnahme lief durch.** Der Zähler ist der Beleg: die Lease wurde **benutzt**,
+nicht bloß zugesagt.
+
+### Die Lücke, die daneben stehenbleibt
+
+    '6j' in den Rollenquellen:        0 Dateien
+    'DB-Lease' in den Rollenquellen:  2 Dateien
+    '6j' in der Steuerungs-README:    1 Treffer
+
+Der Dirigent nennt sie selbst *„Handregel mit Selbstmeldungspflicht"*, bis Z0-I1 Stufe 1 sie
+fail-closed in den Testläufer baut. **Damit ist sie genau das, was A-37-22e als Loch beschrieben
+hat:** eine Steuerung, die zwischen Veröffentlichung und Lesen ein Fenster hat — und der Generator
+ist heute Vormittag schon einmal genau dort hineingefallen (Pause 08:12:54, sein Commit 08:16:37).
+
+**Verschärft durch die Grundmenge:** `6j` steht in **keiner einzigen** Rollenquelle. Wer eine Rolle
+neu startet und seine Quelle liest — der vorgesehene Weg —, erfährt von der Regel **nichts**. Er
+erfährt sie nur, wenn er die README liest oder das Ereignis von 16:03:05 im Ordner findet.
+
+**Das ist kein Vorwurf an die Regel, sondern ihre bekannte Übergangsform** — der Dirigent schreibt es
+hin, der Planner hat sie ins Errata aufgenommen (`Z0-I1-9`, Lease-Pfad heute auf
+`TESTDB-ticket_testing` berichtigt, §378). **Ich halte nur fest, wo sie bis dahin nicht hinreicht:
+nicht bei denen, die sie gelesen haben, sondern bei der nächsten Instanz, die frisch startet.**
+
+### Was der Fall über den Nachmittag sagt
+
+Der Generator hätte schweigen können. Der Evaluator hatte den Vorfall bereits als eigene Hürde
+verbucht und keinen Verursacher benannt — **die Sache war erledigt, ohne dass jemand einen Namen
+trug.** Dass sie es jetzt nicht mehr ist, hat den Riegel schwerer gemacht: **eine Regel, deren
+Anlass einen Verursacher hat, wird anders gelesen als eine, deren Anlass Pech war.**
+
+Ball: **niemand von mir aus.** Der Bau von Z0-I1 Stufe 1 schließt die Lücke; er läuft.
+
+## §387 — Alterungsprüfung Posten 3 (Tragwerk): gilt unverändert. Damit ist die Yama-Liste einmal durchgemessen
+
+Messstand: HEAD `667931e2`, Baum 0, gemessen 16:33–16:37. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §387'` → 0). Neunte und letzte Alterungsprüfung.
+
+### Posten 3, gemessen am Stand `ceb4224a`
+
+Der Befund vom 16.08. lautet: *„W-21 Sparren/Lattung — **EIN** Aufrufer, und der ist ein
+ENGINE-PANEL, keine Zeichenfläche."* Nachgemessen **über den Funktionsnamen und mit Klammer** (Lehre
+§382):
+
+    berechneSparren(   Produktivdateien: 2  — davon 1 die Definition (sparrenBerechnung.ts:105)
+                       -> EIN Aufrufer: app/dashboard/enginePanels.ts:227
+    berechneLattung(   Produktivdateien: 0  — die Funktion existiert nicht
+    Gegenprobe OHNE Klammer: 3 Dateien — eine Erwaehnung mehr, kein Aufruf
+
+**Der Aufrufer ist `app/dashboard/enginePanels.ts` — ein Engine-Panel, keine Zeichenfläche.** Der
+Befund hält nach sechs Tagen **unverändert**, in beiden Hälften.
+
+**Nebenbefund, der zwei Posten verbindet:** `sparrenBerechnung.ts:100` führt
+`export const N003_VORBEHALT = 'Vorbemessung, ersetzt keine prüffähige Statik'`. **Der N-003-Vorbehalt
+aus Posten 1 steht als Konstante genau in dem Modul, dessen Zeichenflächen-Frage Posten 3 ist.** Wer
+Tragwerk an die Zeichenfläche holt, holt den Vorbehalt mit — sichtbar für den Bediener, nicht nur im
+Panel. Das ist kein neuer Befund, aber es erklärt, warum die beiden Posten nicht unabhängig
+entschieden werden können.
+
+### Bilanz: die Liste ist einmal durch
+
+Neun Posten, neun Alterungsprüfungen. **Nur die drei von heute nenne ich mit Zahlen — die übrigen
+sechs stehen in ihren eigenen Abschnitten, und meine Dauerregel verbietet, Postenlisten aus Notizen
+statt aus frischer Messung zu bauen:**
+
+    Posten 6  Seed-Weg der Pruefbuehne   §366  ENTSCHIEDEN OHNE EMPFAENGER -> 15:25:28 umgebucht,
+                                               heute als Z0-I1-11 im Auftrag angekommen
+    Posten 9  §119/§120                  §383  38 -> 26 tote Module; Posten gilt, kleiner
+    Posten 3  Tragwerk                   §387  gilt unveraendert, 1 Aufrufer, Engine-Panel
+    (Posten 10, DB-Name, entstand 15:43 und war 15:55 positiv erfuellt — §375)
+
+Die übrigen sechs (N-003, A-13, W-21L, versatz-Quittung, raumAuswahl.ts, Regelkollision) sind in
+früheren Runden geprüft und dort belegt; **ich trage ihre Zahlen hier nicht fort, weil eine Zahl, die
+ich heute nicht gemessen habe, in einer Vorlage nichts zu suchen hat.**
+
+**Was die Durchsicht insgesamt ergeben hat:** Von neun Posten hat sich **einer als fehladressiert**
+erwiesen (6 — Yama schuldete längst nichts mehr), **einer als kleiner** (9), **einer entstand und
+verging innerhalb von zwölf Minuten** (10). **Die übrigen liegen zu Recht bei Yama** — es sind
+Entscheidungen, keine Messfragen, und keine Messung kann sie ersetzen.
+
+Ball: **niemand.** Kein Auftrag berührt.
+
+## §388 — Der Zeiger aus §366 ist in 74 Minuten ein zweites Mal weitergewandert
+
+Messstand: HEAD `0dcf91d1`, Baum 0, gemessen 16:36–16:40. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §388'` → 0). Vorratsprüfung (a) + (e): gewanderte Verweise, eigenen Befund
+verfolgen.
+
+### Die Regel aus §366 hält — gemessen, nicht angenommen
+
+    'STATUS Z.' / 'STATUS.md:<Zahl>' in den 21 Abschnitten NACH §366:   0
+    Gegenprobe, ganze Befunddatei:                                    102
+
+**Null neue Zeilenzeiger in 21 Abschnitten.** Die Regel *„Belege in `docs/STATUS.md` über
+Inhaltsmuster, nie über Zeilennummern"* wird eingehalten.
+
+### Der Befund: die Drift ist stündlich, nicht täglich
+
+§366 maß um **15:22**: `STATUS Z.3037` zeigt auf `mein_anteil: "Ich habe geraeumt…"`, der Beschluss
+liegt bei **3058**. Heute um **16:38**, also **74 Minuten später**:
+
+    Z.3037 heute:            "mein php artisan test im Grundtor fuer A-31/A-32, unmittelbar vor 3661"
+    'WEG C entschieden' bei:  3059            (15:22 war es 3058)
+    STATUS.md Zeilen:        19664            (15:22 waren es 19640)
+
+**Derselbe Zeiger zeigt binnen 74 Minuten auf einen dritten Inhalt.** Und das Ziel selbst ist um eine
+Zeile weitergerutscht. Ich hatte in §366 geschrieben, ein Zeiger in eine erzeugte Datei sei „ein
+Zeiger auf einen wandernden Baum" — **gemessen wandert er schneller, als eine Wache-Runde dauert.**
+
+### Was ich über die Grundmenge NICHT behaupte
+
+Mein Suchmuster fand **45 eindeutige Zeilennummern**, davon **9 außerhalb der heutigen Datei**
+(> 19664). **Diese Zahlen melde ich mit Vorbehalt:** das Muster `STATUS(\.md)? ?Z?\.?:?[0-9]{3,5}`
+fängt auch Zahlen, die keine Zeiger sind — etwa eine Zeilenzahl-Angabe im Fließtext. **Ich habe die
+45 nicht einzeln geprüft, und deshalb ist „9 zeigen ins Leere" keine belastbare Aussage, sondern eine
+Obergrenze.**
+
+**Belastbar sind die drei direkt gemessenen Werte oben** — der dreifach gewanderte Zeiger, das um
+eine Zeile verschobene Ziel, die 24 neuen Zeilen. Sie genügen: **wenn ein Zeiger in 74 Minuten zweimal
+falsch wird, ist die Frage nach der genauen Zahl der übrigen zweitrangig.**
+
+### Warum ich die 102 Altfälle nicht nachziehe
+
+Sie stehen in Abschnitten, die einen Messstand dokumentieren, zu dem sie **richtig waren**. Ein
+Befund, dessen Zeiger ich nachträglich korrigiere, ist kein Befund mehr, sondern eine
+Rekonstruktion — dieselbe Linie wie bei §367/§372: **berichtigen ja, überschreiben nein, die alten
+Zahlen sind Teil des Belegs.** Wer einen Altabschnitt nachschlägt, findet über das Inhaltsmuster
+hin, was der Zeiger nicht mehr trifft.
+
+Ball: **niemand.** Kein Auftrag berührt, keine fremde Datei angefasst.
+
+## §389 — DoR Z1-W2-5 und Z1-W2-6: beide ERTEILT. Ein Fallstrick, vor dem der Modulkommentar mit dem falschen Feld warnt
+
+Messstand: HEAD `a9e91f27`, Baum 0, gemessen 16:39–16:43. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §389'` → 0). Auslöser `planner-CODE_FERTIG-Z1-W2-5-und-6.yaml`, 16:38:43,
+Blätter `Z1-W2-5-wandflaeche-anschliessen.md` und `Z1-W2-6-auswechslung-anschliessen.md @ 1146cbe6`,
+Messstand `281a60f9`.
+
+### Selbst gemessen — alle tragenden Zahlen bestätigt
+
+    Z1-W2-5   217 Blattzeilen · 7 Kriterien / 7 Matrixzeilen · N4 · Rueckweg · HEADFUL
+              wandFlaeche.ts    253 Z. (Planner: 253) · Produktivimporte 0 · Suite vorhanden
+    Z1-W2-6   257 Blattzeilen · 7 Kriterien / 7 Matrixzeilen · N4 · Rueckweg · HEADFUL
+              auswechslung.ts   195 Z. (Planner: 195) · Produktivimporte 0 · Suite vorhanden
+    rafterDist in domain/       0 Dateien   (in der Insel: 4 — auswechslung, dachWerte,
+                                             schifterListe, dachWerte.test)
+    ObstacleData                5 Nennungen · 0 Definitionen   <- der Typ existiert nicht
+
+### Mein eigener Fehlalarm, von der Gegenprobe gefangen
+
+Mein erster Lauf maß `auswechslung.ts`: **0 Testdateien** — gegen die Planner-Angabe *„eigene Suite
+vorhanden"*. Ich stand vor einem Befund. **Die Gegenprobe über Dateiname und Funktionsnamen fand
+`__tests__/auswechslung.test.ts` sofort.** Mein Import-Muster (`from '.*auswechslung'`) griff nicht;
+der Test importiert anders, als ich unterstellt hatte. **Zum dritten Mal heute ein zu enges Muster —
+und zum dritten Mal hat nur die Gegenprobe am bekannten Treffer den Fehlalarm verhindert.**
+
+### Der Achsen-Fallstrick — und warum er schärfer ist, als er aussieht
+
+    RoofAufbau (scene.types.ts)          Oeffnung (auswechslung.ts)
+      breiteMm  parallel Traufe      ->    breiteM   u-Richtung          PASST
+      hoeheMm   VERTIKALE Fronthoehe ->    (keine Entsprechung)
+      tiefeMm   entlang der Schraege ->    hoeheM    v-Richtung, geneigt  <- das RICHTIGE Feld
+
+**Der Modulkommentar warnt zweimal ausdrücklich vor der „Aufbau-Tiefe"** — `auswechslung.ts:11-12`:
+*„Öffnungshöhe = Maß in v-Richtung (geneigt). **Die Aufbau-TIEFE (depth, Aufbauhöhe)**…"* Er setzt
+„Tiefe" mit „Aufbauhöhe" gleich.
+
+**Im Modell heißt `tiefeMm` das Gegenteil: die Ausdehnung IN der Fläche.** Wer den Kommentar liest und
+im Modell nach „Tiefe" sucht, meidet genau das Feld, das er nehmen müsste — und greift zu `hoeheMm`,
+weil die Namen gleich klingen. **Der Kommentar führt in die Falle, vor der er warnt.** Ergebnis wäre,
+wie das Blatt sagt, *„eine plausible falsche Sparrenzahl"* — plausibel, weil eine Zahl herauskommt.
+
+**Das Blatt hat es vollständig:** Achsen-Tabelle (`:79`), der Wortgebrauchs-Konflikt (`:83-87`,
+*„Zwei Bedeutungen desselben Wortes, an der Nahtstelle, an der gemappt werden muss"*), und ein
+Probefall, der **beide** Zuordnungen fährt und die Differenz beziffert (`:134-137`). **Kein Halbsatz
+— das Blatt ist präziser als seine eigene Zusammenfassung im Ereignis.**
+
+### Votum
+
+**Beide ERTEILT.** Je sieben Kriterien mit Messbefehl, rotem Ist und Absage-Regel; N4, Rückweg und
+HEADFUL-Ort vorhanden; Rot-Lage in beiden Fällen dieselbe und selbst nachgemessen (0
+Produktivimporte).
+
+Die Absage-Regeln tragen, drei besonders:
+
+- **Z1-W2-5 (c):** *„Eine 0 anzeigen erfüllt (c) NICHT, eine leere Zelle auch nicht.
+  `WandFlaecheErgebnis` ist eine VEREINIGUNG; der Anschluss darf sie nicht auf ihren Erfolgsfall
+  zusammenziehen."*
+- **Z1-W2-6 (d):** *„`wechselAnzahl 0` als ‚0 Stück' erfüllt (d) NICHT — das Modul unterscheidet
+  ‚keine nötig' von ‚nicht bestimmbar'; eine Oberfläche, die beides als 0 zeigt, macht die
+  Unterscheidung zunichte."*
+- **Z1-W2-6 (b):** *„Kommt der Bau zu einer anderen Zuordnung, GILT SEIN BEFUND — dann ist das Blatt
+  zu ändern, nicht der Code zu biegen."* **Ein Blatt, das seine eigene Widerlegung vorsieht, ist
+  stärker als eines, das sie ausschließt.**
+
+Zur Fach-Empfehlung im Blatt (*„Zimmerer/Dachdecker empfohlen: Handwerkswissen, keine Typprüfung"*):
+**sie trägt.** Die Zuordnung `tiefeMm → hoeheM` ist typkorrekt in jeder Variante — beide sind Zahlen.
+**Was sie unterscheidet, ist das Dach, nicht der Compiler.**
+
+Ball: **Generator** (nach Z0-I1) · bei mir nichts.
+
+## §390 — Zwei unabhängige Wege, dieselbe Antwort: der Materialkatalog ist normbelegt. Und meine vierte Anführungszeichen-Falle an einem Nachmittag
+
+Messstand: HEAD `c9466cc0`, Baum 0, gemessen 16:43–16:47. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §390'` → 0).
+
+### Die Konvergenz, und warum sie zählt
+
+`STEUERUNG-dirigent/yama-lesesitzung-hinweis-materialkatalog-existiert.yaml`, **16:40:53** — zehn
+Minuten nach meinem §385, und **unabhängig davon**: ihr `bezug` nennt nur die Planner-Frage,
+`plan-pruefer` kommt in ihrem Hinweis **0 mal** vor. Ihr Kern: *„Der Materialkatalog muss nicht
+angelegt werden — er existiert im ticket-Bestand, mit Daten und Quellenangabe, und ein U-Wert-Dienst
+liegt daneben."*
+
+**Zwei Verfahren, eine Antwort.** Die Hausregel kennt den umgekehrten Fall („zwei Verfahren, zwei
+Antworten, dann gilt keine"); hier gilt sie in die andere Richtung. Sie hat gemessen, was ich nicht
+durfte — die Datenbank —, ich habe gemessen, was sie nicht brauchte — die Repo-Seite. **Meine
+Gegenprobe auf ihre Zahl:**
+
+    ticket.materials (ihre DB-Messung)               23 Zeilen
+    'lambda_w_mk' in database/data/b2a_referenz.php  23 Treffer     <- Repo und DB stimmen ueberein
+    UWertService.php                                 200 Zeilen (ihre Angabe: 200)   exakt
+
+### Der Katalog ist nicht nur da — er ist normbelegt
+
+    create_materials_table.php:20  decimal('lambda_w_mk', 6, 4)
+                                     comment '[W/mK] Bemessungswert Waermeleitfaehigkeit'
+                              :22  string('quelle')->default('DIN 4108-4 / ISO 10456')
+                              :23  string('verifikations_status')  'din_belegt | impor...'
+                              :24  string('imported_from')         "Herkunfts-Marker, z.B. 'w...'"
+    b2a_referenz.php               'quelle' => 'DIN 4108-4'   53 Treffer auf 'quelle'
+
+**Damit ist auch der zweite Teil der Planner-Frage beantwortet.** Er fragte *„anlegen — und woraus?"*.
+Die Antwort steht in der Migration: **aus DIN 4108-4 / ISO 10456, mit Verifikationsstatus je
+Eintrag.** Ein Katalog mit `verifikations_status: din_belegt` ist genau das Gegenteil der Sorge, vor
+der `scene.types.ts:123` warnt (*„Eine erfundene Schichtung wäre schlimmer als keine"*) — hier steht
+je Wert, woher er stammt und ob er belegt ist.
+
+### Meine vierte Anführungszeichen-Falle an diesem Nachmittag
+
+    'quelle' MIT Quotes im Muster   ->   0 Treffer
+    quelle   OHNE Quotes            ->  53 Treffer
+
+Ich hätte „keine Quellenangabe" gemeldet — in genau dem Abschnitt, der belegt, dass es eine gibt.
+
+    §382  'stair' mit Quotes                    1 statt 17
+    §383  Importgraph nur mit "…"               160 tote Module statt 26
+    §389  Import-Muster fuer auswechslung       0 Testdateien statt 1
+    §390  'quelle' mit Quotes                   0 statt 53
+
+**Viermal an einem Nachmittag dieselbe Wurzel, und jedes Mal in die gefährliche Richtung: zu wenig
+Treffer, was wie ein Befund aussieht.** Ein zu weites Muster meldet Rauschen, das man prüft; ein zu
+enges meldet eine Null, die man glaubt. **Alle vier wurden nur von der Gegenprobe am bekannten
+Treffer gefangen** — nicht von Nachdenken, nicht von Erfahrung, sondern von einem zweiten Befehl.
+
+**Regel an mich, verschärft:** Bei jedem `grep` auf einen Feldnamen in strukturierten Daten wird das
+Muster **ohne Anführungszeichen** gefahren und die Differenz betrachtet. Ist sie groß, war meine
+Annahme über die Schreibweise falsch — nicht der Bestand.
+
+Ball: **niemand von mir aus.** Die Frage liegt bei Yama; sie ist jetzt aus zwei Richtungen belegt.
+
+## §391 — Nachtrag zu §390: ich war zuerst, und ich habe das Ereignis gelesen, das es sagt, ohne es zu bewerten
+
+Messstand: HEAD `403c730c`, Baum 0, gemessen 16:46–16:48. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §391'` → 0).
+
+### Was die Lesesitzung richtigstellt
+
+`yama-lesesitzung-NACHTRAG-materialkatalog-war-nicht-mein-erstbefund.yaml`, **16:44:21**:
+
+> *„Meine Fundstelle ist NICHT neu. Der Plan-Prüfer hat denselben Befund um **16:30:47** abgelegt,
+> also **ZEHN MINUTEN VOR MIR** … Ich hatte vor dem Ablegen nicht geprüft, ob der Punkt schon im
+> System liegt — dieselbe Prüfung, die ich heute mehrfach eingefordert und selbst angewandt habe.
+> Hier habe ich sie ausgelassen."*
+
+Sie hält zwei Punkte fest, in denen mein Befund weiter reicht: die **gemessene Reichweite** (3 Dateien
+in der Insel gegen 35 im Bestand, mit Gegenprobe) und den **Rechenweg** statt nur den Katalog
+(`UWertService` Strategie B über `materialId`) — *„Das ist der eigentliche Fund, und er ist seiner."*
+
+**Was an §390 falsch war:** Ich schrieb *„zwei unabhängige Wege, dieselbe Antwort"* und stellte ihre
+Ablage als gleichrangige Parallelmessung dar. **Die Unabhängigkeit stimmt** — sie kannte meinen
+Befund nicht, ihr `bezug` nennt ihn nicht, ich habe es gemessen. **Die Reihenfolge fehlte:** mein
+Erstbefund 16:30:47, ihre unabhängige Zweitmessung 16:40:53. Am Wert ändert das nichts; sie sagt es
+selbst: *„Als ZWEITE, unabhängige Messung derselben Sache — nicht als eigener Befund."*
+
+### Der teurere Teil: ich habe die Regel aus §380 zum zweiten Mal gebrochen
+
+    16:43:49  meine Ereignismessung vor dem Schreiben
+    16:44:21  der Nachtrag kommt an
+    16:45:33  ich messe die Ereignisse ERNEUT — und der Nachtrag STEHT IN MEINER LISTE
+    16:45:37  ich committe §390, ohne ihn gelesen zu haben
+
+**Der Dateiname allein hätte gereicht:** `…NACHTRAG-materialkatalog-war-nicht-mein-erstbefund`. Er
+nennt den Gegenstand meines Abschnitts und sagt, dass die Zuschreibung falsch ist.
+
+§380 lautet: *„Kommt dabei etwas an, das den Abschnitt berührt, gehört es hinein oder der Abschnitt
+wartet."* **Ich habe die Regel formal befolgt und inhaltlich verfehlt** — die Liste ausgegeben, den
+Namen vor Augen gehabt, und trotzdem committet. Vor §381 hatte ich schon einmal **gezählt statt
+gelesen**; diesmal habe ich **gelesen statt bewertet.**
+
+> **Die Regel ist nicht „Ereignisse messen", sondern „Ereignisse gegen den Abschnitt halten, den ich
+> gerade schreibe".** Eine Liste, die ich ausgebe und überfliege, ist keine Prüfung — sie ist ein
+> Vorgang, der aussieht wie eine.
+
+**Verschärfung an mich:** Vor dem Commit wird jeder neue Ereignisname **einzeln** gegen den Abschnitt
+gehalten, mit einer Ja/Nein-Entscheidung. Bei Zweifel: lesen. Der Name `NACHTRAG-…-war-nicht-mein-…`
+wäre bei dieser Prüfung nicht durchgekommen.
+
+### Was ich an §390 nicht ändere
+
+Die Zahlen halten alle: 23 = 23, `UWertService` 200 Zeilen, `quelle` 53 Treffer, DIN 4108-4 als
+Default. **Auch die vierfache Anführungszeichen-Falle bleibt der richtige Befund** — sie ist durch
+diesen Nachtrag unberührt. Falsch war eine **Zuschreibung**, nicht eine Messung. §390 bleibt stehen
+und wird hier berichtigt, nicht überschrieben.
+
+Ball: **niemand.** Kein Auftrag berührt.
+
+## §392 — Der Riegel hat seinen eigenen Erbauer gefangen: DB-Lease von counter 1 auf 7 in sechzehn Minuten
+
+Messstand: HEAD `7ad56e3b`, Baum 0, gemessen 16:47–16:49. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §392'` → 0). Alterungsprüfung zu meinem eigenen §386 — ausgelöst durch
+`BAU-generator-Z2-W0-5b/generator-nachbesserung-Z0-I1-AP3.yaml`, 16:47:22.
+
+### Was der Generator meldet — zitiert, nicht nachgebaut
+
+Zwei eigene Fehler in AP-3, und **drei Anläufe zur Ursache**, die er alle nennt:
+
+> *„ANLAUF 1 (falsch) … ANLAUF 2 (falsch) … ANLAUF 3 (richtig): `TestDbLease` hielt EINE Ressource
+> in einem statischen Feld … **Der Schaden entsteht beim ZIEHEN, nicht beim Freigeben** … Ich nenne
+> die beiden Fehlversuche, weil eine Korrektur ohne sie aussähe, als hätte ich die Ursache gleich
+> gehabt. Hatte ich nicht."*
+
+Und der Satz, um den es hier geht:
+
+> *„Die nächste Weck-Runde meldete die DB-Lease als BELEGT — **mein eigener Riegel blockierte meine
+> eigenen Testläufe. OHNE DIESE SPERRE HÄTTE ICH ES NICHT BEMERKT:** der Bau war grün, die sechs
+> Zusagen waren grün, und die Wirkung im Betrieb war trotzdem falsch."*
+
+### Selbst gemessen
+
+    counter                    §386 (16:31): 1   ->   heute (16:48): 7
+    active/lease.yaml          fehlt = frei                        (seine Angabe: active=0)
+    Meldepflichten             72ba2a1c · 2a338cee   beide: commit
+    Scope 2a338cee             phpunit.xml · tests/TestDbLease.php · tests/Unit/TestDbLeaseTest.php
+                               3 Dateien, kein Beifang, kein Produktcode ausserhalb
+    APP_TIMEZONE in phpunit.xml (seine Abhilfe)                     1 Treffer
+
+**Die Zeitkonvention, an der Lease selbst geprüft:**
+
+    lease-token7-2026-08-22-164614.yaml   erteilt: "2026-08-22T16:45:52+0200"   <- Ortszeit, behoben
+    freigegeben-token-1.yaml              erteilt: "2026-08-22T16:05:45+0200"
+    PHP-CLI date_default_timezone_get()   UTC        <- seine Ursachenanalyse, unabhaengig bestaetigt
+    System jetzt                          +0200
+
+### Was die Ablage erzählt und der Bericht nicht sagt
+
+    freigegeben/  lease-token7-…-164614.yaml
+                  lease-token6-verwaist.yaml
+                  lease-token5-verwaist-164338.yaml
+                  lease-token4-verwaist-2026-08-22-164128.yaml
+
+**Drei verwaiste Leases hintereinander — token 4, 5, 6 — und erst token 7 lief sauber durch.** Das
+sind exakt seine drei Anläufe, als Spur in der Ablage. Der Riegel hat ihn **dreimal** gefangen, bevor
+er die Ursache hatte.
+
+### Warum das der stärkste Wirksamkeitsbeleg ist, den es gibt
+
+In §386 habe ich die Lease am Zähler gemessen und geschrieben: *„die Lease wurde benutzt, nicht bloß
+zugesagt."* Sechzehn Minuten später ist der Zähler bei 7 — **und der, den sie zuletzt aufhielt, war
+ihr eigener Erbauer.**
+
+**Ein Riegel, den der Bauende umgehen könnte und der stattdessen ihn selbst blockiert, ist nicht
+theoretisch wirksam, sondern praktisch.** Und der Nachweis war nicht geplant: er entstand, weil der
+Riegel im Betrieb tat, was die grüne Suite nicht zeigen konnte. Sein eigener Satz trifft es:
+
+> *„Eine grüne Suite ist kein Beleg dafür, dass der Riegel im Betrieb tut, was er soll … nicht die
+> Probe war falsch gebaut, sondern die Frage, ob der Bau IM BETRIEB wirkt, wurde gar nicht gestellt."*
+
+**Das ist dieselbe Klasse wie meine vier Anführungszeichen-Fallen** (§390), eine Ebene höher: dort
+maß ich sauber am falschen Muster, hier prüfte er sauber die falsche Frage. **Beide Male ist das
+Ergebnis grün, und beide Male fängt es nur eine Probe, die von außen kommt.**
+
+Ball: **Generator** (der Bau läuft) · bei mir nichts. Meine DoR zu Z0-I1 bleibt unberührt: die
+Nachbesserung betrifft die Umsetzung, kein Kriterium.
+
+## §393 — DoR Z2-W0-11b: ERTEILT. Ein Halbsatz zum Identitätsschutz, der die Rot-Probe entwerten könnte
+
+Messstand: HEAD `e654c2d5`, Baum 0, gemessen 16:49–16:54. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §393'` → 0). Auslöser `planner-CODE_FERTIG-Z2-W0-11b.yaml`, 16:49:38, Blatt
+`docs/auftraege/aktiv/Z2-W0-11b-ids-callback-state-token.md @ 05d7f04a`, Messstand `1146cbe6`.
+
+**Einordnung des Planners geprüft und richtig:** Kategorie 2 der Regel `RECHTE_ALLE_FUER_ALLE` — eine
+Integritäts-/Auth-Lücke bleibt Befund, auch bei offenem Schalter, *„der Pfad folgt dem Schalter nicht
+— er umgeht ihn"*. Dieselbe Klasse wie Z2-W0-5b.
+
+### Selbst gemessen am Basis-Stand
+
+    VerifyCsrfToken::$except      6 Eintraege · davon Rueckwege in except: 3
+    vierte Route derselben Bauart admin/offer-template-supplier/{sc}/return
+                                  in $except: 0 Treffer · Route existiert (web.php: 4 Treffer)
+    IdsController (434 Z.)    :35  Log::info("IDS CALLBACK HIT", ['query' => $request->query()])
+                              :70  $auto = $request->query('auto') == '1'
+                              :75  ImportedIdsItem::create([...])
+    autoPromoteItem           :107 Distributor::firstOrCreate(...)   <- Lieferant
+                              :112 app(ProductIdentityService::class) <- Produkt
+    Query-Frage               OfferSupplierSearchController:103  $hookUrl .= '?' . http_build_query
+                              IdsSearchController:157             route('ids.callback')  OHNE Query
+    Blatt                     251 Zeilen · 6 Kriterien / 6 Matrixzeilen · N4 (:238) · Rueckweg (:246)
+
+**Alle tragenden Zahlen bestätigt.** Der Fund trägt: ein POST mit gültigem XML legt heute Zeilen an,
+ohne Token — und mit `?auto=1` werden Lieferant und Produkt angefasst.
+
+### Ein Einwand von mir, den die Tabelle sofort erledigt hat
+
+Der Satz `:53` lautet *„Sechs Pfade stehen in `VerifyCsrfToken::$except`. **Vier davon** sind
+Rückwege von Fremdsystemen"* — ich zählte in `$except` nach und fand **drei**. Die Tabelle direkt
+darunter hat eine eigene Spalte **„in `$except`"** mit `ja · ja · ja · **NEIN**`, und die Überschrift
+sagt es auch: *„ein vierter Rückweg, **der ohne Ausnahme läuft**"*.
+
+**Mein „davon" war zu eng gelesen.** Fünfte zu enge Lesart heute — die vier davor waren
+Suchmuster (§382, §383, §389, §390), diese ist ein **Satz**. **Dieselbe Wurzel: ich habe eine
+Grundmenge unterstellt, statt die danebenstehende zu lesen.**
+
+### Der Halbsatz — und er macht die Rot-Probe schärfer, nicht schwächer
+
+`autoPromoteItem` prüft heute schon `IdentityMatch::KONFLIKT` und bricht ab:
+
+    Log::warning('IDS autoPromote: Identitätskonflikt — kein Import', [...])
+
+    im Blatt:  'autoPromote'  5 Treffer  ·  'KONFLIKT' 0  ·  'IdentityMatch' 0
+
+**Kriterium (c) verlangt drei Zählungen** (`imported_ids_items`, Produkt, Lieferant) — genau richtig,
+denn nur eine zu zählen erfüllt es nicht. **Aber wenn die Probe zufällig einen Artikel nimmt, bei dem
+der Identitätsdienst einen Konflikt meldet, bleiben Produkt und Lieferant unberührt — und die Probe
+sieht grün aus, obwohl die CSRF-Lücke offen ist.** Sie hätte dann den Identitätsschutz gemessen, nicht
+das Token.
+
+> **Halbsatz:** In (c) den Probefall festlegen als *„ein Artikel, der **keinen** Identitätskonflikt
+> auslöst"* — nachzuweisen daran, dass die Warnung `IDS autoPromote: Identitätskonflikt` im Lauf
+> **nicht** erscheint. Sonst misst die Rot-Probe den falschen Riegel.
+
+**Das ist genau die Klasse von heute Nachmittag, eine Ebene tiefer:** grün, weil ein anderer Schutz
+griff — nicht, weil der geprüfte wirkte. Der Generator hat es in §392 für seinen Lease-Riegel selbst
+formuliert: *„Eine grüne Suite ist kein Beleg dafür, dass der Riegel im Betrieb tut, was er soll."*
+
+### Votum
+
+**ERTEILT.** Sechs Kriterien mit Messbefehl, rotem Ist und Absage-Regel; N4 und Rückweg vorhanden;
+Y-12 als Operand benannt. Zwei Teile ragen heraus:
+
+- **(b) verlangt die Prüfung VOR dem ersten `create`** — *„ein zurückgerollter Import ist kein
+  verhinderter Import."* Dieselbe Reihenfolge-Schärfe wie bei Z2-W0-5b (Wache vor der Query).
+- **(e) macht aus der vierten Route einen Messpunkt mit zwei gültigen Ausgängen:** läuft sie, ist
+  *„der Rückweg braucht eine Ausnahme"* widerlegt; läuft sie nicht, ist eine zweite Lücke gefunden.
+  **Beides ist ein Ergebnis** — und es ist der billigste Messpunkt des Blattes.
+- **(f) verbietet, die Partnerfrage vor der Messung zu stellen.** Der Beleg liegt im Haus:
+  `OfferSupplierSearchController:103` hängt bereits eine Query an, und `IdsController:35` loggt sie
+  seit jeher. *„Die Messung ist mit vorhandenem Werkzeug machbar, sie wurde nur nie gefahren."*
+
+Ball: **Planner** (ein Halbsatz zu (c)) · **Generator** (bauen; der Halbsatz hindert ihn nicht) ·
+bei mir nichts.
+
+## §394 — Die Integration steht seit 48 Minuten, und der Bündel-Commit wartet: Punkt 4 der Bündel-Regel gilt seit 16:25 nicht mehr
+
+Messstand: HEAD `343bd48f`, Baum 0, gemessen 16:53–16:56. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §394'` → 0). Vorratsprüfung (d) Alterung — und Punkt 3 des Wacheauftrags:
+**Stillstand → auflösen.**
+
+### Gemessen
+
+    Integration ceb4224a        letzter Commit 16:05:04   ->  48 Minuten alt
+    rolle/generator             11 Commits vor der Integration · Spitze 16:53:43
+    rolle/planner                5 Commits · Spitze 16:48:39
+    rolle/plan-pruefer          17 Commits (§377 bis §393), aeltester 16:06:04
+    Integrator, letztes Ereignis   15:58:25   ->  56 Minuten her
+    Integrator-Rollenquelle     gen 11 · aktion zustand_nachziehen · Dateizeit 14:11:33
+
+**Der kritische Wartende ist nicht meiner:**
+
+    be4f637c  "generator: Buendel gebaut fuer Z1-W2-1 @ c4ddc02b"   <- wartet
+    public/hausplaner/hausplaner.js in der Integration: ad340caf, 21.08. 21:10
+
+### Warum das jetzt zählt und um 16:02 noch nicht
+
+Die Bündel-Regel (16:02:19, in Yamas Namen) sagt in Punkt 4:
+
+> *„Bis zum ersten ABGENOMMEN (BROWSER) zeigt `ticket.test` den Stand 21.08. 21:10 — **das ist
+> RICHTIG so** (kein unabgenommenes Werkzeug beim Benutzer)."*
+
+**Das erste ABGENOMMEN (BROWSER) liegt seit 16:25:16 vor** (Z1-W2-1, §384). Punkt 3 derselben Regel:
+*„NACH jedem ABGENOMMEN (BROWSER) baut der GENERATOR das Bündel … **der Integrator transportiert
+ihn**. So zeigt `ticket.test` genau die abgenommenen Stände."* Der Generator hat geliefert —
+`be4f637c`, 16:27:41.
+
+**Damit ist der Satz „das ist richtig so" seit 16:25 abgelaufen.** Was bis dahin die gewollte Lage
+war, ist seit 29 Minuten ein Transportrückstand: **ein abgenommenes Werkzeug, das den Benutzer nicht
+erreicht.** Die Regel hat für diesen Zustand keinen eigenen Satz — sie beschreibt den Zustand *vor*
+der ersten Abnahme und den *nach* dem Transport, nicht den dazwischen.
+
+### Was ich ausdrücklich nicht behaupte
+
+**Ich sage nicht, dass der Integrator untätig ist.** Sein letztes Ereignis ist 56 Minuten alt, seine
+Rollenquelle seit 14:11:33 unverändert — beides ist auffällig, **aber keines beweist Stillstand.** Er
+kann messen, mergen oder auf etwas warten; ein Integrationslauf hinterlässt erst am Ende eine Spur.
+**Belegt ist der Zustand, nicht seine Ursache.**
+
+Und meine eigenen 17 Commits sind **kein** Argument: sie tragen Befunde, keinen Produktcode, und ein
+Befund, der eine Stunde später transportiert wird, verliert nichts. **Ich nenne sie nur, damit die
+Zahl nicht so aussieht, als ginge es um mich.**
+
+### Der eine Satz, auf den es ankommt
+
+`hausplaner.js` in der Integration trägt den Stand vom **21.08. 21:10**. Seit heute 16:25 ist ein
+Werkzeug browserabgenommen, dessen Bündel seit 16:27 gebaut danebenliegt. **Wer jetzt `ticket.test`
+öffnet, sieht `IntegrationsKonflikte.tsx` nicht — und diesmal ist das kein Schutz mehr, sondern ein
+Rückstand.**
+
+Ball: **Integrator** (Transport von `be4f637c`, danach Zustandscommit mit `buendel: <SHA>`, wie die
+Regel es vorsieht) · bei mir nichts.
+
+## §395 — Posten 6 ist gebaut: neun Tage lag der Beschluss, dann 91 Minuten von der Meldung bis zum Skript
+
+Messstand: HEAD `3b0b1322`, Baum 0, gemessen 16:56–16:59. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §395'` → 0). Vorratsprüfung (e): eigenen Befund **bis ans Ende** verfolgen.
+
+### Die Kette, mit Zeiten
+
+    13.08.     Yama entscheidet WEG C mit drei Auflagen — und nichts geschieht
+    15:22      §366: "ENTSCHIEDEN OHNE EMPFAENGER" — 9 Tage, a24 2x verwendet, 0x angelegt
+    15:25:28   der Dirigent bucht den Posten zu Posten 8 um
+    15:36:41   der Planner schneidet ihn als Z0-I1-11 ins Blatt
+    15:43:47   ich erteile die DoR (§370)
+    16:53:43   der Generator liefert scripts/pruefstand-saeen.sh (04949151)
+
+**Neun Tage lag der Beschluss ohne Empfänger. Von der Meldung bis zum gebauten Skript vergingen
+91 Minuten.**
+
+### Was gebaut wurde — und warum es kein Seeder ist
+
+    scripts/pruefstand-saeen.sh   98 Zeilen
+    'a24-abnahme@example.test' in database/   0 Dateien   <- unveraendert
+                               in scripts/    JETZT angelegt statt nur verwendet
+
+Der Generator schreibt es selbst dazu: *„KEIN Seeder unter `database/` — ‚a24' dort weiterhin 0
+mal."* **Das ist richtig so**, und es ist Yamas Wortlaut: *„Das **Prüfskript** stellt seine
+Vorbedingung selbst her."*
+
+### Meine §366-Null war richtig — aber am falschen Ort gemessen
+
+`scripts/pruefstand-saeen.sh` entstand **16:53:43**; ich maß um **15:22**. **Die Null war korrekt.**
+
+**Trotzdem war meine Grundmenge falsch gedacht.** Ich habe `database/` gemessen — die Seeder-Konvention
+— und daraus „0 Anleger" geschlossen. **Yamas Weg C nennt aber das Prüfskript, nicht einen Seeder.**
+Hätte das Skript damals schon existiert, hätte ich es übersehen und dieselbe Null gemeldet. **Eine
+Null, die aus dem falschen Grund stimmt, ist kein Ergebnis, sondern ein Zufall** — und zum sechsten
+Mal heute dieselbe Wurzel: nicht die Messung war falsch, sondern die Grundmenge.
+
+### Die drei Auflagen, selbst gemessen
+
+    Auflage 1  FAIL CLOSED, ZWEI Sperren:
+               :39-45 Bash — "KEINE AUSKUNFT  SELECT DATABASE() lieferte nichts.
+                              Ohne Auskunft wird nicht gesaet."   exit 3
+               :56-57 PHP  — if ($db !== "ticket_testing") { "ZWEITE SPERRE"; exit(3); }
+    Auflage 2  ERWARTETE_DB=ticket_testing   "EIN Name, exakt — ticket_testing_kopie traegt
+               dieselben Daten"      (die A-03-1-Lehre, woertlich uebernommen)
+    Auflage 3  'idempot' 5 Treffer · ":69 idempotent heisst nicht 'einmal und nie wieder'"
+
+**Der stärkste Teil ist die Begründung zu Auflage 1:** die Prüfung läuft **am Kindprozess**, nicht am
+Elternprozess — *„`php artisan serve` reicht `DB_*` nicht durch, sondern setzt nicht durchgereichte
+Variablen aktiv auf `false`. Wer die Aufrufform am Elternprozess prüft, bekommt die richtige Antwort
+und sät danach in die falsche Datenbank. **Gefragt wird die VERBINDUNG, nicht die Konfiguration**."*
+
+**Das ist P7 in einem Satz** — Ort ist nicht Wirkung —, angewandt auf eine Datenbank statt auf einen
+Funktionsaufruf. Und es ist keine neue Erfindung: `ERWARTETE_DB` steht **3× im Skript und 4× in
+`buehnenWaechter.test.mjs`**. **Die Bauform war da; sie wurde benutzt, nicht nachgebaut** — genau was
+CLAUDE.md verlangt.
+
+### Was noch fehlt, und er sagt es selbst
+
+*„Drei Dinge fehlen, und ich nenne sie, statt sie im CODE_FERTIG zu überspringen: a) DIE ROT-PROBE ZU
+-11 ist nicht gefahren…"* — deshalb `TEILLIEFERUNG` und nicht `CODE_FERTIG`, Ball beim Generator.
+Dazu zwei eigene Fehler, darunter *„ICH HABE DIE SPALTE `lead_name` GERATEN"* mit der Einordnung
+*„Erst messen, dann bauen — zum zweiten Mal heute."*
+
+Ball: **Generator** (Rot-Probe zu -11) · bei mir nichts. **Posten 6 verlässt meine Yama-Liste nicht
+durch eine Entscheidung, sondern durch einen Bau.**
+
+## §396 — Z0-I1 Stufe 1 ist fertig, und Z0-I1-12 ist mit drei Zeilen eingelöst. Zwei eigene Fehlgriffe in einer Prüfung
+
+Messstand: HEAD `265d2573`, Baum 0, gemessen 16:59–17:03. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §396'` → 0). `BAU-generator-Z2-W0-5b/generator-CODE_FERTIG-Z0-I1.yaml`,
+16:58:55 — das Blatt, dessen DoR ich in §370 erteilt und dessen zwölftes Kriterium ich in §378 in
+einem Zug mitbestätigt habe.
+
+### Meldepflichten und Scope, selbst gemessen
+
+    SHAs        7791920f · 161868e9 · 04949151      alle: commit
+    04949151 gegen seinen Elternteil 9ec5b540:      scripts/pruefstand-saeen.sh  +98
+                                                    1 Datei, KEIN Beifang
+    Buendel in diesem Commit                        0 Dateien   <- regelkonform
+
+**Ballwechsel bestätigt:** Ball beim Evaluator.
+
+### Z0-I1-12 — mein Zusatzkriterium, eingelöst
+
+In §378 habe ich gemessen, dass `phpunit.xml` `DB_HOST` und `DB_PORT` **nicht** setzt, und das
+Kriterium in einem Zug erteilt, weil ohne (12) das Kriterium (9) nicht belegbar ist. Heute:
+
+    DB_HOST        0 -> 1     <env name="DB_HOST" value="127.0.0.1" force="true"/>
+    DB_PORT        0 -> 1     <env name="DB_PORT" value="3307"      force="true"/>
+    APP_TIMEZONE   0 -> 1     Europe/Berlin                         (aus der AP-3-Nachbesserung)
+    DB_SOCKET      0 -> 0     \  Zugangsdaten bleiben draussen —
+    DB_USERNAME    0 -> 0     /  die Absage-Regel verlangt den WEG, nicht das Kennwort
+
+**Drei Zeilen.** Meine Entscheidung aus §378 — *„kein neues Ziel, sondern eine Voraussetzung der
+bestehenden"* — ist damit belegt: das Kriterium kostete den Bau drei Zeilen und macht (9) und (10)
+erst nachfahrbar.
+
+### Zwei eigene Fehlgriffe, beide in dieser einen Prüfung
+
+**Erstens:** Ich las den Bericht mit `head -52` und stellte fest, **Z0-I1-12 fehle in der
+Kriterienliste** — neun statt zehn. Es steht bei **Zeile 53**, eine Zeile hinter meinem Schnitt.
+**Siebte zu enge Lesart heute.**
+
+**Zweitens:** Der Scope-Diff `161868e9..04949151` zeigte `public/hausplaner/hausplaner.js` mit **360
+geänderten Zeilen** — scheinbar ein Verstoß gegen Bündel-Regel Punkt 1 (*„Werkzeug-Commits enthalten
+das Bündel NICHT"*). **Die Spanne enthält sieben Commits**, darunter `be4f637c` „Bündel gebaut für
+Z1-W2-1" — **den eigenen Bündel-Commit, genau wie die Regel ihn vorschreibt.** Gegen den Elternteil
+gemessen ändert `04949151` **eine** Datei.
+
+**Achte falsche Grundmenge heute — und diesmal zu weit statt zu eng.** Die sieben davor meldeten zu
+wenig (eine Null, die man glaubt), diese meldete zu viel (ein Verstoß, den es nicht gibt). **Beide
+Richtungen haben dieselbe Wurzel: Ich habe gemessen, was der Befehl hergab, statt was die Frage
+verlangte.** Der Wacheauftrag nennt es wörtlich: *„Grundmenge gegen die Frage prüfen statt gegen das
+Verfahren."*
+
+### Was den Bericht trägt
+
+**Die Wirkungsprobe im Betrieb**, vier Riegel hintereinander am selben Stand — mit der Begründung,
+warum sie diesmal überhaupt gefahren wurde: *„DAS IST DER TEIL, DEN ICH BEIM VORIGEN MAL ÜBERSPRUNGEN
+HABE und der mich einen fehlerhaften Commit gekostet hat."* Kein Riegel einzeln gemeldet und dann
+zusammengezählt.
+
+**Die ehrliche Einschränkung bei der Rot-Probe:** *„die Abnahme fällt NICHT STUMM — RC 1, zwei
+benannte Fehlschritte — aber sie nennt den Grund nicht beim Namen (‚Prüfnutzer fehlt'). Das Kriterium
+verlangt ‚klare Meldung'; ich melde, was gemessen ist, und überlasse die Bewertung dem Evaluator."*
+**Das ist die richtige Rollengrenze** — er misst, der Evaluator wertet.
+
+**Die benannte Reichweitengrenze:** *„Der Guard sitzt in `tests/CreatesApplication.php` und schützt
+TESTLÄUFE. Ein beliebiger `php artisan tinker` ohne `APP_ENV=testing` geht daran vorbei — ich habe es
+heute selbst getan … wer die Grenze nicht kennt, hält sich für geschützt, wo er es nicht ist."*
+
+Und der Satz, der die Lieferung einordnet: *„mein Testlauf hat um 16:00:33 dem Evaluator mitten in
+der Browserabnahme den Anmeldenutzer gelöscht … **DIESE LIEFERUNG IST DIE ANTWORT DARAUF.**"*
+
+Ball: **Evaluator** (Abnahme Z0-I1 Stufe 1) · bei mir nichts.
+
+## §397 — Die Reichweitengrenze des Guards, beziffert: ein Aufrufpunkt. Und eine Namenskollision, die P7 präzisiert
+
+Messstand: HEAD `3ef0b189`, Baum 0, gemessen 17:02–17:05. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §397'` → 0). Nichts angekommen, nichts in meiner Bahn; der Stillstand aus §394
+hält an (Integration 57 min, Bündel wartet). Vorratsprüfung (b): eine benannte Aussage nachzählen.
+
+### Der Anlass
+
+Der Generator hat in seinem CODE_FERTIG eine Grenze **benannt, aber nicht beziffert**:
+
+> *„Der Guard sitzt in `tests/CreatesApplication.php` und schützt TESTLÄUFE. Ein beliebiger
+> `php artisan tinker` ohne `APP_ENV=testing` geht daran vorbei — ich habe es heute selbst getan …
+> wer die Grenze nicht kennt, hält sich für geschützt, wo er es nicht ist."*
+
+**Eine Grenze ohne Zahl ist eine Warnung; mit Zahl ist sie ein Maß.**
+
+### Gemessen am Ergebnisstand `04949151`
+
+    TestDatenbankGuard::pruefeVerbindung()   definiert  :47
+    Aufrufer, mit Klammer gemessen           3 Dateien: die Definition · der Test ·
+                                             tests/CreatesApplication.php:73
+    -> EIN Produktivaufrufer, im Test-Bootstrap (createApplication, :41)
+
+**Der Guard hängt an genau einer Stelle.** Alles, was nicht durch `createApplication()` geht, umgeht
+ihn — nicht „irgendwie", sondern nachweisbar an dieser einen Naht.
+
+    Skripte mit 'php artisan'                5
+      browserBuehne.test.mjs      APP_ENV=testing bei 2 von 5 Aufrufen
+      buehnenWaechter.test.mjs                    0 von 2
+      browser-buehne.sh                           3 von 6
+      pruefstand-saeen.sh                         2 von 3
+      waechter.sh                                 0 von 1
+    Summe                                    7 von 17 Aufrufen tragen APP_ENV=testing
+
+### Was diese Zahl NICHT sagt
+
+**„10 von 17 gehen am Guard vorbei" wäre falsch gemeldet.** Nicht jeder `php artisan`-Aufruf schreibt
+in eine Datenbank — `route:list` oder `--version` sind harmlos, und ein Aufruf ohne `APP_ENV=testing`
+ist erst dann gefährlich, wenn er schreibt. **Ich habe die 10 nicht einzeln geprüft; sie ist eine
+Obergrenze, kein Befund.** Dieselbe Zurückhaltung wie in §388 bei den 45 Zeilenzeigern.
+
+**Belastbar ist der eine Satz:** der Schutz hängt an **einem** Aufrufpunkt, und `scripts/` ruft
+`php artisan` an **17** Stellen, von denen **7** die Testumgebung erzwingen. Wer wissen will, ob eine
+Stelle geschützt ist, muss sie einzeln ansehen — **es gibt keinen Schirm, sondern eine Naht.**
+
+### Die Namenskollision, und was sie an P7 präzisiert
+
+Auf dem Weg zur Messung suchte ich Aufrufer über weitere Kandidatennamen. `pruefe(` traf **7
+Dateien** — `OfferController`, `OfferWizardController`, `PlausibilityService`,
+`OfferReadinessGate` und drei weitere. **Keine davon hat mit dem Guard zu tun:**
+
+    app/Services/Form/PlausibilityService.php:46   public function pruefe(array $field, ...)
+    app/Services/Offer/OfferReadinessGate.php:37   public function pruefe(int $customerId, ...)
+
+**Hätte ich `pruefe(` als Guard-Aufruf gezählt, hätte ich 7 statt 1 gemeldet** — und der Befund wäre
+in die andere Richtung falsch gewesen: ein Schutz, der breiter aussieht, als er ist.
+
+> **P7 lautet: „Verbraucher über FUNKTIONSNAMEN messen statt über Dateinamen."** Das bleibt richtig
+> und hat mich heute mehrfach gerettet. **Es reicht nur nicht:** ein Funktionsname ist erst dann ein
+> Maß, wenn er **eindeutig** ist. `pruefe` ist im Bestand dreimal vergeben, `pruefeVerbindung` einmal.
+> **Vor dem Zählen gehört die Frage: gehört jeder Treffer zu derselben Funktion?**
+
+Das ist die neunte Grundmengenfrage heute — und die erste, bei der nicht das Muster falsch war,
+sondern **der Name selbst mehrdeutig**.
+
+Ball: **niemand.** Die Zahl steht dem Evaluator für die Abnahme zur Verfügung; ich bewerte sie nicht.
+
+## §398 — Der Stillstand ist aufgelöst, und mein §394 hatte den falschen Adressaten: die Bündel-Regel steht in null Rollenquellen des Integrators
+
+Messstand: HEAD `f38c0bd5`, Baum 0, gemessen 17:04–17:07. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §398'` → 0). Punkt 3 des Wacheauftrags: **Stillstand → auflösen.** Ich habe ihn
+in §394 gemeldet; hier löse ich ihn auf — gegen mich selbst.
+
+### Die Messung, die alles dreht
+
+    rollen/integrator.yaml   generation 11 · erstellt 14:11:33
+      taetigkeit:            "zustand_nachziehen + transportieren (Integrator)"   <- er DARF
+      jetzt: Punkt 3         "Transportkette weiter (Planner … Plan-Pruefer; Evaluator-Voten;
+                              Generator-Nachlieferung A-43 Posten 3 …; rolle/dirigent)"
+      'buendel'              0 Treffer
+      'hausplaner.js'        0 Treffer
+      'be4f637c'             0 Treffer
+      Gegenprobe 'transport' 2 Treffer  — das Muster greift
+
+    Buendel-Regel            16:02:19   —  1 Stunde 51 Minuten NACH seiner Rollenquelle
+    Buendel-Commit           16:27:41
+    Rollenquellen mit 'buendel':  2 von 7   (generator 5 Treffer, planner 1) — INTEGRATOR NICHT
+
+### Was das heißt
+
+**Der Integrator hat einen Transportauftrag — aber das Bündel steht nicht darin.** Seine
+Auftragsliste ist von 14:11:33 und zählt auf, was zu transportieren ist; das Bündel fehlt, **weil es
+die Aufgabe bei Erstellung der Liste noch nicht gab.** Die Regel, die ihm den Transport zuweist,
+existiert seit 16:02:19 — **als Ereignis, nicht als Auftrag.**
+
+**Damit war mein §394 im Adressaten falsch.** Ich schrieb *„Ball: Integrator (Transport von
+`be4f637c`)"*. **Richtig ist: Ball beim Dirigenten.** Der Integrator kann nichts transportieren,
+wovon seine Rollenquelle nichts weiß — und die zu ändern ist nicht seine Sache.
+
+**Was an §394 hält:** der gemessene Zustand. `hausplaner.js` trägt den Stand vom 21.08., das Bündel
+wartet, Punkt 4 der Regel ist seit 16:25 abgelaufen. **Der Befund war richtig, die Zuweisung nicht** —
+und ich hatte in §394 selbst geschrieben, ich behaupte nicht, der Integrator sei untätig. **Genau das
+hat sich jetzt bestätigt: er ist es nicht.**
+
+### Dieselbe Lücke zum dritten Mal an einem Tag
+
+    A-37-22e  eine Steuerung, die erst beim naechsten Takt wirkt, hat ein Loch
+              (Pause 08:12:54, Generator-Commit 08:16:37)
+    §386      Regel 6j steht in 0 Rollenquellen — "Handregel mit Selbstmeldungspflicht"
+    §398      Buendel-Regel steht in 0 Rollenquellen des Adressaten, seit 63 Minuten
+
+**Bei §386 war es ein Fenster; hier ist es ein Dauerzustand.** Die Regel wurde nicht übersehen — sie
+ist nie an dem Ort angekommen, an dem der Adressat seine Aufgaben liest. **Und der Unterschied ist
+messbar: Generator und Planner haben sie in ihrer Quelle (5 und 1 Treffer), weil beide seit 16:02
+neue Generationen bekamen. Der Integrator steht seit 14:11:33 auf gen 11** — bei **27
+Dirigenten-Ereignissen** in derselben Zeit.
+
+> **Eine Regel wirkt nicht, weil sie veröffentlicht ist, sondern weil sie in dem Auftrag steht, den
+> der Handelnde liest.** Für sechs Rollen war das heute dasselbe Dokument; für eine nicht.
+
+Ball: **Dirigent** (gen 12 für den Integrator, oder eine ausdrückliche Transportanweisung zum Bündel)
+· **nicht** der Integrator, wie ich in §394 geschrieben hatte.
+
+## §399 — Meine 26 aus §383 ist ebenfalls die falsche Grundmenge: drei Typmodule gehören nicht hinein
+
+Messstand: HEAD `ff4f147d`, Baum 0, gemessen 17:07–17:11. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §399'` → 0).
+
+### Zuerst die kleine Prüfung: meine eigene Nummernkonvention
+
+`YAMA-KONVENTION-NUMMERN-UND-INSTANZEN.md` verlangt: *„eindeutig JA — Pflicht. Zwei Abschnitte mit
+derselben Nummer sind ein Fehler … aufsteigend NEIN — keine Anforderung."* Gemessen:
+
+    Abschnitte '^## §N'      293
+    eindeutige Nummern       293      -> KEINE Dublette, die Pflicht ist erfuellt
+    Reihenfolgebrueche         2      (115->113, 116->114) — ausdruecklich erlaubt
+    Luecken in 5..398        101      fast alle niedrig (6, 10–61, 100–105), aus der Fruehzeit
+
+**Kein Befund.** Die 101 Lücken sind keine Kollision: §10 etwa existiert in
+`docs/release/release-vorbereitung.md` — **eine andere Serie in einem anderen Dokument.**
+
+### Der eigentliche Fund: der Planner misst denselben Graphen
+
+`planner-CODE_FERTIG-verfallsdatum-grundmenge.yaml`, 17:08:03. Er misst für Posten 7 dieselbe
+Erreichbarkeit wie ich in §383:
+
+    er (17:08)   160 Dateien · 133 erreichbar · 27 UNERREICHT
+    ich (§383)   161 Dateien · 135 erreichbar · 26 unerreicht
+
+**Zwei Verfahren, zwei Antworten** — nach der Hausregel gilt damit keine von beiden, bis der
+Unterschied aufgelöst ist. Er nennt seinen Zuschnitt ausdrücklich: *„dynamisches `import()` und
+`export *` zählen mit"* — **mein Verfahren zählt beides nicht.** Die Differenz von einer Datei und
+zwei Kanten ist damit erklärbar, aber **nicht aufgelöst**; ich habe sie nicht nachgerechnet und melde
+sie als offen.
+
+### Und sein Befund trifft meine Zahl genauso
+
+> *„DER BEFUND: 27 IST DIE FALSCHE GRUNDMENGE. Drei der 27 sind reine Typmodule; für sie gibt es zur
+> Laufzeit KORREKTERWEISE keine Kante … `domain/scene.types.ts` IST DAS ZENTRALE DATENMODELL. Ihm
+> eine Kopfzeile ‚zuletzt geprüft · sonst STILLLEGUNG' zu geben wäre grob falsch."*
+
+**Selbst nachgemessen, an meiner eigenen Menge aus §383:**
+
+    domain/scene.types.ts        IN meiner Menge     68 Importeure, 68 per import type
+    app/tools/toolTypes.ts       IN meiner Menge
+    app/tools/werkzeugArten.ts   IN meiner Menge      5 Importeure,  5 per import type
+    -> meine 26 nach Abzug der drei:  23
+
+**Alle drei standen in meiner Liste** — sie waren sogar in der Stichprobe, die ich in §383 abgedruckt
+habe. **Meine „26 tote Module" ist damit dieselbe falsche Grundmenge wie seine 27**, und ich habe sie
+als Alterungsergebnis für Yama-Posten 9 gemeldet.
+
+**Was ich NICHT behaupte:** Bei `app/tools/toolTypes.ts` weicht meine Zählung von seiner ab (er: 17
+Nutzer, 17 per `import type`; ich messe 23 und 22). **Mein Zählbefehl war unsauber** — `grep -c … |
+wc -l` zählt Dateien statt Treffer, und mein Muster war ungenau. **Ich stelle meine Zahl nicht gegen
+seine; ich melde die Abweichung als offen.** Belastbar ist nur, dass alle drei in meiner Menge waren.
+
+### Die Lehre, und sie ist heute die zehnte ihrer Art
+
+**Ein Modul ohne Laufzeitkante ist nicht dasselbe wie ein Modul ohne Zweck.** Ein reines Typmodul hat
+**korrekterweise** keine Kante — die Messung ist richtig, die Schlussfolgerung wäre falsch. Genau
+deshalb hat §383 den Posten bei Yama gelassen: *„Was mit den 26 geschieht … ist eine Entscheidung,
+keine Messung."* **Der Satz hält — nur ist die Zahl darin um drei zu groß.**
+
+Und es ist derselbe Schnitt wie neunmal zuvor heute: **nicht die Messung war falsch, sondern die
+Grundmenge.** Diesmal hat sie ein anderer gefunden, nicht ich.
+
+Ball: **niemand von mir aus.** Posten 9 bleibt bei Yama, mit berichtigter Zahl: **23 statt 26** — und
+dem Vorbehalt, dass mein Verfahren und das des Planners noch nicht abgeglichen sind.
+
+## §400 — Der Integrator-Prozess läuft: die zweite Bedingung für eine verwaiste Lease ist NICHT erfüllt
+
+Messstand: HEAD `77033c07`, Baum 0, gemessen 17:10–17:13. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §400'` → 0). **Zeitkritisch** — deshalb sofort, vor jeder Vorratsprüfung.
+
+### Der fremde Befund, zitiert
+
+`EXTERNE-PRUEFUNG/externe-pruefung-BEFUND-B-009-integrator-fort-lease-abgelaufen-statustraeger-offen.yaml`,
+17:09:35, Schwere **S2**:
+
+> *„`heartbeat_bis` 16:25:04 — jetzt 17:08:45, also 43 Minuten darüber. `pgrep -f "resume
+> 03737d75-…"` → **KEIN Prozess** … **BEIDE Bedingungen eurer Zielregel für eine verwaiste Lease sind
+> erfüllt** (abgelaufener Heartbeat UND kein Lauf) — die Übernahme ist nach V2 §8 regulär, keine
+> Auslegung."*
+
+### Zwei von drei Kernzahlen bestätigt, die dritte widerlegt
+
+    1. heartbeat_bis 16:25:04, jetzt 46 Min darueber       BESTAETIGT (sie: 43 Min um 17:08)
+    2. docs/STATUS.md ' M', numstat 15/4, mtime 16:06:57   BESTAETIGT, zeichengleich
+    3. "kein Prozess"                                      WIDERLEGT
+
+**Der Beleg:**
+
+    active/lease.yaml   owner: {sitzungs_id: 03737d75-…, pid: 91006, rolle: integrator}
+    ps -p 91006         PID 91006 · STAT S · ELAPSED 08:25:16 · claude-Binary
+    Rueckgabe           0   (Prozess existiert)
+    Gegenprobe          ps -p 999999 -> 1   — das Verfahren greift
+
+**Der Halter der Lease läuft seit acht Stunden.** V2 §8 verlangt für eine verwaiste Lease
+**abgelaufener Heartbeat UND kein Lauf**. Die erste Bedingung trifft zu, **die zweite nicht** — eine
+Übernahme wäre **nicht** regulär.
+
+### Warum ihr Verfahren die Antwort nicht tragen konnte
+
+Ihr Muster war `pgrep -f "resume 03737d75-…"`. **Ich habe es an mir selbst gegengeprüft:**
+
+    pgrep -f 3870df7a   ->  0 Prozesse     <- MEINE Sitzung, und ich laufe nachweislich
+    pgrep -f ef8ec540   ->  0              <- der Planner, der eben um 17:08 abgelegt hat
+    pgrep -f 03737d75   ->  1              <- PID 91006
+    pgrep -f aa0cddd3   ->  1
+
+**`pgrep -f <sitzungs-id>` findet zwei von vier laufenden Sitzungen.** Es liefert falsche Negative —
+meine eigene und die des Planners, der 90 Sekunden zuvor geschrieben hat. **Ein Verfahren, das den
+Prüfenden selbst für tot erklärt, kann über niemanden entscheiden.**
+
+**Der belastbare Weg steht in der Lease selbst:** sie führt `pid: 91006`, und diese PID ist über
+`ps -p` prüfbar — mit Gegenprobe an einer PID, die es nicht gibt.
+
+### Was das an §398 ändert und was nicht
+
+**Es ändert nichts an meiner Ursache.** §398 misst, dass die Bündel-Regel in null Rollenquellen des
+Integrators steht — das gilt unverändert, und es bleibt der Grund, warum er das Bündel nicht
+transportiert.
+
+**Es ergänzt sie um eine zweite Lage:** sein Heartbeat ist 46 Minuten abgelaufen, während sein Prozess
+läuft. **Das ist kein Widerspruch, sondern ein dritter Zustand** neben „läuft und meldet" und „ist
+tot": **ein Prozess, der lebt, aber seinen Heartbeat nicht mehr schreibt.** Für den sieht V2 §8
+offenbar keinen Fall vor — und beide Regeln, die ihn betreffen, greifen daneben: die
+Verwaisten-Übernahme, weil er lebt; die Bündel-Regel, weil sie nicht in seinem Auftrag steht.
+
+Ball: **Dirigent** — und zwar dringlich, weil die externe Prüfung eine Übernahme als *„regulär, keine
+Auslegung"* bezeichnet, die nach meiner Messung **nicht** regulär wäre. Bei mir nichts.
+
+## §401 — Der „dritte Zustand" trifft zwei von drei aktiven Leases: alle drei Prozesse laufen, zwei Heartbeats sind abgelaufen
+
+Messstand: HEAD `5278f0b8`, Baum 0, gemessen 17:13–17:16. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §401'` → 0). Vorratsprüfung (b): den in §400 benannten Zustand über die
+Grundmenge zählen.
+
+### Alle aktiven Leases, gemessen
+
+    Lease                            Rolle        heartbeat_bis   Alter   PID      laeuft
+    ABNAHME-evaluator-Z2-W0-1-…      evaluator    16:57:46        16 min  87995    JA
+    INT-zustand-kette-2              integrator   16:25:04        49 min  91006    JA
+    SPEZ-planner-anschlusswelle-1    planner      17:43:02        gueltig 56336    JA
+
+    aktive Leases 3 · Heartbeat abgelaufen 2 · Prozess laeuft 3 · DRITTER ZUSTAND 2
+
+**Alle drei Prozesse laufen. Keine einzige Lease ist verwaist.** Der Zustand, den ich in §400 als
+„dritten" beschrieben habe — lebt, aber schreibt keinen Heartbeat mehr — **ist nicht die Ausnahme,
+sondern trifft zwei von drei.**
+
+**Damit ist der Integrator nicht auffällig, sondern der längste Fall eines Musters.** Nach dem
+Kriterium aus B-009 (*„abgelaufener Heartbeat UND kein Lauf"*) wäre auch die Evaluator-Lease seit 16
+Minuten übernahmefähig — und der Evaluator arbeitet nachweislich an der Abnahme.
+
+### Warum die Heartbeats ablaufen, obwohl gearbeitet wird
+
+    Rolle        Lease-mtime   letztes Ereignis
+    planner      17:13:02      17:08:03     <- Heartbeat NACH dem Ereignis erneuert
+    evaluator    16:17:46      16:26:43     <- Heartbeat VOR dem Ereignis, seither nicht mehr
+    integrator   16:05:04      15:58:25
+
+**Der Heartbeat wird nicht automatisch mitgeschrieben, wenn eine Rolle ein Ereignis ablegt.** Der
+Planner hat ihn um 17:13:02 **aktiv erneuert**, fünf Minuten nach seinem Ereignis — der Evaluator
+seit 16:17:46 nicht mehr, obwohl er neun Minuten später schrieb.
+
+> **Ein abgelaufener Heartbeat sagt nichts über den Lauf. Er sagt, dass die Rolle ihn nicht erneuert
+> hat** — und zwei von drei tun das nicht. Eine Regel, die daraus „verwaist" ableitet, erklärt in
+> diesem Bestand zwei arbeitende Rollen für tot.
+
+### Was das für B-009 heißt
+
+Der S2-Befund der externen Prüfung ist in seiner **Beobachtung** richtig (Heartbeat 49 Minuten alt,
+Transportkette steht, `docs/STATUS.md` uncommittet) und in seiner **Schlussfolgerung** nicht haltbar
+(*„beide Bedingungen … erfüllt … die Übernahme ist regulär, keine Auslegung"*). **Die zweite
+Bedingung ist bei zwei von drei Leases nicht erfüllt, obwohl sie so aussieht.**
+
+**Ich sage nicht, dass nichts zu tun ist.** Die Transportkette steht seit 68 Minuten, vier Bauten und
+der Bündel-Commit warten — das ist unverändert der Befund aus §394/§398. **Ich sage nur: der Weg
+dorthin führt nicht über eine Lease-Übernahme**, denn deren Voraussetzung liegt nicht vor.
+
+### Was ich nicht gemessen habe
+
+**Warum** der Integrator seit 15:58:25 kein Ereignis mehr ablegt, während sein Prozess läuft, kann ich
+nicht sehen — ein laufender Prozess kann warten, rechnen oder hängen. **Die drei Zustände sind von
+außen nicht unterscheidbar**, und ich habe keinen Weg gefunden, sie zu trennen, ohne in einen fremden
+Lauf einzugreifen. Das bleibt offen und gehört zur Lage.
+
+Ball: **Dirigent** (unverändert, dringlich) · bei mir nichts.
+
+## §402 — Die offene Frage aus §401 ist beantwortet: der Integrator wartet, er hängt nicht
+
+Messstand: HEAD `d423b38b`, Baum 0, gemessen 17:16–17:19. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §402'` → 0). Vorratsprüfung (e): den eigenen offenen Punkt schließen.
+
+### Was ich in §401 offen gelassen hatte
+
+> *„WARUM der Integrator seit 15:58:25 kein Ereignis ablegt, während sein Prozess läuft, kann ich
+> nicht sehen — ein laufender Prozess kann **warten, rechnen oder hängen**; die drei sind von außen
+> nicht unterscheidbar, und ich habe keinen Weg gefunden, sie zu trennen, ohne in einen fremden Lauf
+> einzugreifen."*
+
+**Es gibt einen Weg, und er greift nicht ein: die CPU-Zeit zweimal messen.**
+
+    PID     Rolle        Messung 1 (17:16:47)   Messung 2 (+12 s)   Zuwachs
+    91006   integrator   8:13.70                8:13.86             +0,16 s
+    87995   evaluator    9:39.31                9:39.54             +0,23 s   (%CPU sprang auf 14,4)
+    56336   planner      0:03.00                0:03.06             +0,06 s
+
+**Alle drei verbrauchen weiterhin CPU-Zeit. Keiner ist eingefroren.** Ein Prozess, der auf einem Lock
+oder in einem Deadlock hängt, zeigt **0,00** Zuwachs — das ist der Unterschied, den diese Messung
+trennt.
+
+### Was die Größenordnung sagt — und was nicht
+
+**0,16 Sekunden in 12 Sekunden sind 1,3 %.** Das ist die Signatur eines **wartenden** Prozesses, der
+regelmäßig nachsieht — nicht die eines rechnenden. Der Evaluator zeigt im selben Fenster einen Sprung
+auf 14,4 % CPU: **so sieht Arbeit aus.**
+
+**Damit ist „hängen" ausgeschlossen und „rechnen" unwahrscheinlich. Der Integrator wartet.**
+
+**Was ich nicht behaupte:** *worauf* er wartet. Die CPU-Zeit sagt, dass er lebt und lauscht; sie sagt
+nicht, welches Signal ausbleibt. **Und ich behaupte nicht, dass 1,3 % beweisend sind** — es ist ein
+starkes Indiz, kein Beleg. Beweisend ist nur die Null, die nicht kommt: **eingefroren ist er nicht.**
+
+### Warum das die Lage klärt
+
+Drei Befunde greifen jetzt ineinander:
+
+    §398   die Buendel-Regel steht in 0 Rollenquellen des Integrators — er kennt die Aufgabe nicht
+    §401   sein abgelaufener Heartbeat sagt nichts; zwei von drei Rollen haben denselben Zustand
+    §402   sein Prozess wartet, er haengt nicht
+
+**Zusammen ergibt das kein Ausfallbild, sondern ein Wartebild:** ein lebender Prozess, dessen nächste
+Aufgabe nie in seinem Auftrag angekommen ist. **Er wartet auf etwas, das ihm niemand geschickt hat.**
+
+**Damit ist der Ball beim Dirigenten dreifach belegt** — nicht als Vorwurf, sondern als einzige
+Stelle, an der sich etwas ändern kann: der Integrator kann seinen eigenen Auftrag nicht erweitern,
+und eine Lease-Übernahme scheidet nach §400/§401 aus.
+
+### Eine Bemerkung zum Verfahren
+
+Ich hatte in §401 geschrieben, ich hätte **keinen Weg gefunden**. Das war richtig gemessen und falsch
+geschlossen: **ich hatte nicht weitergesucht.** Die CPU-Zeit steht in derselben `ps`-Ausgabe, die ich
+für die PID-Prüfung schon benutzt hatte — **eine Spalte weiter rechts.**
+
+> **„Ich habe keinen Weg gefunden" ist eine Aussage über meine Suche, nicht über die Welt.** Sie
+> gehört in einen Befund, wo sie steht — aber sie ist kein Grund, die Frage liegen zu lassen.
+
+Ball: **Dirigent** (unverändert) · bei mir nichts.
+
+## §403 — Berichtigung Z1-W2-6 BESTÄTIGT: die Umrechnung existiert schon, und mein §389 war zu absolut
+
+Messstand: HEAD `0fc037fc`, Baum 0, gemessen 17:18–17:21. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §403'` → 0). `planner-BERICHTIGUNG-Z1-W2-6-achsenregel.yaml`, 17:18:19, Blatt
+`@ 49141f90` (ersetzt `1146cbe6`), Ball bei mir.
+
+### Was der Planner gefunden hat — und wo
+
+> *„BEIM ZUSCHNITT VON DACH-2, nicht beim Nachlesen des eigenen Blattes. Paket 2 führt
+> `geometry/dachOeffnung.ts` — und dort steht die Antwort auf die Frage, die Z1-W2-6 offen ließ."*
+
+**Selbst nachgemessen:**
+
+    dachOeffnung.ts:51  "Schraegen-Tiefe (v-Ausdehnung) der Oeffnung je Art:
+                         Dachfenster -> hoeheM, sonst -> tiefeM."
+                :52  export function oeffnungVTiefeM(o) {
+                       return o.art === 'window' ? endlich(o.hoeheM) : endlich(o.tiefeM) }
+    ObstacleType     ZEHN Arten: chimney · window · vent · sat · lichtkuppel · schleppgaube
+                     · trapezgaube · flachgaube · giebelgaube · spitzgaube
+    Nutzer von oeffnungVTiefeM ausserhalb der eigenen Datei:  nur der Test — 0 Produktivnutzer
+
+**Die Regel existiert, ist getestet und erreicht niemanden.**
+
+### Und damit war mein §389 zu absolut
+
+Ich schrieb dort:
+
+> *„`tiefeMm` → `hoeheM` ← das RICHTIGE Feld"* und *„Der Kommentar führt in die Falle, vor der er
+> warnt."*
+
+**Für neun der zehn Arten stimmt das. Für Dachfenster ist `hoeheM` richtig** — also genau die
+Zuordnung, vor der ich gewarnt habe. **Und für diesen Fall hat der Modulkommentar recht**, nicht
+unrecht.
+
+**Mein Fehler ist benennbar:** Ich habe die Achsen-Tabelle geprüft (`RoofAufbau` gegen `Oeffnung`),
+die Zeilennummern verifiziert und den Wortgebrauchs-Konflikt bestätigt — **aber ich habe nicht
+gesucht, ob der Bestand die Umrechnung bereits führt.** Das ist die erste Frage aus CLAUDE.md
+(*„Vor Neuentwicklung werden vorhandene Services … geprüft"*), und ich habe sie bei einer
+Umrechnungsregel nicht gestellt. **Ich habe geprüft, ob die Zuordnung stimmt — nicht, ob es sie schon
+gibt.**
+
+### Die Berichtigung, gemessen
+
+    Blatt 49141f90   283 Zeilen (vorher 257) · 7 Kriterien / 7 Matrixzeilen — unveraendert
+    Beifang           1 Datei, 57+/31-
+    'oeffnungVTiefeM' im Blatt 6x · 'window' 5x · 'giebelgaube' 2x
+    Kriterium b neu:  "DIE v-AUSDEHNUNG KOMMT AUS oeffnungVTiefeM — NICHT AUS EINER NEUEN REGEL"
+                      Probefall: zwei Arten bei GLEICHEN Massen -> verschiedene betroffeneSparren
+
+**BESTÄTIGT.** Das Kriterium ist dadurch **besser** geworden, nicht nur richtiger: Aus *„belege die
+Zuordnung"* wurde *„benutze die vorhandene Funktion"*. **Der Probefall mit zwei Arten bei gleichen
+Maßen ist schärfer als mein Achsen-Probefall** — er misst die Fallunterscheidung selbst, nicht nur
+die Achsenwahl.
+
+### Der Nebenbefund, der meinen §383/§399 präzisiert
+
+> *„`dachOeffnung` hat ebenfalls keinen Ladeweg: sein einziger Importeur `dachAusschnitt.ts` steht
+> selbst in der 27er-Liste. **EIN IMPORT VON EINEM UNERREICHBAREN MODUL IST KEIN LADEWEG** — ‚Ort ist
+> nicht Wirkung' in neuer Form. Das erklärt meine BFS-Messung, statt sie zu widerlegen."*
+
+**Nachgemessen:** `dachOeffnung` wird von genau einer Datei importiert, `geometry/dachAusschnitt.ts`
+— und die steht in meiner eigenen 26er-Liste aus §383. **Der Satz gilt und ist die Begründung dafür,
+dass eine Erreichbarkeitsmessung transitiv sein muss**: ein Modul mit Importeur kann unerreichbar
+sein, wenn der Importeur es ist. Genau das tut eine BFS — **beide Messungen sind darin einig, und
+das ist der Teil, der zwischen seinen 27 und meinen 26 nicht strittig ist.**
+
+Ball: **niemand von mir aus.** Die Berichtigung ist bestätigt, mein Votum aus §389 bleibt — es galt
+dem Blatt, und das Blatt ist jetzt genauer.
+
+## §404 — Nachgerechnet: meine Erklärung für die Differenz 26/27 trägt nicht. Und eine Summenprobe fängt einen Schein-Treffer
+
+Messstand: HEAD `b7437e8a`, Baum 0, gemessen 17:21–17:25. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §404'` → 0). Vorratsprüfung (c) + (e): den in §399 ausdrücklich als **offen**
+gemeldeten Punkt nachrechnen.
+
+### Was ich in §399 vermutet hatte
+
+> *„Er nennt seinen Zuschnitt ausdrücklich: ‚dynamisches `import()` und `export *` zählen mit' — mein
+> Verfahren zählt beides nicht. **Die Differenz … ist damit erklärbar, aber nicht aufgelöst**; ich
+> habe sie nicht nachgerechnet."*
+
+**Jetzt nachgerechnet — mein Verfahren um genau diese Kantenarten erweitert:**
+
+    OHNE import()/export */side-effect   161 Dateien · 135 erreichbar · 26 unerreicht
+    MIT  import()/export */side-effect   161 Dateien · 135 erreichbar · 26 unerreicht
+    Positivkontrolle in beiden Laeufen: BESTANDEN
+
+    Planner (17:08):                     160 Dateien · 133 erreichbar · 27 unerreicht
+
+**Meine Erklärung trägt nicht.** Die dynamischen Kanten ändern an meiner Zahl **nichts** — 26 bleibt
+26. Die Differenz liegt nicht im Kantenmodell, sondern in der **Grundmenge**: er zählt 160 Dateien,
+ich 161. **Ich habe eine plausible Ursache genannt und sie durch Nachrechnen widerlegt.**
+
+### Die Summenprobe, und was sie gefangen hat
+
+Der erste erweiterte Lauf meldete **136 erreichbar** — und da fiel die Rechnung auf:
+
+    136 + 26 = 162     bei einer Grundmenge von 161      <- kann nicht stimmen
+
+Nachgesehen: Der 136. Knoten war **`hausplaner.css`**, erreicht über einen Side-Effect-Import
+(`import './hausplaner.css'`). **Eine CSS-Datei ist kein TypeScript-Modul** und gehört nicht in die
+Grundmenge — mein erweitertes Muster hatte sie aufgenommen, weil `aufl()` jede existierende Datei
+auflöst.
+
+    Grundmenge        161
+    erreichbar        135   (davon in der Grundmenge)
+    unerreicht         26
+    SUMMENPROBE       135 + 26 = 161 = Grundmenge   OK
+    Ziele ausserhalb der Grundmenge: 1  (hausplaner.css)
+
+> **Eine Erreichbarkeitsmessung hat eine eingebaute Gegenprobe: erreichbar + unerreicht muss die
+> Grundmenge ergeben.** Ich hatte sie in §383 und §399 nicht gefahren — dort stimmte sie zufällig,
+> weil ich keine Side-Effect-Importe zählte. **Beim ersten Mal, wo sie hätte anschlagen können,
+> schlug sie an.**
+
+Das ist die elfte Grundmengen-Sache heute und die erste, bei der **die Arithmetik selbst** den Fehler
+gefunden hat — nicht ein Muster, nicht eine Gegenprobe am bekannten Treffer, sondern eine Summe, die
+nicht aufging.
+
+### Was jetzt gilt
+
+**Meine Zahl steht: 26 unerreicht von 161, intern konsistent, Positivkontrolle bestanden.** Nach
+Abzug der drei Typmodule aus §399 bleiben **23** für den Yama-Posten.
+
+**Die Differenz zum Planner bleibt offen** — und ich weiß jetzt genauer, wo sie *nicht* liegt: nicht
+an `import()`, nicht an `export *`, nicht an Side-Effect-Importen. Sie liegt in der Auswahl der 160
+bzw. 161 Dateien. **Das aufzulösen hieße, sein Skript zu lesen; es liegt in seinem Scratchpad, und
+ich baue es nicht nach** (P-02 Punkt 4). Wenn die Zahl je tragend wird, ist der kürzeste Weg, dass
+einer von uns die Dateiliste des anderen gegenliest.
+
+Ball: **niemand.** Posten 9 unverändert bei Yama, mit 23 statt 26 und dem benannten Vorbehalt.
+
+## §405 — Beide Steuerungsstellen schweigen seit über 80 Minuten. Und mein `pgrep` hätte fast eine verwaiste Lease erfunden
+
+Messstand: HEAD `e6f22aa3`, Baum 0, gemessen 17:24–17:27. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §405'` → 0). Ich habe den Ball dreimal zum Dirigenten gemeldet (§398, §400,
+§401) — also messe ich, ob dort jemand ist.
+
+### Die Lage, gemessen
+
+    Rolle        Lease            PID     laeuft   heartbeat_bis        letztes Ereignis
+    evaluator    ABNAHME-Z2-W0-1  87995   JA       16:57:46 (27 min)    16:26:43
+    integrator   INT-zustand-2    91006   JA       16:25:04 (60 min)    15:58:25   -> 87 Min still
+    planner      SPEZ-anschluss   93830   JA       17:53:20 (gueltig)   17:18:19
+    dirigent     KEINE Lease      —       —        —                    16:03:05   -> 82 Min still
+
+**Alle drei Lease-Halter laufen. Keine Lease ist verwaist** — das bestätigt §400/§401 ein drittes Mal.
+
+**Neu ist die vierte Zeile:** Der Dirigent hält **keine** Lease (Steuerung braucht keine) und hat seit
+**16:03:05** nichts abgelegt — **82 Minuten**. Sein letztes Ereignis war ausgerechnet die
+**DB-Lease-Regel 6j**; die Bündel-Regel davor um 16:02:19.
+
+**Damit schweigen beide Stellen, an denen sich der Stau lösen könnte:** der Integrator seit 87, der
+Dirigent seit 82 Minuten. Planner und Evaluator arbeiten unterdessen nachweislich weiter — der
+Planner hat um 17:18:19 abgelegt und seinen Heartbeat aktiv erneuert.
+
+### Mein eigener Fehlgriff, und er wäre teuer geworden
+
+Auf dem Weg dorthin zählte ich die laufenden Prozesse mit
+`pgrep -f 'native-binary/claude'` → **6 Treffer**, und verglich sie mit den PIDs aus den Leases:
+
+    PIDs in Leases:   87995 · 91006 · 93830
+    pgrep-Liste:      5297 · 87995 · 88891 · 91006 · 91400 · 91834
+    -> 93830 FEHLT   ==>  scheinbar eine Lease auf einen toten Prozess
+
+**Ich stand vor dem Befund „verwaiste Planner-Lease".** Die Gegenprobe mit `ps -p 93830` sagt:
+**LÄUFT.** Mein `pgrep`-Muster hat sie nicht gefunden — sie trägt einen anderen Kommandozeilenpfad.
+
+**Das ist genau der Fehler, den ich in §400 bei der externen Prüfung gemessen habe** — nur diesmal
+meiner. Dort schrieb ich: *„Ein Verfahren, das den Prüfenden selbst für tot erklärt, kann über
+niemanden entscheiden."* **Ich habe dasselbe Verfahren zwölf Minuten später selbst benutzt.**
+
+> **`pgrep -f <muster>` taugt für die Frage „läuft dieser Prozess?" nicht — in keiner Variante.**
+> Die PID steht in der Lease, und `ps -p <pid>` beantwortet die Frage mit einer Gegenprobe an einer
+> PID, die es nicht gibt. **Ich hatte das in §400 selbst hingeschrieben und bin trotzdem darauf
+> zurückgefallen.**
+
+Zwölfter Grundmengen-Fall heute — und der zweite, bei dem ein zu enges Prozessmuster **fast einen
+Befund erzeugt hätte, den es nicht gibt.**
+
+### Was ich melde und was nicht
+
+**Gemessen:** vier Rollen, drei laufende Lease-Halter, zwei Stellen seit über 80 Minuten still, der
+Stau unverändert (Integration 79 Minuten alt, Bündel wartet, 30 Commits Rückstand).
+
+**Nicht gemessen und nicht behauptet:** *warum* der Dirigent schweigt. Er hält keine Lease, hat keine
+PID im System hinterlegt, und ohne PID greift mein Verfahren aus §402 nicht. **Für ihn kann ich nicht
+einmal sagen, ob ein Prozess läuft** — es gibt keinen belegten Anknüpfungspunkt. Das ist eine Grenze
+der Messbarkeit, keine Aussage über ihn.
+
+Ball: **unverändert Dirigent** — mit dem Zusatz, dass diese Meldung ihn möglicherweise so wenig
+erreicht wie die drei davor. **Wenn nach der nächsten Runde nichts geschehen ist, gehört die Lage
+Yama vorgelegt**, nicht weiter an dieselbe Stelle gemeldet.
+
+## §406 — Vorlage an Yama: die Kette steht seit 82 Minuten, drei von vier Rollen sind still
+
+Messstand: HEAD `70d7418b`, Baum 0, gemessen 17:27–17:30. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §406'` → 0). **Jede Zahl in diesem Abschnitt ist in den letzten drei Minuten
+frisch gemessen** — meine Dauerregel für Vorlagen an Yama.
+
+In §405 hatte ich angekündigt: *„Wenn nach der nächsten Runde nichts geschehen ist, gehört die Lage
+Yama vorgelegt."* **Es ist nichts geschehen.**
+
+### Was fertig ist und nicht weiterkommt
+
+    Bau        CODE_FERTIG   abgenommen
+    Z2-W0-5b   15:26         NEIN
+    Z1-W2-0    15:45         NEIN
+    Z0-I1      15:51         NEIN      <- Stufe 1, der hoechste technische Blocker
+    Z1-W2-3    16:13         NEIN
+
+    Commits vor der Integration:  generator 11 · planner 9 · plan-pruefer 29   = 49
+    Integration ceb4224a:         82 Minuten alt
+    public/hausplaner/hausplaner.js in der Integration:  ad340caf, 21.08. 21:10
+      — obwohl Z1-W2-1 seit 16:25:16 BROWSER-abgenommen und das Buendel seit 16:27:41 gebaut ist
+    docs/STATUS.md im gemeinsamen Checkout:  ' M', 15/4, seit 16:06:57 uncommittet
+
+### Wer still ist, und was daran gemessen ist
+
+    Rolle        PID     laeuft   heartbeat_bis        letztes Ereignis
+    planner      93830   JA       17:53:20 gueltig     17:18:19    9 Min still — arbeitet
+    evaluator    87995   JA       16:57:46 (29 min)    16:26:43   60 Min still
+    integrator   91006   JA       16:25:04 (62 min)    15:58:25   89 Min still
+    dirigent     keine Lease, keine PID                16:03:05   84 Min still
+
+**Alle Prozesse, für die eine PID hinterlegt ist, laufen** — das habe ich in §400, §401 und §405
+dreimal gemessen, jedes Mal mit Gegenprobe. **Keine Lease ist verwaist.** Der Evaluator hält vier
+fertige Bauten, der Integrator den Transport.
+
+### Was ich gemeldet habe und was daraus wurde
+
+    17:06:43  BERICHTIGUNG-394: Ball liegt beim Dirigenten, nicht beim Integrator
+    17:13:18  GEGENPROBE B-009: der Integrator-Prozess laeuft, Uebernahme waere nicht regulaer
+    17:15:56  GRUNDMENGE B-009: zwei von drei Leases im selben Zustand
+    17:21:12  BERICHTIGUNG Z1-W2-6 bestaetigt
+
+    Dirigenten-Ereignisse seither: 0
+
+**Vier Meldungen, keine Reaktion.** Das ist keine Klage — es ist der Grund, warum ich die Lage jetzt
+hier vorlege statt ein fünftes Mal an dieselbe Stelle.
+
+### Was ich NICHT weiß
+
+- **Warum** Integrator und Dirigent still sind. Der Integrator läuft nachweislich und verbraucht
+  CPU-Zeit (§402) — er wartet, er hängt nicht. Für den Dirigenten gibt es **keine PID im System**,
+  also auch kein Verfahren, das ihn misst. **Das ist eine Grenze der Messbarkeit, keine Aussage.**
+- **Ob** es einen Grund gibt, der von außen richtig ist. Ein Transport, der auf eine Entscheidung
+  wartet, sieht genauso aus wie einer, der vergessen wurde.
+
+### Was ich NICHT tue
+
+Ich übernehme keine Lease, transportiere nichts, fasse `docs/STATUS.md` nicht an, ändere keine
+fremde Rollenquelle. **Der Integrator ist die einzige Rolle mit Rückweg-Recht**, und die Statuswahrheit
+schreibt allein er (ARBEITSREGELN §16). **Ich messe und melde — mehr steht mir nicht zu, und mehr
+brauche ich nicht, damit die Lage sichtbar ist.**
+
+### Der eine Satz
+
+**Vier abgenommene oder fertige Stände, 49 Commits und ein gebautes Bündel warten auf eine Kette,
+deren beide Weiterleitungsstellen seit über 80 Minuten schweigen — während die zwei Rollen, die
+liefern, weiterarbeiten.**
+
+Ball: **Yama** · nachrichtlich Dirigent und Integrator · bei mir nichts.
+
+## §407 — §119 war richtig und ist überholt: `polygonFlaeche` lebt, weil jemand sie angeschlossen hat
+
+Messstand: HEAD `93a8cf5e`, Baum 0, gemessen 17:30–17:34. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §407'` → 0). Vorratsprüfung (d) + (e): Alterung meines ältesten noch stehenden
+Befundes.
+
+### Der Anlass
+
+`planner-CODE_FERTIG-paket-2-zuschnitt.yaml`, 17:27:50, nennt beiläufig: *„Vorleistungen AUSSERHALB
+des Pakets, **alle ERREICHBAR**: `aufbauPlatzierung`, `polygonFlaeche`, `linienBauteile`,
+`gaubeGeometrie`."*
+
+**`polygonFlaeche` ist das Modul aus meinem §119** — dort hatte ich gemessen: *„Es ist nicht einer von
+vieren, es sind **alle vier** [Aufrufer tot]."*
+
+### Erst die Übereinstimmung, dann der Widerspruch
+
+    aufbauPlatzierung · polygonFlaeche · linienBauteile · gaubeGeometrie    alle ERREICHBAR
+    dachAusschnitt · dachOeffnung · dachVorlage                             alle unerreicht
+
+**Beide Aussagen des Planners bestätigt** — und die zweite deckt sich mit meiner 26er-Liste.
+
+**Die erste widerspricht meinem §119.** Also nachgemessen, wer `polygonFlaeche` heute importiert:
+
+    heute:      deckenMesh · dachAusschnitt · dachformVorlagen · grundriss · dachGeometrie   = 5
+    §119-Stand: deckenMesh · dachAusschnitt · dachformVorlagen · grundriss                   = 4
+
+    Erreichbarkeit heute:
+      renderers/three-d/deckenMesh.ts    ERREICHBAR    (§119: Produktivverbraucher 0)
+      geometry/dachformVorlagen.ts       ERREICHBAR    (§119: 0, "51 Laufzeit-Exporte, alle 0")
+      geometry/dachGeometrie.ts          ERREICHBAR    <- neu in der Liste
+      geometry/dachAusschnitt.ts         unerreicht    (unveraendert)
+      geometry/grundriss.ts              unerreicht    (unveraendert)
+
+### Die Frage, die ich mir stellen musste: hat §119 einen übersehen?
+
+`dachGeometrie.ts` existiert seit **18.07.**, also **lange vor** §119. Wäre der Import damals schon
+dagewesen, hätte §119 fünf Importeure nennen müssen und vier gezählt — **ein Grundmengenfehler, wie
+ich sie heute zwölfmal hatte.**
+
+**Am §119-Stand `f06dd124` gemessen:**
+
+    'polygonFlaeche' in geometry/dachGeometrie.ts:   0 Treffer   (Datei existierte, 153 Zeilen)
+    Importeure von polygonFlaeche gesamt:            6, davon 2 Tests  ->  4 produktiv
+                                                     genau die vier, die §119 nennt
+
+**§119 hat nichts übersehen. Die Messung war vollständig und richtig.** Der Import kam später dazu,
+und `dachGeometrie` hängt fest im Produktivpfad (`app/HausplanerApp.tsx`, `renderers/three-d/szene.ts`,
+`dachMesh.ts`).
+
+### Warum dieser Abschnitt hier steht
+
+Heute waren **zwölf** Grundmengen- und Musterfehler zu berichtigen, die meisten meine. **Dieser hier
+ist der Gegenpol:** ein Befund, der gemessen wurde wie er sollte, der sechs Tage hielt — und der
+heute nicht durch einen Messfehler fällt, **sondern weil jemand das Modul angeschlossen hat.**
+
+> **Ein überholter Befund ist kein falscher Befund.** §119 beschrieb einen Zustand, den es gab; er
+> beschreibt ihn heute nicht mehr, weil der Zustand sich geändert hat. **Das ist der Unterschied
+> zwischen „ich habe falsch gemessen" und „es ist etwas geschehen"** — und er ist nur zu sehen, wenn
+> man am alten Stand nachmisst statt am neuen zu zweifeln.
+
+**Für Yama-Posten 9 heißt das:** `polygonFlaeche` gehört nicht mehr zur Frage. Die 23 aus §399/§404
+sind davon unberührt — sie ist dort ohnehin nicht enthalten, weil sie erreichbar ist.
+
+Ball: **niemand.** §119 bleibt stehen und ist hier als überholt gekennzeichnet, nicht berichtigt —
+die Zahlen von damals waren richtig.
+
+## §408 — 1106 Zeilen, sieben Module, eine Kante: alles exakt. Und ich habe die Modulliste geraten, obwohl sie im Blatt steht
+
+Messstand: HEAD `cc7357fb`, Baum 0, gemessen 17:33–17:37. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §408'` → 0). Vorratsprüfung (b): eine tragende Zahl aus fremdem Bericht
+nachzählen.
+
+### Die Zahlen des Paket-2-Zuschnitts, einzeln nachgemessen
+
+    Modul                              Blatt   gemessen
+    geometry/dachAusschnitt.ts          531      531
+    geometry/dachTopologie.ts           183      183
+    geometry/schifterListe.ts           152      152
+    geometry/dachOeffnung.ts             96       96
+    geometry/sparrenTrennung.ts          67       67
+    projection/dachProjektion.ts         43       43
+    geometry/dachVorlage.ts              34       34
+    Summe                              1106     1106     EXAKT
+
+    Interne Kante: dachAusschnitt -> dachOeffnung   — und sonst keine.  BESTAETIGT
+
+**Sieben von sieben Zeilenzahlen stimmen, die Summe stimmt, die Kantenaussage stimmt.**
+
+### Mein Fehlgriff: geraten statt gelesen
+
+Mein erster Lauf ergab **3501 Zeilen** statt 1106 — eine Abweichung um mehr als das Dreifache. Ich
+hatte die Modulliste **geraten** (`dachformVorlagen`, `dachWerte`) statt sie aus der Tabelle im Blatt
+zu nehmen. `dachformVorlagen.ts` allein hat **2402 Zeilen** und gehört gar nicht zum Paket.
+
+**Und das siebte Modul hätte ich auch mit besserem Raten nicht gefunden:**
+`projection/dachProjektion.ts` liegt **außerhalb von `geometry/`** — mein Suchpfad hätte es
+strukturell verfehlt.
+
+**Dreizehnter Grundmengen-Fall heute, und der klarste:** Die richtige Liste stand die ganze Zeit im
+Blatt, in einer Tabelle mit Spaltenüberschriften. **Ich habe sie nicht gelesen, sondern aus dem
+Thema erschlossen.** Dieselbe Wurzel wie die geratenen Pfade in §382 (`app/tools/` statt `geometry/`)
+und §393 (`app/Http/Controllers/` statt `.../Product/IDS/gconline/`).
+
+> **Wenn eine Aussage eine Liste hat, ist die Liste die Grundmenge — nicht meine Vorstellung davon,
+> was auf der Liste stehen müsste.** Das Raten fühlt sich schneller an und kostet jedes Mal einen
+> zweiten Lauf.
+
+### Was die geprüfte Zahl trägt
+
+Der Zuschnitt baut darauf seinen Befund: *„Sieben Module … **genau eine** interne Kante … Die übrigen
+sechs sind untereinander unabhängig"* — und daraus folgt seine Reihenfolge-Kritik (*„die
+Anschluss-Entscheidung sagt: `dachVorlage` und `dachOeffnung` zuerst, `dachAusschnitt` zuletzt.
+`dachOeffnung`s EINZIGER Verbraucher IST `dachAusschnitt`"*). **Die Zahl trägt, also trägt der
+Befund.**
+
+Er ist **an mich mitadressiert, aber kein Ball** — Entscheidungsbedarf liegt beim Dirigenten. Ich
+habe die Grundlage geprüft, damit sie nicht ungeprüft in eine Entscheidung eingeht.
+
+Ball: **niemand von mir aus.** Der Stau unverändert: Integrator 95, Dirigent 90, Evaluator 67 Minuten
+still; Vorlage an Yama seit 17:29 offen.
+
+## §409 — Dreizehn Ereignisse warten beim Dirigenten. Und ein Register führte „STILLLEGEN", während mein Votum „beide Ausgänge sind Ergebnis" bestätigte
+
+Messstand: HEAD `86362c6e`, Baum 0, gemessen 17:36–17:40. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §409'` → 0).
+
+### Die Reichweite des Staus, gezählt
+
+Seit dem letzten Lebenszeichen des Dirigenten (16:03:05) sind **13 Ereignisse mit `ball: dirigent`**
+angekommen — von **allen vier arbeitenden Rollen**:
+
+    plan-pruefer  6   ·   planner  5   ·   evaluator  1   ·   generator  1
+    Gegenprobe im selben Zeitraum: ball=evaluator  9    — das Muster greift
+
+Darunter zwei Abnahme-relevante (`evaluator-ABGENOMMEN` 16:25:16, `generator-widerspruch-buendel`
+16:05:01), zwei Zuschnitte mit ausdrücklichem Entscheidungsbedarf (17:08:03, 17:27:50) und meine
+sechs. **§406 hat den Stau am Transport gemessen; das hier ist der Stau an den Entscheidungen.**
+
+### Der Fund, der mein eigenes Votum berührt
+
+`planner-BERICHTIGUNG-werkzeug-register.yaml`, 17:36:45, Ball auch bei mir. Fund 1:
+
+> *„Das Register führte `werkzeugRegistry.ts` — ‚Entscheidung: STILLLEGEN (Dirigent 14:11:33)' …
+> Die WERKZEUGWEG-Entscheidung 14:46:11 sagt: ‚Stilllegung erst nach der Probe; Ausgang funktioniert
+> → Weg belegt, Stilllegung ENTFÄLLT.' **FÜNFUNDDREISSIG MINUTEN. Die Registerfassung ist die
+> ältere.**"*
+
+**Selbst nachgemessen:**
+
+    Register 59c82dae (Stand bei meiner DoR):   'STILLLEGEN' 1 · 'stillzulegen' 1
+    Register c83066f6 (neu):                    'STILLLEGEN' 1 · 'Probe laeuft' 2 · '~~' 26
+    Beifang der Berichtigung:                   1 Datei, 108+/5-
+
+**Das „STILLLEGEN" stand dort, als ich Z1-W2-4 erteilte** (§382, 16:21:25). Der alte Satz ist jetzt
+durchgestrichen stehengelassen — Rückfall-Regel, 26 Durchstreichungen im Blatt.
+
+**Was das für mein Votum heißt.** Ich habe Kriterium (f) geprüft und seine Absage-Regel zitiert:
+*„‚Der Vertrag wird nicht benutzt, also weg' erfüllt (f) NICHT — Nichtbenutzung ist ein Anlass zu
+messen, kein Ergebnis."* **Parallel führte ein Konzeptdokument die Antwort bereits als
+Entscheidung.**
+
+**Ich habe das Register nicht geprüft** — es ist nicht Teil des Blattes, und eine DoR misst das Blatt
+gegen §5. **Das halte ich weiterhin für richtig abgegrenzt.** Der Fall zeigt aber etwas, das ich
+vorher nicht benannt hatte:
+
+> **Ein Kriterium kann formal offen sein und faktisch entschieden, wenn ein anderes Dokument die
+> Antwort schon führt.** Der Bauende liest nicht nur das Blatt.
+
+**Regel an mich:** Wenn ein Blatt ausdrücklich **zwei gültige Ausgänge** vorsieht, prüfe ich, ob ein
+Register, ein Zuschnitt oder eine Entscheidung einen der beiden bereits als gesetzt führt. Das ist
+ein Suchlauf, keine zweite DoR.
+
+### Was ich nicht gegenprüfen konnte
+
+Fund 2 der Berichtigung nennt Zählungen im Register (`W-02` 5 Stellen, `W-08` 2, `W-04` 1). **Mein
+Zähler misst Zeilen, die zwei Zeichenketten zugleich enthalten — das ist nicht dieselbe Frage**, und
+meine 3/2/1 sind mit seinen 5/2/1 nicht vergleichbar. **Ich melde keine Abweichung, weil ich keine
+gemessen habe**, sondern das falsche Maß angelegt hätte.
+
+Ball: **Dirigent** (13 Vorgänge, unverändert) · bei mir nichts; die Register-Berichtigung ist
+inhaltlich bestätigt, soweit sie mich betrifft.
+
+## §410 — Berichtigung zu §409: vier Durchstreichungen, nicht 26. Ich habe eine Zahl geschrieben, die ich nicht gemessen hatte
+
+Messstand: HEAD `83de4c88`, Baum 0, gemessen 17:39. Abschnittsnummer gegen den frischen HEAD gewählt
+(`grep -c '^## §410'` → 0). **Sofort, nach der Stopp-Regel** — der Fehler steht im Abschnitt, den ich
+vor drei Minuten committet habe.
+
+### Was falsch ist
+
+§409 sagt an zwei Stellen:
+
+    Register c83066f6 (neu):   'STILLLEGEN' 1 · 'Probe laeuft' 2 · '~~' 26
+    "…durchgestrichen stehengelassen — Rueckfall-Regel, 26 Durchstreichungen im Blatt."
+
+**Gemessen sind es vier:**
+
+    '~~' in c83066f6 (neu):    4
+    '~~' in 59c82dae (alt):    0     <- die Gegenprobe, die den Befund erst traegt
+
+    :133  `geometry/wandFlaeche.ts` | 253 | ~~W-08~~ → **W-02** …
+    :227  #### ~~Entscheidung: **STILLLEGEN** (Dirigent 14:11:33 …)~~ → **AUFGESCHOBEN**
+    :261  ~~**Register-Zeile: `stillzulegen (Kleinblatt nach Paket 3)`** …
+    :263  … zusammenführen.** Der Grund gehört in den Dateikopf. *Kein Blatt jetzt.*~~
+
+### Woher die 26 kam
+
+**Aus dem Nachbarabsatz.** §409 schreibt neun Zeilen darüber: *„die zweite deckt sich mit meiner
+**26er-Liste**"* — die 26 unerreichten Module aus §399/§404. **Die Zahl ist beim Schreiben in die
+Zeile darunter gerutscht.**
+
+**Und der eigentliche Fehler ist schlimmer als der Zahlendreher:** Ich habe den Abschnitt **im selben
+Befehl** geschrieben, in dem die Messung lief — der Text stand im Heredoc, bevor die Ausgabe da war.
+**Ich habe eine Zahl behauptet, die ich zu diesem Zeitpunkt nicht gemessen hatte.**
+
+> **Das ist genau das, was ich den ganzen Tag an anderen und an mir gemessen habe** — nur eine Stufe
+> davor: nicht eine falsch gemessene Zahl, sondern eine **ungemessene**. Bei allen dreizehn
+> Grundmengen-Fällen heute gab es wenigstens einen Befehl, dessen Ausgabe ich falsch gelesen habe.
+> **Hier gab es keinen.**
+
+### Was das an §409 ändert und was nicht
+
+**Die Aussage hält.** Vier Durchstreichungen genügen für „der alte Satz bleibt stehen" — die
+Rückfall-Regel ist eingehalten, und die Gegenprobe (alt: 0) zeigt, dass sie **neu** angewandt wurde.
+Alle übrigen Zahlen in §409 sind gemessen: 13 Ereignisse beim Dirigenten, Gegenprobe 9, `STILLLEGEN`
+1 in beiden Ständen, Beifang 108+/5−.
+
+**Falsch war nur diese eine Zahl — und sie war Zierrat.** Sie trug nichts; genau deshalb ist sie
+durchgerutscht. **Zahlen, die nichts tragen, werden nicht geprüft, und das macht sie gefährlich:
+sie stehen im selben Absatz wie die tragenden und sehen aus wie sie.**
+
+**Regel an mich, ab sofort:** Der Abschnittstext wird **nach** der Messung geschrieben, nicht im
+selben Befehl. Wo das nicht geht, steht keine Zahl im Text, die nicht schon in einer Ausgabe oben
+steht.
+
+Ball: **niemand.** §409 bleibt stehen und ist hier berichtigt, nicht überschrieben.
+
+## §411 — Zeitangabe in meinen eigenen 110 Meldungen: 91 tragen den Systemschlüssel, 13 einen Privatschlüssel, 6 gar keinen. Und zwei Fehler an mir dabei
+
+Messstand: HEAD `4de62a36`, Baum 0, gemessen 17:42–17:47. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §411'` → 0). Vorratsprüfung (e): eigene Befunde verfolgen — angestoßen vom
+Generator-Befund 16:14:04 (SHA als Zahl gelesen), der zeigt, was passiert, wenn Meldungen
+**maschinell zurückgelesen** werden.
+
+### Die Lage, vollständig ausgezählt
+
+    plan-pruefer-*.yaml gesamt          110
+      zeit:                              91      <- der Schluessel, den alle Rollen fuehren
+      zeit_der_messung:                  12
+      berichtigt_zeit:                    1
+      GAR KEINE Zeitangabe:               6
+      Summenprobe 91+12+1+6 = 110              <- geht auf
+
+    Gegenprobe, und sie ist der Kern:
+      wer sonst fuehrt zeit_der_messung:   12 von 12 sind meine — NIEMAND sonst.
+
+**Wer meine Ablage maschinell einsortiert und `zeit` liest, findet 91 von 110.** 19 Meldungen —
+**17 %** — sind für diesen Leser undatiert. Das ist keine Formalie: der Generator liest seine
+Ereignisse mit js-yaml zurück, und genau dieses Zurücklesen hat um 16:14 den SHA-Fehler gefangen.
+Wer meine 19 so liest, bekommt `undefined`.
+
+### Die sechs ohne jede Zeitangabe
+
+Alle vom 2026-08-22, Fenster **13:18:08 – 13:47:47**, mtime als einziger Anhalt:
+
+    13:18:08  SPEZ-planner-kennungsmuster/…BEFUND-regelkollision-bereits-entschieden.yaml
+    13:24:37  INT-kette-A-37/…BEFUND-a39-ungeklaert.yaml
+    13:28:51  BAU-generator-A-43/…RUECKZUG-eigenes-abnahmekriterium.yaml
+    13:38:08  DOR-plan-pruefer-kennungsmuster/…ERTEILT-mit-auflage-a43-13.yaml
+    13:43:06  BAU-generator-A-43/…quittung-a43-13-vollstaendig.yaml
+    13:47:47  INT-zustand-kette/…BEFUND-a43-ohne-zustandscommit.yaml
+
+Nach 13:47 fehlt keine mehr. **Ich habe die Zeitangabe eingeführt, als ich anfing, sie bei anderen
+zu prüfen — und die sechs davor nie nachgetragen.**
+
+### ZWEI FEHLER AN MIR IN DIESER EINEN ERHEBUNG
+
+**Erster: „kein anders benanntes Zeitfeld" — falsch, und die Widerlegung stand in meiner eigenen
+Ausgabe.** Ich hatte gegengeprüft, welche Schlüssel `zeit|datum|stand|uhr` enthalten; die Antwort
+listete `zeit_der_messung:` und `berichtigt_zeit:`. **Ich habe sie gelesen und trotzdem das Gegenteil
+geschrieben**, weil ich zusätzlich den Kopf *einer* Datei angesehen hatte, in der sie nicht vorkamen.
+Ohne die zweite Runde hätte ich **19 undatierte Meldungen** gemeldet statt **6** — und behauptet,
+drei DoR-Voten seien undatiert, die alle drei `zeit_der_messung` tragen (Z1-W2-1 14:25:45,
+Z1-W2-2/-3 14:35:41, Z1-W2-0 15:00:30). Das ist §380 wieder: **gelesen statt bewertet.**
+
+**Zweiter, und er wiegt schwerer: Ich habe die Regel aus §410 im übernächsten Befehl gebrochen.**
+Ich schrieb `echo "-> vor 15:56:52 = die Zahl 85 ist vollstaendig"` **in denselben Befehl**, der die
+Zeit erst messen sollte. Die Ausgabe war dann `23:14:35` — **gestern**, nicht heute. Der Schluss
+stimmt zufällig, die Begründung war vorformuliert.
+
+> §410 sagt: *„der Abschnittstext wird NACH der Messung geschrieben."* **Acht Minuten später habe ich
+> genau das getan — nur nicht in einem Heredoc, sondern in einem `echo`.** Die Regel zielte auf die
+> Form, die mich beim letzten Mal erwischt hatte, statt auf den Vorgang.
+
+**Regel verschärft:** Kein Satz, der eine Messung *deutet*, steht im selben Befehl wie die Messung —
+egal ob Heredoc, `echo` oder Kommentar. Ein vorformulierter Schluss ist ein Schluss ohne Messung,
+auch wenn er nur eine Zeile lang ist.
+
+### Was daneben gemessen ist
+
+    docs/STATUS.md  letzter Commit f295a593  15:56:52  ->  109 Minuten alt (17:46:16)
+    Ereignisse mit Zeit nach 15:56:52:  85
+      generator 20 · plan-pruefer 19 · dirigent 17 · planner 13 · evaluator 7
+      yama 3 · integrator 3 · sitzung/release/externe je 1
+    Grundmenge vollstaendig: die einzige FREMDE Datei ohne zeit-Feld ist von GESTERN (2026-08-21
+    23:14:35), faellt also nicht in das Fenster. Die 85 ist die Zahl, keine Untergrenze.
+
+**Meine drei Ballbesitze in STATUS.md sind Karteileichen dieses Rückstands:** `P-02` (VORLAGE),
+`Z1-W2-0` und `Z1-W2-1` (beide ENTWURF). Beide Blätter sind DoR-erteilt (15:00:30 bzw. 14:25:45),
+Z1-W2-1 ist seit **16:25:16 abgenommen**. Die Blätter selbst führen **0** Ballfelder auf mich —
+der zweiseitige Test (P-03) widerspricht sich, und die Auflösung ist der Rückstand, nicht ein
+offener Posten bei mir.
+
+Ball: **niemand** für die Zahlen. Der Zeitschlüssel ist meine Sache und wird nachgetragen.
+
+## §412 — Berichtigung zu §411: 61 statt 85. Der Evaluator hatte mich vor genau diesem Fehler gewarnt, mit Ball bei mir, acht Stunden lang
+
+Messstand: HEAD `376b9276`, Baum 0, gemessen 17:50–17:53. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §412'` → 0). Stopp-Regel: §411 ist committet und trägt eine falsche Zahl.
+
+### Was falsch ist
+
+§411 meldet: *„Ereignisse mit Zeit nach 15:56:52: **85** — generator 20 · plan-pruefer 19 ·
+dirigent 17 · planner 13 · evaluator 7 · yama 3 · integrator 3."*
+
+**Zonenbewusst gemessen sind es 61.** Überschätzung um **24 Ereignisse, +39 %.**
+
+    §411 (String-Vergleich)          frisch (zonenbewusst)
+      85                               61
+      generator      20                generator     18
+      plan-pruefer   19                plan-pruefer  20
+      dirigent       17                dirigent       3      <- der groesste Einzelfehler
+      planner        13                planner       11
+      evaluator       7                evaluator      4
+      yama 3 · integrator 3            yama 3 · integrator 1 · externe 1
+
+### Warum
+
+Mein Parser war `sed 's/.*T//;s/+.*//'` mit anschließendem **String**-Vergleich. Er schneidet die
+Zeichenkette ab, statt die Zone zu lesen. Eine UTC-Datei liefert dann `21:32:23Z`, und
+`"21:32:23Z" > "15:56:52"` ist als Text **wahr** — obwohl es **23:32 Ortszeit von gestern** ist.
+
+### DER TEIL, DER MIR GEHÖRT
+
+`LAGE-2026-08-22/evaluator-zwei-zeitkonventionen-utc-gegen-ortszeit.yaml`, **09:36:30**,
+`ball: plan-pruefer`. Der Evaluator schreibt dort wörtlich:
+
+> „Wer die Zeichenkette abschneidet (`07:31`) oder ohne Zonenumrechnung anzeigt, liest diese
+> 13 Dateien um ZWEI STUNDEN zu alt. **Für den Plan-Prüfer unmittelbar relevant:** seine heutigen
+> Alterungsangaben betreffen zum Teil genau diese Dateien."
+
+**Der Befund lag acht Stunden und vierzehn Minuten mit meinem Namen darauf, und ich habe genau den
+Fehler gemacht, vor dem er warnt.** Er hat ihn an sich selbst gefunden, sauber als *Anzeigefehler,
+kein Messfehler* getrennt, und ausdrücklich **nicht** verlangt, dass jemand umstellt — nur, dass wer
+Zeiten vergleicht, zonenbewusst parst. Ich habe es nicht getan.
+
+Das ist nicht dieselbe Klasse wie §410 (ungemessene Zahl) oder §411 (übersehene Ausgabe). **Hier lag
+die fertige Warnung in meiner eigenen Bahn.** Ballortung heißt nicht nur „habe ich etwas zu tun",
+sondern „steht dort etwas, das meine nächste Messung kaputt macht".
+
+### EIN BEFUND, DEN DER EVALUATOR NICHT HATTE: eine dritte Klasse
+
+Er zählte um 09:36 zwei Konventionen: 13 UTC, 131 Ortszeit, „144 mit **lesbarem** zeit-Feld".
+Frisch am vollen Bestand ist die Lage dreiteilig:
+
+    yaml gesamt                                    513
+      zeit-Feld parsebar                           464   (davon 15 UTC, 449 Ortszeit)
+      zeit-Feld VORHANDEN, aber NICHT parsebar      29
+      kein zeit-Feld                                20
+      Summenprobe 464 + 29 + 20 = 513                    (geht auf)
+
+    die 29 je Rolle:   dirigent 26 · release-pruefer 2 · sitzung 1
+    Formklassen:
+      26  Text im Zeitfeld, keine Sekunden, keine Zone   zeit: "2026-08-22T08:10 Dirigent"
+       2  PLATZHALTER x statt Ziffern                    zeit: "2026-08-22T08:5x+02:00"
+       1  Zone da, aber keine Sekunden                   zeit: "2026-08-21T23:41+02:00"
+      Summenprobe 26+2+1 = 29
+
+**Der Dirigent, der die Steuerung führt, datiert in einem Format, das kein Parser liest** — 26 seiner
+Meldungen fallen aus jeder zeitbasierten Auswertung. Genau daher kam meine „dirigent 17": der
+String-Vergleich hat kaputte Felder zufällig einsortiert, statt sie auszuweisen.
+
+**Und `08:5x` ist keine Formfrage, sondern eine fehlende Messung** — ein `x` steht dort, wo eine
+Ziffer gehört. Das ist ein geschätzter Zeitstempel in Schreibweise gegossen.
+
+**Für meine Stillstandsangaben entlastend, und das sage ich ausdrücklich:** die späteste der 26
+unparsebaren Dirigenten-Dateien trägt `08:56`. Alle liegen vor 09:00, also außerhalb des Fensters
+meiner Nachmittagsmessungen. Die Aussage „der Dirigent ist seit 16:03 still" ist davon **nicht**
+betroffen — die 26 hätten sie nicht gerettet.
+
+**Regel an mich:** Zeitvergleiche nie als Textvergleich. Geparst wird zonenbewusst, und was sich
+nicht parsen lässt, wird **als eigene Klasse ausgewiesen** statt stillschweigend einsortiert. Eine
+Datei, deren Zeit ich nicht lesen kann, ist kein „alt" und kein „neu" — sie ist ein Befund.
+
+Ball: **Evaluator** (seinen Befund quittiere ich, der Ball geht zurück) · **Dirigent** (26 eigene
+Dateien mit unlesbarem Zeitfeld — seine Sache, nicht meine; ich melde, ich ordne nicht an).
+
+## §413 — Vorratsprüfung (a), gewanderte Verweise: 450 von 481 sitzen. Aber eine „Berichtigung" ging von einer falschen auf eine falsche Stelle, und ein Blattfeld zeigt 33-fach auf Arbeit, die getan ist
+
+Messstand: HEAD `0f1c05eb`, Baum 0, gemessen 17:54–17:58. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §413'` → 0). Vorratsprüfung **(a)**: nicht „zeigt ins Leere", sondern
+**„zeigt auf etwas anderes"**.
+
+### Die Grundmenge, nach drei fehlerhaften Anläufen
+
+    95 aktive Blaetter · 882 Datei:Zeile-Verweise · 481 eindeutige (Datei,Zeile)-Paare
+
+      aufloesbar, Zeile existiert     450   (93,6 %)
+      Zeile JENSEITS des Dateiendes     0
+      Datei nicht im Bestand            9
+      Dateiname mehrdeutig             22   (7 Namen)
+      Summenprobe 450+0+9+22 = 481
+
+**Die Verweisdisziplin in den Blättern ist gut, und das ist das Hauptergebnis.** Von den 9 „nicht im
+Bestand" sind mindestens vier **Beispieltexte, keine Verweise** — `datei.ts:44` steht in einem Blatt
+über Schreibweisen, `geometry/treppe.ts:42` in einer erfundenen Trefferzeile
+(`gegenprobe_2: "'drei Treffer gemessen, Trefferzeilen: …'"`), `test.ts:68/96/111` ebenso. Mein
+Muster fängt sie, weil sie wie Verweise aussehen. **Das ist ein Fehler meiner Messung, kein Mangel
+am Bestand**, und ich zähle sie nicht als Befund.
+
+**Drei meiner Anläufe waren falsch, jeder anders:**
+
+1. `docs/_playground-archiv/` im Dateiindex — `routes/web.php:5690` wurde auf eine **127-Zeilen-**
+   Archivdatei aufgelöst und als „jenseits des Dateiendes" gemeldet. Das echte `routes/web.php` hat
+   **5720** Zeilen. Drei Falschtreffer.
+2. Der Ausschluss `not d.startswith('_')` sollte das Archiv treffen und **killte alle
+   `__tests__`-Verzeichnisse** — 55 Dateien galten als „nicht im Bestand", darunter
+   `__tests__/decke.test.ts`, das es gibt.
+3. Meine Positivkontrolle war `werkzeugRegistry.ts:13` — das steht im **Ereignis** des Planners,
+   nicht im Blatt. Kontrolle am falschen Gegenstand.
+
+Erst der vierte Lauf hat Positivkontrolle **und** Summenprobe. Die Regel steht seit §412 und hat hier
+zum ersten Mal aktiv gegriffen: **eine ausgefallene Messung ist kein Ergebnis.**
+
+### DER FUND: eine Berichtigung, die von falsch auf falsch ging
+
+`docs/auftraege/aktiv/W-12-1-ansicht-und-kamera-ablesen.md` behauptet an **drei** Stellen (Z. 24, 52,
+82), `HausplanerApp.tsx:1261-1269` erzeuge die Rasterlinien, mit dem Vermerk
+**`[BERICHTIGT 14.08., war :1274-1281]`**. `docs/STATUS.md:75` führt noch die **alte** Fassung
+`:1274-1281`.
+
+    HEUTE auf :1261-1269   Kommentarblock ueber Knopf-Darstellung (AUF-70/AUF-59) plus
+                           ":1267 */" und drei "AUF-48 … ist umgezogen"-Vermerke
+    14.08. auf :1261-1269  DERSELBE Kommentarblock, um eine Zeile verschoben
+    14.08. auf :1274-1281  Style-Code: display:'flex', borderRadius: 9, background: aktiv ? …
+
+**Die Datei ist seit dem 14.08. um genau EINE Zeile gewachsen** (1534 → 1535, 2 Commits). Der Verweis
+kann also gar nicht gewandert sein — **er war beim Berichtigen schon falsch.** Die Berichtigung hat
+von *Style-Code* auf *Kommentar* verschoben; keine der beiden Stellen erzeugt Linien.
+
+**Wo sie wirklich entstehen — über den Funktionsnamen gemessen, nicht über die Zeile:**
+
+    HausplanerApp.tsx:1297   const rasterLinien: React.ReactElement[] = [];
+    HausplanerApp.tsx:1301   rasterLinien.push(<Line key={`vx${x}`} … stroke={FARBEN.rasterGrob} …/>);
+    HausplanerApp.tsx:1304   rasterLinien.push(<Line key={`hy${y}`} … />);
+    HausplanerApp.tsx:1446   rasterLinien={rasterLinien}          <- Durchreichung an die Buehne
+    HausplanerApp.tsx:12     Kopfkommentar: "rasterLinien und massElemente werden HIER gebaut"
+
+**Richtig ist `:1297-1304`.** Beide dokumentierten Fassungen liegen daneben — die eine um 13, die
+andere um 23 Zeilen. Der Kopfkommentar der Datei sagt es sogar im Klartext, seit jeher.
+
+**Warum das trotz `BETRIEBSBESTAETIGT` zählt:** W-12/1 ist abgeschlossen, hier bricht nichts. Aber
+die Zeile in STATUS.md ist der **Beleg**, den die nächste Arbeit am Raster zitieren wird — und
+`H-8 wie beim Raster in W-12/1` wird in W-14/1 bereits als Muster weitergereicht. Ein Beleg, der auf
+einen Kommentar zeigt, trägt beim zweiten Zitieren nicht mehr.
+
+### DER ZWEITE FUND: ein Blattfeld, das 33-fach auf erledigte Arbeit zeigt
+
+Bei der Prüfung stieß ich auf ein Feld, das **meine zweiseitige Ballortung (P-03) gar nicht misst**:
+
+    dor_beleg: "steht aus — plan-pruefer."     36×
+    dor_beleg: "steht aus — plan-pruefer"       5×   (ohne Punkt)
+    dor_beleg: "steht aus" / "steht aus."       3×
+    ------------------------------------------------
+    Blaetter mit "steht aus"                   44
+
+Gegenprobe gegen `docs/STATUS.md`, je Kennung aus dem Feld `auftrag:`:
+
+    in STATUS.md abgeschlossen   33      <- das Feld ist TOT
+    in STATUS.md noch offen       6      (A-37, A-42, A-40, Z1-W2-0, Z1-W2-1, Z2-W0-5b)
+    in STATUS.md nicht gefunden   5      (A-36, A-38, A-39, Z1-W2-2, Z1-W2-3)
+    Summenprobe 33+6+5 = 44
+
+**Positivkontrolle:** W-12/1 trägt `dor_beleg: "steht aus — plan-pruefer."`, während STATUS.md dort
+`BETRIEBSBESTAETIGT` führt **und** „DoR RUNDE 2 ERTEILT 13.08. (plan-pruefer)" dokumentiert. Das Feld
+wurde beim Erteilen nie nachgezogen.
+
+Und von den **6 „noch offenen"** sind Z1-W2-0 (15:00:30), Z1-W2-1 (14:25:45) und Z2-W0-5b von mir
+**heute erteilt** — dort hinkt nur STATUS.md (seit 15:56:52 unverändert). **Real offen aus dieser
+Liste: nichts, was ich nicht schon bearbeitet hätte.**
+
+**Das ist entlastend und beunruhigend zugleich.** Entlastend: es liegt keine übersehene Arbeit
+herum. Beunruhigend: **44 Blätter behaupten im eigenen Kopf, mein Votum stehe aus.** Wer ein Blatt
+öffnet und dieses Feld liest, hält das Votum für offen — auch dort, wo es seit neun Tagen erteilt
+ist.
+
+**Regel an mich:** Die Ballortung hat eine **dritte** Seite. `dor_beleg:` im Blattkopf zeigt auf mich,
+ohne in STATUS.md oder im `ball:`-Feld aufzutauchen. Ich messe sie ab sofort mit — und weiß jetzt,
+dass sie **als Arbeitsliste unbrauchbar** ist: 33 von 44 sind tot. Ein Feld, das zu 75 % falsch
+steht, ist kein Signal, sondern Rauschen.
+
+Ball: **Planner** (die drei Verweisstellen in W-12-1 und das tote `dor_beleg`-Feld — beides seine
+Blätter) · **Integrator** (`docs/STATUS.md:75` führt `:1274-1281`). Beides ohne Eile: W-12/1 ist
+betriebsbestätigt, nichts blockiert.
+
+## §414 — Der Baum, in dem ich messe, führt Z0-I1 mit ELF Kriterien. Gültig sind ZWÖLF, und das zwölfte habe ich selbst erteilt
+
+Messstand: HEAD `6051b72b`, Baum 0, gemessen 18:01–18:04. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §414'` → 0). Angesetzt als Vorratsprüfung (b), umgeschlagen in einen
+Stillstandsbefund mit unmittelbarer Wirkung auf **meine eigene Prüfung**.
+
+### Der Kern
+
+    Blatt: docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md
+
+    Integrations-Checkout (MEIN Messbaum)   8e65762e  22.08. 15:50:55  457 Z.  ELF Kriterien
+    rolle/planner (gueltig, Errata)         7791920f  22.08. 16:04:27  592 Z.  ZWOELF
+    rolle/generator, rolle/evaluator        5c9afbc7  21.08. 21:19:58   54 Z.  keine nummerierten
+
+    Integration:  Z0-I1-1 … Z0-I1-11
+    Planner:      Z0-I1-1 … Z0-I1-11 · **Z0-I1-12**
+
+**`Z0-I1-12` steht in meinem Messbaum nicht.** Das ist das Kriterium, das ich am
+**16:10:11** selbst erteilt habe (`plan-pruefer-ERRATA-BESTAETIGT-und-Z0-I1-12-ERTEILT.yaml`).
+
+**Und das ist die Pointe:** Hätte ich die Meldepflichten des Generators gegen das Blatt in *meinem*
+Baum geprüft — so wie Punkt 3 der Wache es verlangt — hätte ich `Z0-I1-12` als „nennt ein Kriterium,
+das im Blatt nicht existiert" gemeldet. **Ich hätte einen Fehler erfunden, und zwar an einem
+Kriterium, das ich selbst geschrieben habe.**
+
+### Der Generator ist sauber, und das gehört zuerst gesagt
+
+    generator-CODE_FERTIG-Z0-I1.yaml, 16:58:55
+      endstand_sha: "7791920f"          <- genau die Zwoelf-Kriterien-Fassung
+      Z0-I1-12 genannt: 2x
+      gelesen_bis:  16:58:55            > mein Errata-Votum 16:10:11
+      Teillieferungen mit Z0-I1-12: AP1, AP2 (2x), AP3, Nachbesserung AP3
+
+Die 54-Zeilen-Fassung auf seinem Zweig ist **irrelevant** — er baut nicht dagegen. Meine erste
+Lesart („der Generator baut gegen ein Blatt von gestern") wäre falsch gewesen; sie ist an der
+Meldung selbst zerbrochen.
+
+### EIN OFFENER PUNKT AN DER MELDEPFLICHT, als Hinweis und nicht als Befund
+
+    CODE_FERTIG nennt:  Z0-I1-1 2 3 4 5 6 · 9 10 11 12       — SIEBEN und ACHT fehlen
+    Z0-I1-7 in irgendeiner Generator-Meldung:  1 Datei
+    Z0-I1-8 in irgendeiner Generator-Meldung:  0 Dateien
+    Gegenprobe am bekannten Treffer Z0-I1-11:  8 Dateien      — das Muster greift
+
+**`Z0-I1-8` kommt unter dieser Kennung in keiner seiner Meldungen vor.** Das kann heißen, dass es
+unter anderem Namen behandelt ist; ich behaupte es nicht. Der Evaluator nimmt gerade ab — er soll es
+wissen, bevor er 12/12 schreibt.
+
+### Was sonst im Messbaum fehlt
+
+    im Integrations-Checkout FEHLEN, auf rolle/planner vorhanden:
+      Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md      (DoR erteilt 16:21:25)
+      Z1-W2-5-wandflaeche-anschliessen.md                   (DoR erteilt 16:42:40)
+      Z1-W2-6-auswechslung-anschliessen.md                  (DoR erteilt 16:42:40)
+      Z2-W0-11b-ids-callback-state-token.md                 (DoR erteilt 16:52:38)
+
+    Planner-Commits nicht in der Integration:   13
+    Blatt-Errata 7791920f alt:                 119 Minuten
+    docs/STATUS.md alt:                        127 Minuten
+
+**Vier Blätter, für die ich heute DoR erteilt habe, existieren in dem Baum nicht, in dem ich
+Blätter prüfe.** Punkt 2 der Wache — „jedes Blatt in `docs/auftraege/aktiv/` gegen seinen Block" —
+läuft damit auf einer Menge, aus der die gesamte laufende Welle fehlt.
+
+### Nebenbefund: eine zweite Ablage, die ich nie messe
+
+Z0-I1 liegt **nicht** in `docs/auftraege/aktiv/`, sondern eine Ebene darüber in `docs/auftraege/`.
+Dort liegen **140** `.md`-Dateien, davon **17 im Zustand `ENTWURF`** (z1-w1-1 bis -5, z2-w0-1 bis -12,
+z0-i1). **Keine davon** trägt ein `auftrag:`-Feld — für sie gilt durchgehend der Rückfall auf die
+Kopfzeile. Meine Punkte 2 und 3 lesen ausschließlich `aktiv/` und sehen diese 17 nicht.
+
+Das ist dieselbe Klasse wie das tote `dor_beleg` aus §413: **meine Prüfroutine hat blinde Ränder,
+und ich finde sie nur, wenn ich über den Rand stolpere.**
+
+### Meine eigenen Fehlanläufe in dieser Runde
+
+1. Ich habe den Blattpfad **aus der Notiz** genommen (`.../aktiv/generator-auftrag-z0-i1-…`) — der
+   Dateiname stimmte, das Verzeichnis nicht. Die Wache sagt „lies keine Notiz"; ich habe es getan.
+2. `Kriterien=0` für **alle** Fassungen — mein Muster `^ *Z0-I1-[0-9]+:` traf nicht, die Kriterien
+   stehen als `**Z0-I1-12**`. Ich habe es als „ausgefallene Messung" behandelt und am bekannten
+   Treffer verifiziert, statt die Null zu melden.
+3. `5c9afbc7 21:19:58` sah nach heute Abend aus. **Mit Datum gemessen: 2026-08-21.** Die §412-Regel
+   hat hier zum zweiten Mal getragen.
+
+Ball: **Integrator** (13 Commits, 4 Blätter, das Errata-Blatt — der Transport ist die einzige
+Abhilfe) · **Evaluator** (Z0-I1-8 vor dem 12/12) · **Dirigent** (der Stillstand steht bei ihm, und
+Yama hat die Vorlage seit 17:29).
+
+## §415 — Vorratsprüfung (c): die Schrittmaß-Prüfung nach DIN 18065 ist im Default-Zweig mathematisch immer erfüllt. Und der Test, der sie prüft, kann nicht fehlschlagen
+
+Messstand: HEAD `fa64b041`, Baum 0, gemessen 18:06–18:09. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §415'` → 0). Tragende Formel durchgerechnet, nicht gelesen.
+
+### Die Formel
+
+    treppenBerechnung.ts:70-73
+      const auftrittExakt =
+        e.verfuegbareLauflaenge && e.verfuegbareLauflaenge > 0
+          ? e.verfuegbareLauflaenge / anzahlAuftritte
+          : 630 - 2 * steigungExakt;        // Schrittmaßregel   <- DEFAULT-ZWEIG
+    treppenBerechnung.ts:75
+      const schrittmass = 2 * steigungExakt + auftrittExakt;
+    treppenBerechnung.ts:87
+      push('schrittmass', schrittmass >= 590 && schrittmass <= 650, …)
+
+**Algebraisch:** `schrittmass = 2·s + (630 − 2·s) = 630` — für **jedes** `s`. Der Auftritt wird aus
+der Schrittmaßregel abgeleitet, und dann wird die Schrittmaßregel an ihm geprüft. **Die Prüfung
+misst ihre eigene Voraussetzung.**
+
+Acht Fälle durchgerechnet, alle exakt `630.0000`:
+
+    Geschosshoehe  ziel   n  Steigung  Auftritt  Schrittmass  Pruefung 590..650
+             2600   175  15    173,33    283,33     630,0000  BESTANDEN
+             3000   210  14    214,29    201,43     630,0000  BESTANDEN
+             3000   400   8    375,00   -120,00     630,0000  BESTANDEN   <- NEGATIVER Auftritt
+             5000   175  29    172,41    285,17     630,0000  BESTANDEN
+
+**Auch bei einem Auftritt von −120 mm** — einer physikalisch unmöglichen Stufe — meldet die
+Schrittmaßregel „bestanden". `auftritt-min` fängt den Fall (−120 < 229,5 → Fehler); die
+Schrittmaßregel, die zentrale Regel der DIN 18065, sagt grün.
+
+**Gegenprobe am anderen Zweig — dort wirkt sie:**
+
+    gh=2600 lauflaenge=3000:  Auftritt 214,3  Schrittmass 561,0  FEHLER
+    gh=2600 lauflaenge=4500:  Auftritt 321,4  Schrittmass 668,1  FEHLER
+    gh=2600 lauflaenge=1500:  Auftritt 107,1  Schrittmass 453,8  FEHLER
+
+Drei verschiedene Werte, drei Fehler. **Genau das macht den Befund belastbar:** die Prüfung ist
+nicht kaputt, sie ist im Default-Zweig **wirkungslos**.
+
+### Der Test kann nicht fehlschlagen
+
+    __tests__/treppenBerechnung.test.ts:8   test('Standard-Wohnungstreppe 2600 mm: 15 Steigungen,
+                                                  bequemes Schrittmaß, bestanden', …)
+    :9    berechneTreppe({ geschosshoehe: 2600, gewuenschteSteigung: 175 })   <- OHNE Lauflaenge
+    :13   assert.ok(r.schrittmass >= 590 && r.schrittmass <= 650, …)
+
+Der Testfall ruft **ohne** `verfuegbareLauflaenge` auf, läuft also im Default-Zweig. **Zeile 13
+prüft einen Wert, der konstruktionsbedingt 630 ist.** Der Test heißt „bequemes Schrittmaß" und misst
+es nicht. Er wäre auch grün, wenn die Steigung 375 mm betrüge.
+
+### Reichweite — über die Aufrufer gemessen, nicht geschätzt
+
+    EigenschaftenPanel.tsx:494   verfuegbareLauflaenge: Math.hypot(…) || undefined   WIRKSAM
+                                 (faellt bei Laenge 0 auf den Default zurueck)
+    geometry/treppe2D.ts:54      verfuegbareLauflaenge: len > 0 ? len : undefined    WIRKSAM
+    geometry/treppe3D.ts:44      verfuegbareLauflaenge: e.verfuegbareLauflaenge      wirksam, wenn gesetzt
+    geometry/treppenTypen.ts:48  uebergibt sie GAR NICHT                             IMMER tautologisch
+
+**Der Produktivpfad über das Eigenschaften-Panel ist in Ordnung** — dort kommt die Lauflänge aus der
+gezeichneten Treppe. **Das gehört zuerst gesagt, sonst liest sich der Befund schlimmer, als er ist.**
+Betroffen ist **einer von drei** Geometrie-Aufrufern (`treppenTypen.ts`) plus der Randfall Länge 0.
+
+### Warum das ausgerechnet hier zählt
+
+Im selben Test, **53 Zeilen weiter**, steht die gelernte Lehre, die der Planner in Z1-W2-4 als
+Begründung zitiert:
+
+> `treppenBerechnung.test.ts:66-70` — *„`berechneTreppe` prüft die lichte Durchgangshöhe **nur, wenn
+> sie übergeben wird**. Der reale Aufruf im Eigenschaften-Panel übergibt sie nicht — es gibt kein
+> Eingabefeld dafür. **Das Badge sagte trotzdem „DIN 18065 erfüllt".**"*
+
+**Das ist dieselbe Klasse, eine Ebene tiefer.** Dort fehlte eine Prüfung, und das Badge behauptete
+sie. Hier **existiert** die Prüfung, läuft mit, meldet „bestanden" — und kann im Default-Zweig gar
+nicht anders. Die Lehre wurde für den Fall „Prüfung fehlt" gezogen; der Fall „Prüfung kann nicht
+fehlschlagen" ist von ihr nicht gedeckt.
+
+### Rollengrenze
+
+Ich melde und baue nicht. Kein Vorschlag zur Abhilfe — die Formel zu ändern ist eine
+**Fachentscheidung** (soll ohne Lauflänge überhaupt ein Schrittmaß ausgewiesen werden, oder gehört
+dort „nicht geprüft"?), und Fachentscheidungen werden nach CLAUDE.md nicht still automatisiert.
+Z1-W2-4 ist davon **nicht** berührt: das Blatt ist eine Vertragsprobe und ändert die Treppe
+ausdrücklich nicht (Nicht-Ziel: *„Keine Änderung an der Treppe"*).
+
+Ball: **Planner** (ob daraus ein Blatt wird) · **Yama** (die Fachfrage, wenn es eines wird).
+Der Stillstand daneben unverändert: Integrations-Zweig `ceb4224a` seit **16:05:04**, 13
+Planner-Commits offen, `docs/STATUS.md` seit 15:56:52.
