@@ -31,6 +31,11 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
    nach V2 §8 — `counter` (dauerhaft), `counter.lock/` (mkdir-Sperre für den ganzen Vergabevorgang), `active/lease.yaml`
    (mkdir-atomar über tmp + `mv`), mit `fencing_token` aus `counter`, `heartbeat_bis`, `owner` (sitzungs_id, pid, rolle).
    Zwei Sitzungen derselben Rolle können denselben Auftrag nicht gleichzeitig halten. Existiert `active/` gültig → nicht arbeiten.
+   **Zielregel Lease-Identität (Yama 22.08., wörtlich):** stabile Identität = Sitzungs-ID · pro Lauf aktuelle PID plus
+   Startkennung · während Schreibarbeit regelmäßig erneuerter Heartbeat · Übernahme **nur** bei abgelaufenem Heartbeat
+   **und** fehlendem aktuellen Lauf (kein Prozess mit `--resume <Sitzungs-ID>`) · Fencing-Token bleibt maßgeblich ·
+   **eine alte PID allein darf niemals eine Lease für verwaist erklären.** (Beleg: Planner-Lease nannte PID 88928,
+   die Sitzung arbeitete unter 97092 weiter.)
 5. **Steuerungshandlungen vor Sacharbeit (Yama 21.08.):** Registrierung, Lease-Anforderung und ACK sind
    **erlaubte Steuerungshandlungen und keine Sacharbeit** — sie sind ohne Lease erlaubt und auch dann, wenn der
    Auftrag `parken`/`warten` lautet. **Sacharbeit** (Dateien im Worktree ändern, Tests/DB-Läufe, Commits) nur im
