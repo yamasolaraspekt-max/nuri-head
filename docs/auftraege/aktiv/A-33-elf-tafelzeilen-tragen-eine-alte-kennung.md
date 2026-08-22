@@ -18,7 +18,7 @@ art: "BAU — ein SKRIPT, das die verkuerzten Tafelkennungen nachzieht.
       bevor der Integrator ueberhaupt existiert."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "NICHT ERTEILT — plan-pruefer 13.08. gemessen an f9b67b1b. Quelle: docs/STATUS.md, Kennung "A-33" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: f9b67b1b
 prioritaet: P2

@@ -7,7 +7,7 @@ art: "STUFE 6 — Blatt schneiden, Ziel ENTWORFEN (VORGABE). Es gibt KEINEN Code
       vor, was gebaut werden soll — wie W-15, W-23, W-27 und W-40."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "BESTANDEN — plan-pruefer 12.08.. Quelle: docs/STATUS.md, Kennung "W-41" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: c9ac316d
 prioritaet: P1

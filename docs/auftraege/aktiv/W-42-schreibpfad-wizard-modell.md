@@ -7,7 +7,7 @@ art: "STUFE 6 — Blatt schneiden, Ziel BESCHRIEBEN (ABLESUNG). ABWEICHUNG VON Y
       Abschnitt 1: er hat W-42 als VORGABE mit Ziel ENTWORFEN freigegeben, der Code EXISTIERT aber."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "BESTANDEN — plan-pruefer 12.08.. Quelle: docs/STATUS.md, Kennung "W-42" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: c9ac316d
 prioritaet: P1

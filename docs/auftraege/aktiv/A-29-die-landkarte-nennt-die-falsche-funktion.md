@@ -6,7 +6,7 @@ werkzeug: "—  (Selbstauskunft im Hausplaner-Code)"
 art: "BAU — zwei Berichtigungen in app/tools/werkzeugLandkarte.ts. Kein Verhalten, keine Marke."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 13.08. gemessen an 86f94d98. Quelle: docs/STATUS.md, Kennung "A-29" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: 84c57085
 prioritaet: P2

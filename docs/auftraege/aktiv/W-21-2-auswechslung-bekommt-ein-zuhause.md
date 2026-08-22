@@ -7,7 +7,7 @@ art: "BAU — ein sechstes Modul in die Blätter von W-21 aufnehmen. Nachtrag zu
       BETRIEBSBESTAETIGTEN Ablesung, Muster wie W-40/1."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 13.08.. Quelle: docs/STATUS.md, Kennung "W-21/2" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: 9ea1c3db
 prioritaet: P2

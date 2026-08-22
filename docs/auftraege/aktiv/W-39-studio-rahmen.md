@@ -7,7 +7,7 @@ art: "STUFE 6 — Blatt schneiden, Ziel BESCHRIEBEN (Ablesung). Der Code EXISTIE
       app/HausplanerStudio.tsx, 159 Zeilen."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "BESTANDEN — plan-pruefer 12.08.. Quelle: docs/STATUS.md, Kennung "W-39" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: d53806f6
 prioritaet: P2

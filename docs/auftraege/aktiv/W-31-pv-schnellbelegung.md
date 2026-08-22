@@ -7,7 +7,7 @@ art: "STUFE 6 — Blatt schneiden, Ziel BESCHRIEBEN (Ablesung) für den GEBAUTEN
       Der Code EXISTIERT: geometry/pvBelegung.ts, 75 Z., und er ist ANGESCHLOSSEN."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 13.08. (ZWEITE Fassung). Quelle: docs/STATUS.md, Kennung "W-31" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: 6ace6f3e
 prioritaet: P2

@@ -7,7 +7,7 @@ art: "BAU — die WIRKSAMEN Fundstellen-Verweise auf Anker umstellen. Ein Kommen
       die Kriterien der aktiven Blaetter. Kein Verhalten, keine Formel."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 13.08. gemessen an 876403f4. Quelle: docs/STATUS.md, Kennung "A-34" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: 876403f4
 prioritaet: P2

@@ -7,7 +7,7 @@ art: "STUFE B — Blatt schneiden, Ziel BESCHRIEBEN (Ablesung) PLUS ein benannte
       Die Einordnung ist GEMESSEN: drei von vier Operationen gebaut, Drehen fehlt."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 13.08. gemessen an 5dfb6f17. Quelle: docs/STATUS.md, Kennung "W-14/1" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: 78c09e1b
 prioritaet: P2

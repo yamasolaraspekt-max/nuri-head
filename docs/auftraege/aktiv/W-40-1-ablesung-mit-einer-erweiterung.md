@@ -8,7 +8,7 @@ art: "NACHBESSERUNG nach §12. W-40 ist BETRIEBSBESTAETIGT und inhaltlich überh
       NUR blocked als Erweiterung. Das Blatt gibt vor, was zu drei Vierteln existiert."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "BESTANDEN — plan-pruefer 12.08.. Quelle: docs/STATUS.md, Kennung "W-40/1" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: 2e7504ec
 prioritaet: P1

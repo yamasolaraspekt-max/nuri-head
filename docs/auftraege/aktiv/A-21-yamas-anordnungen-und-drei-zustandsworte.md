@@ -7,7 +7,7 @@ art: "REGELWERK. Fasst docs/ARBEITSREGELN.md an (§3, §11). Wie A-19 und A-20: 
       EINEM Blatt, weil alle dieselbe Datei anfassen."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "BESTANDEN — plan-pruefer 12.08. (DRITTE Fassung). Quelle: docs/STATUS.md, Kennung "A-21" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: 7b7db5b6
 prioritaet: P1

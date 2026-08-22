@@ -8,7 +8,7 @@ art: "BAU — ein Werkzeug in die Registry, das vorhandene Geradenmathematik ueb
       Schema, KEIN neuer Dialog."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "ERTEILT — plan-pruefer 13.08. gemessen an 1df82ee1. Quelle: docs/STATUS.md, Kennung "A-35" (Feld dor_beleg)."
 status_steht_in: docs/STATUS.md
 basis_sha: 1df82ee1
 prioritaet: P2
