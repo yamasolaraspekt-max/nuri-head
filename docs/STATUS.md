@@ -110,7 +110,7 @@
 | **Z1-W2-8** Werkzeugleiste in Baureihenfolge | **`ABGENOMMEN`** | **Release-Prüfer** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `dbaa6b4d` (ersetzt `262ed5c7`), geschnitten 18:51:32, **Kriterium b gestrichen 18:58:46** — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR · **Bodenplatte faellt** — `ceiling` kann sie nicht tragen, braucht GP-0; sieben Eintraege statt acht · **DoR ERTEILT** 19:06:40 mit zwei Halbsaetzen (§429) — Bau kann sofort beginnen · Bau `3a4aafa1` · CODE_FERTIG 19:59:36 · **Kriterium (c) nachgeliefert** `7500bb7d` 20:43 · Weg A nach der Pfadgrenzen-Entscheidung 19:44:38 · **ABGENOMMEN (BROWSER)** 22:13 — fuenf von fuenf gueltigen, gegen den berichtigten Blattstand `8460f98f` gemessen |
 | **Z1-E0-1** Hoehenkette — eine Wahrheit statt drei Rechnungen | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E0-1-hoehenkette-eine-wahrheit.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) · Bau `ad2ac724` · CODE_FERTIG 20:09:51 · **drei Mangelanzeigen offen** (Planner 20:26 und 20:51, Evaluator 20:56) · **ABGENOMMEN (BROWSER)** 22:26:14, fuenf von fuenf — die drei Mangelanzeigen sind damit erledigt |
 | **Z1-E2-1** Etagen-Integritaet — Wachen und Mitnahme | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. 19:24:44 · Basis `fd2575ce` | **Blatt** `docs/auftraege/aktiv/Z1-E2-1-etagen-integritaet.md` @ `4746d9c5` · **Spur A** · **DoR ERTEILT** 19:30:30, ohne Halbsaetze, ein Durchgang für beide · Konzept "Etagenweiser Aufbau" (Yama 18:4x, Posten 25) · Bau `51b0ddfb` · CODE_FERTIG 20:18:30 · **ABGENOMMEN (BROWSER)** 22:47:41 — sechs von sechs, Reifegrad `browserabgenommen` |
-| **Z1-E4-1** Bodenplatte als eigenes Bauteil (GP-0) | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 22:25:33 · Basis `54163b25` | **Blatt** `docs/auftraege/aktiv/Z1-E4-1-bodenplatte-als-eigenes-bauteil.md` @ `54163b25` · **auf Yamas Anweisung vorgezogen** (22:08) · neun Kriterien, acht rot · **DoR ERTEILT** 22:32:20 · Bau `3b4e8f6b` · CODE_FERTIG 23:18 |
+| **Z1-E4-1** Bodenplatte als eigenes Bauteil (GP-0) | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 22.08. 22:25:33 · Basis `54163b25` | **Blatt** `docs/auftraege/aktiv/Z1-E4-1-bodenplatte-als-eigenes-bauteil.md` @ `54163b25` · **auf Yamas Anweisung vorgezogen** (22:08) · neun Kriterien, acht rot · **DoR ERTEILT** 22:32:20 · Bau `3b4e8f6b` · CODE_FERTIG 23:18 · **ABGENOMMEN (BROWSER)** 00:06:32 — acht Kriterien voll belegt, zwei mit benanntem Restpunkt |
 | **Z1-E0-1b** Umbenennung `deckenOberkanteMm` -> `wandOberkanteMm` | **`ABGENOMMEN`** | **Release-Prüfer** | Bauplatz 22.08. 22:32:23 · Basis `3b4e8f6b` | **KEIN Blatt, kein DoR-Durchgang** — Kriterien a-d stehen im Bauplatz selbst, so ausdruecklich verfuegt · Bau `d5e88f15` · CODE_FERTIG 23:23:20 · **ABGENOMMEN (CODE)** 23:28:31 — vier von vier, Reifegrad `code-abgenommen per Diff-Lesung und Suite`, **kein Browserlauf, wie vorgesehen** |
 | **Z1-E1-1** Wo bin ich — Etagenkontext als Vertrag | `ENTWURF` | **Plan-Prüfer** | Schnitt 23.08. 00:01:40 · Basis `97c610ca` | **Blatt** `docs/auftraege/aktiv/Z1-E1-1-wo-bin-ich-etagenkontext-als-vertrag.md` @ `31ff1600` · **Spur A** · **DoR steht aus** · auf Dirigenten-Anweisung 23:50 geschnitten |
 | **Z1-E3-1** Decke aenderbar und Rolle abgeleitet | `ENTWURF` | **Plan-Prüfer** | Schnitt 23.08. 00:01:40 · Basis `97c610ca` | **Blatt** `docs/auftraege/aktiv/Z1-E3-1-decke-aenderbar-und-rolle-abgeleitet.md` @ `31ff1600` · **Spur A** · **DoR steht aus** · auf Dirigenten-Anweisung 23:50 geschnitten |
@@ -19728,8 +19728,8 @@ votum: |
 ```yaml
 auftrag: "Z1-E4-1"
 titel: "Bodenplatte als eigenes Bauteil (GP-0)"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 blatt: "docs/auftraege/aktiv/Z1-E4-1-bodenplatte-als-eigenes-bauteil.md"
 blatt_sha: 54163b25
 basis_sha: 54163b25
@@ -19764,6 +19764,22 @@ zustand_nachgezogen: |
   Blatt gezogen statt in ein Folgeblatt, Kriterium d in d1/d2 getrennt, die Oberkante auf
   negativ und der Aufbau auf Pflichtfeld entschieden, und der Plan-Pruefer hat eine eigene
   Fachaussage berichtigt (floorThickness ist nicht der Fussbodenaufbau).
+
+votum: |
+  ABGENOMMEN (BROWSER) — evaluator, 00:06:32, evaluator-ABGENOMMEN-z1-e4-1.yaml,
+  ergebnis_sha 41cceb3f (Votum) und c798995e (Bildbelege).
+  "acht Kriterien voll belegt, zwei mit benanntem Restpunkt"
+  GP-0 IST DURCH: die Bodenplatte ist ein eigenes Bauteil, im Browser belegt. Damit ist der
+  Weg frei fuer den Leisteneintrag, der am 22.08. um 18:58 als Kriterium b von Z1-W2-8 fallen
+  musste.
+  SEINE EIGENE LEHRE STEHT IM VOTUM und ich gebe sie wieder, weil sie dieselbe ist, die ich
+  mir heute zweimal aufgeschrieben habe: sein Mangelbefund von 23:33:40 zu Kriterium e war
+  durch 4ada01dd erledigt — 28 Sekunden VOR seiner Meldung. Er laesst den Befund stehen statt
+  ihn zu tilgen und schreibt dazu: "VOR dem Absenden eines Mangels den Stand noch einmal
+  ziehen."
+  BALLBESITZ: das Ereignis nennt [planner, evaluator] fuer die zwei Restpunkte. In der Tafel
+  steht release-pruefer, weil die Regel des Dirigenten von 23:53:11 fuer JEDE ABGENOMMEN-Zeile
+  gilt; die zwei Restpunkte sind im Votum benannt und gehen nicht verloren.
 
 ```
 
