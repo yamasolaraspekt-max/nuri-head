@@ -108,7 +108,7 @@
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-4** Wächter: keine neue Web-Route ohne permission: — Ratschen-Test mit Baseline | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-4-route-permission-waechter.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §258): Kriterium C zaehlt drei Routen, es sind sechs · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-5** Nuriva-API api/planner/*: Zuständigkeitsbindung an vier Stellen, ein Baustein | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-5-api-planner-zustaendigkeit.md` · **DoR ERTEILT** (plan-pruefer §259) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · **Blockade-Vermerk berichtigt** (plan-pruefer §259): Y-6 blockiert W0-5 NICHT; offen ist stattdessen beim Planner, wer das Routen-Gate fuer `/planner/*` baut · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
-| **Z2-W0-5b** linked gibt Master-Sets fremder Auftragspunkte | `BEREIT` | **Generator** | Schnitt 22.08. 15:2x · Basis `78e5fb3e` | **Blatt** `docs/auftraege/aktiv/Z2-W0-5b-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR ERTEILT**, berichtigt 15:3x |
+| **Z2-W0-5b** linked gibt Master-Sets fremder Auftragspunkte | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 15:2x · Basis `78e5fb3e` | **Blatt** `docs/auftraege/aktiv/Z2-W0-5b-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR ERTEILT**, berichtigt 15:3x · Bau `48b52294` · Matrix `b593357c` · CODE_FERTIG 16:03:25 |
 | **Z2-W0-6** Nuriva-API: die vier Token-Abilities werden durchgesetzt — oder sie verschwinden | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `cb500067` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-6-api-token-abilities.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §260): Dateiname im Ist-Beleg berichtigen · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-7** Rechte-Schalter „alle für alle' + Permission-Item Planner (Yamas Entscheidung 21.08.) | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-7-rechte-schalter-planner-item.md` · **DoR ERTEILT ohne Restpunkte** (plan-pruefer §261) · **VORRANG vor Z2-W0-1** (plan-pruefer §260) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-8** secure.image und Geschwister: Recht + Bindung statt bloßem auth | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `114b98f6` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-8-secure-image-gate.md` · **DoR ERTEILT** (plan-pruefer §262) · Datensatz vom Integrator angelegt 21.08. auf Zustellung §260 · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -19350,8 +19350,8 @@ herkunft_dieses_datensatzes: |
 ```yaml
 auftrag: "Z2-W0-5b"
 titel: "linked gibt die Master-Sets fremder Auftragspunkte"
-zustand: BEREIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 blatt: "docs/auftraege/aktiv/Z2-W0-5b-..."
 blatt_sha: ec239609
 basis_sha: 78e5fb3e
@@ -19362,12 +19362,23 @@ dor_beleg: |
   gesucht habe. Ich hatte Messung und Schreiben in EINEN Befehl gelegt; damit konnte das
   Schreiben die Messung nicht mehr benutzen. Genau der Fehler, den ich im selben Commit
   anderen vorhalte.
-bau_sha: "noch offen"
+bau_sha: b593357c
 herkunft_dieses_blocks: |
   Angelegt vom integrator im Transportlauf (gen 11 Punkt 3). Regelfall: Blatt neu, DoR noch
   nicht erteilt. Gemessen am Ereignisordner DOR-plan-pruefer-w0-5b, nicht an einem Wortmuster
   im Commit-Betreff — die Verwechslung ist mir bei Z1-W2-0 fast unterlaufen.
   TRANSPORT, keine Bewertung.
+
+zustand_nachgezogen: |
+  CODE_FERTIG nachgezogen vom integrator aus generator-CODE_FERTIG-Z2-W0-5b.yaml (16:03:25,
+  BAU-generator-Z2-W0-5b, lease_token 1). Bau 48b52294, Matrix b593357c.
+  DER CODE IST NICHT IN DER INTEGRATION, UND DAS IST ABSICHT: spur A. Die Dirigenten-Regel vom
+  15:33:27 (dirigent-antwort-transport-vor-browserabnahme.yaml) lautet, dass nur Spur-W-Blaetter
+  VOR der Abnahme transportiert werden, weil ohne Transport kein Werkzeug im Browser steht.
+  Z2-W0-5b traegt "spur: A" im Blattkopf, Zeile 8 — Rechte-Wache. Fuer Spur A bleibt es beim
+  Transport NACH ABGENOMMEN. Der Zustand steht also auf CODE_FERTIG, der Bau liegt auf
+  rolle/generator, und ich habe ihn bewusst nicht geholt.
+
 ```
 
 ```yaml
