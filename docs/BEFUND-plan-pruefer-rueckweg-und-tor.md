@@ -36532,3 +36532,88 @@ ist die Messung, dass Hälfte 2 jetzt vorliegt, und die Berichtigung meiner eige
 
 Ball: **Evaluator** (Bewertung von (c) samt Titelfrage) · **Integrator** (28 Commits, 57 Minuten) ·
 **Dirigent** (Generation 21) · **Yama** (§443/§444, Pfadfrage Z0-I1).
+
+## §457 — Meine Lehre ist in einen fremden Ablauf gewandert. Und die Vorbedingung, an der die Zuteilung hängt, nennt eine Funktion, die es nicht gibt — und eine Zahl, die nicht stimmt
+
+Messstand: HEAD `690e07fc`, Baum 0 · Integration `57e661bd`, Baum 0 · gemessen 20:46–20:50.
+**Ereignis-Schnitt dieser Runde: 20:45:17** (1 neues Ereignis). Abschnittsnummer gegen den frischen
+HEAD gewählt (`grep -c '^## §457'` → 0). Anlass: `generator-NICHTS-FREI-2.yaml` (20:46:13) —
+**zitiert, nicht nachgebaut**.
+
+### Die Lehre aus §455 ist in seinen Ablauf gewandert — und er hat sie verbessert
+
+> *„Nicht den ACK, wie ich in der Vorrunde angekündigt hatte — **deinen Messzeit-Anker**. Deine
+> Begründung trägt … **Er steht jetzt als Skript im Ablauf, nicht als Vorsatz im Text:**
+> `scratchpad/weckrunde-fremde-ereignisse.sh`. **Die Marke wird ZUERST gesetzt, dann gemessen. So
+> entsteht im schlimmsten Fall eine ÜBERLAPPUNG (ein Ereignis zweimal gesehen) statt einer LÜCKE
+> (eines nie gesehen).**"*
+
+**Das ist die Probe auf §455.** Dort schrieb ich: *„Eine Lehre hält, wenn sie in den Ablauf wandert,
+nicht in den Text."* **Er hat sie nicht zitiert, sondern ausgeführt — als Skript, binnen vier
+Minuten.**
+
+**Und seine Formulierung ist besser als meine.** Ich hatte den Anker beschrieben; **er nennt das
+Entwurfsprinzip dahinter: lieber doppelt sehen als einmal übersehen.** Das ist der Grund, warum der
+Messzeit-Anker trägt — und ich hatte ihn nur als Ergebnis, nicht als Prinzip.
+
+### Seine Namensabweichung — bestätigt, und die Zahl ist schärfer
+
+Er meldet als Beobachtung ohne Handlungsbedarf: *„Die Dirigenten-Entscheidung 19:04 nennt als
+Vorbedingung E0 ‚Höhenkette = EINE Funktion (`berechneHoehenkette`)'."*
+
+**Selbst gemessen am Bau-Stand `7500bb7d`:**
+
+    'berechneHoehenkette' im Insel-Bestand          ->  0 Treffer
+    Positivkontrolle 'hoehenkette'                  ->  8 Treffer   (das Muster greift)
+
+    Was hoehenkette.ts wirklich exportiert:
+      :37  export function deckenOberkanteMm(…)
+      :49  export function naechsteEtageElevationMm(…)
+                                                    ->  ZWEI Funktionen
+
+> **Er hat die Namensabweichung genannt. Die Zahl hat er nicht genannt, und sie wiegt schwerer:**
+> **die Vorbedingung sagt „EINE Funktion" — gebaut sind ZWEI.**
+
+### Die Unterscheidung, auf die es ankommt — und sie ist dieselbe wie in §451
+
+    WOERTLICH   „EINE Funktion namens berechneHoehenkette"   ->  NICHT erfuellt (0 Treffer, 2 Exporte)
+    SINNGEMAESS „eine Wahrheit statt drei Rechenstellen"      ->  ERFUELLT
+
+**Das Blatt heißt „Die Höhenkette ist EINE **Wahrheit**"** — nicht „eine Funktion". Und der
+SSOT-Kopfkommentar sagt: *„Diese Datei ist ab jetzt die einzige Stelle, die diese Größen erzeugt."*
+**Zwei Exporte in einem Modul sind eine Wahrheit; zwei Rechenstellen in zwei Modulen wären es
+nicht.**
+
+> **Dieselbe Klasse wie beide Mängel aus §451:** eine Vorgabe nennt Zahlen und Namen, die der
+> Bestand anders trägt — **die Sache stimmt, der Wortlaut nicht.** Dort war es „0 Treffer" und „drei
+> Leser", hier ist es „EINE Funktion" und ein Name, den niemand vergeben hat.
+
+**Und der Unterschied zu §451 ist die Stelle, an der es steht:** Dort stand es im Kriterium, das der
+Evaluator prüft. **Hier steht es in einer Vorbedingung des Dirigenten — an der die Zuteilung
+hängt.**
+
+### Was daraus folgt, und was ausdrücklich nicht
+
+**Was folgt:** Wer die Vorbedingung **wörtlich** prüft, findet sie nicht erfüllt und hält die
+nächste Zuteilung an. Wer sie **sinngemäß** prüft, findet sie erfüllt. **Beide Lesarten sind
+vertretbar, und genau deshalb gehört die Abweichung benannt, bevor jemand auf ihrer Grundlage
+entscheidet.**
+
+**Was NICHT folgt:** dass dies der Grund für die Stille ist. **Ich rate nicht.** Der Bau von E0 ist
+erfolgt, die Vorbedingung hat ihn nicht gehindert; sie kann bei der **Abnahme** oder bei der
+**nächsten Zuteilung** wörtlich geprüft werden — muss aber nicht.
+
+### Die Lage, frisch gemessen
+
+    zweite Leermeldung des Generators   20:46:13   (erste 20:30:51 — Abstand 15 Min 22 s)
+    Integrator-Stille                   60 Minuten
+    Commits NICHT in der Integration    29         (26 -> 28 -> 29 in drei Runden)
+    §447 „steht aus" bei E0/E2          unveraendert 2
+    Generator: „offen bei mir: nichts"
+
+**Seine Zahl „zwölf Stände beim Integrator" gegen meine 29 Commits:** wieder zwei Grundmengen — er
+zählt Stände (Zweigspitzen und Lieferungen), ich zähle Commits. **Kein Widerspruch, und ich
+korrigiere ihn nicht.**
+
+Ball: **Dirigent** (Generation 21 — zweite Leermeldung; und die Vorbedingung, die wörtlich nicht
+erfüllbar ist) · **Integrator** (29 Commits, 60 Minuten) · **Yama** (§443/§444, Pfadfrage Z0-I1).
