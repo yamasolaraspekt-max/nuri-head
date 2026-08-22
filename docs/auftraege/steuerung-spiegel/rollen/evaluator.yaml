@@ -1,25 +1,18 @@
-auftrag_id: NACHPRUEFUNG-evaluator-Z1-W1-5
-generation: 11           # 2026-08-22T13:41:49+0200 — gen 10 abgeschlossen (A-43 ABGENOMMEN 12/12, fbb8a73a). Yama 13:3x: 'die fuenf Z1-Bauten abnehmen' — W1-3/W1-4 sind abgenommen (Zustandscommits laufen), W1-1/W1-2 haengen an Browser+Test-DB (Y-13 GRANT bei Yama), W1-5 ist JETZT pruefbar.
+auftrag_id: NACHPRUEFUNG-evaluator-A-43-posten3
+generation: 12           # 2026-08-22T13:58:44+0200 — gen 11 abgeschlossen (Z1-W1-5 ABGENOMMEN cf49113b). Tor-Wort zurueckgenommen: aktion = nachpruefen. Generator-Nachlieferung Posten 3 CODE_FERTIG (08e4901a).
 rolle: evaluator
 sitzung_erwartet: 303cefb6-35fd-4c36-9aca-ed10515f59b3
 worktree: /Users/yamanuri/Documents/ticket-rolle-evaluator
 branch: rolle/evaluator
-basis_sha: fbb8a73a
+basis_sha: cf49113b
 prioritaet: P0
-aktion: bauen            # TOR-WORT (Umstellung auf 'nachpruefen' folgt nach deinem Hinweg auf den A-43-Stand)
-taetigkeit: "nachpruefen (Evaluator): Z1-W1-5 nach NACHBESSERN a4144ff4"
-gegenstand: |
-  Dein Votum a4144ff4 (NACHBESSERN, 'eine Zahl') zu Z1-W1-5 (K-1 insulationType-Ausweis, Bau da86c59d). Die Nachbesserung 7eaab966 entstand
-  als DIREKTCOMMIT im Integrations-Checkout (Abweichungsprotokoll 21.08.) und ist deshalb prozessual nicht abnahmefaehig gewesen; sie ist
-  heute Bestandteil des Integrationsstands. Pruefe den INHALT am aktuellen Integrationsstand (SHA nennen): ist der eine Mangel aus a4144ff4
-  behoben (rot a4144ff4-Stand -> gruen heute), haelt die Gegenprobe (Z1-W1-5-Kriterien unveraendert, Tests 1778+/0, tsc 0, Produktcode-Diff
-  nur die Ausweiszeilen)? Herkunft der Nachbesserung im Votum AUSDRUECKLICH benennen (Direktcommit, seitdem Tor A-37-25 wirksam) —
-  Votum ABGENOMMEN / NACHBESSERN nach Inhalt. Kein Kriterium nachschreiben; Browser ist fuer W1-5 nicht verlangt (Kriterien pruefen).
-meldepflicht: "AUFTRAG_GESTARTET mit endstand_sha + gelesen_bis; Abschluss mit endstand_sha, ergebnis_sha, gelesen_bis"
-lease: "leases/NACHPRUEFUNG-evaluator-Z1-W1-5/"
-danach: "gen 12 = Nachpruefung A-43 Posten 3 (sobald Generator-Nachlieferung CODE_FERTIG) ODER Abnahmerueckstand Posten 2 (Z2-W0-7) — je nachdem, was zuerst vorliegt; W1-1/W1-2 Browser sobald Y-13 GRANT vorliegt (Yama)."
-verboten: [Produktcode, Reparaturen, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Commit ausserhalb des eigenen Worktrees, Produktiv-DB]
+aktion: nachpruefen
+taetigkeit: "nachpruefen (Evaluator): A-43 Posten 3 (A-43-13 Dirigent-Bereich) — danach Abnahmerueckstand Posten 2 (Z2-W0-7) als gen 13"
+hinweg_zuerst: "ZUERST Hinweg: git merge --no-edit -m "<rolle>: Hinweg — A-43-Stand" auto/hausplaner-integration im EIGENEN Worktree (kein Rebase/Force; Konflikt -> BASE_BLOCKED melden). Erst danach ist das Rollenverb in deinem Tor bekannt; <rolle>-BASIS_NACHGEZOGEN.yaml mit HEAD."
+gegenstand: "A-43-13 am Generator-Endstand 08e4901a (Basis 8a08d625): Positiv-/Negativprobe NUR im Wegwerf-Repo unter TMPDIR (A-37-22d; Ortsangabe jetzt im Blatt 3aa7c730): dirigent + docs/backlog/ -> 0, docs/fortschritt/ -> 0, docs/STATUS.md -> !=0, scripts/ -> !=0; Gegenprobe: uebrige 12 unberuehrt (git diff --stat 8a08d625..Endstand nur rollen-tor.sh + Matrix), Produktcode leer. Votum ABGENOMMEN/NACHBESSERN mit endstand_sha, ergebnis_sha, gelesen_bis."
+lease: "leases/NACHPRUEFUNG-evaluator-A-43-posten3/"
+verboten: [Produktcode, Reparaturen, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd im Bestand, --no-verify]
 steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/NACHPRUEFUNG-evaluator-Z1-W1-5/evaluator-ack.yaml
-erstellt: "2026-08-22T13:41:49+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/NACHPRUEFUNG-evaluator-A-43-posten3/evaluator-ack.yaml
+erstellt: "2026-08-22T13:58:44+0200 Dirigent (atomar; Uhr: date)"

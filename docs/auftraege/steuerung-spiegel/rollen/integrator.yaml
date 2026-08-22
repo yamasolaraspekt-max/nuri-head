@@ -1,22 +1,23 @@
-auftrag_id: INT-zustand-z-welle
-generation: 10           # 2026-08-22T13:41:49+0200 — deine Standmeldung 13:37:47 ('elf Posten setzbar, warten auf Weisung'): hier ist sie. A-43 ABGENOMMEN 12/12 (fbb8a73a), Bau 8a08d625 bereits in der Kette (3b3ec356). gen 9 Posten 1/2 erledigt.
+auftrag_id: INT-zustand-kette-2
+generation: 11           # 2026-08-22T14:11:33+0200 — gen 10 ZUSTAND_NACHGEZOGEN (b45f0814, 10 gesetzt, 2 leer uebersprungen — richtig). Tor-Wort zurueckgenommen: aktion = zustand_nachziehen (A-43-Vokabular; Hinweg zuerst).
 rolle: integrator
 sitzung_erwartet: 03737d75-b216-4299-b4ea-595407d3e457
 worktree: /Users/yamanuri/Documents/ticket
 branch: auto/hausplaner-integration
-basis_sha: fafcc882
+basis_sha: b45f0814
 prioritaet: P0
-aktion: bauen            # TOR-WORT; nach deinem Hinweg (A-43-Vokabular) gilt 'zustand_nachziehen' — Umstellung folgt als gen 11 fuer alle Rollen
-taetigkeit: "zustand_nachziehen + transportieren (Integrator); kein Produktcode"
+aktion: zustand_nachziehen
+taetigkeit: "zustand_nachziehen + transportieren (Integrator)"
+hinweg: "Der Integrations-Checkout traegt A-43 bereits (8a08d625 Vorfahr) — kein Merge noetig; das Verb ist in deinem Tor bekannt."
 jetzt:
-  1: "Zustandscommit A-43 ABGENOMMEN (Bau 8a08d625, Beleg fbb8a73a; Posten 3 als 'Nachlieferung offen' im Block), A-Kennung."
-  2: "Die elf Z-Zustandscommits, je EIN nicht-leerer Commit mit Votum-/Bau-SHA, Reihenfolge: (a) Z2-W0-5 ABGENOMMEN 28ca0834 / 639a7a32 + Satz zu Bau B ef7a8c89 (Beleg/Vorrat, nicht transportiert, Entscheidung Yama); (b) Z1-W1-3 ABGENOMMEN b9fe55c0; (c) Z1-W1-4 ABGENOMMEN 36eb8b63; (d) Z1-W1-1 CODE_FERTIG (Bau b3c6ac29; Votum d40adbf5 Teil-ENV_BLOCKED, Browser offen); (e) Z1-W1-2 CODE_FERTIG (Bau 60c04eef; Votum 27143f96 4/5, E ENV_BLOCKED); (f) Z1-W1-5 NACHBESSERN (Bau da86c59d; Votum a4144ff4; Nachbesserung 7eaab966 Herkunft Direktcommit — Nachpruefung laeuft); (g)-(k) die fuenf Z2-W0 (314ea991, 69c85d01, 5831c06a, 29eb791c, + der fuenfte laut Plan-Pruefer §318) CODE_FERTIG — Zustand NUR nach Beleglage, kein Votum erfinden; wo ein Votum existiert, dessen Ergebnis."
-  3: "Jeder Zustandscommit ueber das Muster (status-erzeugen.sh), Mustersperre fuer Mehrfachbetreffe bleibt; 'git show --stat' je Commit im Abschlussereignis. Kein Handtext in STATUS.md ausser dem erzeugten Block."
-  4: "Transportkette weiter (Planner ebb798d7/A-43 Posten 3, Plan-Pruefer, Evaluator-Voten, Generator-Nachlieferung)."
-abschluss: "ZUSTAND_NACHGEZOGEN mit Liste (Kennung -> Zustand -> Commit-SHA), endstand_sha, ergebnis_sha, gelesen_bis."
+  1: "Z1-W1-5: Evaluator Nachpruefung ABGENOMMEN cf49113b (13:4x, der eine Mangel behoben; Herkunft 7eaab966 benannt) -> Zustandscommit Z1-W1-5 ABGENOMMEN, Beleg cf49113b (ersetzt NACHBESSERN c5587478)."
+  2: "Deine Berichtigung zu b3c6ac29/da86c59d (Meldungen, nicht Bauten) ist richtig — fuer Z1-W1-1/Z1-W1-2/Z1-W1-5 gilt der Bau-SHA aus dem jeweiligen Evaluator-Votum bzw. Generator-CODE_FERTIG; wo du ihn nicht belegen kannst: Feld 'bau: siehe Votum <SHA>' statt geraten."
+  3: "Transportkette weiter (Planner: Werkzeug-Register/Anschluss-Blaetter/Z2-W0-5b; Plan-Pruefer; Evaluator-Voten; Generator-Nachlieferung A-43 Posten 3 nach Evaluator-Votum; rolle/dirigent). Block-Anlage bei neuen Blaettern (ENTWURF, dor_beleg steht aus)."
+  4: "Reifegrad im Zustandscommit, sobald das Muster es traegt (V3-9, Regelbau spaeter): bis dahin ABGENOMMEN wie bisher."
+abschluss: "ZUSTAND_NACHGEZOGEN je Lauf mit Liste, endstand_sha, ergebnis_sha, gelesen_bis."
 verboten: [Produktcode, --no-verify, core.hooksPath aendern, leere Commits, Voten erfinden]
 erlaubte_pfade: [docs/STATUS.md, docs/BEFUNDNOTIZEN.md, "Rueckweg-Commits der Rollenzweige"]
 steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/INT-zustand-z-welle/integrator-ack.yaml
-erstellt: "2026-08-22T13:41:49+0200 Dirigent (atomar; Uhr: date)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/INT-zustand-kette-2/integrator-ack.yaml
+erstellt: "2026-08-22T14:11:33+0200 Dirigent (atomar; Uhr: date)"
