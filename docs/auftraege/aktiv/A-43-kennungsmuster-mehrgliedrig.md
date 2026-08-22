@@ -448,9 +448,31 @@ aktion"*).
   **Messbefehl** — gezählt werden **Dateien und `case`-Anweisungen**, nicht Fundstellen:
   ```
   grep -rlE 'bauen\|nachbessern|pausieren\|angehalten' scripts/ .githooks/ | wc -l   -> genau 1 Datei
-  grep -c 'case "$AKTION" in' <diese Datei>                                          -> genau 1 Anweisung
+  grep -cF 'case "$AKTION" in' <diese Datei>                                         -> genau 1 Anweisung
   grep -rnE 'bauen\|nachbessern|pausieren\|angehalten' scripts/ .githooks/           -> Zeilen benennen
   ```
+
+  > **Zweite Berichtigung an dieser Stelle (Plan-Prüfer 13:08:35), und sie gehört ins Blatt, weil
+  > sie sein Gegenstand ist:** der mittlere Befehl stand hier als `grep -c 'case "$AKTION" in'` —
+  > **ohne `-F` liefert er 0**, nicht 1. **`$` ist im regulären Ausdruck der Zeilenend-Anker**, das
+  > Muster liest sich als *„`case "` gefolgt vom Zeilenende, danach `AKTION" in`"* und kann nie
+  > treffen. Selbst nachgefahren, alle Formen am Stand `a7035fb7`:
+  > `ohne -F → 0` · `grep -cF → 1` · `grep -c 'case "\$AKTION" in' → 1` · `grep -cE 'case "[$]AKTION" in' → 1`.
+  >
+  > **Wie es entstanden ist — ich kann die Auskunft geben, die er ausdrücklich nicht messen konnte:**
+  > gemessen habe ich in der Shell mit `'case "\$AKTION" in'`, **mit** Backslash, und dort **1**
+  > erhalten. Ins Blatt geschrieben habe ich ihn **ohne**. *Die Messung war richtig, die Niederschrift
+  > hat ein Zeichen verloren* — und zwar genau das, an dem alles hängt.
+  >
+  > **Er hat die Klasse richtig benannt:** drei Zeilen höher steht `bauen\|nachbessern` mit korrekt
+  > escaptem Pipe. **Dieselbe Sorgfalt, die das eine Metazeichen erkannt hat, hat das andere
+  > übersehen.** Deshalb steht hier jetzt `-F`: es schaltet die Metazeichen ganz ab und ist gegen
+  > jede Shell und jedes Escaping robust. *Ein Befehl, den man richtig zitieren muss, damit er
+  > funktioniert, ist der falsche Befehl.*
+  >
+  > **Gegenprobe über das ganze Blatt:** `grep -n '\$'` → **8** Fundstellen; sieben davon sind
+  > Shell (`echo $?`, `STAND=$( )`), ein awk-Feld (`{print $1}`) oder die Erklärung des Ankers
+  > selbst. **Diese eine war die einzige defekte.**
 
   **Heutiges (grünes) Ergebnis:** **1 Datei** (`scripts/rollen-tor.sh`), **1 `case`-Anweisung**,
   darin **2 Fundstellen** — `:361` (Arbeit) und `:362` (Pause), die zwei Zweige derselben Anweisung.
