@@ -125,26 +125,64 @@ DIE VORLAGEN, die kopiert werden:
   **Absage-Regel:** Eine Ablehnung erfüllt (c) **nicht.** *Der Keller ist ein gültiger Fall; die
   Warnung informiert, sie verbietet nicht.*
 
-- **Z1-E4-1-d** · **SPEICHERN UND LADEN — UND DER BESTAND BLEIBT UNBERÜHRT.**
+- **Z1-E4-1-d1** · **LADEN — UND DER BESTAND LÄDT UNVERÄNDERT.**
 
-  **Verlangt:** Dokument **mit** Platte speichert und lädt (**PHP 200, nicht 422**);
-  Bestandsdokument **ohne** Platte lädt **unverändert**. *Yamas eigene Vorgabe vom 21.08.*
+  > *(Halbsatz Posten 28, zugestellt 23:04:26. **(d) ist in d1 LADEN und d2 SPEICHERN getrennt** —
+  > die DoR `54163b25`/`998ff9f2` bleibt gültig, Nachtrag 1.5, kein neuer Durchgang.)*
+
+  **Verlangt:** Ein Dokument **mit** Platte lädt. Ein **Bestandsdokument nach Schema 3** lädt
+  **unverändert** über `migriereSzene`. *Yamas eigene Vorgabe vom 21.08.*
 
   **Messbefehl:**
   ```
-  Schema 3 -> 4 ueber scripts/hausplaner-schema.mts (nicht von Hand)
+  Schema 3 -> 4 ueber scripts/hausplaner-schema.mts (NICHT von Hand)
   Zod validation.ts · scene-document-v2.schema.json (additionalProperties:false!)
-  PHP: SceneDocumentValidator.php:12 · SpeichereHausplanerDokumentRequest.php:66
   migriereSzene: EINE Zeile
-  Bestandsdokument ohne foundationSlabs laden -> 200, Diff zeigt NUR das neue leere Feld
+  Bestandsdokument ohne foundationSlabs LADEN -> Diff zeigt NUR das neue leere Feld
   ```
 
   **Heutiges (rotes) Ergebnis:** `SCHEMA_VERSION = 3` (`scene.types.ts:18`), `foundationSlabs` →
   **0 Treffer** in Zod, JSON-Schema und PHP.
 
-  **Absage-Regel:** Ein von Hand gepflegtes `scene-document-v2.schema.json` erfüllt (d) **nicht** —
+  **Absage-Regel:** Ein von Hand gepflegtes `scene-document-v2.schema.json` erfüllt (d1) **nicht** —
   *das Skript existiert und läuft als Tor vor Build und Suite; eine Handpflege liefe daran vorbei
   und wäre beim nächsten Lauf überschrieben.*
+
+- **Z1-E4-1-d2** · **SPEICHERN — UND DER PHP-VALIDATOR SPIEGELT ALLE VIER SAMMLUNGEN.**
+
+  **Verlangt:** Ein Dokument mit Platte speichert (**PHP 200, nicht 422**). Ein **unbekanntes
+  Level** führt zu **422** — für `nodes`, `ceilings`, `roofs` **und** `foundationSlabs`.
+  **Je Sammlung EIN PHP-Feature-Test** (422 + Fehlertext „unbekanntes Level").
+
+  **Messbefehl:**
+  ```
+  PHP: app/Domain/Hausplaner/Validation/SceneDocumentValidator.php
+       integritaetsfehler(:58) — vier Schleifen statt einer, Muster nodes (:67, :71)
+       SpeichereHausplanerDokumentRequest.php:66
+  vier Feature-Tests: je Sammlung ein Dokument mit unbekannter levelId -> 422
+  Dokument MIT Platte, gueltige levelId -> 200
+  ```
+
+  **Heutiges (rotes) Ergebnis — selbst gemessen:**
+  ```
+  SceneDocumentValidator.php:53  "Diese Regeln spiegeln EXAKT sceneDocumentSchema + validateSceneIntegrity."
+  integritaetsfehler prueft:      levels (:62) · nodes (:67, :91)
+  'ceilings' · 'roofs' · 'foundationSlabs'   ->  JE 0 TREFFER in der ganzen Datei
+  Positivkontrolle 'nodes': 2 Treffer
+  ```
+
+  > **Der Kommentar auf `:53` behauptet eine Spiegelung, die es zu drei Vierteln nicht gibt.**
+  > *Er wird durch die Tests wahr gemacht — oder er wird gestrichen.* **Eine Behauptung im Code,
+  > die niemand misst, ist die teuerste Sorte:** sie ersetzt die Prüfung, die sie beschreibt.
+
+  **Absage-Regel:** Drei Schleifen ohne die drei Tests erfüllen (d2) **nicht** — *der Dirigent
+  verlangt ausdrücklich einen TEST, der die Spiegelung prüft, keinen Kommentar, der sie behauptet
+  (Yama 22:5x).*
+
+  **Bewusst in Kauf genommen und hier benannt:** ein **Bestandsdokument mit verwaister Decke oder
+  verwaistem Dach** bekäme künftig beim **Speichern** 422. *Das ist gewollt — der Client lehnt es
+  heute schon ab — und **es betrifft nur das Speichern, nicht das Laden** (d1). Eine Zählung im
+  Bestand ist ein eigener Posten und kein Blocker für E4.*
 
 - **Z1-E4-1-e** · **DIE HÖHENKETTE KENNT DIE PLATTE ALS UNTERES ENDE.**
 
@@ -275,7 +313,8 @@ lässt das bestehende Enum unberührt. *Option B hätte ein Enum erweitert, das 
 | a Leiste Platz 1, Klick erzeugt, 2D+3D | AP-1 Werkzeug + Render | n.U. | n.U. |
 | b zweite Platte je Geschoss abgelehnt | AP-2 Command-Wache | n.U. | n.U. |
 | c Geschoss darunter → Hinweis | AP-2 (Hinweis) | n.U. | n.U. |
-| d Schema 3→4, Bestand lädt unverändert | AP-3 Modell + Speicherweg | n.U. | n.U. |
+| d1 LADEN: Schema 3→4, Bestand lädt unverändert | AP-3 Modell + Ladeweg | n.U. | n.U. |
+| d2 SPEICHERN: 200 + vier Sammlungen 422 | AP-3 PHP-Validator + vier Tests | n.U. | n.U. |
 | e Höhenkette kennt das untere Ende | AP-3 (Naht E0) | n.U. | n.U. |
 | f Grenzfläche erdreich | AP-4 Projektion | n.U. | n.U. |
 | g Panel ohne „geprüft" | AP-1 (Panel) | n.U. | n.U. |
