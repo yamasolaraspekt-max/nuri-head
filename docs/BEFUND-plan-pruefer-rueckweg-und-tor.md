@@ -38419,3 +38419,87 @@ aus einer Dauerregel, die Zustand und Transport koppelt — und der Zustand war 
     Rueckstand mein Baum -> Integration   182
 
 Ball: **keiner** — der Stau ist aufgelöst, die Würdigung geht als Ereignis raus.
+
+## §480 — Der Dirigent entscheidet §443 mit NEIN. Drei meiner Befunde sind damit erledigt, und eine Anweisung an mich ist gegenstandslos — gemessen, nicht angenommen
+
+Messstand: HEAD `72fab124`, Baum 0 · **Integration `0435ff47`**, jüngster Integrator-Commit 22:02:32
+· **Rückstand `HEAD..auto` = 185** · gemessen 22:03–22:08. **Ereignis-Schnitt dieser Runde: 22:00:22**
+(11 neue Ereignisse). Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §480'` → 0).
+Anlass: `dirigent-ENTSCHEIDUNG-2200-sieben-punkte.yaml` (22:01:46, `in_yamas_namen: true`).
+
+### Punkt 1 — meine Regelfrage aus §443 ist entschieden
+
+> *„**NEIN** zur Regelfrage §443: **keine Schutzprobe, kein Test, kein Skript verbindet sich mit
+> ‚ticket'.** Die Gegenprobe zu Z0-I1-10 läuft gegen `information_schema` oder einen nicht
+> existierenden DB-Namen. **‚ticket' darf in keinem Test-/Probebefehl stehen.**"*
+
+**Das ist die Antwort auf die Frage, die ich um 19:52 gestellt und ausdrücklich nicht selbst
+entschieden habe.** Sie fällt so aus, wie der Präzedenzfall aus §472 es nahelegte: **die Rolle fährt
+die verbotene Messung nicht.**
+
+**Und meine §452-Berichtigung ist übernommen:** *„Planner: Pfaderweiterung … **alle DREI Stellen
+(:179, :433, :467)** in einem Commit."* **Ich hatte in §439 zwei genannt und in §452 auf drei
+berichtigt — die Entscheidung nennt drei.**
+
+### Punkt 4 — meine Rangfolge aus §459 ist bestätigt
+
+> *„Klarstellung: ‚EINE Wahrheit' = **EINE Quelle** (`geometry/hoehenkette.ts`), **nicht EIN
+> Funktionsname**. ‚berechneHoehenkette' war der GP-0-Vorschlag, kein Kriterium. Zwei Exporte
+> derselben Kette sind erlaubt … **Maßstab ist das Blatt, geprüft vom Evaluator — nicht mein Satz.**"*
+
+**§457 hatte gemessen, dass `berechneHoehenkette` nicht existiert und zwei Exporte gebaut sind;
+§459 hatte die Rangfolge gesetzt: es bindet der Messbefehl, nicht der Zielsatz.** Beides ist
+bestätigt — **und der letzte Halbsatz ist die stärkere Fassung meiner eigenen Aussage:** *nicht mein
+Satz* sagt der Dirigent über seine eigene Vorbedingung.
+
+### Punkt 7 — meine Lagemeldung aus §453 ist bestätigt
+
+> *„Transportstau 20:00–21:55 = Produktionsstopp (**Plan-Prüfer hat recht**)."*
+
+### Und die Anweisung an mich — gemessen, bevor ausgeführt
+
+> *„**JEDER Rollen-Worktree** (generator, evaluator, planner, **plan-pruefer**; NICHT der
+> Integrationscheckout) stellt seine `.env` auf `ticket_testing` — **ohne die Datei zu lesen oder
+> anzuzeigen** … Jede Rolle meldet das als Ereignis `<rolle>-ENV-ticket_testing.yaml`."*
+
+    .env in ticket-rolle-plan-pruefer :  NICHT VORHANDEN
+    .env.testing                      :  NICHT VORHANDEN
+    .env* insgesamt                   :  1 Datei — .env.example
+    Gegenprobe, nur Existenz:
+      ticket-rolle-generator  .env VORHANDEN
+      ticket-rolle-evaluator  .env VORHANDEN
+      ticket-rolle-planner    .env nicht vorhanden
+
+> **Für mich ist die Anweisung gegenstandslos: es gibt nichts zu stellen.** Das deckt sich mit meiner
+> eigenen Messung aus §444 (19:58) — *„.env liegt in `ticket` (JA) und `ticket-rolle-generator` (JA),
+> in `ticket-rolle-plan-pruefer` NICHT."*
+>
+> **Ich habe das `sed` nicht gefahren.** Ein Befehl, der eine nicht existierende Datei bearbeitet,
+> legt sie im schlimmsten Fall an oder scheitert im besten — **beides wäre schlechter als die
+> Messung, die zeigt, dass nichts zu tun ist.** Und die Schutzauflage *„ohne die Datei zu lesen"*
+> habe ich eingehalten: gemessen wurde nur die **Existenz** und der **Dateiname**, kein Inhalt.
+
+**Betroffen sind nach dieser Messung Generator und Evaluator.** Der Planner ist wie ich ohne `.env`.
+
+### Was das über die zwei Stunden sagt
+
+Der Dirigent schreibt im Vorspann: *„Der Dirigent war 19:45–21:55 nicht am Zug — **0 Ereignisse in
+zwei Stunden**, vier Planner-Fragen und ein Sicherheitsvorfall lagen."*
+
+> **Beide Engpässe der letzten zwei Stunden haben sich zur selben Minute aufgelöst** — der Integrator
+> um 21:56, der Dirigent um 22:01. **Und beide haben ihre eigene Lücke selbst benannt, bevor jemand
+> sie ihnen vorhielt.** Meine Meldungen aus §447, §453, §457 und §461 haben das nicht bewirkt; sie
+> lagen bereit, als die Rollen zurückkamen. **Das ist der Wert einer Meldung an einen Abwesenden,
+> und es ist ein anderer als Fortschritt** — genau die Unterscheidung, die der Evaluator um 21:07
+> getroffen hat.
+
+### Lage, alles in dieser Runde gemessen (22:03:52)
+
+    Integration                           0435ff47  (juengster Commit 22:02:32, Stille 1 Min)
+    Commits NICHT in der Integration      0          (vorher 1, davor 50)
+    §447 „steht aus" bei E0/E2            0
+    ballbesitz plan-pruefer in der Tafel  1          — P-02, zustand VORLAGE
+    Baelle beim Integrator                24
+    Rueckstand mein Baum -> Integration   185
+
+Ball: **bei mir** — die ENV-Meldung geht sofort als Ereignis (§463: alles mit Ball einzeln).
