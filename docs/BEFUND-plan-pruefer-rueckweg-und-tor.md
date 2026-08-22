@@ -31954,3 +31954,61 @@ Verwaisten-Übernahme, weil er lebt; die Bündel-Regel, weil sie nicht in seinem
 
 Ball: **Dirigent** — und zwar dringlich, weil die externe Prüfung eine Übernahme als *„regulär, keine
 Auslegung"* bezeichnet, die nach meiner Messung **nicht** regulär wäre. Bei mir nichts.
+
+## §401 — Der „dritte Zustand" trifft zwei von drei aktiven Leases: alle drei Prozesse laufen, zwei Heartbeats sind abgelaufen
+
+Messstand: HEAD `5278f0b8`, Baum 0, gemessen 17:13–17:16. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §401'` → 0). Vorratsprüfung (b): den in §400 benannten Zustand über die
+Grundmenge zählen.
+
+### Alle aktiven Leases, gemessen
+
+    Lease                            Rolle        heartbeat_bis   Alter   PID      laeuft
+    ABNAHME-evaluator-Z2-W0-1-…      evaluator    16:57:46        16 min  87995    JA
+    INT-zustand-kette-2              integrator   16:25:04        49 min  91006    JA
+    SPEZ-planner-anschlusswelle-1    planner      17:43:02        gueltig 56336    JA
+
+    aktive Leases 3 · Heartbeat abgelaufen 2 · Prozess laeuft 3 · DRITTER ZUSTAND 2
+
+**Alle drei Prozesse laufen. Keine einzige Lease ist verwaist.** Der Zustand, den ich in §400 als
+„dritten" beschrieben habe — lebt, aber schreibt keinen Heartbeat mehr — **ist nicht die Ausnahme,
+sondern trifft zwei von drei.**
+
+**Damit ist der Integrator nicht auffällig, sondern der längste Fall eines Musters.** Nach dem
+Kriterium aus B-009 (*„abgelaufener Heartbeat UND kein Lauf"*) wäre auch die Evaluator-Lease seit 16
+Minuten übernahmefähig — und der Evaluator arbeitet nachweislich an der Abnahme.
+
+### Warum die Heartbeats ablaufen, obwohl gearbeitet wird
+
+    Rolle        Lease-mtime   letztes Ereignis
+    planner      17:13:02      17:08:03     <- Heartbeat NACH dem Ereignis erneuert
+    evaluator    16:17:46      16:26:43     <- Heartbeat VOR dem Ereignis, seither nicht mehr
+    integrator   16:05:04      15:58:25
+
+**Der Heartbeat wird nicht automatisch mitgeschrieben, wenn eine Rolle ein Ereignis ablegt.** Der
+Planner hat ihn um 17:13:02 **aktiv erneuert**, fünf Minuten nach seinem Ereignis — der Evaluator
+seit 16:17:46 nicht mehr, obwohl er neun Minuten später schrieb.
+
+> **Ein abgelaufener Heartbeat sagt nichts über den Lauf. Er sagt, dass die Rolle ihn nicht erneuert
+> hat** — und zwei von drei tun das nicht. Eine Regel, die daraus „verwaist" ableitet, erklärt in
+> diesem Bestand zwei arbeitende Rollen für tot.
+
+### Was das für B-009 heißt
+
+Der S2-Befund der externen Prüfung ist in seiner **Beobachtung** richtig (Heartbeat 49 Minuten alt,
+Transportkette steht, `docs/STATUS.md` uncommittet) und in seiner **Schlussfolgerung** nicht haltbar
+(*„beide Bedingungen … erfüllt … die Übernahme ist regulär, keine Auslegung"*). **Die zweite
+Bedingung ist bei zwei von drei Leases nicht erfüllt, obwohl sie so aussieht.**
+
+**Ich sage nicht, dass nichts zu tun ist.** Die Transportkette steht seit 68 Minuten, vier Bauten und
+der Bündel-Commit warten — das ist unverändert der Befund aus §394/§398. **Ich sage nur: der Weg
+dorthin führt nicht über eine Lease-Übernahme**, denn deren Voraussetzung liegt nicht vor.
+
+### Was ich nicht gemessen habe
+
+**Warum** der Integrator seit 15:58:25 kein Ereignis mehr ablegt, während sein Prozess läuft, kann ich
+nicht sehen — ein laufender Prozess kann warten, rechnen oder hängen. **Die drei Zustände sind von
+außen nicht unterscheidbar**, und ich habe keinen Weg gefunden, sie zu trennen, ohne in einen fremden
+Lauf einzugreifen. Das bleibt offen und gehört zur Lage.
+
+Ball: **Dirigent** (unverändert, dringlich) · bei mir nichts.
