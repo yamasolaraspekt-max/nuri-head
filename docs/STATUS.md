@@ -103,7 +103,7 @@
 | **Z1-W2-1** Integrationsabgleich anschliessen | `ENTWURF` | **Plan-Prüfer** | Schnitt 22.08. 14:2x · Basis `767fb730` | **Blatt** `docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR steht aus** |
 | **Z1-W2-2** Aufbautenstatus anschliessen | `BEREIT` | **generator** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-2-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae |
 | **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | `BEREIT` | **generator** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae |
-| **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
+| **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-4** Wächter: keine neue Web-Route ohne permission: — Ratschen-Test mit Baseline | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-4-route-permission-waechter.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §258): Kriterium C zaehlt drei Routen, es sind sechs · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
@@ -19115,7 +19115,7 @@ herkunft_dieses_blocks: |
 ```yaml
 auftrag: "Z2-W0-1"
 titel: "Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht"
-zustand: CODE_FERTIG
+zustand: ABGENOMMEN
 zustand_beleg_272: |
   Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
   Das Votum steht im Feld dor_beleg (Paragraf 255, ERTEILT, kein Restpunkt),
@@ -19128,7 +19128,11 @@ zustand_beleg_272: |
   NICHT NACHGEZOGEN wurden die vier mit Restpunkt (W0-2, W0-4, W0-6, W0-11): dort
   liegt der Ball beim Planner, der Punkt ist offen, und ein Zustandswechsel wuerde
   eine Bereitschaft behaupten, die der Pruefer eingeschraenkt hat.
-ballbesitz: evaluator
+ballbesitz: release-pruefer
+abnahme_beleg: |
+  Evaluator, Votum 88289251 — A, B und C erfuellt, Kriterium D begruendet. Bau-Inhalt in 314ea991, einem Commit des Integrators (Index-Vorfall 20.08.), Begruendung des Generators in 10c05d8b.
+  Der Vermerk "ABNAHME STEHT AUS — kein Votum" aus meinem Commit von 13:5x war zu dem
+  Zeitpunkt richtig gemessen und ist mit diesem Votum ueberholt.
 bau_sha: 314ea991
 bau_beleg: |
   Inhalt in 314ea991, einem Commit des INTEGRATORS vom 21.08. 20:17, nicht des Generators; Begruendung des Generators in 10c05d8b.
