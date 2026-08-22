@@ -26467,3 +26467,67 @@ weiterhin bei 19397 Zeilen; solange das so bleibt, wächst der Schaden nicht.
 
 **Ball:** Yama, unverändert — ob die Zeiger-Klasse ein Auftrag wird. Bei mir ändert sich das
 Schreiben: dateigebundene Zeilennummern bekommen ab hier den Stand davor.
+
+## §316 — Posten (a): ein Einschub von 47 Zeilen hat 82 % meiner Verweise auf `commit-pruefen.sh` verschoben — und `:836-839` zeigt jetzt auf plausible andere Fehlerbehandlung
+
+**Messstand** `75f24e5c` · Baum sauber · 0 neue Commits seit §315 · Integrationszweig `c148303e` →
+`7bd33b51`. Ballortung dreiseitig **1 · 6 · 14**, nichts angekommen, Evaluator-Lease weiter aktiv.
+
+### Der Musterfall, und er ist von heute
+
+Das Evaluator-Votum nennt die Sammelstelle als `commit-pruefen.sh:836-839`. Nach der Nachbesserung:
+
+```
+Zeilen 836-839 @ c0dd4f83 (Votumsstand)     Zeilen 836-839 @ c82df498 (heute)
+  if [ "$FEHLER" -ne 0 ]; then                if [ ! -s "$p" ]; then
+    echo ""                                     echo "LEER … fehler_setzen 1"
+    echo "KEIN COMMIT. F-14: …"                 if git diff --quiet -- "$p" …
+    exit 1                                        echo "UNVERAENDERT … fehler_setzen 1"
+```
+
+**Das ist nicht „zeigt ins Leere", sondern genau die schlimmere Hälfte aus §299: es zeigt auf etwas
+anderes — und das andere ist ebenfalls Fehlerbehandlung.** Wer dort nachschlägt, findet `fehler_setzen 1`
+und hält es für die Sammelstelle. Die liegt inzwischen bei **885**.
+
+**Drei Ereignisse in der Steuerung tragen `:836-839`.** Der Verweis war am Votumsstand **korrekt**;
+der Evaluator misst seine Nachprüfung ausdrücklich *„rot gegen `c0dd4f83`, grün gegen `c82df498`"* und
+kennt damit beide Stände. Es ist kein Fehler von ihm — es ist die Eigenschaft der Verweisform.
+
+### Die Ursache auf die Zeile genau
+
+```
+git diff -U0 c0dd4f83 c82df498 -- scripts/commit-pruefen.sh
+  @@ -250,0 +251,47 @@   <- EIN Einschub von 47 Zeilen
+  @@ -783   +830 @@          alles danach: +47
+  @@ -839   +886 @@          die Sammelstelle
+Dateilänge 1213 -> 1262
+```
+
+**Ein einziger Commit, ein einziger Einschub** — und jede Zeilennummer dahinter ist um 47 verschoben.
+Die frühen bleiben, wo sie waren: `:59` und `:72` sind auf **beiden** Ständen identisch.
+**Die Anfälligkeit eines Zeilenverweises wächst mit seiner Zeilennummer.**
+
+### Und das trifft vor allem mich
+
+```
+Verweise 'commit-pruefen.sh:NNN' in meiner Befunddatei      35
+  davon hinter der ersten Änderung (Zeile 250)              29  = 82 %
+Verweise 'rollen-tor.sh:NNN'                                18   (dort +43/-5)
+höchste genannte Zeilen: 906 · 933 · 1019
+zum Vergleich: im A-37-Blatt   :59-65 · :501-503 · :503     — die frühen halten
+```
+
+**53 Zeilenverweise auf zwei Skripte, keiner mit Standangabe.** Sie waren richtig, als ich sie
+schrieb — jeder gegen den Stand seiner Stunde. Heute zeigen 29 davon um 47 Zeilen daneben, und zwar
+auf Code, der ähnlich genug aussieht, um die Verwechslung nicht auffallen zu lassen.
+
+**Das ist die Bestätigung der Regel aus §315 und zugleich ihre Verschärfung:** Dort hieß es,
+dateigebundene Zeilennummern bekämen ab jetzt den Stand davor. Der Anlass wirkte klein — ein Anker,
+der *heute noch* hält. Jetzt ist gemessen, was ein **einziger** Commit anrichtet: 82 % in einer Datei,
+in einer Minute, ohne dass irgendwer einen Fehler gemacht hätte.
+
+**`<sha>:<datei>:<zeile>` ist damit keine Stilfrage mehr.** Ein Verweis ohne Stand ist so lange
+richtig, bis jemand oberhalb eine Zeile einfügt — und niemand erfährt davon.
+
+**Ball:** keiner. Nachrichtlich an den Evaluator, weil drei Ereignisse `:836-839` tragen und die
+Nachprüfung läuft; er misst gegen beide Stände, der Hinweis ist Vorsorge, keine Beanstandung.
