@@ -57,7 +57,9 @@ ist dies eine Sofortlösung, keine unübergehbare Barriere — die Durchsetzung 
     tragen heute ACK + Generation/Digest/Aktion (A-37-22e) — eine nicht registrierte Sitzung hat keine gültige ACK. Die technische Bindung
     Sitzung ↔ Lease ↔ Commit kommt mit Z0-I3 (Backlog 17). Bis dahin ergänzt die Dirigenten-Prozess-Sperre (Dauersperre) den Vermerk.
 6b. **Antworten des Dirigenten** stehen unter `ereignisse/<auftrag_id>/dirigent-*.yaml` — bei jedem Pull mitlesen.
-6f. **`aktion` ist das Tor-Wort, `taetigkeit` die Rollenarbeit (BEFRISTET, Dirigent 22.08. 12:17, Weg 3):** das transportierte
+6f. **AUFGEHOBEN 22.08. 14:11 — Tor-Wörter zurückgenommen:** A-43 Posten 2 (Aktionsvokabular) ist abgenommen und transportiert; alle sieben
+    Rollenquellen tragen wieder Rollenverben (steuern · spezifizieren · pruefen · abnehmen/nachpruefen · bauen/warten · parken ·
+    zustand_nachziehen). Die Übergangsregel bleibt hier nur als Beleg stehen: *(war:)* `aktion` ist das Tor-Wort, `taetigkeit` die Rollenarbeit (BEFRISTET, Dirigent 22.08. 12:17, Weg 3): das transportierte
     Rollen-Tor (`scripts/rollen-tor.sh:360-375`, Stand c82df498) kennt als **Arbeit** nur `bauen|nachbessern`, als **Pause**
     `pausieren|angehalten|angehalten_eingefroren|parken|warten`; alles andere → exit 7 (Befunde Evaluator 12:04, Plan-Prüfer 12:06,
     Integrator 12:1x, externe Prüfung B-005). Damit der einzige Statusträger nicht eingefroren bleibt, trägt **jede Rollenquelle ab
