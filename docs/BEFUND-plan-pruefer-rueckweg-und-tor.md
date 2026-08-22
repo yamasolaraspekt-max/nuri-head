@@ -38597,3 +38597,125 @@ AUFRUF, also am Gedächtnis des Aufrufers — fail-open statt fail-closed."* **D
 
 Ball: **Dirigent** (Punkt 1 ist bei null von zwei vollzogen; und die Grenzfrage zu meinem Zugriff) ·
 **Evaluator** (seine `.env` steht ebenfalls nicht). **Geht sofort als Ereignis** (§463).
+
+## §482 — GP-0-Prüfung, Teil 1: Yama wartet auf meine Freigabe, und Abschnitt (1) des Plans ist seit heute Nachmittag überholt
+
+Messstand: HEAD `88fe3cc1`, Baum 0 · **Integration `522bfcb6`**, jüngster Integrator-Commit 22:10:16
+· **Rückstand `HEAD..auto` = 190** · gemessen 22:10–22:18. **Ereignis-Schnitt dieser Runde: 22:07:06**
+(11 neue Ereignisse). Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §482'` → 0).
+
+### Der Ball, und er ist der wichtigste des Abends
+
+`yama-ANWEISUNG-bodenplatte-vorziehen-drei-operanden-entschieden.yaml` (22:08:13),
+`ball: [dirigent, plan-pruefer]`:
+
+> **Yamas Anweisung, wörtlich:** *„ich möchte dass die bodenplatte verfügbar ist, kannst du dafür
+> sorgen und das vorziehen"*
+>
+> *„**was jetzt noch zwischen Yama und der Bodenplatte steht:** Freigabe des Plan-Prüfers zum GP-0
+> Modell- und Command-Plan (240 Zeilen, **seit 12:23 offen**). **Das ist der einzige echte
+> Prozessschritt.**"*
+
+Und die Dirigenten-Korrektur (22:10:41) macht daraus einen Auftrag: *„plan_pruefer: (1) GP-0
+Modell-/Command-Plan (`docs/konzept/golden-path-gp0-modellplan-bodenplatte.md`, seit 12:23 offen)
+**heute Nacht prüfen**."*
+
+**Ich bin der Engpass, seit zehn Stunden.** Das ist dieselbe Klasse wie §466 (Dirigenten-Ball 4h41
+übersehen) — **nur älter und mit Yama am anderen Ende.**
+
+### Yamas drei Operanden sind entschieden
+
+    Bezugshoehe ±0,00      OK FERTIGFUSSBODEN EG
+    Schichten-Reihenfolge  AUSSEN -> INNEN (schichten[0] erdseitig, zuletzt der Belag)
+    Anzahl Bodenplatten    EINE JE GESCHOSS
+
+**Das Operanden-Gate ist damit offen** — die drei Fragen, die GP-0 Abschnitt 8 als „vor dem Bau zu
+entscheiden" führte, sind beantwortet.
+
+### Der Plan, gemessen
+
+    docs/konzept/golden-path-gp0-modellplan-bodenplatte.md
+    240 Zeilen · zuletzt geaendert 21.08. 21:42 · Blob bafe62a2 · 8 Abschnitte
+    zustand: „KONZEPT — Planner-Output 21.08. … Freigabe durch [plan-pruefer]"
+
+### Teil 1 der Prüfung: Abschnitt (1) IST-Höhenkette ist ÜBERHOLT
+
+**Der Plan beschreibt drei unabhängige Rechnungen und drei „zweite Wahrheiten". Am heutigen Stand
+gemessen:**
+
+    Nr. 1  B gegen C — Kopfrahmen.tsx rechnet selbst          ->  BESEITIGT durch Z1-E0-1
+           heute: Kopfrahmen.tsx:175 RUFT naechsteEtageElevationMm auf
+                  geschossVorlage.ts:75 ebenso  ->  2 Produktivaufrufer, keine eigene Rechnung
+    Nr. 2  RoofNode.traufhoeheMm friert ein                   ->  BESTEHT
+           HausplanerApp.tsx:1013  traufhoeheMm: deckenOberkanteMm(level)  (einmalig bei ADD_ROOF)
+    Nr. 3  WallNode.height ist eingefrorene Kopie             ->  BESTEHT
+           HausplanerApp.tsx:944   height: … bei Wanderzeugung
+           §448: E0 hat die Wandhoehe AUSDRUECKLICH als Nicht-Ziel benannt
+
+    Bodenplatte im Bestand:  FoundationSlab 0 · foundationSlab 0 · bodenplatte 0
+                             „Bodenplatte" 1 Datei — der Tooltip-Kommentar aus §456
+    -> DER KERN DES PLANS STEHT: die Bodenplatte gibt es nicht.
+
+**Und die Fundstellen des Plans zeigen ins Falsche:**
+
+    Plan sagt:  deckenOberkanteMm — deckenMesh.ts:10-12
+                naechsteEtageElevationMm — deckenMesh.ts:32-38
+    heute:      beide in geometry/hoehenkette.ts (:37 und :49)
+
+> **Das ist §449 in Reinform, angewandt auf einen fremden Plan: gewanderte Verweise.** Sie zeigen
+> nicht ins Leere — `deckenMesh.ts` existiert weiter —, **sondern auf etwas anderes.** Wer dem Plan
+> folgt und dort nachsieht, findet die Funktionen nicht mehr und schließt womöglich, sie seien
+> gelöscht.
+
+### Was das für die Freigabe bedeutet — und was noch nicht
+
+**Der Plan ist in seinem Kern gültig:** Die Bodenplatte fehlt, das Modell ist additiv geplant, die
+Fachfragen sind jetzt beantwortet. **Überholt ist die IST-Aufnahme, nicht der Entwurf.**
+
+**Aber ich gebe noch nichts frei.** Geprüft ist Abschnitt (1) von acht. **Offen: (2) Modellplan,
+(3) Command-Plan, (4) Abhängigkeitsmatrix, (5) Phasendefinition, (6) Referenzhaus, (7)
+Abnahmekriterien, (8) Risiken.** Und die vier Pflichtfelder aus §458/§459 gelten: `blatt_sha`
+(= Blob `bafe62a2`), jede Zahl im Plan nachgerechnet, Streichungen abwärts und aufwärts.
+
+> **Ein Zwischenstand nach einem von acht Abschnitten ist kein Votum** — aber er ist mehr wert als
+> Schweigen, **weil der Planner gerade das Blatt Z1-E4-1 schneidet und Abschnitt (1) als IST-Aufnahme
+> hineinnehmen würde.**
+
+### Lage, alles in dieser Runde gemessen (22:10:22)
+
+    Integration                        522bfcb6  (juengster Commit 22:10:16, Stille 0 Min)
+    Commits NICHT in der Integration   0
+    ENV-Vollzug: generator 1 · evaluator 1   ->  §481 ERLEDIGT, der Dirigent hat es ausgefuehrt
+    §447 „steht aus" bei E0/E2         0
+    Baelle beim Integrator             24
+    Rueckstand mein Baum -> Integration 190
+
+Ball: **bei mir** (GP-0-Prüfung läuft) · Zwischenstand geht sofort als Ereignis (§463).
+
+### Nachtrag zu §482 — das Rollen-Tor hat diesen Abschnitt abgewiesen, und es hatte recht
+
+Mein erster Commit-Versuch zu §482 fiel um **22:13:12** mit **Rückgabe 7** durch:
+*„Die zentrale Rollenquelle lässt ihn nicht zu."*
+
+    Rollenquelle plan-pruefer.yaml   generation 11   (seit 22:10:41)
+    mein letzter ACK                 generation 10   (18:33:07)
+    Digest SOLL = IST                5154d5c8…       GLEICH
+    aktion                           pruefen          (kein Pausenfall)
+    -> FEHLENDER ACK fuer Generation 11. Das Tor greift genau dort, wo A-37-22e es verlangt:
+       VOR jeder Aenderung, nicht erst beim naechsten Takt.
+
+> **Das ist der Wirksamkeitsbeleg für A-37-22e** — jene Nachschärfung, deren Anlass ein Commit war,
+> der 3 Minuten 43 nach einer Pause fiel, weil der Takt sie noch nicht gelesen hatte. **Heute lag
+> zwischen der neuen Generation (22:10:41) und meinem Commit-Versuch (22:13:12) genau
+> 2 Minuten 31 — und diesmal ist er nicht durchgefallen, sondern abgewiesen worden.**
+>
+> **Der Text war nie in Gefahr:** Baum 1, unverändert im Arbeitsbaum. **Ein Tor, das vor der
+> Änderung greift, kostet einen ACK — eines, das danach greift, kostet einen Rückweg.**
+
+**Und die neue Generation 11 übernimmt meine Selbstbindung:** Punkt 4 lautet *„Vier Pflichtfelder
+(deine Selbstbindung) gelten"* — die vier Felder aus §458/§459 stehen jetzt in der zentralen
+Rollenquelle. **Was ich mir selbst auferlegt habe, ist damit prüfbar durch andere geworden**, und
+zwar auf dem Weg, den der Generator in §464 vorgemacht hat: **aus einem Vorsatz wird eine Form.**
+
+**Der Auftrag aus Generation 11, wörtlich:** *„GP-0-Plan freigeben (heute Nacht), DoR Z1-E4-1 sofort
+nach Schnitt, dann E1/E3"* — Abschluss: **`FREIGEGEBEN` oder `WIDERSPROCHEN` in EINEM Durchgang.**
