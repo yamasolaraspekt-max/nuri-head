@@ -27072,3 +27072,61 @@ durch; die Übernahme verlangt zusätzlich einen abgelaufenen Heartbeat und geh�
 
 **Ball:** Vorrat Z0-I2 (Planner), zusammen mit §322 und dem Zeitformat-Befund · nachrichtlich Dirigent
 und Evaluator, damit niemand die abgelaufene Lease für verwaist hält, während der Inhaber misst.
+
+## §325 — Posten (d): die A-37-Kette läuft 11 h 42, gearbeitet wurde 4 h 12 — der Rest ist eine einzige Lücke
+
+**Messstand** `849f6316` · Baum sauber · 0 neue Commits seit §324 · Integrationszweig `d5e9e405` →
+`cd332670`. Ballortung dreiseitig **1 · 6 · 14**, nichts angekommen außer meinem eigenen Hinweis.
+Evaluator-Lease weiter abgelaufen, sein Baum unverändert `e39cbccc` — in §324 gemeldet, nicht wiederholt.
+
+### Die Kette, Station für Station
+
+```
+22.08. 00:16:58   DoR quittiert
+       00:42:42   DoR NICHT ERTEILT              25 min
+       00:49:39   DoR ERTEILT                     6 min
+       08:20:38   Nachschärfung geliefert       450 min   <- die Lücke
+       09:05:12   Nachschärfung ERTEILT          44 min
+       09:31:53   Bau gestartet                  26 min
+       09:55:32   Bau CODE_FERTIG                23 min
+       10:02:50   Errata geliefert                7 min
+       10:12:46   Errata BESTÄTIGT                9 min
+       10:16:03   Abnahme gestartet               3 min
+       10:49:27   Votum NACHBESSERN              33 min
+       11:08:21   Nachbesserung fertig           18 min
+       11:15:50   Nachprüfung gestartet           7 min
+       läuft                                     43 min
+```
+
+```
+GESAMT                                          702 min = 11 h 42
+eine einzige Lücke (DoR ERTEILT -> Nachschärfung) 450 min = 7 h 30
+Arbeitszeit                                     252 min =  4 h 12
+```
+
+### Was die Zahlen sagen
+
+**Elf abgeschlossene Stationen in 4 h 12** — die längste davon 44 Minuten, der Median liegt bei rund
+18. Die Kette ist nicht langsam; sie hat **einmal** siebeneinhalb Stunden gestanden, und das war die
+Nacht zwischen dem erteilten DoR und der Nachschärfung. **Wer nur die Gesamtdauer nennt, beschreibt
+eine Pause und nennt es Arbeit.**
+
+**Die laufende Station ist mit 43 Minuten die längste überhaupt** — länger als die erste Abnahme von
+**31** Kriterien (33 min), obwohl sie **eines** nachprüft. Das ist keine Kritik: die Nachprüfung
+verlangt zusätzlich die Gegenprobe, dass die übrigen 30 unberührt sind, und der Evaluator hat im
+ersten Votum vier eigene Fehler gemeldet — er arbeitet gründlich, nicht langsam. **Es erklärt aber,
+warum seine 40-Minuten-Frist aus §324 zu kurz war:** sie war an der ersten Abnahme bemessen, und die
+war die kürzere Aufgabe.
+
+**Der Anfang liegt früher als mein ACK:** der älteste A-37-Eintrag in der Steuerung stammt vom
+**21.08. 23:14:35**. Meine Kette beginnt mit dem Quittieren um 00:16 — davor lag die Spezifikation
+beim Planner.
+
+### Für Yama
+
+Der Abnahmerückstand (§306) hat als Voraussetzung *„A-37 vollständig ABGENOMMEN"*. Diese Voraussetzung
+steht seit **11 h 42** aus, und sie ist **einen** Prüfschritt entfernt: ein Kriterium, dessen
+Nachbesserung seit 11:08 vorliegt. Danach bleibt Z0-I1 — dessen Abschluss allerdings an der
+Musterentscheidung A/B/C aus §321/§323 hängt.
+
+**Ball:** Evaluator (läuft) · Dirigent (A/B/C) · bei mir nichts.
