@@ -107,7 +107,7 @@
 | **Z1-W2-5** Wandflaeche anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-5-wandflaeche-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40, gemeinsames Votum mit Z1-W2-6) · Planner-Blatt `418bcb6c` · Bau `5617dc4c` · CODE_FERTIG 18:52:39 · **die Wandflaeche erreicht den Benutzer** |
 | **Z1-W2-6** Auswechslung anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-6-auswechslung-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 16:42:40) · **Achsenregel berichtigt 17:18, bestaetigt 17:21** · Planner-Blatt `e1c3f425` |
 | **Z1-V1-1** Sammelblatt Spur V: Anzeige am ausgewaehlten Objekt (fuenf Module) | `BEREIT` | **Generator** | Schnitt 22.08. 18:43 · Basis `3daf4f1e` | **Blatt** `docs/auftraege/aktiv/Z1-V1-1-sammelblatt-anzeige-am-ausgewaehlten-objekt.md` @ `3ab3bb88` · **DoR ERTEILT** — zweifach: auf den Kriterientext (18:37:20, Nachtrag 1.6 V-1..V-6) **und** auf dieses Blatt (**plan-pruefer §424**, `d30be815`, alle sechs Vollstaendigkeitspunkte) · erstes Blatt nach Yamas Entscheidung 18:27 |
-| **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `ENTWURF` | **Planner** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt noch nicht geschnitten** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR |
+| **Z1-W2-8** Werkzeugleiste in Baureihenfolge | `ENTWURF` | **Plan-Prüfer** | Auftrag 22.08. 18:46:18 · Basis `06956916` | **Blatt** `docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md` @ `262ed5c7`, geschnitten 18:51:32 — **fuenf Minuten nach dem Auftrag** · **P0 — Yamas ausdrueckliche Anweisung 18:4x** (Posten 24) · Spur W, <= 6 Kriterien, EIN Durchgang · Reihenfolge Bodenplatte -> Wand -> Fenster -> Tuer -> Treppe -> Decke -> Kontur -> Dach · geht dem Sammelblatt Z1-V1-1 im Bau VOR |
 | **Z0-I1** Testdatenbank-Isolation — Stufe 1 | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/generator-auftrag-z0-i1-testdatenbank-isolation.md` · Bau `04949151` · CODE_FERTIG 16:58:55 · **hoechster technischer Blocker** (plan-pruefer, Vorlage an Yama 17:29) · Blatt liegt NICHT unter `aktiv/` |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
@@ -19374,9 +19374,9 @@ berichtigung_dor: |
 auftrag: "Z1-W2-8"
 titel: "Werkzeugleiste in Baureihenfolge"
 zustand: ENTWURF
-ballbesitz: planner
-blatt: "noch nicht geschnitten — der Planner schneidet es aus diesem Auftrag"
-blatt_sha: "keiner"
+ballbesitz: plan-pruefer
+blatt: "docs/auftraege/aktiv/Z1-W2-8-werkzeugleiste-in-baureihenfolge.md"
+blatt_sha: 262ed5c7
 basis_sha: 06956916
 dor_beleg: "steht aus — der Plan-Pruefer prueft in EINEM Durchgang direkt nach Z1-V1-1"
 bau_sha: "noch offen"
@@ -19404,6 +19404,18 @@ herkunft_dieses_blocks: |
   unterste Ebene nicht ohne Modellaenderung setzen, wird das GEMELDET und nicht gebastelt —
   dann Reihenfolge ohne Bodenplatte, Bodenplatte als Folgeposten an GP-0.
   TRANSPORT UND EINTRAG, KEINE BEWERTUNG.
+
+blatt_nachgetragen: |
+  Das Blatt ist da — planner-CODE_FERTIG-Z1-W2-8.yaml, 18:51:32, ergebnis_sha 262ed5c7,
+  endstand_sha 3ab3bb88, ball [plan-pruefer]. Fuenf Minuten und vierzehn Sekunden nach dem
+  Auftrag des Dirigenten von 18:46:18.
+  Damit ist die Abweichung aufgeloest, die ich in c14db2b3 begruendet hatte: der Platz war
+  vor dem Blatt da, jetzt traegt er es. Zustand bleibt ENTWURF, weil die DoR aussteht —
+  der Plan-Pruefer prueft in EINEM Durchgang direkt nach Z1-V1-1.
+  SEINE EIGENE KENNUNGSPROBE, die ich uebernehme statt sie nachzubauen: "docs/ 1 Treffer
+  (dieses Blatt), git log 1 Treffer (der Auftrag selbst). Z1-W2-0..6 vergeben, -7 frei
+  gelassen, -8 vom Dirigenten zugewiesen." Die Kennung ist also nicht doppelt vergeben.
+
 ```
 
 ```yaml
