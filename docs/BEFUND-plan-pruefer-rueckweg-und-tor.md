@@ -29586,3 +29586,57 @@ gültig · die eine Messung, die zählt, darf nur Yama fahren"**.
 **Ball: niemand.** Keine Forderung — im Gegenteil: **von den drei als „entschieden" geführten Posten
 ist einer (N-003) erledigt, einer (dieser) zu Recht offen.** In der abgelegten Postenliste
 berichtigt.
+
+## §365 — Die Unbefangenheitsregel der externen Prüfung, auf mich selbst angewandt
+
+Gewählt gegen HEAD `01af3848` (Baum sauber, 15:18). §365 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok.
+
+**Anlass, zitiert und nicht nachgebaut (P-02 Punkt 4).** Die externe Prüfung nimmt um **15:14:20**
+eine eigene Aussage zurück (`externe-pruefung-RUECKNAHME-eigene-bestreitung.yaml`). Sie hatte
+behauptet, in dieser Sitzung *„keinen einzigen Fachagenten aufgerufen"* zu haben — und misst es an
+ihrem eigenen Transkript nach: **zwei**, `software-architekt` und `zimmermannmeister`, um 13:52:57
+und 13:53:10, Gegenprobe `"name":"Bash"` → 319. Ihr Satz dazu:
+
+> *„Ich habe eine Tatsache über **mich selbst** aus dem Gedächtnis behauptet, während die Messung
+> einen `grep` entfernt lag … **‚keinen einzigen' ist eine Messbehauptung, und ich hatte keine
+> Messung.**"*
+
+**Der teurere Teil ist der zweite**, und er ist der Grund für diesen Abschnitt:
+
+> *„Ein Prüfer, der eine Messung **beauftragt** und die darauf gebaute Entscheidung anschließend
+> **lobt**, ist zu dieser Entscheidung nicht unbefangen. Ich ziehe das Urteil zurück — nicht weil es
+> falsch wäre, sondern **weil es nicht meines zu fällen war**."*
+
+**Diese Regel gilt für mich genauso, also habe ich sie an meinen heutigen Voten gemessen:**
+
+    §350  Z1-W2-1        1 Lobstelle · 2 Bezuege auf eigene fruehere Befunde
+    §353  Z1-W2-2/3      1 Lobstelle · 3 Bezuege   <- hier steht "Was er aufgenommen hat,
+                                                      und das gehoert gewuerdigt: meinen §349-Befund"
+    §360  Z1-W2-0        1 Lobstelle · 0 Bezuege   <- unbefangen
+
+**§353 ist der Fall.** Dort habe ich im selben Abschnitt **das Votum erteilt** und **die Umsetzung
+meines eigenen Befundes gewürdigt**.
+
+**Wo ich mich abgrenze — und wo nicht.** Der Unterschied zu ihrem Fall: Sie hat eine Messung
+**beauftragt**, deren Ergebnis eine fremde Entscheidung trug, und dann diese Entscheidung bewertet.
+Ich habe einen **Mangel gemeldet**, der Planner hat ihn behoben, und ich habe die Behebung geprüft.
+**Das Votum ist rollengemäß** — Mängel finden und DoRs erteilen ist genau meine Rolle, und ich habe
+jede Zahl nachgemessen (§348 die zwei Module, §353 die drei Befehle). *Wäre das befangen, könnte
+kein Prüfer je zweimal dasselbe Blatt ansehen.*
+
+**Die Würdigung ist der Punkt, an dem ich vorsichtiger sein sollte.** *„Das gehört gewürdigt"* ist
+kein Messsatz, sondern ein Urteil — und es betrifft die Umsetzung meines eigenen Hinweises.
+**Das Votum trägt es nicht, es steht daneben.** Für künftige Fälle: **Feststellen, dass ein Befund
+umgesetzt ist, gehört ins Votum; ob die Umsetzung lobenswert ist, gehört nicht dazu.**
+
+**§360 zeigt, dass es auch anders geht** — null Bezüge auf eigene frühere Befunde, das Blatt stand
+für sich, das Votum ebenso. *Das ist kein Verdienst, sondern ein Zufall der Reihenfolge; aber es ist
+der Maßstab.*
+
+**Was ich nicht tue.** Ich ziehe kein Votum zurück. **Keines der drei ruht auf einer Grundlage, die
+ich beauftragt hätte** — sie ruhen auf Zahlen, die ich nachgemessen habe. *Der Unterschied zwischen
+„veranlasst" und „nachgemessen" ist genau der, den ihre Rücknahme markiert, und er trägt hier.*
+
+**Ball: niemand.** Kein Auftrag berührt. Der Abschnitt hält eine Regel fest, die von außen kam und
+auf mich anwendbar ist — **das ist der Zweck einer Prüfung, die auch die Prüfenden mitprüft.**
