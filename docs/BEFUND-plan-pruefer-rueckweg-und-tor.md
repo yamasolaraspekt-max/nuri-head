@@ -29182,3 +29182,60 @@ niemand anfasst.**
 
 **Ball: niemand.** Der Posten bleibt offen bei Yama, jetzt aber **belegt und abgelegt** statt nur
 weitergereicht. **Sechs von sieben stehen noch aus; je Runde einer.**
+
+## §358 — Berichtigung zu §356: alle neun Posten sind gemessen. Ich habe „wo liegen sie" gemessen und „sind sie gemessen" behauptet
+
+Gewählt gegen HEAD `c24c24a7` (Baum sauber, 14:52:34). §358 als Überschrift 0 Treffer. Rollenquelle
+gen 9, Dateizeit 13:58:44, Digest ok.
+
+**§356 ist in seinem Kern falsch, und §357 hat es zum ersten Mal gezeigt.** Dort hieß es: sieben von
+neun Posten mit *„Stand nicht gemessen"*. Beim ersten (`raumAuswahl.ts`) fand ich eine Messung vom
+16.08.; beim zweiten (`Regelkollision §3/E1/Beifang`) wieder. **Statt weiterzuraten habe ich meine
+eigene Datei durchsucht:**
+
+    grep -c '^## Yama-Posten' in meiner Befunddatei        ->  4 eigene Messabschnitte
+    dazu eine vollstaendige Uebersichtstabelle mit          ->  8 Posten und je einer Lage
+
+**Der Stand, den ich die ganze Zeit selbst geschrieben hatte:**
+
+    1  Fach-Gate N-003                 ENTSCHIEDEN  (Yama 12.08., DAUERGELB, mit ERLAUBT/NICHT-ERLAUBT)
+    2  A-13-Veroeffentlichungsbedingung ENTSCHIEDEN  (gemessen, Bedingung war leer)
+    3  Tragwerk an die Zeichenflaeche  GEMESSEN     (16.08. gegen 6cab51a0 — eigener Abschnitt)
+    4  W-21L                           VERKLEINERT  (erster Schritt beim Planner)
+    5  versatz-Quittung                OFFEN        (und ein Abschlussvermerk dazu ist zu stark)
+    6  Seed-Weg der Pruefbuehne        ENTSCHIEDEN  (Yama 13.08., Weg C mit drei Auflagen)
+    7  Zeiger raumAuswahl.ts           OFFEN, STABIL (147 -> 162, §357 heute bestaetigt)
+    8  Regelkollision §3/E1/Beifang    praktisch geschlossen, formal offen
+    9  §119/§120                       GEMESSEN     (27 statt 33, §347 heute)
+
+**Neun von neun sind gemessen. Drei sind entschieden.** In der Tabelle steht bei Posten 3
+*„nicht gemessen, bleibt für die nächste Runde"* — **auch das ist überholt**, der eigene Abschnitt
+dazu trägt *„die Operanden sind gemessen"*.
+
+**Wie der Fehler entstand — und er ist ein Lehrstück.** In §356 habe ich gemessen:
+*wo liegen die Posten?* (Ereignisse: 0 · docs: 6–42 Dateien). Daraus habe ich geschlossen:
+*sie sind nicht gemessen*. **Das sind zwei verschiedene Fragen, und die Grundmenge der ersten
+beantwortet die zweite nicht.** Genau die Regel, die in meiner eigenen Wache steht:
+**„Grundmenge gegen die Frage prüfen statt gegen das Verfahren."** Ich hatte die Zahlen der
+Fundstellen zur Hand — und habe sie für eine Aussage über den Messstand genommen.
+
+*Bitter daran: die Fundstellen selbst waren der Hinweis. „N-003: 30 Dateien in `docs/`" heißt nicht
+„ungemessen", es heißt „dreißigmal behandelt". Ich habe die Zahl gelesen und ihr Gegenteil daraus
+gemacht.*
+
+**Was von §356 trägt und was fällt.**
+**Trägt:** Die Posten lagen **nicht als adressierte Frage in der Steuerung** — 0 Ereignisdateien,
+und in der Entscheidungsliste des Dirigenten stand von neun genau einer. **Die Ablage war der echte
+Mangel, und sie ist behoben.**
+**Fällt:** *„Stand nicht gemessen"* für sieben Posten. **Richtig ist: alle neun sind gemessen, drei
+entschieden.** Die abgelegte Liste in der Steuerung trug diesen Fehler seit 14:47 — sie wird mit
+dieser Runde berichtigt.
+
+**Und eine Folge für die Ankündigung aus §356.** Ich hatte gesagt: *„die Messung folgt Posten für
+Posten in den nächsten Runden."* **Das ist gegenstandslos** — die Messungen liegen vor. Was
+stattdessen sinnvoll bleibt: **prüfen, ob sie noch gelten**, wie in §357 für `raumAuswahl.ts`
+geschehen (Ergebnis: unverändert, Datei seit 13.08. nicht angefasst). **Das ist Alterungsprüfung,
+nicht Erstmessung** — und dafür genügt je Runde einer.
+
+**Ball: niemand.** Kein Auftrag berührt, keine fremde Rolle betroffen. Der Fehler war meiner, er
+stand vier Minuten in der Steuerung und wird jetzt dort berichtigt.
