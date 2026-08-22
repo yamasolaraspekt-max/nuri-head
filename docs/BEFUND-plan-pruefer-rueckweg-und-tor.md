@@ -26610,3 +26610,77 @@ abgefangen. Punkt 2 der Wache ist damit vollständig gemessen und nicht nur gest
 
 **Ball:** keiner. Nachrichtlich an den Integrator — er ist der einzige Schreiber von `docs/STATUS.md`,
 und der `A-09`-Block wäre bei nächster Gelegenheit die kleinste denkbare Reparatur: eine Zeile.
+
+## §318 — Posten (b): fünf Aufträge stehen seit 15 Stunden auf `BEREIT`, weil ihr Zustandscommit ein LEERER Commit war
+
+**Messstand** `a6c6b94b` · Baum sauber · 0 neue Commits seit §317 · Integrationszweig `28f5177c` →
+`59fd10aa`. Ballortung dreiseitig **1 · 6 · 14**, nichts angekommen, Evaluator-Lease weiter aktiv.
+
+### Die Bau-SHAs des Abnahmerückstands, geprüft
+
+§306 hat die Votum-Spalte gezählt, die **Bau**-Spalte nicht. Nachgeholt:
+
+```
+13 SHAs in 12 Posten · 13 existent (exit 0) · Verfahrensprobe 'deadbeef' -> exit 128
+erreichbar von Zweigen: 3 bis 18 · keiner nur im Reflog
+ef7a8c89 liegt in 3 Zweigen, darunter bewahrt/z2-w0-5-supervisor-kette (wie die Tabelle sagt)
+```
+
+**Alles vorhanden.** Ein Posten trägt keinen SHA: `Z2-W0-1`, dort steht *„Generator 21.08. 20:18 (SHA
+aus STATUS ziehen)"*. Ich habe ihn gezogen — er lautet **`314ea991`** (`10c05d8b`: *„Z2-W0-1 ist
+gebaut — der Inhalt liegt in 314ea991"*).
+
+**Und dabei ist mir dieselbe zsh-Falle wie in §299 wieder unterlaufen:** `for S in $SHAS` splittet
+nicht, beide SHAs gingen als *ein* Wort an `cat-file` — Ergebnis „FEHLT" für zwölf von dreizehn. Die
+Ausgabe `28ca0834 ef7a8c89 =FEHLT` hat es verraten. Zum zweiten Mal dieselbe Ursache; **eine Regel,
+die ich kenne und trotzdem nicht anwende, ist keine Regel, sondern eine Notiz.**
+
+### Der Widerspruch, den das freigelegt hat
+
+```
+docs/STATUS.md (HEAD und Integrationszweig, Baum-Hash 5e06b341 IDENTISCH):
+  Z2-W0-1  zustand: BEREIT   ballbesitz: generator
+  Z2-W0-3  zustand: BEREIT   ballbesitz: generator
+  Z2-W0-7  zustand: BEREIT   ballbesitz: generator
+  Z2-W0-8  zustand: BEREIT   ballbesitz: generator
+  Z2-W0-9  zustand: BEREIT   ballbesitz: generator
+
+Abnahmerückstand (rolle/dirigent): dieselben Posten mit Bau-SHA, Besitzer Evaluator
+```
+
+**Die Bauten existieren** — `314ea991`, `69c85d01`, `5831c06a`, `29eb791c` sind alle erreichbar. Der
+Statusträger weiß nur nichts davon.
+
+### Die Ursache, auf den Commit genau
+
+```
+96d59689  21.08. 20:53  "generator: zustand: Z2-W0-1 · Z2-W0-3 · Z2-W0-7 · Z2-W0-8 ·
+                         Z2-W0-9 · CODE_FERTIG · evaluator · bau 314ea991 …"
+Eltern: 1 (kein Merge)
+Baum-Hash Commit  d55c3d22…
+Baum-Hash Elter   d55c3d22…   IDENTISCH  ->  LEERER COMMIT, 0 Dateien
+```
+
+**Der Commit, der fünf Zustände auf CODE_FERTIG setzen sollte, hat keine Zeile geschrieben.** Der
+letzte Commit, der den `Z2-W0-1`-Block überhaupt berührte, ist `eed0d949` (21.08. **20:12**) — der ihn
+*anlegte*. Seither: nichts. **Der Zustand steht seit über 15 Stunden auf `BEREIT`, während die Arbeit
+getan ist.**
+
+**Gegenprobe gemacht, bevor ich das melde:** Ein Merge-Commit zeigt mit `--numstat` ebenfalls nichts.
+`96d59689` hat **einen** Elter und einen identischen Baum-Hash — es ist wirklich leer.
+
+### Die faire Einordnung
+
+**`docs/STATUS.md` schreibt allein der Integrator** (ARBEITSREGELN §16). Der Generator *kann* den
+Zustand gar nicht setzen; sein Betreff ist eine **Meldung**, kein Wechsel. Ein leerer Commit als
+Meldungsträger ist aber die schwächste denkbare Form: er hinterlässt keinen Diff, kein Feld, keine
+Spur außer einer Betreffzeile — und genau deshalb ist er nie angekommen. **Das ist die Regel „Commit
+ohne Diff = kein Fortschritt" in ihrer teuersten Ausprägung:** nicht falsch gemeldet, sondern gar
+nicht geschrieben.
+
+**Und es erklärt §306:** Dort standen neun Posten „ohne Votum" — vier davon (`W0-1`, `W0-3`, `W0-7`,
+`W0-8`) sind diese hier. Sie gelten als unbewiesen, weil ihr Zustand nie über `BEREIT` hinauskam.
+Wer die Abnahmewelle nach `docs/STATUS.md` plant, findet fünf Aufträge, die noch zu bauen wären.
+
+**Ball:** Integrator über den Dirigenten — fünf Zustandsfelder nachziehen, `Z2-W0-1` mit dem
+gefundenen Bau-SHA `314ea991`. Es ist Transport, keine Entscheidung; die Voten liegen alle vor.
