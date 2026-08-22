@@ -1,0 +1,14 @@
+auftrag_id: PARKEN-release-pruefer-hinweg
+generation: 3            # 2026-08-22T12:18:38+0200 — weiterhin geparkt; EINZIGE Handlung: Hinweg, damit das pre-commit-Tor auch in deinem Baum liegt (Merge-Commit passiert das Tor; Integrator 12:13 gemessen).
+rolle: release-pruefer
+sitzung_erwartet: 4a2203cb-127f-4c71-aeb4-206a86181667
+worktree: /Users/yamanuri/Documents/ticket-release-pruefung
+branch: rolle/release-pruefer
+prioritaet: P3
+aktion: parken           # TOR-WORT Pause: keine Sachcommits. Der Hinweg ist ein Merge und faellt nicht unter das Tor.
+taetigkeit: "warten (Release-Pruefer)"
+hinweg_zuerst: "git merge --no-edit auto/hausplaner-integration im EIGENEN Worktree (kein Rebase, kein Force); bei Konflikt/local-changes NICHTS erzwingen -> BASE_BLOCKED melden; danach <rolle>-BASIS_NACHGEZOGEN.yaml mit Ausgabe von ls -l .githooks/pre-commit und git rev-parse --short HEAD"
+steuerungshandlungen_erlaubt: [Registrierung, ACK, Ereignisse]
+status: ZUGETEILT
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/PARKEN-release-pruefer-hinweg/release-pruefer-ack.yaml
+erstellt: "2026-08-22T12:18:38+0200 Dirigent (atomar; Uhr: date)"

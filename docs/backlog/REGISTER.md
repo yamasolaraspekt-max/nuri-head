@@ -31,6 +31,18 @@ Ein Eintrag folgt dem Qualitätsraster (`~/.claude/skills/qualitaetsraster/SKILL
 
 ---
 
+## Drei Steuerungslisten (Yama 22.08., aus der Inventur-Bilanz `06642e35`)
+
+| Liste | Posten | Reihenfolge |
+|---|---:|---|
+| [`abnahmerueckstand-2026-08-22.md`](abnahmerueckstand-2026-08-22.md) — gebaut, unbewiesen | 12 | W0-5 → W0-7/W0-3 → W0-1 → W0-8 → W0-10 → W0-11 → W0-12 → Z1 inkl. Browser; keine Sammelabnahme |
+| [`produkt-backlog-2026-08-22.md`](produkt-backlog-2026-08-22.md) — unverändert | 13 (+ Wächter, 2 Yama-Fragen) | zuerst S-2, A-7/W0-9, A-10 B/C, A-5 |
+| [`steuerungs-backlog-2026-08-22.md`](steuerungs-backlog-2026-08-22.md) — technisch offene Barrieren | 12 | A-37 (31 Kriterien) → Z0-I1 → Z0-I2 → Z0-I3 |
+
+Jeder Posten trägt: Kennung · Schwere · Bau-SHA · unabhängiges Votum · Browserpflicht · Abhängigkeit · Besitzer ·
+nächste konkrete Handlung. Die Bilanz selbst ([`../fortschritt/inventur-bilanz-2026-08-22.md`](../fortschritt/inventur-bilanz-2026-08-22.md))
+bleibt unverändert als datierter Nachweis; fortgeschrieben werden nur diese Listen.
+
 ## Zustände
 
 ```text

@@ -25,6 +25,25 @@ selbstgezogene Grenzen (Rollentrennung, Deploy/Löschung, Operanden-Gate, main-W
 alle Rechte; gebaut als ein Schalter (`RECHTE_ALLE_FUER_ALLE`), Tore bleiben Struktur; Integrität
 und Authentifizierung unberührt.
 
+**Berichtsregeln (Yama, 22.08.2026):** [`BERICHTSREGELN-FORTSCHRITT.md`](BERICHTSREGELN-FORTSCHRITT.md) —
+genau ein Mess-SHA je Bericht, Rückblick getrennt, ACKs nur je Generation als Tabelle, Pull-Betrieb
+`SOFT-AKTIV` bis A-37 negativ abgenommen, drei Reifegrade (CODE VORHANDEN → PRODUKTWEG ANGESCHLOSSEN →
+BROWSERABGENOMMEN), Commits nie als Fortschrittswert, Hausplaner getrennt von Plattform/Rechte,
+Headless-Identität = Sitzungs-ID + Lauf-PID/Start + Heartbeat + Lease, Abschluss mit genau einer nächsten Handlung.
+
+**Meldepflicht je Rolle und Auftrag (Yama, 22.08.2026):** [`MELDEPFLICHT-AUFTRAG.md`](MELDEPFLICHT-AUFTRAG.md) —
+Startmeldung vor jeder Sacharbeit („Ich bearbeite diesen Auftrag als `<Rolle>`…"), Abschlussmeldung nur für den eigenen
+Rollenanteil mit rollenspezifischem Begriff (SPEZIFIZIERT · ERTEILT/NICHT ERTEILT · CODE_FERTIG · ABGENOMMEN/NACHBESSERN ·
+TRANSPORTIERT/ZUSTAND_NACHGEZOGEN · RELEASE_FREI/NICHT RELEASE_FREI · ZUGEWIESEN/ENTSCHIEDEN), strukturiert als Ereignis,
+technisch geprüft durch den zentralen Monitor (Z0-I3/Z0-I4). Nie „alles erledigt".
+
+**Architekturentscheid „kein Intendant" (historisch, bestätigt Yama 22.08.2026):** Quelle
+[`../konzept/arbeitsregeln-1-5-orchestra-nachtrag.md`](../konzept/arbeitsregeln-1-5-orchestra-nachtrag.md) §5 („Dirigent
+wird einmal definiert; Intendant wird nicht eingeführt") — keine siebte Steuerungsrolle; kein Rollenordner, keine
+Rollenquelle, kein Branch, kein Worktree. Yama entscheidet und gibt frei; der Dirigent steuert operativ; ein künftiger
+**Dispatcher** (Z0-I4) ist reine Zustellinfrastruktur, keine Rolle. Ein Intendant käme nur auf separate Entscheidung Yamas
+und nur strategisch (Portfolio, Priorisierung), nie mit Routing oder Freigaberecht.
+
 **Aufgehoben, aber erhalten:** [`docs/HAUSREGELN.md`](../HAUSREGELN.md) trägt seit 12.08.2026
 keinen Regelinhalt mehr — ihr Inhalt steht in ARBEITSREGELN §18a. Nicht gelöscht, weil der Weg
 dorthin nachvollziehbar bleiben soll.

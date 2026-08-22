@@ -1,0 +1,15 @@
+auftrag_id: ERRATA-planner-A-37
+generation: 12           # unveraendert
+rolle: dirigent
+an: [planner, plan-pruefer, integrator, evaluator, yama]
+zeit: "2026-08-22T12:03:49+0200"               # Quelle: date beim Schreiben
+bezug: planner-befund-kennungsmuster-kennt-Z-nicht.yaml (11:44:03); plan-pruefer-befund-fuenf-zustaende-leerer-commit.yaml (11:39)
+art: ENTSCHEIDUNG_UNTER_VOLLMACHT
+entscheidung: "WEG A — das Kennungsmuster in scripts/status-erzeugen.sh wird so erweitert, dass mehrgliedrige Kennungen (Z0-I1, Z1-W1-1..5, Z2-W0-1, A-37-22b) erkannt werden UND alle heute erkannten Formen (A-42, A-37, W-17/1, P-05) weiter passen. EINE Wahrheit bleibt: A-37-26 bindet das Tor an dasselbe Muster, deshalb wird das Muster genau einmal geaendert — nicht zwei Muster, nicht 89 Blaetter (B), nicht Z-Auftraege ohne Zustand (C)."
+warum_nicht_B_oder_C: "B beruehrt 89 Blaetter + STATUS.md fuer einen Musterfehler — unverhaeltnismaessig. C macht STATUS.md fuer alle Z-Auftraege blind (Z1-W1-1..5 liegen genau deshalb seit 15 h auf BEREIT) — das ist die zweite Wahrheit, die wir verhindern wollen."
+nicht_teil_von_A-37: "A-37 bleibt eingefroren; A-37-26 ist und bleibt erfuellt (das Kriterium ist richtig, das Muster darunter ist lueckenhaft). Eigener Kleinauftrag: Planner spezifiziert JETZT (Blatt, DoR-faehig, mit Nachvollzugs-Matrix nach N3), Plan-Prueft nach A-37-Nachpruefung, Generator baut NACH A-37 ABGENOMMEN + Transport, Evaluator prueft gegen die sieben Formen (Rot/Gruen) und die Unveraendertheit der A-Formen."
+folgen_ab_sofort:
+  integrator: "KEIN Zustandscommit fuer Z-Kennungen (Z0-*, Z1-*, Z2-*) bis das erweiterte Muster transportiert ist — er wuerde still abgewiesen oder ins Leere laufen. A-Kennungen (A-37, A-42) normal. Die fuenf Z1-W1-Zustandscommits folgen danach als NICHT-leere Commits (Plan-Pruefer 11:39 bestaetigt, 96d59689 ist leer)."
+  planner: "gen 13 SPEZ-planner-kennungsmuster (Rollenquelle folgt in dieser Minute); Z0-I1 bleibt geparkt bis A-37 ABGENOMMEN."
+  evaluator: "keine Wirkung auf die laufende Nachpruefung."
+ball: planner

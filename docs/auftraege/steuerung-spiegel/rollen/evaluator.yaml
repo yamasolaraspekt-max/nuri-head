@@ -1,0 +1,20 @@
+auftrag_id: PROBE-evaluator-A-37-25-wirksamkeit
+generation: 8            # 2026-08-22T12:18:38+0200 — A-37 ABGENOMMEN (0a18446a), Bau transportiert (f6792ec3). Yama: 'bestaetige mir, dass der nackte git commit scheitert' — in JEDEM realen Baum. Weg 3: aktion = Tor-Wort.
+rolle: evaluator
+sitzung_erwartet: 303cefb6-35fd-4c36-9aca-ed10515f59b3
+worktree: /Users/yamanuri/Documents/ticket-rolle-evaluator
+branch: rolle/evaluator
+basis_sha: 0a18446a
+prioritaet: P0
+aktion: bauen            # TOR-WORT (befristet, README 6f): Arbeit erlaubt. Du baust nichts.
+taetigkeit: "abnehmen/pruefen (Evaluator): Wirksamkeitsprobe A-37-25 je Baum; kein Produktcode, keine Reparatur"
+hinweg_zuerst: "git merge --no-edit auto/hausplaner-integration im EIGENEN Worktree (kein Rebase, kein Force); bei Konflikt/local-changes NICHTS erzwingen -> BASE_BLOCKED melden; danach <rolle>-BASIS_NACHGEZOGEN.yaml mit Ausgabe von ls -l .githooks/pre-commit und git rev-parse --short HEAD"
+gegenstand: "In JEDEM der sieben realen Baeume (ticket, ticket-rolle-generator, ticket-rolle-planner, ticket-rolle-plan-pruefer, ticket-rolle-evaluator, ticket-release-pruefung, ticket-rolle-dirigent): (a) liegt .githooks/pre-commit (ausfuehrbar) und core.hooksPath=.githooks? (b) scheitert ein NACKTER git commit (ohne TICKET_ROLLE) nachweislich — exit != 0, KEIN Commit entstanden? (c) Positivfall in deinem eigenen Baum: Commit MIT TICKET_ROLLE=evaluator, ACK gen 8, aktion bauen geht durch (dein Votum-Commit selbst ist dieser Beleg)."
+verfahren: "Nebenwirkungsfrei: die Probe darf KEINEN Commit hinterlassen. Empfohlen: in fremden Baeumen NUR lesend messen (Datei, Rechte, hooksPath) + der nackte Commit-Versuch mit --allow-empty und einer Probe-Botschaft; Erwartung: Abweisung. Faellt er wider Erwarten durch: sofort git reset --soft HEAD~1 im selben Baum, dann als MANGEL melden (Baum, Befehl, Ausgabe). Kein TICKET_ROLLE=<fremd> setzen. Baeume ohne pre-commit (Hinweg noch nicht gefahren) als AUSSTEHEND fuehren, nicht als Mangel; beim naechsten Pull erneut; Endvotum bei 7/7 oder spaetestens 60 min nach Start mit Liste (WIRKSAM / AUSSTEHEND / MANGEL je Baum)."
+grenze_benannt: "--no-verify und geaenderter core.hooksPath uebergehen den Haken (Bau + Votum db420cf0 Z.86) — wird nicht geprueft, nur zitiert."
+meldepflicht: "AUFTRAG_GESTARTET mit endstand_sha f6792ec3 (Integration) VOR der Arbeit; Abschluss WIRKSAM_7_VON_7 oder NICHT_WIRKSAM (mit Liste) als ABGENOMMEN/NACHBESSERN-Aequivalent + evaluator-AUFTRAG_ABGESCHLOSSEN.yaml; Votum im eigenen Worktree (commit-pruefen.sh, TICKET_ROLLE=evaluator)."
+verboten: [Produktcode, Reparaturen, rueckweg.py auf realen Baeumen, TICKET_ROLLE fremd, --no-verify, Commit ausserhalb des eigenen Worktrees]
+steuerungshandlungen_erlaubt: [Registrierung, ACK, Lease, Ereignisse, Start-/Abschlussmeldung]
+status: ZUGETEILT
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/PROBE-evaluator-A-37-25-wirksamkeit/evaluator-ack.yaml
+erstellt: "2026-08-22T12:18:38+0200 Dirigent (atomar; Uhr: date)"

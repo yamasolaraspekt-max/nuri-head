@@ -1,11 +1,41 @@
 # GESAMTAUFTRAG v2 — Fortschrittswahrheit herstellen, Rollenkollisionen technisch schließen, eindeutig testbereiten Stand erzeugen
 
 ```yaml
-erteilt_von: Yama, 21.08.2026 abends (Wortlaut 1:1 unten); ersetzt und erweitert GESAMTAUFTRAG-TESTSTAND-2026-08-21.md (v1 bleibt als Phasen-1–4-Vorlage gültig, wo v2 nichts anderes sagt)
-weitergegeben_durch: Dirigent (Vollmacht docs/regelwerk/VOLLMACHT-DIRIGENT.md)
+erteilt_von: "Yama, 21.08.2026 abends (Wortlaut 1:1 unten); ersetzt und erweitert GESAMTAUFTRAG-TESTSTAND-2026-08-21.md (v1 bleibt als Phasen-1-4-Vorlage gueltig, wo v2 nichts anderes sagt)"
+weitergegeben_durch: "Dirigent (Vollmacht docs/regelwerk/VOLLMACHT-DIRIGENT.md)"
 gilt_fuer: alle Rollen
-phase_0_snapshot: 2026-08-21 20:58:40 · HEAD 976f7d6b (generator: Z2-W0-12 gebaut) · fork 0/0 · gemeinsamer Checkout: nur drei Planner-Blattaenderungen (W0-4/6/11 Restpunkte) uncommittet, KEINE fremde Produktivarbeit · 16 Worktrees (inkl. 3 Scratchpad-Worktrees fremder Sitzung 303cefb6, ticket-rolle-* auf 80b3cbf9/af6f1403) · keine laufenden Testprozesse · Testdatenbanken nicht messbar ohne Zugang (Phase 3)
+phase_0_snapshot: "2026-08-21 20:58:40 - HEAD 976f7d6b (generator Z2-W0-12 gebaut) - fork 0/0 - gemeinsamer Checkout nur drei Planner-Blattaenderungen (W0-4/6/11 Restpunkte) uncommittet, KEINE fremde Produktivarbeit - 16 Worktrees (inkl. 3 Scratchpad-Worktrees fremder Sitzung 303cefb6, ticket-rolle-* auf 80b3cbf9/af6f1403) - keine laufenden Testprozesse - Testdatenbanken ohne Zugang nicht messbar (Phase 3)"
+nachtrag_yama_21_08_spaet: "WIP-GRENZE und REIHENFOLGE — siehe Abschnitt 'Nachtrag Yama (spaet)' unten; gilt vor allem Uebrigen"
 ```
+
+## Nachtrag Yama (21.08., spät) — WIP-Grenze und bessere Reihenfolge, vom Dirigenten vollständig übernommen
+
+**Urteil Yama:** Konzept richtig, aber zu viel angefangen, zu wenig vollständig geschlossen. Hebel:
+weniger parallele Bauten, mehr Abnahme, technische Isolation. **Umstellung von „viel gleichzeitig
+bauen" auf „Blocker schließen, abnehmen, dann Neues beginnen".**
+
+**WIP-Grenze (gleichzeitig höchstens):** ein Sicherheitsbau · eine unabhängige Abnahme · ein
+Planner-Zuschnitt ohne Code. **Acht Verbesserungen:** (1) gemeinsamen Checkout sofort wirklich
+sperren — dort lagen erneut uncommittierte W0-11-Produktänderungen; (2) Z0-I1 vor allen parallelen
+DB-Prüfungen abschließen (Kollision zweimal eingetreten — höchster technischer Blocker); (3) WIP
+begrenzen; (4) A-37 sofort schließen (20/21, kleine js-yaml-Nachbesserung; erst das funktionierende
+Rollen-Tor macht Parallelarbeit belastbar); (5) Statuswechsel atomar — Baucommit, Zustand, Ball,
+Bau-SHA in einem kontrollierten Übergang; (6) Abnahme vor weiteren Bauten — Z1-W1-3 ist abgenommen,
+die übrigen vier schließen; (7) Hausplaner und allgemeine Sicherheit getrennt berichten; (8) Berichte
+stark verkürzen — eine Tabelle `Auftrag | gebaut | unabhängig geprüft | Browser | Blocker | nächster
+Besitzer`, historische Fehler bleiben in der Chronik.
+
+**Reihenfolge (Yama):** 1 W0-11-Arbeit aus dem gemeinsamen Checkout sichern → 2 Y-13 technisch
+ausführen und Z0-I1 abnehmen → 3 A-37 nachbessern und vollständig abnehmen → 4 Z1-W1-1/2/4/5
+abschließen → 5 bereits gebaute Z2-Aufträge unabhängig abnehmen → 6 erst danach W0-2/4/5/6/11
+weiterbauen → 7 vollständige Browserprüfung → 8 Test-SHA und TESTBEREIT-Urteil → 9 Dachschichten
+und fotorealistische Darstellung.
+
+**Anweisung Dirigent daraus:** Generator baut NICHTS Neues, bis Z0-I1 abgenommen ist (Ausnahme: die
+Sicherung der W0-11-Arbeit in den eigenen Worktree, pfadgenau, ohne Sammelcommit); der EINE
+Sicherheitsbau ist Z0-I1; die EINE Abnahme läuft beim Evaluator seriell (Z1-W1-1/2/4/5, dann
+gebaute Z2); der EINE Planner-Zuschnitt ist A-37 (Blattberichtigung ohne Code). Integrator zieht
+Zustände atomar nach und trennt im Bericht Hausplaner von Sicherheit.
 
 ## Entscheidungen des Planners/Dirigenten zu den im Auftrag genannten Punkten (21.08., Vollmacht)
 
@@ -14,7 +44,7 @@ phase_0_snapshot: 2026-08-21 20:58:40 · HEAD 976f7d6b (generator: Z2-W0-12 geba
 - **W0-11:** Teil A (uid-Bindung + fünf tote Ausnahmen) sofort, Teil B (IDS-Rückgabeformat, extern) als W0-11b nach **Y-12** — bereits im Blatt getrennt.
 - **Y-10/Y-11:** wie erteilt (8 h; reversible Stilllegung) — bereits eingearbeitet (W0-12, W0-10).
 - **Rollenbarriere (Phase 2):** Stage-Scope-Abbruch ist angewiesen; A-38 (Merges durch das Rollen-Tor) wird vom Plan-Prüfer priorisiert. **Der Dirigent selbst verlässt den gemeinsamen Checkout** für weitere Planner-Schreibarbeit (eigener Worktree/Rollenbranch) — Ausnahme: Commits bereits offener eigener Dateien mit explizitem Pfad.
-- **Testdatenbanken (Phase 3):** Auftrag **Z0-I1** geschnitten (je Rolle eigene DB + Namensprüfung vor dem ersten Schreibzugriff + Positiv-/Kollisionsprobe). **Operand:** Anlage neuer Datenbanken braucht MySQL-Rechte — `ticket_user` hat sie vermutlich nicht; Root-Passwort hält Yama (→ **Y-13:** Yama legt die vier DBs an ODER gibt `ticket_user` CREATE-Recht auf `ticket_testing\_%`).
+- **Testdatenbanken (Phase 3):** Auftrag **Z0-I1** geschnitten (je Rolle eigene DB + Namensprüfung vor dem ersten Schreibzugriff + Positiv-/Kollisionsprobe). **Y-13 ENTSCHIEDEN (Yama, 21.08. abends):** `ticket_user` erhält vollständige Rechte (CREATE, DROP, ALTER, Migrationen, Datenänderungen) auf `ticket_testing\_%`; die vier Testdatenbanken werden selbstständig angelegt/zurückgesetzt/verwaltet; **parallele DB-Läufe erst nach erfolgreichem Guard- und Verbindungstest**; Produktionsdatenbanken unberührt. Das GRANT führt Yama (Root) aus; der Generator misst dessen Wirksamkeit als Erstes (ENV_BLOCKED bei Fehlschlag).
 - **Fortschrittsbericht (Phase 7):** Auftrag **Z0-F1** — HTML nur aus einem Snapshot erzeugen, 13-zeilige Aktivierungsmatrix, historische Abschnitte markiert.
 
 ---
