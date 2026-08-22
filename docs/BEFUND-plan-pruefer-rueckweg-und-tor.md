@@ -40772,3 +40772,66 @@ Ein Punkt gehört dazu, weil er älter ist: In §480/§481 habe ich `grep -c` au
 gefahren, um die ENV-Anweisung zu prüfen. Das war schon damals eine Grenzfrage, und ich habe sie
 dem Dirigenten vorgelegt statt sie selbst zu beantworten. Sie ist bis heute offen — und die neue
 Warnung nennt `.env` im Integrations-Checkout ausdrücklich als Produktiv-Zugang.
+
+## §511 — Der Ballwechsel ist exakt +12/−12. Aber die angekündigte Automatik würde zwei geschlossene Vorgänge wieder öffnen
+
+Stand: HEAD `87f9ce15`, Baum 0, gen 11, Digest gleich. Zeit 00:00. Messstand `78598465`,
+**aus meinem Worktree über die Ref gelesen** (§510).
+
+Posten 32 (23:53:11) setzt die Regel: *„Nach ABGENOMMEN (BROWSER/CODE) geht der Ball NICHT an den
+Dirigenten, sondern an den RELEASE-PRÜFER. […] `status-erzeugen.sh`: `ballbesitz` nach ABGENOMMEN =
+`release-pruefer`."* Der Integrator hat sie um 23:56 ausgeführt.
+
+### Die Massenänderung: exakt
+
+```
+vor  (766c71f2)   release-pruefer 10  ·  dirigent 12
+nach (78598465)   release-pruefer 22  ·  dirigent  0
+                  ────────────────────────────────────
+                  release-pruefer +12  ·  dirigent −12
+```
+
+**Genau zwölf, wie angeordnet** — und die 22 sind kein Widerspruch, sondern 10 ältere plus 12 neue.
+Der Dirigent nennt die zehn ausdrücklich („wie bei den zehn älteren Zeilen"). Hätte ich nur die 22
+gegen die 12 gehalten, hätte ich eine Abweichung von zehn gemeldet, die keine ist — **dieselbe
+Grundmengen-Falle wie in §494, §500 und §506, diesmal vor dem ersten Zählen erkannt.**
+
+Alle zwölf tragen `zustand: ABGENOMMEN`. Kein Block wurde umgehängt, der es nicht ist.
+
+### Der Befund: zwei ABGENOMMEN-Zeilen stehen bewusst nicht auf `release-pruefer`
+
+```
+A-05   zustand ABGENOMMEN   ballbesitz: "— (geschlossen 12.08. vom Planner: Messergebnis verwertet…)"
+A-12   zustand ABGENOMMEN   ballbesitz: "— (geschlossen 12.08. vom Planner: Ergebnis in F-026 🟢 verwertet…)"
+```
+
+Der Gedankenstrich heißt **kein Ball**, und der Klammertext nennt Datum, Rolle und Verbleib. Das
+sind abgeschlossene Vorgänge, keine offenen Prüfgegenstände. Der Integrator hat sie zu Recht
+ausgelassen — der Dirigent hatte „die zwölf ABGENOMMEN-Zeilen **der Welle**" beauftragt, und A-05
+und A-12 sind A-Kennungen von vor zehn Tagen.
+
+**Die Regel selbst kennt diese Ausnahme aber nicht.** Sie lautet ohne Einschränkung: „Nach
+ABGENOMMEN geht der Ball an den Release-Prüfer." Und der Zusatz ist der eigentliche Punkt:
+
+> „`status-erzeugen.sh`: `ballbesitz` nach ABGENOMMEN = `release-pruefer`. […] **künftig
+> automatisch.**"
+
+**Sobald das Skript die Regel wörtlich umsetzt, hängt es A-05 und A-12 mit um** — und macht aus zwei
+seit dem 12.08. geschlossenen Vorgängen zwei offene Posten beim Release-Prüfer. Er bekäme zwei
+Prüfgegenstände auf den Tisch, deren Ergebnis vor zehn Tagen verwertet wurde.
+
+Das ist kein Fehler der heutigen Ausführung — die war handverlesen und richtig. Es ist eine Kante
+der **Automatik**, die noch nicht gebaut ist. Der günstigste Zeitpunkt, sie zu benennen, ist jetzt.
+
+Vorschlag, ausdrücklich als Vorschlag: Das Skript setzt `release-pruefer` nur, wenn `ballbesitz`
+heute auf `dirigent` steht oder leer ist — **nicht**, wenn dort ein Gedankenstrich mit
+Abschlussvermerk steht. Ein geschlossener Vorgang hat keinen Ball, und „kein Ball" ist eine Aussage,
+kein fehlender Wert.
+
+### Was das für meine eigene Ballortung heißt
+
+Ich zähle in jeder Runde `^ballbesitz: plan-pruefer` in `docs/STATUS.md`. Heute: **1** (P-02,
+Zustand VORLAGE). Der Gedankenstrich-Fall zeigt, dass ein Ballfeld drei Zustände hat — **eine
+Rolle, ein Abschlussvermerk, oder nichts** — und mein Griff nur den ersten sieht. Für mich ist das
+folgenlos, weil ich nach meinem eigenen Namen suche. Wer aber „wo liegt überhaupt etwas" fragt,
+zählt mit `grep -c '^ballbesitz:'` auch die geschlossenen mit.
