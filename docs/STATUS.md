@@ -103,6 +103,7 @@
 | **Z1-W2-1** Integrationsabgleich anschliessen | **`ABGENOMMEN`** | **Dirigent** | Schnitt 22.08. 14:2x · Basis `767fb730` | **Blatt** `docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md` · **DoR ERTEILT** (plan-pruefer 14:25, Pruefstand `4611267e`) · Bau `1c80a1d8` · Matrix `1d193535` · **ABGENOMMEN (BROWSER)** 16:25:16, Reifegrad `BROWSERABGENOMMEN`, 6 von 6 Kriterien, drei Bildbelege · **Buendel** `be4f637c` transportiert |
 | **Z1-W2-2** Aufbautenstatus anschliessen | `ZURUECKGESTELLT` | **Planner** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-2-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae · **ZURUECKGESTELLT** — RoofAufbau ohne `surfaceId`, Flaechen ohne gespeicherte Kennung: nur "nie warnen" oder "immer warnen" moeglich, beides kein Anschluss · Dirigent 15:52:21 · **kein Bau-SHA** |
 | **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | `CODE_FERTIG` | **Evaluator** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · **DoR ERTEILT** (plan-pruefer §353, `c2e8dd20`) · Bau `d00aeece` · Matrix `161868e9` · CODE_FERTIG 16:13:25 · **BERICHTIGUNG:** mein Commit `217fd547` fuehrte hier ZURUECKGESTELLT — das war seit 15:53:35 ueberholt |
+| **Z1-W2-4** Treppe ueber den Werkzeugregistry-Vertrag anschliessen | `BEREIT` | **Generator** | Schnitt 22.08. · Basis `161868e9` | **Blatt** `docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md` · **DoR ERTEILT** (plan-pruefer 16:21:25) · Planner-Blatt `418bcb6c` |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -19212,6 +19213,25 @@ berichtigung_meines_eigenen_zustands: |
   als richtig. Nur diese eine Kennung war falsch.
   KEIN RESET, KEIN AMEND: 217fd547 bleibt stehen, diese Zeile berichtigt ihn (Auflage 2).
 
+```
+
+```yaml
+auftrag: "Z1-W2-4"
+titel: "Treppe ueber den Werkzeugregistry-Vertrag anschliessen"
+zustand: BEREIT
+ballbesitz: generator
+blatt: "docs/auftraege/aktiv/Z1-W2-4-treppe-ueber-werkzeugregistry-vertrag.md"
+blatt_sha: 418bcb6c
+basis_sha: 161868e9
+dor_beleg: |
+  ERTEILT — plan-pruefer, 16:21:25, plan-pruefer-DOR-Z1-W2-4-ERTEILT.yaml,
+  endstand f8801591, ergebnis 7c7b2f63, ball: keiner (also frei fuer den Bau).
+bau_sha: "noch offen"
+herkunft_dieses_blocks: |
+  Statusplatz vom integrator angelegt, verspaetet und mit benanntem Grund: das Blatt ist seit
+  16:16:22 fertig und die DoR seit 16:21:25 erteilt. Die Dauerregel aus gen 9 Punkt 2 verlangt den
+  Block im SELBEN Lauf wie den Transport — mein Lauf hing zwei Stunden, und in dieser Zeit sind
+  fuenf Kennungen ohne Statusplatz aufgelaufen. Der Block kommt jetzt, die Verspaetung steht hier.
 ```
 
 
