@@ -671,13 +671,151 @@ ausnahmslos eine **ausgelöste** Negativprobe mit Rohausgabe und `echo $?`, nich
   *Ein Tor, das nur sperrt, ist von einem kaputten nicht zu unterscheiden — dieselbe Begründung wie
   bei `A-37-2`.*
 
-  **Sitzungsidentität — Befund `79285cf2`, in ein Kriterium überführt:** wo der Hook eine Sitzung
-  identifiziert, besteht die Kennung aus **Sitzungs-ID + PID des Sitzungsprozesses + Prozess-
-  Startkennung**, **nie** aus der Shell-PID einer Werkzeugrunde. **Gemessen:** von vier `pid`-Feldern
-  im Steuerungssystem trugen **drei** eine Zahl, zu der kein Prozess mehr existierte; die Shell-PID
-  einer einzigen Sitzung wechselte in vier aufeinanderfolgenden Aufrufen `76231 → 80694 → 80830`,
-  während der Sitzungsprozess konstant blieb. *Ein Tor, das Lebendigkeit über die Shell-PID prüft,
-  prüft bei drei von vier Rollen eine tote Zahl.*
+  **⚠ SITZUNGSIDENTITÄT — BERICHTIGT am 22.08. nach DoR-Restpunkt 1 (`plan-pruefer-NICHT_ERTEILT.yaml`,
+  Votum `1568610f`/`c74a9141`). Meine erste Fassung war gegen den alten Fehler richtig und gegen den
+  neuen falsch, und sie hätte gebaut Schaden angerichtet.**
+
+  *(Die überholte Fassung bleibt als Beleg stehen — A-20-4:)*
+
+  > ~~Sitzungsidentität — Befund `79285cf2`, in ein Kriterium überführt: wo der Hook eine Sitzung
+  > identifiziert, besteht die Kennung aus **Sitzungs-ID + PID des Sitzungsprozesses + Prozess-
+  > Startkennung**, **nie** aus der Shell-PID einer Werkzeugrunde. **Gemessen:** von vier `pid`-Feldern
+  > im Steuerungssystem trugen **drei** eine Zahl, zu der kein Prozess mehr existierte; die Shell-PID
+  > einer einzigen Sitzung wechselte in vier aufeinanderfolgenden Aufrufen `76231 → 80694 → 80830`,
+  > während der Sitzungsprozess konstant blieb. *Ein Tor, das Lebendigkeit über die Shell-PID prüft,
+  > prüft bei drei von vier Rollen eine tote Zahl.*~~
+  >
+  > **⚠ BERICHTIGUNG AM ZITAT SELBST (22.08., Anmerkung 2 des DoR-Votums `a248eaaf`):** meine erste
+  > Fassung dieses Blocks brach das Zitat nach *„Werkzeugrunde"* ab — **drei von sieben Zeilen**,
+  > während drei Zusagen im selben Commit *„null Löschungen"* und *„die überholte Fassung bleibt
+  > vollständig stehen"* behaupteten. **Verschwunden waren genau die Messwerte**, die den Befund
+  > tragen (`76231 → 80694 → 80830`, *„von vier `pid`-Feldern … trugen drei"*, *„bei drei von vier
+  > Rollen eine tote Zahl"*) — der Satz *„der Befund bleibt richtig"* stand damit zwei Zeilen weiter
+  > **ohne seinen Nachweis**. Oben vollständig wiederhergestellt. *Ein gekürzter Beleg ist die
+  > stillste Art, eine Aussage unbelegt zu machen — und die Kürzung stand ausgerechnet unter der
+  > Zusage, nichts zu löschen.*
+  >
+  > **Der Satz wehrt die Shell-PID ab — das war der Befund aus Sitzung `79285cf2…`, und er bleibt
+  > richtig.** *(Das durchgestrichene Zitat behält die alte Schreibweise wörtlich — es ist der Beleg,
+  > nicht die Aussage.)* **Falsch ist, dass er PID und Startkennung zu Bestandteilen der IDENTITÄT
+  > macht.** Bei einer per `--resume` getakteten Sitzung gehört die eingetragene PID **per
+  > Konstruktion** einem beendeten Lauf; die Kennung ist damit nicht stabil, obwohl die Sitzung
+  > durchgehend arbeitet.
+  > *Der Begründungssatz „während der Sitzungsprozess konstant blieb" traf auf die messende Sitzung
+  > `79285cf2…` zu und auf die Planner-Sitzung nicht.*
+
+  **⚠ ZWEITE BERICHTIGUNG — WAS `agentenarchitektur-v2.md` §8 WIRKLICH SAGT.** *(Selbst gemessen,
+  nachdem meine erste Fassung eine fremde Folgerung ungeprüft übernommen hatte; Auflage aus
+  `plan-pruefer-berichtigung-paragraph8.yaml`, dessen Gegenmessung ich nachgefahren habe.)*
+
+  **§8 trennt zwei Sperren, und die Trennung ist bereits richtig:**
+
+  | Gegenstand | Regel in §8 | gebunden an |
+  |---|---|---|
+  | **Lease** (`active/`) | `:162` — darf **nur** entfernt werden, wenn `heartbeat_bis` verstrichen ist | die **Sitzung** |
+  | **Vergabesperre** (`counter.lock/owner.yaml`) | `:154-156` — Entfernung nur, wenn die Prozessidentität nachweislich nicht mehr existiert | den **Lauf** |
+
+  **Messbefehl:** `grep -n 'PID'` über §8 → **genau zwei Treffer**, `:154` und `:156`, **beide** unter
+  der Absatzüberschrift *„Recovery der Sperre selbst"*. **Die Lease-Übernahme bei `:162` nennt keine
+  PID.** *§8 entzieht eine Lease also nicht über die PID — für die Lease trägt es Punkt 4 und 6 der
+  Zielregel bereits.*
+
+  **Und die Bindung der Vergabesperre an den Lauf ist richtig, nicht falsch:** `counter.lock` soll
+  laut `:126`/`:137`/`:148` nur den **kurzen Vergabevorgang** überdauern. **Für einen Lauf ist die
+  Prozessidentität die zutreffende Kennung.** *Was für die Lease falsch wäre, ist für die
+  Vergabesperre richtig.* **Auch `fail closed` (`:157-159`) greift hier nicht:** es gilt, wenn die
+  Lebendigkeit *„nicht eindeutig messbar"* ist, und §8 nennt dafür zwei Fälle — **fremder Host,
+  fehlende Startkennung**. Bei einer lokal zurückgebliebenen Sperre mit eingetragener Kennung
+  antwortet `ps` eindeutig (**exit 1** = nachweislich nicht mehr existent, **an allen beendeten Läufen
+  dieser Sitzung geprüft** — Stand der Erhebung siehe Tabelle unten, Verfahren an beiden Enden
+  verifiziert) — **das ist genau die Bedingung, unter der `:155-156` die Entfernung erlaubt.**
+  Kein Entzug und kein Stillstand.
+
+  > **⚠ BELEGBERICHTIGUNG (22.08., Anmerkung aus `2b9cedc4`):** hier stand *„an **vier** beendeten
+  > Läufen"*. **Richtig waren zum Zeitpunkt jener Messung fünf** — `16345` fehlte in meiner
+  > Aufzählung, obwohl dieselbe Datei ihn zwölf Zeilen weiter unten als „Lauf 5" führt.
+  > **Das ist der zweite Zählfehler derselben Bauart innerhalb einer Stunde:** zuvor hieß es *„alle
+  > sechs standen bei 0×"*, richtig waren fünf (*„Sitzungs-ID"* stand bereits 1×). **Beide Male um
+  > eins daneben, beide Male durch Überspringen eines Elements, das an anderer Stelle desselben
+  > Dokuments vollständig aufgeführt ist.** *Die Aussage trägt in beiden Fällen unverändert — die
+  > Regel gilt, ob vier oder fünf Läufe beendet sind. Falsch war jeweils nur der **Beleg**, und ein
+  > Beleg, der um eins danebenliegt, ist als Beleg wertlos.*
+  > **Abhilfe im Text, nicht im Kopf:** die Zahl steht nicht mehr im Satz, sondern **nur noch in der
+  > Tabelle**, die sie ohnehin führt. *Eine Zahl, die an zwei Stellen steht, driftet an einer davon.*
+
+  **Was hier bleibt, ist deshalb kein Mangel an §8, sondern eine Ergänzung:** **Yamas Zielregel fügt
+  für die Lease hinzu, was §8 dort schon trägt, und macht es zur Abnahmebedingung** — mit dem
+  ausdrücklichen Verbot (Punkt 6), aus einer alten PID auf „verwaist" zu schließen. *Genau dieser
+  Schluss war der Fehler meiner ersten Fassung — nicht der von §8.*
+
+  **DIE ZIELREGEL — Yamas Wortlaut vom 22.08., sechs Punkte, einzeln abzunehmen:**
+
+  | # | Regel | wo abgenommen |
+  |---|---|---|
+  | 1 | **Stabile Identität ist allein die Sitzungs-ID.** Sie überlebt den Prozess. | **A-37-25** |
+  | 2 | **`pid` und `prozess_start` gelten je LAUF**, nicht je Sitzung. | **A-37-25** |
+  | 3 | Während Schreibarbeit wird der **Heartbeat** regelmäßig erneuert (atomar, tmp + `mv`). | **Z0-I2** |
+  | 4 | **Übernahme nur bei abgelaufenem Heartbeat UND fehlendem aktuellem Lauf** — beides. | **Z0-I2** |
+  | 5 | Das **Fencing-Token** bleibt maßgeblich. | **Z0-I2** |
+  | 6 | **Eine alte PID allein erklärt eine Lease NIEMALS für verwaist.** | **A-37-25** |
+
+  **⚠ ZUR ZUSCHNITTGRENZE, weil der Plan-Prüfer sie ausdrücklich offengelassen hat** *(„Wo die Grenze
+  liegt, entscheidet der Planner")*: **Alle sechs Punkte stehen hier zusammen, weil sie eine Regel
+  sind und getrennt ihren Sinn verlieren** — abgenommen werden sie an zwei Orten. **`A-37-25` baut
+  ein `pre-commit`-Tor, keine Lease-Verwaltung.** Das Tor muss wissen, **woran es eine Sitzung
+  erkennt** (1, 2) und **was es daraus nicht schließen darf** (6). **Heartbeat-Erneuerung, Übernahme
+  und Fencing (3–5) sind Mechanik der Claim-Sperre und gehören nach `Z0-I2`** — sie hier abzunehmen
+  hieße, Lease-Verwaltung in einen Commit-Hook zu bauen. *`README.md:66` weist die Barriere beiden
+  Aufträgen zu; diese Tabelle sagt, welcher Punkt bei welchem liegt, damit keiner zwischen ihnen
+  verschwindet.*
+
+  **GEMESSEN AM LAUFENDEN SYSTEM — die Sitzung `ef8ec540` lief binnen 40 Minuten unter VIER Prozessen:**
+  ```
+  ERHEBUNGSSTAND 01:05 — eine Momentaufnahme, keine Dauerauskunft (siehe Hinweis unter der Tabelle)
+
+  88928  Start 00:00:48  (--session-id)   Läufe 1-3     ps-exit 1   beendet
+  97092  Start 00:16:24  (--resume)       Messung P-P   ps-exit 1   beendet
+  12334  Start 00:32:38  (--resume)       Lauf 4        ps-exit 1   beendet
+  16345  Start 00:40:08  (--resume)       Lauf 5        ps-exit 1   beendet   (um 00:44 noch lebend)
+  21343  Start 00:48:47  (--resume)       Lauf 6        ps-exit 1   beendet
+  25914  Start 00:56:50  (--resume)       Lauf 7        ps-exit 1   beendet
+  30651  Start 01:04:51  (--resume)       Lauf 8        ps-exit 0   LEBT
+  ```
+  **⚠ Diese Tabelle ist selbst der beste Beleg des Kriteriums, und zwar gerade weil sie altert.**
+  In der Fassung von 00:59 stand `16345` hier als *„lebt"* — **richtig zum Zeitpunkt der Messung,
+  fünfzehn Minuten später überholt.** *Wer eine solche Zeile als Dauerauskunft liest, hält einen
+  beendeten Prozess für lebend; wer sie als Momentaufnahme liest, liest sie richtig.* **Genau diesen
+  Unterschied muss das Tor treffen** — deshalb steht der Erhebungsstand jetzt in der Tabelle selbst.
+  **Erhebung:** `ps -o pid=,lstart= -p <PID>`, Exit-Code **direkt** gelesen — nicht hinter einer Pipe
+  *(der Plan-Prüfer hat seinen ersten Versuch genau daran verworfen)*. **Verfahren an beiden Enden
+  verifiziert:** lebende PID → exit `0` mit Startzeit, `999999` → exit `1` leer.
+  **Der Lebensnachweis ist der laufende Lauf:** `ps -axo command=` findet genau **einen** Prozess,
+  dessen Kommandozeile die Sitzungs-ID trägt (`claude -p --resume <sitzungs-id>`).
+  **Der Realfall ist protokolliert, nicht konstruiert:** um **00:17:18** wurde die Planner-Lease mit
+  `owner.pid 88928` erteilt — **dieser Prozess war da bereits tot**, während die Sitzung durchgehend
+  arbeitete und um 00:21:57 dieses Blatt schrieb.
+
+  **Warum das ein eigener Absatz bleibt:** *jede* der vier PIDs war zum Zeitpunkt ihres Eintrags
+  richtig. **Die Registrierung war nie falsch — sie ist abgelaufen**, dieselbe Klasse wie die feste
+  Zahl in `A-37-11`, die Zeilennummer in `A-37-19`, die „sechs Bäume" in `A-37-18` und das Nicht-Ziel
+  „Kein Hook". **Ein Tor, das Lebendigkeit an einer gespeicherten PID misst, prüft eine Aussage mit
+  Verfallsdatum, ohne das Datum zu kennen.**
+
+  **Negativprobe, ausgelöst:** Eintrag mit **toter** `owner.pid`, aber gültigem Heartbeat und
+  laufendem `--resume`-Prozess derselben Sitzungs-ID → **die Sitzung gilt als lebend**, eine
+  Übernahme wird abgewiesen. **Gegenprobe:** kein laufender Prozess mit dieser Sitzungs-ID **und**
+  abgelaufener Heartbeat → Übernahme erlaubt.
+  **Absage-Regel:** Ein Bau, der eine Sitzung oder Lease **allein wegen abweichender PID** für tot
+  erklärt, erfüllt dieses Kriterium **nicht** — auch dann nicht, wenn alle fünf Negativproben oben
+  grün sind.
+
+  **Zum Beleg `79285cf2` — Restpunkt 2 der DoR, berichtigt:** die Zeichenfolge steht in diesem Blatt
+  neben echten Commit-SHAs (`26c46f31`, `e5aa5af7`, `e9e6ee5b`) und liest sich wie einer.
+  **Sie ist keiner:** `git cat-file -e 79285cf2^{commit}` → **exit 128**. Es ist die **Sitzungs-ID**
+  `79285cf2-4231-4f71-8dfc-3306e3371109` (Sitzungsprozess-PID 70499), Quelle
+  `ereignisse/SITZUNG-70499-ROLLENWECHSEL/sitzung-70499-meldung.yaml`. **Ab hier im Blatt immer als
+  „Sitzung `79285cf2…`" geschrieben.** *Eine gekürzte UUID und ein gekürzter SHA sehen gleich aus —
+  und ein Beleg, den man nicht öffnen kann, ist die stille Variante eines toten Verweises.*
 
   **⚠ `--no-verify` IST DIE GRENZE UND WIRD ALS SOLCHE DOKUMENTIERT, NICHT ÜBERSPIELT.**
   Ein Git-Hook ist mit `git commit --no-verify` umgehbar; **das ist technisch nicht verhinderbar.**
