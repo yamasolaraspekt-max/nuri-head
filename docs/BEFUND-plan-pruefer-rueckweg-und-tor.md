@@ -34291,3 +34291,66 @@ habe.
 
 Ball: **niemand** — das Votum bleibt gültig, die Berichtigung ist meine. **Generator** unverändert:
 sieben Einträge, Bündel jetzt Pflicht.
+
+## §431 — Das Bündel im Repo kennt Z1-W2-5 nicht. Auch die lokale Datei nicht — sie ist 40 Minuten älter als der Bau
+
+Messstand: HEAD `92da3890`, Baum 0, gemessen 19:11–19:12. Abschnittsnummer gegen den frischen HEAD
+gewählt (`grep -c '^## §431'` → 0). Vorratsprüfung **(e)** — Verfolgung der Dirigenten-Entscheidung
+von 19:05:47, mit dem **korrigierten Schnitt auf die Lesezeit** (§430).
+
+### Die Lage in vier Zahlen
+
+    letzter Buendel-Commit    be4f637c  16:27:14  "Buendel gebaut fuer Z1-W2-1 @ c4ddc02b"   164 min
+    Datei-mtime               public/hausplaner/hausplaner.js  18:11                          60 min
+    Insel-Commits seither     1         5617dc4c  18:51:47  "Z1-W2-5 — die Wandflaeche …"
+    Dirigenten-Auftrag        19:05:47  "Buendel fuer Z1-W2-5 JETZT bauen (5 min)"             6 min
+
+**Der Bau `5617dc4c` enthält das Bündel nicht** — gemessen an seinen Dateien: nur
+`EigenschaftenPanel.tsx` und `WandflaechenAnzeige.tsx`. Und **kein** Insel-Commit seit `be4f637c`
+trägt `public/hausplaner`.
+
+### Der Punkt, den man leicht übersieht: auch die lokale Datei ist zu alt
+
+    Datei-mtime  18:11        <  Bau von Z1-W2-5  18:51:47
+
+**Die lokale `hausplaner.js` wurde 40 Minuten VOR dem Z1-W2-5-Bau erzeugt.** Wer die Bühne startet
+und *nicht* selbst baut, sieht die Wandflächen-Anzeige nicht — weder aus dem Repo noch aus dem
+Arbeitsbaum. **Für die laufende Browserabnahme heißt das: `npm run build:hausplaner` ist Pflicht,
+nicht Kür.**
+
+### Berichtigung meiner eigenen Vermutung, vor dem Melden
+
+Ich hatte vermutet, seit `be4f637c` seien **vier** Bauten ohne Bündel gelaufen (Z1-W2-0, Z1-W2-3,
+Z2-W0-5b, Z1-W2-5). **Gemessen ist es einer.** Die drei anderen liegen **vor** dem Bündel-Commit:
+
+    Z1-W2-0    15:44:13   ) alle vor be4f637c (16:27:14)
+    Z2-W0-5b   16:02:25   )  -> vom Buendel ERFASST
+    Z1-W2-3    16:12:31   )
+    Z1-W2-5    18:51:47      -> NICHT erfasst
+
+**Das ist der Unterschied zwischen einem Befund und einem Alarm.** Vier Bauten ohne Bündel wären ein
+Rückstand; einer ist ein offener Posten, den der Dirigent vor sechs Minuten beauftragt hat.
+
+### Das Blatt kannte die Frage schon
+
+    Z1-W2-5-wandflaeche-anschliessen.md:196
+      "[?] 12  public/hausplaner/…js   OFFEN — Buendel-Frage (gen 19 Posten 7, 'messen')"
+
+**Der Planner hat die Bündelfrage im Blatt als offen markiert** — mit Fragezeichen und Verweis auf
+den Posten, der sie klären sollte. Sie ist seit **19:05:47** geklärt: das Bündel ist Teil **jeder**
+Lieferung, die Regel von 16:02 ist aufgehoben.
+
+**Damit ist Zeile 196 überholt** — kein Mangel, aber ein Kandidat für den nächsten Blattstand.
+
+### Was das für meine erteilten Voten bedeutet
+
+Ich habe Z1-W2-4, -5 und -6 gegen ihre **eigenen** Kriterien erteilt, nicht gegen V-1..V-6. Der
+Dirigent sagt jetzt: *„V-5 gilt auch für Z1-W2-4/5/6."* **Das erweitert die Lieferpflicht, ohne ein
+Kriterium zu ändern** — meine Voten bleiben gültig, die Lieferung wird um das Bündel größer.
+
+**Und es löst nachträglich den Widerspruch, den ich in §421 für Spur V schließen musste:** Wenn das
+Bündel überall Pflicht ist, brauchen V-5 und V-6 die Ausnahme, die ich als Halbsatz 2 formuliert
+habe — sie gilt jetzt für **alle** Lieferungen, nicht nur für Spur V.
+
+Ball: **Generator** (Bündel, seit 6 Minuten beauftragt) · **Evaluator** (bis dahin selbst bauen —
+sonst prüft er die Insel ohne Z1-W2-5) · **Planner** (Zeile 196 beim nächsten Anfassen).
