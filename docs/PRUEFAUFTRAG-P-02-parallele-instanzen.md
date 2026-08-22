@@ -33,10 +33,13 @@ Worktree — für zwei Instanzen **derselben** Rolle sagt das Regelwerk nichts.*
 ```text
 1  CLAIM GILT      Ein Claim auf ein Blatt bindet, bis er erledigt oder zurueckgezogen ist.
                    Wer wach wird und das Blatt frei findet, faengt NICHT an.
-2  TRENNUNG        Entscheidungen, Widerspruchspruefungen und die Auftragstafel bleiben bei
+2  TRENNUNG        [UEBERHOLT 22.08. - heute rollenweise geregelt, siehe Nachtrag. Bleibt
+   (UEBERHOLT)      als Beleg stehen, nicht geloescht.]
+                   Entscheidungen, Widerspruchspruefungen und die Auftragstafel bleiben bei
                    EINER Instanz. Geclaimte Blaetter gehoeren der claimenden.
-3  OPERAND STATT   Wer eine Entscheidung hat, die ein geclaimtes Blatt braucht, legt sie in
-   UMSCHNITT       STATUS.md ab - nicht ins Blatt. Sie kostet die andere Instanz einen Befehl.
+3  OPERAND STATT   Wer eine Entscheidung hat, die ein geclaimtes Blatt braucht, legt sie als
+   UMSCHNITT       EIGENES EREIGNIS in der Steuerung ab - nicht ins Blatt und nicht in
+                   STATUS.md. Sie kostet die andere Instanz einen Befehl.
 4  VERLINKEN       Fremde Befunde werden zitiert und verlinkt, nie nachgebaut.
    STATT NACHBAUEN
 5  FRISCH MESSEN   Die Freiheitspruefung einer Datei aendert sich binnen einer Minute.
@@ -70,3 +73,50 @@ beobachtbaren Auslöser?) · Kausalität (hätte der Punkt den Vorfall verhinder
 
 *Bei P-01 war mein Machtverdacht falsch und die Prüfung hat es gezeigt. Punkt 2 sieht ähnlich aus:
 er behält Entscheidungen und die Tafel bei „einer Instanz" — und das bin im Zweifel ich.*
+
+---
+
+## Nachtrag 22.08. — Punkt 3 neu gefasst, Punkt 2 als überholt gekennzeichnet
+
+**Anlass:** Votum des Plan-Prüfers zu dieser Vorlage (22.08., `docs/BEFUND-plan-pruefer-rueckweg-und-tor.md` §343).
+Ergebnis: **Punkt 1, 4 und 5 erteilt** · **Punkt 2 gegenstandslos** · **Punkt 3 nicht erteilbar in
+der alten Fassung**.
+
+### Punkt 3 — der Ablageort war neun Tage jünger als die Vorlage
+
+**Alte Fassung:** *„…legt sie in `STATUS.md` ab"*. **Das ist seit dem 16.08. verboten** —
+`ARBEITSREGELN.md:1555` („Niemand bearbeitet `docs/STATUS.md` von Hand") und `:1280`
+(Integrator alleiniger Schreiber, **ausnahmslos**).
+
+**Die Absicht trägt unverändert:** eine Entscheidung gehört **nicht ins fremde Blatt**, sonst
+schneidet eine Instanz in der Arbeit einer anderen. **Nur der Ablageort war überholt.**
+Neu: **ein eigenes Ereignis in der Steuerung** — dort, wo Entscheidungen ohnehin liegen, mit
+Uhrzeit, Urheber und Ball.
+
+> **Diese Vorlage ist vom 07.08., die Regel, die sie aushebelt, vom 16.08.** Kein Fehler in der
+> Sache — aber der Beleg dafür, dass eine Vorlage, die 15 Tage auf `VORLAGE` steht, an Stellen
+> altert, die niemand angefasst hat. *Dieselbe Klasse wie §5 gegen §16 bei der Statuswahrheit:
+> die ältere Regel steht unverändert weiter, ohne Hinweis auf die jüngere.*
+
+### Punkt 2 — ÜBERHOLT, nicht gestrichen
+
+**Nicht falsch, sondern gegenstandslos:** Punkt 2 sollte Konflikte zwischen **Instanzen** regeln.
+Heute sind die Zuständigkeiten **rollenweise** geregelt — die Auftragstafel schreibt der Integrator,
+die Widerspruchsprüfungen liegen beim Plan-Prüfer. *Der Fall, den Punkt 2 löst, kann so nicht mehr
+entstehen.*
+
+**Er bleibt im Kasten stehen, mit `(UEBERHOLT)` gekennzeichnet** — nach der Hausform für überholte
+Punkte, wie beim Nicht-Ziel „Kein Hook" in A-37. *Wer ihn löscht, nimmt der Vorlage ihren Anlassfall.*
+
+### Was ich hier nicht entscheide
+
+Ob diese Vorlage nach 15 Tagen **förmlich in Kraft gesetzt** wird, entscheidet der Dirigent.
+**Punkt 4 wird ohnehin gelebt** — er steht wörtlich in den Rollen-Aufträgen (*„Fremde Befunde
+werden ZITIERT UND VERLINKT, nie nachgebaut (P-02 Punkt 4)"*), und der Plan-Prüfer belegt drei
+Anwendungen allein vom heutigen Tag.
+
+**Punkt 5 ist der wichtigste und der am schwersten zu haltende.** Der Plan-Prüfer legt offen, dass
+er ihn **heute dreimal selbst gebrochen** hat — die Rolle, die ihn prüfen soll. *Das ist der
+stärkste Kausalitätsbeleg für den Punkt und zugleich der Beweis, dass ein Text ihn nicht trägt.*
+**Was hilft, ist ein geänderter Messweg, kein Vorsatz** — dieselbe Lehre, die heute an drei
+weiteren Stellen dieses Hauses gezogen wurde.
