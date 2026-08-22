@@ -604,3 +604,123 @@ nicht als Vorsatz im Bericht — **je Stand eine eigene Datei, `cmp`-Gegenprobe,
 zwei Antworten, dann gilt keine von beiden.**
 
 **Ball: Generator** (`aa0cddd3`) für den ergänzenden Bau nach 22b/c/d/e und den Rest 24…27.
+
+---
+
+## Errata-Bestätigung — `c11f97ac` (Auftrag `DOR-plan-pruefer-A-37-errata`, gen 7)
+
+**Ergebnis: BESTÄTIGT.** Das DoR-Votum **ERTEILT** (`1ca8d512`) bleibt unverändert stehen, und der
+von mir nachgetragene Restpunkt ist damit **geschlossen**. Der Errata-Commit ändert kein Kriterium.
+
+### Punkt 1 — kein Kriterium bewegt
+
+Selbst gemessen gegen den Vorstand `96b24ca3`, an den Definitionszeilen und getrennt an den
+Unterkriterien:
+
+```
+diff Kriterien-Definitionszeilen 96b24ca3 <-> c11f97ac   exit 0
+diff Unterkriterien 22b/22c/22d/22e                      exit 0
+Hauptkriterien 27 · Unterkriterien 4 · z0-i1 im Commit 0
+git show --numstat c11f97ac -> 23  2  (EIN Pfad)   Elter 96b24ca3
+```
+
+Der **volle** Diff bestätigt es nicht nur an den Kriterienzeilen, sondern über die ganze Datei:
+**zwei ersetzte Zeilen, beide Belegzeilen** — der `22c`-Messbefehl (Standbezug angehängt) und die
+`15`-Zeile. Alles Übrige ist Einfügung von Erläuterung. Das ist der Unterschied zwischen „die
+Kriterienzeilen sind gleich" und „es wurde kein Kriterium geändert"; nur die zweite Aussage trägt,
+und nur der volle Diff belegt sie.
+
+### Punkt 2 — die `aktion`-Rot-Belegzeile steht
+
+```
+grep -cw 'aktion'   0   0        Blatt c11f97ac :742, unmittelbar unter der ACK-Zeile
+dieselbe Zeile im Vorstand 96b24ca3:   0 Treffer   (das war die Lücke)
+```
+
+Gemessen **ohne Zeilennummern-Annahme** — über den Blockinhalt gesucht, die Nummer erst danach
+abgelesen. Genau daran ist die Gegenprobe des Planners im selben Lauf gescheitert (`sed -n
+'720,732p'`, gemeldet als „0"), weil sein eigener Posten 3 oberhalb Zeilen eingefügt hatte. Er hat
+den Ausfall selbst erkannt, selbst gemeldet und selbst wiederholt. Das ist die Meldung, die zählt.
+
+Damit ist auch der Punkt geschlossen, den ich mir selbst hatte nachtragen müssen: nicht „ist die
+Sache rot?", sondern „belegt das Blatt, dass sie rot ist?" — sie belegt es jetzt für **fünf von
+fünf** Prüfgegenständen.
+
+**Er hat dabei einen Fehler von mir abgefangen.** Die Gegenprobe, die ich für tragfähig hielt,
+zählte `aktion` in `rollen/planner.yaml` — dort wandert die Zahl mit der Generation (3 bei gen 11,
+2 bei gen 12). Ein Beleg, der an der Steuerungsablage hängt, wandert mit ihr. Ersetzt durch zwei
+Kontrollwörter **in den geprüften, versionierten Dateien**: `TICKET_ROLLE` 7 und `commit` 10.
+
+### Punkt 3 — `15` → `16`, und die Abhilfe sitzt an der Ursache
+
+Selbst nachgezählt, Grundmenge zuerst bestimmt:
+
+```
+Stand 762243b9 und c11f97ac:  5 .mjs-Dateien in scripts/__tests__/
+mkdtempSync GESAMT 16  =  commitPruefen 12 + buehnenWaechter 2 + zeileErsetzen 2
+```
+
+**16 bestätigt**, und „in drei Dateien" stimmt ebenfalls — von fünf Dateien tragen genau drei
+Treffer. Entscheidend ist nicht die berichtigte Zahl, sondern dass der Befehl im Blatt jetzt
+`| wc -l` trägt: bei 16 Ausgabezeilen ist Verzählen um eins normal, bei einer Zahl aus dem Befehl
+ist es unmöglich. Es war der dritte Zählfehler derselben Bauart in dieser Kette — die Abhilfe am
+Messweg statt am Vorsatz ist die richtige Antwort darauf.
+
+### Posten 3 — vom Planner zusätzlich eingesetzt, von mir geprüft
+
+Nicht in meinem Auftrag genannt (der ließ „ggf. weitere ohne Kriterienwirkung" offen), deshalb
+eigens geprüft. Die Drei-Stand-Messung selbst nachgefahren, Exit-Codes direkt gelesen:
+
+```
+762243b9 -> 0 (exit 1)     49972884 -> 1 (exit 0)     561cc3d1 -> 9 (exit 0)
+```
+
+**0 / 1 / 9 bestätigt.** Der Befund dahinter trägt: Wer nach dem Bau `grep -c` fährt, findet 9 und
+kann die Ähnlichkeitsprüfung nicht mehr vom Zeilenparser unterscheiden.
+
+**Die Kernfrage war, ob der eingefügte Satz den Abnahmemaßstab verschiebt** — denn ein Errata darf
+Belege berichtigen, nicht Maßstäbe. Er verschiebt ihn nicht. Der **unveränderte** `Verlangt`-Text
+von 22c sagt bereits wörtlich: *„erkennt Namens-Ähnliche … und **meldet sie ausdrücklich als
+ausgeschlossen**"*. Der Zusatz verlegt den Beleg von der Zahl auf genau diese schon verlangte
+Wirkung; er fügt der Forderung nichts hinzu.
+
+**Der Standbezug `762243b9` trägt**, gegen die naheliegende Sorge geprüft:
+
+```
+merge-base --is-ancestor 762243b9 c11f97ac        exit 0
+Commits auf rueckweg.py in 762243b9..99ea9183     0
+Blob rueckweg.py  762243b9 == 99ea9183            b0b64a1b… identisch
+```
+
+Der genannte Stand ist also byte-genau der Code-Stand, der galt, als das Kriterium formuliert wurde.
+
+### Anmerkung — nicht kriterienwirksam
+
+Die Beschriftung `762243b9 (Blattstand, rot)` ist streng genommen ungenau: in `762243b9` enthält
+das **Blatt** das Kriterium 22c noch gar nicht (`grep -c 'A-37-22c'` → 0; im Blattstand `c11f97ac`
+→ 1). Der Bezug meint erkennbar den **Code**-Stand, und dafür ist er durch die Blob-Identität oben
+exakt belegt. Dass zuerst rot gemessen und danach das Kriterium geschrieben wird, ist die richtige
+Reihenfolge, nicht der Fehler. Eine Anmerkung zur Selbstbeschreibung — **kein Restpunkt**, weil sie
+keinen Beleg schwächt und kein Kriterium berührt.
+
+### Zwei eigene Messausfälle in dieser Runde
+
+Ich lege sie offen, weil ich dasselbe von den geprüften Rollen verlange:
+
+1. Meine Zählschleife über die Testdateien lief unter zsh **ohne Wortsplitting** — alle fünf Pfade
+   gingen als *ein* Pfad an `git show`, Ergebnis „0". Die `fatal:`-Zeile stand sichtbar daneben;
+   ohne sie hätte ich eine ausgefallene Messung als Widerspruch zur `16` gemeldet. Wiederholt mit
+   `while read`, dann 16.
+2. Mein Muster `^- \*\*A-37-22c` traf im Zielstand nichts — falsche Grundmenge, nicht falsche
+   Sache. Am bekannten Treffer verifiziert und wiederholt.
+
+**Eine ausgefallene Messung ist kein Ergebnis.** Beide Male war der Ausfall nur deshalb erkennbar,
+weil ich das Verfahren an einem bekannten Treffer gegengeprüft habe statt der Zahl zu glauben.
+
+### Ball
+
+**Evaluator** — Abnahme über **alle** A-37-Commits als **eine** Lieferung. Zwei Stände sind dabei
+auseinanderzuhalten: gebaut wurde gegen den Blattstand `762243b9`, gültiger Blattstand ist
+`c11f97ac`. Der Generator meldet A-37-11 sowie 12–16 ausdrücklich als **UNGEPRÜFT** statt grün
+(`npm ci` scheitert am Puppeteer-Download) — das ist seine Lieferung und seine Offenlegung; die
+Bewertung steht dem Evaluator zu, nicht mir. `Z0-I1` bleibt geparkt bis A-37 ABGENOMMEN.
