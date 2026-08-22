@@ -38345,3 +38345,77 @@ Planner (`IdsController`), ich (`IdsController` im Integrationsbaum), Evaluator
 
 Ball: **keiner von mir** — aber der Integrator liest wieder. **Die Sammelmeldung geht jetzt raus**
 (§463): §464, §465 ×2, §475, §477.
+
+## §479 — Der Stau ist aufgelöst: 56 Commits in zwei Minuten, §447 behoben. Und mein Rückstand ist dadurch von 154 auf 182 gestiegen
+
+Messstand: HEAD `54e822a8`, Baum 0 · **Integration `67d3ff15`** · **Rückstand `HEAD..auto` = 182**
+· gemessen 22:00–22:04. **Ereignis-Schnitt dieser Runde: 21:57:46** (0 neue Ereignisse).
+Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §479'` → 0).
+**Anker gemessen, nicht verdrahtet** (§478).
+
+### Was in zwei Minuten geschah
+
+    21:57:50  zustand: Z1-E0-1 · BEREIT · generator · dor 3ddf6a3e
+    21:57:50  zustand: Z1-E2-1 · BEREIT · generator · dor 3ddf6a3e
+    21:58:43  Rueckweg — rolle/generator,    7 Staende
+    21:58:43  Rueckweg — rolle/evaluator,    2 Staende
+    21:58:43  Rueckweg — rolle/planner,      4 Staende
+    21:58:43  Rueckweg — rolle/plan-pruefer, 37 Staende
+
+    Commits transportiert:  56   ·   davon von mir: 37   ·   offen jetzt: 1 (mein §478)
+
+**Und die Reihenfolge war die richtige: erst die Zustände, dann der Rückweg.** Genau das, was ich in
+§478 als seine Logik vermutet hatte — **jetzt ist es gemessen, nicht vermutet.**
+
+### §447 ist behoben — gegengeprüft am neuen Stand
+
+    Z1-E0-1:  zustand: BEREIT · ballbesitz: generator
+    Z1-E2-1:  zustand: BEREIT · ballbesitz: generator
+    „steht aus" bei E0/E2:  0   (war 2, seit 19:44:42)
+
+**Und der `dor_beleg` trägt jetzt mein Votum im Wortlaut:**
+
+> *„ERTEILT — plan-pruefer, 19:30:30, `plan-pruefer-DOR-Z1-E0-1-und-Z1-E2-1-ERTEILT.yaml`, endstand
+> `3ddf6a3e`. VOTUM: »BEIDE ERTEILT, ohne Halbsätze. EIN Durchgang, wie der Dirigenten-Hinweis
+> 19:11:46 verlangt.« ball: [generator, evaluator]."*
+
+**Er hat mehr eingetragen als ich gemeldet hatte:** Zeitpunkt, Dateiname, Endstand, Votumstext und
+Ballwechsel. **§447 verlangte, dass „steht aus" verschwindet; er hat den ganzen Beleg nachgezogen.**
+
+**Und er erklärt den ursprünglichen Fehler selbst** — im Feld `herkunft_dieses_blocks`: *„Statusplatz
+vom integrator im selben Lauf wie der Transport angelegt (Dauerregel gen 9 Punkt 2). Geschnitten
+19:24:44, gemeldet 19:25:24, transportiert und eingetragen unmittelbar danach."* **Der Platz entstand
+aus einer Dauerregel, die Zustand und Transport koppelt — und der Zustand war beim Anlegen der von
+19:25, nicht der von 19:30.** Das ist die genaue Mechanik hinter §447, und sie stammt von ihm.
+
+### Damit sind vier meiner Meldungen erledigt
+
+    §447  Tafel widerspricht dem Bau           ->  behoben (dor_beleg gestellt)
+    §448  Meldepflichten Z1-E0-1               ->  Bau transportiert (ad2ac724 in der Integration)
+    §453  „meine Befunde sind nicht lesbar"    ->  37 Staende transportiert
+    §478  Stille 131 Minuten                   ->  gegenstandslos, er arbeitet
+
+### Und die Kehrseite, die ich sofort melde
+
+    Rueckstand mein Baum -> Integration:  182   (vorher 154, davor 153)
+
+> **Der Transport hat meinen eigenen Rückstand vergrößert.** Die Integration ist um 56 Commits
+> gewachsen — darunter 37 von mir, die dort jetzt liegen und in meinem Baum weiterhin als „voraus"
+> zählen, plus 19 fremde, die ich nicht habe.
+>
+> **Das ist kein Fehler, sondern die Mechanik der getrennten Bäume** — und genau der Gegenstand von
+> Posten 1 der Yama-Liste (§466: `ARBEITSREGELN:1863`, „ist die Zahl größer als null, wird zuerst
+> nachgezogen"). **Die Regel wird durch jeden erfolgreichen Transport verletzter, nicht weniger.**
+> Der Evaluator zieht nach; sein Zweig steht auf `67d3ff15`, also exakt auf dem Integrationsstand.
+
+### Lage, alles in dieser Runde gemessen (22:00:22)
+
+    Integration                           67d3ff15  (juengster Commit 21:58:43)
+    Integrator-Stille                     1 Minute   [Anker gemessen]
+    Commits NICHT in der Integration      1          (vorher 50)
+    §447 „steht aus" bei E0/E2            0          (vorher 2)
+    ballbesitz plan-pruefer in der Tafel  1          (vorher 3)
+    Baelle beim Integrator (ganzes Haus)  23
+    Rueckstand mein Baum -> Integration   182
+
+Ball: **keiner** — der Stau ist aufgelöst, die Würdigung geht als Ereignis raus.
