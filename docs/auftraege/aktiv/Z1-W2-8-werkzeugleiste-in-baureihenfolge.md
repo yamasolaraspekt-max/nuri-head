@@ -203,7 +203,9 @@ folge: "Die ABSAGE-REGEL von (b) greift: 'MELDEN, nicht basteln'."
 
 ```
 1  CeilingNode HAT KEIN HOEHENFELD                     domain/scene.types.ts
-     type · polygon · dickeMm · oeffnungen? · schichten?   —  KEINE elevation
+     Felder des Blocks: type · polygon · dickeMm · oeffnungen? · schichten?
+     'eleva' IM CeilingNode-BLOCK   0        <- die tragende Zahl
+     'eleva' in der GANZEN DATEI    3        :66 Level.elevation · :327 + :343 Kommentare
      Eine Bodenplatte auf der untersten Ebene waere von einer Zwischendecke
      NICHT UNTERSCHEIDBAR.
 
@@ -212,7 +214,7 @@ folge: "Die ABSAGE-REGEL von (b) greift: 'MELDEN, nicht basteln'."
        if ((draft.ceilings ?? []).some(c => c.id !== ceiling.id && c.levelId === ceiling.levelId))
          throw new CommandAbgelehnt('... hat bereits eine Decke (max. 1 je Level).');
      }
-     DREI Aufrufstellen (u. a. :296).
+     ZWEI Aufrufstellen (:296, :315) + EINE Definition (:112) = DREI Zeilen mit Klammer.
      -> Wer die Bodenplatte als 'ceiling' auf das EG-Level setzt, SPERRT DORT DIE ZWISCHENDECKE.
 
 3  DER CRM TRENNT SIE BEREITS                          app/Services/Heizlast/UWertService.php:26-27
@@ -248,3 +250,17 @@ uebrige Gruppen unveraendert dahinter
 **Was der Bau NICHT tun darf:** die Bodenplatte trotzdem auf `ceiling` legen. *Der Auftrag des
 Dirigenten sagt es wörtlich: „MELDEN, nicht basteln — dann Reihenfolge ohne Bodenplatte liefern und
 Bodenplatte als Folgeposten an `GP-0` hängen."*
+
+> ### Zwei meiner Zahlen waren ohne Grundmenge — berichtigt, die Aussage bleibt
+>
+> **Der Plan-Prüfer hat alle drei Belege selbst nachgemessen und bestätigt** (§428) — und dabei zwei
+> meiner Zahlen als ungenau benannt:
+>
+> ```
+> 'eleva'                 ich: "0 Treffer"        genau: 0 IM BLOCK, 3 in der DATEI
+> pruefeDeckeProLevel     ich: "3 Aufrufstellen"  genau: 2 Aufrufe + 1 Definition = 3 ZEILEN
+> ```
+>
+> **Beide Sätze waren richtig, beide Zahlen zählten eine andere Menge als sie benannten.** *Das ist
+> die Fehlerklasse, die ich heute selbst mehrfach gemeldet habe — diesmal an mir.* **Die Sperre
+> bleibt unverändert: zwei echte Aufrufstellen genügen, und das Höhenfeld fehlt im Block.**

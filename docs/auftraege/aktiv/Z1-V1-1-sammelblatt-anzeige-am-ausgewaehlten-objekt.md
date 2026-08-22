@@ -38,7 +38,7 @@ zielreifegrad: "ABGENOMMEN (BROWSER) je Modul"
 
 | Nr | Kriterium (mit Halbsatz) |
 |---|---|
-| **V-1** | Aufrufer im Produktivpfad **0 → ≥ 1**; Komponente/Aufrufstelle **mit Pfad** benannt. **Halbsatz: gezählt wird die AUFRUFSTELLE MIT KLAMMER** — nicht das Vorkommen des Namens, nicht der Import. |
+| **V-1** | Aufrufer im Produktivpfad **0 → ≥ 1**; Komponente/Aufrufstelle **mit Pfad** benannt. **Halbsatz: gezählt wird die AUFRUFSTELLE MIT KLAMMER** — nicht das Vorkommen des Namens, nicht der Import. **NACHSCHÄRFUNG (§428): OHNE die Definitionszeile** (`function <name>(` / `const <name> = (`) — *sie trägt selbst eine Klammer.* |
 | **V-2** | Wirkung im Browser **ausgelöst**; Eingabewert und Ergebnis **wörtlich** genannt |
 | **V-3** | **Rot-Probe**: derselbe Bedienweg gegen den Stand **ohne** das Modul → Wirkung fehlt; **Ortsbeleg** |
 | **V-4** | Fachlogik unberührt. **Halbsatz: `git diff <basis_sha>..<endstand_sha> -- <modulpfad>` → leer. OHNE BEIDE SHA IST DAS KRITERIUM NICHT ERFÜLLT.** |
