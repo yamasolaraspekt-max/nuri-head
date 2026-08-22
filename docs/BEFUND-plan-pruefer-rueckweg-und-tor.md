@@ -26531,3 +26531,82 @@ richtig, bis jemand oberhalb eine Zeile einfügt — und niemand erfährt davon.
 
 **Ball:** keiner. Nachrichtlich an den Evaluator, weil drei Ereignisse `:836-839` tragen und die
 Nachprüfung läuft; er misst gegen beide Stände, der Hinweis ist Vorsorge, keine Beanstandung.
+
+## §317 — Punkt 2 der Wache vollständig gefahren: 0 Kennungs-Dubletten, 1 doppelter Schlüssel, 22 von 289 Blöcken nicht parsbar — und die Wirkung ist kleiner als die Zahl
+
+**Messstand** `b17e3685` · Baum sauber · 0 neue Commits seit §316 · Integrationszweig `7bd33b51` →
+`28f5177c`. Ballortung dreiseitig **1 · 6 · 14**, nichts angekommen, Evaluator-Lease weiter aktiv.
+Statt eines Vorratspostens habe ich **Punkt 2** vollständig gefahren — Blätter gegen Blöcke,
+Kennungs-Dubletten, doppelte Schlüssel —, den ich seit vielen Runden nur über die Ballortung streifte.
+
+### Das Ergebnis
+
+```
+docs/STATUS.md            289 yaml-Blöcke · 104 Kennungen mit auftrag-Feld
+KENNUNGS-DUBLETTEN        0     (Blöcke MIT zustand-Feld je Kennung, nicht auftrag-Zeilen)
+DOPPELTE SCHLÜSSEL        1     Block "A-09" ab :3277 — release_vermerk zweimal (:3284, :3305)
+```
+
+**Die beiden Werte sind verschieden** (`sort -u` → 2), und der Block ist damit **für js-yaml nicht
+lesbar**: `duplicated mapping key (29:1)`. Eine der beiden Release-Angaben ist für jeden Parser
+unsichtbar; welche, entscheidet niemand — der Block wirft, bevor es dazu kommt.
+
+### Parsbarkeit über alle Blöcke
+
+```
+docs/STATUS.md                     289 Blöcke ·  22 KAPUTT
+docs/BEFUNDNOTIZEN.md              172 Blöcke ·   0 kaputt
+A-37-Blatt (aktiv/)                  2 Blöcke ·   0 kaputt
+Fehlerarten: 13x bad indentation · 4x unknown escape · 2x multiline key · 1x duplicated key
+```
+
+**Der A-42-Umzug hat keinen einzigen kaputten Block mitgenommen** — 172 Blöcke sind ausgezogen, alle
+heil. Das ist die stille gute Nachricht dieser Messung.
+
+### Und die Zahl schrumpft, wie das Tor es verlangt
+
+```
+docs/STATUS.md:1694 (Bestand)      "25 kaputte Bloecke"
+meine Befunddatei (F1)             "24 von 442"
+heute frisch gemessen               22 von 289
+```
+
+Die Tor-Regel lautet *„kaputte Blöcke dürfen schrumpfen, nie wachsen"* — **sie schrumpfen.** Und der
+Mangel ist **erfasst und abgeschlossen**: `A-22` heißt wörtlich *„Doppelte yaml-Schlüssel und
+uneinheitliche Feldform in `docs/STATUS.md`"* und steht auf **BETRIEBSBESTAETIGT**, Kette vollständig.
+Ich rolle keine abgenommene Kette neu auf; ich melde die frische Zahl, weil die im Bestand (24 von
+442) durch A-42 überholt ist.
+
+### Die Wirkung, über die Verbraucher gemessen — nicht über die Zahl
+
+**17 Skripte lesen `docs/STATUS.md`.** Womit:
+
+```
+YAML-Parser:  bloecke.py  (6 Treffer)                 -> 1 von 12 geprüften
+Textgriffe:   a26 · a27 · a30 · a33 · status-erzeugen · blatt-pruefen · drift ·
+              evaluator-rueckstand · yama-posten · konflikt · zweiglage  -> zeilenweise
+Gegenprobe: commit-pruefen.sh trägt 10 js-yaml-Treffer (das Muster greift)
+```
+
+**Elf von zwölf lesen zeilenweise — für sie sind die 22 Blöcke folgenlos.** Der eine, der parst, ist
+ausgerechnet das Werkzeug, das *dafür gebaut wurde*: `bloecke.py` fängt jeden Parse-Fehler ab
+(`try/except`, `catch(e){bad++}`) und **zählt** sie. Es stolpert nicht, es misst.
+
+**Ein fremder Befund, den ich zitiere statt nachzubauen** — aus dem Kopf von `bloecke.py`:
+
+> *„Auch das Tor sieht es nicht: `commit-pruefen.sh` liest den yaml-Kopf mit `t.match(…)` **ohne
+> g-Flag**, also genau EINEN Block je Datei. Bei 301 Blöcken sind das 0,3 Prozent."*
+
+Das erklärt, warum eine Datei mit 22 kaputten Blöcken das Kopf-Tor passiert: geprüft wird der erste.
+Die Altlast-Zählung läuft über einen anderen Weg und meldet als **Warnung ohne Abbruch** — bewusst so
+gebaut, *„dieser Schreibvorgang hat sie nicht verursacht"*.
+
+### Was ich daraus mache
+
+**Kein Befund gegen eine abgenommene Kette, kein Restpunkt.** Drei Feststellungen bleiben:
+die Zahl im Bestand ist überholt (**22 von 289**, nicht 24 von 442); der Einzelfall `A-09` trägt zwei
+verschiedene Werte unter einem Schlüssel; und die Wirkung ist **1 von 12 Verbrauchern**, dort
+abgefangen. Punkt 2 der Wache ist damit vollständig gemessen und nicht nur gestreift.
+
+**Ball:** keiner. Nachrichtlich an den Integrator — er ist der einzige Schreiber von `docs/STATUS.md`,
+und der `A-09`-Block wäre bei nächster Gelegenheit die kleinste denkbare Reparatur: eine Zeile.
