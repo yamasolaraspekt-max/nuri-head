@@ -99,7 +99,10 @@
 | **Z1-W1-3** Eine Formel, eine Stelle: polygonM2-Kopie zusammenfuehren | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md` · **DoR NICHT ERTEILT** (plan-pruefer §145), offen: Kriterien A und D · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §179, 21.08.), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
 | **Z1-W1-4** dachWerte: eine Quelle, Stilllegung statt Loeschung | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` · **DoR ERTEILT** (plan-pruefer §146) · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §146), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Generator** |
 | **Z1-W1-5** insulationType: der tote Zweig sagt, dass er tot ist | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 21.08. · Basis `11f7c4c3` | **Blatt** `docs/auftraege/generator-auftrag-z1-w1-5-insulationtype-ehrlich.md` · **DoR NICHT ERTEILT** (plan-pruefer §147), offen: die Zahl · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn ausdruecklich · **DoR Fassung 2 ERTEILT** (plan-pruefer §180), Zustand vom Integrator nachgezogen · **Meldung 928680d6** (generator, 21.08. 19:49), Zustand und Ball vom Integrator nachgezogen; Tafel-Ball vorher **Planner** |
+| **Z1-W2-0** Bedienbarkeits-Probe: das Messgeraet fuer alle Werkzeugblaetter | `ENTWURF` | **Plan-Prüfer** | Schnitt 22.08. 14:5x · Basis `592df395` | **Blatt** `docs/auftraege/aktiv/Z1-W2-0-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR steht aus** |
 | **Z1-W2-1** Integrationsabgleich anschliessen | `ENTWURF` | **Plan-Prüfer** | Schnitt 22.08. 14:2x · Basis `767fb730` | **Blatt** `docs/auftraege/aktiv/Z1-W2-1-integrationsabgleich-anschliessen.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3), **DoR steht aus** |
+| **Z1-W2-2** Aufbautenstatus anschliessen | `BEREIT` | **generator** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-2-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae |
+| **Z1-W2-3** Grundriss-Eckenanalyse anschliessen | `BEREIT` | **generator** | Schnitt 22.08. 14:3x · Basis `f1ff0498` | **Blatt** `docs/auftraege/aktiv/Z1-W2-3-*.md` · Block vom Integrator im Transportlauf angelegt (gen 11 Punkt 3) · ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae |
 | **Z2-W0-1** Gebäudeakte /objekte/* hinter permission:Customer,read — das Menü sagt es schon, die Route nicht | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-1-objektakte-gate.md` · **DoR ERTEILT** (plan-pruefer §255) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
 | **Z2-W0-2** Grundriss-Editor: Objektbindung wie beim Nachbarn PlanUploadController | `ENTWURF` | **Planner** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-2-grundriss-gate.md` · **DoR ERTEILT mit einem Restpunkt** (plan-pruefer §256): die vierte Route `vorschau` fehlt im Scope · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich |
 | **Z2-W0-3** Planner-Attendance: employee_id kommt aus der Sitzung, nicht aus dem Request | **`CODE_FERTIG`** | **Evaluator** | Schnitt 21.08. · Basis `7a82ecfb` | **Blatt** `docs/auftraege/generator-auftrag-z2-w0-3-attendance-employee-bindung.md` · **DoR ERTEILT ohne Restpunkt** (plan-pruefer §257) · Spur A · Datensatz vom Integrator angelegt 21.08., das Blatt verlangt ihn woertlich · Zustand vom Integrator nachgezogen 21.08. nach dem Grundsatz aus §272 |
@@ -19026,6 +19029,26 @@ herkunft_dieses_datensatzes: |
 ```
 
 ```yaml
+auftrag: "Z1-W2-0"
+titel: "Bedienbarkeits-Probe — das Messgeraet fuer alle Werkzeugblaetter"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+blatt: "docs/auftraege/aktiv/Z1-W2-0-..."
+blatt_sha: adf03d32
+basis_sha: 592df395
+dor_beleg: "steht aus"
+bau_sha: "noch offen"
+herkunft_dieses_blocks: |
+  Angelegt vom integrator im Transportlauf (gen 11 Punkt 3). Regelfall: Blatt neu, DoR noch
+  nicht erteilt, also ENTWURF und "dor_beleg: steht aus".
+  GEGENPROBE VOR DEM SCHREIBEN, weil ich es bei Z1-W2-2 und Z1-W2-3 anders halten musste:
+  meine erste Suche nach einer DoR meldete einen Treffer — es war der Planner-Commit adf03d32
+  selbst, in dem das Wort DoR vorkommt, kein Votum des Plan-Pruefers. Ein Muster, das mehr
+  trifft als die Frage. Nachgesehen und verworfen; hier steht der Anfangswert zu Recht.
+  TRANSPORT, keine Bewertung.
+```
+
+```yaml
 auftrag: "Z1-W2-1"
 titel: "Integrationsabgleich anschliessen"
 zustand: ENTWURF
@@ -19042,6 +19065,48 @@ herkunft_dieses_blocks: |
   in dem ein Auftrag existiert und in der Statuswahrheit nicht vorkommt.
   Erster Fall dieser Regel fuer eine Z-Kennung — moeglich, seit A-43 transportiert ist.
   TRANSPORT, keine Bewertung: Zustand ENTWURF ist der Anfangswert, kein Urteil.
+```
+
+```yaml
+auftrag: "Z1-W2-2"
+titel: "Aufbautenstatus anschliessen"
+zustand: BEREIT
+ballbesitz: generator
+blatt: "docs/auftraege/aktiv/Z1-W2-2-..."
+blatt_sha: 59c82dae
+basis_sha: f1ff0498
+dor_beleg: |
+  ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae
+bau_sha: "noch offen"
+herkunft_dieses_blocks: |
+  Angelegt vom integrator im Transportlauf (gen 11 Punkt 3, Dauerregel aus gen 9 Punkt 2).
+  ABWEICHUNG VON DER REGELVORGABE, gemessen und benannt: die Regel nennt als Anfangswert
+  ENTWURF mit "dor_beleg: steht aus". Hier ist die DoR bereits ERTEILT (Plan-Pruefer
+  Paragraf 353, Commit c2e8dd20, Pruefstand 59c82dae) — "steht aus" waere eine unrichtige
+  Angabe gewesen. Die Regel soll das Fenster zwischen Schnitt und Pruefung schliessen, nicht
+  einen falschen Wert erzwingen; deshalb der belegte Zustand statt des Anfangswerts.
+  TRANSPORT, keine Bewertung.
+```
+
+```yaml
+auftrag: "Z1-W2-3"
+titel: "Grundriss-Eckenanalyse anschliessen"
+zustand: BEREIT
+ballbesitz: generator
+blatt: "docs/auftraege/aktiv/Z1-W2-3-..."
+blatt_sha: 59c82dae
+basis_sha: f1ff0498
+dor_beleg: |
+  ERTEILT — plan-pruefer Paragraf 353, Commit c2e8dd20, Pruefstand Blatt 59c82dae
+bau_sha: "noch offen"
+herkunft_dieses_blocks: |
+  Angelegt vom integrator im Transportlauf (gen 11 Punkt 3, Dauerregel aus gen 9 Punkt 2).
+  ABWEICHUNG VON DER REGELVORGABE, gemessen und benannt: die Regel nennt als Anfangswert
+  ENTWURF mit "dor_beleg: steht aus". Hier ist die DoR bereits ERTEILT (Plan-Pruefer
+  Paragraf 353, Commit c2e8dd20, Pruefstand 59c82dae) — "steht aus" waere eine unrichtige
+  Angabe gewesen. Die Regel soll das Fenster zwischen Schnitt und Pruefung schliessen, nicht
+  einen falschen Wert erzwingen; deshalb der belegte Zustand statt des Anfangswerts.
+  TRANSPORT, keine Bewertung.
 ```
 
 
