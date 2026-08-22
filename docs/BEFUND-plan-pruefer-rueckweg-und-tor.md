@@ -34626,3 +34626,86 @@ der beiden bindenden Regeln zu brechen. **Genau das ist die Absage-Regel, die da
 
 Ball: **Dirigent** (Pfadgrenze in (f)) · **Planner** (Messbefehl von (a) zeigt auf den falschen Ort)
 · bei mir: **der dritte Halbsatz liegt vor.**
+
+## §435 — Vorratsprüfung (c) an der Nachlieferung Z1-W2-5-b: die Formel geht exakt auf. Drei Grenzen sind ausdrücklich benannt, eine Beschriftung ist missverständlich
+
+Messstand: HEAD `82cfde79`, Baum 0, gemessen 19:24–19:28. **Messzeit des Ereignisbefehls dieser
+Runde: 19:24:12.** Abschnittsnummer gegen den frischen HEAD gewählt (`grep -c '^## §435'` → 0).
+**Ereignis dieses Abschnitts:** `ereignisse/BAU-generator-spur-V-1/plan-pruefer-MELDEPFLICHTEN-nachlieferung-Z1-W2-5-b.yaml`
+
+### Die tragende Formel, durchgerechnet
+
+    Brutto           28,00 m²
+    roh              6,720 m³   ->  Dicke  240 mm
+    fertig           5,600 m³   ->  Dicke  200 mm
+    Differenz        1,120 m³   =   40 mm auf 28,00 m²
+
+    behauptet: "1,120 m³ — genau die 40 mm Schichten (15 innen + 25 aussen)"   TRIFFT EXAKT
+
+**Und die Begründung trägt fachlich:** *„Schichten wirken auf die DICKE, also aufs Volumen.
+Fläche = Länge × Höhe. Eine Anzeige, bei der sich hier die Quadratmeter änderten, wäre falsch."*
+Die 28,00 m² bleiben in beiden Läufen gleich — richtig.
+
+### Die Richtung stimmt, und der Beleg steht im Modell
+
+`wandFlaeche.ts:181` rechnet bei `fertig`: `dicke = wand.thickness - schichtSumme` — es wird
+**abgezogen**. Das war mein Prüfpunkt, denn im Sprachgebrauch klingt „mit Schichten" nach *mehr*.
+
+    scene.types.ts:119   "thickness bleibt unberuehrt und bleibt die WAHRHEIT FUER DEN ROHBAU.
+                          Diese Liste sagt, woraus [die Wand besteht]"
+
+**Die Schichten sind eine Aufschlüsselung der vorhandenen Dicke, nicht ein Aufschlag darauf.**
+Damit ist das Abziehen richtig, und die Fehlerart `schichten-dicker-als-wand` (`:174`) bestätigt es
+von der anderen Seite: Wären die Schichten additiv, könnte diese Bedingung gar nicht auftreten.
+
+### DREI GRENZEN AUSDRÜCKLICH BENANNT — das ist der eigentliche Wert der Lieferung
+
+    :184  "dicke: keine Schichten am Knoten hinterlegt (AUF-76)"       wenn schichtSumme = 0
+    :189  "laenge: Wandverbund nicht gerechnet (Auftrag §3)"
+    :196  "hoehe: Fussboden-/Deckenaufbau nicht im Eingang (Operanden-Gate)"
+
+**Und bei der dritten weicht er vom Auftragswortlaut ab — begründet und gemeldet:**
+
+> *„Der Auftrag sagt ‚Dicke **und Höhe** abzüglich der Schichten'. Die Schichten aus AUF-76 liegen
+> **quer zur Dicke**; sie von der Höhe abzuziehen hat keine fachliche Grundlage. Was die Höhe fertig
+> verkürzt, ist der Fußboden- und Deckenaufbau — der hängt an `CeilingNode`, nicht an dieser Wand …
+> **Einen fehlenden Operanden zu erfinden ist genau das, was das Operanden-Gate verbietet.** Also:
+> nicht gerechnet, benannt, gemeldet."*
+
+**Das ist eine Abweichung vom Wortlaut, die den Auftrag besser erfüllt als der Wortlaut selbst** —
+und sie steht als Meldung im Ergebnis, nicht als stille Auslassung. Genau die Form, die CLAUDE.md
+für fehlende Operanden verlangt.
+
+### Die Gegenprobe, die der Generator selbst gefahren hat
+
+> *„Dieselbe Messung an einer Wand OHNE Schichten (`decke-treppe`): 6,72 m³ in BEIDEN Bezügen, plus
+> die Meldung ‚dicke: keine Schichten am Knoten hinterlegt (AUF-76)'. **Die Fixture erzeugt den
+> Unterschied, nicht die Anzeige.**"*
+
+**Das ist die Rot-Probe für ein Prüfmittel** — er beweist, dass die Fixture die Ursache ist und nicht
+die Komponente. Ohne sie wäre „1,120 m³ Unterschied" nicht von einem Anzeigefehler zu trennen.
+
+### EINE BEOBACHTUNG, ausdrücklich KEIN Befund
+
+    Beschriftung Lauf B:  "fertig (mit Schichten)"     Wert:  Schichten ABGEZOGEN
+
+**Wer „mit Schichten" liest, erwartet den größeren Wert.** Fachlich ist der Wert richtig — es ist
+das Volumen ohne Putz, also die Menge, die ein Maurer bestellt. **Die Beschriftung sagt das
+Gegenteil dessen, was die Zahl bedeutet.**
+
+Ich melde es **als Beobachtung**: Ob die Beschriftung geändert wird, ist eine Fach-/Bedienfrage und
+gehört in die Browserabnahme des Evaluators, nicht in meine Meldepflichtprüfung. **Ich behaupte
+nicht, dass sie falsch ist** — nur, dass zwei Leser sie verschieden verstehen können, und das ist
+bei einer Mengenangabe teuer.
+
+### Meldepflichten
+
+    ausgangs_sha  1c6b7601   endstand_sha/ergebnis_sha  a0b61ba4    alle in Feldern
+    pfade         fixtures/studioFixtures.ts · public/hausplaner/hausplaner.js
+    Buendel mitgeliefert — die Regel seit 19:05:47, hier eingehalten
+    bezug: "dirigent-entscheidung-vier-befunde-1905.yaml Punkt 3" — die Beauftragung ist genannt
+
+**Erfüllt.** Ballwechsel an `[evaluator, integrator]` korrekt.
+
+Ball: **Evaluator** (Abnahme mit Vorbehalt „b per Prüfmittel", wie beauftragt; dazu die Beschriftung)
+· **Integrator** (Transport).
