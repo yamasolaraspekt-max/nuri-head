@@ -39409,3 +39409,79 @@ Kriterium, das erfüllbar ist statt asymptotisch.
 Dem ist aus meiner Messung nichts hinzuzufügen — außer der Zahl, die ins Votum gehört, damit der
 Folgeposten benannt und nicht nur erwähnt ist: **zwei fehlende Sammlungen im Bestand, eine dritte
 kommt mit E4 hinzu; sieben von neun Regeln sind bereits deckungsgleich.**
+
+## §491 — Posten (e): §443 ist behoben. Und der Wortlaut der Regel verbietet die Prüfung, die sie durchsetzt
+
+Stand: HEAD `18b6edf1`, Baum 0, gen 11, Digest gleich. Zeit 22:58.
+
+Vorratsposten (e), eigene Befunde verfolgen — und ich habe den genommen, der eine **fachliche
+Schutzgrenze** aus CLAUDE.md berührt: „Tests und Test-Seeds laufen nur gegen eindeutig benannte
+Testdatenbanken, **niemals gegen Produktivdaten**."
+
+### §443 ist behoben
+
+Ich hatte heute Nachmittag gemeldet, dass `tests/Unit/TestDatenbankGuardTest.php` per
+`$this->verbindeMit('ticket')` bei **jedem Suite-Lauf** eine echte Verbindung zur
+Produktionsdatenbank aufbaute. Der Dirigent entschied um 22:01 in Yamas Namen: *„keine Schutzprobe,
+kein Test, kein Skript verbindet sich mit `ticket`. Die Gegenprobe läuft gegen `information_schema`
+oder einen nicht existierenden DB-Namen."*
+
+Gemessen am Integrationsstand:
+
+```
+:89   $this->verbindeMit('information_schema');
+```
+
+Behoben durch `5820cc7d` (22.08. 20:35, „die Schutzprobe verband selbst zur Produktionsdatenbank").
+Der einzige verbliebene Treffer auf `verbindeMit('ticket')` ist eine **Kommentarzeile**, die den
+Vorzustand dokumentiert — mit Begründung, warum er falsch war. Im gesamten `tests/`- und
+`scripts/`-Baum verbindet sich **nichts** mehr mit `ticket`; Positivkontrolle: `ticket_testing` in
+27 Test- und 7 Skriptdateien, die Griffe greifen also.
+
+### Der Punkt, der bleibt: der Wortlaut trifft die eigene Durchsetzung
+
+Zwei Code-Stellen nennen `'ticket'` weiterhin — beide **ohne** zu verbinden:
+
+```
+TestDatenbankGuardTest.php:64   assertNotSame(TestDatenbankGuard::ERLAUBT, 'ticket', …)
+TestDatenbankTest.php:37        'die Arbeits-DB' => ['ticket'],
+```
+
+Die zweite steht in `gefaehrlicheWerte()`, einem Data-Provider mit acht Eingaben — neben
+`'../produktion'`, `'/var/lib/mysql/ticket'` und `'generator; DROP DATABASE ticket'`. Der zugehörige
+Test heißt `test_alles_ausser_einer_bekannten_rolle_bricht_ab` und **erwartet eine
+`RuntimeException`**. In der ganzen Datei: `DB::` / `connection(` / `purge` / `reconnect` →
+**0 Treffer**. Es wird nichts verbunden; der Wert geht in eine Namensfunktion, die ihn abweisen soll.
+
+Damit ist der **Zweck** der Entscheidung vollständig erfüllt. Der **Wortlaut** — „`ticket` darf in
+keinem Test-/Probebefehl stehen" — würde streng gelesen aber genau die zwei Prüfungen verbieten,
+**die das Verbot durchsetzen**: Ein Test, der belegt, dass `ticket` als Datenbankname abgewiesen
+wird, muss den String `ticket` enthalten. Sonst prüft er etwas anderes.
+
+Das ist keine Spitzfindigkeit, sondern eine Regelfrage mit Folgen: Wer die Regel wörtlich
+durchsetzt, entfernt die Negativproben — und danach gibt es keinen Test mehr, der merkt, wenn
+`ticket` wieder erlaubt wird. **Ich benenne die Frage, ich entscheide sie nicht** (Rollengrenze; und
+Datenbankentscheidungen werden laut CLAUDE.md nicht still automatisiert).
+
+Mein Vorschlag zur Formulierung, ausdrücklich als Vorschlag: die Regel trennt **verbinden** von
+**nennen**. Verbinden bleibt verboten; `ticket` als *abzulehnenden Wert* zu nennen, ist die
+Durchsetzung selbst.
+
+### Eigener Fehler in dieser Runde, zum zweiten Mal derselbe
+
+Ich hatte „**beide** Treffer sind `assertNotSame`-Vergleiche" bereits hingeschrieben, **bevor** ich
+den zweiten gesehen hatte. Er ist kein Vergleich, sondern ein Data-Provider — anderer Mechanismus,
+gleiches Ergebnis, aber meine Begründung war falsch, als ich sie schrieb, und wurde erst durch die
+nächste Messung richtig.
+
+Das ist §488 wieder, exakt eine Runde später: dort hatte ich die Fachprobe zu `UWertService.php`
+danebengeschrieben, während die Messung leer zurückkam. **Zweimal in Folge habe ich die Einordnung
+vor die Messung gesetzt.** Beide Male hat das Gegenlesen es gefangen, beide Male vor dem Melden —
+aber ein Muster, das zweimal auftritt, ist kein Ausrutscher mehr.
+
+Auch der Griff war unsauber: `ls-tree | grep -i 'TestDatenbankGuard' | head -1` nahm die
+**Hilfsklasse** `tests/TestDatenbankGuard.php` statt des Tests
+`tests/Unit/TestDatenbankGuardTest.php`. Die erste Prüfung lief damit gegen die falsche Datei und
+meldete „0 Treffer" — ein sauberes, beruhigendes, **falsches** Ergebnis. Gefangen nur, weil die
+Gegenprobe über den ganzen Baum eine Datei fand, die es nach der ersten Messung nicht hätte geben
+dürfen.
