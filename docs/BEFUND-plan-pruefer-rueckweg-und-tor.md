@@ -27956,3 +27956,110 @@ diese Zeile wie ein Widerspruch aussieht.**
 **Ball: Evaluator** (zur Kenntnis vor der Abnahme) und **Planner** (eine Wortkorrektur am
 Rot-Beleg, wenn er das Blatt ohnehin anfasst — kein Auftrag von mir). Ein Votum gebe ich hier
 nicht ab: der Bau wird vom Evaluator abgenommen, nicht von mir.
+
+## §339 — DoR für A-43-13 (Errata): Rot-Lage trägt, aber der Messbefehl nennt keinen Ort
+
+Gewählt gegen HEAD `4d566d96` (Baum sauber, 13:34:31). §339 als Überschrift 0 Treffer, frei.
+
+**Wie der Ball zu mir kam — nicht über meinen Auslöser.** Der Planner hat um 13:32:01 die
+A-43-Errata abgelegt (`planner-CODE_FERTIG-nachtrag-posten3.yaml`, `ball: [plan-pruefer, generator]`),
+aber im Ordner seines **neuen** Auftrags `KONZEPT-planner-anschluss` (gen 15). Mein Auslöser zeigt
+auf die A-43-Ordner; ich hätte sie dort nicht gefunden. **Gefunden hat es die externe Prüfung**
+(`externe-pruefung-BEFUND-B-008-lieferung-unauffindbar.yaml`, 13:33:34, S2) — zitiert, nicht
+nachgebaut. Ihr Satz trifft die Lage: *„Zwei richtige Regeln arbeiten gegeneinander, weil für den
+Fall ‚eigener Auftrag wechselt, während eine Nachlieferung für den alten aussteht' keine von beiden
+gemacht ist."* Die Regelfrage gehört dem Dirigenten; für mich zählt: **ein Ball lag zwei Minuten
+lang unauffindbar in meiner Bahn.**
+
+**Angeordnet, nicht eigenmächtig.** Ich habe geprüft, ob ein 13. Kriterium nach eingefrorenem
+Kriterienstand zulässig ist: `rollen/planner.yaml` gen 15 (13:29:42, Digest ok) trägt
+`posten_1_zuerst_kurz: „A-43 Errata-Posten 3 … ein Nachtrag ins A-43-Blatt"`. Es ist eine **Errata
+auf Anweisung des Dirigenten** (`dirigent-errata-posten3-dirigent-bereich.yaml`, 13:25), keine
+nachgeschobene Verschärfung. Der Planner vermerkt die Chronologie selbst im Blatt.
+
+**Die Rot-Lage selbst nachgemessen** — über den Inhalt gesucht, nicht über die Zeilennummer, weil
+der Bau `rollen-tor.sh` bewegt hat:
+
+    scripts/rollen-tor.sh:754   docs/konzept/*|docs/regelwerk/*|docs/auftraege/*) ;;
+    scripts/rollen-tor.sh:760   echo "  Erlaubt sind nur: docs/konzept/  docs/regelwerk/  docs/auftraege/"
+    'docs/backlog/'      Treffer in rollen-tor.sh: 0        Gegenprobe 'docs/konzept/': 3
+    'docs/fortschritt/'  Treffer in rollen-tor.sh: 0
+    im gebauten Generator-Stand 8a08d625 ebenfalls: 0
+
+**Beide Zeilennummern stimmen exakt, beide behaupteten Lücken bestehen, auch nach dem Bau.** Die
+Rot-Lage trägt. Und der Planner hat meinen §334-Hinweis übernommen und selbst benannt: `:760`
+wiederholt die Liste als **Meldungstext** — *„Wer nur die `case`-Zeile erweitert, lässt die Auskunft
+falsch stehen"*. Dass er die Beleghälften trennt (*„die Positivliste habe ich gelesen, die
+ausgelöste Abweisung hat der Dirigent gefahren"*), ist die richtige Form für ein Schutz-Rot, das er
+nach A-37-22d nicht selbst auslösen durfte.
+
+**Die Auflage: der Messbefehl nennt keinen Ort.** Er verlangt vier Läufe:
+
+    Positivprobe : Commit als dirigent mit Pfad unter docs/backlog/      -> erwartet 0
+                   desgleichen unter docs/fortschritt/                   -> erwartet 0
+    Negativprobe : Commit als dirigent mit docs/STATUS.md                -> erwartet 1
+                   desgleichen mit scripts/                              -> erwartet 1
+
+**Vier Commits mit `TICKET_ROLLE=dirigent`** — und genau das ist im realen Checkout nach **A-37-22d**
+untersagt. Der Planner weiß es und schreibt es für **seine eigene** Messung hin; für die **Abnahme**
+steht es nicht da. Wer den Messbefehl so ausführt, wie er dasteht, verstößt gegen A-37-22d — oder
+er hält an und fragt. **Ein Kriterium, dessen Probe nur an einem Ort zulässig ist, muss den Ort
+nennen.** Abhilfe: ein Halbsatz (*„im Wegwerf-Repo unter `TMPDIR`, A-37-22d"*), wie A-43-1 ihn für
+seinen eigenen Nachweis bereits trägt.
+
+**Votum zu A-43-13: ERTEILT MIT AUFLAGE.** Dieselbe Form und derselbe Grund wie in Runde 2: das
+Kriterium ist tragfähig, die Rot-Lage von mir nachgemessen, 13 Kriterien und 13 Matrixzeilen
+deckungsgleich — offen ist die **Ausführbarkeit** der Probe, nicht ihr Inhalt. Der Bau ist davon
+nicht blockiert; betroffen ist die Abnahme.
+
+## Zweiter Teil — Vorratsprüfung: was liegt außerhalb der Integration, und ist es gesichert?
+
+**Zuerst mein eigener Fehler.** Ich habe diese Runde mit *„ein Zweig ist neu, den es in meiner
+letzten Probe nicht gab"* begonnen — `salvage/evaluator-bd2043d`. **Falsch.** Der Zweig trägt das
+Commitdatum **12.07.2026**; neu war nicht der Zweig, sondern mein **Filter**: ich hatte
+`ls-remote | grep -E 'plan-pruefer|integration|planner|generator'` gefahren und diesmal `evaluator`
+ergänzt. **Ich habe eine Änderung am Messgriff für eine Änderung der Welt gehalten.** Als Regel an
+mich: *wer den Griff ändert, misst nicht mehr dasselbe — eine Bewegung im Ergebnis kann vom
+Gegenstand kommen oder vom Werkzeug, und das ist vor dem Melden zu trennen.*
+
+**Die Messung, systematisch.** 29 Alt-Zweige (ohne `rolle/*` und Integration) gegen den
+Integrationsstand:
+
+    Zweige mit Pfaden, die in der Integration fehlen:  5 von 29   (42 Pfade)
+      auto/hausplaner-dach-ui 29 · strang/C 7 · salvage/evaluator-bd2043d 4
+      auto/energie-verdrahtung 1 · bewahrt/z2-w0-5-supervisor-kette 1
+    davon Produktcode/Tests: 8 — und sieben davon liegen in GENAU EINEM Zweig:
+      FensterSpec.php · AnforderungsprofilKlimaAdapter.php · AnforderungsprofilUWertAdapter.php
+      KlimaPlzService.php · +2 zugehoerige Tests            -> alle nur strang/C
+      WpBivalenzVerdrahtungTest.php                          -> nur auto/energie-verdrahtung
+      PlannerZustaendigkeit.php                              -> zwei Zweige
+
+Griff gegengeprüft: eine bekannte Datei trifft in **21** Zweigen, eine erfundene in **0**.
+
+**Die Sicherungsfrage, und sie ist der Punkt.** `strang/C`, `auto/energie-verdrahtung` und
+`salvage/evaluator-bd2043d` sind auf `fork` **gesichert** (Remote-SHA gleich lokal). Aber:
+
+    NICHT GEPUSHT: bewahrt/z2-w0-5-supervisor-kette · rolle/generator-beleg-2026-08-21
+                   tmp-a03 · work/a01-generator                        4 von 37 Zweigen
+
+**`app/Traits/PlannerZustaendigkeit.php` liegt in genau zwei Zweigen — und beide sind nicht
+gepusht.** Diese Datei existiert damit ausschließlich auf dieser Maschine; es gibt keine Kopie
+außerhalb. Das ist die Lage, die der Governance-Rahmen benennt: *„nicht gepusht heißt nicht
+unordentlich, sondern kein Backup"* — und `rolle/generator-beleg-2026-08-21` ist ausgerechnet der
+Zweig, der heute Nacht als **Sicherung** dreier Commits angelegt wurde (A-37-22c).
+
+**Kein Vorwurf und kein Auftrag.** Ob die Datei noch gebraucht wird, ist eine Sachfrage, die ich
+nicht entscheide; `strang/C` etwa trägt Heizlast-Adapter, deren Cut-over eigene Gates hat. Gemeldet
+wird nur: **an einer Stelle hängt Code an genau zwei lokalen Zweigen ohne Remote-Kopie.**
+
+**Drei Messausfälle in dieser Runde, alle erkannt und wiederholt.**
+**(1)** `for Z in $ZWEIGE` — zsh splittet unquoted Variablen nicht; die 29 Zweige wurden **ein**
+Wort, Ergebnis eine Zeile mit `0 0`. **Das ist dieselbe Falle wie in §299 und §318 — zum dritten
+Mal.** Sie steht wörtlich in meiner eigenen Wache-Regel. Behoben mit `while read`.
+**(2)** Ein Lauf gab **gar keine Ausgabe** — als Ausfall gewertet und schrittweise wiederholt.
+**(3)** Eine Prüfung auf `PlannerZustaendigkeit.php` gab leer, während dieselbe Frage kurz zuvor
+zwei Zweige geliefert hatte. Zwei Verfahren, zwei Antworten, **also galt keine**; mit dem Pfad aus
+der Messdatei statt getippt wiederholt — zwei Zweige, bestätigt.
+
+**Ball: Planner** (Ortsangabe im Messbefehl von A-43-13, ein Halbsatz) · **Dirigent** (die
+Ordner-Regel aus B-008, und die Frage der vier ungesicherten Zweige).
